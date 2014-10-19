@@ -30,7 +30,7 @@ categories: jekyll update
 
 ## What type of chart to use?
 | To show        | use           |
-| -------------        |:-------------:|
+| -------------        |-------------|
 | Category + Frequency | Pie chart | 
 | Category + Percentage | Bar chart   |
 | Category + Frequency + Percentage | Segmented Bar      |

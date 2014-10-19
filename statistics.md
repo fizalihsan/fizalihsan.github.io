@@ -51,7 +51,7 @@ categories: jekyll update
 ## Mode
 * Most frequent value. There can be more than one mode in a data set. 
 * Bimodal - data set with 2 modes
-* Group / category with highest frequency is *modal class*
+* Group / category with highest frequency is `modal class`
 * When to use?
   * When the data is categorical
   * For the data with clusters

@@ -4,30 +4,56 @@ title:  "Welcome to Statistics!!!"
 date:   2014-10-18 22:18:03
 categories: jekyll update
 ---
-You’ll find this post in your `_posts` directory. Go ahead and edit it and re-build the site to see your changes. You can rebuild the site in many different ways, but the most common way is to run `jekyll serve --watch`, which launches a web server and auto-regenerates your site when a file is updated.
 
-To add new posts, simply add a file in the `_posts` directory that follows the convention `YYYY-MM-DD-name-of-post.ext` and includes the necessary front matter. Take a look at the source for this post to get an idea about how it works.
+# Charts
 
-Jekyll also offers powerful support for code snippets:
+## Pie chart
+* Used to visualize proportions
+* Never use percentage as proportions
 
-{% highlight ruby linenos %}
-def print_hi(name)
-  puts "Hi, #{name}"
-end
-print_hi('Tom')
-#=> prints 'Hi, Tom' to STDOUT.
-{% endhighlight %}
+## Bar chart
+* Prefer horizontal bar chart when the category names are longer.
+* Segmented bar chart is used to show both frequency and percentage.
 
-```ruby
-def print_hi(name)
-  puts "Hi, #{name}"
-end
-print_hi('Tom')
-#=> prints 'Hi, Tom' to STDOUT.
-```
+## Histogram
+* Histogram's bar area must be proportional to frequency.
+* Frequency Density = Frequency / Group Width
 
-Check out the [Jekyll docs][jekyll] for more info on how to get the most out of Jekyll. File all bugs/feature requests at [Jekyll’s GitHub repo][jekyll-gh]. If you have questions, you can ask them on [Jekyll’s dedicated Help repository][jekyll-help].
+> What is the difference between Histogram & Bar chart?
+> * Widths are constant in bar charts. It varies in histogram.
+> * No gaps between bars in histogram.
 
-[jekyll]:      http://jekyllrb.com
-[jekyll-gh]:   https://github.com/jekyll/jekyll
-[jekyll-help]: https://github.com/jekyll/jekyll-help
+## Line Chart
+* Use only for numerical data. Never for categorical data.
+
+> Rule: When using percentages in charts, show frequency also. 
+
+## What type of chart to use?
+| To show        | use           |
+| -------------        |:-------------:|
+| Category + Frequency | Pie chart | 
+| Category + Percentage | Bar chart   |
+| Category + Frequency + Percentage | Segmented Bar      |
+| Range of numbers + Frequency | Histogram |
+| Range of numbers + Cumulative Frequency | Line chart |  
+
+# Averages
+
+## Mean 
+* **Outliers** - An extreme high or low value that stands out from the rest of the data.
+* **Skewed Data** - When outliers pull the data to the left or right.
+
+## Median
+* Sort and find the middle value. 
+* Use this when the data is skewed.
+* Can fluctuate if the data is symmetrical.
+
+## Mode
+* Most frequent value. There can be more than one mode in a data set. 
+* Bimodal - data set with 2 modes
+* Group / category with highest frequency is *modal class*
+* When to use?
+  * When the data is categorical
+  * For the data with clusters
+* When not to use?
+  * When there are many modes.

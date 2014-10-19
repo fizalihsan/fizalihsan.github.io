@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Welcome to Statistics!"
+title:  "Welcome to Statistics!!!"
 date:   2014-10-18 22:18:03
 categories: jekyll update
 ---

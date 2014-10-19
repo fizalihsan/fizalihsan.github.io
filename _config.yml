@@ -10,20 +10,14 @@ url: "http://fizalihsan.github.io" # the base hostname & protocol for your site
 twitter_username: @fizalihsan
 github_username:  fizalihsan
 
-# Markdown Processors
-maruku:
-  use_tex:    false
-  use_divs:   false
-  png_engine: blahtex
-  png_dir:    images/latex
-  png_url:    /images/latex
-  fenced_code_blocks: true
-
 # Build settings
 highlighter: true
-markdown: kramdown
-kramdown:
-  input: GFM
+#markdown: kramdown
+#kramdown:
+#  input: GFM
+markdown: redcarpet
+redcarpet:
+  extensions: ["no_intra_emphasis", "fenced_code_blocks", "autolink", "tables", "with_toc_data"]
 highlighter: pygments
 permalink: pretty
 

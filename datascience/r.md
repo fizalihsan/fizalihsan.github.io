@@ -148,35 +148,35 @@ attr(,"levels")
 {% endhighlight %}
 
 
-#Appendix
+##Appendix
 
-##Command Reference 
+###Command Reference 
 {% highlight r linenos %}
 > ls() or ls(all.names = TRUE) # Lists all variables/objects defined in the session
-> setwd(“c:/xyz”) – sets working directory
-> getwd() – Gets working directory
-> runif(8) – generates 8 random numbers
-> x<-9 – assigns 9 to object x in workspace
-> x – prints the value of x
-> rm(x) – removes the object x
-> rm(list=ls()) – removes all objects in workspace
-> Save & Load (Binary)
-> save() – saves all objects to default file .RData. Objects still exist in memory (binary format)
+> setwd(“c:/xyz”) # sets working directory
+> getwd() # Gets working directory
+> runif(8) # generates 8 random numbers
+> x <- 9 # assigns 9 to object x in workspace
+> x # prints the value of x
+> rm(x) # removes the object x
+> rm(list=ls()) # removes all objects in workspace
+> # Save & Load (Binary)
+> save() # saves all objects to default file .RData. Objects still exist in memory (binary format)
 > save(obj1, obj2, file=”filename”)
-> load(“filename”) – loads from file to memory
-> Save & Load (Text)
-> write.table(obj1, file=”filename”) – only 1 obj at a time
+> load(“filename”) # loads from file to memory
+> # Save & Load (Text)
+> write.table(obj1, file=”filename”) # only 1 obj at a time
 > load.table()
 {% endhighlight %}
 
-##Packages
+###Packages
 * `install.packages(c("ggplot2", "devtools", "KernSmooth")` # install the collection of packages from CRAN
 * `library()`        #list all available packages
 * `library(package)` # loads package on to memory
 * `require(package)` # loads package on to memory. Used in scripts. Returns loading status as boolean.
 * `detach(package:name)` # unloads package from memory.
 
-##Help 
+###Help 
 * `?func`           # open help page on function 'func'
 * `help(func)`      # same as above
 * `apropos("foo")`  # list all functions containing string foo

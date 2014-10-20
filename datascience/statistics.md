@@ -29,13 +29,13 @@ categories: jekyll update
 > Rule: When using percentages in charts, show frequency also. 
 
 ## What type of chart to use?
-| To show        | use           |
-| -------------        |-------------|
-| Category + Frequency | Pie chart | 
-| Category + Percentage | Bar chart   |
-| Category + Frequency + Percentage | Segmented Bar      |
-| Range of numbers + Frequency | Histogram |
-| Range of numbers + Cumulative Frequency | Line chart |  
+| To show                                 | use           |
+| ----------------------------------------|---------------|
+| Category + Frequency                    | Pie chart     | 
+| Category + Percentage                   | Bar chart     |
+| Category + Frequency + Percentage       | Segmented Bar |
+| Range of numbers + Frequency            | Histogram     |
+| Range of numbers + Cumulative Frequency | Line chart    |  
 
 # Averages
 

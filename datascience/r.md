@@ -5,9 +5,6 @@ date:   2014-10-18 22:18:03
 categories: jekyll update
 ---
 
-## Command Reference
-
-* `ls()` display directory structure
 
 ## Basic Data Types
 R has five basic or “atomic” classes of objects:
@@ -149,3 +146,25 @@ attr(,"levels")
 > ncol(x)
 [1] 2
 {% endhighlight %}
+
+
+# Appendix
+## Command Reference
+
+* `ls()` display directory structure
+
+## Packages
+* `install.packages(c("ggplot2", "devtools", "KernSmooth")` # install the collection of packages from CRAN
+* `library()`        #list all available packages
+* `library(package)` # loads package on to memory
+* `require(package)` # loads package on to memory. Used in scripts. Returns loading status as boolean.
+* `detach(package:name)` # unloads package from memory.
+
+##Help 
+* `?func`           # open help page on function 'func'
+* `help(func)`      # same as above
+* `apropos("foo")`  # list all functions containing string foo
+* `example(foo)`    # show an example of function foo
+* `vignette()`      # show available vignettes on installed packages
+* `vignette("foo")` # show specific vignette
+		

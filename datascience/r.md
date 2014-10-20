@@ -33,7 +33,7 @@ The most basic object is a vector.
 different classes (indeed, that’s usually why we use them)
 * Empty vectors can be created with the `vector()` function.
 * Vector examples
-```r
+```{r}
 > x <- c(0.5, 0.6) ## numeric
 > x <- c(TRUE, FALSE) ## logical
 > x <- c(T, F) ## logical

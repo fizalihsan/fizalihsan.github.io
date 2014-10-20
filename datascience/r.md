@@ -148,12 +148,12 @@ attr(,"levels")
 {% endhighlight %}
 
 
-# Appendix
-## Command Reference
+#Appendix
+##Command Reference
 
 * `ls()` display directory structure
 
-## Packages
+##Packages
 * `install.packages(c("ggplot2", "devtools", "KernSmooth")` # install the collection of packages from CRAN
 * `library()`        #list all available packages
 * `library(package)` # loads package on to memory

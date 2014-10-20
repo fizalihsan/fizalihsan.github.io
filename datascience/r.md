@@ -44,7 +44,7 @@ different classes (indeed, that’s usually why we use them)
 * Lists are a special type of vector that can contain elements of different classes.
 {% highlight r linenos %}
 > x <- list(1, "a", TRUE, 1 + 4i) 
-```
+{% endhighlight %}
 
 * **Mixing Objects**  
 When different objects are mixed in a vector, *coercion* occurs so that every element in the vector is

@@ -40,7 +40,7 @@ different classes (indeed, that’s usually why we use them)
 > x <- c("a", "b", "c") ## character
 > x <- 9:29 ## integer
 > x <- c(1+0i, 2+4i) ## complex
-{% endhighlight %}
+```
 * Lists are a special type of vector that can contain elements of different classes.
 {% highlight r linenos %}
 > x <- list(1, "a", TRUE, 1 + 4i) 

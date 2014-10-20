@@ -7,7 +7,7 @@ categories: jekyll update
 
 ## Command Reference
 
-* `ls()` displays directory strcuture
+* `ls()` displays directory structure
 
 ## Basic Data Types
 R has five basic or “atomic” classes of objects:
@@ -33,14 +33,14 @@ The most basic object is a vector.
 different classes (indeed, that’s usually why we use them)
 * Empty vectors can be created with the `vector()` function.
 * Vector examples
-{% highlight r linenos %}
+```r
 > x <- c(0.5, 0.6) ## numeric
 > x <- c(TRUE, FALSE) ## logical
 > x <- c(T, F) ## logical
 > x <- c("a", "b", "c") ## character
 > x <- 9:29 ## integer
 > x <- c(1+0i, 2+4i) ## complex
-{% endhighlight %}
+```
 * Lists are a special type of vector that can contain elements of different classes.
 {% highlight r linenos %}
 > x <- list(1, "a", TRUE, 1 + 4i) 

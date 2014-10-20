@@ -7,7 +7,7 @@ categories: jekyll update
 
 ## Command Reference
 
-* `ls()` display directory structure
+* `ls()` displays directory structure
 
 ## Basic Data Types
 R has five basic or “atomic” classes of objects:

@@ -33,7 +33,7 @@ The most basic object is a vector.
 different classes (indeed, that’s usually why we use them)
 * Empty vectors can be created with the `vector()` function.
 * Vector examples
-{% highlight r linenos %}
+```r
 > x <- c(0.5, 0.6) ## numeric
 > x <- c(TRUE, FALSE) ## logical
 > x <- c(T, F) ## logical
@@ -44,7 +44,8 @@ different classes (indeed, that’s usually why we use them)
 * Lists are a special type of vector that can contain elements of different classes.
 {% highlight r linenos %}
 > x <- list(1, "a", TRUE, 1 + 4i) 
-{% endhighlight %}
+```
+
 * **Mixing Objects**  
 When different objects are mixed in a vector, *coercion* occurs so that every element in the vector is
 of the same class.

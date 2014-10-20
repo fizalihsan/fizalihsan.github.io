@@ -149,9 +149,25 @@ attr(,"levels")
 
 
 #Appendix
-##Command Reference
 
-* `ls()` display directory structure
+## Command Reference 
+<% highlight r linenos %>
+> ls() or ls(all.names = TRUE) # Lists all variables/objects defined in the session
+> setwd(“c:/xyz”) – sets working directory
+> getwd() – Gets working directory
+> runif(8) – generates 8 random numbers
+> x<-9 – assigns 9 to object x in workspace
+> x – prints the value of x
+> rm(x) – removes the object x
+> rm(list=ls()) – removes all objects in workspace
+> Save & Load (Binary)
+> save() – saves all objects to default file .RData. Objects still exist in memory (binary format)
+> save(obj1, obj2, file=”filename”)
+> load(“filename”) – loads from file to memory
+> Save & Load (Text)
+> write.table(obj1, file=”filename”) – only 1 obj at a time
+> load.table()
+<% endhighlight %>
 
 ##Packages
 * `install.packages(c("ggplot2", "devtools", "KernSmooth")` # install the collection of packages from CRAN

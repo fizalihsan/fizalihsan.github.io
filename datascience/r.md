@@ -150,7 +150,7 @@ attr(,"levels")
 
 #Appendix
 
-## Command Reference 
+##Command Reference 
 {% highlight r linenos %}
 > ls() or ls(all.names = TRUE) # Lists all variables/objects defined in the session
 > setwd(“c:/xyz”) – sets working directory

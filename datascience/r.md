@@ -151,7 +151,7 @@ attr(,"levels")
 #Appendix
 
 ## Command Reference 
-<% highlight r linenos %>
+{% highlight r linenos %}
 > ls() or ls(all.names = TRUE) # Lists all variables/objects defined in the session
 > setwd(“c:/xyz”) – sets working directory
 > getwd() – Gets working directory
@@ -167,7 +167,7 @@ attr(,"levels")
 > Save & Load (Text)
 > write.table(obj1, file=”filename”) – only 1 obj at a time
 > load.table()
-<% endhighlight %>
+{% endhighlight %}
 
 ##Packages
 * `install.packages(c("ggplot2", "devtools", "KernSmooth")` # install the collection of packages from CRAN

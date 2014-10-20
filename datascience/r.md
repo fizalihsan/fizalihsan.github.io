@@ -6,7 +6,7 @@ categories: jekyll update
 ---
 
 
-## Basic Data Types
+##Basic Data Types
 R has five basic or “atomic” classes of objects:
 1. **character**
 * **numeric** (real numbers) 
@@ -22,8 +22,8 @@ R has five basic or “atomic” classes of objects:
 * **complex**
 * **logical** (True/False)
 
-## Complex Data Types
-### Vectors
+##Complex Data Types
+###Vectors
 The most basic object is a vector. 
 *  A vector can only contain objects of the same class.
 * BUT: The one exception is a list, which is represented as a vector but can contain objects of

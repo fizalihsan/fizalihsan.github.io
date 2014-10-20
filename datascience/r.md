@@ -33,7 +33,7 @@ The most basic object is a vector.
 different classes (indeed, that’s usually why we use them)
 * Empty vectors can be created with the `vector()` function.
 * Vector examples
-{% highlight r linenos %}
+{% highlight r %}
 > x <- c(0.5, 0.6) ## numeric
 > x <- c(TRUE, FALSE) ## logical
 > x <- c(T, F) ## logical
@@ -43,21 +43,21 @@ different classes (indeed, that’s usually why we use them)
 {% endhighlight %}
 
 * Lists are a special type of vector that can contain elements of different classes.
-{% highlight r linenos %}
+{% highlight r %}
 > x <- list(1, "a", TRUE, 1 + 4i) 
 {% endhighlight %}
 
 * **Mixing Objects**  
 When different objects are mixed in a vector, *coercion* occurs so that every element in the vector is
 of the same class.
-{% highlight r linenos %}
+{% highlight r %}
 > y <- c(1.7, "a") ## character
 > y <- c(TRUE, 2) ## numeric
 > y <- c("a", TRUE) ## character
 {% endhighlight %}
 * **Explicit Coercion **  
 Objects can be explicitly coerced from one class to another using the `as.*()` functions, if available.
-{% highlight r linenos %}
+{% highlight r %}
 > x <- 0:6
 > class(x)
 [1] "integer"
@@ -69,7 +69,7 @@ Objects can be explicitly coerced from one class to another using the `as.*()` f
 [1] "0" "1" "2" "3" "4" "5" "6"
 {% endhighlight %}
 * **Nonsensical coercion results in *NAs* **
-{% highlight r linenos %}
+{% highlight r  %}
 > x <- c("a", "b", "c")
 > as.numeric(x)
 [1] NA NA NA
@@ -83,7 +83,7 @@ NAs introduced by coercion
 * **Matrices**
 Matrices are vectors with a *dimension* attribute. The dimension attribute is itself an integer vector of
 length 2 (nrow, ncol).
-{% highlight r linenos %}
+{% highlight r %}
 > m <- matrix(nrow = 2, ncol = 3) 
 > m
  [,1] [,2] [,3]
@@ -97,7 +97,7 @@ $dim
 {% endhighlight %}
 * **cbind-ing and rbind-ing**
 Matrices can be created by column-binding or row-binding with `cbind()` and `rbind()`.
-{% highlight r linenos %}
+{% highlight r  %}
 > x <- 1:3
 > y <- 10:12
 > cbind(x, y)
@@ -115,7 +115,7 @@ y 10 11 12
 * Factors are nothing but enumeration data types used to represent categorical data.
 * Can be ordered or unordered.
 * Factor can be thought of as an integer vector where each integer has a *label*. 
-{% highlight r linenos %}
+{% highlight r  %}
 > x <- factor(c("yes", "yes", "no", "yes", "no")) 
 > x
 [1] yes yes no yes no
@@ -136,7 +136,7 @@ attr(,"levels")
 * Unlike matrices, data frames can store different classes of objects in each column.
 * To create - `read.table()` or `read.csv()`
 * To convert to a matrix - `data.matrix()`
-{% highlight r linenos %}
+{% highlight r  %}
 > x <- data.frame(foo = 1:4, bar = c(T, T, F, F)) 
 > x
  foo bar

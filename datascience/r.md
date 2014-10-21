@@ -6,7 +6,7 @@ categories: jekyll update
 ---
 
 
-##Basic Data Types
+## Basic Data Types
 R has five basic or “atomic” classes of objects:
 1. **character**
 * **numeric** (real numbers) 
@@ -22,8 +22,9 @@ R has five basic or “atomic” classes of objects:
 * **complex**
 * **logical** (True/False)
 
-##Complex Data Types
-###Vectors
+## Complex Data Types
+
+### Vectors
 The most basic object is a vector. 
 *  A vector can only contain objects of the same class.
 * BUT: The one exception is a list, which is represented as a vector but can contain objects of
@@ -52,7 +53,8 @@ of the same class.
 > y <- c(TRUE, 2) ## numeric
 > y <- c("a", TRUE) ## character
 {% endhighlight %}
-* **Explicit Coercion **  
+
+* **Explicit Coercion**  
 Objects can be explicitly coerced from one class to another using the `as.*()` functions, if available.
 {% highlight r %}
 > x <- 0:6
@@ -65,8 +67,8 @@ Objects can be explicitly coerced from one class to another using the `as.*()` f
 > as.character(x)
 [1] "0" "1" "2" "3" "4" "5" "6"
 {% endhighlight %}
-* **Nonsensical coercion results in *NAs* **
-{% highlight r  %}
+* **Nonsensical coercion results in NAs**
+{% highlight r %}
 > x <- c("a", "b", "c")
 > as.numeric(x)
 [1] NA NA NA
@@ -94,7 +96,7 @@ $dim
 {% endhighlight %}
 * **cbind-ing and rbind-ing**
 Matrices can be created by column-binding or row-binding with `cbind()` and `rbind()`.
-{% highlight r  %}
+{% highlight r %}
 > x <- 1:3
 > y <- 10:12
 > cbind(x, y)
@@ -112,7 +114,7 @@ y 10 11 12
 * Factors are nothing but enumeration data types used to represent categorical data.
 * Can be ordered or unordered.
 * Factor can be thought of as an integer vector where each integer has a *label*. 
-{% highlight r  %}
+{% highlight r %}
 > x <- factor(c("yes", "yes", "no", "yes", "no")) 
 > x
 [1] yes yes no yes no
@@ -133,7 +135,7 @@ attr(,"levels")
 * Unlike matrices, data frames can store different classes of objects in each column.
 * To create - `read.table()` or `read.csv()`
 * To convert to a matrix - `data.matrix()`
-{% highlight r  %}
+{% highlight r %}
 > x <- data.frame(foo = 1:4, bar = c(T, T, F, F)) 
 > x
  foo bar
@@ -151,7 +153,7 @@ attr(,"levels")
 ##Appendix
 
 ###Command Reference 
-{% highlight r linenos %}
+{% highlight r %}
 > ls() or ls(all.names = TRUE) # Lists all variables/objects defined in the session
 > setwd(“c:/xyz”) # sets working directory
 > getwd() # Gets working directory

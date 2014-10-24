@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
   
-  <meta name="description" content="Statistics Oct 21st, 2014 12:11 am Charts Pie chart Bar chart Histogram Line Chart What type of chart to use? Averages Mean Median Mode Charts Pie &hellip;">
+  <meta name="description" content="Statistics Charts Pie chart Bar chart Histogram Line Chart What type of chart to use? Averages Mean ($\mu$) Median Mode Measuring Spread Range &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -26,6 +26,22 @@
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
   <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!-- mathjax config similar to math.stackexchange -->
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['$', '$'] ],
+      displayMath: [ ['$$', '$$']],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    messageStyle: "none",
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+  });
+  </script>
+  <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+  <!--script src="/javascripts/mathjax/MathJax.js"></script-->
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -68,12 +84,7 @@
   
   <header>
     <h1 class="entry-title">Statistics</h1>
-    <p class="meta">
-
-
-
-
-<time class='entry-date' datetime='2014-10-21T00:11:00-04:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2014</span></span> <span class='time'>12:11 am</span></time></p>
+    
   </header>
   
   <p><ul>
@@ -88,14 +99,29 @@
  </li>
  <li><a href="#Averages">Averages</a>
  <ul>
-  <li><a href="#Mean">Mean</a></li>
+  <li><a href="#Mean....mu..">Mean ($\mu$)</a></li>
   <li><a href="#Median">Median</a></li>
   <li><a href="#Mode">Mode</a></li>
  </ul>
  </li>
+ <li><a href="#Measuring.Spread">Measuring Spread</a>
+ <ul>
+  <li><a href="#Range">Range</a></li>
+  <li><a href="#Quartiles">Quartiles</a></li>
+  <li><a href="#Percentiles">Percentiles</a></li>
+ </ul>
+ </li>
+ <li><a href="#Measuring.Variability">Measuring Variability</a>
+ <ul>
+  <li><a href="#Variance..amp..Standard.Deviation....sigma..">Variance &amp; Standard Deviation ($\sigma$)</a></li>
+  <li><a href="#Standard.Score...z..">Standard Score ($z$)</a></li>
+ </ul>
+ </li>
 </ul>
 
-</p>
+
+hi
+{:toc}</p>
 
 <a name="Charts"></a>
 <h1>Charts</h1>
@@ -179,8 +205,8 @@
 <a name="Averages"></a>
 <h1>Averages</h1>
 
-<a name="Mean"></a>
-<h2>Mean</h2>
+<a name="Mean....mu.."></a>
+<h2>Mean ($\mu$)</h2>
 
 <ul>
 <li><strong>Outliers</strong> - An extreme high or low value that stands out from the rest of the data.</li>
@@ -221,18 +247,88 @@
 </ul>
 
 
+<a name="Measuring.Spread"></a>
+<h1>Measuring Spread</h1>
+
+<a name="Range"></a>
+<h2>Range</h2>
+
+<ul>
+<li>The range is a way of measuring how spread out a set of values are. It&rsquo;s given by:
+<code>range = upper bound - lower bound</code>.</li>
+<li>The range only describes the width of the data, not how it’s dispersed between the bounds.</li>
+<li>Range value is misleading when there are outliers.</li>
+</ul>
+
+
+<a name="Quartiles"></a>
+<h2>Quartiles</h2>
+
+<ul>
+<li>Quartiles are values that split your data into quarters.</li>
+<li>The lowest quartile is known as the <em>lower quartile</em>, or first quartile
+(Q1), and the highest quartile is known as the <em>upper quartile</em>, or third
+quartile (Q3). The quartile in the middle (Q2) is the <em>median</em>, as it splits
+the data in half.</li>
+<li>The lowest quartile is called the <em>lower quartile</em> (Q1), and the highest quartile is called the <em>upper quartile</em> (Q3). The middle quartile is the <em>median</em>.</li>
+<li><strong>Interquartile Range (IQR)</strong> - is the range of central 50% of the data between lower and upper quartiles. You find it by calculating <code>Upper quartile - Lower quartile</code>.</li>
+<li>Box and whisker chart or Box plot is used to visualize the range, IQR and median.</li>
+</ul>
+
+
+<a name="Percentiles"></a>
+<h2>Percentiles</h2>
+
+<ul>
+<li>If you break up a set of data into percentages, the values that split the data are called <em>percentiles</em>. For example, if the data is split into tenths (10% each), then the values are called <em>deciles</em>.</li>
+<li>P<sub>k</sub> is the value k% of the way through your data. If you scored 50 and knew
+that P<sub>90</sub> = 50, you’d have beaten or matched the score of 90% of other people.</li>
+<li>Quartiles are a type of percentile. Q1 is P<sub>25</sub>, Q2 is P<sub>50</sub> and Q3 is P<sub>75</sub>.</li>
+<li>We can use percentiles to construct a new range called the <strong>interpercentile range</strong>.</li>
+</ul>
+
+
+<a name="Measuring.Variability"></a>
+<h1>Measuring Variability</h1>
+
+<a name="Variance..amp..Standard.Deviation....sigma.."></a>
+<h2>Variance &amp; Standard Deviation ($\sigma$)</h2>
+
+<ul>
+<li><p>The variance is a way of measuring spread, and it’s the average of the distance of values from the mean squared.
+<img src="/datascience/variance1.png"></p></li>
+<li><p>For faster variance calculation, use below formula. Here you don’t have to calculate <img src="/datascience/variance3.png" title="" > for every number.
+<img src="/datascience/variance2.png"></p></li>
+<li><p><strong>Standard Deviation</strong> is a way of saying how far typical values are from the mean. The smaller the standard deviation, the closer values are to the mean. The smallest value the standard deviation can take is 0.
+<img src="/datascience/stddev.png"></p></li>
+</ul>
+
+
+<a name="Standard.Score...z.."></a>
+<h2>Standard Score ($z$)</h2>
+
+<ul>
+<li>Standard scores give you a way of comparing values across different sets of data
+where the mean and standard deviation differ. They’re a way of comparing
+related data values in different circumstances.
+$$ \left{ z = \frac{x-\mu} {\sigma} \right} $$</li>
+<li>You find the standard score of a particular value using the mean and standard
+deviation of the entire data set.</li>
+</ul>
+
+
+<p><em>Example</em>: Imagine a situation in which you have two basketball players of different ability. The first player gets the ball into the net an average of 70% of the time, and he
+has a standard deviation of 20%. The second player has a mean of 40% and a
+standard deviation of 10%.
+In a particular practice session, Player 1 gets the ball into the net 75% of the time, and Player 2 makes a basket 55% of the time. Which player does best against their personal track record?
+$$
+z1 = \frac{75-70}{20} = 0.25 \
+z2 = \frac{55-40}{10} = 1.5
+$$</p>
+
   
     <footer>
-      <p class="meta">
-        
-        
-
-
-
-
-<time class='entry-date' datetime='2014-10-21T00:11:00-04:00'><span class='date'><span class='date-month'>Oct</span> <span class='date-day'>21</span><span class='date-suffix'>st</span>, <span class='date-year'>2014</span></span> <span class='time'>12:11 am</span></time>
-        
-      </p>
+      
       
         <div class="sharing">
   
@@ -259,6 +355,10 @@
         <a href="/blog/2014/10/20/test/">R Programming</a>
       </li>
     
+  </ul>
+  <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
   </ul>
 </section>
 

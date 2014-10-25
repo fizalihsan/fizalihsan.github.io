@@ -9,8 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
   
-  <meta name="description" content="Groovy Overview Overview Use Groovy for flexibility and readability. Use Java for performance
-Runs on JVM - Groovy is nothing but a new way of &hellip;">
+  <meta name="description" content="Groovy Overview Fundamentals Control Structure Boolean Evaluation Safe-navigation operator (?.) Looping methods Static imports Exceptions OOPS &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -54,7 +53,7 @@ Runs on JVM - Groovy is nothing but a new way of &hellip;">
 
 </head>
 
-<body   >
+<body    class="collapse-sidebar sidebar-footer" >
   <header role="banner"><hgroup>
   <h1><a href="/">KnowledgeShop</a></h1>
   
@@ -76,7 +75,7 @@ Runs on JVM - Groovy is nothing but a new way of &hellip;">
 </form>
   
 <ul class="main-navigation">
-  <li><a href="/">Blog</a></li>
+  <li><a href="/">Home</a></li>
   <li><a href="/blog/archives">Archives</a></li>
 </ul>
 
@@ -93,6 +92,44 @@ Runs on JVM - Groovy is nothing but a new way of &hellip;">
   
   <p><ul>
  <li><a href="#Overview">Overview</a></li>
+ <li><a href="#Fundamentals">Fundamentals</a>
+ <ul>
+  <li><a href="#Control.Structure">Control Structure</a>
+  <ul>
+   <li><a href="#Boolean.Evaluation">Boolean Evaluation</a></li>
+   <li><a href="#Safe-navigation.operator.....">Safe-navigation operator (?.)</a></li>
+   <li><a href="#Looping.methods">Looping methods</a></li>
+   <li><a href="#Static.imports">Static imports</a></li>
+  </ul>
+  </li>
+  <li><a href="#Exceptions">Exceptions</a></li>
+  <li><a href="#OOPS">OOPS</a>
+  <ul>
+   <li><a href="#Basics">Basics</a>
+   <ul>
+    <li><a href="#Optional.Parameters">Optional Parameters</a></li>
+    <li><a href="#Named.arguments.in.method.calls">Named arguments in method calls</a></li>
+    <li><a href="#Multiple.Assignments">Multiple Assignments</a></li>
+    <li><a href="#Implementing.Interface">Implementing Interface</a></li>
+    <li><a href="#Operator.Overloading">Operator Overloading</a></li>
+   </ul>
+   </li>
+   <li><a href="#Coercion">Coercion</a></li>
+   <li><a href="#Strings">Strings</a></li>
+  </ul>
+  </li>
+  <li><a href="#Arrays.and.Collection">Arrays and Collection</a>
+  <ul>
+   <li><a href="#Arrays">Arrays</a></li>
+   <li><a href="#Ranges">Ranges</a></li>
+   <li><a href="#List">List</a></li>
+  </ul>
+  </li>
+  <li><a href="#Annotations">Annotations</a></li>
+  <li><a href="#Closures">Closures</a></li>
+  <li><a href="#Questions">Questions</a></li>
+ </ul>
+ </li>
 </ul>
 
 </p>
@@ -107,18 +144,583 @@ Runs on JVM - Groovy is nothing but a new way of &hellip;">
 <li>Every Groovy type is a subtype of java.lang.Object - Every Groovy object is an instance of a type in the normal way</li>
 <li>Groovy class IS A Java class</li>
 <li>Groovy supports dynamic typing</li>
-<li>To compile a Groovy script - { groovyc –d classes Foo.groovy }</li>
-<li>To run a compiled Groovy class in Java - { java -cp $GROOVY_HOME/embeddable/groovy-all-1.0.jar:classes Foo }</li>
-<li>To run a Groovy script - {groovy Foo.groovy}</li>
+<li>To compile a Groovy script - <code>groovyc –d classes Foo.groovy</code></li>
+<li>To run a compiled Groovy class in Java - <code>java -cp $GROOVY_HOME/embeddable/groovy-all-1.0.jar:classes Foo</code></li>
+<li>To run a Groovy script - <code>groovy Foo.groovy</code></li>
 <li>Behind the scenes it compiles to a Java class and executes</li>
 <li>Any Groovy code can be executed this way as long as it can be run; that is, it is either a script, a class with a main method, a Runnable, or a GroovyTestCase.</li>
 <li>Groovy is purely object-oriented</li>
-<li>everything is an object. E.g 2*3 //though they look like primitives, they are actually java.lang.Integer objects</li>
-<li>every operator is a method call. E.g. a+b //logic for the + operator is implemented in method plus() on the object</li>
-<li>Groovy automatically imports following packages: groovy.lang.<em>, groovy.util.</em>, java.lang.<em>, java.util.</em>, java.net.<em>, and java.io.</em> as well as the classes java.math.BigInteger and BigDecimal.</li>
+<li>everything is an object. E.g <code>2*3</code>, though they look like primitives, they are actually java.lang.Integer objects</li>
+<li>every operator is a method call. E.g. <code>a+b</code> //logic for the + operator is implemented in method plus() on the object</li>
+<li>Groovy automatically imports following packages: <code>groovy.lang.*, groovy.util.*, java.lang.*, java.util.*, java.net.*, and java.io.*</code> as well as the classes <code>java.math.BigInteger</code> and <code>BigDecimal</code>.</li>
 <li>Say there is a Groovy class called Foo, we can use Foo objects without explicitly compiling the Book class as long as Foo.groovy is on the classpath.</li>
 <li>A Groovy script can also have a class definition inside them.</li>
 </ul>
+
+
+<a name="Fundamentals"></a>
+<h1>Fundamentals</h1>
+
+<a name="Control.Structure"></a>
+<h2>Control Structure</h2>
+
+<a name="Boolean.Evaluation"></a>
+<h3>Boolean Evaluation</h3>
+
+<ul>
+<li>Groovy’s <code>==</code> Is Equal to Java’s <code>equals()</code> only if the class does not implement the <code>Comparable</code> interface. If it does, then it maps to the class’s <code>compareTo()</code> method.</li>
+<li>Reference comparison is done via <code>is()</code> method. Custom truth conventions can be added by implementing <code>asBoolean()</code> method.</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>str = 'Hello'
+</span><span class='line'>if(str) println str + 'World' //Groovy checks if the object reference is null
+</span><span class='line'>list = [1]
+</span><span class='line'>if(list) println list //Groovy checks if list is not-null and not empty</span></code></pre></td></tr></table></div></figure>
+
+
+<a name="Safe-navigation.operator....."></a>
+<h3>Safe-navigation operator (?.)</h3>
+
+<ul>
+<li>eliminates the mundane null check. If input is null, returns null instead of NPE.</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>def foo(str) { if (str != null) { str.reverse() } } //Before
+</span><span class='line'>def foo(str) { str?.reverse() } //After</span></code></pre></td></tr></table></div></figure>
+
+
+<a name="Looping.methods"></a>
+<h3>Looping methods</h3>
+
+<ul>
+<li>Using Ranges: <code>for(i in 0..5){println i}  //prints 0,1,2,3,4</code></li>
+<li>Using times function: <code>5.times { println "$it" } //prints 0,1,2,3,4</code></li>
+<li>Using upto function: <code>0.upto(5) { println "$it" } //prints 0,1,2,3,4</code></li>
+<li>Using step function: <code>0.step(5, 2) { println "$it" } //prints 0,2,4</code></li>
+</ul>
+
+
+<a name="Static.imports"></a>
+<h3>Static imports</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>import static Math.random as rand 
+</span><span class='line'>double value = rand() // alias name is used here to avoid confusion among static imports</span></code></pre></td></tr></table></div></figure>
+
+
+<a name="Exceptions"></a>
+<h2>Exceptions</h2>
+
+<ul>
+<li>Not forced to catch exceptions we don&rsquo;t care. Any exception we don’t handle is automatically passed on to a higher level.</li>
+<li>Catching all exceptions that may be thrown. (not Throwables or Errors) e.g., <code>try{...} catch(ex){...}</code></li>
+</ul>
+
+
+<hr />
+
+<a name="OOPS"></a>
+<h2>OOPS</h2>
+
+<ul>
+<li>All methods and classes are public by default.</li>
+<li>Getters and setters are automatically created by Groovy. No setters created for final fields. To prevent non-final fields from modification, implement setter method manually and throw an error.</li>
+<li><code>"hello".class.name</code> instead of <code>"hello".getClass().getName()</code>. This class property has special meaning in Map and Builders so it won&rsquo;t work.</li>
+<li>We can use &lsquo;this&rsquo; within static methods to refer to the Class object.</li>
+</ul>
+
+
+<a name="Basics"></a>
+<h3>Basics</h3>
+
+<a name="Optional.Parameters"></a>
+<h4>Optional Parameters</h4>
+
+<ul>
+<li>With Default value</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>def log(x, base=10) { Math.log(x) / Math.log(base) }
+</span><span class='line'>log(1024) //default base 10 is used
+</span><span class='line'>log(1024, 2)</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Trailing array parameter as optional. Much like Java varargs.</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>def task(name, String[] details) { println "$name - $details" }
+</span><span class='line'>task 'name1'
+</span><span class='line'>task 'name2', 'blah..'
+</span><span class='line'>task 'name3', 'blah..blah..'</span></code></pre></td></tr></table></div></figure>
+
+
+<a name="Named.arguments.in.method.calls"></a>
+<h4>Named arguments in method calls</h4>
+
+<ul>
+<li>Class with no-argument constructor</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class Robot { def type, height, width }
+</span><span class='line'>robot = new Robot(type: 'arm', width: 10, height: 40)
+</span><span class='line'>println "$robot.type, $robot.height, $robot.width"</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Excess Parameters as Map - If the number of arguments sent is more than what the method parameters, and if the excess arguments are in name-value pair, then Groovy treats the name-value pairs as a Map.</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class Robot { 
+</span><span class='line'>  def access(location, weight, fragile) {
+</span><span class='line'>    println "Received fragile? $fragile, weight: $weight, loc: $location"
+</span><span class='line'>  }
+</span><span class='line'>}
+</span><span class='line'>new Robot().access(x: 30, y: 20, z: 10, 50, true)
+</span><span class='line'>//You can change the order
+</span><span class='line'>new Robot().access(50, true, x: 30, y: 20, z: 10, a:5)</span></code></pre></td></tr></table></div></figure>
+
+
+<a name="Multiple.Assignments"></a>
+<h4>Multiple Assignments</h4>
+
+<ul>
+<li>Method returning an array is assigned to multiple variables</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>def splitName(fullName) { fullName.split(' ') }
+</span><span class='line'>def (firstName, lastName) = splitName('James Bond')
+</span><span class='line'>println "$lastName, $firstName $lastName"</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Swapping two variables without a temporary variable using above technique</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>def (first, last) = ["James", "Bond"]
+</span><span class='line'>(first, last) = [last, first]
+</span><span class='line'>println "$first $last"</span></code></pre></td></tr></table></div></figure>
+
+
+<a name="Implementing.Interface"></a>
+<h4>Implementing Interface</h4>
+
+<ul>
+<li>Block of code morphed as the implementation of an interface</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>interface Greeting { void greet(greeting) }
+</span><span class='line'>interface WellWisher { void wish(wish) }
+</span><span class='line'>void greeter(Greeting greeting){ greeting.greet()}
+</span><span class='line'>void wellwisher(WellWisher wellwisher){ wellwisher.wish()}
+</span><span class='line'>
+</span><span class='line'>greeter(new Greeting(){ void greet(greeting){println 'Java style'}}) 
+</span><span class='line'>groovyStyle = {println 'Groovy style'}
+</span><span class='line'>greeter(groovyStyle as Greeting) 
+</span><span class='line'>//block of code is morphed into an implementation of the
+</span><span class='line'>// interface via 'as' operator
+</span><span class='line'>wellwisher(groovyStyle as WellWisher) </span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Groovy does not force us to implement all the methods in an interface. Very useful while mocking for unit testing.</li>
+<li>Implementation of multi-method interface as a Map</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>interface Greeting { void greet(greeting); void wish(wish); void regard(regard); }
+</span><span class='line'>void callMe(Greeting greeting){ greeting.greet(); greeting.wish()}
+</span><span class='line'>//method name as key, implementation as value. Not all methods are implemented
+</span><span class='line'>greetingsMap = [ greet: {println 'Greet Hello World'}, wish: {println 'Wish Hello World'} ] 
+</span><span class='line'>callMe(greetingsMap as Greeting) </span></code></pre></td></tr></table></div></figure>
+
+
+<a name="Operator.Overloading"></a>
+<h4>Operator Overloading</h4>
+
+<ul>
+<li>Each operator has a standard mapping to methods.</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>== equals
+</span><span class='line'>+ plus
+</span><span class='line'>- minus
+</span><span class='line'>++ next
+</span><span class='line'>.. next (for-each syntax)
+</span><span class='line'>-- previous
+</span><span class='line'>&lt;&lt; leftShift
+</span><span class='line'>&lt;=&gt; compareTo</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Example 1: <code>for (ch in 'a'..'c') { println ch }</code></li>
+<li>Example 2: <code>lst = ['hello']; lst &lt;&lt; 'there'; println lst</code></li>
+<li>Example 3: Custom class and operator overriding</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>class Name{
+</span><span class='line'>  def name; 
+</span><span class='line'>  def plus(other){
+</span><span class='line'>    new Name(name: name + "~~" + other.name)
+</span><span class='line'>  }
+</span><span class='line'>  String toString() { "name: " + name}
+</span><span class='line'>}
+</span><span class='line'>def name1 = new Name(name: "Hello")
+</span><span class='line'>def name2 = new Name(name: "World")
+</span><span class='line'>println name1 + name2</span></code></pre></td></tr></table></div></figure>
+
+
+<a name="Coercion"></a>
+<h3>Coercion</h3>
+
+<ul>
+<li>Implementing operators is straightforward when both operands are of the same type. Things get more complex with a mixture of types, say 1 + 1.0. One of the two arguments needs to be promoted to the more general type, and this is called coercion.</li>
+<li><span style="color:red">Double dispatch???? - Need better description &amp; example ????</span></li>
+<li>Examples</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>== equals
+</span><span class='line'>+ plus
+</span><span class='line'>- minus
+</span><span class='line'>++ next
+</span><span class='line'>-- previous
+</span><span class='line'>&lt;=&gt; compareTo</span></code></pre></td></tr></table></div></figure>
+
+
+<a name="Strings"></a>
+<h3>Strings</h3>
+
+<ul>
+<li>Plain strings (instance of java.lang.String)</li>
+<li>GStrings (instance of groovy.lang.GString)</li>
+<li>GStrings allow placeholder expressions to be resolved and evaluated at runtime. ( Also called String interpolation ) Placeholders may appear in a full <code>${expression}</code> syntax or an abbreviated $reference syntax.</li>
+</ul>
+
+
+<a name="Arrays.and.Collection"></a>
+<h2>Arrays and Collection</h2>
+
+<ul>
+<li>Groovy supports collections at language level</li>
+<li>Groovy supports generics but favors dynamic behavior. Compile-time type checking is turned off by default.</li>
+</ul>
+
+
+<a name="Arrays"></a>
+<h3>Arrays</h3>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>[1,2,3] //Groovy treats this as list. 
+</span><span class='line'>[1,2,3] as int[] //Now the list is converted to an array here</span></code></pre></td></tr></table></div></figure>
+
+
+<a name="Ranges"></a>
+<h3>Ranges</h3>
+
+<p>For loops and conditionals are not objects, cannot be reused, and cannot be passed around, but ranges can. Ranges let you focus on what the code does, rather than how it does it. This is a pure declaration of your intent, as opposed to fiddling with indexes and boundary conditions.</p>
+
+<p>Custom Range - Any datatype can be used with ranges, provided that both of the following are true:</p>
+
+<ol>
+<li>The type implements next and previous; that is, it overrides the ++ and &ndash; operators.</li>
+<li>The type implements java.lang.Comparable; that is, it implements compareTo, effectively overriding the <code>&lt;=&gt;</code> spaceship operator.</li>
+</ol>
+
+
+<a name="List"></a>
+<h3>List</h3>
+
+<ul>
+<li>The sequence can be empty to declare an empty list.</li>
+<li>Lists are by default of type <code>java.util.ArrayList</code> and can also be declared explicitly by calling the respective constructor. The resulting list can still be used with the subscript operator. In fact, this works with any type of list, as we show here with type <code>java.util.LinkedList</code>.</li>
+<li>Lists can be created and initialized at the same time by calling <code>toList</code> on ranges.</li>
+</ul>
+
+
+<a name="Annotations"></a>
+<h2>Annotations</h2>
+
+<ul>
+<li>groovyc ignores @Override</li>
+<li><code>@Canonical</code> - auto-generates <code>toString()</code> implementation as comma-separated field values</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> import groovy.transform.*
+</span><span class='line'> @Canonical(excludes="age, password")
+</span><span class='line'> class Person {
+</span><span class='line'> String firstName, lastName, password
+</span><span class='line'> int age
+</span><span class='line'> }
+</span><span class='line'> def sara = new Person(firstName: "Sara", lastName: "Walker", age: 49, password: "passw0rd")
+</span><span class='line'> println sara</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li><code>@Delegate</code></li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>import groovy.transform.*
+</span><span class='line'>class Worker {
+</span><span class='line'> def work() { println 'get work done' }
+</span><span class='line'> def analyze() { println 'analyze...' }
+</span><span class='line'> def writeReport() { println 'get report written' }
+</span><span class='line'>}
+</span><span class='line'>class Expert {
+</span><span class='line'> def analyze() { println "expert analysis..." }
+</span><span class='line'>}
+</span><span class='line'>class Manager {
+</span><span class='line'> //At compile time, Groovy examines the Manager class and brings 
+</span><span class='line'> // in methods from the delegated classes only if those methods 
+</span><span class='line'> // don’t already exist
+</span><span class='line'> @Delegate Expert expert = new Expert() 
+</span><span class='line'> //only work() and writeReport() methods are brought here
+</span><span class='line'> @Delegate Worker worker = new Worker()
+</span><span class='line'>}
+</span><span class='line'>def bernie = new Manager()
+</span><span class='line'>bernie.analyze()      //invokes Expert.analyze()
+</span><span class='line'>bernie.work()         //invokes Worker.work()
+</span><span class='line'>bernie.writeReport()  //invokes Worker.writeReport</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li><code>@Immutable</code> - Groovy adds the hashCode(), equals(), and toString() methods</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> import groovy.transform.*
+</span><span class='line'> @Immutable
+</span><span class='line'> class CreditCard { String cardNumber; int creditLimit }
+</span><span class='line'> println new CreditCard("4000-1111-2222-3333", 1000)</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li><code>@Lazy</code> - provides a painless way to implement the virtual proxy pattern with thread safety as a bonus</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> class AsNeeded {
+</span><span class='line'> def value
+</span><span class='line'> //heavy1 and heavy2 are lazy-initialized only at the time of invocation
+</span><span class='line'> @Lazy Heavy heavy1 = new Heavy()
+</span><span class='line'> @Lazy Heavy heavy2 = { new Heavy(size: value) }()
+</span><span class='line'> AsNeeded() { println "Created AsNeeded" }
+</span><span class='line'> }</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li><code>@Newify</code> - Create objects via Ruby-like and Python-like constructors without using &lsquo;new Foo()&rsquo; style. Comes handy in DSL creation.</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>@Newify([CreditCard, Person]) //specify the list of types here. 
+</span><span class='line'>def fluentCreate() {
+</span><span class='line'> println CreditCard("1234-5678-1234-5678", 2000) //Python-like constructor invocation with new keyword
+</span><span class='line'> println Person.new("John", "Doe") //Ruby-like constructor invocation where new() is a method
+</span><span class='line'>}
+</span><span class='line'>fluentCreate()</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li><code>@Singleton</code></li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> @Singleton(lazy = true)
+</span><span class='line'> class TheUnique {
+</span><span class='line'>  private TheUnique() { println 'Instance created' }
+</span><span class='line'> def hello() { println 'hello' }
+</span><span class='line'> }
+</span><span class='line'> TheUnique.instance.hello()
+</span><span class='line'> TheUnique.instance.hello()
+</span><span class='line'> new TheUnique().hello() //Caveat: since Groovy does not honor private methods, clients can still do this.</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li><code>@InheritConstructors</code></li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> @Canonical
+</span><span class='line'> class Car {
+</span><span class='line'> def make, model, year
+</span><span class='line'> Car(make, model){ this.make = make; this.model = model; this.year = 2000; }
+</span><span class='line'> Car(make, model, year){ this.make = make; this.model = model; this.year = year; }
+</span><span class='line'> }
+</span><span class='line'> @InheritConstructors
+</span><span class='line'> class Honda extends Car{
+</span><span class='line'> //no need to explicitly override all the constructors here
+</span><span class='line'> }
+</span><span class='line'> println new Car("Honda", "Accord")</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<a name="Closures"></a>
+<h2>Closures</h2>
+
+<p>In OO languages, the Method-Object pattern has often been used to simulate the same kind of behavior by defining types whose sole purpose is to implement an appropriate single-method interface so that instances of those types can be passed as arguments to methods, which then invoke the method on the interface. e.g., <code>java.io.File.list(FilenameFilter)</code> where FilenameFilter interface specifies a single method, and its only purpose is to allow the list of files returned from the list method to be filtered while it’s being generated.</p>
+
+<a name="Questions"></a>
+<h2>Questions</h2>
+
+<ol>
+<li>What is the difference between a Groovy script and a Groovy class?</li>
+<li>how closure is better than an anonymous inner class?</li>
+<li>what is a spaceship operator? &lt;=></li>
+<li>how to implement dynamic parameters and method?</li>
+<li>What is relaying and duck typing and how dynamic typing enables to achieve them?</li>
+</ol>
 
 
   
@@ -146,15 +748,11 @@ Runs on JVM - Groovy is nothing but a new way of &hellip;">
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
     
-      <li class="post">
-        <a href="/blog/2014/10/20/test/">R Programming</a>
-      </li>
-    
   </ul>
-  <ul>
+  <!-- <ul>
     <li><a href="/datascience/statistics.html">Statistics</a></li>
     <li><a href="/datascience/r.html">R Programming</a></li>
-  </ul>
+  </ul> &#8211;>
 </section>
 
 

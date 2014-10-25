@@ -1,0 +1,447 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Web Concepts - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+  
+  <meta name="description" content="Web Concepts HTTP HTTP Basics HTTP Methods HTTP Content Negotiation (Conneg) Caching Web Tools Bibliography HTTP HTTP Basics Browser-based web &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/webprogramming/webconcepts.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="/atom.xml" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!-- mathjax config similar to math.stackexchange -->
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['$', '$'] ],
+      displayMath: [ ['$$', '$$']],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    messageStyle: "none",
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+  });
+  </script>
+  <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+  <!--script src="/javascripts/mathjax/MathJax.js"></script-->
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body    class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Web Concepts</h1>
+    
+  </header>
+  
+  <p><ul>
+ <li><a href="#HTTP">HTTP</a>
+ <ul>
+  <li><a href="#HTTP.Basics">HTTP Basics</a></li>
+  <li><a href="#HTTP.Methods">HTTP Methods</a></li>
+  <li><a href="#HTTP.Content.Negotiation..Conneg.">HTTP Content Negotiation (Conneg)</a></li>
+  <li><a href="#Caching">Caching</a></li>
+ </ul>
+ </li>
+ <li><a href="#Web.Tools">Web Tools</a></li>
+ <li><a href="#Bibliography">Bibliography</a></li>
+</ul>
+
+</p>
+
+<a name="HTTP"></a>
+<h1>HTTP</h1>
+
+<a name="HTTP.Basics"></a>
+<h2>HTTP Basics</h2>
+
+<ul>
+<li>Browser-based web applications see only a tiny fraction of the features of HTTP.</li>
+<li>Non-RESTful technologies like SOAP and WS-<em> use HTTP strictly as a transport protocol and thus use a very small subset of its capabilities. Many would say that SOAP and WS-</em> use HTTP solely to tunnel through firewalls</li>
+<li>HTTP Request has 4 parts:  the method, the target URL, the HTTP headers, and the entity-body.
+
+<ul>
+<li>HTML <code>&lt;a&gt;</code> tag: has URL and the HTTP method(implicitly definied by HTML spec)</li>
+<li>HTML form: has all 4 parts in it.</li>
+<li>URI Template: only has the URL part. It defines nothing about the HTTP request except for the target URI. It’s not telling you to make a GET request,   a POST request, or any kind of request in particular. That’s why URI Templates   don’t make sense on their own.</li>
+</ul>
+</li>
+</ul>
+
+
+<a name="HTTP.Methods"></a>
+<h2>HTTP Methods</h2>
+
+<p>HTTP has its well-known verbs, officially known as methods or protocol semantics. HTTP verbs 1 to 4 correspond to the CRUD (Create, Read, Update, Delete) operations. 5, 6 are used by clients to explore an API.</p>
+
+<table>
+<thead>
+<tr>
+<th>#  </th>
+<th> HTTP verb  </th>
+<th> CRUD operation  </th>
+<th> Safe  </th>
+<th> Idempotent</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1  </td>
+<td> POST       </td>
+<td> Create          </td>
+<td> No    </td>
+<td> No</td>
+</tr>
+<tr>
+<td>2  </td>
+<td> GET        </td>
+<td> Read            </td>
+<td> Yes   </td>
+<td> Yes</td>
+</tr>
+<tr>
+<td>3  </td>
+<td> PUT        </td>
+<td> Update          </td>
+<td> No    </td>
+<td> Yes</td>
+</tr>
+<tr>
+<td>4  </td>
+<td> DELETE     </td>
+<td> Delete          </td>
+<td> No    </td>
+<td> Yes</td>
+</tr>
+<tr>
+<td>5  </td>
+<td> HEAD       </td>
+<td> Read            </td>
+<td> Yes   </td>
+<td> Yes</td>
+</tr>
+<tr>
+<td>6  </td>
+<td> OPTION     </td>
+<td>                 </td>
+<td>       </td>
+<td></td>
+</tr>
+<tr>
+<td>7  </td>
+<td> CONNECT    </td>
+<td>                 </td>
+<td>       </td>
+<td></td>
+</tr>
+<tr>
+<td>8  </td>
+<td> TRACE      </td>
+<td>                 </td>
+<td>       </td>
+<td></td>
+</tr>
+<tr>
+<td>9  </td>
+<td> LINK       </td>
+<td>                 </td>
+<td> No    </td>
+<td> Yes</td>
+</tr>
+<tr>
+<td>10 </td>
+<td> UNLINK     </td>
+<td>                 </td>
+<td> No    </td>
+<td> Yes</td>
+</tr>
+</tbody>
+</table>
+
+
+<p> Any GET request should be sideeffect free (idempotent) because a GET is a read rather than a create, update, or delete operation. A GET as a read with no side effects is called a &lsquo;safe GET&rsquo;.</p>
+
+<a name="HTTP.Content.Negotiation..Conneg."></a>
+<h2>HTTP Content Negotiation (Conneg)</h2>
+
+<p>Clients invoking the services could expect the response in various data formats, languages and encodings. HTTP Content Negotiation feature comes handy for such cases.</p>
+
+<ul>
+<li>Response Data Format
+
+<ul>
+<li>clients could specify the response format via &ldquo;Accept&rdquo;. If the requested format is not supported, then &lsquo;not accepted&rsquo; error is returned.</li>
+</ul>
+</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>GET http://example.com/stuff
+</span><span class='line'>Accept: application/xml, application/json</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>specifying preference using wild cards.</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>GET http://example.com/stuff
+</span><span class='line'>Accept: text/*, text/html;level=1, */*, application/xml</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Order of preference
+
+<ul>
+<li>when multiple preference are provided, the most specific types takes priority. In above example, &lsquo;text/html;level=1&rsquo; takes precedence.</li>
+<li>&lsquo;q&rsquo; MIME type property could be used as well. Higher the q value, more preferred it is. Default q value is 1.0. e.g., <code>text/*;q=0.9, */*;q=0.1, audio/mpeg, application/xml;q=0.5</code>.</li>
+</ul>
+</li>
+<li>Language Negotiation</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>GET http://example.com/stuff
+</span><span class='line'>Accept-Language: fr;q=1.0, es;q=1.0, en=0.1</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Encoding Negotiation</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>GET http://example.com/stuff
+</span><span class='line'>Accept-Encoding: gzip;q=1.0, compress;0.5; deflate;q=0.1</span></code></pre></td></tr></table></div></figure>
+
+
+<a name="Caching"></a>
+<h2>Caching</h2>
+
+<ul>
+<li>Browser caching</li>
+<li>Proxy caches (CDNs)</li>
+<li>HTTP caching
+
+<ul>
+<li>Cache-control
+
+<ul>
+<li>private - shared intermediaries like proxy or CDNs cannot cache. Only clients can cache.</li>
+<li>public - anyone can cache</li>
+<li>no-cache -</li>
+<li>no-store - cached data is stored in disks.</li>
+<li>no-transform - intermediary caches typically transforms data like images by compressing.</li>
+<li>max-age - expiration time</li>
+<li>s-maxage - expiration time for intermediary caches</li>
+</ul>
+</li>
+<li><p>Revalidation: When the cache is stale, the cacher can ask the server if the data it is holding is still valid. This is called revalidation. To be able to perform revalidation, the client needs some extra information from the server about the resource it is caching. The server will send back a Last-Modified and/or an ETag header with its initial response to the client. If the client supports revalidation, it will store this timestamp along with the cached data.</p>
+
+<ul>
+<li><p>Last-Modified<br/>
+<code>HTTP/1.1 200 OK</code><br/>
+<code>Content-Type: application/xml</code><br/>
+<code>Cache-Control: max-age=1000</code><br/>
+<code>Last-Modified: Tue, 15 May 2009 09:56</code></p></li>
+<li><p>Conditional GET</p>
+
+<ul>
+<li>the client may opt to revalidate its cache of the item. To do this it does a conditional GET request by passing a request header called If-Modified-Since with the value of the cached Last-Modified header. For example:</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>GET /customers/123 HTTP/1.1
+</span><span class='line'>If-Modified-Since: Tue, 15 May 2009 09:56 EST</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>ETag or Entity Tag
+
+<ul>
+<li>The ETag header is a pseudounique identifier that represents the version of the data sent back. Its value is any arbitrary quoted string and is usually an MD5 hash. Here’s an example response:</li>
+</ul>
+</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>HTTP/1.1 200 OK
+</span><span class='line'>Content-Type: application/xml
+</span><span class='line'>Cache-Control: max-age=1000
+</span><span class='line'>ETag: "3141271342554322343200"</span></code></pre></td></tr></table></div></figure>
+
+
+<hr />
+
+<a name="Web.Tools"></a>
+<h1>Web Tools</h1>
+
+<ul>
+<li><a href="http://curl.haxx.se/">cUrl</a></li>
+<li>Web Log Analytics Tool - Splunk</li>
+<li><a href="http://techblog.netflix.com/2011/07/netflix-simian-army.html">Simian Army</a></li>
+<li><a href="http://techblog.netflix.com/2012/07/chaos-monkey-released-into-wild.html">Chaos monkey</a></li>
+</ul>
+
+
+<a name="Bibliography"></a>
+<h1>Bibliography</h1>
+
+<ul>
+<li>Books
+
+<ul>
+<li>RESTful Web APIs - OReilly 2013</li>
+<li>HTTP - The Definitive Guide</li>
+</ul>
+</li>
+</ul>
+
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/webprogramming/webconcepts.html" data-via="" data-counturl="http://fizalihsan.github.io/technology/webprogramming/webconcepts.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

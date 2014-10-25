@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
   
-  <meta name="description" content="Statistics Charts Pie chart Bar chart Histogram Line Chart What type of chart to use? Averages Mean ($\mu$) Median Mode Measuring Spread Range &hellip;">
+  <meta name="description" content="Statistics 1. Charts Pie chart Bar chart Histogram Line Chart What type of chart to use? 2. Measuring Central Tendency Mean ($\mu$) Median Mode 3. &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -21,6 +21,9 @@
   <link rel="canonical" href="http://fizalihsan.github.io/datascience/statistics.html">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
   <link href="/atom.xml" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
   <script src="/javascripts/modernizr-2.0.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -88,7 +91,7 @@
   </header>
   
   <p><ul>
- <li><a href="#Charts">Charts</a>
+ <li><a href="#L1..Charts">1. Charts</a>
  <ul>
   <li><a href="#Pie.chart">Pie chart</a></li>
   <li><a href="#Bar.chart">Bar chart</a></li>
@@ -97,21 +100,21 @@
   <li><a href="#What.type.of.chart.to.use.">What type of chart to use?</a></li>
  </ul>
  </li>
- <li><a href="#Averages">Averages</a>
+ <li><a href="#L2..Measuring.Central.Tendency">2. Measuring Central Tendency</a>
  <ul>
   <li><a href="#Mean....mu..">Mean ($\mu$)</a></li>
   <li><a href="#Median">Median</a></li>
   <li><a href="#Mode">Mode</a></li>
  </ul>
  </li>
- <li><a href="#Measuring.Spread">Measuring Spread</a>
+ <li><a href="#L3..Measuring.Spread">3. Measuring Spread</a>
  <ul>
   <li><a href="#Range">Range</a></li>
   <li><a href="#Quartiles">Quartiles</a></li>
   <li><a href="#Percentiles">Percentiles</a></li>
  </ul>
  </li>
- <li><a href="#Measuring.Variability">Measuring Variability</a>
+ <li><a href="#L4..Measuring.Variability">4. Measuring Variability</a>
  <ul>
   <li><a href="#Variance..amp..Standard.Deviation....sigma..">Variance &amp; Standard Deviation ($\sigma$)</a></li>
   <li><a href="#Standard.Score...z..">Standard Score ($z$)</a></li>
@@ -119,12 +122,10 @@
  </li>
 </ul>
 
+</p>
 
-hi
-{:toc}</p>
-
-<a name="Charts"></a>
-<h1>Charts</h1>
+<a name="L1..Charts"></a>
+<h1>1. Charts</h1>
 
 <a name="Pie.chart"></a>
 <h2>Pie chart</h2>
@@ -202,8 +203,12 @@ hi
 </table>
 
 
-<a name="Averages"></a>
-<h1>Averages</h1>
+<hr />
+
+<a name="L2..Measuring.Central.Tendency"></a>
+<h1>2. Measuring Central Tendency</h1>
+
+<p>There are 3 types of average: Mean, Median &amp; Mode.</p>
 
 <a name="Mean....mu.."></a>
 <h2>Mean ($\mu$)</h2>
@@ -247,8 +252,10 @@ hi
 </ul>
 
 
-<a name="Measuring.Spread"></a>
-<h1>Measuring Spread</h1>
+<hr />
+
+<a name="L3..Measuring.Spread"></a>
+<h1>3. Measuring Spread</h1>
 
 <a name="Range"></a>
 <h2>Range</h2>
@@ -288,8 +295,10 @@ that P<sub>90</sub> = 50, you’d have beaten or matched the score of 90% of oth
 </ul>
 
 
-<a name="Measuring.Variability"></a>
-<h1>Measuring Variability</h1>
+<hr />
+
+<a name="L4..Measuring.Variability"></a>
+<h1>4. Measuring Variability</h1>
 
 <a name="Variance..amp..Standard.Deviation....sigma.."></a>
 <h2>Variance &amp; Standard Deviation ($\sigma$)</h2>
@@ -311,7 +320,7 @@ that P<sub>90</sub> = 50, you’d have beaten or matched the score of 90% of oth
 <li>Standard scores give you a way of comparing values across different sets of data
 where the mean and standard deviation differ. They’re a way of comparing
 related data values in different circumstances.
-$$ \left{ z = \frac{x-\mu} {\sigma} \right} $$</li>
+<img src="/datascience/standardscore.png"></li>
 <li>You find the standard score of a particular value using the mean and standard
 deviation of the entire data set.</li>
 </ul>
@@ -320,11 +329,40 @@ deviation of the entire data set.</li>
 <p><em>Example</em>: Imagine a situation in which you have two basketball players of different ability. The first player gets the ball into the net an average of 70% of the time, and he
 has a standard deviation of 20%. The second player has a mean of 40% and a
 standard deviation of 10%.
-In a particular practice session, Player 1 gets the ball into the net 75% of the time, and Player 2 makes a basket 55% of the time. Which player does best against their personal track record?
-$$
-z1 = \frac{75-70}{20} = 0.25 \
-z2 = \frac{55-40}{10} = 1.5
-$$</p>
+In a particular practice session, Player 1 gets the ball into the net 75% of the time, and Player 2 makes a basket 55% of the time. Which player does best against their personal track record?</p>
+
+<table>
+<thead>
+<tr>
+<th>Player 1                       </th>
+<th>   </th>
+<th> Player 2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>$x$ = 75                       </td>
+<td>   </td>
+<td> $x$ = 55</td>
+</tr>
+<tr>
+<td>$\mu$ = 70                     </td>
+<td>   </td>
+<td> $\mu$ = 40</td>
+</tr>
+<tr>
+<td>$\sigma$ = 20                  </td>
+<td>   </td>
+<td> $\sigma$ = 10</td>
+</tr>
+<tr>
+<td>$z1 = \frac{75-70}{20} = 0.25$ </td>
+<td>   </td>
+<td> $z2 = \frac{55-40}{10} = 1.5 $</td>
+</tr>
+</tbody>
+</table>
+
 
   
     <footer>

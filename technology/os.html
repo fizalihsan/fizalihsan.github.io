@@ -5,14 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Knowledge Shop - KnowledgeShop</title>
+  <title>Operating Systems - KnowledgeShop</title>
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
   
-  <meta name="description" content="Knowledge Shop Technical Architecture Overview Web Programming Concepts Languages Groovy
-Scala General Concepts Data Structures
-OOPS
-Operating &hellip;">
+  <meta name="description" content="Operating Systems UNIX Frequently used commands Find and copy files created today
+find /home/clstest -ctime -1 -exec cp {} /home/mohammo/CSW \; &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -21,7 +19,7 @@ Operating &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://fizalihsan.github.io">
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/os.html">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <!-- Below custom CSS is for table border styling -->
@@ -89,74 +87,79 @@ Operating &hellip;">
 <article role="article">
   
   <header>
-    <h1 class="entry-title">Knowledge Shop</h1>
+    <h1 class="entry-title">Operating Systems</h1>
     
   </header>
   
-  <ul>
-<li>Technical
+  <a name="UNIX"></a>
+<h1>UNIX</h1>
+
+<a name="Frequently.used.commands"></a>
+<h2>Frequently used commands</h2>
 
 <ul>
-<li>Architecture
+<li>Find and copy files created today
+<code>find /home/clstest -ctime -1 -exec cp {} /home/mohammo/CSW \;</code></li>
+<li>Suppress error message from &lsquo;find&rsquo; command
+<code>find . -name "*" -print 2&gt;/dev/null</code></li>
+<li>Tar &amp; untar directories with permissions intact</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>tar -cvpf test.tar /home/mohammo/test
+</span><span class='line'>tar -xvpf test.tar /home/mohammo/test</span></code></pre></td></tr></table></div></figure>
+
 
 <ul>
-<li><a href="/technology/architecture/architecture.html">Overview</a></li>
+<li>Exclude certain files in &lsquo;find&rsquo; command</li>
 </ul>
-</li>
-<li>Web Programming
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>find . -name "*" -not -name "*.jar" -print
+</span><span class='line'>find . -name "*" -not \( -name "*.jar" -o -name "*.tar" \) -print</span></code></pre></td></tr></table></div></figure>
+
 
 <ul>
-<li><a href="/technology/webprogramming/webconcepts.html">Concepts</a></li>
+<li>Search and replace with no hassle of escaping characters
+<code>echo "/home/mohammo" | sed -e "s#/home/mohammo#/home/test#/g"</code></li>
+<li>Search for text but only display their file names
+<code>find . -name "*" -type f -exec grep -l "searchtext" {} \; -print</code></li>
+<li>Set operations - Complement (A-B)- below command prints all entries in file1 that are not in file2
+<code>comm -23 file1 file2</code></li>
+<li>Sorting files</li>
 </ul>
-</li>
-<li>Languages
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> sort file1 file2 | uniq  //Union of unsorted files 
+</span><span class='line'> sort file1 file2 | uniq -d  //Intersection of unsorted files 
+</span><span class='line'> sort file1 file1 file2 | uniq -u //Difference of unsorted files 
+</span><span class='line'> sort file1 file2 | uniq -u  //Symmetric Difference of unsorted files </span></code></pre></td></tr></table></div></figure>
+
 
 <ul>
-<li><a href="/technology/groovy.html">Groovy</a></li>
-<li><a href="/technology/scala.html">Scala</a></li>
+<li>When a JVM process is running in Unix/Windows, how do I check how much memory is being currently used by that JVM?</li>
 </ul>
-</li>
-<li>General Concepts
+
+
+<a name="VI.Tips"></a>
+<h2>VI Tips</h2>
+
+<blockquote><p>Note: Anything between [ and ] denotes a command executed from within vi.</p></blockquote>
 
 <ul>
-<li><a href="/technology/datastructures.html">Data Structures</a></li>
-<li><a href="/technology/oops.html">OOPS</a></li>
-<li><a href="/technology/os.html">Operating Systems</a></li>
-<li><a href="/technology/security.html">Security</a></li>
-<li><a href="/technology/vcs.html">VCS</a></li>
-<li><a href="/technology/xml.html">XML</a></li>
-<li><a href="/technology/coding_bibliography.html">Coding Bibliography</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Functional
-
-<ul>
-<li>Data Science
-
-<ul>
-<li><a href="/datascience/datascience.html">Overview</a></li>
-<li><a href="/datascience/statistics.html">Statistics</a></li>
-<li><a href="/datascience/r.html">R Programming</a></li>
-</ul>
-</li>
-<li>Domain Knowledge
-
-<ul>
-<li><a href="/domain/retirement.html">Retirement</a></li>
-</ul>
-</li>
-<li>Soft Skills
-
-<ul>
-<li><a href="/softskills/presentation.html">Presentation</a></li>
-<li><a href="/softskills/productivity.html">Productivity</a></li>
-<li><a href="/softskills/written.html">Written Communication</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li><code>[ !wc % ]</code> - opens a command shell and runs &lsquo;wc&rsquo; on the current file open in vi. <code>%</code> means current file &amp; <code>!</code> is called &lsquo;Bang&rsquo;. Bang works best with non-interactive commands</li>
+<li><code>[ qa ]</code> close all files open</li>
+<li><code>[ ga ]</code> Show character info</li>
+<li><code>[ ls ]</code> List buffers</li>
+<li><code>[ % ]</code> Bracket matching</li>
 </ul>
 
 

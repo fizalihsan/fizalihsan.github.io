@@ -1,0 +1,448 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Logging & Monitoring - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+  
+  <meta name="description" content="Logging & Monitoring Monitoring Components Monitoring Tools Splunk Components Queries Analytics Metric identity name: k-tuple
+Metrics values &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/architecture/logging-and-monitoring.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="/atom.xml" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!-- mathjax config similar to math.stackexchange -->
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['$', '$'] ],
+      displayMath: [ ['$$', '$$']],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    messageStyle: "none",
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+  });
+  </script>
+  <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+  <!--script src="/javascripts/mathjax/MathJax.js"></script-->
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body    class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Logging & Monitoring</h1>
+    
+  </header>
+  
+  <p><ul>
+ <li><a href="#Monitoring.Components">Monitoring Components</a></li>
+ <li><a href="#Monitoring.Tools">Monitoring Tools</a>
+ <ul>
+  <li><a href="#Splunk">Splunk</a>
+  <ul>
+   <li><a href="#Components">Components</a></li>
+   <li><a href="#Queries">Queries</a></li>
+   <li><a href="#Analytics">Analytics</a></li>
+  </ul>
+  </li>
+ </ul>
+ </li>
+</ul>
+
+</p>
+
+<ul>
+<li>Metric identity name: k-tuple</li>
+<li>Metrics values
+
+<ul>
+<li>counters, gauges, percentiles, nominal, ordinal, interval, ratio, derived</li>
+</ul>
+</li>
+<li>How can we monitor?
+
+<ul>
+<li>Resolution: how frequent to collect the metrics? every 6-10secs?</li>
+<li>Latency: how long before we act on them?</li>
+<li>Diversity: are we collecting different metrics?</li>
+</ul>
+</li>
+</ul>
+
+
+<a name="Monitoring.Components"></a>
+<h1>Monitoring Components</h1>
+
+<p><a href="https://www.usenix.org/sites/default/files/conference/protected-files/dickson.pdf">https://www.usenix.org/sites/default/files/conference/protected-files/dickson.pdf</a></p>
+
+<ol>
+<li>Sensing/Measurement: Creation of metrics</li>
+<li>various systems gather data at various speeds.</li>
+<li>various systems have various concepts of a unit of a metric identity</li>
+<li>no consistent interface</li>
+<li>e.g., <code>top</code>, <code>np</code>, <code>netstats</code>, <code>sar</code>, <code>nagios</code>.</li>
+<li>Storage</li>
+<li>Collection</li>
+<li>Analysis</li>
+<li>Alerting/Escalation</li>
+<li>Visualization - should be actionable items. Avoid pie charts for disk usage metrics. Think of visual graphs which can predict the disk size after 6 months.</li>
+<li>Configuration</li>
+<li>Configuration and Storage are cross-cutting concerns.</li>
+</ol>
+
+
+<a name="Monitoring.Tools"></a>
+<h1>Monitoring Tools</h1>
+
+<ol>
+<li>sar</li>
+<li>trace</li>
+<li><a href="http://oss.oetiker.ch/mrtg/">MRTG</a>
+
+<ul>
+<li>acronym for Multi Router Traffic Grapher</li>
+<li>free software for monitoring and measuring the traffic load on network links.</li>
+<li>gets its data via SNMP agents every few minutes</li>
+<li>results are plotted in graphs</li>
+<li>has alerting mechanism</li>
+</ul>
+</li>
+<li><a href="http://oss.oetiker.ch/rrdtool/">RRDTool</a>
+
+<ul>
+<li>acronym for Round-Robin Database Tool</li>
+<li>aims to handle time-series data like n/w bandwidth, CPU load, etc.</li>
+<li>The data are stored in a round-robin circular buffer/database, thus the system storage footprint remains constant over time.</li>
+<li>It has tools to display the data in graphical format.</li>
+</ul>
+</li>
+<li><a href="http://www.nagios.com/">Nagios</a></li>
+<li><a href="http://ganglia.info/">Ganglia</a>
+
+<ul>
+<li>a scalable distributed system monitor tool for high performance computing systems such as clusters and grids.</li>
+<li>typically used with Nagios.</li>
+</ul>
+</li>
+<li><a href="http://www.cacti.net/">Cacti</a> (mrtg++)
+
+<ul>
+<li>Network Graphing solution designed to harness the power of RRDTool&rsquo;s storage and graph functionality</li>
+</ul>
+</li>
+<li><a href="http://www.sensuapp.org/">Sensu</a>
+
+<ul>
+<li>open source monitoring framework</li>
+</ul>
+</li>
+<li>LogStash
+
+<ul>
+<li>Redis for storage</li>
+<li>RabbitMQ, grok</li>
+<li>Typical implementation: logstash + redis + elasticsearch</li>
+</ul>
+</li>
+<li>Splunk</li>
+<li><a href="http://www.fluentd.org/">FluentD</a>
+
+<ul>
+<li>an open-source tool to collect events and logs and store as JSON</li>
+<li>built on CRuby.</li>
+<li>plugins enables to store the massive data for Log Search (like ElasticSearch), Analytics and Archiving (MongoDB, S3, Hadoop)</li>
+</ul>
+</li>
+<li><a href="http://www.graylog2.com/">GrayLog2</a>
+
+<ul>
+<li>an open source data analytics system</li>
+<li>search logs, create charts, create alerts</li>
+<li>leverages Java and ElasticSearch. Communication via REST API</li>
+</ul>
+</li>
+<li><a href="http://opentsdb.net/">OpenTSDB</a>
+
+<ul>
+<li>pure storage solution</li>
+<li>a free distributed time-series database written on top of HBase.</li>
+<li>was written to store, index and serve metrics collected at a large scale, and make it easily accessible and graphable.</li>
+</ul>
+</li>
+<li>D3.js - Pure visualization solution</li>
+<li><a href="https://github.com/etsy/statsd/">Statsd</a>
+
+<ul>
+<li>listens to anything and everything</li>
+<li>written in node.js. There are alternative implementations in groovy, C, etc.</li>
+<li>listens to statistics (counters and timers) and sends aggregates to backend services like Graphite</li>
+</ul>
+</li>
+<li><a href="http://graphite.wikidot.com/">Graphite</a>
+
+<ul>
+<li>this open-source tool written on Python does 2 things: store numeric time-series data and render graphs of this data on demand</li>
+<li>does not collect data.</li>
+<li>3 components
+
+<ul>
+<li>carbon - a <a href="https://twistedmatrix.com/trac/">Twisted</a> daemon that listens for time-series data</li>
+<li>whisper - a simple database library for storing time-series data</li>
+<li>graphite-webapp - A <a href="https://www.djangoproject.com/">Django</a> webapp that renders graphs on-demand using <a href="http://www.cairographics.com/">Cairo</a>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="http://www.shinken-monitoring.org/">Shinken</a>
+
+<ul>
+<li>open-source Nagios like tool, redesigned and rewritten from scratch.</li>
+<li>Nagios + Graphite + Configuration</li>
+</ul>
+</li>
+<li><a href="http://www.elasticsearch.org/overview/kibana/">Kibana</a>
+
+<ul>
+<li>web interface for viewing logstash records stored in elasticsearch</li>
+</ul>
+</li>
+<li><a href="http://www.elasticsearch.org/">ElasticSearch</a></li>
+<li>Zenoss</li>
+<li>Shippers
+
+<ul>
+<li>lumberjack</li>
+<li>beaver</li>
+<li>syslog</li>
+<li>woodchuck</li>
+</ul>
+</li>
+<li>AppDynamics</li>
+<li>New Relic</li>
+<li>Other tools
+
+<ul>
+<li>monigusto</li>
+<li>collectd</li>
+<li>jmxtrans</li>
+<li>tasseo</li>
+<li>gdash</li>
+<li>librato</li>
+</ul>
+</li>
+</ol>
+
+
+<a name="Splunk"></a>
+<h2>Splunk</h2>
+
+<ul>
+<li>is a time-series indexer - a product that takes care of the three Vs very well.</li>
+<li>3 main functionalities
+
+<ul>
+<li><strong>Data collection</strong>
+
+<ul>
+<li>from static source</li>
+<li>from real-time source</li>
+<li>from log files, rolling log files</li>
+<li>from databases</li>
+</ul>
+</li>
+<li>from script results</li>
+<li><strong>Data indexing</strong> - index of above data</li>
+<li><strong>Search and Analysis</strong> - Using Splunk Processing Language to search and extract results in the form of charts, events, etc.</li>
+</ul>
+</li>
+<li>Splunk breaks down log file entries into different events based on the associated timestamp. If no timestamp is found, then all the lines in the log file is considered as a single event.</li>
+</ul>
+
+
+<a name="Components"></a>
+<h3>Components</h3>
+
+<ol>
+<li>Search Head</li>
+<li>Forwarders</li>
+</ol>
+
+
+<a name="Queries"></a>
+<h3>Queries</h3>
+
+<ul>
+<li>Top browsers: <code>sourcetype="access_combined_wcookie" | top useragent</code></li>
+<li>Bottom 3 browsers: <code>sourcetype=access_combined_wcookie | rare useragent limit=3</code></li>
+<li>Top 5 IP address: <code>sourcetype="access_combined_wcookie" | top clientip limit=5</code></li>
+<li>Top Referers without percent field: <code>sourcetype=access_combined_wcookie referer != *MyGizmo* | top referer | fields - percent</code></li>
+<li>Count of 404 errors grouped by <code>source: sourcetype=access_combined_wcookie status=404 | stats count by source</code></li>
+<li>Top purchases by product: <code>sourcetype=access* | timechart count(eval(action="purchase")) by productId usenull=f</code></li>
+<li>Pages views and purchases: <code>sourcetype=access_* | timechart per_hour(eval(method="GET")) AS Views, per_hour(eval(action="purchase")) AS Purchases</code></li>
+<li>Geo location of IPs (Google Maps): <code>sourcetype=access* | geoip clientip</code></li>
+</ul>
+
+
+<a name="Analytics"></a>
+<h3>Analytics</h3>
+
+<ul>
+<li>also known as Business Intelligence / Data Mining / OLAP</li>
+<li>Traditional analytics are based on &lsquo;Early Structure Binding&rsquo;, where you need to know beforehand what questions are going to be asked of the data.
+
+<ul>
+<li>The typical development steps can be summarized as follows:
+
+<ul>
+<li>Decide what questions to ask</li>
+<li>Design the data schema</li>
+<li>Normalize the data</li>
+<li>Write database insertion code</li>
+<li>Create the queries</li>
+<li>Feed the results into an analytics tool</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Late Structure Binding, which has these simple steps:
+
+<ul>
+<li>Write data (or events) to log files</li>
+<li>Collect the log files</li>
+<li>Create searches, graphs, and reports using Splunk</li>
+</ul>
+</li>
+<li>Operational Intelligence refers to the information collected and processed</li>
+<li>Semantic logging as data or events that are written to log files explicitly for the purpose of gathering analytics.</li>
+</ul>
+
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/architecture/logging-and-monitoring.html" data-via="" data-counturl="http://fizalihsan.github.io/technology/architecture/logging-and-monitoring.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

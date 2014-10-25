@@ -1,0 +1,350 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Design Principles - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+  
+  <meta name="description" content="Design Principles Design Idioms API Design - Best Practices Interface Interface Types Properties of an Interface 5 principles of class design (SOLID &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/architecture/design-principles.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="/atom.xml" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!-- mathjax config similar to math.stackexchange -->
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['$', '$'] ],
+      displayMath: [ ['$$', '$$']],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    messageStyle: "none",
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+  });
+  </script>
+  <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+  <!--script src="/javascripts/mathjax/MathJax.js"></script-->
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body    class="collapse-sidebar sidebar-footer" >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Design Principles</h1>
+    
+  </header>
+  
+  <p><ul>
+ <li><a href="#Design.Idioms">Design Idioms</a></li>
+ <li><a href="#API.Design.-.Best.Practices">API Design - Best Practices</a></li>
+ <li><a href="#Interface">Interface</a>
+ <ul>
+  <li><a href="#Interface.Types">Interface Types</a></li>
+  <li><a href="#Properties.of.an.Interface">Properties of an Interface</a></li>
+ </ul>
+ </li>
+ <li><a href="#L5.principles.of.class.design..SOLID.">5 principles of class design (SOLID)</a></li>
+ <li><a href="#L6.principles.of.package.design">6 principles of package design</a>
+ <ul>
+  <li><a href="#L3.principles.of.package.cohesion">3 principles of package cohesion</a></li>
+  <li><a href="#L3.principles.of.package.coupling">3 principles of package coupling</a></li>
+ </ul>
+ </li>
+ <li><a href="#Object.Calisthenics">Object Calisthenics</a></li>
+ <li><a href="#Law.of.Demeter..or.Don.t.talk.to.strangers.">Law of Demeter (or Don&#8217;t talk to strangers)</a></li>
+</ul>
+
+</p>
+
+<a name="Design.Idioms"></a>
+<h1>Design Idioms</h1>
+
+<ul>
+<li><a href="http://www.slideshare.net/nadeembtech/code-craftsmanship">http://www.slideshare.net/nadeembtech/code-craftsmanship</a></li>
+<li>Technical debt</li>
+<li>Code smell</li>
+<li>Orthogonal concerns (design &amp; architecture)</li>
+<li>RIA technolgies?</li>
+<li>Data extraction patterns</li>
+<li>Backward Compatibility (Refer to <em>Practical API Design - Confessions of a Java * Framework Architect</em>)
+
+<ul>
+<li>Source Compatibility</li>
+<li>Binary Compatibility</li>
+<li>Functional Compatibility</li>
+</ul>
+</li>
+</ul>
+
+
+<a name="API.Design.-.Best.Practices"></a>
+<h1>API Design - Best Practices</h1>
+
+<ul>
+<li>Do not expose more than you want
+
+<ul>
+<li>A method is better than a field</li>
+<li>A Factory is better than a constructor</li>
+<li>Make Everything final</li>
+<li>Do not put setters where they do not belong</li>
+<li>Give the creator of an object more rights</li>
+<li>Do not expose deep hierarchies</li>
+</ul>
+</li>
+<li>Code against Interfaces, not Implementations
+
+<ul>
+<li>Removing a method or a field</li>
+<li>Removing or Adding a Class or an Interface</li>
+<li>Inserting an Interface or a Class into an Existing Hierarchy</li>
+<li>Adding a Method or a Field</li>
+<li>Comparing Java Interfaces and Classes</li>
+<li>Are Abstract Classes Useful?</li>
+</ul>
+</li>
+<li>Use Modular Architecture
+
+<ul>
+<li>Cyclic dependencies</li>
+</ul>
+</li>
+</ul>
+
+
+<a name="Interface"></a>
+<h1>Interface</h1>
+
+<a name="Interface.Types"></a>
+<h2>Interface Types</h2>
+
+<p>(Refer to <em>Interface Oriented Design</em>)
+* Data Interfaces &amp; Service Interfaces
+* Data Access Interface Structures
+  * Sequential Vs. Random retrieval
+  * Push &amp; Pull Interfaces
+  * Alternative Interfaces
+* Stateless Vs. Stateful Interfaces</p>
+
+<a name="Properties.of.an.Interface"></a>
+<h2>Properties of an Interface</h2>
+
+<ul>
+<li>Cohesiveness</li>
+<li>Printer interface</li>
+<li>Coupling</li>
+<li>Minimal Vs. Complete</li>
+<li>Complete Vs. Simple</li>
+</ul>
+
+
+<a name="L5.principles.of.class.design..SOLID."></a>
+<h1>5 principles of class design (SOLID)</h1>
+
+<ol>
+<li><strong>SRP</strong> <a href="https://docs.google.com/open?id=0ByOwmqah_nuGNHEtcU5OekdDMkk">The Single Responsibility Principle</a> - A class should have one, and only one, reason to change.</li>
+<li><strong>OCP</strong> <a href="http://docs.google.com/a/cleancoder.com/viewer?a=v&amp;pid=explorer&amp;chrome=true&amp;srcid=0BwhCYaYDn8EgN2M5MTkwM2EtNWFkZC00ZTI3LWFjZTUtNTFhZGZiYmUzODc1&amp;hl=en">The Open Closed Principle</a> - You should be able to extend a classes behavior, without modifying it.</li>
+<li><strong>LSP</strong> <a href="http://docs.google.com/a/cleancoder.com/viewer?a=v&amp;pid=explorer&amp;chrome=true&amp;srcid=0BwhCYaYDn8EgNzAzZjA5ZmItNjU3NS00MzQ5LTkwYjMtMDJhNDU5ZTM0MTlh&amp;hl=en">The Liskov Substitution Principle</a> - Derived classes must be substitutable for their base classes.</li>
+<li><strong>ISP</strong> <a href="http://docs.google.com/a/cleancoder.com/viewer?a=v&amp;pid=explorer&amp;chrome=true&amp;srcid=0BwhCYaYDn8EgOTViYjJhYzMtMzYxMC00MzFjLWJjMzYtOGJiMDc5N2JkYmJi&amp;hl=en">The Interface Segregation Principle</a> - Make fine grained interfaces that are client specific.</li>
+<li><strong>DIP</strong> <a href="http://docs.google.com/a/cleancoder.com/viewer?a=v&amp;pid=explorer&amp;chrome=true&amp;srcid=0BwhCYaYDn8EgMjdlMWIzNGUtZTQ0NC00ZjQ5LTkwYzQtZjRhMDRlNTQ3ZGMz&amp;hl=en">The Dependency Inversion Principle</a> - Depend on abstractions, not on concretions.</li>
+</ol>
+
+
+<a name="L6.principles.of.package.design"></a>
+<h1>6 principles of package design</h1>
+
+<p>The next six principles are about packages. In this context a package is a binary deliverable like a .jar file, or a dll as opposed to a namespace like a java package or a C++ namespace.</p>
+
+<a name="L3.principles.of.package.cohesion"></a>
+<h2>3 principles of package cohesion</h2>
+
+<p>These principles are about package cohesion, they tell us what to put inside packages:</p>
+
+<ol>
+<li><strong>REP</strong> <a href="http://docs.google.com/a/cleancoder.com/viewer?a=v&amp;pid=explorer&amp;chrome=true&amp;srcid=0BwhCYaYDn8EgOGM2ZGFhNmYtNmE4ZS00OGY5LWFkZTYtMjE0ZGNjODQ0MjEx&amp;hl=en">The Release Reuse Equivalency Principle</a> - The granule of reuse is the granule of release.</li>
+<li><strong>CCP</strong> <a href="http://docs.google.com/a/cleancoder.com/viewer?a=v&amp;pid=explorer&amp;chrome=true&amp;srcid=0BwhCYaYDn8EgOGM2ZGFhNmYtNmE4ZS00OGY5LWFkZTYtMjE0ZGNjODQ0MjEx&amp;hl=en">The Common Closure Principle</a> - Classes that change together are packaged together.</li>
+<li><strong>CRP</strong> <a href="http://docs.google.com/a/cleancoder.com/viewer?a=v&amp;pid=explorer&amp;chrome=true&amp;srcid=0BwhCYaYDn8EgOGM2ZGFhNmYtNmE4ZS00OGY5LWFkZTYtMjE0ZGNjODQ0MjEx&amp;hl=en">The Common Reuse Principle</a> - Classes that are used together are packaged together.</li>
+</ol>
+
+
+<a name="L3.principles.of.package.coupling"></a>
+<h2>3 principles of package coupling</h2>
+
+<p>These principles are about the couplings between packages, and talk about metrics that evaluate the package structure of a system.</p>
+
+<ol>
+<li><strong>ADP</strong> <a href="http://docs.google.com/a/cleancoder.com/viewer?a=v&amp;pid=explorer&amp;chrome=true&amp;srcid=0BwhCYaYDn8EgOGM2ZGFhNmYtNmE4ZS00OGY5LWFkZTYtMjE0ZGNjODQ0MjEx&amp;hl=en">The Acyclic Dependencies Principle</a> - The dependency graph of packages must have no cycles.</li>
+<li><strong>SDP</strong> <a href="http://docs.google.com/a/cleancoder.com/viewer?a=v&amp;pid=explorer&amp;chrome=true&amp;srcid=0BwhCYaYDn8EgZjI3OTU4ZTAtYmM4Mi00MWMyLTgxN2YtMzk5YTY1NTViNTBh&amp;hl=en">The Stable Dependencies Principle</a> - Depend in the direction of stability.</li>
+<li><strong>SAP</strong> <a href="http://docs.google.com/a/cleancoder.com/viewer?a=v&amp;pid=explorer&amp;chrome=true&amp;srcid=0BwhCYaYDn8EgZjI3OTU4ZTAtYmM4Mi00MWMyLTgxN2YtMzk5YTY1NTViNTBh&amp;hl=en">The Stable Abstractions Principle</a> - Abstractness increases with stability.</li>
+</ol>
+
+
+<a name="Object.Calisthenics"></a>
+<h1>Object Calisthenics</h1>
+
+<ul>
+<li><a href="http://williamdurand.fr/2013/06/03/object-calisthenics/">http://williamdurand.fr/2013/06/03/object-calisthenics/</a></li>
+<li><a href="http://www.slideshare.net/rdohms/bettercode-phpbenelux212alternate">http://www.slideshare.net/rdohms/bettercode-phpbenelux212alternate</a></li>
+<li><p><a href="https://github.com/TheLadders/object-calisthenics">https://github.com/TheLadders/object-calisthenics</a></p></li>
+<li><p><strong>Rule 1</strong>: One level of indentation per method</p>
+
+<ul>
+<li>Each method should do exactly one thing.</li>
+<li>How to fix it: Use the &lsquo;Extract Method&rsquo; to pull out behaviors until your methods only have 1 level of indentation.</li>
+</ul>
+</li>
+<li><strong>Rule 2</strong>: Don&rsquo;t use the ELSE keyword
+
+<ul>
+<li>Every conditional branch creates confusion.</li>
+<li>How to fix it: Use polymorphism; Use the Null Object pattern.</li>
+</ul>
+</li>
+<li><strong>Rule 3</strong>: Wrap all primitives and Strings
+
+<ul>
+<li>If the variable of your primitive type has a behaviors, you MUST encapsulate it. And this is especially true for Domain Driven Design. DDD describes Value Objects like Money, or Hour for instance which expresses the intent explicitly.</li>
+</ul>
+</li>
+<li><strong>Rule 4</strong>: First class collections</li>
+<li><strong>Rule 5</strong>: One dot per line</li>
+<li><strong>Rule 6</strong>: Don’t abbreviate</li>
+<li><strong>Rule 7</strong>: Keep all entities small</li>
+<li><strong>Rule 8</strong>: No classes with more than two instance variables</li>
+<li><strong>Rule 9</strong>: No getters/setters/properties</li>
+</ul>
+
+
+<a name="Law.of.Demeter..or.Don.t.talk.to.strangers."></a>
+<h1>Law of Demeter (or Don&rsquo;t talk to strangers)</h1>
+
+<p>???</p>
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/architecture/design-principles.html" data-via="" data-counturl="http://fizalihsan.github.io/technology/architecture/design-principles.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

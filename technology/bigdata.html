@@ -1,0 +1,380 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Big Data - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+  
+  <meta name="description" content="Big Data Big Data Concepts MapReduce (Programming Model) Apache Hadoop HDFS (Hadoop Distributed File System) Daemons MapReduce (Hadoop &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/bigdata.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="/atom.xml" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!-- mathjax config similar to math.stackexchange -->
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['$', '$'] ],
+      displayMath: [ ['$$', '$$']],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    messageStyle: "none",
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+  });
+  </script>
+  <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+  <!--script src="/javascripts/mathjax/MathJax.js"></script-->
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Big Data</h1>
+    
+  </header>
+  
+  <p><ul>
+ <li><a href="#Big.Data.Concepts">Big Data Concepts</a></li>
+ <li><a href="#MapReduce..Programming.Model.">MapReduce (Programming Model)</a></li>
+ <li><a href="#Apache.Hadoop">Apache Hadoop</a>
+ <ul>
+  <li><a href="#HDFS..Hadoop.Distributed.File.System.">HDFS (Hadoop Distributed File System)</a></li>
+  <li><a href="#Daemons">Daemons</a></li>
+  <li><a href="#MapReduce..Hadoop.Implementation.">MapReduce (Hadoop Implementation)</a></li>
+ </ul>
+ </li>
+ <li><a href="#Clustering">Clustering</a></li>
+ <li><a href="#Bibliography">Bibliography</a></li>
+</ul>
+
+</p>
+
+<a name="Big.Data.Concepts"></a>
+<h1>Big Data Concepts</h1>
+
+<ul>
+<li>Large data processing in low latency</li>
+<li>Process unstructured data</li>
+<li>3Vs of Big Data - Volume, Velocity and Variety</li>
+<li><a href="http://fizalihsan.wordpress.com/2014/01/02/7vs-of-big-data-briefly/">7Vs of Big Data</a> - Volume, Velocity and Variety, Veracity, Variability, Visualization and Value</li>
+<li>Why Big Data?
+
+<ul>
+<li>Old data mining systems were expensive, not easily scalable</li>
+</ul>
+</li>
+<li>Scaling concepts
+
+<ul>
+<li>Scale Up
+
+<ul>
+<li>When volume of data increases, add computing power to a single server or move to a bigger server.</li>
+<li>Pros: no change in architecture needed.</li>
+<li>Cons: there are limitation on how big a single host can be.</li>
+</ul>
+</li>
+<li>Scale Out
+
+<ul>
+<li>Processing is handled by more than 1 server. When data volume increases, add more servers to the farm.</li>
+<li>Pros: Cheaper purchase costs than scale up, High availability</li>
+<li>Cons: complex data processing stratagies involved.</li>
+<li>Features: smart-software-dumb-hardware, move-processing-not-data.</li>
+<li>Challenges: Bottlenecks, increased risk of failure</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Consistency - CAP theorem</li>
+<li>Caching</li>
+<li>Adhoc query</li>
+<li>Sharding</li>
+<li>Replication</li>
+<li>Fault tolerance</li>
+</ul>
+
+
+<a name="MapReduce..Programming.Model."></a>
+<h1>MapReduce (Programming Model)</h1>
+
+<blockquote><p>Source: Hadoop Operations -OReilly</p></blockquote>
+
+<ul>
+<li>Designed to simplify the development of large-scale, distributed, fault-tolerant data processing applications</li>
+<li>In MapReduce, developers write jobs that consist primarily of a map function and a reduce function, and the framework handles the gory details of parallelizing the work, scheduling parts of the job on worker machines, monitoring for and recovering from failures, and so forth.</li>
+<li>User-provided code is invoked by the framework rather than the other way around.</li>
+<li>Features
+
+<ul>
+<li><strong>Simplicity of development</strong> - Developers use functional programming concepts to operate on one record at a time. Map functions operate on these records and produce intermediate key-value pairs. The reduce function then operates on the intermediate key-value pairs, processing all values that have the same key together and outputting the result. These primitives can be used to implement filtering, projection, grouping, aggregation, and other common data processing functions.</li>
+<li><strong>Scalability</strong> - MapReduce is designed to be a &lsquo;share-nothing&rsquo; system. Since tasks are independent, they can run in parallel in one or more machines.</li>
+<li><strong>Automatic parallelization and distribution of work</strong> -  Developers focus on the map and reduce functions that process individual records (where “record” is an abstract concept—it could be a line of a file or a row from a relational database) in a dataset. The storage of the dataset is not prescribed by MapReduce, although it is extremely common, as we’ll see later, that files on a distributed filesystem are an excellent pairing. The framework is responsible for splitting a MapReduce job into tasks. Tasks are then executed on worker nodes or (less pleasantly) slaves.</li>
+<li><strong>Fault Tolerance</strong> - MapReduce treats failure as a first-class citizen and supports reexecution of failed tasks on healthy worker nodes in the cluster. Should a worker node fail, all tasks are assumed to be lost, in which case they are simply rescheduled elsewhere.</li>
+</ul>
+</li>
+</ul>
+
+
+<a name="Apache.Hadoop"></a>
+<h1>Apache Hadoop</h1>
+
+<ul>
+<li>Hadoop is an open source platform that provides implementations of both the MapReduce and GFS (Google File System) technologies and allows the processing of very large data sets across clusters of low-cost commodity hardware.</li>
+<li>The terms host or server refer to the physical hardware hosting Hadoop&rsquo;s various components. The term node will refer to the software component comprising a part of the cluster.</li>
+<li>Where Hadoop is not a good fit?
+
+<ul>
+<li>not well suited for low-latency queries like websites, real time systems, etc. (HBase on top of Hadoop serves low-latency queries)</li>
+<li>smaller data sets.</li>
+</ul>
+</li>
+<li>The term <em>Hadoop Streaming</em> refers to a mechanism allowing scripting languages to be used to write map and reduce tasks</li>
+<li>Hadoop installation consists of four types of nodes—a NameNode, DataNodes, a JobTracker, and TaskTracker HDFS nodes (NameNode and DataNodes) provide a distributed filesystem where the JobTracker manages the jobs and TaskTrackers run tasks that perform parts of the job. Users submit MapReduce jobs to the JobTracker, which runs each of the Map and Reduce parts of the initial job in TaskTrackers, collects results, and finally emits the results.</li>
+</ul>
+
+
+<a name="HDFS..Hadoop.Distributed.File.System."></a>
+<h2>HDFS (Hadoop Distributed File System)</h2>
+
+<ul>
+<li>is a distributed filesystem that can store very large data sets by scaling out across a cluster of hosts. It has specific design and performance characteristics; in particular, it is optimized for throughput instead of latency, and it achieves high availability through replication instead of redundancy.</li>
+<li>similar to any other linux file system like ext3 - but cannot be mounted - and requires applications to be specially built for it.</li>
+<li>Block size in old file systems are typically 4KB or 8KB of size. In HDFS, it is 64MB to 1GB.</li>
+<li>Replicates each block to multiple machines (default 3) in the cluster. Should the number of copies of a block drop below the configured replication factor, the filesystem automatically makes a new copy from one of the remaining replicas.</li>
+<li>Due to replicated data, failures are easily tolerated.</li>
+<li>not a POSIX-compliant filesystem.</li>
+<li>HDFS is optimized for throughput over latency; it is very efficient at streaming read requests for large files but poor at seek requests for many small ones.</li>
+</ul>
+
+
+<p><img class="right" src="/technology/hadoop-server-roles.png"></p>
+
+<a name="Daemons"></a>
+<h2>Daemons</h2>
+
+<ul>
+<li>Namenode (NN)
+
+<ul>
+<li>1 per cluster</li>
+<li>Purpose: Stores filesystem metadata, stores file to block map, and provides a global picture of the filesystem</li>
+</ul>
+</li>
+<li>Secondary namenode (SNN)
+
+<ul>
+<li>1 per cluster (better not to share machine with NameNode)</li>
+<li>Purpose: Performs internal namenode transaction log checkpointing</li>
+</ul>
+</li>
+<li>DataNode
+
+<ul>
+<li>Many per cluster</li>
+<li>Purpose: Stores block data (file contents)</li>
+</ul>
+</li>
+<li>Each storage node runs a process called a DataNode that manages the blocks on that host, and these are coordinated by a master NameNode process running on a separate host.</li>
+<li>Instead of handling disk failures by having physical redundancies in disk arrays or similar strategies, HDFS uses replication. Each of the blocks comprising a file is stored on multiple nodes within the cluster, and the HDFS NameNode constantly monitors reports sent by each DataNode to ensure that failures have not dropped any block below the desired replication factor. If this does happen, it schedules the addition of another copy within the cluster. (include archictecture diagram from internet)</li>
+<li>The master (NameNode) monitors the health of the cluster and handle failures by moving data blocks around.</li>
+<li>Processes on each server (DataNode) are responsible for performing work on the physical host, receiving instructions from the NameNode nd reporting health/progress status back to it.</li>
+<li>NameNode Federation - Since NameNodes keep all the metadata in memory, there is inherent limitation up to which it can scale up. Scaling out with multiple namenodes is called namenode federation</li>
+<li>HDFS interface
+
+<ul>
+<li>HDFS shell</li>
+<li>Java API</li>
+<li>REST API - WebHDFS, HttpFS(standalone RESTful HDFS proxy service)</li>
+</ul>
+</li>
+</ul>
+
+
+<a name="MapReduce..Hadoop.Implementation."></a>
+<h2>MapReduce (Hadoop Implementation)</h2>
+
+<ul>
+<li>is a data processing paradigm that takes a specification of how the data will be input and output from its two stages (called map and reduce) and then applies this across arbitrarily large data sets. MapReduce integrates tightly with HDFS, ensuring that wherever possible, MapReduce tasks run directly on the HDFS nodes that hold the required data.</li>
+<li>Concepts
+
+<ul>
+<li>concepts of functions called map and reduce come straight from functional programming languages where they were applied to lists of input data.</li>
+<li>divide and conquer&#8221;, where a single problem is broken into multiple individual subtasks. This approach becomes even more powerful when the subtasks are executed in parallel;</li>
+</ul>
+</li>
+<li>Unlike traditional relational databases that require structured data with well-defined schemas, MapReduce and Hadoop work best on semi-structured or unstructured data.</li>
+<li>Instead of data conforming to rigid schemas, the requirement is instead that the data be provided to the map function as a series of key value pairs. The output of the map function is a set of other key value pairs, and the reduce function performs aggregation to collect the final set of results.</li>
+<li>Hadoop provides a standard specification (that is, interface) for the map and reduce functions, and implementations of these are often referred to as mappers and reducers. A typical MapReduce job will comprise of a number of mappers and reducers, and it is not unusual for several of these to be extremely simple. The developer focuses on expressing the transformation between source and result data sets, and the Hadoop framework manages all aspects of job execution, parallelization, and coordination.</li>
+<li>The master (JobTracker) monitors the health of the cluster and handle failures by rescheduling failed work.</li>
+<li>Processes on each server (TaskTracker) are responsible for performing work on the physical host, receiving instructions from the JobTracker, and reporting health/progress status back to it.</li>
+</ul>
+
+
+<a name="Clustering"></a>
+<h1>Clustering</h1>
+
+<ul>
+<li>What is Clustering</li>
+<li>How clustering works</li>
+<li>Why clustering</li>
+<li>Terms to know</li>
+<li>Failover</li>
+<li>Replication</li>
+<li>Scalability vs. High availability</li>
+<li>Physical node vs. virtual node</li>
+<li>Quorum</li>
+<li>Load balancing</li>
+</ul>
+
+
+<a name="Bibliography"></a>
+<h1>Bibliography</h1>
+
+<ul>
+<li>Hadoop
+
+<ul>
+<li>Hadoop Beginner&rsquo;s Guide</li>
+</ul>
+</li>
+<li>Clustering
+
+<ul>
+<li><a href="http://publib.boulder.ibm.com/infocenter/iseries/v5r4/index.jsp?topic=%2Frzaig%2Frzaigconceptsbasiccluster.htm">http://publib.boulder.ibm.com/infocenter/iseries/v5r4/index.jsp?topic=%2Frzaig%2Frzaigconceptsbasiccluster.htm</a></li>
+<li><a href="http://www.slideshare.net/yashamwan/cluster-16097908?from_search=9">http://www.slideshare.net/yashamwan/cluster-16097908?from_search=9</a></li>
+<li><a href="http://www.slideshare.net/itsec/clustering-and-high-availability">http://www.slideshare.net/itsec/clustering-and-high-availability</a></li>
+</ul>
+</li>
+</ul>
+
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/bigdata.html" data-via="" data-counturl="http://fizalihsan.github.io/technology/bigdata.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

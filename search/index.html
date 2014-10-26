@@ -5,13 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Data Structures - KnowledgeShop</title>
+  <title>Search Results - KnowledgeShop</title>
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
-<meta name="description" content="Data Structures Data Structures Heap sort visualization - http://www2.hawaii.edu/~copley/665/HSApplet.html
-B+ tree &amp; Balanced B+ tree - used in &hellip;">
+<meta name="description" content="Search Results Search results Technical Architecture Overview | Coding Principles | Design Principles | Logging &amp; Monitoring | Patterns Database &hellip;">
 <meta name="keywords" content="statistics, data science, R, big data, mongodb">
 
   <!-- http://t.co/dKP3o1e -->
@@ -20,7 +19,7 @@ B+ tree &amp; Balanced B+ tree - used in &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://fizalihsan.github.io/technology/datastructures.html">
+  <link rel="canonical" href="http://fizalihsan.github.io/search">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <!-- Below custom CSS is for table border styling -->
@@ -112,150 +111,16 @@ B+ tree &amp; Balanced B+ tree - used in &hellip;">
 <article role="article">
   
   <header>
-    <h1 class="entry-title">Data Structures</h1>
+    <h1 class="entry-title">Search Results</h1>
     
   </header>
   
-  <p>Data Structures</p>
+  <p><section id="search-results" style="display: none;">
+  <p>Search results</p>
+  <div class="entries">
+  </div>
+</section></p>
 
-<ul>
-<li>Heap sort visualization - <a href="http://www2.hawaii.edu/~copley/665/HSApplet.html">http://www2.hawaii.edu/~copley/665/HSApplet.html</a></li>
-<li>B+ tree &amp; Balanced B+ tree - used in DB indexes</li>
-<li>Red-Black tree - implemented in java.util.TreeMap</li>
-<li>Basics</li>
-<li>Iteration</li>
-<li>Sorting</li>
-<li>Hashing</li>
-<li>Searching</li>
-<li><a href="http://msdn.microsoft.com/en-US/library/ms379570(v=vs.80">Guide - An Extensive Examination of Data Structures Using C# 2.0</a>.aspx)</li>
-<li><a href="http://www.mpi-inf.mpg.de/~mehlhorn/Toolbox.html">http://www.mpi-inf.mpg.de/~mehlhorn/Toolbox.html</a></li>
-<li><p><a href="http://www.cs.auckland.ac.nz/software/AlgAnim/ds_ToC.html">http://www.cs.auckland.ac.nz/software/AlgAnim/ds_ToC.html</a></p></li>
-<li><p>List</p>
-
-<ul>
-<li>Array</li>
-<li>LinkedList</li>
-<li>Skiplist (invented by William Pugh - look paper on alternative to Binary Tree - learn the Java implementations - when to prepare this over Maps)</li>
-</ul>
-</li>
-<li>Trees (<a href="http://webdocs.cs.ualberta.ca/~holte/T26/top.realTop.html">http://webdocs.cs.ualberta.ca/~holte/T26/top.realTop.html</a>)
-
-<ul>
-<li>Types</li>
-<li>Binary search tree (BST)</li>
-<li>Balanced tree or</li>
-<li>Height-balanced binary search tree (OR) AVL tree (after their Russian inventors  * Adelson-Velskii and Landis.)</li>
-<li>Self-balanced tree</li>
-<li>M-way trees</li>
-<li>B trees: Perfectly Height-balanced M-way search trees</li>
-<li>2-3-4 trees</li>
-<li>Red-Black trees</li>
-<li>Heap</li>
-<li>Operations</li>
-<li>Insertion, Deletions</li>
-<li>Traversals - inorder, pre-order, post-order</li>
-<li>Tree Rotation</li>
-</ul>
-</li>
-<li>Graphs
-
-<ul>
-<li>Types - Directed, Undirected, Weighted</li>
-<li>Operations</li>
-<li>Algorithms</li>
-</ul>
-</li>
-</ul>
-
-
-<a name="Algorithms"></a>
-<h2>Algorithms</h2>
-
-<ul>
-<li>Space-time complexity</li>
-</ul>
-
-
-<a name="Efficiency.and.Big-O.notation"></a>
-<h3>Efficiency and Big-O notation</h3>
-
-<p>A good algorithm is economical in its use of two resources: time and space. The O-notation is a way of describing the performance of an algorithm in an abstract way, without the detail required to predict the precise performance of a particular program running on a particular machine. Main reason for using it is that it gives us a way of describing how the execution time for an algorithm depends on the size of its data set, provided the data set is large enough.</p>
-
-<ul>
-<li>How to calculate the BigO values?</li>
-<li>Diff use cases - best case, worst case, amortized, probablistic???</li>
-<li><a href="http://www.perlmonks.org/?node_id=227909">Informal Introduction to BigO notation</a></li>
-<li><strong>Common Big-O functions</strong></li>
-</ul>
-
-
-<table>
-<thead>
-<tr>
-<th> # </th>
-<th> Time </th>
-<th> Common Name     </th>
-<th>Effect on running time if N is doubled</th>
-<th>Example</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td> 1 </td>
-<td> O(1) </td>
-<td><strong>Constant Time</strong></td>
-<td>unchanged </td>
-<td> insertion into a hash table </td>
-</tr>
-<tr>
-<td> 2 </td>
-<td> O(log N) </td>
-<td> <strong>Logarithmic Time</strong> </td>
-<td> increased by a constant amount </td>
-<td> insertion into a tree </td>
-</tr>
-<tr>
-<td> 3 </td>
-<td> O(N) </td>
-<td> <strong>Linear Time</strong> </td>
-<td> Doubled e.g. linear search </td>
-<td></td>
-</tr>
-<tr>
-<td> 4 </td>
-<td> O(N log N) </td>
-<td> </td>
-<td> doubled plus an amount proportional to N </td>
-<td> merge sort</td>
-</tr>
-<tr>
-<td> 5 </td>
-<td> O(N2) </td>
-<td> <strong>Quadratic Time</strong> </td>
-<td> Increases fourfold. </td>
-<td> bubble sort </td>
-</tr>
-<tr>
-<td> 6 </td>
-<td> </td>
-<td> <strong>Amortized Constant Time</strong> </td>
-<td> adding an element to the end of an ArrayList can normally be done in constant time, unless the ArrayList has reached its capacity. In that case, a new and larger array must be allocated, and the contents of the old array transferred into it. The cost of this operation is linear in the number of elements in the array, but it happens relatively rarely. In situations like this, we calculate the amortized cost of the operation—that is, the total cost of performing it n times divided by n, taken to the limit as n becomes arbitrarily large. In the case of adding an element to an ArrayList, the total cost for N elements is O(N), so the amortized cost is O(1). (<a href="http://en.wikipedia.org/wiki/Big_O_notation#Orders_of_common_functions">Wiki link</a> for more examples)</td>
-<td></td>
-</tr>
-</tbody>
-</table>
-
-
-<ul>
-<li>Download algorithms and solutions from book site : Cracking coding interviews</li>
-</ul>
-
-
-  
-    <footer>
-      
-      
-    </footer>
   
 </article>
 

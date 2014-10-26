@@ -1,0 +1,987 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>DBMS Concepts - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+  
+  <meta name="description" content="DBMS Concepts Concepts Keys Integrity Constraints Data Types LOB Cursors Triggers Disadvantages of cursors Joins Join Algorithms Nested Loop Join &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/rdbms.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="/atom.xml" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!-- mathjax config similar to math.stackexchange -->
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['$', '$'] ],
+      displayMath: [ ['$$', '$$']],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    messageStyle: "none",
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+  });
+  </script>
+  <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+  <!--script src="/javascripts/mathjax/MathJax.js"></script-->
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">DBMS Concepts</h1>
+    
+  </header>
+  
+  <p><ul>
+ <li><a href="#Concepts">Concepts</a>
+ <ul>
+  <li><a href="#Keys">Keys</a></li>
+  <li><a href="#Integrity">Integrity</a>
+  <ul>
+   <li><a href="#Constraints">Constraints</a></li>
+  </ul>
+  </li>
+  <li><a href="#Data.Types">Data Types</a></li>
+  <li><a href="#LOB">LOB</a></li>
+  <li><a href="#Cursors">Cursors</a></li>
+  <li><a href="#Triggers">Triggers</a>
+  <ul>
+   <li><a href="#Disadvantages.of.cursors">Disadvantages of cursors</a></li>
+  </ul>
+  </li>
+  <li><a href="#Joins">Joins</a>
+  <ul>
+   <li><a href="#Join.Algorithms">Join Algorithms</a>
+   <ul>
+    <li><a href="#Nested.Loop.Join">Nested Loop Join</a></li>
+    <li><a href="#Merge.Join...Sort-Merge.Join">Merge Join / Sort-Merge Join</a></li>
+    <li><a href="#Hash.Join">Hash Join</a>
+</li>
+   </ul>
+   
+</li>
+  </ul>
+  </li>
+ </ul>
+ </li>
+ <li><a href="#Design">Design</a>
+ <ul>
+  <li><a href="#Physical.Database.Design">Physical Database Design</a>
+  <ul>
+   <li><a href="#Data.Modelling">Data Modelling</a></li>
+   <li><a href="#Normalization">Normalization</a>
+   <ul>
+    <li><a href="#What.is.">What is?</a></li>
+    <li><a href="#Types">Types</a>
+</li>
+   </ul>
+   </li>
+  </ul>
+  </li>
+  <li><a href="#Patterns">Patterns</a>
+  <ul>
+   <li><a href="#Bi-temporal.milestoning">Bi-temporal milestoning</a></li>
+   <li><a href="#Schema.Patterns">Schema Patterns</a></li>
+  </ul>
+  </li>
+  <li><a href="#Anti-Patterns">Anti-Patterns</a></li>
+  <li><a href="#Database.Refactoring">Database Refactoring</a></li>
+ </ul>
+ </li>
+ <li><a href="#Performance">Performance</a>
+ <ul>
+  <li><a href="#Indexes">Indexes</a>
+  <ul>
+   <li><a href="#How.Indexes.work.">How Indexes work?</a></li>
+   <li><a href="#Limitations">Limitations</a></li>
+   <li><a href="#Index.usage.criteria">Index usage criteria</a></li>
+   <li><a href="#Index.Types">Index Types</a></li>
+   <li><a href="#When.to.use.Clustered.index.">When to use Clustered index?</a></li>
+   <li><a href="#Index.Covering">Index Covering</a></li>
+   <li><a href="#Indexing.Rules.of.Thumb">Indexing Rules of Thumb</a></li>
+   <li><a href="#Index.Selection.Decisions">Index Selection Decisions</a></li>
+   <li><a href="#Properties.of.an.Index..Oracle.feature.">Properties of an Index (Oracle feature)</a></li>
+  </ul>
+  </li>
+  <li><a href="#Query.Optimization">Query Optimization</a>
+  <ul>
+   <li><a href="#Query.Execution.Plan">Query Execution Plan</a></li>
+  </ul>
+  </li>
+  <li><a href="#Concurrency">Concurrency</a>
+  <ul>
+   <li><a href="#Locks">Locks</a></li>
+   <li><a href="#Isolation.Levels">Isolation Levels</a>
+</li>
+  </ul>
+  </li>
+ </ul>
+ </li>
+ <li><a href="#FAQs">FAQs</a></li>
+ <li><a href="#Bibliography">Bibliography</a></li>
+</ul>
+
+</p>
+
+<a name="Concepts"></a>
+<h1>Concepts</h1>
+
+<a name="Keys"></a>
+<h2>Keys</h2>
+
+<blockquote><p>Refer to SQL Tips and Techniques-2002</p></blockquote>
+
+<ul>
+<li><strong>Primary Key</strong>*
+
+<ul>
+<li>PK is an attribute or a set of attributes that uniquely identify a specific instance of an entity.</li>
+<li>PKs enforce entity integrity by uniquely identifying entity instances.</li>
+</ul>
+</li>
+<li><strong>Candidate Key</strong> - an entity can have more than one attribute that can serve as a primary key. Any key or minimum set of keys that could be a primary key is called a candidate key. (Eg. EmpId, SSN, Name of an Employee entity)</li>
+<li><strong>Alternate Key</strong> - Rest of the non-primary keys are called alternate keys</li>
+<li><strong>Composite Key</strong> - A primary key made up of more than one attribute is known as a composite key</li>
+<li><strong>Foreign Key</strong>
+
+<ul>
+<li>is an attribute that completes a relationship by identifying the parent entity.</li>
+<li>Foreign keys provide a method for maintaining integrity in the data (called referential integrity) and for navigating between different instances of an entity.</li>
+</ul>
+</li>
+</ul>
+
+
+<p><strong>Difference between a primary key and a unique key?</strong>
+Both primary key and unique enforce uniqueness of the column on which they are defined. But by default primary key creates a clustered index on the column, whereas unique key creates a nonclustered index by default. Another major difference is that, primary key doesn&rsquo;t allow NULLs, but unique key allows one NULL only. Identity columns &amp; default values</p>
+
+<a name="Integrity"></a>
+<h2>Integrity</h2>
+
+<ul>
+<li><strong>Data integrity</strong> - means, in part, that you can correctly and consistently navigate and manipulate the tables in the database. There are two basic rules to ensure data integrity; entity integrity and referential integrity.
+
+<ul>
+<li><strong>Entity Integrity</strong>- Entity integrity rule states that for every instance of an entity, the value of the primary key must exist, be unique, and cannot be null.</li>
+<li><strong>Referential Integrity</strong>- rule states that every foreign key value must match a primary key value in an associated table. Referential integrity ensures that we can correctly navigate between related entities. FKs can have nulls.</li>
+</ul>
+</li>
+</ul>
+
+
+<a name="Constraints"></a>
+<h3>Constraints</h3>
+
+<ul>
+<li>Constraints enable the RDBMS enforce the integrity of the database automatically, without needing you to create triggers, rule or defaults.</li>
+<li><strong>Types of constraints</strong>: NOT NULL, CHECK, UNIQUE, PRIMARY KEY, FOREIGN KEY</li>
+<li><strong>Check Constraints</strong></li>
+</ul>
+
+
+<a name="Data.Types"></a>
+<h2>Data Types</h2>
+
+<a name="LOB"></a>
+<h2>LOB</h2>
+
+<a name="Cursors"></a>
+<h2>Cursors</h2>
+
+<ul>
+<li><strong>Static Cursor</strong> - Specifies that cursor will use a temporary copy of the data instead of base tables. This cursor does not allow modifications and modifications made to base tables are not reflected in the data returned by fetches made to this cursor.</li>
+<li><strong>Dynamic Cursor</strong> -</li>
+<li><strong>Forward-ONLY Cursor</strong> - Specifies that cursor can only fetch data sequentially from the first to the last row. FETCH NEXT is the only fetch option supported.</li>
+<li><strong>KeySet Cursor</strong> -
+
+<ul>
+<li>Specifies that cursor uses the set of keys that uniquely identify the cursor&rsquo;s rows (keyset), so that the membership and order of rows in the cursor are fixed when the cursor is opened. SQL Server uses a table in tempdb to store keyset.</li>
+<li>The KEYSET cursor allows updates nonkey values from being made through this cursor, but inserts made by other users are not visible.</li>
+<li>Updates non-key values made by other users are visible as the owner scrolls around the cursor, but updates key values made by other users are not visible. If a row is deleted, an attempt to fetch the row returns an @@FETCH_STATUS of -2</li>
+</ul>
+</li>
+<li><strong>Ref Cursors</strong> - Cursor variables are like pointers to result sets. You use them when you want to perform a query in one subprogram, and process the results in a different subprogram (possibly one written in a different language). A cursor variable has datatype REF CURSOR, and you might see them referred to informally as REF CURSORs.</li>
+<li><strong>Implict &amp; Explicit cursors</strong></li>
+</ul>
+
+
+<a name="Triggers"></a>
+<h2>Triggers</h2>
+
+<p>Triggers are special kind of stored procedures that get executed automatically when an INSERT, UPDATE or DELETE operation takes place on a table. Triggers can&rsquo;t be invoked on demand. They get triggered only when an associated action (INSERT, UPDATE, DELETE) happens on the table on which they are defined.</p>
+
+<a name="Disadvantages.of.cursors"></a>
+<h3>Disadvantages of cursors</h3>
+
+<p>Each time you fetch a row from the cursor,it results in a network round trip, where as a normal SELECT query makes only one round trip, however large the resultset is. Further, there are restrictions on the SELECT statements that can be used with some types of cursors.</p>
+
+<a name="Joins"></a>
+<h2>Joins</h2>
+
+<ul>
+<li><a href="http://www.codinghorror.com/blog/2007/10/a-visual-explanation-of-sql-joins.html">http://www.codinghorror.com/blog/2007/10/a-visual-explanation-of-sql-joins.html</a></li>
+<li><p><a href="http://publib.boulder.ibm.com/infocenter/iseries/v5r4/index.jsp?topic=%2Fsqlp%2Frbafyjoin.htm">http://publib.boulder.ibm.com/infocenter/iseries/v5r4/index.jsp?topic=%2Fsqlp%2Frbafyjoin.htm</a></p></li>
+<li><p><strong>Inner Join</strong> - Records in both table A and table B where the given condition matches. e.g, <code>SELECT * FROM TableA INNER JOIN TableB ON TableA.name = TableB.name</code></p></li>
+<li><strong>Cross Join</strong> - Every possible pair of rows from both the tables. If no condition is provided in Inner join, then it becomes a cross join. e.g., <code>SELECT * FROM TableA CROSS JOIN TableB</code></li>
+<li><strong>Full Outer Join</strong> = Left Outer + Right Outer. e.g., <code>SELECT * FROM TableA FULL OUTER JOIN TableB ON TableA.name = TableB.name</code></li>
+<li><strong>Right Outer Join</strong> - e.g., <code>SELECT * FROM TableA RIGHT OUTER JOIN TableB ON TableA.name = TableB.name</code></li>
+<li><strong>Left Outer Join</strong> - e.g., <code>SELECT * FROM TableA LEFT OUTER JOIN TableB ON TableA.name = TableB.name</code></li>
+<li><strong>Outer Join</strong> - Records NOT in table A and table B where the given condition matches. e.g, <code>SELECT * FROM TableA FULL OUTER JOIN TableB ON TableA.name = TableB.name WHERE TableA.id IS null OR TableB.id IS null</code></li>
+<li><strong>Equijoin</strong> -</li>
+<li><strong>Natural Join</strong>- is an equijoin with redundant columns removed.</li>
+<li><strong>Self Join</strong> -</li>
+<li><strong>Projection</strong> - The project operator retrieves a subset of columns from a table, removing duplicate rows from the result.</li>
+</ul>
+
+
+<a name="Join.Algorithms"></a>
+<h3>Join Algorithms</h3>
+
+<a name="Nested.Loop.Join"></a>
+<h4>Nested Loop Join</h4>
+
+<ul>
+<li><em>when one table is small, and other table is large</em></li>
+<li><strong>What is?</strong> The nested loops join, also called nested iteration, uses one join input as the outer input table and one as the inner input table. The outer loop consumes the outer input table row by row. For every outer row, the inner loop searches for matching rows in the inner input table.</li>
+<li>In the simplest case, the search scans an entire table or index; this is called a <strong>naive nested loops join</strong>.</li>
+<li>If the search exploits an index, it is called an <strong>index nested loops join</strong>.</li>
+<li>If the index is built as part of the query plan (and destroyed upon completion of the query), it is called a <strong>temporary index nested loops join</strong>. (All these variants are considered by the query optimizer.)</li>
+<li><strong>When is it effective?</strong> A nested loops join is particularly effective if the outer input is small and the inner input is preindexed and large. In many small transactions, such as those affecting only a small set of rows, index nested loops joins are superior to both merge joins and hash joins. In large queries, however, nested loops joins are often not the optimal choice.</li>
+<li>Block nested loop join???
+<img class="right" src="/technology/nested-loop-join.gif" width="300" height="300"></li>
+</ul>
+
+
+<a name="Merge.Join...Sort-Merge.Join"></a>
+<h4>Merge Join / Sort-Merge Join</h4>
+
+<ul>
+<li><em>when both the tables involved in the join are large</em></li>
+<li>The merge join requires both inputs to be sorted on the merge columns, which are defined by the equality (ON) clauses of the join predicate. The query optimizer typically scans an index, if one exists on the proper set of columns, or it places a sort operator below the merge join. In rare cases, there may be multiple equality clauses, but the merge columns are taken from only some of the available equality clauses.</li>
+<li>Because each input is sorted, the Merge Join operator gets a row from each input and compares them. For example, for inner join operations, the rows are returned if they are equal. If they are not equal, the lower-value row is discarded and another row is obtained from that input. This process repeats until all rows have been processed.</li>
+<li>The merge join operation may be either a regular or a many-to-many operation. A many-to-many merge join uses a temporary table to store rows. If there are duplicate values from each input, one of the inputs will have to rewind to the start of the duplicates as each duplicate from the other input is processed.</li>
+<li>If a residual predicate is present, all rows that satisfy the merge predicate evaluate the residual predicate, and only those rows that satisfy it are returned.</li>
+<li>Merge join itself is very fast, but it can be an expensive choice if sort operations are required. However, if the data volume is large and the desired data can be obtained presorted from existing B-tree indexes, merge join is often the fastest available join algorithm.
+<img class="right" src="/technology/merge-join.gif" width="300" height="300"></li>
+</ul>
+
+
+<a name="Hash.Join"></a>
+<h4>Hash Join</h4>
+
+<ul>
+<li><em>when the data set is large but the result set expected is small</em></li>
+<li>This algorithm also has a startup penalty by forcing you to build a hash table of one of the input sets before the actual join can start.</li>
+<li>Performance
+
+<ul>
+<li>Compared to the sort merge join this is easier as it involves only one sweep through the data and therefore the computational complexity is <code>O(n)</code> while sorting won&rsquo;t be better than <code>O(n log n)</code>. So in general you can build the hash faster than you would be able to do the sorting.</li>
+<li>The hash also needs to be computed for only one input set and this could be the smaller one.</li>
+<li>This makes the hash join often the preferred choice over the sort merge join.</li>
+</ul>
+</li>
+<li>Generally speaking the hash join wins when you expect a large result set and the nested loop join wins when you expect a small result set. One of the most dominant problems in this area is the planner getting the estimates wrong and taking the other path.</li>
+<li>The hash join can only be used if you use equality as join relation.</li>
+<li>Building the hash needs temporary space and increasing work_mem sometimes helps.</li>
+<li><p>The hash join is also a good candidate for parallel processing.</p></li>
+<li><p><a href="http://etutorials.org/Misc/advanced+dba+certification+guide+and+reference/Chapter+6.+The+DB2+Optimizer/Joining+in+DB2+UDB/">http://etutorials.org/Misc/advanced+dba+certification+guide+and+reference/Chapter+6.+The+DB2+Optimizer/Joining+in+DB2+UDB/</a></p></li>
+<li><a href="http://pic.dhe.ibm.com/infocenter/db2luw/v9r7/index.jsp?topic=%2Fcom.ibm.db2.luw.admin.perf.doc%2Fdoc%2Fc0005311.html">http://pic.dhe.ibm.com/infocenter/db2luw/v9r7/index.jsp?topic=%2Fcom.ibm.db2.luw.admin.perf.doc%2Fdoc%2Fc0005311.html</a></li>
+</ul>
+
+
+<a name="Design"></a>
+<h1>Design</h1>
+
+<a name="Physical.Database.Design"></a>
+<h2>Physical Database Design</h2>
+
+<ul>
+<li>Data compression techniques</li>
+<li>Data Striping (RAID)
+
+<ul>
+<li>What is RAID and what are different types of RAID configurations?</li>
+<li>RAID stands for Redundant Array of Inexpensive Disks, used to provide fault tolerance to database servers. There are six RAID levels 0 through 5 offering different levels of performance, fault * tolerance.</li>
+</ul>
+</li>
+<li>Mirroring</li>
+<li>Denormalization</li>
+<li>Security
+
+<ul>
+<li>Permissioning - Users &amp; Groups</li>
+</ul>
+</li>
+</ul>
+
+
+<a name="Data.Modelling"></a>
+<h3>Data Modelling</h3>
+
+<a name="Normalization"></a>
+<h3>Normalization</h3>
+
+<blockquote><p>Refer to Sybase Performance and Tuning Guide</p></blockquote>
+
+<ul>
+<li><a href="http://dev.mysql.com/tech-resources/articles/intro-to-normalization.html">http://dev.mysql.com/tech-resources/articles/intro-to-normalization.html</a></li>
+<li><a href="http://www.bkent.net/Doc/simple5.htm">http://www.bkent.net/Doc/simple5.htm</a></li>
+<li><a href="http://publib.boulder.ibm.com/infocenter/dzichelp/v2r2/index.jsp?topic=%2Fcom.ibm.db2z10.doc.intro%2Fsrc%2Ftpc%2Fdb2z_denormalizationforperformance.htm">http://publib.boulder.ibm.com/infocenter/dzichelp/v2r2/index.jsp?topic=%2Fcom.ibm.db2z10.doc.intro%2Fsrc%2Ftpc%2Fdb2z_denormalizationforperformance.htm</a></li>
+</ul>
+
+
+<a name="What.is."></a>
+<h4>What is?</h4>
+
+<ul>
+<li>process to eliminate data redundancy, and to remove potential update inconsistencies which arise from inserting, modifying, and deleting data.</li>
+<li>The goal of normalization is to create a set of relational tables that are free of redundant data and that can be consistently and correctly modified. This means that all tables in a relational database should be in the third normal form (3NF).</li>
+<li>A relational table is in 3NF if and only if all non-key columns are (a) mutually independent and (b) fully dependent upon the primary key. Mutual independence means that no non-key column is dependent upon any combination of the other columns. The first two normal forms are intermediate steps to achieve the goal of having all tables in 3NF. In order to better understand the 2NF and higher forms, it is necessary to understand the concepts of functional dependencies and lossless decomposition.</li>
+</ul>
+
+
+<a name="Types"></a>
+<h4>Types</h4>
+
+<ul>
+<li>1st Normal Form- A relational table, by definition, is in first normal form. 1NF requires all values of the columns to be atomic. That is, they contain no repeating values. Table in 1NF contains redundancy of data. Redundancy causes what is called as &lsquo;Update anomalies&rsquo;</li>
+<li>2nd Normal Form- The second normal form (or 2NF) any non-key columns must depend on the entire primary key. In the case of a composite primary key, this means that a non-key column cannot depend on only part of the composite key.</li>
+<li>3rd Normal Form- Third Normal Form (3NF) requires that all columns depend directly on the primary key. Tables violate the 3NF when one column depends on another column, which in turn depends on the primary key (a transitive dependency). One way to identify transitive dependencies is to look at your table and see if any columns would require updating if another column in the table was updated. If such a column exists, it probably violates 3NF.</li>
+<li>4th Normal Form-</li>
+<li>5th Normal Form-</li>
+<li>Update Anomalies-Problems that arise when information is inserted, updated or deleted</li>
+</ul>
+
+
+<a name="Patterns"></a>
+<h2>Patterns</h2>
+
+<ul>
+<li>How do you implement 1-to-1, 1-to-many and many-to-many relationships while designing tables?</li>
+<li>1-to-1 relationship can be implemented as a single table and rarely as two tables with primary and foreign key relationships.</li>
+<li>1-to-Many relationships are implemented by splitting the data into two tables with primary key and foreign key relationships.</li>
+<li>Many-to-Many relationships are implemented using a junction table with the keys from both the tables forming the composite primary key of the junction table.</li>
+</ul>
+
+
+<a name="Bi-temporal.milestoning"></a>
+<h3>Bi-temporal milestoning</h3>
+
+<ul>
+<li>Bi-temporal chaining – Database chaining mechanisms</li>
+<li>spatial and temporal locality</li>
+</ul>
+
+
+<a name="Schema.Patterns"></a>
+<h3>Schema Patterns</h3>
+
+<ul>
+<li>Data Warehouse schema types - <a href="http://datawarehouse4u.info/Data-Warehouse-Schema-Architecture.html">http://datawarehouse4u.info/Data-Warehouse-Schema-Architecture.html</a></li>
+<li>Star schema</li>
+</ul>
+
+
+<a name="Anti-Patterns"></a>
+<h2>Anti-Patterns</h2>
+
+<blockquote><p>Refer to SQL Anti-patterns</p></blockquote>
+
+<ul>
+<li>Logical Database Anti-patterns
+
+<ul>
+<li>Comma separated lists</li>
+<li>Multi-column attributes</li>
+<li>Entity attribute value</li>
+<li>Metadata tribbles</li>
+</ul>
+</li>
+<li>Physical Database Anti-patterns
+
+<ul>
+<li>ID Required</li>
+<li>Phantom Files</li>
+<li>FLOAT Antipattern</li>
+<li>ENUM Antipattern</li>
+<li>Readable Passwords</li>
+</ul>
+</li>
+<li>Query Anti-patterns
+
+<ul>
+<li>Ambiguous GROUP BY</li>
+<li>HAVING antipattern</li>
+<li>Poor Man&rsquo;s Search Engine</li>
+<li>Implicit columns in SELECT and INSERT</li>
+</ul>
+</li>
+<li>Application Anti-patterns
+
+<ul>
+<li>User-supplied SQL</li>
+<li>SQL Injection</li>
+<li>Parameter Façade</li>
+<li>Pseudokey Neat Freak</li>
+<li>Session Coupling</li>
+<li>Phantom Side Effects</li>
+</ul>
+</li>
+</ul>
+
+
+<a name="Database.Refactoring"></a>
+<h2>Database Refactoring</h2>
+
+<blockquote><p>Refer to Refactoring Databases
+* Database smells
+* Refactoring strategies</p></blockquote>
+
+<a name="Performance"></a>
+<h1>Performance</h1>
+
+<a name="Indexes"></a>
+<h2>Indexes</h2>
+
+<blockquote><p>Refer to Sybase - Performance and Tuning Guide</p></blockquote>
+
+<ul>
+<li><a href="http://use-the-index-luke.com/sql/table-of-contents">http://use-the-index-luke.com/sql/table-of-contents</a></li>
+<li><a href="http://www.sqlskills.com/blogs/kimberly/guids-as-primary-keys-andor-the-clustering-key/">http://www.sqlskills.com/blogs/kimberly/guids-as-primary-keys-andor-the-clustering-key/</a></li>
+<li><a href="http://www.micmin.com/Session320/Session%20320%20-%20Role%20of%20Indexes.htm">http://www.micmin.com/Session320/Session%20320%20-%20Role%20of%20Indexes.htm</a></li>
+</ul>
+
+
+<p>An index is an ordered set of pointers associated with a table, and is used for performance purposes.</p>
+
+<a name="How.Indexes.work."></a>
+<h3>How Indexes work?</h3>
+
+<p>Each index entry contains a search-key value and a pointer to the row containing that value. If you specify the ALLOW REVERSE SCANS parameter in the CREATE INDEX statement, the values can be searched in both ascending and descending order. It is therefore possible to bracket the search, given the right predicate. An index can also be used to obtain rows in an ordered sequence, eliminating the need for the database manager to sort the rows after they are read from the table.</p>
+
+<p>Although the optimizer decides whether to use an index to access table data, except in the following case, you must decide which indexes might improve performance and create these indexes. Exceptions are the dimension block indexes and the composite block index that are created automatically for each dimension that you specify when you create a multi-dimensional clustering (MDC) table.</p>
+
+<p>In addition to the search-key value and row pointer, an index can contain include columns, which are non-indexed columns in the indexed row. Such columns might make it possible for the optimizer to get required information only from the index, without accessing the table itself.</p>
+
+<a name="Limitations"></a>
+<h3>Limitations</h3>
+
+<p>Although indexes can reduce access time significantly, they can also have adverse effects on performance. Before you create indexes, consider the effects of multiple indexes on disk space and processing time:</p>
+
+<ul>
+<li>Each index requires storage or disk space. The exact amount depends on the size of the table and the size and number of columns in the index.</li>
+<li>Each INSERT or DELETE operation performed on a table requires additional updating of each index on that table. This is also true for each UPDATE operation that changes the value of an index key.</li>
+<li>Each index potentially adds an alternative access path for a query for the optimizer to consider, which increases the compilation time.</li>
+</ul>
+
+
+<a name="Index.usage.criteria"></a>
+<h3>Index usage criteria</h3>
+
+<p>The query contains a column in a join clause that matches at least the first column of the index. eg. <code>create index idx1 on emp (division, dep, emptype)</code></p>
+
+<ul>
+<li>All the below queries will make use of the above index.
+
+<ul>
+<li><code>select * from emp where division='acct'</code></li>
+<li><code>select * from emp where division='acct' and dept='fin'</code></li>
+<li><code>select * from emp where division='acct' and emptype='exempt'</code></li>
+</ul>
+</li>
+<li>However, this query would be NOT be able to use the index since it doesn&rsquo;t specify the first column of the index.
+
+<ul>
+<li><code>select * from emp where emptype='exempt'</code></li>
+</ul>
+</li>
+</ul>
+
+
+<a name="Index.Types"></a>
+<h3>Index Types</h3>
+
+<ol>
+<li><strong>Clustered</strong> Any index structure having the data accessed in the same way the index is organized so that data with similar or the same key values is stored (or clustered) together. Clustering tends to greatly reduce input/output (I/O) time for queries and sorting.</li>
+<li><strong>Non-clustered</strong></li>
+<li><strong>Unique index</strong></li>
+<li><strong>Hashtable index</strong> - An index that maps primary key values to block data addresses in the database for otherwise un-ordered data. Not good for range searches</li>
+<li><strong>Bitmapped index</strong>
+
+<ul>
+<li>A collection of bit vectors to form an index that can be used to quickly search secondary indexes or to search data warehouses. Each bit vector represents a different value of an attribute, and the length of each vector is the number of rows (rows) in the table.</li>
+<li>Bitmap and Bitmap join indexes</li>
+</ul>
+</li>
+<li><strong>Composite index</strong> - An index based on more than one attribute or key (i.e., a concatenated key).</li>
+<li><strong>Covering Index</strong> - An index with enough information to satisfy certain queries by itself, in other words, the query can be satisfied merely by searching the index and not the database.</li>
+<li><strong>B+ Tree</strong>
+
+<ul>
+<li>Basic table index based on one or more attributes, often used to enforce uniqueness of primary keys.</li>
+<li>These indexes are the standard index type. They are excellent for primary key and highly-selective indexes. Used as concatenated indexes, B-tree indexes can retrieve data sorted by the indexed columns. B-tree indexes have the following subtypes:
+
+<ul>
+<li><strong>Index-organized tables</strong>: An index-organized table differs from a heap-organized because the data is itself the index.</li>
+<li><strong>Reverse key indexes</strong>: In this type of index, the bytes of the index key are reversed, for example, 103 is stored as 301. The reversal of bytes spreads out inserts into the index over many blocks.</li>
+<li><strong>Descending indexes</strong>: This type of index stores data on a particular column or columns in descending order.
+B-tree cluster indexes</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><strong>Dense Vs Sparse Index</strong> - A dense index has a pointer to each row in the table; a sparse index has at most one pointer to each block or page in the table.</li>
+<li><strong>Function-based indexes</strong></li>
+<li><strong>Application Domain indexes</strong></li>
+<li><strong>Bi-directional indexes</strong></li>
+</ol>
+
+
+<a name="When.to.use.Clustered.index."></a>
+<h3>When to use Clustered index?</h3>
+
+<ul>
+<li><strong>Range searches</strong> - Clustered indexes can improve performance for range retrievals because it can be used to set the bounds of a search, even if the query involves the large percentage of the rows in the table. Because the data is in sorted order, the db can use it to find the starting and ending points of the range, and scan only the data pages within the range.</li>
+<li>Without a clustered index, the rows could be randomly spread throughout the table, and the db would have to perform a table scan to find all rows within the range.</li>
+<li>Columns containing number of duplicates - Same concept holds true for indexes on columns with a large number of duplicates. With a clustered index, the duplicate values are grouped together. This minimizes the no. of pages that would have to be read to retrieve them.</li>
+<li>Columns often referenced in an ORDER BY. Most sorts require that the table be copied into a buffer pool(DB2) or work table in tempdb(Sybase). This incurs additional I/O overhead. However if you&rsquo;re performing an ORDER BY on clustered index columns on a table, you can avoid creating a work table even if a query contains no search arguments.</li>
+<li>Columns other than primary key reference in join clauses - Clustered indexes can also be more efficient for joins that are non-clustered indexes, cos clustered indexes usually are much smaller in size; typically they are atleast on level less in the B-tree.</li>
+<li><strong>Single index table</strong> - If you require only a single index on a table, it typically is advantageous to make it a clustered index, as the resulting overhead of maintaining clustered indexes during updates, inserts and deletes can be considerably less than the other one.</li>
+</ul>
+
+
+<a name="Index.Covering"></a>
+<h3>Index Covering</h3>
+
+<ul>
+<li>Index covering is a mechanism for using the leaf level of a non-clustered index the way the data page of a clustered index would work. This occurs when all columns referenced in a query are contained in the index itself.</li>
+<li>Because the non-clustered index contains a leaf row corresponding to every data row in the table, db can satisfy the query from the leaf rows of the non-clustered index without having to read the data pages.</li>
+<li>Because all leaf index pages point to the next page in the leaf-page chain, the leaf level of the index can be scanned just like the data pages in a table.</li>
+<li>Because the leaf index rows typically are much smaller than the data rows, a non-clustered index that covers a query will be faster than a clustered index on the same columns, due to the fewer number of pages that must be read.</li>
+<li><strong>Covered Queries</strong> - in a query, if all the columns mentioned in the conditions section are part of an index, then it&rsquo;s a covered query</li>
+</ul>
+
+
+<a name="Indexing.Rules.of.Thumb"></a>
+<h3>Indexing Rules of Thumb</h3>
+
+<blockquote><p>Refer to Physical Database Design - Database Professional&rsquo;s Guide to Exploiting Indexes, Views, Storage &amp; More</p></blockquote>
+
+<ul>
+<li>Index every primary key and most foreign keys in the database.</li>
+<li>Attributes frequently referenced in SQL WHERE clauses are potentially good candidates for an index.</li>
+<li>Use a B+tree index for both equality and range queries</li>
+<li>Choose carefully one clustered index for each table</li>
+<li>Avoid or remove redundant indexes</li>
+<li>Add indexes only when absolutely necessary</li>
+<li>Add or delete index columns for composite indexes to improve performance. Do not alter primary key columns</li>
+<li>Use attributes for indexes with caution when they are frequently updated.</li>
+<li>Keep up index maintenance on a regular basis; drop indexes only when they are clearly hurting performance</li>
+<li>Avoid extremes in index cardinality and value distribution.</li>
+<li>Covering indexes (index only) are useful, but often overused</li>
+<li>Use bitmap indexes for high-volume data, especially in data warehouses.</li>
+</ul>
+
+
+<a name="Index.Selection.Decisions"></a>
+<h3>Index Selection Decisions</h3>
+
+<ul>
+<li>Does this table require an index or not, and if so which search key should I build an index on?</li>
+<li>When do I need multi-attribute (composite) search keys, and which ones should I choose?</li>
+<li>Should I use a dense or sparse index?</li>
+<li>When can I use a covering index?</li>
+<li>Should I create a clustered index?</li>
+<li>Is an index still preferred when updates are taken into account? What are the tradeoffs between queries and updates for each index chosen?</li>
+<li>How do I know I made the right indexing choice?</li>
+</ul>
+
+
+<a name="Properties.of.an.Index..Oracle.feature."></a>
+<h3>Properties of an Index (Oracle feature)</h3>
+
+<ul>
+<li><strong>Usability</strong>
+
+<ul>
+<li>Indexes are usable (default) or unusable. An unusable index is not maintained by DML operations and is ignored by the optimizer. An unusable index can improve the performance of bulk loads. Instead of dropping an index and later re-creating it, you can make the index unusable and then rebuild it. Unusable indexes and index partitions do not consume space. When you make a usable index unusable, the database drops its index segment.</li>
+</ul>
+</li>
+<li><strong>Visibility</strong>
+
+<ul>
+<li>Indexes are visible (default) or invisible. An invisible index is maintained by DML operations and is not used by default by the optimizer. Making an index invisible is an alternative to making it unusable or dropping it. Invisible indexes are especially useful for testing the removal of an index before dropping it or using indexes temporarily without affecting the overall application.</li>
+</ul>
+</li>
+<li><strong>Composite Indexes</strong>
+
+<ul>
+<li>A composite index, also called a concatenated index, is an index on multiple columns in a table. Columns in a composite index should appear in the order that makes the most sense for the queries that will retrieve data and need not be adjacent in the table.</li>
+<li><code>CREATE INDEX employees_ix ON employees (last_name, job_id, salary);</code></li>
+<li>Queries that access all three columns, only the last_name column, or only the last_name and job_id columns use this index. In this example, queries that do not access the last_name column do not use the index.</li>
+<li>Multiple indexes can exist for the same table if the permutation of columns differs for each index. You can create multiple indexes using the same columns if you specify distinctly different permutations of the columns. For example, the following SQL statements specify valid permutations:</li>
+<li><code>CREATE INDEX employee_idx1 ON employees (last_name, job_id);</code></li>
+<li><code>CREATE INDEX employee_idx2 ON employees (job_id, last_name);</code></li>
+</ul>
+</li>
+<li><strong>Unique and Nonunique Indexes</strong>
+
+<ul>
+<li>Indexes can be unique or nonunique. Unique indexes guarantee that no two rows of a table have duplicate values in the key column or column. For example, no two employees can have the same employee ID. Thus, in a unique index, one rowid exists for each data value. The data in the leaf blocks is sorted only by key.</li>
+<li>Nonunique indexes permit duplicates values in the indexed column or columns. For example, the first_name column of the employees table may contain multiple Mike values. For a nonunique index, the rowid is included in the key in sorted order, so nonunique indexes are sorted by the index key and rowid (ascending).</li>
+<li>Oracle Database does not index table rows in which all key columns are null, except for bitmap indexes or when the cluster key column value is null.</li>
+</ul>
+</li>
+</ul>
+
+
+<a name="Query.Optimization"></a>
+<h2>Query Optimization</h2>
+
+<p>When db processes the query, it performs the following steps:</p>
+
+<ul>
+<li>Parses and normalizes the query, validating syntax and object references</li>
+<li>Optimizes the query and generates the query plan
+
+<ul>
+<li>Phase 1 - Query Analysis
+
+<ul>
+<li>Find the search arguments (SARG)</li>
+<li>Find the ORs c. Find the joins</li>
+</ul>
+</li>
+<li>Phase 2 - Index Selection
+
+<ul>
+<li>Choose the best index for each SARG</li>
+<li>Choose the best method for ORs</li>
+<li>Choose the best indexes for any join clauses</li>
+<li>Choose the best index to use for each table</li>
+</ul>
+</li>
+<li>Phase 3 - Join Order Selection
+
+<ul>
+<li>Evaluate the join orders</li>
+<li>Compute the costs</li>
+<li>Evaluate other server options for resolving joins</li>
+</ul>
+</li>
+<li>Phase 4 - Plan Selection</li>
+</ul>
+</li>
+<li>Compiles the query plan</li>
+<li>Executes the query plan and returns the results to the user.</li>
+</ul>
+
+
+<p>How do you tune a SQL query? How do you use an access plan?</p>
+
+<a name="Query.Execution.Plan"></a>
+<h3>Query Execution Plan</h3>
+
+<blockquote><p>Refer to Dissecting SQL Server Execution Plans and SQL Tuning
+* What is?
+* How to read a query execution plan?</p></blockquote>
+
+<p>Page Extent - Denotes the # of contiguous pages of data read from the hard disk at a time. SQL reads 8 pages(64K) at a time.</p>
+
+<a name="Concurrency"></a>
+<h2>Concurrency</h2>
+
+<p><a href="http://msdn2.microsoft.com/en-us/library/ms171845">http://msdn2.microsoft.com/en-us/library/ms171845</a>(SQL.90).aspx</p>
+
+<ul>
+<li>Dirty reading</li>
+<li>Phantom reading</li>
+</ul>
+
+
+<a name="Locks"></a>
+<h3>Locks</h3>
+
+<ul>
+<li>Locks <a href="http://www.dbazine.com/db2/db2-disarticles/gulutzan6">http://www.dbazine.com/db2/db2-disarticles/gulutzan6</a>
+
+<ul>
+<li>Shared Lock</li>
+<li>Update Lock</li>
+<li>Exclusive Lock (<a href="http://www.dbazine.com/db2/db2-disarticles/gulutzan6">http://www.dbazine.com/db2/db2-disarticles/gulutzan6</a>)</li>
+</ul>
+</li>
+<li>Deadlock
+
+<ul>
+<li>Deadlock is a situation when two processes, each having a lock on one piece of data, attempt to acquire a lock on the other&rsquo;s piece. Each process would wait indefinitely for the other to release the lock, unless one of the user processes is terminated. SQL Server detects deadlocks and terminates one user&rsquo;s process.</li>
+<li>How do you avoid deadlocks?</li>
+</ul>
+</li>
+<li>Livelock
+
+<ul>
+<li>A livelock is one, where a request for an exclusive lock is repeatedly denied because a series of overlapping shared locks keeps interfering. SQL Server detects the situation after four denials and refuses further shared locks. A livelock also occurs when read transactions monopolize a table or page, forcing a write transaction to wait indefinitely.</li>
+</ul>
+</li>
+<li>Lock contention</li>
+<li>Lock escalation</li>
+</ul>
+
+
+<a name="Isolation.Levels"></a>
+<h3>Isolation Levels</h3>
+
+<ul>
+<li>Access to uncommitted data (only with UR)</li>
+<li>Non-repeatable read (only with UR &amp; CS)</li>
+<li>Phantom read phenomenon (only wit UR, CS &amp; RS)</li>
+<li>Isolation levels</li>
+<li>Repeatable Read(RR)</li>
+<li>Read Stability (RS)
+
+<ul>
+<li>Cursor Stability (CS)</li>
+<li>Uncommitted Read (UR)</li>
+</ul>
+</li>
+</ul>
+
+
+<a name="FAQs"></a>
+<h1>FAQs</h1>
+
+<ul>
+<li>What&rsquo;s the difference between DELETE TABLE and TRUNCATE TABLE commands?
+
+<ul>
+<li>DELETE TABLE is a logged operation, so the deletion of each row gets logged in the transaction log, which makes it slow.</li>
+<li>TRUNCATE TABLE also deletes all the rows in a table, but it won&rsquo;t log the deletion of each row, instead it logs the de-allocation of the data pages of the table, which makes it faster. Of course, TRUNCATE TABLE can be rolled back.</li>
+</ul>
+</li>
+<li>Pivoting</li>
+<li>Co-related subquery? Co-related query is a query in which subquery depends on execution of main query</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>Select DeptNo,Ename,Sal From Emp e1 Where Sal=(Select Max(Sal) From Emp e2 Where e1.DeptNo=e2.DeptNo)</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>What is SQL Injection and how to prevent it?</li>
+<li>How to select first/last/max per group in SQL : <a href="http://www.xaprb.com/blog/2006/12/07/how-to-select-the-firstleastmax-row-per-group-in-sql/">http://www.xaprb.com/blog/2006/12/07/how-to-select-the-firstleastmax-row-per-group-in-sql/</a></li>
+<li>SQL query to get 4th or 5th maximum value from a table</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>select max(id) from EMP A where N=(select count(id) From EMP B where B.ID&gt;=A.ID) 
+</span><span class='line'>OR 
+</span><span class='line'>select * from (select rownum rn,id from (select distinct id From EMP order by id desc)) where rn between N-1 and N;</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>How to identify the performance order (Big-O notation) of a query?</li>
+<li>How query execution order works when a SQL has sub-queries in it?</li>
+<li>When we need to use USING clause in the sql?For example in this below: SELECT emp_name, department_name, city FROM employees e JOIN departments d USING (department_id) JOIN locations l USING (location_id) WHERE salary > 10000;</li>
+<li>How to delete duplicate records in a table?</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>DELETE FROM test t1 WHERE EXISTS ( SELECT * FROM test t2 WHERE t2.col1=t1.col1 AND t2.rowid &lt;&gt; t1.rowid);</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>What will be the o/p of this query?</li>
+<li><code>SELECT 1 FROM DUAL UNION SELECT 'A' FROM DUAL;</code> The query would throw an error. The two data types in the union set should be same. Out here it is a 1 and &lsquo;A&rsquo;, datatype mismatch and hence the error.</li>
+</ul>
+
+
+<a name="Bibliography"></a>
+<h1>Bibliography</h1>
+
+<ul>
+<li>Physical Database Design - The Database Professional&rsquo;s Guide to Exploiting Indexes, Views, Storage, and More</li>
+<li>Refactoring Databases</li>
+<li>SQL Anti-patterns</li>
+<li><a href="http://www.geekinterview.com/articles/sql-interview-questions-with-answers.html">http://www.geekinterview.com/articles/sql-interview-questions-with-answers.html</a></li>
+</ul>
+
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/rdbms.html" data-via="" data-counturl="http://fizalihsan.github.io/technology/rdbms.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+<ul>
+<h2>Technical</h2>
+
+<li>
+	<h3>Architecture</h3>
+	<a href="/technology/architecture/architecture.html">Overview</a>  |  <a href="/technology/architecture/coding-principles.html">Coding Principles</a>  |  <a href="/technology/architecture/design-principles.html">Design Principles</a>  |  <a href="/technology/architecture/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/architecture/patterns.html">Patterns</a>
+</li>
+
+<li>
+	<h3>Database</h3>
+	<a href="/technology/bigdata.html">Big Data</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/rdbms.html">RDBMS</a>  |  <a href="/technology/rdbms-products.html">RDBMS Products</a>
+</li>
+
+<li>
+	<h3>Languages</h3>
+	<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/scala.html">Scala</a>
+</li>
+
+<li>
+	<h3>General Concepts</h3>
+	<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/webprogramming/webconcepts.html">Web Concepts</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+</li>
+
+<h2>Non-Techninal</h2>
+
+<li>
+	<h3>Data Science</h3>
+
+	<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+</li>
+
+<li>
+	<h3>Domain Knowledge</h3>
+	<a href="/domain/retirement.html">Retirement</a>
+</li>
+
+<li>
+	<h3>Soft Skills</h3>
+	<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+</li>
+</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

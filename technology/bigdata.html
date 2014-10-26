@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
   
-  <meta name="description" content="Big Data Big Data Concepts MapReduce (Programming Model) Apache Hadoop HDFS (Hadoop Distributed File System) Daemons MapReduce (Hadoop &hellip;">
+  <meta name="description" content="Big Data Big Data Concepts MapReduce (Programming Model) Big Data Ecology Apache Hadoop HDFS (Hadoop Distributed File System) Daemons MapReduce ( &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -93,11 +93,25 @@
   <p><ul>
  <li><a href="#Big.Data.Concepts">Big Data Concepts</a></li>
  <li><a href="#MapReduce..Programming.Model.">MapReduce (Programming Model)</a></li>
- <li><a href="#Apache.Hadoop">Apache Hadoop</a>
+ <li><a href="#Big.Data.Ecology">Big Data Ecology</a>
  <ul>
-  <li><a href="#HDFS..Hadoop.Distributed.File.System.">HDFS (Hadoop Distributed File System)</a></li>
-  <li><a href="#Daemons">Daemons</a></li>
-  <li><a href="#MapReduce..Hadoop.Implementation.">MapReduce (Hadoop Implementation)</a></li>
+  <li><a href="#Apache.Hadoop">Apache Hadoop</a>
+  <ul>
+   <li><a href="#HDFS..Hadoop.Distributed.File.System.">HDFS (Hadoop Distributed File System)</a></li>
+   <li><a href="#Daemons">Daemons</a></li>
+   <li><a href="#MapReduce..Hadoop.Implementation.">MapReduce (Hadoop Implementation)</a></li>
+  </ul>
+  </li>
+  <li><a href="#HCatalog">HCatalog</a></li>
+  <li><a href="#Hive">Hive</a></li>
+  <li><a href="#Pig">Pig</a>
+  <ul>
+   <li><a href="#L1..Pig.Latin">1. Pig Latin</a></li>
+   <li><a href="#L2..Grunt">2) Grunt</a></li>
+   <li><a href="#L3..Piggybank">3) Piggybank</a>
+</li>
+  </ul>
+  </li>
  </ul>
  </li>
  <li><a href="#Clustering">Clustering</a></li>
@@ -173,8 +187,11 @@
 </ul>
 
 
+<a name="Big.Data.Ecology"></a>
+<h1>Big Data Ecology</h1>
+
 <a name="Apache.Hadoop"></a>
-<h1>Apache Hadoop</h1>
+<h2>Apache Hadoop</h2>
 
 <ul>
 <li>Hadoop is an open source platform that provides implementations of both the MapReduce and GFS (Google File System) technologies and allows the processing of very large data sets across clusters of low-cost commodity hardware.</li>
@@ -192,7 +209,7 @@
 
 
 <a name="HDFS..Hadoop.Distributed.File.System."></a>
-<h2>HDFS (Hadoop Distributed File System)</h2>
+<h3>HDFS (Hadoop Distributed File System)</h3>
 
 <ul>
 <li>is a distributed filesystem that can store very large data sets by scaling out across a cluster of hosts. It has specific design and performance characteristics; in particular, it is optimized for throughput instead of latency, and it achieves high availability through replication instead of redundancy.</li>
@@ -208,7 +225,7 @@
 <p><img class="right" src="/technology/hadoop-server-roles.png"></p>
 
 <a name="Daemons"></a>
-<h2>Daemons</h2>
+<h3>Daemons</h3>
 
 <ul>
 <li>Namenode (NN)
@@ -249,7 +266,7 @@
 
 
 <a name="MapReduce..Hadoop.Implementation."></a>
-<h2>MapReduce (Hadoop Implementation)</h2>
+<h3>MapReduce (Hadoop Implementation)</h3>
 
 <ul>
 <li>is a data processing paradigm that takes a specification of how the data will be input and output from its two stages (called map and reduce) and then applies this across arbitrarily large data sets. MapReduce integrates tightly with HDFS, ensuring that wherever possible, MapReduce tasks run directly on the HDFS nodes that hold the required data.</li>
@@ -265,6 +282,146 @@
 <li>Hadoop provides a standard specification (that is, interface) for the map and reduce functions, and implementations of these are often referred to as mappers and reducers. A typical MapReduce job will comprise of a number of mappers and reducers, and it is not unusual for several of these to be extremely simple. The developer focuses on expressing the transformation between source and result data sets, and the Hadoop framework manages all aspects of job execution, parallelization, and coordination.</li>
 <li>The master (JobTracker) monitors the health of the cluster and handle failures by rescheduling failed work.</li>
 <li>Processes on each server (TaskTracker) are responsible for performing work on the physical host, receiving instructions from the JobTracker, and reporting health/progress status back to it.</li>
+</ul>
+
+
+<a name="HCatalog"></a>
+<h2>HCatalog</h2>
+
+<ul>
+<li>provides one consistent data model for various Hadoop tools.</li>
+<li>provides a shared schema.</li>
+<li>allows users to see when shared data is available.</li>
+<li>decouples tools like Pig and Hive from data location, data format, etc.</li>
+<li>Based currently on Hive&rsquo;s metastore.</li>
+</ul>
+
+
+<a name="Hive"></a>
+<h2>Hive</h2>
+
+<ul>
+<li>Hive is a data warehouse system layer build on Hadoop.</li>
+<li>Allows you to define a structure for your unstructured Big Data.</li>
+<li>Simplifies analysis and queries with an SQL-like scripting language called HiveQL for adhoc querying on HDFS data.</li>
+<li>Hive is
+
+<ul>
+<li>not a relational database. It uses a database to store metadata, but the data that Hive processes is stored in HDFS.</li>
+<li>not designed for online transaction processing. not suited for real-time queries and row-level updates.</li>
+</ul>
+</li>
+<li>Components
+
+<ul>
+<li>CLI, Web interface (Beeswax?), Micrsoft HDInsight</li>
+</ul>
+</li>
+<li>When to use Hive?
+
+<ul>
+<li>for adhoc querying; for analysts with SQL familiarity</li>
+</ul>
+</li>
+<li>HiveQL - SQL-like syntax. based on SQL-92 specification.</li>
+<li>Hive Table
+
+<ul>
+<li>A Hive Table consists of (1) Data: typically a file or group of files in HDFS (2) Schema: in the form of metadata stored in a database</li>
+<li>Schema and data are separate</li>
+<li>A schema can be defined for existing data; Data can be added/removed independently; Before querying data in HDFS using Hive, a schema needs to be defined.</li>
+</ul>
+</li>
+</ul>
+
+
+<a name="Pig"></a>
+<h2>Pig</h2>
+
+<p>3 components of Pig:</p>
+
+<a name="L1..Pig.Latin"></a>
+<h3>1. Pig Latin</h3>
+
+<ul>
+<li>High level scripting language to describe data flow - statements translate into a series of MapReduce jobs - can invoke Java, JRuby or Jython programs and vice versa - User defined functions (UDF) can be written in Java and uploaded as jar.</li>
+<li>Sample Pig Latin script</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> a = LOAD 'nyse_stocks' using org.apache.hcatalog.pig.HCatLoader();
+</span><span class='line'> b = filter a by stock_symbol == 'IBM';
+</span><span class='line'> c = group b all;
+</span><span class='line'> d = foreach c generate AVG(b.stock_volume);
+</span><span class='line'> dump d;</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>Pig Latin script describes a DAG (directed acyclic graph) - <a href="http://vkalavri.com/tag/apachepig/">http://vkalavri.com/tag/apachepig/</a></li>
+<li>Pig script is not converted to a MapReduce job unless a DUMP/STORE command is invoked.</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'> runs = foreach batting generate $0 as playerID, $1 as year, $8 as runs;
+</span><span class='line'> (playerID,yearID,R)
+</span><span class='line'> (john,2008,10)
+</span><span class='line'> (john,2009,22)
+</span><span class='line'> (john,2010,0)
+</span><span class='line'> (adam,2008,58)
+</span><span class='line'> (adam,2009,105)
+</span><span class='line'> (adam,2010,106)
+</span><span class='line'> (adam,2011,118)
+</span><span class='line'>
+</span><span class='line'> grp_data = group runs by (year);
+</span><span class='line'> (2008, [(john,2008,10), (adam,2008,58)])
+</span><span class='line'> (2009, [(john,2009,22), (adam,2009,105)])
+</span><span class='line'> (2010, [(john,2010,0),  (adam,2010,106)])
+</span><span class='line'> (2011, [(adam,2011,118)])</span></code></pre></td></tr></table></div></figure>
+
+
+<a name="L2..Grunt"></a>
+<h3>2) Grunt</h3>
+
+<p>Interactive command-line shell</p>
+
+<a name="L3..Piggybank"></a>
+<h3>3) Piggybank</h3>
+
+<ul>
+<li>A repository to store the UDFs</li>
+<li>When to use Pig?
+
+<ul>
+<li>for ETL purposes; for preparing data for easier analysis; when you have a long series of steps to perform.</li>
+</ul>
+</li>
+<li>Data Model difference b/w Pig and Hive
+
+<ul>
+<li>In Pig, data objects exist and are operated on in the script. They are deleted after the script completes. They can be stored explicitly for later use.</li>
+<li>In Hive, data objects exist in Hadoop data store. After every line of execution, results are stored in Hadoop which can be useful for debugging.</li>
+</ul>
+</li>
 </ul>
 
 
@@ -328,10 +485,53 @@
 <aside class="sidebar">
   
     <section>
-  <h1>Recent Posts</h1>
+
+<ul>
+<h2>Technical</h2>
+
+<li>
+	<h3>Architecture</h3>
+	<a href="/technology/architecture/architecture.html">Overview</a>  |  <a href="/technology/architecture/coding-principles.html">Coding Principles</a>  |  <a href="/technology/architecture/design-principles.html">Design Principles</a>  |  <a href="/technology/architecture/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/architecture/patterns.html">Patterns</a>
+</li>
+
+<li>
+	<h3>Database</h3>
+	<a href="/technology/bigdata.html">Big Data</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/rdbms.html">RDBMS</a>  |  <a href="/technology/rdbms-products.html">RDBMS Products</a>
+</li>
+
+<li>
+	<h3>Languages</h3>
+	<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/scala.html">Scala</a>
+</li>
+
+<li>
+	<h3>General Concepts</h3>
+	<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/webprogramming/webconcepts.html">Web Concepts</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+</li>
+
+<h2>Non-Techninal</h2>
+
+<li>
+	<h3>Data Science</h3>
+
+	<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+</li>
+
+<li>
+	<h3>Domain Knowledge</h3>
+	<a href="/domain/retirement.html">Retirement</a>
+</li>
+
+<li>
+	<h3>Soft Skills</h3>
+	<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+</li>
+</ul>
+
+  <!-- <h1>Recent Posts</h1>
   <ul id="recent_posts">
     
-  </ul>
+  </ul> &#8211;>
   <!-- <ul>
     <li><a href="/datascience/statistics.html">Statistics</a></li>
     <li><a href="/datascience/r.html">R Programming</a></li>

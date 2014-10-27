@@ -21,6 +21,9 @@ footer: true
   * Languages
     * [Groovy]({{ root_url }}/technology/groovy.html)
     * [Scala]({{ root_url }}/technology/scala.html)
+    * Java
+      * [Core Concepts]({{ root_url }}/technology/java.html)
+      * [Collections]({{ root_url }}/technology/java-collections.html)
   * General Concepts
     * [Data Structures]({{ root_url }}/technology/datastructures.html)
     * [OOPS]({{ root_url }}/technology/oops.html)

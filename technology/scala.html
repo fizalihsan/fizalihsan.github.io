@@ -209,16 +209,17 @@ Interface defined in Java can &hellip;">
 <a name="Simple.Hello.World"></a>
 <h2>Simple Hello World</h2>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>object HelloWorld {
-</span><span class='line'>  def main(args: Array[String]) {
-</span><span class='line'>    println("Hello, world!")
-</span><span class='line'>  }
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">object</span> <span class="nc">HelloWorld</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">def</span> <span class="n">main</span><span class="o">(</span><span class="n">args</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">println</span><span class="o">(</span><span class="s">&quot;Hello, world!&quot;</span><span class="o">)</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <ul>
@@ -237,7 +238,7 @@ Interface defined in Java can &hellip;">
 
 <p><em>Program 1:</em></p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -248,22 +249,23 @@ Interface defined in Java can &hellip;">
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>import java.util.{Date, Locale}
-</span><span class='line'>import java.text.DateFormat
-</span><span class='line'>import java.text.DateFormat._
-</span><span class='line'> 
-</span><span class='line'>object FrenchDate {
-</span><span class='line'>  def main(args: Array[String]) {
-</span><span class='line'>    val now = new Date
-</span><span class='line'>    val df = getDateInstance(LONG, Locale.FRANCE)
-</span><span class='line'>    println(df format now)
-</span><span class='line'>  }
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">import</span> <span class="nn">java.util.</span><span class="o">{</span><span class="nc">Date</span><span class="o">,</span> <span class="nc">Locale</span><span class="o">}</span>
+</span><span class='line'><span class="k">import</span> <span class="nn">java.text.DateFormat</span>
+</span><span class='line'><span class="k">import</span> <span class="nn">java.text.DateFormat._</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">object</span> <span class="nc">FrenchDate</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">def</span> <span class="n">main</span><span class="o">(</span><span class="n">args</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">val</span> <span class="n">now</span> <span class="k">=</span> <span class="k">new</span> <span class="nc">Date</span>
+</span><span class='line'>    <span class="k">val</span> <span class="n">df</span> <span class="k">=</span> <span class="n">getDateInstance</span><span class="o">(</span><span class="nc">LONG</span><span class="o">,</span> <span class="nc">Locale</span><span class="o">.</span><span class="nc">FRANCE</span><span class="o">)</span>
+</span><span class='line'>    <span class="n">println</span><span class="o">(</span><span class="n">df</span> <span class="n">format</span> <span class="n">now</span><span class="o">)</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p><em>Program 2: Passing function as input to another function</em></p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -276,19 +278,20 @@ Interface defined in Java can &hellip;">
 <span class='line-number'>11</span>
 <span class='line-number'>12</span>
 <span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>object Timer {
-</span><span class='line'>  def oncePerSecond(callback: () =&gt; Unit) {
-</span><span class='line'>    while (true) { callback(); Thread sleep 1000 }
-</span><span class='line'>  }
-</span><span class='line'> 
-</span><span class='line'>  def timeFlies() {
-</span><span class='line'>    println("time flies like an arrow...")
-</span><span class='line'>  }
-</span><span class='line'> 
-</span><span class='line'>  def main(args: Array[String]) {
-</span><span class='line'>    oncePerSecond(timeFlies)
-</span><span class='line'>  }
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='scala'><span class='line'><span class="k">object</span> <span class="nc">Timer</span> <span class="o">{</span>
+</span><span class='line'>  <span class="k">def</span> <span class="n">oncePerSecond</span><span class="o">(</span><span class="n">callback</span><span class="k">:</span> <span class="o">()</span> <span class="o">=&gt;</span> <span class="nc">Unit</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="k">while</span> <span class="o">(</span><span class="kc">true</span><span class="o">)</span> <span class="o">{</span> <span class="n">callback</span><span class="o">();</span> <span class="nc">Thread</span> <span class="n">sleep</span> <span class="mi">1000</span> <span class="o">}</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="n">timeFlies</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">println</span><span class="o">(</span><span class="s">&quot;time flies like an arrow...&quot;</span><span class="o">)</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>  <span class="k">def</span> <span class="n">main</span><span class="o">(</span><span class="n">args</span><span class="k">:</span> <span class="kt">Array</span><span class="o">[</span><span class="kt">String</span><span class="o">])</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">oncePerSecond</span><span class="o">(</span><span class="n">timeFlies</span><span class="o">)</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <ul>
@@ -335,7 +338,7 @@ Interface defined in Java can &hellip;">
 
 		<li>
 			<h3>Java</h3>
-			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/spring.html">Spring</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
 		</li>
 
 		<li>

@@ -847,8 +847,9 @@ B-tree cluster indexes</li>
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>Select DeptNo,Ename,Sal From Emp e1 Where Sal=(Select Max(Sal) From Emp e2 Where e1.DeptNo=e2.DeptNo)</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">Select</span> <span class="n">DeptNo</span><span class="p">,</span><span class="n">Ename</span><span class="p">,</span><span class="n">Sal</span> <span class="k">From</span> <span class="n">Emp</span> <span class="n">e1</span> <span class="k">Where</span> <span class="n">Sal</span><span class="o">=</span><span class="p">(</span><span class="k">Select</span> <span class="k">Max</span><span class="p">(</span><span class="n">Sal</span><span class="p">)</span> <span class="k">From</span> <span class="n">Emp</span> <span class="n">e2</span> <span class="k">Where</span> <span class="n">e1</span><span class="p">.</span><span class="n">DeptNo</span><span class="o">=</span><span class="n">e2</span><span class="p">.</span><span class="n">DeptNo</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <ul>
@@ -858,12 +859,13 @@ B-tree cluster indexes</li>
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>select max(id) from EMP A where N=(select count(id) From EMP B where B.ID&gt;=A.ID) 
-</span><span class='line'>OR 
-</span><span class='line'>select * from (select rownum rn,id from (select distinct id From EMP order by id desc)) where rn between N-1 and N;</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">select</span> <span class="k">max</span><span class="p">(</span><span class="n">id</span><span class="p">)</span> <span class="k">from</span> <span class="n">EMP</span> <span class="n">A</span> <span class="k">where</span> <span class="n">N</span><span class="o">=</span><span class="p">(</span><span class="k">select</span> <span class="k">count</span><span class="p">(</span><span class="n">id</span><span class="p">)</span> <span class="k">From</span> <span class="n">EMP</span> <span class="n">B</span> <span class="k">where</span> <span class="n">B</span><span class="p">.</span><span class="n">ID</span><span class="o">&gt;=</span><span class="n">A</span><span class="p">.</span><span class="n">ID</span><span class="p">)</span>
+</span><span class='line'><span class="k">OR</span>
+</span><span class='line'><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="p">(</span><span class="k">select</span> <span class="n">rownum</span> <span class="n">rn</span><span class="p">,</span><span class="n">id</span> <span class="k">from</span> <span class="p">(</span><span class="k">select</span> <span class="k">distinct</span> <span class="n">id</span> <span class="k">From</span> <span class="n">EMP</span> <span class="k">order</span> <span class="k">by</span> <span class="n">id</span> <span class="k">desc</span><span class="p">))</span> <span class="k">where</span> <span class="n">rn</span> <span class="k">between</span> <span class="n">N</span><span class="o">-</span><span class="mi">1</span> <span class="k">and</span> <span class="n">N</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <ul>
@@ -874,8 +876,9 @@ B-tree cluster indexes</li>
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>DELETE FROM test t1 WHERE EXISTS ( SELECT * FROM test t2 WHERE t2.col1=t1.col1 AND t2.rowid &lt;&gt; t1.rowid);</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">DELETE</span> <span class="k">FROM</span> <span class="n">test</span> <span class="n">t1</span> <span class="k">WHERE</span> <span class="k">EXISTS</span> <span class="p">(</span> <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">test</span> <span class="n">t2</span> <span class="k">WHERE</span> <span class="n">t2</span><span class="p">.</span><span class="n">col1</span><span class="o">=</span><span class="n">t1</span><span class="p">.</span><span class="n">col1</span> <span class="k">AND</span> <span class="n">t2</span><span class="p">.</span><span class="n">rowid</span> <span class="o">&lt;&gt;</span> <span class="n">t1</span><span class="p">.</span><span class="n">rowid</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <ul>
@@ -934,7 +937,7 @@ B-tree cluster indexes</li>
 
 		<li>
 			<h3>Java</h3>
-			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/spring.html">Spring</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
 		</li>
 
 		<li>

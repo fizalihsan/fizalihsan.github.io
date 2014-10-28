@@ -198,14 +198,15 @@
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>str = 'Hello'
-</span><span class='line'>if(str) println str + 'World' //Groovy checks if the object reference is null
-</span><span class='line'>list = [1]
-</span><span class='line'>if(list) println list //Groovy checks if list is not-null and not empty</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="n">str</span> <span class="o">=</span> <span class="s1">&#39;Hello&#39;</span>
+</span><span class='line'><span class="k">if</span><span class="o">(</span><span class="n">str</span><span class="o">)</span> <span class="n">println</span> <span class="n">str</span> <span class="o">+</span> <span class="s1">&#39;World&#39;</span> <span class="c1">//Groovy checks if the object reference is null</span>
+</span><span class='line'><span class="n">list</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="o">]</span>
+</span><span class='line'><span class="k">if</span><span class="o">(</span><span class="n">list</span><span class="o">)</span> <span class="n">println</span> <span class="n">list</span> <span class="c1">//Groovy checks if list is not-null and not empty</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <a name="Safe-navigation.operator....."></a>
@@ -216,10 +217,11 @@
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>def foo(str) { if (str != null) { str.reverse() } } //Before
-</span><span class='line'>def foo(str) { str?.reverse() } //After</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="kt">def</span> <span class="nf">foo</span><span class="o">(</span><span class="n">str</span><span class="o">)</span> <span class="o">{</span> <span class="k">if</span> <span class="o">(</span><span class="n">str</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span> <span class="n">str</span><span class="o">.</span><span class="na">reverse</span><span class="o">()</span> <span class="o">}</span> <span class="o">}</span> <span class="c1">//Before</span>
+</span><span class='line'><span class="kt">def</span> <span class="nf">foo</span><span class="o">(</span><span class="n">str</span><span class="o">)</span> <span class="o">{</span> <span class="n">str</span><span class="o">?.</span><span class="na">reverse</span><span class="o">()</span> <span class="o">}</span> <span class="c1">//After</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <a name="Looping.methods"></a>
@@ -236,10 +238,11 @@
 <a name="Static.imports"></a>
 <h3>Static imports</h3>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>import static Math.random as rand 
-</span><span class='line'>double value = rand() // alias name is used here to avoid confusion among static imports</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="kn">import</span> <span class="nn">static</span> <span class="n">Math</span><span class="o">.</span><span class="na">random</span> <span class="k">as</span> <span class="n">rand</span>
+</span><span class='line'><span class="kt">double</span> <span class="n">value</span> <span class="o">=</span> <span class="n">rand</span><span class="o">()</span> <span class="c1">// alias name is used here to avoid confusion among static imports</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <a name="Exceptions"></a>
@@ -275,12 +278,13 @@
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>def log(x, base=10) { Math.log(x) / Math.log(base) }
-</span><span class='line'>log(1024) //default base 10 is used
-</span><span class='line'>log(1024, 2)</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="kt">def</span> <span class="nf">log</span><span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">base</span><span class="o">=</span><span class="mi">10</span><span class="o">)</span> <span class="o">{</span> <span class="n">Math</span><span class="o">.</span><span class="na">log</span><span class="o">(</span><span class="n">x</span><span class="o">)</span> <span class="s">/ Math.log(base) }</span>
+</span><span class='line'><span class="s">log(1024) /</span><span class="o">/</span><span class="k">default</span> <span class="n">base</span> <span class="mi">10</span> <span class="n">is</span> <span class="n">used</span>
+</span><span class='line'><span class="n">log</span><span class="o">(</span><span class="mi">1024</span><span class="o">,</span> <span class="mi">2</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <ul>
@@ -288,14 +292,15 @@
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>def task(name, String[] details) { println "$name - $details" }
-</span><span class='line'>task 'name1'
-</span><span class='line'>task 'name2', 'blah..'
-</span><span class='line'>task 'name3', 'blah..blah..'</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="kt">def</span> <span class="nf">task</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">String</span><span class="o">[]</span> <span class="n">details</span><span class="o">)</span> <span class="o">{</span> <span class="n">println</span> <span class="s2">&quot;$name - $details&quot;</span> <span class="o">}</span>
+</span><span class='line'><span class="n">task</span> <span class="s1">&#39;name1&#39;</span>
+</span><span class='line'><span class="n">task</span> <span class="s1">&#39;name2&#39;</span><span class="o">,</span> <span class="s1">&#39;blah..&#39;</span>
+</span><span class='line'><span class="n">task</span> <span class="s1">&#39;name3&#39;</span><span class="o">,</span> <span class="s1">&#39;blah..blah..&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <a name="Named.arguments.in.method.calls"></a>
@@ -306,12 +311,13 @@
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>class Robot { def type, height, width }
-</span><span class='line'>robot = new Robot(type: 'arm', width: 10, height: 40)
-</span><span class='line'>println "$robot.type, $robot.height, $robot.width"</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="kd">class</span> <span class="nc">Robot</span> <span class="o">{</span> <span class="kt">def</span> <span class="n">type</span><span class="o">,</span> <span class="n">height</span><span class="o">,</span> <span class="n">width</span> <span class="o">}</span>
+</span><span class='line'><span class="n">robot</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Robot</span><span class="o">(</span><span class="nl">type:</span> <span class="s1">&#39;arm&#39;</span><span class="o">,</span> <span class="nl">width:</span> <span class="mi">10</span><span class="o">,</span> <span class="nl">height:</span> <span class="mi">40</span><span class="o">)</span>
+</span><span class='line'><span class="n">println</span> <span class="s2">&quot;$robot.type, $robot.height, $robot.width&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <ul>
@@ -319,7 +325,7 @@
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -327,14 +333,15 @@
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>class Robot { 
-</span><span class='line'>  def access(location, weight, fragile) {
-</span><span class='line'>    println "Received fragile? $fragile, weight: $weight, loc: $location"
-</span><span class='line'>  }
-</span><span class='line'>}
-</span><span class='line'>new Robot().access(x: 30, y: 20, z: 10, 50, true)
-</span><span class='line'>//You can change the order
-</span><span class='line'>new Robot().access(50, true, x: 30, y: 20, z: 10, a:5)</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="kd">class</span> <span class="nc">Robot</span> <span class="o">{</span>
+</span><span class='line'>  <span class="kt">def</span> <span class="nf">access</span><span class="o">(</span><span class="n">location</span><span class="o">,</span> <span class="n">weight</span><span class="o">,</span> <span class="n">fragile</span><span class="o">)</span> <span class="o">{</span>
+</span><span class='line'>    <span class="n">println</span> <span class="s2">&quot;Received fragile? $fragile, weight: $weight, loc: $location&quot;</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="k">new</span> <span class="nf">Robot</span><span class="o">().</span><span class="na">access</span><span class="o">(</span><span class="nl">x:</span> <span class="mi">30</span><span class="o">,</span> <span class="nl">y:</span> <span class="mi">20</span><span class="o">,</span> <span class="nl">z:</span> <span class="mi">10</span><span class="o">,</span> <span class="mi">50</span><span class="o">,</span> <span class="kc">true</span><span class="o">)</span>
+</span><span class='line'><span class="c1">//You can change the order</span>
+</span><span class='line'><span class="k">new</span> <span class="nf">Robot</span><span class="o">().</span><span class="na">access</span><span class="o">(</span><span class="mi">50</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="nl">x:</span> <span class="mi">30</span><span class="o">,</span> <span class="nl">y:</span> <span class="mi">20</span><span class="o">,</span> <span class="nl">z:</span> <span class="mi">10</span><span class="o">,</span> <span class="nl">a:</span><span class="mi">5</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <a name="Multiple.Assignments"></a>
@@ -345,12 +352,13 @@
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>def splitName(fullName) { fullName.split(' ') }
-</span><span class='line'>def (firstName, lastName) = splitName('James Bond')
-</span><span class='line'>println "$lastName, $firstName $lastName"</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="kt">def</span> <span class="nf">splitName</span><span class="o">(</span><span class="n">fullName</span><span class="o">)</span> <span class="o">{</span> <span class="n">fullName</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s1">&#39; &#39;</span><span class="o">)</span> <span class="o">}</span>
+</span><span class='line'><span class="kt">def</span> <span class="o">(</span><span class="n">firstName</span><span class="o">,</span> <span class="n">lastName</span><span class="o">)</span> <span class="o">=</span> <span class="n">splitName</span><span class="o">(</span><span class="s1">&#39;James Bond&#39;</span><span class="o">)</span>
+</span><span class='line'><span class="n">println</span> <span class="s2">&quot;$lastName, $firstName $lastName&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <ul>
@@ -358,12 +366,13 @@
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>def (first, last) = ["James", "Bond"]
-</span><span class='line'>(first, last) = [last, first]
-</span><span class='line'>println "$first $last"</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="kt">def</span> <span class="o">(</span><span class="n">first</span><span class="o">,</span> <span class="n">last</span><span class="o">)</span> <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;James&quot;</span><span class="o">,</span> <span class="s2">&quot;Bond&quot;</span><span class="o">]</span>
+</span><span class='line'><span class="o">(</span><span class="n">first</span><span class="o">,</span> <span class="n">last</span><span class="o">)</span> <span class="o">=</span> <span class="o">[</span><span class="n">last</span><span class="o">,</span> <span class="n">first</span><span class="o">]</span>
+</span><span class='line'><span class="n">println</span> <span class="s2">&quot;$first $last&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <a name="Implementing.Interface"></a>
@@ -374,7 +383,7 @@
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -385,17 +394,18 @@
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>interface Greeting { void greet(greeting) }
-</span><span class='line'>interface WellWisher { void wish(wish) }
-</span><span class='line'>void greeter(Greeting greeting){ greeting.greet()}
-</span><span class='line'>void wellwisher(WellWisher wellwisher){ wellwisher.wish()}
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="kd">interface</span> <span class="nc">Greeting</span> <span class="o">{</span> <span class="kt">void</span> <span class="n">greet</span><span class="o">(</span><span class="n">greeting</span><span class="o">)</span> <span class="o">}</span>
+</span><span class='line'><span class="kd">interface</span> <span class="nc">WellWisher</span> <span class="o">{</span> <span class="kt">void</span> <span class="n">wish</span><span class="o">(</span><span class="n">wish</span><span class="o">)</span> <span class="o">}</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">greeter</span><span class="o">(</span><span class="n">Greeting</span> <span class="n">greeting</span><span class="o">){</span> <span class="n">greeting</span><span class="o">.</span><span class="na">greet</span><span class="o">()}</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">wellwisher</span><span class="o">(</span><span class="n">WellWisher</span> <span class="n">wellwisher</span><span class="o">){</span> <span class="n">wellwisher</span><span class="o">.</span><span class="na">wish</span><span class="o">()}</span>
 </span><span class='line'>
-</span><span class='line'>greeter(new Greeting(){ void greet(greeting){println 'Java style'}}) 
-</span><span class='line'>groovyStyle = {println 'Groovy style'}
-</span><span class='line'>greeter(groovyStyle as Greeting) 
-</span><span class='line'>//block of code is morphed into an implementation of the
-</span><span class='line'>// interface via 'as' operator
-</span><span class='line'>wellwisher(groovyStyle as WellWisher) </span></code></pre></td></tr></table></div></figure>
+</span><span class='line'><span class="n">greeter</span><span class="o">(</span><span class="k">new</span> <span class="n">Greeting</span><span class="o">(){</span> <span class="kt">void</span> <span class="n">greet</span><span class="o">(</span><span class="n">greeting</span><span class="o">){</span><span class="n">println</span> <span class="s1">&#39;Java style&#39;</span><span class="o">}})</span>
+</span><span class='line'><span class="n">groovyStyle</span> <span class="o">=</span> <span class="o">{</span><span class="n">println</span> <span class="s1">&#39;Groovy style&#39;</span><span class="o">}</span>
+</span><span class='line'><span class="n">greeter</span><span class="o">(</span><span class="n">groovyStyle</span> <span class="k">as</span> <span class="n">Greeting</span><span class="o">)</span>
+</span><span class='line'><span class="c1">//block of code is morphed into an implementation of the</span>
+</span><span class='line'><span class="c1">// interface via &#39;as&#39; operator</span>
+</span><span class='line'><span class="n">wellwisher</span><span class="o">(</span><span class="n">groovyStyle</span> <span class="k">as</span> <span class="n">WellWisher</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <ul>
@@ -404,16 +414,17 @@
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>interface Greeting { void greet(greeting); void wish(wish); void regard(regard); }
-</span><span class='line'>void callMe(Greeting greeting){ greeting.greet(); greeting.wish()}
-</span><span class='line'>//method name as key, implementation as value. Not all methods are implemented
-</span><span class='line'>greetingsMap = [ greet: {println 'Greet Hello World'}, wish: {println 'Wish Hello World'} ] 
-</span><span class='line'>callMe(greetingsMap as Greeting) </span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="kd">interface</span> <span class="nc">Greeting</span> <span class="o">{</span> <span class="kt">void</span> <span class="n">greet</span><span class="o">(</span><span class="n">greeting</span><span class="o">);</span> <span class="kt">void</span> <span class="n">wish</span><span class="o">(</span><span class="n">wish</span><span class="o">);</span> <span class="kt">void</span> <span class="n">regard</span><span class="o">(</span><span class="n">regard</span><span class="o">);</span> <span class="o">}</span>
+</span><span class='line'><span class="kt">void</span> <span class="nf">callMe</span><span class="o">(</span><span class="n">Greeting</span> <span class="n">greeting</span><span class="o">){</span> <span class="n">greeting</span><span class="o">.</span><span class="na">greet</span><span class="o">();</span> <span class="n">greeting</span><span class="o">.</span><span class="na">wish</span><span class="o">()}</span>
+</span><span class='line'><span class="c1">//method name as key, implementation as value. Not all methods are implemented</span>
+</span><span class='line'><span class="n">greetingsMap</span> <span class="o">=</span> <span class="o">[</span> <span class="nl">greet:</span> <span class="o">{</span><span class="n">println</span> <span class="s1">&#39;Greet Hello World&#39;</span><span class="o">},</span> <span class="nl">wish:</span> <span class="o">{</span><span class="n">println</span> <span class="s1">&#39;Wish Hello World&#39;</span><span class="o">}</span> <span class="o">]</span>
+</span><span class='line'><span class="n">callMe</span><span class="o">(</span><span class="n">greetingsMap</span> <span class="k">as</span> <span class="n">Greeting</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <a name="Operator.Overloading"></a>
@@ -424,7 +435,7 @@
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -432,14 +443,15 @@
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>== equals
-</span><span class='line'>+ plus
-</span><span class='line'>- minus
-</span><span class='line'>++ next
-</span><span class='line'>.. next (for-each syntax)
-</span><span class='line'>-- previous
-</span><span class='line'>&lt;&lt; leftShift
-</span><span class='line'>&lt;=&gt; compareTo</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="o">==</span> <span class="n">equals</span>
+</span><span class='line'><span class="o">+</span> <span class="n">plus</span>
+</span><span class='line'><span class="o">-</span> <span class="n">minus</span>
+</span><span class='line'><span class="o">++</span> <span class="n">next</span>
+</span><span class='line'><span class="o">..</span> <span class="n">next</span> <span class="o">(</span><span class="k">for</span><span class="o">-</span><span class="n">each</span> <span class="n">syntax</span><span class="o">)</span>
+</span><span class='line'><span class="o">--</span> <span class="n">previous</span>
+</span><span class='line'><span class="o">&lt;&lt;</span> <span class="n">leftShift</span>
+</span><span class='line'><span class="o">&lt;=&gt;</span> <span class="n">compareTo</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <ul>
@@ -449,7 +461,7 @@
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -459,16 +471,17 @@
 <span class='line-number'>8</span>
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>class Name{
-</span><span class='line'>  def name; 
-</span><span class='line'>  def plus(other){
-</span><span class='line'>    new Name(name: name + "~~" + other.name)
-</span><span class='line'>  }
-</span><span class='line'>  String toString() { "name: " + name}
-</span><span class='line'>}
-</span><span class='line'>def name1 = new Name(name: "Hello")
-</span><span class='line'>def name2 = new Name(name: "World")
-</span><span class='line'>println name1 + name2</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="kd">class</span> <span class="nc">Name</span><span class="o">{</span>
+</span><span class='line'>  <span class="kt">def</span> <span class="n">name</span><span class="o">;</span>
+</span><span class='line'>  <span class="kt">def</span> <span class="nf">plus</span><span class="o">(</span><span class="n">other</span><span class="o">){</span>
+</span><span class='line'>    <span class="k">new</span> <span class="nf">Name</span><span class="o">(</span><span class="nl">name:</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;~~&quot;</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="na">name</span><span class="o">)</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'>  <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span> <span class="s2">&quot;name: &quot;</span> <span class="o">+</span> <span class="n">name</span><span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="kt">def</span> <span class="n">name1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Name</span><span class="o">(</span><span class="nl">name:</span> <span class="s2">&quot;Hello&quot;</span><span class="o">)</span>
+</span><span class='line'><span class="kt">def</span> <span class="n">name2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Name</span><span class="o">(</span><span class="nl">name:</span> <span class="s2">&quot;World&quot;</span><span class="o">)</span>
+</span><span class='line'><span class="n">println</span> <span class="n">name1</span> <span class="o">+</span> <span class="n">name2</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <a name="Coercion"></a>
@@ -481,18 +494,19 @@
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>== equals
-</span><span class='line'>+ plus
-</span><span class='line'>- minus
-</span><span class='line'>++ next
-</span><span class='line'>-- previous
-</span><span class='line'>&lt;=&gt; compareTo</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="o">==</span> <span class="n">equals</span>
+</span><span class='line'><span class="o">+</span> <span class="n">plus</span>
+</span><span class='line'><span class="o">-</span> <span class="n">minus</span>
+</span><span class='line'><span class="o">++</span> <span class="n">next</span>
+</span><span class='line'><span class="o">--</span> <span class="n">previous</span>
+</span><span class='line'><span class="o">&lt;=&gt;</span> <span class="n">compareTo</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <a name="Strings"></a>
@@ -517,10 +531,11 @@
 <a name="Arrays"></a>
 <h3>Arrays</h3>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>[1,2,3] //Groovy treats this as list. 
-</span><span class='line'>[1,2,3] as int[] //Now the list is converted to an array here</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="o">[</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">]</span> <span class="c1">//Groovy treats this as list. </span>
+</span><span class='line'><span class="o">[</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">]</span> <span class="k">as</span> <span class="kt">int</span><span class="o">[]</span> <span class="c1">//Now the list is converted to an array here</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <a name="Ranges"></a>
@@ -555,7 +570,7 @@
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -563,14 +578,15 @@
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'> import groovy.transform.*
-</span><span class='line'> @Canonical(excludes="age, password")
-</span><span class='line'> class Person {
-</span><span class='line'> String firstName, lastName, password
-</span><span class='line'> int age
-</span><span class='line'> }
-</span><span class='line'> def sara = new Person(firstName: "Sara", lastName: "Walker", age: 49, password: "passw0rd")
-</span><span class='line'> println sara</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'> <span class="kn">import</span> <span class="nn">groovy.transform.*</span>
+</span><span class='line'> <span class="nd">@Canonical</span><span class="o">(</span><span class="n">excludes</span><span class="o">=</span><span class="s2">&quot;age, password&quot;</span><span class="o">)</span>
+</span><span class='line'> <span class="kd">class</span> <span class="nc">Person</span> <span class="o">{</span>
+</span><span class='line'> <span class="n">String</span> <span class="n">firstName</span><span class="o">,</span> <span class="n">lastName</span><span class="o">,</span> <span class="n">password</span>
+</span><span class='line'> <span class="kt">int</span> <span class="n">age</span>
+</span><span class='line'> <span class="o">}</span>
+</span><span class='line'> <span class="kt">def</span> <span class="n">sara</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Person</span><span class="o">(</span><span class="nl">firstName:</span> <span class="s2">&quot;Sara&quot;</span><span class="o">,</span> <span class="nl">lastName:</span> <span class="s2">&quot;Walker&quot;</span><span class="o">,</span> <span class="nl">age:</span> <span class="mi">49</span><span class="o">,</span> <span class="nl">password:</span> <span class="s2">&quot;passw0rd&quot;</span><span class="o">)</span>
+</span><span class='line'> <span class="n">println</span> <span class="n">sara</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <ul>
@@ -578,7 +594,7 @@
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -599,27 +615,28 @@
 <span class='line-number'>19</span>
 <span class='line-number'>20</span>
 <span class='line-number'>21</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>import groovy.transform.*
-</span><span class='line'>class Worker {
-</span><span class='line'> def work() { println 'get work done' }
-</span><span class='line'> def analyze() { println 'analyze...' }
-</span><span class='line'> def writeReport() { println 'get report written' }
-</span><span class='line'>}
-</span><span class='line'>class Expert {
-</span><span class='line'> def analyze() { println "expert analysis..." }
-</span><span class='line'>}
-</span><span class='line'>class Manager {
-</span><span class='line'> //At compile time, Groovy examines the Manager class and brings 
-</span><span class='line'> // in methods from the delegated classes only if those methods 
-</span><span class='line'> // don’t already exist
-</span><span class='line'> @Delegate Expert expert = new Expert() 
-</span><span class='line'> //only work() and writeReport() methods are brought here
-</span><span class='line'> @Delegate Worker worker = new Worker()
-</span><span class='line'>}
-</span><span class='line'>def bernie = new Manager()
-</span><span class='line'>bernie.analyze()      //invokes Expert.analyze()
-</span><span class='line'>bernie.work()         //invokes Worker.work()
-</span><span class='line'>bernie.writeReport()  //invokes Worker.writeReport</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="kn">import</span> <span class="nn">groovy.transform.*</span>
+</span><span class='line'><span class="kd">class</span> <span class="nc">Worker</span> <span class="o">{</span>
+</span><span class='line'> <span class="kt">def</span> <span class="nf">work</span><span class="o">()</span> <span class="o">{</span> <span class="n">println</span> <span class="s1">&#39;get work done&#39;</span> <span class="o">}</span>
+</span><span class='line'> <span class="kt">def</span> <span class="nf">analyze</span><span class="o">()</span> <span class="o">{</span> <span class="n">println</span> <span class="s1">&#39;analyze...&#39;</span> <span class="o">}</span>
+</span><span class='line'> <span class="kt">def</span> <span class="nf">writeReport</span><span class="o">()</span> <span class="o">{</span> <span class="n">println</span> <span class="s1">&#39;get report written&#39;</span> <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="kd">class</span> <span class="nc">Expert</span> <span class="o">{</span>
+</span><span class='line'> <span class="kt">def</span> <span class="nf">analyze</span><span class="o">()</span> <span class="o">{</span> <span class="n">println</span> <span class="s2">&quot;expert analysis...&quot;</span> <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="kd">class</span> <span class="nc">Manager</span> <span class="o">{</span>
+</span><span class='line'> <span class="c1">//At compile time, Groovy examines the Manager class and brings </span>
+</span><span class='line'> <span class="c1">// in methods from the delegated classes only if those methods </span>
+</span><span class='line'> <span class="c1">// don’t already exist</span>
+</span><span class='line'> <span class="nd">@Delegate</span> <span class="n">Expert</span> <span class="n">expert</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Expert</span><span class="o">()</span>
+</span><span class='line'> <span class="c1">//only work() and writeReport() methods are brought here</span>
+</span><span class='line'> <span class="nd">@Delegate</span> <span class="n">Worker</span> <span class="n">worker</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Worker</span><span class="o">()</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="kt">def</span> <span class="n">bernie</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Manager</span><span class="o">()</span>
+</span><span class='line'><span class="n">bernie</span><span class="o">.</span><span class="na">analyze</span><span class="o">()</span>      <span class="c1">//invokes Expert.analyze()</span>
+</span><span class='line'><span class="n">bernie</span><span class="o">.</span><span class="na">work</span><span class="o">()</span>         <span class="c1">//invokes Worker.work()</span>
+</span><span class='line'><span class="n">bernie</span><span class="o">.</span><span class="na">writeReport</span><span class="o">()</span>  <span class="c1">//invokes Worker.writeReport</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <ul>
@@ -627,14 +644,15 @@
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'> import groovy.transform.*
-</span><span class='line'> @Immutable
-</span><span class='line'> class CreditCard { String cardNumber; int creditLimit }
-</span><span class='line'> println new CreditCard("4000-1111-2222-3333", 1000)</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'> <span class="kn">import</span> <span class="nn">groovy.transform.*</span>
+</span><span class='line'> <span class="nd">@Immutable</span>
+</span><span class='line'> <span class="kd">class</span> <span class="nc">CreditCard</span> <span class="o">{</span> <span class="n">String</span> <span class="n">cardNumber</span><span class="o">;</span> <span class="kt">int</span> <span class="n">creditLimit</span> <span class="o">}</span>
+</span><span class='line'> <span class="n">println</span> <span class="k">new</span> <span class="nf">CreditCard</span><span class="o">(</span><span class="s2">&quot;4000-1111-2222-3333&quot;</span><span class="o">,</span> <span class="mi">1000</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <ul>
@@ -642,20 +660,21 @@
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'> class AsNeeded {
-</span><span class='line'> def value
-</span><span class='line'> //heavy1 and heavy2 are lazy-initialized only at the time of invocation
-</span><span class='line'> @Lazy Heavy heavy1 = new Heavy()
-</span><span class='line'> @Lazy Heavy heavy2 = { new Heavy(size: value) }()
-</span><span class='line'> AsNeeded() { println "Created AsNeeded" }
-</span><span class='line'> }</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'> <span class="kd">class</span> <span class="nc">AsNeeded</span> <span class="o">{</span>
+</span><span class='line'> <span class="kt">def</span> <span class="n">value</span>
+</span><span class='line'> <span class="c1">//heavy1 and heavy2 are lazy-initialized only at the time of invocation</span>
+</span><span class='line'> <span class="nd">@Lazy</span> <span class="n">Heavy</span> <span class="n">heavy1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Heavy</span><span class="o">()</span>
+</span><span class='line'> <span class="nd">@Lazy</span> <span class="n">Heavy</span> <span class="n">heavy2</span> <span class="o">=</span> <span class="o">{</span> <span class="k">new</span> <span class="n">Heavy</span><span class="o">(</span><span class="nl">size:</span> <span class="n">value</span><span class="o">)</span> <span class="o">}()</span>
+</span><span class='line'> <span class="n">AsNeeded</span><span class="o">()</span> <span class="o">{</span> <span class="n">println</span> <span class="s2">&quot;Created AsNeeded&quot;</span> <span class="o">}</span>
+</span><span class='line'> <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <ul>
@@ -663,18 +682,19 @@
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
 <span class='line-number'>5</span>
 <span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>@Newify([CreditCard, Person]) //specify the list of types here. 
-</span><span class='line'>def fluentCreate() {
-</span><span class='line'> println CreditCard("1234-5678-1234-5678", 2000) //Python-like constructor invocation with new keyword
-</span><span class='line'> println Person.new("John", "Doe") //Ruby-like constructor invocation where new() is a method
-</span><span class='line'>}
-</span><span class='line'>fluentCreate()</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="nd">@Newify</span><span class="o">([</span><span class="n">CreditCard</span><span class="o">,</span> <span class="n">Person</span><span class="o">])</span> <span class="c1">//specify the list of types here. </span>
+</span><span class='line'><span class="kt">def</span> <span class="nf">fluentCreate</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'> <span class="n">println</span> <span class="nf">CreditCard</span><span class="o">(</span><span class="s2">&quot;1234-5678-1234-5678&quot;</span><span class="o">,</span> <span class="mi">2000</span><span class="o">)</span> <span class="c1">//Python-like constructor invocation with new keyword</span>
+</span><span class='line'> <span class="n">println</span> <span class="n">Person</span><span class="o">.</span><span class="na">new</span><span class="o">(</span><span class="s2">&quot;John&quot;</span><span class="o">,</span> <span class="s2">&quot;Doe&quot;</span><span class="o">)</span> <span class="c1">//Ruby-like constructor invocation where new() is a method</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'><span class="n">fluentCreate</span><span class="o">()</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <ul>
@@ -682,7 +702,7 @@
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -690,14 +710,15 @@
 <span class='line-number'>6</span>
 <span class='line-number'>7</span>
 <span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'> @Singleton(lazy = true)
-</span><span class='line'> class TheUnique {
-</span><span class='line'>  private TheUnique() { println 'Instance created' }
-</span><span class='line'> def hello() { println 'hello' }
-</span><span class='line'> }
-</span><span class='line'> TheUnique.instance.hello()
-</span><span class='line'> TheUnique.instance.hello()
-</span><span class='line'> new TheUnique().hello() //Caveat: since Groovy does not honor private methods, clients can still do this.</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'> <span class="nd">@Singleton</span><span class="o">(</span><span class="n">lazy</span> <span class="o">=</span> <span class="kc">true</span><span class="o">)</span>
+</span><span class='line'> <span class="kd">class</span> <span class="nc">TheUnique</span> <span class="o">{</span>
+</span><span class='line'>  <span class="kd">private</span> <span class="nf">TheUnique</span><span class="o">()</span> <span class="o">{</span> <span class="n">println</span> <span class="s1">&#39;Instance created&#39;</span> <span class="o">}</span>
+</span><span class='line'> <span class="kt">def</span> <span class="nf">hello</span><span class="o">()</span> <span class="o">{</span> <span class="n">println</span> <span class="s1">&#39;hello&#39;</span> <span class="o">}</span>
+</span><span class='line'> <span class="o">}</span>
+</span><span class='line'> <span class="n">TheUnique</span><span class="o">.</span><span class="na">instance</span><span class="o">.</span><span class="na">hello</span><span class="o">()</span>
+</span><span class='line'> <span class="n">TheUnique</span><span class="o">.</span><span class="na">instance</span><span class="o">.</span><span class="na">hello</span><span class="o">()</span>
+</span><span class='line'> <span class="k">new</span> <span class="nf">TheUnique</span><span class="o">().</span><span class="na">hello</span><span class="o">()</span> <span class="c1">//Caveat: since Groovy does not honor private methods, clients can still do this.</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <ul>
@@ -705,7 +726,7 @@
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
 <span class='line-number'>4</span>
@@ -716,17 +737,18 @@
 <span class='line-number'>9</span>
 <span class='line-number'>10</span>
 <span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'> @Canonical
-</span><span class='line'> class Car {
-</span><span class='line'> def make, model, year
-</span><span class='line'> Car(make, model){ this.make = make; this.model = model; this.year = 2000; }
-</span><span class='line'> Car(make, model, year){ this.make = make; this.model = model; this.year = year; }
-</span><span class='line'> }
-</span><span class='line'> @InheritConstructors
-</span><span class='line'> class Honda extends Car{
-</span><span class='line'> //no need to explicitly override all the constructors here
-</span><span class='line'> }
-</span><span class='line'> println new Car("Honda", "Accord")</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'> <span class="nd">@Canonical</span>
+</span><span class='line'> <span class="kd">class</span> <span class="nc">Car</span> <span class="o">{</span>
+</span><span class='line'> <span class="kt">def</span> <span class="n">make</span><span class="o">,</span> <span class="n">model</span><span class="o">,</span> <span class="n">year</span>
+</span><span class='line'> <span class="n">Car</span><span class="o">(</span><span class="n">make</span><span class="o">,</span> <span class="n">model</span><span class="o">){</span> <span class="k">this</span><span class="o">.</span><span class="na">make</span> <span class="o">=</span> <span class="n">make</span><span class="o">;</span> <span class="k">this</span><span class="o">.</span><span class="na">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">;</span> <span class="k">this</span><span class="o">.</span><span class="na">year</span> <span class="o">=</span> <span class="mi">2000</span><span class="o">;</span> <span class="o">}</span>
+</span><span class='line'> <span class="n">Car</span><span class="o">(</span><span class="n">make</span><span class="o">,</span> <span class="n">model</span><span class="o">,</span> <span class="n">year</span><span class="o">){</span> <span class="k">this</span><span class="o">.</span><span class="na">make</span> <span class="o">=</span> <span class="n">make</span><span class="o">;</span> <span class="k">this</span><span class="o">.</span><span class="na">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">;</span> <span class="k">this</span><span class="o">.</span><span class="na">year</span> <span class="o">=</span> <span class="n">year</span><span class="o">;</span> <span class="o">}</span>
+</span><span class='line'> <span class="o">}</span>
+</span><span class='line'> <span class="nd">@InheritConstructors</span>
+</span><span class='line'> <span class="kd">class</span> <span class="nc">Honda</span> <span class="kd">extends</span> <span class="n">Car</span><span class="o">{</span>
+</span><span class='line'> <span class="c1">//no need to explicitly override all the constructors here</span>
+</span><span class='line'> <span class="o">}</span>
+</span><span class='line'> <span class="n">println</span> <span class="k">new</span> <span class="nf">Car</span><span class="o">(</span><span class="s2">&quot;Honda&quot;</span><span class="o">,</span> <span class="s2">&quot;Accord&quot;</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <hr />
@@ -787,7 +809,7 @@
 
 		<li>
 			<h3>Java</h3>
-			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/spring.html">Spring</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
 		</li>
 
 		<li>

@@ -231,8 +231,9 @@
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>SELECT CARD, STATS_TIME FROM SYSCAT.TABLES WHERE TABNAME='MARGININFO'</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="n">CARD</span><span class="p">,</span> <span class="n">STATS_TIME</span> <span class="k">FROM</span> <span class="n">SYSCAT</span><span class="p">.</span><span class="n">TABLES</span> <span class="k">WHERE</span> <span class="n">TABNAME</span><span class="o">=</span><span class="s1">&#39;MARGININFO&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <ul>
@@ -240,8 +241,9 @@
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>SELECT NLEAF, NLEVELS, FULLKEYCARD, STATS_TIME, i.* FROM SYSCAT.INDEXES i WHERE TABSCHEMA='CMDRPROD' and TABNAME='MARGININFO'</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="n">NLEAF</span><span class="p">,</span> <span class="n">NLEVELS</span><span class="p">,</span> <span class="n">FULLKEYCARD</span><span class="p">,</span> <span class="n">STATS_TIME</span><span class="p">,</span> <span class="n">i</span><span class="p">.</span><span class="o">*</span> <span class="k">FROM</span> <span class="n">SYSCAT</span><span class="p">.</span><span class="n">INDEXES</span> <span class="n">i</span> <span class="k">WHERE</span> <span class="n">TABSCHEMA</span><span class="o">=</span><span class="s1">&#39;CMDRPROD&#39;</span> <span class="k">and</span> <span class="n">TABNAME</span><span class="o">=</span><span class="s1">&#39;MARGININFO&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <ul>
@@ -251,10 +253,11 @@
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>RUNSTATS ON TABLE schema.table WITH DISTRIBUTION AND DETAILED INDEXES ALL;
-</span><span class='line'>RUNSTATS ON TABLE schema.table; </span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="n">RUNSTATS</span> <span class="k">ON</span> <span class="k">TABLE</span> <span class="k">schema</span><span class="p">.</span><span class="k">table</span> <span class="k">WITH</span> <span class="n">DISTRIBUTION</span> <span class="k">AND</span> <span class="n">DETAILED</span> <span class="n">INDEXES</span> <span class="k">ALL</span><span class="p">;</span>
+</span><span class='line'><span class="n">RUNSTATS</span> <span class="k">ON</span> <span class="k">TABLE</span> <span class="k">schema</span><span class="p">.</span><span class="k">table</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>(If reorg is run, then execute runstats also)
@@ -266,8 +269,9 @@ Execute Runstats : after creating an index, after hanging the prefetch size, aft
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>SELECT tabname TableName, card RowCount FROM syscat.tables WHERE TABNAME='tableName'</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">SELECT</span> <span class="n">tabname</span> <span class="n">TableName</span><span class="p">,</span> <span class="n">card</span> <span class="n">RowCount</span> <span class="k">FROM</span> <span class="n">syscat</span><span class="p">.</span><span class="n">tables</span> <span class="k">WHERE</span> <span class="n">TABNAME</span><span class="o">=</span><span class="s1">&#39;tableName&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <ul>
@@ -275,16 +279,18 @@ Execute Runstats : after creating an index, after hanging the prefetch size, aft
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>LOAD FROM /dev/null of del REPLACE INTO YourTable</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">LOAD</span> <span class="k">FROM</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="k">null</span> <span class="k">of</span> <span class="n">del</span> <span class="k">REPLACE</span> <span class="k">INTO</span> <span class="n">YourTable</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>This operation is fully recoverable. Note that on Windows systems, you have to replace <code>/dev/null</code> by <code>NUL</code>.</p>
 
 <p>OR</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>ALTER TABLE YourTable ACTIVATE NOT LOGGED INITIALLY WITH EMPTY TABLE</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">YourTable</span> <span class="n">ACTIVATE</span> <span class="k">NOT</span> <span class="n">LOGGED</span> <span class="k">INITIALLY</span> <span class="k">WITH</span> <span class="n">EMPTY</span> <span class="k">TABLE</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <p>Causes all data currently in table to be removed. Once the data has been removed, it cannot be recovered except through use of the RESTORE facility. If the unit of work in which this alter statement was issued is rolled back, the table data will not be returned to its original state.
@@ -295,8 +301,9 @@ When this action is requested, no DELETE triggers defined on the affected table 
 </ul>
 
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>select current timestamp from sysibm.sysdummy1;</span></code></pre></td></tr></table></div></figure>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">select</span> <span class="k">current</span> <span class="k">timestamp</span> <span class="k">from</span> <span class="n">sysibm</span><span class="p">.</span><span class="n">sysdummy1</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
 <a name="Advanced.Concepts"></a>
@@ -418,13 +425,21 @@ To create a table in a given table space, use the CREATE TABLE statement with th
 <p>The system administrator can extend the size of tempdb Local variables denoted as <code>@varname</code> Global variables</p>
 
 <ul>
-<li><p><code>@@rowcount</code> - Holds the number of rows returned by the last Transact-SQL statement. Be careful, almost any statement will set this. Even an &ldquo;if&rdquo; statement which checks it&rsquo;s value. For example:
-<code>`
-select * from pubs where ....
-if @@rowcount = 0 /* set to 1 after this */
-print "no rows returned"
-</code></p></li>
-<li><p><code>@@error</code> - Holds status of last statement executed. Zero is success. Once again almost any statement sets this, so use it&rsquo;s value immediately (or save it in a local variable).</p></li>
+<li><code>@@rowcount</code> - Holds the number of rows returned by the last Transact-SQL statement. Be careful, almost any statement will set this. Even an &ldquo;if&rdquo; statement which checks it&rsquo;s value. For example:</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='sql'><span class='line'><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">pubs</span> <span class="k">where</span> <span class="p">....</span>
+</span><span class='line'><span class="n">if</span> <span class="o">@@</span><span class="n">rowcount</span> <span class="o">=</span> <span class="mi">0</span> <span class="cm">/* set to 1 after this */</span>
+</span><span class='line'><span class="n">print</span> <span class="ss">&quot;no rows returned&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li><code>@@error</code> - Holds status of last statement executed. Zero is success. Once again almost any statement sets this, so use it&rsquo;s value immediately (or save it in a local variable).</li>
 <li><code>@@servername</code> - The name of the Sybase dataserver.</li>
 <li><code>@@version</code> - What version of the Sybase server you are using</li>
 </ul>
@@ -524,7 +539,7 @@ print "no rows returned"
 
 		<li>
 			<h3>Java</h3>
-			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/spring.html">Spring</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
 		</li>
 
 		<li>

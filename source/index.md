@@ -24,6 +24,10 @@ footer: true
     * Java
       * [Core Concepts]({{ root_url }}/technology/java.html)
       * [Collections]({{ root_url }}/technology/java-collections.html)
+      * [I/O]({{ root_url }}/technology/java-io.html)
+      * [Performance]({{ root_url }}/technology/java-performance.html)
+      * [Spring]({{ root_url }}/technology/spring.html)
+      * [Java Specialist Newsletters]({{ root_url }}/technology/java-newsletters.html)
   * General Concepts
     * [Data Structures]({{ root_url }}/technology/datastructures.html)
     * [OOPS]({{ root_url }}/technology/oops.html)

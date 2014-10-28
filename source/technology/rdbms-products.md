@@ -50,20 +50,20 @@ Types of Views
 * How to find out if statistics on a table or schema is up-to-date?
   * If CARD is -1 or STATS_TIME is null or far in the past, then statistics needs to be updated. Non-negative number on CARD denotes the number of rows on the table.
 
-```
+``` sql
 SELECT CARD, STATS_TIME FROM SYSCAT.TABLES WHERE TABNAME='MARGININFO'
 ```
 
   * If NLEAF, NLEVELS & FULLKEYCARD is -1 or STATS_TIME is null or far in the past, then statistics needs to be updated on that index
 
-```
+``` sql
 SELECT NLEAF, NLEVELS, FULLKEYCARD, STATS_TIME, i.* FROM SYSCAT.INDEXES i WHERE TABSCHEMA='CMDRPROD' and TABNAME='MARGININFO'
 ```
   * Via DB2 Command - `reorgchk update statistics on SCHEMA CMDRPROD`
 * Reorg - TODO
 * Runstats - Execute to collect statistics of the table and its indexes to help optimizer choose the best data-access plan
 
-```
+``` sql
 RUNSTATS ON TABLE schema.table WITH DISTRIBUTION AND DETAILED INDEXES ALL;
 RUNSTATS ON TABLE schema.table; 
 ```
@@ -74,13 +74,13 @@ Execute Runstats : after creating an index, after hanging the prefetch size, aft
 * Check transaction log usage : `call sp.xlogfull()`
 * Row count on table without full table scan
 
-```
+``` sql
 SELECT tabname TableName, card RowCount FROM syscat.tables WHERE TABNAME='tableName'
 ```
 
 * Truncate a table without transaction logging
 
-```
+``` sql
 LOAD FROM /dev/null of del REPLACE INTO YourTable
 ```
 
@@ -88,7 +88,7 @@ This operation is fully recoverable. Note that on Windows systems, you have to r
 
 OR
 
-```
+``` sql
 ALTER TABLE YourTable ACTIVATE NOT LOGGED INITIALLY WITH EMPTY TABLE
 ```
 
@@ -97,7 +97,7 @@ When this action is requested, no DELETE triggers defined on the affected table 
 
 * Dummy select
 
-```
+``` sql
 select current timestamp from sysibm.sysdummy1;
 ```
 
@@ -181,11 +181,11 @@ The tempdb database is a special Sybase supplied database that comes in each ser
 The system administrator can extend the size of tempdb Local variables denoted as `@varname` Global variables
 
 * `@@rowcount` - Holds the number of rows returned by the last Transact-SQL statement. Be careful, almost any statement will set this. Even an "if" statement which checks it's value. For example:
-```
+``` sql
 select * from pubs where ....
 if @@rowcount = 0 /* set to 1 after this */
 print "no rows returned"
-``
+```
 
 * `@@error` - Holds status of last statement executed. Zero is success. Once again almost any statement sets this, so use it's value immediately (or save it in a local variable).
 * `@@servername` - The name of the Sybase dataserver.

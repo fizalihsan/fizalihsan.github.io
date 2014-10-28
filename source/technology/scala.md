@@ -51,7 +51,7 @@ footer: true
 
 ## Simple Hello World
 
-```
+``` scala
 object HelloWorld {
   def main(args: Array[String]) {
     println("Hello, world!")
@@ -68,7 +68,7 @@ Simple Programs
 
 *Program 1:*
 
-```
+``` scala
 import java.util.{Date, Locale}
 import java.text.DateFormat
 import java.text.DateFormat._
@@ -84,7 +84,7 @@ object FrenchDate {
 
 *Program 2: Passing function as input to another function*
 
-```
+``` scala
 object Timer {
   def oncePerSecond(callback: () => Unit) {
     while (true) { callback(); Thread sleep 1000 }

@@ -37,7 +37,7 @@ footer: true
 * Groovy’s `==` Is Equal to Java’s `equals()` only if the class does not implement the `Comparable` interface. If it does, then it maps to the class’s `compareTo()` method. 
 * Reference comparison is done via `is()` method. Custom truth conventions can be added by implementing `asBoolean()` method.
 
-```
+``` groovy
 str = 'Hello'
 if(str) println str + 'World' //Groovy checks if the object reference is null
 list = [1]
@@ -47,7 +47,7 @@ if(list) println list //Groovy checks if list is not-null and not empty
 ### Safe-navigation operator (?.) 
 
 * eliminates the mundane null check. If input is null, returns null instead of NPE.
-```
+``` groovy
 def foo(str) { if (str != null) { str.reverse() } } //Before
 def foo(str) { str?.reverse() } //After
 ```
@@ -61,7 +61,7 @@ def foo(str) { str?.reverse() } //After
 
 ### Static imports
 
-```
+``` groovy
 import static Math.random as rand 
 double value = rand() // alias name is used here to avoid confusion among static imports
 ```
@@ -85,14 +85,14 @@ double value = rand() // alias name is used here to avoid confusion among static
 #### Optional Parameters
 
 * With Default value
-```
+``` groovy
 def log(x, base=10) { Math.log(x) / Math.log(base) }
 log(1024) //default base 10 is used
 log(1024, 2)
 ```
 
 * Trailing array parameter as optional. Much like Java varargs.
-```
+``` groovy
 def task(name, String[] details) { println "$name - $details" }
 task 'name1'
 task 'name2', 'blah..'
@@ -102,14 +102,14 @@ task 'name3', 'blah..blah..'
 #### Named arguments in method calls
 
 * Class with no-argument constructor
-```
+``` groovy
 class Robot { def type, height, width }
 robot = new Robot(type: 'arm', width: 10, height: 40)
 println "$robot.type, $robot.height, $robot.width"
 ```
 
 * Excess Parameters as Map - If the number of arguments sent is more than what the method parameters, and if the excess arguments are in name-value pair, then Groovy treats the name-value pairs as a Map.
-```
+``` groovy
 class Robot { 
   def access(location, weight, fragile) {
     println "Received fragile? $fragile, weight: $weight, loc: $location"
@@ -123,14 +123,14 @@ new Robot().access(50, true, x: 30, y: 20, z: 10, a:5)
 #### Multiple Assignments
 
 * Method returning an array is assigned to multiple variables 
-```
+``` groovy
 def splitName(fullName) { fullName.split(' ') }
 def (firstName, lastName) = splitName('James Bond')
 println "$lastName, $firstName $lastName"
 ```
 
 * Swapping two variables without a temporary variable using above technique
-```
+``` groovy
 def (first, last) = ["James", "Bond"]
 (first, last) = [last, first]
 println "$first $last"
@@ -139,7 +139,7 @@ println "$first $last"
 #### Implementing Interface
 
 * Block of code morphed as the implementation of an interface
-```
+``` groovy
 interface Greeting { void greet(greeting) }
 interface WellWisher { void wish(wish) }
 void greeter(Greeting greeting){ greeting.greet()}
@@ -155,7 +155,7 @@ wellwisher(groovyStyle as WellWisher)
 
 * Groovy does not force us to implement all the methods in an interface. Very useful while mocking for unit testing.
 * Implementation of multi-method interface as a Map
-```
+``` groovy
 interface Greeting { void greet(greeting); void wish(wish); void regard(regard); }
 void callMe(Greeting greeting){ greeting.greet(); greeting.wish()}
 //method name as key, implementation as value. Not all methods are implemented
@@ -166,7 +166,7 @@ callMe(greetingsMap as Greeting)
 #### Operator Overloading
 
 * Each operator has a standard mapping to methods.
-```
+``` groovy
 == equals
 + plus
 - minus
@@ -181,7 +181,7 @@ callMe(greetingsMap as Greeting)
 * Example 2: `lst = ['hello']; lst << 'there'; println lst`
 * Example 3: Custom class and operator overriding
 
-```
+``` groovy
 class Name{
   def name; 
   def plus(other){
@@ -199,7 +199,7 @@ println name1 + name2
 * Implementing operators is straightforward when both operands are of the same type. Things get more complex with a mixture of types, say 1 + 1.0. One of the two arguments needs to be promoted to the more general type, and this is called coercion.
 * <span style="color:red">Double dispatch???? - Need better description & example ????</span>
 * Examples
-```
+``` groovy
 == equals
 + plus
 - minus
@@ -221,7 +221,7 @@ println name1 + name2
 * Groovy supports generics but favors dynamic behavior. Compile-time type checking is turned off by default.
 
 ### Arrays
-```
+``` groovy
 [1,2,3] //Groovy treats this as list. 
 [1,2,3] as int[] //Now the list is converted to an array here
 ```
@@ -246,7 +246,7 @@ Custom Range - Any datatype can be used with ranges, provided that both of the f
 * groovyc ignores @Override
 * `@Canonical` - auto-generates `toString()` implementation as comma-separated field values
 
-```
+``` groovy
  import groovy.transform.*
  @Canonical(excludes="age, password")
  class Person {
@@ -259,7 +259,7 @@ Custom Range - Any datatype can be used with ranges, provided that both of the f
 
 * `@Delegate`
 
-``` 
+``` groovy 
 import groovy.transform.*
 class Worker {
  def work() { println 'get work done' }
@@ -284,7 +284,7 @@ bernie.writeReport()  //invokes Worker.writeReport
 ```
 
 * `@Immutable` - Groovy adds the hashCode(), equals(), and toString() methods
-```
+``` groovy
  import groovy.transform.*
  @Immutable
  class CreditCard { String cardNumber; int creditLimit }
@@ -292,7 +292,7 @@ bernie.writeReport()  //invokes Worker.writeReport
 ```
 
 * `@Lazy` - provides a painless way to implement the virtual proxy pattern with thread safety as a bonus
-```
+``` groovy
  class AsNeeded {
  def value
  //heavy1 and heavy2 are lazy-initialized only at the time of invocation
@@ -303,7 +303,7 @@ bernie.writeReport()  //invokes Worker.writeReport
 ```
 
 * `@Newify` - Create objects via Ruby-like and Python-like constructors without using 'new Foo()' style. Comes handy in DSL creation.
-```
+``` groovy
 @Newify([CreditCard, Person]) //specify the list of types here. 
 def fluentCreate() {
  println CreditCard("1234-5678-1234-5678", 2000) //Python-like constructor invocation with new keyword
@@ -313,7 +313,7 @@ fluentCreate()
 ```
 
 * `@Singleton`
-```
+``` groovy
  @Singleton(lazy = true)
  class TheUnique {
   private TheUnique() { println 'Instance created' }
@@ -325,7 +325,7 @@ fluentCreate()
 ```
 
 * `@InheritConstructors`
-```
+``` groovy
  @Canonical
  class Car {
  def make, model, year

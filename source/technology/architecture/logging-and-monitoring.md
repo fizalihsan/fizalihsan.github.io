@@ -155,3 +155,16 @@ https://www.usenix.org/sites/default/files/conference/protected-files/dickson.pd
   * Create searches, graphs, and reports using Splunk
 * Operational Intelligence refers to the information collected and processed 
 * Semantic logging as data or events that are written to log files explicitly for the purpose of gathering analytics.
+
+# Java Logging
+
+## slf4j
+
+* Meta logging Frameworks - http://www.slf4j.org
+* NDC, MDC statements - http://stackoverflow.com/questions/7404435/conditional-logging-with-log4j?
+* What are the classloader issues that plague JCL?
+* what is meant by 'static binding approach' in sl4j?
+* Marker objects
+* NOPLogger?
+
+## logback

@@ -24,9 +24,15 @@ footer: true
     * Java
       * [Core Concepts]({{ root_url }}/technology/java.html)
       * [Collections]({{ root_url }}/technology/java-collections.html)
+      * [Concurrency]({{ root_url }}/technology/java-concurrency.html)
+      * [Database]({{ root_url }}/technology/java-database.html)
       * [I/O]({{ root_url }}/technology/java-io.html)
+      * [JMX]({{ root_url }}/technology/java-jmx.html)
+      * [JNDI]({{ root_url }}/technology/java-jndi.html)
       * [Performance]({{ root_url }}/technology/java-performance.html)
       * [Spring]({{ root_url }}/technology/spring.html)
+      * [Testing]({{ root_url }}/technology/java-testing.html)
+      * [Web]({{ root_url }}/technology/java-web.html)
       * [Java Specialist Newsletters]({{ root_url }}/technology/java-newsletters.html)
   * General Concepts
     * [Data Structures]({{ root_url }}/technology/datastructures.html)

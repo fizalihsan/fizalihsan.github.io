@@ -10,7 +10,7 @@
 
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
-<meta name="description" content="Java Performance Terminology Profiling Benchmarking JVM Profiling Tools HPROF VisualVM MAT BTrace Tools shipped with Java HP JTune HP JMeter &hellip;">
+<meta name="description" content="Java Performance Memory JVM Architecture Class loader subsystem Execution engine Native interface Runtime data areas Runtime data areas shared among &hellip;">
 <meta name="keywords" content="statistics, data science, R, big data, mongodb">
 
   <!-- http://t.co/dKP3o1e -->
@@ -74,7 +74,7 @@
   <header role="banner"><hgroup>
   <h1><a href="/">KnowledgeShop</a></h1>
   
-    <h2>A blogging framework for hackers.</h2>
+    <h2>Learn & Share</h2>
   
 </hgroup>
 
@@ -116,7 +116,41 @@
   </header>
   
   <p><ul>
- <li><a href="#Terminology">Terminology</a></li>
+ <li><a href="#Memory">Memory</a>
+ <ul>
+  <li><a href="#JVM.Architecture">JVM Architecture</a>
+  <ul>
+   <li><a href="#Class.loader.subsystem">Class loader subsystem</a></li>
+   <li><a href="#Execution.engine">Execution engine</a></li>
+   <li><a href="#Native.interface">Native interface</a></li>
+   <li><a href="#Runtime.data.areas">Runtime data areas</a>
+   <ul>
+    <li><a href="#Runtime.data.areas.shared.among.all.threads">Runtime data areas shared among all threads</a></li>
+    <li><a href="#Thread-specific.runtime.data.areas">Thread-specific runtime data areas</a>
+</li>
+   </ul>
+   </li>
+  </ul>
+  </li>
+  <li><a href="#Garbage.Collection">Garbage Collection</a>
+  <ul>
+   <li><a href="#Phases">Phases</a></li>
+   <li><a href="#JVM.Generations">JVM Generations</a></li>
+   <li><a href="#Generational.GC.Process">Generational GC Process</a></li>
+   <li><a href="#Garbage.Collection.Algorithms">Garbage Collection Algorithms</a></li>
+  </ul>
+  </li>
+  <li><a href="#Reference.Types">Reference Types</a>
+  <ul>
+   <li><a href="#WeakReference">WeakReference</a></li>
+   <li><a href="#SoftReference">SoftReference</a></li>
+   <li><a href="#PhantomReference">PhantomReference</a>
+</li>
+  </ul>
+  </li>
+ </ul>
+ </li>
+ <li><a href="#Performance.Metrics">Performance Metrics</a></li>
  <li><a href="#Profiling">Profiling</a></li>
  <li><a href="#Benchmarking">Benchmarking</a></li>
  <li><a href="#JVM.Profiling.Tools">JVM Profiling Tools</a>
@@ -135,8 +169,253 @@
 
 </p>
 
-<a name="Terminology"></a>
-<h1>Terminology</h1>
+<a name="Memory"></a>
+<h1>Memory</h1>
+
+<p>Any Java object occupies at least 16 bytes, 12 out of which are occupied by a Java object header. Besides that, all Java objects are aligned by 8 bytes boundary. It means that, for example, an object containing 2 fields: int and byte will occupy not 17 (12 + 4 + 1), but 24 bytes (17 aligned by 8 bytes).</p>
+
+<p>Each Object reference occupies 4 bytes if the Java heap is under 32G and <code>XX:+UseCompressedOops</code> is turned on (it is turned on by default in the recent Oracle JVM versions). Otherwise, Object references occupy 8 bytes.</p>
+
+<ul>
+<li><a href="http://java-performance.info/memory-introspection-using-sun-misc-unsafe-and-reflection/">http://java-performance.info/memory-introspection-using-sun-misc-unsafe-and-reflection/</a></li>
+<li><a href="http://java-performance.info/overview-of-memory-saving-techniques-java/">http://java-performance.info/overview-of-memory-saving-techniques-java/</a></li>
+<li><a href="http://apmblog.compuware.com/2011/04/20/the-top-java-memory-problems-part-1/">Top Java Memory Problems - Part 1</a></li>
+<li><a href="http://docs.oracle.com/javase/6/docs/technotes/guides/management/jconsole.html#gddzt">Garbage Collection</a></li>
+</ul>
+
+
+<p>Understand the implications of moving b/w 32-bit and 64-bit JVMs especially in terms of memory usage and allocation.</p>
+
+<a name="JVM.Architecture"></a>
+<h2>JVM Architecture</h2>
+
+<p><img class="right" src="/technology/jvm-architecture.png"></p>
+
+<p><a href="http://www.cubrid.org/blog/dev-platform/understanding-jvm-internals/">Understanding JVM Internals</a></p>
+
+<a name="Class.loader.subsystem"></a>
+<h3>Class loader subsystem</h3>
+
+<p>Responsible for loading classes and interfaces</p>
+
+<a name="Execution.engine"></a>
+<h3>Execution engine</h3>
+
+<p>Responsible for the execution of the instructions specified in the classes.</p>
+
+<a name="Native.interface"></a>
+<h3>Native interface</h3>
+
+<p>interacts with the native libraries.</p>
+
+<a name="Runtime.data.areas"></a>
+<h3>Runtime data areas</h3>
+
+<p>Mechanism to hold all kinds of data items such as instructions, object data, local variable data, return values &amp; intermediate results. How runtime data are stored in the runtime data areas depends on the implementation of the JVM. Some implementation may enjoy the availability of memory and some others may not. The abstract nature of runtime data area specification allows the implementation of JVM in different machines easier. Some runtime data areas are shared among all the threads in the application, while some others are too specific to an active thread.</p>
+
+<a name="Runtime.data.areas.shared.among.all.threads"></a>
+<h4>Runtime data areas shared among all threads</h4>
+
+<ul>
+<li><strong>Method area</strong>: holds the details of each class loaded by the class loader subsystem.</li>
+<li><strong>Heap</strong>: holds every object being created by the threads during execution</li>
+</ul>
+
+
+<a name="Thread-specific.runtime.data.areas"></a>
+<h4>Thread-specific runtime data areas</h4>
+
+<ul>
+<li><strong>Program counter register</strong>: points to the next instruction to be executed.</li>
+<li><strong>Java stack</strong>: hold the state of each method (java method, not a native method) invocations for the thread such as the local variables, method arguments, return values, intermediate results. Each entry in the Java stack is called “stack frames“. Whenever a method is invoked a new stack frame is added to the stack and corresponding frame is removed when its execution is completed.</li>
+<li><strong>Native method stack</strong>: holds the state of each native method call in an implementation dependent way.</li>
+</ul>
+
+
+<a name="Garbage.Collection"></a>
+<h2>Garbage Collection</h2>
+
+<p><img src="/technology/java-gc1.png"></p>
+
+<p><img class="right" src="/technology/java-gc2.png"></p>
+
+<ul>
+<li>Definition: process of looking at heap memory, identifying which objects are in use and which are not, and deleting the unused objects.</li>
+<li><a href="http://www.oracle.com/technetwork/java/gc-tuning-5-138395.html">Tuning GC</a></li>
+<li><a href="http://architects.dzone.com/articles/how-tune-java-garbage">How to tune GC</a></li>
+</ul>
+
+
+<a name="Phases"></a>
+<h3>Phases</h3>
+
+<ul>
+<li>Mark phase - garbage collector identifies which pieces of memory are in use and which are not. Unused memory is cleaned up.</li>
+<li>Normal deletion removes unreferenced objects leaving referenced objects and pointers to free space.</li>
+<li>Compact phase - To further improve performance, in addition to deleting unreferenced objects, you can also compact the remaining referenced objects. By moving referenced object together, this makes new memory allocation much easier and faster.</li>
+</ul>
+
+
+<a name="JVM.Generations"></a>
+<h3>JVM Generations</h3>
+
+<ul>
+<li>Young Generation
+
+<ul>
+<li>all new objects are allocated and aged.</li>
+<li>causes a minor GC when this fills up.</li>
+<li>relatively quicker to collect than other generations</li>
+<li>Stop the World event: All minor GCs are &ldquo;Stop the World&rdquo; events which means all the app threads are stopped until the GC completes.</li>
+</ul>
+</li>
+<li>Old Generation
+
+<ul>
+<li>stores long surviving objects.</li>
+<li>a threshold is set for young generation objects and when the age is met, the objects gets moved to old generation.</li>
+<li>causes a major GC when this fills up. Also, a &ldquo;Stop the World&rdquo; event.</li>
+</ul>
+</li>
+<li>Permanent Generation
+
+<ul>
+<li>stores metadata required by the JVM to describe the classes and methods used in the app. Java SE library classes and method may be stored here.</li>
+<li>class may get collected/unloaded if they are no longer needed. Causes a Full GC</li>
+</ul>
+</li>
+</ul>
+
+
+<a name="Generational.GC.Process"></a>
+<h3>Generational GC Process</h3>
+
+<ul>
+<li>1st minor GC
+
+<ul>
+<li>New objects are allocated in eden space. Both survivor spaces start out empty.</li>
+<li>When eden space fills up, a minor GC is triggered.</li>
+<li>referenced objects are moved to 1st survivor space (S0)</li>
+<li>Eden space is cleared.</li>
+</ul>
+</li>
+<li>2nd minor GC
+
+<ul>
+<li>When eden space fills up, a minor GC is triggered.</li>
+<li>referenced objects are moved to 2nd survivor space (S1).</li>
+<li>In addition, objects from 1st survivor space (S0) have their age incremented and get moved to S1.</li>
+<li>Eden &amp; S0 space is cleared.</li>
+</ul>
+</li>
+<li>3rd minor GC
+
+<ul>
+<li>When eden space fills up, a minor GC is triggered.</li>
+<li>referenced objects are moved to S0.</li>
+<li>In addition, objects from S1 have their age incremented and get moved to S0.</li>
+<li>Plus, objects that reached the threshold age are moved to old generation.</li>
+<li>Eden &amp; S1 space are cleared.</li>
+</ul>
+</li>
+<li>1st major GC
+
+<ul>
+<li>When tenure space fills up, a major GC is triggered. It cleans up and compacts that space.</li>
+</ul>
+</li>
+</ul>
+
+
+<a name="Garbage.Collection.Algorithms"></a>
+<h3>Garbage Collection Algorithms</h3>
+
+<ul>
+<li>The Serial GC
+
+<ul>
+<li>default collector for client style machines in Java SE 5 &amp; 6.</li>
+<li>Both minor &amp; major GCs are done serially using a single virtual CPU.</li>
+<li>Uses a mark-compact collection method.</li>
+<li>Option: <code>-XX:+UserSerialGC</code>.</li>
+<li>Usages:</li>
+<li>For longer apps with no low pause time requirements</li>
+<li>For apps which run on machine that hosts more JVMs than available processors.In such environment, GC of one app shouldn&rsquo;t affect all other JVMs.</li>
+</ul>
+</li>
+<li>The Parallel GC
+
+<ul>
+<li>uses multiple threads  to perform the young generation GC.</li>
+<li>By default, on a host with &lsquo;N&rsquo; CPUs, the parallel GC uses N GC threads in the collection. The number of GC threads can be controlled: <code>-XX:ParallelGCThreads=&lt;num&gt;</code></li>
+<li>Parallel GC is also called a throughput collector.</li>
+<li>Usages:</li>
+<li>apps where high throughput is required and long pauses are accepted.</li>
+<li>2 flavors of Parallel GC</li>
+<li>Option: <code>-XX:+UseParallelGC</code> - does multi-threaded young generation GC, single-threaded old generation collection and compaction.</li>
+<li>Option: <code>-XX:+UseParallelOldGC</code> - does multi-threaded young, multi-thread old generation collection and compaction. (HotSpot does compaction only in the old generation)</li>
+</ul>
+</li>
+<li>The Concurrent Mark Sweep (CMS) Collector
+
+<ul>
+<li>Also called Concurrent Low Pause Collector.</li>
+<li>For younger generation, uses the same algorithm as Parallel GC</li>
+<li>For older generation, it minimizes the pauses by doing GC concurrently with the application threads.</li>
+<li>Does not copy or compact the live objects. If fragmentation becomes an issue, allocate larger heap.</li>
+<li>Option: <code>-XX:+UseConcMarkSweepGC</code></li>
+</ul>
+</li>
+<li>The G1 collector
+
+<ul>
+<li>Also called Garbage First Collector.</li>
+<li>Replacement for CMS collector.</li>
+<li>G1 is a parallel, concurrent, and incrementally compacting low-pause collector that has a different layout from other collectors above.</li>
+<li>More details here</li>
+<li>Option: <code>-XX:+UserG1GC</code></li>
+</ul>
+</li>
+</ul>
+
+
+<a name="Reference.Types"></a>
+<h2>Reference Types</h2>
+
+<a name="WeakReference"></a>
+<h3>WeakReference</h3>
+
+<p>Weak reference objects, which do not prevent their referents from being made finalizable, finalized, and then reclaimed. Weak references are most often used to implement canonicalizing mappings.</p>
+
+<p>Suppose that the garbage collector determines at a certain point in time that an object is weakly reachable. At that time it will atomically clear all weak references to that object and all weak references to any other weakly-reachable objects from which that object is reachable through a chain of strong and soft references. At the same time it will declare all of the formerly weakly-reachable objects to be finalizable. At the same time or at some later time it will enqueue those newly-cleared weak references that are registered with reference queues.</p>
+
+<a name="SoftReference"></a>
+<h3>SoftReference</h3>
+
+<p>Soft reference objects, which are cleared at the discretion of the garbage collector in response to memory demand. Soft references are most often used to implement memory-sensitive caches.</p>
+
+<p>Suppose that the garbage collector determines at a certain point in time that an object is softly reachable. At that time it may choose to clear atomically all soft references to that object and all soft references to any other softly-reachable objects from which that object is reachable through a chain of strong references. At the same time or at some later time it will enqueue those newly-cleared soft references that are registered with reference queues.</p>
+
+<p>All soft references to softly-reachable objects are guaranteed to have been cleared before the virtual machine throws an OutOfMemoryError. Otherwise no constraints are placed upon the time at which a soft reference will be cleared or the order in which a set of such references to different objects will be cleared. Virtual machine implementations are, however, encouraged to bias against clearing recently-created or recently-used soft references.</p>
+
+<p>Direct instances of this class may be used to implement simple caches; this class or derived subclasses may also be used in larger data structures to implement more sophisticated caches. As long as the referent of a soft reference is strongly reachable, that is, is actually in use, the soft reference will not be cleared. Thus a sophisticated cache can, for example, prevent its most recently used entries from being discarded by keeping strong referents to those entries, leaving the remaining entries to be discarded at the discretion of the garbage collector.</p>
+
+<a name="PhantomReference"></a>
+<h3>PhantomReference</h3>
+
+<p>Phantom reference objects, which are enqueued after the collector determines that their referents may otherwise be reclaimed. Phantom references are most often used for scheduling pre-mortem cleanup actions in a more flexible way than is possible with the Java finalization mechanism.</p>
+
+<p>If the garbage collector determines at a certain point in time that the referent of a phantom reference is phantom reachable, then at that time or at some later time it will enqueue the reference.</p>
+
+<p>In order to ensure that a reclaimable object remains so, the referent of a phantom reference may not be retrieved: The get method of a phantom reference always returns null.</p>
+
+<p>Unlike soft and weak references, phantom references are not automatically cleared by the garbage collector as they are enqueued. An object that is reachable via phantom references will remain so until all such references are cleared or themselves become unreachable. Automatically cleared references Soft and weak references are automatically cleared by the collector before being added to the queues with which they are registered, if any. Therefore soft and weak references need not be registered with a queue in order to be useful, while phantom references do. An object that is reachable via phantom references will remain so until all such references are cleared or themselves become unreachable</p>
+
+<hr />
+
+<a name="Performance.Metrics"></a>
+<h1>Performance Metrics</h1>
 
 <ul>
 <li>Responsiveness
@@ -538,6 +817,13 @@ Sample- and instrumentation-based approaches</p>
 <h1>Bibliography</h1>
 
 <ul>
+<li>Books
+
+<ul>
+<li>Java - The Good Parts</li>
+<li>Inside the Java Virtual Machine - Bill Venners</li>
+</ul>
+</li>
 <li><a href="http://www.codinghorror.com/blog/2008/12/hardware-is-cheap-programmers-are-expensive.html">http://www.codinghorror.com/blog/2008/12/hardware-is-cheap-programmers-are-expensive.html</a></li>
 <li><a href="http://www.infoq.com/articles/9_Fallacies_Java_Performance?utm_source=infoq&amp;utm_medium=popular_links_homepage">http://www.infoq.com/articles/9_Fallacies_Java_Performance?utm_source=infoq&amp;utm_medium=popular_links_homepage</a></li>
 <li><a href="http://www.javacodegeeks.com/2012/09/visualvm-monitoring-remote-jvm-over-ssh.html">http://www.javacodegeeks.com/2012/09/visualvm-monitoring-remote-jvm-over-ssh.html</a></li>
@@ -590,7 +876,7 @@ Sample- and instrumentation-based approaches</p>
 
 		<li>
 			<h3>Java</h3>
-			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/spring.html">Spring</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-io.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/spring.html">Spring</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
 		</li>
 
 		<li>

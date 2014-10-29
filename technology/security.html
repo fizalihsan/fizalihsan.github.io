@@ -10,7 +10,7 @@
 
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
-<meta name="description" content="Security Authentication Basic Authentication Digest Authentication X.509 certificates Authorization Authentication Basic Authentication It involves &hellip;">
+<meta name="description" content="Security Overview Core Concepts Authentication Basic Authentication Unauthorized request Response with authorization details Digest Authentication &hellip;">
 <meta name="keywords" content="statistics, data science, R, big data, mongodb">
 
   <!-- http://t.co/dKP3o1e -->
@@ -74,7 +74,7 @@
   <header role="banner"><hgroup>
   <h1><a href="/">KnowledgeShop</a></h1>
   
-    <h2>A blogging framework for hackers.</h2>
+    <h2>Learn & Share</h2>
   
 </hgroup>
 
@@ -116,61 +116,340 @@
   </header>
   
   <p><ul>
- <li><a href="#Authentication">Authentication</a>
+ <li><a href="#Overview">Overview</a>
  <ul>
-  <li><a href="#Basic.Authentication">Basic Authentication</a></li>
-  <li><a href="#Digest.Authentication">Digest Authentication</a></li>
-  <li><a href="#X.509.certificates">X.509 certificates</a></li>
+  <li><a href="#Core.Concepts">Core Concepts</a></li>
  </ul>
  </li>
- <li><a href="#Authorization">Authorization</a></li>
+ <li><a href="#Authentication">Authentication</a>
+ <ul>
+  <li><a href="#Basic.Authentication">Basic Authentication</a>
+  <ul>
+   <li><a href="#Unauthorized.request">Unauthorized request</a></li>
+   <li><a href="#Response.with.authorization.details">Response with authorization details</a></li>
+  </ul>
+  </li>
+  <li><a href="#Digest.Authentication">Digest Authentication</a>
+  <ul>
+   <li><a href="#Response.to.an.unauthorized.request">Response to an unauthorized request</a></li>
+   <li><a href="#Request.with.Authorization.details">Request with Authorization details</a></li>
+   <li><a href="#Pros">Pros</a></li>
+   <li><a href="#Cons">Cons</a></li>
+  </ul>
+  </li>
+  <li><a href="#X.509.certificates">X.509 certificates</a>
+  <ul>
+   <li><a href="#Pros">Pros</a></li>
+   <li><a href="#Cons">Cons</a></li>
+  </ul>
+  </li>
+  <li><a href="#OpenAuth..OpenID.">OpenAuth (OpenID)</a></li>
+ </ul>
+ </li>
+ <li><a href="#Authorization">Authorization</a>
+ <ul>
+  <li><a href="#Simple.Access.Control.List..ACL.">Simple Access Control List (ACL)</a></li>
+ </ul>
+ </li>
+ <li><a href="#Session.Management">Session Management</a></li>
+ <li><a href="#Cryptography">Cryptography</a>
+ <ul>
+  <li><a href="#Hashing..a.k.a.Message.Digest.">Hashing (a.k.a Message Digest)</a></li>
+  <li><a href="#Cipher">Cipher</a></li>
+ </ul>
+ </li>
+ <li><a href="#Miscellaneous">Miscellaneous</a></li>
+ <li><a href="#Bibliography">Bibliography</a></li>
 </ul>
 
 </p>
 
+<a name="Overview"></a>
+<h1>Overview</h1>
+
+<p>Application Security has 4 aspects:</p>
+
+<ul>
+<li>Authentication - proving user identity, often called user ‘login’.</li>
+<li>Authorization - access control</li>
+<li>Cryptography - protecting or hiding data from prying eyes</li>
+<li>Session Management - per-user time-sensitive state</li>
+</ul>
+
+
+<a name="Core.Concepts"></a>
+<h2>Core Concepts</h2>
+
+<p><img class="right" src="/technology/shiro-basics.png"></p>
+
+<p>3 Main concepts in security</p>
+
+<ol>
+<li>Subject - &ldquo;the currently executing user&rdquo;. It could be more than a human user. e.g., daemon apps, 3rd party apps, etc.</li>
+<li>SecurityManager - manages security operations for all users</li>
+<li>Realm - acts the bridge/connector between the security provider and your application&rsquo;s security data like user accounts, access controls, etc.</li>
+</ol>
+
+
 <a name="Authentication"></a>
 <h1>Authentication</h1>
+
+<ul>
+<li>Process of verifying a user&rsquo;s identity. Also called &lsquo;login&rsquo; process.</li>
+<li>3 step process
+
+<ul>
+<li>Collect the user’s identifying information, called principals (e.g. username), and supporting proof of identity, called credentials (e.g. password). Combination of principal and credential is called as <strong>Authentication Token</strong></li>
+<li>Submit the <strong>principals</strong> and <strong>credentials</strong> to the system.</li>
+<li>If the submitted credentials match what the system expects for that user identity (principal), the user is considered authenticated.</li>
+</ul>
+</li>
+</ul>
+
 
 <a name="Basic.Authentication"></a>
 <h2>Basic Authentication</h2>
 
-<p>It involves sending a Base64-encoded username and password within a request header to the server. The server checks to see if the username exists within its system and verifies the sent password. The client needs to send this Authorization header with each and every request it makes to the server.</p>
+<p>Basic authentication is the simplest protocol available for performing authentication over HTTP. It involves sending a Base64-encoded username and password within a request header to the server. With Basic authentication (with and without SSL), your name and password do get automatically Base64- encoded.</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<p>The server checks to see if the username exists within its system and verifies the sent password. The client needs to send this Authorization header with each and every request it makes to the server.</p>
+
+<a name="Unauthorized.request"></a>
+<h3>Unauthorized request</h3>
+
+<ul>
+<li>The 401 response tells the client that it is not authorized to access the URI it tried to invoke on.</li>
+<li>The <strong>WWW-Authenticate</strong> header specifies which authentication protocol the client should use.</li>
+<li>In this case, <strong>Basic</strong> means basic authentication should be used. The realm attribute identifies a collection of secured resources on a website.</li>
+</ul>
+
+
+<figure class='code'><figcaption><span>Response to an unauthorized request</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>GET /customers/333 HTTP/1.1
-</span><span class='line'>Authorization: Basic YmJ1cmtlOmdlaGVpbQ==</span></code></pre></td></tr></table></div></figure>
+</pre></td><td class='code'><pre><code class='r'><span class='line'> HTTP<span class="o">/</span><span class="m">1.1</span> <span class="m">401</span> Unauthorized
+</span><span class='line'> WWW<span class="o">-</span>Authenticate<span class="o">:</span> Basic realm<span class="o">=</span><span class="s">&quot;CustomerDB Realm&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p>
-<strong>Downside</strong>: The problem with this approach is that if this request is intercepted by a hostile entity on the network, the hacker can easily obtain the username and password and use it to invoke its own requests. Using an encrypted HTTP connection, HTTPS, solves this problem. With an encrypted connection, a rogue programmer on the network will be unable to decode the transmission and get at the Authorization header. Still, security-paranoid network administrators are very squeamish about sending passwords over the network, even if they are encrypted within SSL packets.</p>
+<a name="Response.with.authorization.details"></a>
+<h3>Response with authorization details</h3>
+
+<ul>
+<li>To perform authentication, the client must send a request with the Authorization header set to a Base64-encoded string of our username and a colon character, followed by the password. If our username is bburke and our password geheim, the Base64-encoded string of bburke:geheim will be <code>YmJ1cmtlOmdlaGVpbQ==</code>.</li>
+<li>The client needs to send this Authorization header with each and every request it makes to the server.</li>
+</ul>
+
+
+<figure class='code'><figcaption><span>Request with authorization details</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='r'><span class='line'>GET <span class="o">/</span>customers<span class="o">/</span><span class="m">333</span> HTTP<span class="o">/</span><span class="m">1.1</span>
+</span><span class='line'>Authorization<span class="o">:</span> Basic YmJ1cmtlOmdlaGVpbQ<span class="o">==</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p><strong>Downside</strong>: The problem with this approach is that if this request is intercepted by a hostile entity on the network, the hacker can easily obtain the username and password and use it to invoke its own requests. Using an encrypted HTTP connection, HTTPS, solves this problem. With an encrypted connection, a rogue programmer on the network will be unable to decode the transmission and get at the Authorization header. Still, security-paranoid network administrators are very squeamish about sending passwords over the network, even if they are encrypted within SSL packets.</p>
 
 <a name="Digest.Authentication"></a>
 <h2>Digest Authentication</h2>
 
 <p>Digest authentication was invented so that clients would not have to send clear text passwords over HTTP. It involves exchanging a set of secure MD5 hashes of the username, password, operation, URI, and optionally the hash of the message body itself. It is a hash value generated with the following pseudocode:</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<a name="Response.to.an.unauthorized.request"></a>
+<h3>Response to an unauthorized request</h3>
+
+<p>The <strong>nonce</strong> and <strong>opaque</strong> attributes are special server-generated keys that will be used to build the subsequent authenticated request.</p>
+
+<figure class='code'><figcaption><span>Response to an unauthorized request</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
 <span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>H1 = md5("username:realm:password")
-</span><span class='line'>H2 = md5("httpmethod:uri")
-</span><span class='line'>response = md5("H1:nonce:nc:cnonce:qop:H2")</span></code></pre></td></tr></table></div></figure>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='r'><span class='line'> HTTP<span class="o">/</span><span class="m">1.1</span> <span class="m">401</span> Unauthorized
+</span><span class='line'>WWW<span class="o">-</span>Authenticate<span class="o">:</span> Digest realm<span class="o">=</span><span class="s">&quot;CustomerDB Realm&quot;</span><span class="p">,</span>
+</span><span class='line'>qop<span class="o">=</span><span class="s">&quot;auth,auth-int&quot;</span><span class="p">,</span>
+</span><span class='line'>nonce<span class="o">=</span><span class="s">&quot;12dcde223152321ab99cd&quot;</span><span class="p">,</span>
+</span><span class='line'>opaque<span class="o">=</span><span class="s">&quot;aa9321534253bcd00121&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
 
 
-<p>When the server receives this request, it builds its own version of the response hash using its stored, secret values of the username and password. If the hashes match, the user and its credentials are valid.
-One advantage of this approach is that the password is never used directly by the protocol. For example, the server doesn’t even need to store clear text passwords. It can instead initialize its authorization store with prehashed values. Also, since request hashes are built with a nonce value, the server can expire these nonce values over time. This, combined with a request counter, can greatly reduce replay attacks.
-The disadvantage to this approach is that unless you use HTTPS, you are still vulnerable to man-in-the-middle attacks, where the middleman can tell a client to use Basic authentication to obtain a password.</p>
+<a name="Request.with.Authorization.details"></a>
+<h3>Request with Authorization details</h3>
+
+<ul>
+<li>The <strong>nonce</strong> and <strong>opaque</strong> attributes are a copy of the values sent with the earlier WWWAuthenticate header.</li>
+<li>The <strong>uri</strong> attribute is the base URI you are invoking on.</li>
+<li>The <strong>nc</strong> attribute is a request counter that should be incremented by the client with each request. This prevents hostile clients from replaying a request.</li>
+<li>The <strong>cnonce</strong> attribute is a unique key generated by the client and can be anything the client wants.</li>
+<li>The <strong>response</strong> attribute is where all the meat is. It is a hash value generated with the following pseudocode:</li>
+</ul>
+
+
+<figure class='code'><figcaption><span>Response to an unauthorized request</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='r'><span class='line'>H1 <span class="o">=</span> md5<span class="p">(</span><span class="s">&quot;username:realm:password&quot;</span><span class="p">)</span>
+</span><span class='line'>H2 <span class="o">=</span> md5<span class="p">(</span><span class="s">&quot;httpmethod:uri&quot;</span><span class="p">)</span>
+</span><span class='line'>response <span class="o">=</span> md5<span class="p">(</span><span class="s">&quot;H1:nonce:nc:cnonce:qop:H2&quot;</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>When the server receives this request, it builds its own version of the <strong>response</strong> hash using its stored, secret values of the username and password. If the hashes match, the user and its credentials are valid.</li>
+</ul>
+
+
+<figure class='code'><figcaption><span>Request with Authorization details</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='r'><span class='line'>GET <span class="o">/</span>customers<span class="o">/</span><span class="m">333</span> HTTP<span class="o">/</span><span class="m">1.1</span>
+</span><span class='line'>Authorization<span class="o">:</span> Digest username<span class="o">=</span><span class="s">&quot;bburke&quot;</span><span class="p">,</span>
+</span><span class='line'>realm<span class="o">=</span><span class="s">&quot;CustomerDB Realm&quot;</span><span class="p">,</span>
+</span><span class='line'>nonce<span class="o">=</span><span class="s">&quot;12dcde223152321ab99cd&quot;</span><span class="p">,</span>
+</span><span class='line'>uri<span class="o">=</span><span class="s">&quot;/customer/333&quot;</span><span class="p">,</span>
+</span><span class='line'>qop<span class="o">=</span><span class="s">&quot;auth&quot;</span><span class="p">,</span>
+</span><span class='line'>nc<span class="o">=</span><span class="m">00000001</span><span class="p">,</span>
+</span><span class='line'>cnonce<span class="o">=</span><span class="s">&quot;43fea&quot;</span><span class="p">,</span>
+</span><span class='line'>response<span class="o">=</span><span class="s">&quot;11132fffdeab993421&quot;</span><span class="p">,</span>
+</span><span class='line'>opaque<span class="o">=</span><span class="s">&quot;aa9321534253bcd00121&quot;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<a name="Pros"></a>
+<h3>Pros</h3>
+
+<ul>
+<li>The password is never used directly by the protocol. For example, the server doesn&rsquo;t even need to store clear text passwords. It can instead initialize its authorization store with pre-hashed values.</li>
+<li>Also, since request hashes are built with a nonce value, the server can expire these nonce values over time. This, combined with a request counter, can greatly reduce replay attacks.
+When the server receives this request, it builds its own version of the response hash using its stored, secret values of the username and password. If the hashes match, the user and its credentials are valid.</li>
+</ul>
+
+
+<a name="Cons"></a>
+<h3>Cons</h3>
+
+<p>This approach is that unless you use HTTPS, you are still vulnerable to man-in-the-middle attacks, where the middleman can tell a client to use Basic authentication to obtain a password.</p>
 
 <a name="X.509.certificates"></a>
 <h2>X.509 certificates</h2>
 
-<p>?????</p>
+<p><img class="right" src="/technology/security-certs.gif"></p>
+
+<ul>
+<li>When you first interact with a secure website, your browser receives a digitally signed certificate from the server that identifies it.</li>
+<li>Your browser verifies this certificate with a central authority like VeriSign. This is how you guarantee the identity of the server you are interacting with and make</li>
+<li>sure you’re not dealing with some man-in-the-middle security breach.</li>
+<li>HTTPS can also perform two-way authentication. In addition to the client receiving a signed digital certificate representing the server, the server can receive a certificate that represents and identifies the client.</li>
+<li>When a client initially connects to a server, it exchanges its certificate and the server matches it against its internal store.</li>
+<li>Once this link is established, there is no further need for user authentication, since the certificate has already positively identified the user.</li>
+</ul>
+
+
+<blockquote><p>SSL, or Secure Socket Layer, is a technology which allows web browsers and web servers to communicate over a secured connection. This means that the data being sent is encrypted by one side, transmitted, then decrypted by the other side before processing. This is a two-way process, meaning that both the server AND the browser encrypt all traffic before sending out data.</p>
+
+<p>Another important aspect of the SSL protocol is Authentication. This means that during your initial attempt to communicate with a web server over a secure connection, that server will present your web browser with a set of credentials, in the form of a &ldquo;Certificate&rdquo;, as proof the site is who and what it claims to be. In certain cases, the server may also request a Certificate from your web browser, asking for proof that you are who you claim to be. This is known as &ldquo;Client Authentication,&rdquo; although in practice this is used more for business-to-business (B2B) transactions than with individual users. Most SSL-enabled web servers do not request Client Authentication.</p></blockquote>
+
+<a name="Pros"></a>
+<h3>Pros</h3>
+
+<p>Most secure way to perform authentication on web.</p>
+
+<a name="Cons"></a>
+<h3>Cons</h3>
+
+<p>Managing of the certificates is painful. The server must create a unique certificate for each client that wants to connect to the service. From the browser/human perspective, this can be a pain, as the user has to do some extra configuration to interact with the server.</p>
+
+<a name="OpenAuth..OpenID."></a>
+<h2>OpenAuth (OpenID)</h2>
+
+<p><span style="color:red">TODO</span></p>
 
 <a name="Authorization"></a>
 <h1>Authorization</h1>
 
-<p>???</p>
+<p>Authorization is essentially access control - controlling what your users can access in your application, such as resources, web pages, etc.</p>
+
+<a name="Simple.Access.Control.List..ACL."></a>
+<h2>Simple Access Control List (ACL)</h2>
+
+<ul>
+<li>Roles/Users assigned with access to certain features. Users are assigned to roles. This model is not flexible since roles cannot be added dynamically</li>
+<li>Permissions are defined for features. Users are assigned permissions. This model allows dynamic addition of users.</li>
+</ul>
+
+
+<a name="Session.Management"></a>
+<h1>Session Management</h1>
+
+<p>Apache Shiro enables a Session programming paradigm for any application - from small daemon standalone applications to the largest clustered web applications. This means that application developers who wish to use sessions are no longer forced to use Servlet or EJB containers if they don’t need them otherwise.</p>
+
+<a name="Cryptography"></a>
+<h1>Cryptography</h1>
+
+<p>Cryptography is the process of hiding or obfuscating data so prying eyes can’t understand it.</p>
+
+<a name="Hashing..a.k.a.Message.Digest."></a>
+<h2>Hashing (a.k.a Message Digest)</h2>
+
+<ul>
+<li>Hashing/Message digests are secure one-way hash functions that take arbitrary-sized data and output a fixed-length hash value.</li>
+<li><code>java.security.MessageDigest</code> class supports MD5 and SHA digests.</li>
+<li>Shiro supports hex-encode and Base64 encoding.</li>
+</ul>
+
+
+<a name="Cipher"></a>
+<h2>Cipher</h2>
+
+<p>Ciphers are cryptographic algorithms that can reversibly transform data using a key. We use them to keep data safe, especially when transferring or storing data, times when data is particularly susceptible to prying eyes.</p>
+
+<p><strong> Types</strong></p>
+
+<ul>
+<li>Public-Private key cipher</li>
+<li>AES 257-bit cipher</li>
+</ul>
+
+
+<a name="Miscellaneous"></a>
+<h1>Miscellaneous</h1>
+
+<ul>
+<li>Kerberos - how it works</li>
+<li>PGP/GPG</li>
+<li>How to secure passwords - <a href="http://www.youtube.com/watch?v=6bR110r-RfY&amp;list=WL08D7E897CDBD47CB">http://www.youtube.com/watch?v=6bR110r-RfY&amp;list=WL08D7E897CDBD47CB</a> (Salt, Bcrypt, Ascrypt, Blowfish algo, AES 256)</li>
+</ul>
+
+
+<a name="Bibliography"></a>
+<h1>Bibliography</h1>
+
+<ul>
+<li>Books
+
+<ul>
+<li>RESTful Java with JAX-RS - Chapter 12 - Securing JAX-RS</li>
+<li>REST in practice - Chapter 9 - Web Security</li>
+</ul>
+</li>
+<li>Links
+
+<ul>
+<li><a href="http://www.infoq.com/articles/apache-shiro">Application Security With Apache Shiro</a></li>
+<li>Java EE Security - <a href="http://docs.oracle.com/javaee/6/tutorial/doc/gijrp.html">http://docs.oracle.com/javaee/6/tutorial/doc/gijrp.html</a></li>
+<li>Encyclopedia of Security - <a href="http://www.microsoft.com/mspress/books/sampchap/6429.aspx">http://www.microsoft.com/mspress/books/sampchap/6429.aspx</a></li>
+</ul>
+</li>
+</ul>
+
 
   
     <footer>
@@ -211,7 +490,7 @@ The disadvantage to this approach is that unless you use HTTPS, you are still vu
 
 		<li>
 			<h3>Java</h3>
-			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/spring.html">Spring</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-io.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/spring.html">Spring</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
 		</li>
 
 		<li>

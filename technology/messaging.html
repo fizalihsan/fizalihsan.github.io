@@ -1,0 +1,1319 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Messaging - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+<meta name="description" content="Messaging Overview Advantages of Messaging Messaging Architecture Styles Service-Oriented Architecture (SOA) Enterprise Service Bus (ESB) Event- &hellip;">
+<meta name="keywords" content="statistics, data science, R, big data, mongodb">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/messaging.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="/atom.xml" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!-- mathjax config similar to math.stackexchange -->
+  <script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    jax: ["input/TeX", "output/HTML-CSS"],
+    tex2jax: {
+      inlineMath: [ ['$', '$'] ],
+      displayMath: [ ['$$', '$$']],
+      processEscapes: true,
+      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    },
+    messageStyle: "none",
+    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+  });
+  </script>
+  <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
+  <!--script src="/javascripts/mathjax/MathJax.js"></script-->
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+
+  <!-- Below lines added for octopress-lunr-js-search -->
+  
+<script id="search-results-template" type="text/x-handlebars-template">
+  {{#entries}}
+    <article>
+      <h3>
+         <small><time datetime="{{date}}" pubdate>{{date}}</time></small>
+         <a href="{{url}}">{{title}}</a>
+         <p>tagged: {{ tags }} | category: <a href="/categories/{{category }}">{{category}}</a></p>
+      </h3>
+    </article>
+  {{/entries}}
+</script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+
+<!-- Start octopress-lunr-js-search -->
+
+  <form action="/search" method="get">
+  <fieldset role ="search">
+    <input type="text" id="search-query" name="q" placeholder="Search" autocomplete="off" class="search" />
+  </fieldset>
+</form>
+
+
+<!-- End octopress-lunr-js-search -->
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Messaging</h1>
+    
+  </header>
+  
+  <p><ul>
+ <li><a href="#Overview">Overview</a>
+ <ul>
+  <li><a href="#Advantages.of.Messaging">Advantages of Messaging</a></li>
+  <li><a href="#Messaging.Architecture.Styles">Messaging Architecture Styles</a>
+  <ul>
+   <li><a href="#Service-Oriented.Architecture..SOA.">Service-Oriented Architecture (SOA)</a></li>
+   <li><a href="#Enterprise.Service.Bus..ESB.">Enterprise Service Bus (ESB)</a></li>
+   <li><a href="#Event-Driven.Architecture..EDA.">Event-Driven Architecture (EDA)</a></li>
+   <li><a href="#Enterprise.Application.Integration..EAI.">Enterprise Application Integration (EAI)</a>
+</li>
+  </ul>
+  </li>
+ </ul>
+ </li>
+ <li><a href="#EMS..Enterprise.Messaging.System.">EMS (Enterprise Messaging System)</a>
+ <ul>
+  <li><a href="#Architecture.styles">Architecture styles</a></li>
+  <li><a href="#Messaging.Models.or.Domains">Messaging Models or Domains</a></li>
+ </ul>
+ </li>
+ <li><a href="#JMS">JMS</a>
+ <ul>
+  <li><a href="#JMS.Programming.Step-By-Step">JMS Programming Step-By-Step</a>
+  <ul>
+   <li><a href="#Step.1:.Define.jndi.properties">Step 1: Define jndi.properties</a></li>
+   <li><a href="#Step.2:.Obtaining.a.JNDI.connection">Step 2: Obtaining a JNDI connection</a>
+</li>
+  </ul>
+  </li>
+ </ul>
+ </li>
+ <li><a href="#Messaging.Technologies">Messaging Technologies</a>
+ <ul>
+  <li><a href="#RabbitMQ">RabbitMQ</a></li>
+  <li><a href="#ZeroMQ">ZeroMQ</a></li>
+  <li><a href="#ActiveMQ">ActiveMQ</a></li>
+ </ul>
+ </li>
+ <li><a href="#Bibliography">Bibliography</a></li>
+ <li><a href="#Overview">Overview</a></li>
+ <li><a href="#Transaction.Properties">Transaction Properties</a>
+ <ul>
+  <li><a href="#ACID.property">ACID property</a></li>
+  <li><a href="#BASE.property">BASE property</a></li>
+  <li><a href="#ACID.vs..BASE">ACID vs. BASE</a></li>
+  <li><a href="#CAP.Theorem">CAP Theorem</a>
+  <ul>
+   <li><a href="#Combination.1:.CA">Combination 1: CA</a></li>
+   <li><a href="#Combination.2:.CP">Combination 2: CP</a></li>
+   <li><a href="#Combination.3:.AP">Combination 3: AP</a>
+</li>
+  </ul>
+  </li>
+ </ul>
+ </li>
+ <li><a href="#Transaction.Models">Transaction Models</a>
+ <ul>
+  <li><a href="#Local.transactions">Local transactions</a></li>
+  <li><a href="#Programmatic.transactions">Programmatic transactions</a></li>
+  <li><a href="#Declarative.transactions">Declarative transactions</a>
+  <ul>
+   <li><a href="#Transaction.Attributes">Transaction Attributes</a>
+</li>
+  </ul>
+  </li>
+ </ul>
+ </li>
+ <li><a href="#Transaction.Isolation.Level">Transaction Isolation Level</a>
+ <ul>
+  <li><a href="#Dirty.Read...Read.Uncommitted">Dirty Read / Read Uncommitted</a></li>
+  <li><a href="#Read.Committed">Read Committed</a></li>
+  <li><a href="#Repeatable.Read">Repeatable Read</a></li>
+  <li><a href="#Serializable">Serializable</a></li>
+ </ul>
+ </li>
+ <li><a href="#Transaction.Read.Phenomena">Transaction Read Phenomena</a>
+ <ul>
+  <li><a href="#Dirty.Read...Uncommitted.Read">Dirty Read / Uncommitted Read</a></li>
+  <li><a href="#Non-Repeatable.Read">Non-Repeatable Read</a></li>
+  <li><a href="#Phantom.Read">Phantom Read</a></li>
+  <li><a href="#Serializable.Vs..Snapshot">Serializable Vs. Snapshot</a></li>
+ </ul>
+ </li>
+ <li><a href="#Distributed.Transaction.Processing">Distributed Transaction Processing</a>
+ <ul>
+  <li><a href="#XA.Transaction.Processing">XA Transaction Processing</a>
+  <ul>
+   <li><a href="#XA.Resource">XA Resource</a></li>
+  </ul>
+  </li>
+  <li><a href="#L2-phase.commit.protocol">2-phase commit protocol</a></li>
+  <li><a href="#Heuristic.Exceptions">Heuristic Exceptions</a>
+  <ul>
+   <li><a href="#Heuristic.Exception.Types">Heuristic Exception Types</a>
+</li>
+  </ul>
+  </li>
+ </ul>
+ </li>
+ <li><a href="#Transaction.Strategies">Transaction Strategies</a>
+ <ul>
+  <li><a href="#L1..API.Layer.Strategy">1. API Layer Strategy</a></li>
+  <li><a href="#L2..Client.Orchestration.Strategy">2. Client Orchestration Strategy</a></li>
+  <li><a href="#L3..High.Concurrency.Strategy">3. High Concurrency Strategy</a></li>
+  <li><a href="#L4..High.Performance.Strategy">4. High Performance Strategy</a></li>
+ </ul>
+ </li>
+ <li><a href="#Open.Items">Open Items</a></li>
+ <li><a href="#Bibliography">Bibliography</a></li>
+</ul>
+
+</p>
+
+<a name="Overview"></a>
+<h1>Overview</h1>
+
+<ul>
+<li>Messaging is primarily used to solve scalibility &amp; reliability issues</li>
+<li>plays key role in heterogenous integration of system built on myriad of technologies like Java, .Net, Mainframe, etc.</li>
+<li>can process requests asynchronously</li>
+<li><p>provides high degree of decoupling between components, systems, etc.</p></li>
+<li><p>Some of the messaging  techniques and technologies developed:</p>
+
+<ul>
+<li>MDB(Message Driven Bean from EJB spec)</li>
+<li>Spring Messaging Framework</li>
+<li>EDA (Event Driven Architecture)</li>
+<li>SOA (Service-Oriented Architecture)</li>
+<li>RESTful JMS interfaces</li>
+<li>ESB (Enterprise Service Bus).</li>
+</ul>
+</li>
+<li><p>Messaging middleware vendors: IBM&rsquo;s WebSphere MQ, TIBCO Rendezvous, SonicMQ, Microsoft Message Queuing (MSMQ) , Opensource ActiveMQ</p></li>
+<li>Terminologies
+
+<ul>
+<li>Message Broker: responsible for delivering messages from one messaging client to other clients.</li>
+<li>Queue Depth: number of messages in the queue</li>
+</ul>
+</li>
+</ul>
+
+
+<a name="Advantages.of.Messaging"></a>
+<h2>Advantages of Messaging</h2>
+
+<ul>
+<li>Heterogeneous system integration</li>
+<li>Reduce system bottlenecks</li>
+<li>Increase scalability</li>
+<li>Architecture flexibility and agility</li>
+<li>Enterprise middleware products ensure that messages are properly distributed among applications, provide fault tolerance, load balancing, scalability, and transactional support.</li>
+<li>offer a degree of reliability, flexibility, extensibility and modularity that a traditional RPC or distributed object system simply cannot.</li>
+</ul>
+
+
+<a name="Messaging.Architecture.Styles"></a>
+<h2>Messaging Architecture Styles</h2>
+
+<a name="Service-Oriented.Architecture..SOA."></a>
+<h3>Service-Oriented Architecture (SOA)</h3>
+
+<p>an architecture style that defines business services that are abstracted from the corresponding enterprise service implementations.</p>
+
+<a name="Enterprise.Service.Bus..ESB."></a>
+<h3>Enterprise Service Bus (ESB)</h3>
+
+<ul>
+<li>SOA has given rise to a new breed of middleware called ESB.</li>
+<li>In the early days of SOA, most ESBs were implemented as message brokers, whereby components within the messaging layer were used to perform some sort of intelligent routing or message transformation before delivering the message. These earlier message brokers have evolved into sophisticated commercial and open source ESB products that use messaging at their core. Although some ESB products support a traditional non-JMS HTTP transport (web services), most enterprise-wide production implementations still leverage messaging as the protocol for communication.</li>
+<li>Messaging is an excellent means of building the abstraction layer within SOA needed to fully abstract a business service from its underlying implementation. Through messaging, the business service does not need to be concerned about where the corresponding implementation service is, what language it is written in, what platform it is deployed in, or even the name of the implementation service.</li>
+</ul>
+
+
+<a name="Event-Driven.Architecture..EDA."></a>
+<h3>Event-Driven Architecture (EDA)</h3>
+
+<ul>
+<li>an architecture style that is built on the premise that the orchestration of processes and events is dynamic and very complex, and therefore not feasible to control or implement through a central orchestration component. When an action takes place in a system, that process sends an event to the entire system stating that an action took place (an event). That event may then kick off other processes, which in turn may kick off additional processes, all decoupled from each other.</li>
+<li>Example of EDA include insurance domain and benefits domain. Getting married or changing jobs triggers events in the system that quality for certain changes to health and retirement benefits.</li>
+<li>Messaging is at the heart of EDA systems. Not surprisingly, most architectures based on EDA leverage the pub/sub model as a means of broadcasting the events within a system.</li>
+<li>Heterogeneous Platform Integration</li>
+<li>Messaging plays a key role in being able to make these heterogeneous platforms communicate with one another, whether it be Java EE and Microsoft .NET, Java EE and CICS, or Java EE and Tuxedo C++.</li>
+<li>Some platforms, such as .NET, may require an external messaging bridge to convert a JMS message into an MSMQ message (depending on the messaging provider you are using). For example, ActiveMQ provides a messaging bridge for converting MSMQ to JMS (and vice versa). This lower-level platform integration has given rise to a broader scope of integration, known as Enterprise Application Integration.</li>
+</ul>
+
+
+<a name="Enterprise.Application.Integration..EAI."></a>
+<h3>Enterprise Application Integration (EAI)</h3>
+
+<ul>
+<li>Organizations have a strong desire to integrate both legacy and new applications so that they can share information and cooperate in larger enterprise-wide operations. The integration of these applications is generally called Enterprise Application Integration (EAI).</li>
+<li>Data and events can be exchanged in the form of messages via topics or queues, which provide an abstraction that decouples participating applications.</li>
+</ul>
+
+
+<a name="EMS..Enterprise.Messaging.System."></a>
+<h1>EMS (Enterprise Messaging System)</h1>
+
+<p><img class="right" src="/technology/ems-architecture.png"></p>
+
+<ul>
+<li>EMS (Enterprise Message Systems) or MOM (Message Oriented Middleware): Application-to-application messaging systems, when used in business systems, are generally referred to as EMS or MOM.</li>
+<li>Clients send messages to the messaging server, which then distributes them to one or more recipients. Client is the business app or component that uses the JMS API.</li>
+<li>Key feature of messaging is delivering message asynchronously. Client app can send a message and forget about it.</li>
+<li><strong>Message-Oriented Middleware</strong> architectures
+
+<ul>
+<li>vary in their implementation from a centralized architecture that depends on a message server to perform routing, to a decentralized architecture that distributes the server processing out to client machines. Some models use a hybrid approach.</li>
+<li>vary in the protocol used at the network transport layer including TCP/IP, HTTP, SSL, and IP multicast.</li>
+</ul>
+</li>
+</ul>
+
+
+<a name="Architecture.styles"></a>
+<h2>Architecture styles</h2>
+
+<ul>
+<li><strong>Centralized architecture</strong>: relies on message server or broker that is responsible for delivering messages from one client to other - decouples sender from receivers - clients only see the server and not other clients which allows to add/remove without affecting the whole system - central server may be a cluster of distributed servers operating as a single logical unit - Uses TCP/IP as protocol.</li>
+<li><strong>Decentralized architecture</strong>: no centralized server - some of the server functionality (persistence, transactions, security) is embedded as part of the client while the message routing is delegated to the network layer - Uses IP multicast at network level</li>
+</ul>
+
+
+<a name="Messaging.Models.or.Domains"></a>
+<h2>Messaging Models or Domains</h2>
+
+<table>
+<thead>
+<tr>
+<th> </th>
+<th> Point-to-Point (p2p) </th>
+<th> Publish-and-Subscribe (pub-sub) </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> Virtual Channel </td>
+<td> Queue </td>
+<td> Topic </td>
+</tr>
+<tr>
+<td> Actors </td>
+<td> Senders &amp; Receivers </td>
+<td> Publishers &amp; Subscribers </td>
+</tr>
+<tr>
+<td> Message receivers </td>
+<td> Though many receivers may listen on a queue, only one receiver gets the same message.  Same message can be sent to multiple subscribers (this is referred to as broadcasting). There are 2 types of subscribers <br/> * Non-durable - temporary subscriptions that receive messages only when they are actively listening on the topic <br/> * Durable - will receive a copy of every message published, even if they are offline when the message is published. </td>
+<td></td>
+</tr>
+<tr>
+<td> Message notification </td>
+<td> Pull-based or polling-based </td>
+<td> Push-model. Clients are automatically notified when a message is available.</td>
+</tr>
+<tr>
+<td> Message delivery </td>
+<td> Supports both synchronous(request/reply) &amp; asynchronous (fire-and-forget) </td>
+<td> Supports both </td>
+</tr>
+<tr>
+<td> Coupling </td>
+<td> More coupled with client </td>
+<td> Decoupled from clients </td>
+</tr>
+<tr>
+<td> Used for </td>
+<td> Load balancing  </td>
+<td>  </td>
+</tr>
+<tr>
+<td> Browser </td>
+<td> Queue browser allows to view message in a queue before delivery. </td>
+<td> Not available</td>
+</tr>
+</tbody>
+</table>
+
+
+<a name="JMS"></a>
+<h1>JMS</h1>
+
+<ul>
+<li>JMS is a vendor-agnostic Java API that can be used with many different enterprise messaging vendors - Not a messaging system itself.</li>
+<li><p>API Overview</p>
+
+<ul>
+<li>can be broken down into 3 parts
+
+<ul>
+<li>General API - used to send/receive messages from either a queue or a topic</li>
+<li><strong>Point-to-point API</strong> - used solely for messaging with queues</li>
+<li><strong>Publish-subscribe API</strong> - used soleley for messaging with topics</li>
+</ul>
+</li>
+<li><code>ConnectionFactory</code> &amp; <code>Destination</code> must be obtained from the provider using JNDI (per the JMS spec). Other interfaces are created through factory methods. e.g., <code>ConnectionFactory --creates--&gt; Connection --creates--&gt; Session --creates--&gt; Message, MessageProducer, MessageReceiver</code></li>
+<li>Unlike JDBC, in JMS, <code>Session</code> object holds the transactional unit of work for messaging instead of <code>Connection</code>.</li>
+</ul>
+</li>
+<li><p>JMS Client: business app that uses the JMS API</p></li>
+<li>JMS Provider: 3rd party messaging vendor that implemented the JMS API</li>
+<li>JMS Administered Objects: are JMS objects that are created and configured by the system administrator. It includes JMS ConnectionFactory and Destination objects such as topics and queues.</li>
+</ul>
+
+
+<p><img class="right" src="/technology/jms-api.png">
+| General API | Point-to-Point API | Pub-Sub API |
+| &mdash;&mdash;&mdash;&ndash; | &mdash;&mdash;&mdash;&mdash;&mdash;&mdash; | &mdash;&mdash;&mdash;&mdash;|
+| ConnectionFactory| QueueConnectionFactory | TopicConnectionFactory  |
+| Destination| Queue| Topic |
+| Connection| QueueConnection| TopicConnection |
+| Session| QueueSession| TopicSession |
+| Message| Message| Message |
+| MessageProducer| QueueSender| TopicPublisher |
+| MessageConsumer| QueueReceiver| TopicSubscriber |</p>
+
+<a name="JMS.Programming.Step-By-Step"></a>
+<h2>JMS Programming Step-By-Step</h2>
+
+<a name="Step.1:.Define.jndi.properties"></a>
+<h3>Step 1: Define jndi.properties</h3>
+
+<figure class='code'><figcaption><span>jndi.properties</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='properties'><span class='line'><span class="na">java.naming.factory.initial</span> <span class="o">=</span> <span class="s">org.apache.activemq.jndi.ActiveMQInitialContextFactory</span>
+</span><span class='line'><span class="na">java.naming.provider.url</span> <span class="o">=</span> <span class="s">tcp://localhost:61616</span>
+</span><span class='line'><span class="na">java.naming.security.principal</span><span class="o">=</span><span class="s">system</span>
+</span><span class='line'><span class="na">java.naming.security.credentials</span><span class="o">=</span><span class="s">manager</span>
+</span><span class='line'>
+</span><span class='line'><span class="na">connectionFactoryNames</span> <span class="o">=</span> <span class="s">TopicCF</span>
+</span><span class='line'><span class="na">topic.topic1</span> <span class="o">=</span> <span class="s">jms.topic1</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>The jndi.properties file also contains the JNDI connection information for the JMS provider. You will need to set the initial context factory class, provider URL, username, and password needed to connect to the JMS server. Each vendor will have a different context factory class and URL name for connecting to the server. You will need to consult the documentation of your specific JMS provider or Java EE container to obtain
+these values.</p>
+
+<a name="Step.2:.Obtaining.a.JNDI.connection"></a>
+<h3>Step 2: Obtaining a JNDI connection</h3>
+
+<p>A directory service provides JMS clients with access to ConnectionFactory and Destination (topics and queues) objects. ConnectionFactory and Destination objects are the only things in JMS that cannot be obtained using the JMS API—unlike connections, sessions, producers, consumers, and messages, which are manufactured using the factory pattern within the JMS API. JNDI provides a convenient, location-transparent, configurable, and portable mechanism for obtaining ConnectionFactory and Destination objects, also called JMS-administered objects because they are established
+and configured by a system administrator.</p>
+
+<p>JMS servers will either work with a separate directory service like LDAP or provide their own directory service that supports the JNDI API.</p>
+
+<p>Creating a connection to a JNDI naming service requires that a javax.naming.InitialContext object be created. An InitialContext is the starting point for any JNDI lookup—it’s similar in concept to the root of a filesystem. The InitialContext provides a network connection to the directory service that acts as a root for accessing JMS administered objects.</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="c1">// Obtain a JNDI connection using the jndi.properties file</span>
+</span><span class='line'><span class="n">InitialContext</span> <span class="n">ctx</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">InitialContext</span><span class="o">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Alternately, InitialContext can be initialized with properties object as follows:</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">Properties</span> <span class="n">env</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Properties</span><span class="o">();</span>
+</span><span class='line'><span class="n">env</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Context</span><span class="o">.</span><span class="na">SECURITY_PRINCIPAL</span><span class="o">,</span> <span class="s">&quot;system&quot;</span><span class="o">);</span>
+</span><span class='line'><span class="n">env</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Context</span><span class="o">.</span><span class="na">SECURITY_CREDENTIALS</span><span class="o">,</span> <span class="s">&quot;manager&quot;</span><span class="o">);</span>
+</span><span class='line'><span class="n">env</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Context</span><span class="o">.</span><span class="na">INITIAL_CONTEXT_FACTORY</span><span class="o">,</span> <span class="s">&quot;org.apache.activemq.jndi.ActiveMQInitialContextFactory&quot;</span><span class="o">);</span>
+</span><span class='line'><span class="n">env</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Context</span><span class="o">.</span><span class="na">PROVIDER_URL</span><span class="o">,</span> <span class="s">&quot;tcp://localhost:61616&quot;</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">InitialContext</span> <span class="n">ctx</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">InitialContext</span><span class="o">(</span><span class="n">env</span><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<a name="Messaging.Technologies"></a>
+<h1>Messaging Technologies</h1>
+
+<a name="RabbitMQ"></a>
+<h2>RabbitMQ</h2>
+
+<p>RabbitMQ is one of the leading implementation of the AMQP protocol (along with Apache Qpid). Therefore, it implements a broker architecture, meaning that messages are queued on a central node before being sent to clients. This approach makes RabbitMQ very easy to use and deploy, because advanced scenarios like routing, load balancing or persistent message queuing are supported in just a few lines of code. However, it also makes it less scalable and “slower” because the central node adds latency and message envelopes are quite big.</p>
+
+<a name="ZeroMQ"></a>
+<h2>ZeroMQ</h2>
+
+<p>ZeroMQ is a very lightweight messaging system specially designed for high throughput/low latency scenarios like the one you can find in the financial world. Zmq supports many advanced messaging scenarios but contrary to RabbitMQ, you’ll have to implement most of them yourself by combining various pieces of the framework (e.g : sockets and devices). Zmq is very flexible but you’ll have to study the 80 pages or so of the guide (which I recommend reading for anybody writing distributed system, even if you don’t use Zmq) before being able to do anything more complicated than sending messages between 2 peers.</p>
+
+<a name="ActiveMQ"></a>
+<h2>ActiveMQ</h2>
+
+<p>ActiveMQ is in the middle ground. Like Zmq, it can be deployed with both broker and P2P topologies. Like RabbitMQ, it’s easier to implement advanced scenarios but usually at the cost of raw performance. It’s the Swiss army knife of messaging</p>
+
+<p>ActiveMQ (<a href="http://activemq.apache.org">http://activemq.apache.org</a>)</p>
+
+<a name="Bibliography"></a>
+<h1>Bibliography</h1>
+
+<ul>
+<li>Java Message Service - O&#8217;Reilly</li>
+</ul>
+
+
+<hr />
+
+<a name="Overview"></a>
+<h1>Overview</h1>
+
+<ul>
+<li>JTA &amp; JTS
+
+<ul>
+<li>JTA is a high level, implementation-independent, protocol independent API that allows applications and application servers to access transactions. An API like JDBC implemented by vendors - typically by commercial servers or by open source txn managers such as JBoss Txn Service or JOTM.</li>
+<li>JTS (Java Transaction Services) - JTS specifies the implementation of a Transaction Manager which supports JTA and implements the Java mapping of the OMG Object Transaction Service (OTS) 1.1 specification at the level below the API. JTS propagates transactions using the Internet Inter-ORB Protocol (IIOP).</li>
+</ul>
+</li>
+<li>JTA interfaces
+
+<ul>
+<li><code>UserTransaction</code> Interface</li>
+<li><code>javax.transaction.UserTransaction</code> - allows to programmatically begin, commit or rollback txns, or get status.</li>
+<li><code>TransactionManager</code> Interface</li>
+<li>primarily used within the Declarative Txn Model.</li>
+</ul>
+</li>
+</ul>
+
+
+<a name="Transaction.Properties"></a>
+<h1>Transaction Properties</h1>
+
+<p><span style="color:red">TODO </span></p>
+
+<a name="ACID.property"></a>
+<h2>ACID property</h2>
+
+<ul>
+<li><strong>Atomicity</strong> - means a txn must either be a commit or rollback all updates as a single unit of work.</li>
+<li><strong>Consistency</strong> - means during the course of the txn, the resource (db or EMS) will not be left in an inconsisten state.</li>
+<li><strong>Isolation</strong> - During the course of the txn, intermittent status of various participants is not visible to the external world.</li>
+<li><strong>Durability</strong> - means when the txn is committed, then it is guaranteed that the txn is complete and the db or JMS updates are permanent.</li>
+</ul>
+
+
+<a name="BASE.property"></a>
+<h2>BASE property</h2>
+
+<ul>
+<li>Basically Available</li>
+<li>Soft state</li>
+<li>Eventual Consistency</li>
+</ul>
+
+
+<a name="ACID.vs..BASE"></a>
+<h2>ACID vs. BASE</h2>
+
+<p>???</p>
+
+<a name="CAP.Theorem"></a>
+<h2>CAP Theorem</h2>
+
+<p>distributed databases uses.</p>
+
+<p><a href="http://ivoroshilin.com/2012/12/13/brewers-cap-theorem-explained-base-versus-acid/">http://ivoroshilin.com/2012/12/13/brewers-cap-theorem-explained-base-versus-acid/</a></p>
+
+<a name="Combination.1:.CA"></a>
+<h3>Combination 1: CA</h3>
+
+<ul>
+<li>What does it mean?</li>
+<li>When to use this?</li>
+</ul>
+
+
+<a name="Combination.2:.CP"></a>
+<h3>Combination 2: CP</h3>
+
+<ul>
+<li>What does it mean?</li>
+<li>When to use this?</li>
+</ul>
+
+
+<a name="Combination.3:.AP"></a>
+<h3>Combination 3: AP</h3>
+
+<ul>
+<li>What does it mean?</li>
+<li>When to use this?</li>
+</ul>
+
+
+<a name="Transaction.Models"></a>
+<h1>Transaction Models</h1>
+
+<a name="Local.transactions"></a>
+<h2>Local transactions</h2>
+
+<ul>
+<li>Txn is not managed by the framework, but by the local resource manager like db or messaging provider.</li>
+<li>Developer manages connection, not the txn.</li>
+<li><strong>Pros</strong>
+
+<ul>
+<li>Simple code - All you have to do is to reset the auto commit on Connection to false</li>
+<li>Works well for simple applications</li>
+</ul>
+</li>
+<li><strong>Cons/limitations</strong>
+
+<ul>
+<li>Error-prone. Plenty of room for developers to make mistakes which could be disastrous.</li>
+<li>Works only on a single resource. Cannot co-ordinate a txn across global resources like Db and EMS.</li>
+<li>Say if the txn code is split between different DAOs, the connection needs to be explicitly passed (called as connection passing strategy) which is typically error-prone.</li>
+</ul>
+</li>
+</ul>
+
+
+<a name="Programmatic.transactions"></a>
+<h2>Programmatic transactions</h2>
+
+<ul>
+<li>Leverages JTA API implementation</li>
+<li>Developer manages txn rather than the connection, using javax.transaction.UserTransaction</li>
+</ul>
+
+
+<figure class='code'><figcaption><span>EJB Example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">UserTransaction</span> <span class="n">txn</span> <span class="o">=</span> <span class="n">sessionCtx</span><span class="o">.</span><span class="na">getUserTransaction</span><span class="o">();</span>
+</span><span class='line'><span class="n">txn</span><span class="o">.</span><span class="na">begin</span><span class="o">();</span>
+</span><span class='line'><span class="k">try</span><span class="o">{</span>
+</span><span class='line'>    <span class="n">myDAO</span><span class="o">.</span><span class="na">updateOne</span><span class="o">(...);</span>
+</span><span class='line'>    <span class="n">myDAO</span><span class="o">.</span><span class="na">updateTwo</span><span class="o">(...);</span>
+</span><span class='line'>    <span class="n">txn</span><span class="o">.</span><span class="na">commit</span><span class="o">();</span>
+</span><span class='line'><span class="o">}</span> <span class="k">catch</span><span class="o">(...){</span>
+</span><span class='line'>    <span class="n">txn</span><span class="o">.</span><span class="na">rollback</span><span class="o">();</span>
+</span><span class='line'>    <span class="k">throw</span> <span class="n">e</span><span class="o">;</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+
+
+<figure class='code'><figcaption><span>Spring Example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">transaction</span><span class="o">.</span><span class="na">support</span><span class="o">.</span><span class="na">TransactionTemplate</span> <span class="o">=</span> <span class="k">new</span> <span class="o">...</span>
+</span><span class='line'><span class="n">transactionTemplate</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="k">new</span> <span class="nf">TransactionCallback</span><span class="o">(){</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="n">Object</span> <span class="nf">doInTransaction</span><span class="o">(</span><span class="n">TransactionStatus</span> <span class="n">status</span><span class="o">){</span>
+</span><span class='line'>      <span class="k">try</span><span class="o">{</span>
+</span><span class='line'>          <span class="n">myDAO</span><span class="o">.</span><span class="na">updateOne</span><span class="o">();</span>
+</span><span class='line'>      <span class="o">}</span><span class="k">catch</span><span class="o">(...){</span>
+</span><span class='line'>          <span class="n">status</span><span class="o">.</span><span class="na">setRollbackOnly</span><span class="o">();</span>
+</span><span class='line'>          <span class="k">throw</span> <span class="n">e</span><span class="o">;</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>  <span class="o">}</span>
+</span><span class='line'><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>In the above EJB example, txn context is propagated to the DAO. Unlike the local txn model, DAO need not manage connections/txns. All it needs to do is get connections from a pool.</li>
+<li>In the above Spring example, there is no need to explicitly invoke begin() or commit(). Also, the rollback is hinted via the txn status, and not on txn itself.</li>
+<li>Typically an instance of <code>UserTransaction</code> is obtained via JNDI look up.</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">UserTransaction</span> <span class="n">txn</span> <span class="o">=</span> <span class="o">(</span><span class="n">UserTransaction</span><span class="o">)</span><span class="k">new</span> <span class="nf">InitialContext</span><span class="o">()</span>
+</span><span class='line'>                  <span class="o">.</span><span class="na">lookup</span><span class="o">(</span><span class="s">&quot;javax.transaction.UserTransaction&quot;</span><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>However, the look up string name could be different for app servers. To run the code outside of a container like for unit test cases, TransactionManager interface is used as below.</p>
+
+<figure class='code'><figcaption><span>Load the txn manager factory class</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="c1">//Websphere EJB txn manager example</span>
+</span><span class='line'><span class="n">Class</span> <span class="n">txnClass</span> <span class="o">=</span> <span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">&quot;com.ibm.ejs.jts.jta.TransactionManagerFactory&quot;</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">TransactionManager</span> <span class="n">mgr</span> <span class="o">=</span> <span class="o">(</span><span class="n">TransactionManager</span><span class="o">)</span><span class="n">txnClass</span>
+</span><span class='line'>                  <span class="o">.</span><span class="na">getMethod</span><span class="o">(</span><span class="s">&quot;getTransactionManager&quot;</span><span class="o">,</span> <span class="kc">null</span><span class="o">).</span><span class="na">invoke</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">//Start the txn via txn manager</span>
+</span><span class='line'><span class="n">mgr</span><span class="o">.</span><span class="na">begin</span><span class="o">();</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>When to use?
+
+<ul>
+<li>client-initiated transactions</li>
+<li>Localized JTA transactions - If the process has multiple steps and if a txn is required only during a particular phase, then the only way to achieve this localized JTA txn is via programmatic model.</li>
+<li>For performance reasons.</li>
+</ul>
+</li>
+<li>Cons
+
+<ul>
+<li>Error-prone - since developer is handling txns, if exceptions are not handled properly in the code, it could be disastrous.</li>
+<li>Transaction Context Problem: A txn context cannot be passed from a DAO that implements programmatic txn model into another DAO implementing the same txn model. Because, when one of them invoke the other, both will try to begin a new txn on separate threads. This violates the ACID principle since failure in other thread won&rsquo;t be visible to the other.</li>
+</ul>
+</li>
+</ul>
+
+
+<a name="Declarative.transactions"></a>
+<h2>Declarative transactions</h2>
+
+<ul>
+<li>Framework or container manages the txn (which is why it is also called Container Managed Transactions or CMT)</li>
+<li>Txns are configured through configuration parameters. e.g., XML descriptors in EJB or bean definition file <code>ApplicationContext.xml</code> in Spring.</li>
+<li>Developer only says when to rollback. In Spring, rollback rules are specified via <code>TransactionAttributeSource</code> interceptor.</li>
+</ul>
+
+
+<figure class='code'><figcaption><span>EJB Example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Stateless</span>
+</span><span class='line'><span class="nd">@TransactionManagement</span><span class="o">(</span><span class="n">TransactionManagementType</span><span class="o">.</span><span class="na">CONTAINER</span><span class="o">)</span>
+</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyDAO</span><span class="o">{</span>
+</span><span class='line'>   <span class="nd">@TransactionAttribute</span><span class="o">(</span><span class="n">TransactionAttributeType</span><span class="o">.</span><span class="na">REQUIRED</span><span class="o">)</span>
+</span><span class='line'>   <span class="kd">public</span> <span class="kt">void</span> <span class="nf">update</span><span class="o">(){</span>
+</span><span class='line'>      <span class="k">try</span><span class="o">{</span>
+</span><span class='line'>          <span class="n">myDAO</span><span class="o">.</span><span class="na">updateOne</span><span class="o">(...);</span>
+</span><span class='line'>          <span class="n">myDAO</span><span class="o">.</span><span class="na">updateTwo</span><span class="o">(...);</span>
+</span><span class='line'>      <span class="o">}</span><span class="k">catch</span><span class="o">(...){</span>
+</span><span class='line'>          <span class="n">sessionCtx</span><span class="o">.</span><span class="na">setRollbackOnly</span><span class="o">();</span>
+</span><span class='line'>          <span class="k">throw</span> <span class="n">e</span><span class="o">;</span>
+</span><span class='line'>      <span class="o">}</span>
+</span><span class='line'>   <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>As in the above EJB example, developer invokes only the setRollbackOnly method. At class level, we specify that it uses declarative transaction through the annotation.</li>
+<li>In Spring, developer need not call the method explicitly. Instead the rollback rules of when to rollback is specified in the TransactionAttributeSource interceptor. We specify that it uses declarative transaction through TransactionProxyFactoryBean proxy - the txn bean is wrapped with a proxy.</li>
+</ul>
+
+
+<a name="Transaction.Attributes"></a>
+<h3>Transaction Attributes</h3>
+
+<p>In declarative txn, we must tell the container when to begin a txn, which methods should participate in a txn, etc. There are 6 transaction attributes</p>
+
+<ul>
+<li>Transaction Attributes
+
+<ul>
+<li>can be specified at method-level and bean-level.</li>
+<li>bean-level setting applies for all the methods in the class, which can be overridden.</li>
+<li>even if not specified, default attribute is applied to all the methods.</li>
+</ul>
+</li>
+<li>Spring interface <code>Synchronization</code> provides callback methods for the <code>afterBegin()</code>, <code>beforeCompletion()</code>, and <code>afterCompletion()</code> of a JTA transaction.</li>
+</ul>
+
+
+<table>
+<thead>
+<tr>
+<th> Attribute Value (For Spring prefix PROPAGATION_ ) </th>
+<th> Txn is needed to execute the method?</th>
+<th> What if a txn is already open?</th>
+<th> What if no txn open?</th>
+<th> When to use? </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> REQUIRED </td>
+<td> Yes </td>
+<td> Use it </td>
+<td> Start a new one </td>
+<td>    </td>
+</tr>
+<tr>
+<td> MANDATORY </td>
+<td> Yes </td>
+<td> An open txn must always exist before invoking the method </td>
+<td> Throws exception. Never starts a new one. </td>
+<td>   </td>
+</tr>
+<tr>
+<td> REQUIRESNEW </td>
+<td> Yes. Always start a new txn. </td>
+<td> Suspend existing txn, start new one and resume the previous one after completing the new one. </td>
+<td> Start a new one </td>
+<td> When an activity needs to be committed regardless of the surrounding txn. E.g. audit logging during trading operation </td>
+</tr>
+<tr>
+<td> SUPPORTS </td>
+<td> No </td>
+<td> Use it. In fact, any uncommitted change made by the surrounding txn is also visible. </td>
+<td> It works as it and doesn’t start a new txn. </td>
+<td>   </td>
+</tr>
+<tr>
+<td> NOTSUPPORTED </td>
+<td> No </td>
+<td> Suspend existing txn, complete the method invocation and resume the txn. </td>
+<td>  </td>
+<td> For example, invoking a stored proc containing a DDL within the context of an XA txn will throw exception. This attribute is useful in such cases. </td>
+</tr>
+<tr>
+<td> NEVER </td>
+<td> No. Never start a txn. </td>
+<td> Throws exception </td>
+<td> N/A </td>
+<td> </td>
+</tr>
+</tbody>
+</table>
+
+
+<a name="Transaction.Isolation.Level"></a>
+<h1>Transaction Isolation Level</h1>
+
+<p>Transaction isolation is a function of db concurrency and db consistency. As we increase the level of txn isolation, we in effect lower the db concurrency but increase the db consistency. (Isolation­­­ &amp; Consistency are inversely proportional to concurrency )</p>
+
+<a name="Dirty.Read...Read.Uncommitted"></a>
+<h2>Dirty Read / Read Uncommitted</h2>
+
+<ul>
+<li>Allows transactions to read non-committed updates made by other transactions.</li>
+<li>Lowest level of isolation supported by EJB &amp; Spring.</li>
+</ul>
+
+
+<a name="Read.Committed"></a>
+<h2>Read Committed</h2>
+
+<ul>
+<li>Allows multiple transactions to access the same data, hiding the non-committed updates from other transactions until they are committed.</li>
+<li>This is the default isolation setting for most of the databases.</li>
+</ul>
+
+
+<a name="Repeatable.Read"></a>
+<h2>Repeatable Read</h2>
+
+<p>Ensures that once a set of values are read from the db for a particular txn, that same set of values will be read every time the select statement is executed, unless the txn holding the read and write locks modifies the data.</p>
+
+<a name="Serializable"></a>
+<h2>Serializable</h2>
+
+<ul>
+<li>Interleaving txns are stacked up so that only one txn is allowed access to data at a time.</li>
+<li>Lowest level of isolation supported by Java.</li>
+</ul>
+
+
+<table>
+<thead>
+<tr>
+<th> Dirty Read / Uncommitted Read </th>
+<th> Read Committed </th>
+<th> Repeatable Read </th>
+<th> Serializable </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> <img src="/technology/dirty-read.png"> </td>
+<td> <img src="/technology/read-committed.png"> </td>
+<td> <img src="/technology/repeatable-read.png"> </td>
+<td> <img src="/technology/serializable.png"> </td>
+</tr>
+</tbody>
+</table>
+
+
+<a name="Transaction.Read.Phenomena"></a>
+<h1>Transaction Read Phenomena</h1>
+
+<p>Transaction Read Phenomena</p>
+
+<p><a href="http://docs.oracle.com/cd/B28359_01/server.111/b28318/consist.htm">http://docs.oracle.com/cd/B28359_01/server.111/b28318/consist.htm</a></p>
+
+<a name="Dirty.Read...Uncommitted.Read"></a>
+<h2>Dirty Read / Uncommitted Read</h2>
+
+<ul>
+<li>One process (P1) modifies a row, and another process (P2) then reads that row before it is committed by P1. If P1 then rolls back the change, P2 will have read a row that was never committed and that may thus be considered to have never existed.</li>
+<li>Isolation Level: <code>READ UNCOMMITTED</code></li>
+</ul>
+
+
+<a name="Non-Repeatable.Read"></a>
+<h2>Non-Repeatable Read</h2>
+
+<ul>
+<li>Process P1 reads a row. Process P2 then modifies or deletes that rows and commits the change. If P1 re-reads the row it receives the modified value or discovers the row has been deleted.</li>
+<li>Isolation Level: <code>READ COMMITTED</code></li>
+</ul>
+
+
+<a name="Phantom.Read"></a>
+<h2>Phantom Read</h2>
+
+<ul>
+<li>Process P1 reads the set of rows N that satisfy some search condition. Process P2 then executes statements that generate one or more rows that satisfy the search condition. If P1 repeats the query it obtains a different collection of rows.</li>
+<li>Phantom Vs. Non-repeatable
+
+<ul>
+<li>The Non-Repeatable Read is a phenomena specific to a read of a single record. When data has changed in this record, and the record is read again, the changed data is returned. This is a non-repeatable read.</li>
+<li>The Phantom Read is a phenomenon that deals with queries that return sets. The thing that’s changing in a phantom read is not the data in the records; it’s the set membership that has changed.</li>
+<li>For records that have been deleted, if a transaction reads them (or rather fails to read them) it would seem that this is both a non-repeatable read and a phantom read. But for the purposes of the ISO/ANSI standard it is in fact considered a non-repeatable read.</li>
+</ul>
+</li>
+</ul>
+
+
+<a name="Serializable.Vs..Snapshot"></a>
+<h2>Serializable Vs. Snapshot</h2>
+
+<p>???</p>
+
+<a name="Distributed.Transaction.Processing"></a>
+<h1>Distributed Transaction Processing</h1>
+
+<p>Distributed txn is a txn that spans over 1 or more resources. It could be between 2 different dbs, or 2 different messaging channels, or db and a messaging queue/topic.</p>
+
+<a name="XA.Transaction.Processing"></a>
+<h2>XA Transaction Processing</h2>
+
+<p><img class="right" src="/technology/xa-processing.png"></p>
+
+<ul>
+<li>The X/Open XA Interface is a bi-directional system-level interface that forms the communication bridge between a transaction manager and 1 or more resource managers.</li>
+<li>The Transaction Manager manages the lifecycle of a txn, and co-ordinates resources. In JTA, txn manager is abstracted through the javax.transaction.TransactionManager interface and implemented through the underlying transaction service.</li>
+<li>The Resource Manager controls and manages the actual resource participating in the txn like db or JMS queue.</li>
+<li><p>XA txn should only be used when a transaction needs to be coordinated between multiple resources, i.e., databases, queues or topics.</p></li>
+<li><p>What is the relation between XA and JTA?</p></li>
+</ul>
+
+
+<p>???</p>
+
+<a name="XA.Resource"></a>
+<h3>XA Resource</h3>
+
+<ul>
+<li>Without XA, messages sent to a topic/queue are typically read by receivers immediately. With XA, the message in the queue would not be released until the txn is committed.</li>
+<li>To perform a XA txn between multiple resources, each participating resource should be an XA resource. (Some vendors support a feature where 1 resource could be a non-XA resource.### )</li>
+</ul>
+
+
+<a name="L2-phase.commit.protocol"></a>
+<h2>2-phase commit protocol</h2>
+
+<ul>
+<li>Mechanism used by XA to coordinate multiple resources during a global transaction.</li>
+<li>A txn manager coordinates txns between resource managers using a two-phase commit protocol.</li>
+<li>The two-phase commit protocol provides the ACID properties of transactions across multiple resources.</li>
+<li>In phase 1,
+
+<ul>
+<li>the transaction manager tells each resource to &ldquo;prepare&rdquo; to commit; that is, to perform all operations for a commit and be ready either to make the changes permanent or to undo all changes.</li>
+<li>Each resource manager responds back with READY, READ_ONLY or NOT_READY.</li>
+</ul>
+</li>
+<li>In phase 2, if all resource managers respond back with READY, the transaction manager tells all resource managers to commit their changes; otherwise, it tells them all to roll back and indicates transaction failure to the application. Participants that respond with a READ_ONLY are removed from the 2nd phase.</li>
+<li>2-phase commit is possible due to the bi-directional communication capabilities of the XA interface.</li>
+<li><strong>Last Participant Support</strong> / <strong>Last Resource Commit</strong>
+
+<ul>
+<li>Some commercial containers allow this feature where an non-XA resource to participate in a global txn. The non-XA resource participates only in the phase 1 of the txn.</li>
+</ul>
+</li>
+</ul>
+
+
+<table>
+<thead>
+<tr>
+<th> 2PC Commit Scenario </th>
+<th> 2PC Rollback Scenario </th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td> <img src="/technology/2pc-commit.png"> </td>
+<td> <img src="/technology/2pc-rollback.png"> </td>
+</tr>
+</tbody>
+</table>
+
+
+<a name="Heuristic.Exceptions"></a>
+<h2>Heuristic Exceptions</h2>
+
+<p>During the 2-phase commit process a Resource Manager may use heuristic decision making and either commit or rollback its work independent of the Txn Mgr. Heuristic decision making is a process that involves making intelligent choices based on various internal and external factors. When a Resource Manager does this it is reported back to the client through Heuristic Exception.</p>
+
+<p>They only occur under XA during the 2-phase commit process, specifically after a participant has responded in phase 1. The most common reason for this is a timeout condition between phase 1 and 2. When communication is lost or delayed, the resource managers might make a decision to commit or rollback its work in order to free up resources.</p>
+
+<a name="Heuristic.Exception.Types"></a>
+<h3>Heuristic Exception Types</h3>
+
+<p>The 3 JTA Heuristic exceptions in JTA are</p>
+
+<ul>
+<li>HeuristicRollbackException - between phase 1 and 2, if <em>all the resource mgrs</em> decides to rollback the txn, then upon entering phase 2 of the commit request this exception is thrown back to the caller.</li>
+<li>HeuristicMixedException - same as above, but this is thrown if <em>one of the resource mgrs</em> decides to rollback.</li>
+<li>HeuristicCommitException</li>
+</ul>
+
+
+<a name="Transaction.Strategies"></a>
+<h1>Transaction Strategies</h1>
+
+<p>Two golden rules apply to all of the transaction strategies :</p>
+
+<ul>
+<li>The method that starts the transaction is designated as the transaction owner</li>
+<li>Only the transaction owner can roll back the transaction</li>
+</ul>
+
+
+<a name="L1..API.Layer.Strategy"></a>
+<h2>1. API Layer Strategy</h2>
+
+<p><img class="right" src="/technology/api-txn-strategy.png"></p>
+
+<ul>
+<li>Transaction Owner: API Layer - this is where the begin, commit and rollback of a txn occurs</li>
+<li>When to apply this?
+
+<ul>
+<li>apps with coarse-grained API layer</li>
+<li>apps with multiple client channels like webservice client, desktop client, web client, etc.</li>
+</ul>
+</li>
+<li>Rules for implementing this strategy
+
+<ul>
+<li>only public methods in the API layer should have txn logic</li>
+<li>all public write methods are marked with REQUIRED txn attribute</li>
+<li>all public read method are marked with SUPPORTS</li>
+<li>all public write methods should handle checked exceptions with a rollback logic</li>
+</ul>
+</li>
+<li>Limitations/Restrictions
+
+<ul>
+<li>When a public write method calls another public write method in a txn, and if an exception occurs, the rollback logic could potentially be handled by the 2nd method instead of the txn owner.</li>
+<li>Clients cannot make a multiple calls to API layer as a single unit of work.</li>
+<li>Extra attention needed if the same public method is called by clients that act as a txn owner and clients does not start a txn. (see <a href="http://www.ibm.com/developerworks/java/library/j-ts3/index.html#restrictions">IBM article</a> for more details)</li>
+</ul>
+</li>
+</ul>
+
+
+<a name="L2..Client.Orchestration.Strategy"></a>
+<h2>2. Client Orchestration Strategy</h2>
+
+<ul>
+<li>Transaction Owner: Client Layer. Though both client &amp; API layer contains the txn logic, only the client layer begins, commits and rolls back the txn. API layer has only  txn attributes marked on the methods.</li>
+<li>When to apply this?
+
+<ul>
+<li>apps with complex and fine-grained API layer</li>
+<li>cannot use with clients that cannot propagate txn to API layer, e.g., JMS clients, web service clients, etc.</li>
+</ul>
+</li>
+<li>Rules for implementing this strategy
+
+<ul>
+<li>only client &amp; API layer contains the txn logic. Client layer is the txn owner</li>
+<li>typically with this strategy, programmatic model is used in client. The exception to this rule is if the client business delegate in the client layer controlling the transaction scope is managed as a Spring bean by the Spring Framework. In this case, you can use the declarative transaction model provided by Spring.</li>
+<li>all public write methods in API layer are marked as MANDATORY - no rollback logic in them</li>
+<li>all public read methods in API layer are marked as SUPPORT.</li>
+<li>If the client layer is making remote calls to the API layer, the client layer must use a protocol and transaction manager that supports the propagation of a transaction context (such as RMI-IIOP).</li>
+</ul>
+</li>
+<li>Limitations/Restrictions
+
+<ul>
+<li>Client layer must be able to start a txn and propagate it to the API layer. This is not possible with JMS client or web service client</li>
+</ul>
+</li>
+</ul>
+
+
+<a name="L3..High.Concurrency.Strategy"></a>
+<h2>3. High Concurrency Strategy</h2>
+
+<p>???</p>
+
+<a name="L4..High.Performance.Strategy"></a>
+<h2>4. High Performance Strategy</h2>
+
+<p>???</p>
+
+<a name="Open.Items"></a>
+<h1>Open Items</h1>
+
+<ul>
+<li>MVCC, Optimistic locking</li>
+<li>Paxos consensus protocol</li>
+</ul>
+
+
+<a name="Bibliography"></a>
+<h1>Bibliography</h1>
+
+<ul>
+<li>Books
+
+<ul>
+<li>Java Transaction Management Strategies - Mark Richards</li>
+<li>Java Transaction Processing: Design and Implementation - Mark Little, Jon Maron, Greg Pavlik</li>
+<li>Principles of Transaction Processing - Philip A. Bernstein, Eric Newcomer</li>
+</ul>
+</li>
+<li>Websites
+
+<ul>
+<li>IBM - Txn Mgmt Series - Mark Richards - <a href="http://www.ibm.com/developerworks/views/java/libraryview.jsp?site_id=1&amp;contentarea_by=Java&amp;sort_by=Date&amp;sort_order=1&amp;start=1&amp;end=6&amp;topic_by=&amp;product_by=&amp;type_by=All%20Types&amp;show_abstract=true&amp;search_by=transaction%20strategies:&amp;industry_by=&amp;series_title_by=">http://www.ibm.com/developerworks/views/java/libraryview.jsp?site_id=1&amp;contentarea_by=Java&amp;sort_by=Date&amp;sort_order=1&amp;start=1&amp;end=6&amp;topic_by=&amp;product_by=&amp;type_by=All%20Types&amp;show_abstract=true&amp;search_by=transaction%20strategies:&amp;industry_by=&amp;series_title_by=</a></li>
+<li>Spring Txn Mgmt - <a href="http://static.springsource.org/spring/docs/3.0.x/reference/transaction.html">http://static.springsource.org/spring/docs/3.0.x/reference/transaction.html</a></li>
+<li><a href="http://www.jboss.org/jbosstm/resources/fundamentals.html">http://www.jboss.org/jbosstm/resources/fundamentals.html</a></li>
+<li><a href="http://www.pjug.org/jta-j2ee-pjug-2003-07-22.ppt">http://www.pjug.org/jta-j2ee-pjug-2003-07-22.ppt</a></li>
+<li><a href="http://www.subbu.org/articles/transactions/NutsAndBoltsOfTP.html">Nuts And Bolts Of TP</a></li>
+<li><a href="http://www.javaworld.com/article/2077963/open-source-tools/distributed-transactions-in-spring--with-and-without-xa.html">Distributed transactions in Spring, with and without XA</a></li>
+</ul>
+</li>
+</ul>
+
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/messaging.html" data-via="" data-counturl="http://fizalihsan.github.io/technology/messaging.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture/architecture.html">Overview</a>  |  <a href="/technology/architecture/coding-principles.html">Coding Principles</a>  |  <a href="/technology/architecture/design-principles.html">Design Principles</a>  |  <a href="/technology/architecture/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/architecture/patterns.html">Patterns</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/bigdata.html">Big Data</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/rdbms.html">RDBMS</a>  |  <a href="/technology/rdbms-products.html">RDBMS Products</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-io.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/spring.html">Spring</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/messaging.html">Messaging</a>  |  <a href="/technology/webservices.html">Web Services</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/webprogramming/webconcepts.html">Web Concepts</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2014 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

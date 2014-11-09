@@ -30,26 +30,27 @@
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
   <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <!-- mathjax config similar to math.stackexchange -->
-  <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    jax: ["input/TeX", "output/HTML-CSS"],
-    tex2jax: {
-      inlineMath: [ ['$', '$'] ],
-      displayMath: [ ['$$', '$$']],
-      processEscapes: true,
-      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    },
-    messageStyle: "none",
-    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
-  });
-  </script>
-  <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
-  <!--script src="/javascripts/mathjax/MathJax.js"></script-->
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+
+<script src="/mathjax/unpacked/MathJax.js"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script> &#8211;>
   
 
 
@@ -211,8 +212,8 @@
 <li><strong>What is Application State?</strong> Using a browser when you visit a site&rsquo;s homepage, from there to &ldquo;About Us&rdquo; page and from there to &ldquo;Contact Us&rdquo; page, the state of the browser is changing. In REST terminology, this is called &lsquo;Application State&rsquo; change.</li>
 <li><strong>What is Resource State?</strong> State of the resources being served via the web service. It can be static or dynamic. PUT and POST methods typically alter the state of the resource.</li>
 <li><strong>What is Hypermedia?</strong> Hypermedia is the general term for things like HTML links and forms: the techniques a server uses to explain to a client what it can do next. Hypermedia is a way for the server to tell the client what HTTP requests the client might want to make in the future. It’s a menu, provided by the server, from which the client is free to choose.</li>
-<li><strong>What is a hypermedia control?</strong> HTML <a> tag, HTML <form>, HTML <img>, URI Template, etc.</li>
-<li><strong>What is HATEOAS?</strong> “Hypermedia as the engine of application state”. To say that hypermedia is the engine of application state is to say that we all navigate the Web by filling out forms and following links.</li>
+<li><p><strong>What is a hypermedia control?</strong> HTML <code>&lt;a&gt;</code> tag, HTML <code>&lt;form&gt;</code>, HTML <code>&lt;img&gt;</code>, URI Template, etc.</p></li>
+<li><p><strong>What is HATEOAS?</strong> “Hypermedia as the engine of application state”. To say that hypermedia is the engine of application state is to say that we all navigate the Web by filling out forms and following links.</p></li>
 <li><strong>What is REST?</strong> Representational State Transfer. The server sends a representation via GET operations describing the state of a resource. The client sends a representation via POST/PUT describing the state it would like the resource to have. That’s representational state transfer.</li>
 <li><strong>What is a safe method?</strong> GET &amp; HEAD are defined as safe HTTP methods. It’s just a request for information. Sending a GET request to the server should have the same effect on resource state as not sending a GET request—that is, no effect at all. Incidental side effects like logging and rate limiting are OK, but a client should never make a GET request hoping that it will change the resource state.</li>
 <li><strong>What is Idempotence?</strong> Sending a request twice has the same effect on resource state as sending it once. GET, DELETE and PUT are idempotent. This notion comes from math. Multiplying a number by zero or one is an idempotent operation. Once you multiply a number by zero, you can keep multiplying it by zero indefinitely and get the same result: zero.</li>

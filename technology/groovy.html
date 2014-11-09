@@ -10,7 +10,7 @@
 
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
-<meta name="description" content="Groovy Overview Fundamentals Control Structure Boolean Evaluation Safe-navigation operator (?.) Looping methods Static imports Exceptions OOPS &hellip;">
+<meta name="description" content="Groovy Overview Fundamentals Control Structure Boolean Evaluation Operators Elvis operator / Safe-navigation operator (?.) Spread-dot operator &hellip;">
 <meta name="keywords" content="statistics, data science, R, big data, mongodb">
 
   <!-- http://t.co/dKP3o1e -->
@@ -30,26 +30,27 @@
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
   <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <!-- mathjax config similar to math.stackexchange -->
-  <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    jax: ["input/TeX", "output/HTML-CSS"],
-    tex2jax: {
-      inlineMath: [ ['$', '$'] ],
-      displayMath: [ ['$$', '$$']],
-      processEscapes: true,
-      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    },
-    messageStyle: "none",
-    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
-  });
-  </script>
-  <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
-  <!--script src="/javascripts/mathjax/MathJax.js"></script-->
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+
+<script src="/mathjax/unpacked/MathJax.js"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script> &#8211;>
   
 
 
@@ -122,7 +123,13 @@
   <li><a href="#Control.Structure">Control Structure</a>
   <ul>
    <li><a href="#Boolean.Evaluation">Boolean Evaluation</a></li>
-   <li><a href="#Safe-navigation.operator.....">Safe-navigation operator (?.)</a></li>
+   <li><a href="#Operators">Operators</a>
+   <ul>
+    <li><a href="#Elvis.operator...Safe-navigation.operator.....">Elvis operator / Safe-navigation operator (?.)</a></li>
+    <li><a href="#Spread-dot.operator">Spread-dot operator</a></li>
+    <li><a href="#Spaceship">Spaceship</a></li>
+   </ul>
+   </li>
    <li><a href="#Looping.methods">Looping methods</a></li>
    <li><a href="#Static.imports">Static imports</a></li>
   </ul>
@@ -139,10 +146,12 @@
     <li><a href="#Operator.Overloading">Operator Overloading</a></li>
    </ul>
    </li>
+   <li><a href="#Duck.typing">Duck typing</a></li>
    <li><a href="#Coercion">Coercion</a></li>
    <li><a href="#Strings">Strings</a></li>
   </ul>
   </li>
+  <li><a href="#POGOs">POGOs</a></li>
   <li><a href="#Arrays.and.Collection">Arrays and Collection</a>
   <ul>
    <li><a href="#Arrays">Arrays</a></li>
@@ -150,8 +159,14 @@
    <li><a href="#List">List</a></li>
   </ul>
   </li>
-  <li><a href="#Annotations">Annotations</a></li>
+  <li><a href="#Annotations...AST..Abstract.Syntax.Tree..Transformations">Annotations / AST (Abstract Syntax Tree) Transformations</a></li>
   <li><a href="#Closures">Closures</a></li>
+ </ul>
+ </li>
+ <li><a href="#Groovy.Metaprogramming">Groovy Metaprogramming</a></li>
+ <li><a href="#Concurrency">Concurrency</a></li>
+ <li><a href="#DSL">DSL</a>
+ <ul>
   <li><a href="#Questions">Questions</a></li>
  </ul>
  </li>
@@ -180,6 +195,7 @@
 <li>Groovy automatically imports following packages: <code>groovy.lang.*, groovy.util.*, java.lang.*, java.util.*, java.net.*, and java.io.*</code> as well as the classes <code>java.math.BigInteger</code> and <code>BigDecimal</code>.</li>
 <li>Say there is a Groovy class called Foo, we can use Foo objects without explicitly compiling the Book class as long as Foo.groovy is on the classpath.</li>
 <li>A Groovy script can also have a class definition inside them.</li>
+<li><strong>Scope</strong>: Class and methods are public by default. Fields are private by default.</li>
 </ul>
 
 
@@ -195,6 +211,7 @@
 <ul>
 <li>Groovy’s <code>==</code> Is Equal to Java’s <code>equals()</code> only if the class does not implement the <code>Comparable</code> interface. If it does, then it maps to the class’s <code>compareTo()</code> method.</li>
 <li>Reference comparison is done via <code>is()</code> method. Custom truth conventions can be added by implementing <code>asBoolean()</code> method.</li>
+<li><strong>Groovy Truth</strong> - Following evaluate to true : non-null references, non-empty strings or collections, non-zero numbers, and the boolean literal true.</li>
 </ul>
 
 
@@ -209,8 +226,11 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<a name="Safe-navigation.operator....."></a>
-<h3>Safe-navigation operator (?.)</h3>
+<a name="Operators"></a>
+<h3>Operators</h3>
+
+<a name="Elvis.operator...Safe-navigation.operator....."></a>
+<h4>Elvis operator / Safe-navigation operator (?.)</h4>
 
 <ul>
 <li>eliminates the mundane null check. If input is null, returns null instead of NPE.</li>
@@ -223,6 +243,16 @@
 </span><span class='line'><span class="kt">def</span> <span class="nf">foo</span><span class="o">(</span><span class="n">str</span><span class="o">)</span> <span class="o">{</span> <span class="n">str</span><span class="o">?.</span><span class="na">reverse</span><span class="o">()</span> <span class="o">}</span> <span class="c1">//After</span>
 </span></code></pre></td></tr></table></div></figure>
 
+
+<a name="Spread-dot.operator"></a>
+<h4>Spread-dot operator</h4>
+
+<p>Example: <code>collections*.size()</code> - returns the size of each element in the collection</p>
+
+<a name="Spaceship"></a>
+<h4>Spaceship</h4>
+
+<p><code>obj1 &lt;=&gt; obj2</code> compares obj1 and obj2 through <code>compareTo()</code> method</p>
 
 <a name="Looping.methods"></a>
 <h3>Looping methods</h3>
@@ -484,13 +514,43 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
+<a name="Duck.typing"></a>
+<h3>Duck typing</h3>
+
+<ul>
+<li>A static reference can only be assigned to an object of that type or one of its subclasses, or a class that implements that interface if the reference is of interface type. e.g., <code>Car car =</code></li>
+<li>In a dynamically typed language, however, we can have any classes stand in for another, as long as they implement the methods we need. e.g., in the below case, as long as the objects implement the method size() it will work.</li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="c1">//Duck typing example</span>
+</span><span class='line'><span class="kt">def</span> <span class="n">collection</span> <span class="o">=</span>
+</span><span class='line'><span class="n">println</span> <span class="n">collection</span><span class="o">.</span><span class="na">size</span><span class="o">()</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li>if it walks like a duck, and quacks like a duck, then it is a duck.</li>
+</ul>
+
+
 <a name="Coercion"></a>
 <h3>Coercion</h3>
 
 <ul>
 <li>Implementing operators is straightforward when both operands are of the same type. Things get more complex with a mixture of types, say 1 + 1.0. One of the two arguments needs to be promoted to the more general type, and this is called coercion.</li>
-<li><span style="color:red">Double dispatch???? - Need better description &amp; example ????</span></li>
-<li>Examples</li>
+<li><p>Closure Coersion - e.g. <code>Collections.sort(list, { ... } as Comparator)</code></p>
+
+<ul>
+<li>closure here is coerced to implement interface Comparator</li>
+<li>if the interface has more than one methods, then pass different closure implementations as map</li>
+</ul>
+</li>
+<li><p><span style="color:red">Double dispatch???? - Need better description &amp; example ????</span></p></li>
+<li><p>Examples</p></li>
 </ul>
 
 
@@ -516,6 +576,21 @@
 <li>Plain strings (instance of java.lang.String)</li>
 <li>GStrings (instance of groovy.lang.GString)</li>
 <li>GStrings allow placeholder expressions to be resolved and evaluated at runtime. ( Also called String interpolation ) Placeholders may appear in a full <code>${expression}</code> syntax or an abbreviated $reference syntax.</li>
+</ul>
+
+
+<a name="POGOs"></a>
+<h2>POGOs</h2>
+
+<ul>
+<li><code>object.property</code> - though this looks like accessing a private properties on the object, Groovy goes through the getter and setter methods provided in the class when it looks like properties are being accessed or assigned.</li>
+<li>Map-based constructors
+
+<ul>
+<li><code>def faith = new Person(name:'Faith',id:1)</code> - By default, Groovy creates this map-based constructor. (Map is not used behind the implementation though)</li>
+<li><code>def willow = [name:'Willow',id:2] as Person</code> - a map is coerced into an object</li>
+</ul>
+</li>
 </ul>
 
 
@@ -561,8 +636,8 @@
 </ul>
 
 
-<a name="Annotations"></a>
-<h2>Annotations</h2>
+<a name="Annotations...AST..Abstract.Syntax.Tree..Transformations"></a>
+<h2>Annotations / AST (Abstract Syntax Tree) Transformations</h2>
 
 <ul>
 <li>groovyc ignores @Override</li>
@@ -758,6 +833,88 @@
 
 <p>In OO languages, the Method-Object pattern has often been used to simulate the same kind of behavior by defining types whose sole purpose is to implement an appropriate single-method interface so that instances of those types can be passed as arguments to methods, which then invoke the method on the interface. e.g., <code>java.io.File.list(FilenameFilter)</code> where FilenameFilter interface specifies a single method, and its only purpose is to allow the list of files returned from the list method to be filtered while it’s being generated.</p>
 
+<a name="Groovy.Metaprogramming"></a>
+<h1>Groovy Metaprogramming</h1>
+
+<p>In Groovy every class has a metaclass. A metaclass is another class that manages the actual invocation process. If you invoke a method on a class that doesn’t exist, the call is ultimately intercepted by a method in the metaclass called <code>methodMissing</code>. Likewise, accessing a property that doesn’t exist eventually calls <code>propertyMissing</code> in the metaclass. Customizing the behavior of <code>methodMissing</code> and <code>propertyMissing</code> is the heart of Groovy runtime metaprogramming.</p>
+
+<figure class='code'><figcaption><span>&#8220;Example of meta-programming in Groovy&#8221;</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+</pre></td><td class='code'><pre><code class='groovy'><span class='line'><span class="cm">/* Every closure has a delegate property. </span>
+</span><span class='line'><span class="cm">By default the delegate points to the object that the closure was invoked on.</span>
+</span><span class='line'><span class="cm">*/</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">Complex</span><span class="o">.</span><span class="na">metaClass</span><span class="o">.</span><span class="na">plus</span> <span class="o">=</span> <span class="o">{</span> <span class="n">Complex</span> <span class="n">c</span> <span class="o">-&gt;</span> <span class="n">delegate</span><span class="o">.</span><span class="na">add</span> <span class="n">c</span> <span class="o">}</span>
+</span><span class='line'><span class="n">Complex</span><span class="o">.</span><span class="na">metaClass</span><span class="o">.</span><span class="na">minus</span> <span class="o">=</span> <span class="o">{</span> <span class="n">Complex</span> <span class="n">c</span> <span class="o">-&gt;</span> <span class="n">delegate</span><span class="o">.</span><span class="na">subtract</span> <span class="n">c</span> <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="kt">def</span> <span class="n">c1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Complex</span><span class="o">(</span><span class="nl">real:</span> <span class="mi">1</span><span class="o">,</span> <span class="nl">imaginary:</span> <span class="mi">2</span><span class="o">)</span>
+</span><span class='line'><span class="kt">def</span> <span class="n">c2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Complex</span><span class="o">(</span><span class="nl">real:</span> <span class="mi">3</span><span class="o">,</span> <span class="nl">imaginary:</span> <span class="mi">4</span><span class="o">)</span>
+</span><span class='line'><span class="kt">def</span> <span class="n">c3</span> <span class="o">=</span> <span class="n">c1</span> <span class="o">+</span> <span class="n">c2</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">println</span> <span class="n">c3</span> <span class="o">==</span> <span class="k">new</span> <span class="n">Complex</span><span class="o">(</span><span class="nl">real:</span> <span class="mi">4</span><span class="o">,</span> <span class="nl">imaginary:</span> <span class="mi">6</span><span class="o">)</span>
+</span><span class='line'>
+</span><span class='line'><span class="nd">@EqualsAndHashCode</span>
+</span><span class='line'><span class="kd">class</span> <span class="nc">Complex</span><span class="o">{</span>
+</span><span class='line'>    <span class="kt">def</span> <span class="n">real</span><span class="o">,</span> <span class="n">imaginary</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">Complex</span> <span class="nf">add</span><span class="o">(</span><span class="n">Complex</span> <span class="n">c</span><span class="o">){</span>
+</span><span class='line'>        <span class="k">this</span><span class="o">.</span><span class="na">real</span> <span class="o">+=</span> <span class="n">c</span><span class="o">.</span><span class="na">real</span>
+</span><span class='line'>        <span class="k">this</span><span class="o">.</span><span class="na">imaginary</span> <span class="o">+=</span> <span class="n">c</span><span class="o">.</span><span class="na">imaginary</span>
+</span><span class='line'>        <span class="k">this</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="n">Complex</span> <span class="nf">subtract</span><span class="o">(</span><span class="n">Complex</span> <span class="n">c</span><span class="o">){</span>
+</span><span class='line'>        <span class="k">this</span><span class="o">.</span><span class="na">real</span> <span class="o">-=</span> <span class="n">c</span><span class="o">.</span><span class="na">real</span>
+</span><span class='line'>        <span class="k">this</span><span class="o">.</span><span class="na">imaginary</span> <span class="o">-=</span> <span class="n">c</span><span class="o">.</span><span class="na">imaginary</span>
+</span><span class='line'>        <span class="k">this</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nd">@Override</span>
+</span><span class='line'>    <span class="kd">public</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+</span><span class='line'>        <span class="k">return</span> <span class="s2">&quot;($real + ${imaginary}i)&quot;</span>
+</span><span class='line'>    <span class="o">}</span>
+</span><span class='line'><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<a name="Concurrency"></a>
+<h1>Concurrency</h1>
+
+<a name="DSL"></a>
+<h1>DSL</h1>
+
 <a name="Questions"></a>
 <h2>Questions</h2>
 
@@ -766,7 +923,12 @@
 <li>how closure is better than an anonymous inner class?</li>
 <li>what is a spaceship operator? &lt;=></li>
 <li>how to implement dynamic parameters and method?</li>
-<li>What is relaying and duck typing and how dynamic typing enables to achieve them?</li>
+<li>What is relaying and how dynamic typing enables to achieve it?</li>
+<li>How to write new AST annotations?</li>
+<li>Spring + Groovy</li>
+<li>&lsquo;Liquid Heart&rsquo; technique by Dierk Koenig, lead author of Groovy in Action [Manning, 2007]</li>
+<li>Groovy iteration patterns</li>
+<li>JMX</li>
 </ol>
 
 

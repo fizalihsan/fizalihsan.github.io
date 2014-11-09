@@ -10,7 +10,7 @@
 
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
-<meta name="description" content="SOA Concepts What is SOA? Why SOA? SOA Operations Characteristics of contemporary SOA Primitive SOA / First Generation Web-services Framework &hellip;">
+<meta name="description" content="SOA Concepts What is SOA? Why SOA? SOA Operations Characteristics of contemporary SOA Message Exchange Patterns (MEP) Primitive MEPs Complex MEPs &hellip;">
 <meta name="keywords" content="statistics, data science, R, big data, mongodb">
 
   <!-- http://t.co/dKP3o1e -->
@@ -30,26 +30,27 @@
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
   <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <!-- mathjax config similar to math.stackexchange -->
-  <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    jax: ["input/TeX", "output/HTML-CSS"],
-    tex2jax: {
-      inlineMath: [ ['$', '$'] ],
-      displayMath: [ ['$$', '$$']],
-      processEscapes: true,
-      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    },
-    messageStyle: "none",
-    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
-  });
-  </script>
-  <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
-  <!--script src="/javascripts/mathjax/MathJax.js"></script-->
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+
+<script src="/mathjax/unpacked/MathJax.js"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script> &#8211;>
   
 
 
@@ -122,6 +123,19 @@
   <li><a href="#Why.SOA.">Why SOA?</a></li>
   <li><a href="#SOA.Operations">SOA Operations</a></li>
   <li><a href="#Characteristics.of.contemporary.SOA">Characteristics of contemporary SOA</a></li>
+  <li><a href="#Message.Exchange.Patterns..MEP.">Message Exchange Patterns (MEP)</a>
+  <ul>
+   <li><a href="#Primitive.MEPs">Primitive MEPs</a></li>
+   <li><a href="#Complex.MEPs">Complex MEPs</a></li>
+   <li><a href="#MEPs.and.WSDL">MEPs and WSDL</a>
+   <ul>
+    <li><a href="#WSDL.1.1.Spec">WSDL 1.1 Spec</a></li>
+    <li><a href="#WSDL.2.0.Spec">WSDL 2.0 Spec</a>
+</li>
+   </ul>
+   </li>
+  </ul>
+  </li>
   <li><a href="#Primitive.SOA...First.Generation.Web-services.Framework">Primitive SOA / First Generation Web-services Framework</a>
   <ul>
    <li><a href="#Service.Roles">Service Roles</a></li>
@@ -209,6 +223,72 @@
 <li>Promotes loose-coupling - separation of concerns</li>
 <li>Stateless</li>
 <li>Location-, Language- &amp; Protocol-independent</li>
+</ol>
+
+
+<a name="Message.Exchange.Patterns..MEP."></a>
+<h2>Message Exchange Patterns (MEP)</h2>
+
+<ul>
+<li>An MEP is a generic interaction pattern that defines the message exchange between two services</li>
+<li>MEPs can composed to support the creation of large, more complex patterns.</li>
+</ul>
+
+
+<a name="Primitive.MEPs"></a>
+<h3>Primitive MEPs</h3>
+
+<ol>
+<li>Request-response</li>
+<li>this could be synchronous or asynchronous</li>
+<li>typically a &ldquo;correlation&rdquo; is used to associate a response with the request</li>
+<li>Fire-and-forget</li>
+<li>This simple asynchronous pattern is based on a <em>unidirectional</em> transmission of messages from a source to one or more destinations.</li>
+<li>There are few variations in this MEP.
+
+<ul>
+<li><em>single-destination</em> pattern - a source sends a message to one destination only</li>
+<li><em>multi-cast</em> pattern - a source sends messages to a predefined set of destinations</li>
+<li><em>broadcast</em> pattern - same as multi-cast pattern, except that the message is sent out to a broader range of recipient destinations</li>
+</ul>
+</li>
+</ol>
+
+
+<a name="Complex.MEPs"></a>
+<h3>Complex MEPs</h3>
+
+<ul>
+<li>Example of a complex MEP is <strong>Publish-and-subscribe</strong> model</li>
+</ul>
+
+
+<a name="MEPs.and.WSDL"></a>
+<h3>MEPs and WSDL</h3>
+
+<a name="WSDL.1.1.Spec"></a>
+<h4>WSDL 1.1 Spec</h4>
+
+<ol>
+<li><strong>Request-response operation</strong> - upon receiving a message, the service must response with a standard message or a fault message</li>
+<li><strong>Solicit-response operation</strong> - upon submitting a message to a service requestor, the service expects a standard response message or a fault message</li>
+<li><strong>One-way operation</strong> - the service expects a single message and is not obligated to respond.</li>
+<li><strong>Notification operation</strong> - The service sends a message and expects no response.</li>
+</ol>
+
+
+<a name="WSDL.2.0.Spec"></a>
+<h4>WSDL 2.0 Spec</h4>
+
+<ol>
+<li><strong>in-out</strong> pattern - equivalent to WSDL 1.1 request-response</li>
+<li><strong>out-in</strong> pattern - equivalent to WSDL 1.1 solicit-response</li>
+<li><strong>in-only</strong> pattern - equivalent to WSDL 1.1 one-way</li>
+<li><strong>out-only</strong> pattern - equivalent to WSDL 1.1 notification</li>
+<li><strong>robust in-only</strong> pattern - a variation of the in-only pattern that provides the option of launching a fault response message as a result of a transmission or processing error</li>
+<li><strong>robust out-only</strong> pattern - like out-only pattern, has an outbound message initiating the transmission. the difference here is that a fault message can be issued in response to the receipt of this message</li>
+<li><strong>in-optional-out</strong> pattern - similar to in-out with an exception. This variation introduces a rule stating that the delivery of a response message is optional and should therefore not be expected by the service requetor that originated the communication. This pattern also supports the generation of a fault message.</li>
+<li><strong>out-optional-in</strong> pattern - reverse of the in-optional-out, where the incoming message is optional. Fault message generation is also supported.</li>
 </ol>
 
 
@@ -338,7 +418,8 @@
 <li>Books
 
 <ul>
-<li>Service Oriented Architecture - Concepts, Technology and Design - Thomas Earl (2005)</li>
+<li>Service Oriented Architecture - Concepts, Technology and Design - Thomas Erl (2005)</li>
+<li>SOA - Principles of Service Design - Thomas Erl</li>
 </ul>
 </li>
 <li>Sites

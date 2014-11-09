@@ -10,7 +10,7 @@
 
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
-<meta name="description" content="Statistics 1. Charts Pie chart Bar chart Histogram Line Chart What type of chart to use? 2. Measuring Central Tendency Mean ($\mu$) Median Mode 3. &hellip;">
+<meta name="description" content="Statistics Charts Pie chart Bar chart Histogram Line Chart What type of chart to use? Measuring Central Tendency Mean ($\mu$) Median Mode Measuring &hellip;">
 <meta name="keywords" content="statistics, mean, median, mode, bar chart, standard deviation">
 
   <!-- http://t.co/dKP3o1e -->
@@ -30,26 +30,27 @@
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
   <script src="/javascripts/octopress.js" type="text/javascript"></script>
-  <!-- mathjax config similar to math.stackexchange -->
-  <script type="text/x-mathjax-config">
-  MathJax.Hub.Config({
-    jax: ["input/TeX", "output/HTML-CSS"],
-    tex2jax: {
-      inlineMath: [ ['$', '$'] ],
-      displayMath: [ ['$$', '$$']],
-      processEscapes: true,
-      skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    },
-    messageStyle: "none",
-    "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
-  });
-  </script>
-  <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript"></script>
-  <!--script src="/javascripts/mathjax/MathJax.js"></script-->
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+
+<script src="/mathjax/unpacked/MathJax.js"></script>
+<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script> &#8211;>
   
 
 
@@ -116,7 +117,7 @@
   </header>
   
   <p><ul>
- <li><a href="#L1..Charts">1. Charts</a>
+ <li><a href="#Charts">Charts</a>
  <ul>
   <li><a href="#Pie.chart">Pie chart</a></li>
   <li><a href="#Bar.chart">Bar chart</a></li>
@@ -125,32 +126,51 @@
   <li><a href="#What.type.of.chart.to.use.">What type of chart to use?</a></li>
  </ul>
  </li>
- <li><a href="#L2..Measuring.Central.Tendency">2. Measuring Central Tendency</a>
+ <li><a href="#Measuring.Central.Tendency">Measuring Central Tendency</a>
  <ul>
   <li><a href="#Mean....mu..">Mean ($\mu$)</a></li>
   <li><a href="#Median">Median</a></li>
   <li><a href="#Mode">Mode</a></li>
  </ul>
  </li>
- <li><a href="#L3..Measuring.Spread">3. Measuring Spread</a>
+ <li><a href="#Measuring.Spread">Measuring Spread</a>
  <ul>
   <li><a href="#Range">Range</a></li>
   <li><a href="#Quartiles">Quartiles</a></li>
   <li><a href="#Percentiles">Percentiles</a></li>
  </ul>
  </li>
- <li><a href="#L4..Measuring.Variability">4. Measuring Variability</a>
+ <li><a href="#Measuring.Variability">Measuring Variability</a>
  <ul>
   <li><a href="#Variance..amp..Standard.Deviation....sigma..">Variance &amp; Standard Deviation ($\sigma$)</a></li>
   <li><a href="#Standard.Score...z..">Standard Score ($z$)</a></li>
  </ul>
  </li>
+ <li><a href="#Probability">Probability</a>
+ <ul>
+  <li><a href="#Basics">Basics</a>
+  <ul>
+   <li><a href="#Complementary.event">Complementary event</a></li>
+   <li><a href="#Exclusive.events">Exclusive events</a></li>
+   <li><a href="#Intersection.events">Intersection events</a></li>
+   <li><a href="#Conditional.probabilities">Conditional probabilities</a>
+</li>
+  </ul>
+  </li>
+ </ul>
+ </li>
+ <li><a href="#Appendix">Appendix</a>
+ <ul>
+  <li><a href="#About.Roulette.Wheel">About Roulette Wheel</a></li>
+ </ul>
+ </li>
+ <li><a href="#Bibliography">Bibliography</a></li>
 </ul>
 
 </p>
 
-<a name="L1..Charts"></a>
-<h1>1. Charts</h1>
+<a name="Charts"></a>
+<h1>Charts</h1>
 
 <a name="Pie.chart"></a>
 <h2>Pie chart</h2>
@@ -230,8 +250,8 @@
 
 <hr />
 
-<a name="L2..Measuring.Central.Tendency"></a>
-<h1>2. Measuring Central Tendency</h1>
+<a name="Measuring.Central.Tendency"></a>
+<h1>Measuring Central Tendency</h1>
 
 <p>There are 3 types of average: Mean, Median &amp; Mode.</p>
 
@@ -279,8 +299,8 @@
 
 <hr />
 
-<a name="L3..Measuring.Spread"></a>
-<h1>3. Measuring Spread</h1>
+<a name="Measuring.Spread"></a>
+<h1>Measuring Spread</h1>
 
 <a name="Range"></a>
 <h2>Range</h2>
@@ -322,19 +342,30 @@ that P<sub>90</sub> = 50, you’d have beaten or matched the score of 90% of oth
 
 <hr />
 
-<a name="L4..Measuring.Variability"></a>
-<h1>4. Measuring Variability</h1>
+<a name="Measuring.Variability"></a>
+<h1>Measuring Variability</h1>
 
 <a name="Variance..amp..Standard.Deviation....sigma.."></a>
 <h2>Variance &amp; Standard Deviation ($\sigma$)</h2>
 
 <ul>
-<li><p>The variance is a way of measuring spread, and it’s the average of the distance of values from the mean squared.
-<img src="/datascience/variance1.PNG"></p></li>
-<li><p>For faster variance calculation, use below formula. Here you don’t have to calculate <img src="/datascience/variance3.PNG" title="" > for every number.
-<img src="/datascience/variance2.PNG"></p></li>
-<li><p><strong>Standard Deviation</strong> is a way of saying how far typical values are from the mean. The smaller the standard deviation, the closer values are to the mean. The smallest value the standard deviation can take is 0.
-<img src="/datascience/stddev.PNG"></p></li>
+<li>The variance is a way of measuring spread, and it’s the average of the distance of values from the mean squared.</li>
+</ul>
+
+
+<p>\(
+  Variance = \frac{\Sigma(x-\mu)^2} {n}
+\)</p>
+
+<ul>
+<li>For faster variance calculation, use below formula. Here you don’t have to calculate \({\Sigma(x-\mu)^2}\) for every number.</li>
+</ul>
+
+
+<p>\( Variance = \frac{\Sigma x^2} {n} - \mu^2 \)</p>
+
+<ul>
+<li><strong>Standard Deviation</strong> is a way of saying how far typical values are from the mean. The smaller the standard deviation, the closer values are to the mean. The smallest value the standard deviation can take is 0. \(\sigma = \sqrt{variance}\)</li>
 </ul>
 
 
@@ -344,8 +375,7 @@ that P<sub>90</sub> = 50, you’d have beaten or matched the score of 90% of oth
 <ul>
 <li>Standard scores give you a way of comparing values across different sets of data
 where the mean and standard deviation differ. They’re a way of comparing
-related data values in different circumstances.
-<img src="/datascience/standardscore.PNG"></li>
+related data values in different circumstances. \( z = \frac{x - \mu} {\sigma} \)</li>
 <li>You find the standard score of a particular value using the mean and standard
 deviation of the entire data set.</li>
 </ul>
@@ -387,6 +417,154 @@ In a particular practice session, Player 1 gets the ball into the net 75% of the
 </tr>
 </tbody>
 </table>
+
+
+<a name="Probability"></a>
+<h1>Probability</h1>
+
+<a name="Basics"></a>
+<h2>Basics</h2>
+
+<ul>
+<li>Event - An outcome or occurrence that has a probability assigned to it</li>
+<li>Probability = (# of ways of winning) / (# of possible outcomes)</li>
+</ul>
+
+
+<blockquote><p>P(A) = n(A) / n(S)</p></blockquote>
+
+<p>where</p>
+
+<ul>
+<li>P(A) - probability of event A occurring</li>
+<li>n(A) - number of ways of getting an event A</li>
+<li>n(S) - number of possible outcomes</li>
+<li>S - <strong>possibility space</strong> or <strong>sample space</strong></li>
+</ul>
+
+
+<a name="Complementary.event"></a>
+<h3>Complementary event</h3>
+
+<ul>
+<li>A<sup>I</sup> is the complementary event of A. It is the probability that event A does not occur.</li>
+</ul>
+
+
+<blockquote><p>P(A) + P(A<sup>I</sup>) = 1</p></blockquote>
+
+<ul>
+<li>Use Venn Diagram to easily visualize the probabilities</li>
+</ul>
+
+
+<p><img class="right" src="/datascience/venn-diagram.png"></p>
+
+<ul>
+<li>Adding probabilities - e.g., what is the probability of getting an even number in a dice throw.</li>
+</ul>
+
+
+<p>\(
+P(even) = P(2) + P(4) + P(6) &#92;
+        = 1/6 + 1/6 + 1/6 &#92;
+        = 3/6 = 0.5
+\)</p>
+
+<a name="Exclusive.events"></a>
+<h3>Exclusive events</h3>
+
+<ul>
+<li>If two events are mutually exclusive, only one of the two can occur. e.g., head and tail in a coin toss</li>
+</ul>
+
+
+<a name="Intersection.events"></a>
+<h3>Intersection events</h3>
+
+<ul>
+<li>If two events intersect, it’s possible they can occur simultaneously. e.g., black and even number in roulette</li>
+<li><strong>i\(\bigcap\)tersection</strong>
+
+<ul>
+<li>\(A \bigcap B\) refers to intersection between event A and B.</li>
+<li>Think of this symbol as <strong>and</strong></li>
+</ul>
+</li>
+<li><strong>\(\bigcup\)nion</strong>
+
+<ul>
+<li>\(A \bigcup B\) refers to union of A and B. It includes all of the elements in A and B.</li>
+<li>Think of this symbol as <strong>or</strong></li>
+<li>If \(A \bigcup B = 1\), then A and B are said to be <strong>exhaustive</strong>. Between them, they make up the whole of S.</li>
+</ul>
+</li>
+</ul>
+
+
+<p>\(
+  P(A \bigcup B) = P(A) + P(B) + P(A \bigcap B) &#92;
+  where P(A \bigcup B) is P(A or B) &#92;
+  P(A \bigcap B) is P(A and B)
+\)</p>
+
+<ul>
+<li>Mutually exclusive events have no elements in common with each other, so \(P(A \bigcap B) = 0\)</li>
+</ul>
+
+
+<a name="Conditional.probabilities"></a>
+<h3>Conditional probabilities</h3>
+
+<p><img class="right" src="/datascience/decision-tree.png"></p>
+
+<ul>
+<li>measures the probability of an event occurring relative to another occurring.</li>
+<li>it is represented by symbol &ldquo;|&rdquo;. e.g., P(A|B) is read as the probability of A given that wek now B has happened.</li>
+<li>conditional probabilities are best visualized using probability tree.</li>
+</ul>
+
+
+<p>\(
+  \begin{split}
+  P(A | B) = \frac{P(A \bigcap B)} {P(B)} &#92;
+  which means, P(A \bigcap B)} = P(A | B) \times P(B) &#92;
+  \end{split}
+\)</p>
+
+<p>Square bracket</p>
+
+<p>[
+  P(A | B) = \frac {P(A \bigcap B)} {P(B)} \
+  which means, P(A \bigcap B)} = P(A | B) \times P(B) \
+]</p>
+
+<p>Dollar</p>
+
+<p>$$
+  P(A | B) = \frac {P(A \bigcap B)} {P(B)} \
+  which means, P(A \bigcap B)} = P(A | B) \times P(B) \
+$$</p>
+
+<a name="Appendix"></a>
+<h1>Appendix</h1>
+
+<a name="About.Roulette.Wheel"></a>
+<h2>About Roulette Wheel</h2>
+
+<ul>
+<li>It has 38 pockets that the ball can fall into.</li>
+<li>The main pockets are numbered from 1 to 36, and each pocket is colored either red or black.</li>
+<li>There are two extra pockets numbered 0 and 00. These pockets are both green.</li>
+</ul>
+
+
+<a name="Bibliography"></a>
+<h1>Bibliography</h1>
+
+<ul>
+<li>Head First Statistics</li>
+</ul>
 
 
   

@@ -112,15 +112,16 @@ an architecture style that defines business services that are abstracted from th
 * JMS Administered Objects: are JMS objects that are created and configured by the system administrator. It includes JMS ConnectionFactory and Destination objects such as topics and queues.
 
 {% img right /technology/jms-api.png %}
-| General API | Point-to-Point API | Pub-Sub API |
-| ----------- | ------------------ | ------------|
-| ConnectionFactory| QueueConnectionFactory | TopicConnectionFactory  |
-| Destination| Queue| Topic |
-| Connection| QueueConnection| TopicConnection |
-| Session| QueueSession| TopicSession |
-| Message| Message| Message |
-| MessageProducer| QueueSender| TopicPublisher |
-| MessageConsumer| QueueReceiver| TopicSubscriber |
+
+| General API | Point-to-Point API | Pub-Sub API | 
+| ----------- | ------------------ | ----------- | 
+| ConnectionFactory | QueueConnectionFactory | TopicConnectionFactory | 
+| Destination | Queue | Topic |
+| Connection | QueueConnection | TopicConnection | 
+| Session | QueueSession | TopicSession | 
+| Message | Message | Message | 
+| MessageProducer | QueueSender | TopicPublisher | 
+| MessageConsumer | QueueReceiver | TopicSubscriber |
 
 
 ## JMS Programming Step-By-Step

@@ -27,6 +27,7 @@ footer: true
 * Groovy automatically imports following packages: `groovy.lang.*, groovy.util.*, java.lang.*, java.util.*, java.net.*, and java.io.*` as well as the classes `java.math.BigInteger` and `BigDecimal`.
 * Say there is a Groovy class called Foo, we can use Foo objects without explicitly compiling the Book class as long as Foo.groovy is on the classpath.
 * A Groovy script can also have a class definition inside them.
+* **Scope**: Class and methods are public by default. Fields are private by default.
 
 # Fundamentals
 
@@ -36,6 +37,7 @@ footer: true
 
 * Groovy’s `==` Is Equal to Java’s `equals()` only if the class does not implement the `Comparable` interface. If it does, then it maps to the class’s `compareTo()` method. 
 * Reference comparison is done via `is()` method. Custom truth conventions can be added by implementing `asBoolean()` method.
+* **Groovy Truth** - Following evaluate to true : non-null references, non-empty strings or collections, non-zero numbers, and the boolean literal true.
 
 ``` groovy
 str = 'Hello'
@@ -44,13 +46,24 @@ list = [1]
 if(list) println list //Groovy checks if list is not-null and not empty
 ```
 
-### Safe-navigation operator (?.) 
+### Operators
+
+#### Elvis operator / Safe-navigation operator (?.) 
 
 * eliminates the mundane null check. If input is null, returns null instead of NPE.
+
 ``` groovy
 def foo(str) { if (str != null) { str.reverse() } } //Before
 def foo(str) { str?.reverse() } //After
 ```
+
+#### Spread-dot operator 
+
+Example: `collections*.size()` - returns the size of each element in the collection
+
+#### Spaceship 
+
+`obj1 <=> obj2` compares obj1 and obj2 through `compareTo()` method
 
 ### Looping methods
 
@@ -85,6 +98,7 @@ double value = rand() // alias name is used here to avoid confusion among static
 #### Optional Parameters
 
 * With Default value
+
 ``` groovy
 def log(x, base=10) { Math.log(x) / Math.log(base) }
 log(1024) //default base 10 is used
@@ -92,6 +106,7 @@ log(1024, 2)
 ```
 
 * Trailing array parameter as optional. Much like Java varargs.
+
 ``` groovy
 def task(name, String[] details) { println "$name - $details" }
 task 'name1'
@@ -102,6 +117,7 @@ task 'name3', 'blah..blah..'
 #### Named arguments in method calls
 
 * Class with no-argument constructor
+
 ``` groovy
 class Robot { def type, height, width }
 robot = new Robot(type: 'arm', width: 10, height: 40)
@@ -109,6 +125,7 @@ println "$robot.type, $robot.height, $robot.width"
 ```
 
 * Excess Parameters as Map - If the number of arguments sent is more than what the method parameters, and if the excess arguments are in name-value pair, then Groovy treats the name-value pairs as a Map.
+
 ``` groovy
 class Robot { 
   def access(location, weight, fragile) {
@@ -123,6 +140,7 @@ new Robot().access(50, true, x: 30, y: 20, z: 10, a:5)
 #### Multiple Assignments
 
 * Method returning an array is assigned to multiple variables 
+
 ``` groovy
 def splitName(fullName) { fullName.split(' ') }
 def (firstName, lastName) = splitName('James Bond')
@@ -130,6 +148,7 @@ println "$lastName, $firstName $lastName"
 ```
 
 * Swapping two variables without a temporary variable using above technique
+
 ``` groovy
 def (first, last) = ["James", "Bond"]
 (first, last) = [last, first]
@@ -139,6 +158,7 @@ println "$first $last"
 #### Implementing Interface
 
 * Block of code morphed as the implementation of an interface
+
 ``` groovy
 interface Greeting { void greet(greeting) }
 interface WellWisher { void wish(wish) }
@@ -155,6 +175,7 @@ wellwisher(groovyStyle as WellWisher)
 
 * Groovy does not force us to implement all the methods in an interface. Very useful while mocking for unit testing.
 * Implementation of multi-method interface as a Map
+
 ``` groovy
 interface Greeting { void greet(greeting); void wish(wish); void regard(regard); }
 void callMe(Greeting greeting){ greeting.greet(); greeting.wish()}
@@ -163,9 +184,11 @@ greetingsMap = [ greet: {println 'Greet Hello World'}, wish: {println 'Wish Hell
 callMe(greetingsMap as Greeting) 
 ```
 
+
 #### Operator Overloading
 
 * Each operator has a standard mapping to methods.
+
 ``` groovy
 == equals
 + plus
@@ -194,11 +217,30 @@ def name2 = new Name(name: "World")
 println name1 + name2
 ```
 
+### Duck typing 
+
+* A static reference can only be assigned to an object of that type or one of its subclasses, or a class that implements that interface if the reference is of interface type. e.g., `Car car = `
+* In a dynamically typed language, however, we can have any classes stand in for another, as long as they implement the methods we need. e.g., in the below case, as long as the objects implement the method size() it will work.
+
+``` groovy
+//Duck typing example
+def collection = 
+println collection.size()
+```
+
+* if it walks like a duck, and quacks like a duck, then it is a duck.
+
 ### Coercion
 
 * Implementing operators is straightforward when both operands are of the same type. Things get more complex with a mixture of types, say 1 + 1.0. One of the two arguments needs to be promoted to the more general type, and this is called coercion.
+* Closure Coersion - e.g. `Collections.sort(list, { ... } as Comparator)` 
+  * closure here is coerced to implement interface Comparator
+  * if the interface has more than one methods, then pass different closure implementations as map
+
 * <span style="color:red">Double dispatch???? - Need better description & example ????</span>
+
 * Examples
+
 ``` groovy
 == equals
 + plus
@@ -208,12 +250,20 @@ println name1 + name2
 <=> compareTo
 ```
 
+
 ### Strings
 
 * Plain strings (instance of java.lang.String)
 * GStrings (instance of groovy.lang.GString)
 * GStrings allow placeholder expressions to be resolved and evaluated at runtime. ( Also called String interpolation ) Placeholders may appear in a full `${expression}` syntax or an abbreviated $reference syntax.
 
+
+## POGOs
+
+* `object.property` - though this looks like accessing a private properties on the object, Groovy goes through the getter and setter methods provided in the class when it looks like properties are being accessed or assigned.
+* Map-based constructors
+  * `def faith = new Person(name:'Faith',id:1)` - By default, Groovy creates this map-based constructor. (Map is not used behind the implementation though)
+  * `def willow = [name:'Willow',id:2] as Person` - a map is coerced into an object
 
 ## Arrays and Collection
 
@@ -241,7 +291,7 @@ Custom Range - Any datatype can be used with ranges, provided that both of the f
 * Lists are by default of type `java.util.ArrayList` and can also be declared explicitly by calling the respective constructor. The resulting list can still be used with the subscript operator. In fact, this works with any type of list, as we show here with type `java.util.LinkedList`.
 * Lists can be created and initialized at the same time by calling `toList` on ranges.
 
-## Annotations
+## Annotations / AST (Abstract Syntax Tree) Transformations
 
 * groovyc ignores @Override
 * `@Canonical` - auto-generates `toString()` implementation as comma-separated field values
@@ -259,7 +309,7 @@ Custom Range - Any datatype can be used with ranges, provided that both of the f
 
 * `@Delegate`
 
-``` groovy 
+``` groovy
 import groovy.transform.*
 class Worker {
  def work() { println 'get work done' }
@@ -292,6 +342,7 @@ bernie.writeReport()  //invokes Worker.writeReport
 ```
 
 * `@Lazy` - provides a painless way to implement the virtual proxy pattern with thread safety as a bonus
+
 ``` groovy
  class AsNeeded {
  def value
@@ -303,6 +354,7 @@ bernie.writeReport()  //invokes Worker.writeReport
 ```
 
 * `@Newify` - Create objects via Ruby-like and Python-like constructors without using 'new Foo()' style. Comes handy in DSL creation.
+
 ``` groovy
 @Newify([CreditCard, Person]) //specify the list of types here. 
 def fluentCreate() {
@@ -313,6 +365,7 @@ fluentCreate()
 ```
 
 * `@Singleton`
+
 ``` groovy
  @Singleton(lazy = true)
  class TheUnique {
@@ -325,6 +378,7 @@ fluentCreate()
 ```
 
 * `@InheritConstructors`
+
 ``` groovy
  @Canonical
  class Car {
@@ -345,10 +399,62 @@ fluentCreate()
 In OO languages, the Method-Object pattern has often been used to simulate the same kind of behavior by defining types whose sole purpose is to implement an appropriate single-method interface so that instances of those types can be passed as arguments to methods, which then invoke the method on the interface. e.g., `java.io.File.list(FilenameFilter)` where FilenameFilter interface specifies a single method, and its only purpose is to allow the list of files returned from the list method to be filtered while it’s being generated.
 
 
+# Groovy Metaprogramming
+
+In Groovy every class has a metaclass. A metaclass is another class that manages the actual invocation process. If you invoke a method on a class that doesn’t exist, the call is ultimately intercepted by a method in the metaclass called `methodMissing`. Likewise, accessing a property that doesn’t exist eventually calls `propertyMissing` in the metaclass. Customizing the behavior of `methodMissing` and `propertyMissing` is the heart of Groovy runtime metaprogramming.
+
+
+``` groovy "Example of meta-programming in Groovy"
+
+/* Every closure has a delegate property. 
+By default the delegate points to the object that the closure was invoked on.
+*/
+
+Complex.metaClass.plus = { Complex c -> delegate.add c }
+Complex.metaClass.minus = { Complex c -> delegate.subtract c }
+
+def c1 = new Complex(real: 1, imaginary: 2)
+def c2 = new Complex(real: 3, imaginary: 4)
+def c3 = c1 + c2
+
+println c3 == new Complex(real: 4, imaginary: 6)
+
+@EqualsAndHashCode
+class Complex{
+    def real, imaginary
+
+    Complex add(Complex c){
+        this.real += c.real
+        this.imaginary += c.imaginary
+        this
+    }
+
+    Complex subtract(Complex c){
+        this.real -= c.real
+        this.imaginary -= c.imaginary
+        this
+    }
+
+    @Override
+    public String toString() {
+        return "($real + ${imaginary}i)"
+    }
+}
+```
+
+# Concurrency
+
+# DSL
+
 ## Questions
 
 1. What is the difference between a Groovy script and a Groovy class?
 * how closure is better than an anonymous inner class?
 * what is a spaceship operator? <=>
 * how to implement dynamic parameters and method?
-* What is relaying and duck typing and how dynamic typing enables to achieve them?
+* What is relaying and how dynamic typing enables to achieve it?
+* How to write new AST annotations?  
+* Spring + Groovy
+* 'Liquid Heart' technique by Dierk Koenig, lead author of Groovy in Action [Manning, 2007]
+* Groovy iteration patterns
+* JMX

@@ -25,7 +25,8 @@ footer: true
 * **What is Application State?** Using a browser when you visit a site's homepage, from there to "About Us" page and from there to "Contact Us" page, the state of the browser is changing. In REST terminology, this is called 'Application State' change.
 * **What is Resource State?** State of the resources being served via the web service. It can be static or dynamic. PUT and POST methods typically alter the state of the resource.
 * **What is Hypermedia?** Hypermedia is the general term for things like HTML links and forms: the techniques a server uses to explain to a client what it can do next. Hypermedia is a way for the server to tell the client what HTTP requests the client might want to make in the future. It’s a menu, provided by the server, from which the client is free to choose.
-* **What is a hypermedia control?** HTML <a> tag, HTML <form>, HTML <img>, URI Template, etc.
+* **What is a hypermedia control?** HTML `<a>` tag, HTML `<form>`, HTML `<img>`, URI Template, etc.
+
 * **What is HATEOAS?** “Hypermedia as the engine of application state”. To say that hypermedia is the engine of application state is to say that we all navigate the Web by filling out forms and following links.
 * **What is REST?** Representational State Transfer. The server sends a representation via GET operations describing the state of a resource. The client sends a representation via POST/PUT describing the state it would like the resource to have. That’s representational state transfer.
 * **What is a safe method?** GET & HEAD are defined as safe HTTP methods. It’s just a request for information. Sending a GET request to the server should have the same effect on resource state as not sending a GET request—that is, no effect at all. Incidental side effects like logging and rate limiting are OK, but a client should never make a GET request hoping that it will change the resource state.

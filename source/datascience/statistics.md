@@ -9,7 +9,7 @@ keywords: statistics, mean, median, mode, bar chart, standard deviation
 
 [TOC]
 
-# 1. Charts
+# Charts
 
 ## Pie chart
 * Used to visualize proportions
@@ -43,7 +43,7 @@ keywords: statistics, mean, median, mode, bar chart, standard deviation
 
 ---
 
-# 2. Measuring Central Tendency
+# Measuring Central Tendency
 
 There are 3 types of average: Mean, Median & Mode.
 
@@ -68,7 +68,7 @@ There are 3 types of average: Mean, Median & Mode.
 
 ---
 
-# 3. Measuring Spread
+# Measuring Spread
 
 ## Range
 * The range is a way of measuring how spread out a set of values are. It's given by:
@@ -95,23 +95,25 @@ that P<sub>90</sub> = 50, you’d have beaten or matched the score of 90% of oth
 
 ---
 
-# 4. Measuring Variability
+# Measuring Variability
 
 ## Variance & Standard Deviation ($\sigma$)
 * The variance is a way of measuring spread, and it’s the average of the distance of values from the mean squared.
-{% img /datascience/variance1.PNG %}
 
-* For faster variance calculation, use below formula. Here you don’t have to calculate {% img /datascience/variance3.PNG  %} for every number. 
-{% img /datascience/variance2.PNG %}
+\(
+  Variance = \frac{\Sigma(x-\mu)^2} {n} 
+\)
 
-* **Standard Deviation** is a way of saying how far typical values are from the mean. The smaller the standard deviation, the closer values are to the mean. The smallest value the standard deviation can take is 0.
-{% img /datascience/stddev.PNG %}
+* For faster variance calculation, use below formula. Here you don’t have to calculate \({\Sigma(x-\mu)^2}\) for every number. 
+
+\( Variance = \frac{\Sigma x^2} {n} - \mu^2 \)
+
+* **Standard Deviation** is a way of saying how far typical values are from the mean. The smaller the standard deviation, the closer values are to the mean. The smallest value the standard deviation can take is 0. \(\sigma = \sqrt{variance}\)
 
 ## Standard Score ($z$)
 * Standard scores give you a way of comparing values across different sets of data
 where the mean and standard deviation differ. They’re a way of comparing
-related data values in different circumstances.
-{% img /datascience/standardscore.PNG %}
+related data values in different circumstances. \( z = \frac{x - \mu} {\sigma} \)
 * You find the standard score of a particular value using the mean and standard
 deviation of the entire data set.
 
@@ -128,3 +130,102 @@ $\mu$ = 70                     |   | $\mu$ = 40
 $\sigma$ = 20                  |   | $\sigma$ = 10                 
 $z1 = \frac{75-70}{20} = 0.25$ |   | $z2 = \frac{55-40}{10} = 1.5 $
 
+# Probability
+
+## Basics
+
+* Event - An outcome or occurrence that has a probability assigned to it
+* Probability = (# of ways of winning) / (# of possible outcomes)
+
+> P(A) = n(A) / n(S)
+
+where 
+
+* P(A) - probability of event A occurring
+* n(A) - number of ways of getting an event A
+* n(S) - number of possible outcomes
+* S - **possibility space** or **sample space**
+
+### Complementary event
+  * A<sup>I</sup> is the complementary event of A. It is the probability that event A does not occur.
+
+> P(A) + P(A<sup>I</sup>) = 1
+
+* Use Venn Diagram to easily visualize the probabilities 
+
+{% img right /datascience/venn-diagram.png %}
+
+* Adding probabilities - e.g., what is the probability of getting an even number in a dice throw.
+
+\(
+P(even) = P(2) + P(4) + P(6) \\
+        = 1/6 + 1/6 + 1/6 \\
+        = 3/6 = 0.5
+\)
+
+### Exclusive events
+
+* If two events are mutually exclusive, only one of the two can occur. e.g., head and tail in a coin toss
+
+### Intersection events
+
+* If two events intersect, it’s possible they can occur simultaneously. e.g., black and even number in roulette 
+* **i\(\bigcap\)tersection**
+  * \(A \bigcap B\) refers to intersection between event A and B. 
+  * Think of this symbol as **and**
+* **\(\bigcup\)nion**
+  * \(A \bigcup B\) refers to union of A and B. It includes all of the elements in A and B.
+  * Think of this symbol as **or**
+  * If \(A \bigcup B = 1\), then A and B are said to be **exhaustive**. Between them, they make up the whole of S.
+
+\(
+  P(A \bigcup B) = P(A) + P(B) + P(A \bigcap B) \\
+  where P(A \bigcup B) is P(A or B) \\
+  P(A \bigcap B) is P(A and B)
+\)
+
+* Mutually exclusive events have no elements in common with each other, so \(P(A \bigcap B) = 0\)
+
+### Conditional probabilities
+
+{% img right /datascience/decision-tree.png %} 
+
+* measures the probability of an event occurring relative to another occurring.
+* it is represented by symbol "|". e.g., P(A|B) is read as the probability of A given that wek now B has happened.
+* conditional probabilities are best visualized using probability tree.
+
+\(
+  \begin{split}
+  P(A | B) = \frac{P(A \bigcap B)} {P(B)} \\
+  which means, P(A \bigcap B)} = P(A | B) \times P(B) \\
+  \end{split}
+\)
+
+Square bracket
+
+\[
+  P(A | B) = \frac {P(A \bigcap B)} {P(B)} \\
+  which means, P(A \bigcap B)} = P(A | B) \times P(B) \\
+\]
+
+
+Dollar
+
+$$
+  P(A | B) = \frac {P(A \bigcap B)} {P(B)} \\
+  which means, P(A \bigcap B)} = P(A | B) \times P(B) \\
+$$
+
+# Appendix
+
+## About Roulette Wheel
+
+* It has 38 pockets that the ball can fall into.
+* The main pockets are numbered from 1 to 36, and each pocket is colored either red or black.
+* There are two extra pockets numbered 0 and 00. These pockets are both green.
+
+
+
+# Bibliography
+
+* Head First Statistics

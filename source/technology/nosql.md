@@ -96,13 +96,10 @@ Scalability, built-in features like versioning, compression, garbage collection 
 
 # Document-oriented Databases
 
-# Overview
-*  Known databases: MongoDB, CouchDB
-
 ## MongoDB
 {% img right /technology/mongo-datatypes.png 500 500 %}
 
-* supports consistency
+* supports consistency. Supports ACID properties at single-document level only.
 * offers atomic read-write operations such as incrementing a value and deep querying of nested document structures.
 * Using JavaScript for its query language, MongoDB supports both simple queries and complex mapreduce jobs.
 * It is a document database, which allows data to persist in a nested state, and importantly, it can query that nested data in an ad hoc fashion. It enforces no schema.
@@ -129,18 +126,97 @@ Scalability, built-in features like versioning, compression, garbage collection 
   * for surface-of-the-earth-type maps; allows you to specify points, lines, and polygons in GeoJSON format. A point is given by a two-element array, representing [longitude, latitude]; A line by an array of Points; A polygon in the same way as lines but with different 'type'; Sample queries: restaurants in given coordinates, restaurants near given coordinates.
 * 2d index - for flat maps, video game maps and time series data; "2d" indexes assume a perfectly flat surface, instead of a sphere; can only store points; 
 
-### Aggregation Framework
+
+### Data modelling
+
+#### Embedded document model
+
+* **Pros**
+
+* Locality. Less disk seeks and hence faster.
+* Atomicity & Isolation during mutant operations.
+
+* **Cons**
+
+* Querying for all sub-documents with a matching condition would return the sub-document along with parent as well. Major drawback of this approach is that we get back much more data than we actually need.
+* For example, in a document like below, querying for all the comments by John would return all the books where John has commented, not just the comments. Also it is not possible to sort or limit the comments returned.
+
+```
+{
+  "book": "Head First Java",
+  "text": "This is a book",
+  "comments": [
+    {"author": "John", "text": "..."},
+    {"author": "Jack", "text": "..."},
+    {"author": "John", "text": "..."},
+  ]
+}
+```
+
+
+* Embedding carries significant penalties with it:
+  * The larger a document is, the more RAM it uses.
+  * Growing documents must eventually be copied to larger spaces. As you append to the large document, eventually MongoDB is  going to need to move the document to an area with more space available. This movement, when it happens, significantly  slows update performance
+  * MongoDB documents have a hard size limit of 16 MB.
+
+* When to use
+  * If your application’s query pattern is well-known and data tends to be accessed in only one way, an embedded approach works well.
+
+#### Referenced document model
+
+* Pros
+  * Flexibility
+  * Best fit for many-to-many relationships.
+* Cons
+  * No joins hence needs multiple network calls to retrieve complete data.
+  * There is no multi-document transaction in Mongodb. In other words, unlike SQL you cannot edit/delete multiple documents in a single transaction. If a business entity spans across multiple collections, you cannot alter that entity from different collections atomically.
+* When to use
+  * If your application may query data in many different ways, or you are not able to anticipate the patterns in which data may be queried, a more “normalized” approach may be better.
+  * Another factor that may weigh in favor of a more normalized model using document references is when you have one-to-many relationships with very high or unpredictable *arity*.
+
+
+
+### Advanced Concepts
+    
+#### Why no transactions?
+
+* MongoDB was designed from the ground up to be easy to scale to multiple distributed servers. Two of the biggest problems in distributed database design are distributed join operations and distributed transactions.
+* Both of these operations are complex to implement, and can yield poor performance or even downtime in the event that a server becomes unreachable. By “punting” on these problems and not supporting
+* joins or multidocument transactions at all, MongoDB has been able to implement an automatic sharding solution with much better scaling and performance characteristics than you’d normally be stuck with if you had to take relational joins and transactions into account.
+
+#### Write concern
+
+* MongoDB has a configurable write concern. This capability allows you to balance the importance of guaranteeing that all writes are fully recorded in the database with the speed of the insert. 
+* For example, if you issue writes to MongoDB and do not require that the database issue any response, the write operations will return very fast (since the application needs to wait for a response from the database) but you cannot be certain that all writes succeeded. Conversely, if you require that MongoDB acknowledge every write operation, the database will not return as quickly but you can be certain that every item will be present in the database. 
+* The proper write concern is often an application-specific decision, and depends on the reporting requirements and uses of your analytics application.
+
+**Insert acknowledgement**
+
+By setting w=0, you do not require that MongoDB acknowledge receipt of the insert. `db.events.insert(event, w=0)`
+
+**Journal write acknowledgement**
+If you want to ensure that MongoDB not only acknowledges receipt of a write operation but also commits the write operation to the on-disk journal before returning successfully to the application, you can use the j=True option: `db.events.insert(event, j=True)`.
+
+MongoDB uses an on-disk journal file to persist data before writing the updates back to the “regular” data files. Since journal writes are significantly slower than in-memory updates (which are, in turn, much slower than “regular” data file updates), MongoDB batches up journal writes into “group commits” that occur every 100 ms unless overridden in your server settings. What this means for the application developer is that, on average, any individual writes with j=True will take around 50 ms to complete, which is generally even more time than it would take to replicate the data to another server.
+
+**Replication acknowledgement**
+To acknowledge that the data has replicated to two members of the replica set before returning: `db.events.insert(event, w=2)`.
+
+
+#### Aggregation Framework
 * a pipeline that processes a stream of documents through several building blocks: filtering, projecting, grouping, sorting, limiting, and skipping.
 * `aggregate()` function returns an array of result documents; cannot write to a collection;
 * **Pipeline Operations** - Each operator receives a stream of documents, does some type of transformation on these documents, and then passes on the results of the transformation. If it is the last pipeline operator, these results are returned to the client. Otherwise, the results are streamed to the next operator as input.
 
-### Sharding
+#### Sharding
 * One of the central reasons for Mongo to exist is to safely and quickly handle very large datasets. The clearest method of achieving this is through horizontal sharding by value ranges—or just sharding for brevity. Rather than a single server hosting all values in a collection, some range of values are split (or in other words, sharded) onto other servers. For example, in our phone numbers collection, we may put all phone numbers less than 1-500-000-0000 onto Mongo server A and put numbers greater than or equal to 1-500-000-0001 onto a server B. Mongo makes this easier by autosharding, managing this division for you.
 * Diff b/w sharding and replication? Replication copies the exact copy of a data in multiple servers. Sharding stores different subset of data across multiple servers.
 * Shard - server participating in a sharded cluster.
 * mongos - routing process which sits in front of all the shards. Apps connect to this process.
 * Sharding is enabled at database level.
 * Shard key - when you enable sharding you choose a field or two that MongoDb uses to break up data. To even create a shard key, the field(s) must be indexed. Before sharding, the collection is essentially a single chunk. Sharding splits this into smaller chunks based on the shard key
+
+
 
 ## CouchDb
 
@@ -213,7 +289,7 @@ via HTTP REST Interface
 
 # Graph Databases
 
-## Graph Database Concepts
+## Concepts
 
 ### Types of technologies in Graph space
 1. **Graph Databases** - Technologies used primarily for transactional online graph persistence, typically accessed directly in real time from an application. They are the equivalent of “normal” OLTP databases in the relational world.

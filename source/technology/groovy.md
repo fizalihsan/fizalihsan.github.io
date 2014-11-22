@@ -457,4 +457,4 @@ class Complex{
 * Spring + Groovy
 * 'Liquid Heart' technique by Dierk Koenig, lead author of Groovy in Action [Manning, 2007]
 * Groovy iteration patterns
-* JMX
+* JMX 2

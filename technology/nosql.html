@@ -8,10 +8,9 @@
   <title>NoSQL - KnowledgeShop</title>
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
-  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 <meta name="description" content="NoSQL Key-Value Stores Riak Architecture MapReduce Clustering Downsides/Limitations/Trade-offs Redis Column-oriented Databases Overview HBase Why &hellip;">
-<meta name="keywords" content="statistics, data science, R, big data, mongodb">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
   <meta name="HandheldFriendly" content="True">
@@ -50,24 +49,8 @@ messageStyle: "none",
 </script>
 
 <script src="/mathjax/unpacked/MathJax.js"></script>
-<!-- <script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js"></script> &#8211;>
+
   
-
-
-  <!-- Below lines added for octopress-lunr-js-search -->
-  
-<script id="search-results-template" type="text/x-handlebars-template">
-  {{#entries}}
-    <article>
-      <h3>
-         <small><time datetime="{{date}}" pubdate>{{date}}</time></small>
-         <a href="{{url}}">{{title}}</a>
-         <p>tagged: {{ tags }} | category: <a href="/categories/{{category }}">{{category}}</a></p>
-      </h3>
-    </article>
-  {{/entries}}
-</script>
-
 
 </head>
 
@@ -85,24 +68,10 @@ messageStyle: "none",
   
 </ul>
   
-
-<!-- Start octopress-lunr-js-search -->
-
-  <form action="/search" method="get">
-  <fieldset role ="search">
-    <input type="text" id="search-query" name="q" placeholder="Search" autocomplete="off" class="search" />
-  </fieldset>
-</form>
-
-
-<!-- End octopress-lunr-js-search -->
-
 <ul class="main-navigation">
   <li><a href="/">Home</a></li>
   <li><a href="/blog/archives">Archives</a></li>
 </ul>
-
-
 
 
 </nav>
@@ -144,8 +113,7 @@ messageStyle: "none",
   </li>
  </ul>
  </li>
- <li><a href="#Document-oriented.Databases">Document-oriented Databases</a></li>
- <li><a href="#Overview">Overview</a>
+ <li><a href="#Document-oriented.Databases">Document-oriented Databases</a>
  <ul>
   <li><a href="#MongoDB">MongoDB</a>
   <ul>
@@ -154,8 +122,21 @@ messageStyle: "none",
     <li><a href="#Geo-spatial.indexes">Geo-spatial indexes</a></li>
    </ul>
    </li>
-   <li><a href="#Aggregation.Framework">Aggregation Framework</a></li>
-   <li><a href="#Sharding">Sharding</a></li>
+   <li><a href="#Data.modelling">Data modelling</a>
+   <ul>
+    <li><a href="#Embedded.document.model">Embedded document model</a></li>
+    <li><a href="#Referenced.document.model">Referenced document model</a></li>
+   </ul>
+   </li>
+   <li><a href="#Advanced.Concepts">Advanced Concepts</a>
+   <ul>
+    <li><a href="#Why.no.transactions.">Why no transactions?</a></li>
+    <li><a href="#Write.concern">Write concern</a></li>
+    <li><a href="#Aggregation.Framework">Aggregation Framework</a></li>
+    <li><a href="#Sharding">Sharding</a>
+</li>
+   </ul>
+   </li>
   </ul>
   </li>
   <li><a href="#CouchDb">CouchDb</a>
@@ -170,7 +151,7 @@ messageStyle: "none",
  </li>
  <li><a href="#Graph.Databases">Graph Databases</a>
  <ul>
-  <li><a href="#Graph.Database.Concepts">Graph Database Concepts</a>
+  <li><a href="#Concepts">Concepts</a>
   <ul>
    <li><a href="#Types.of.technologies.in.Graph.space">Types of technologies in Graph space</a></li>
    <li><a href="#Advantages.of.Graph.Databases">Advantages of Graph Databases</a></li>
@@ -343,21 +324,13 @@ messageStyle: "none",
 <a name="Document-oriented.Databases"></a>
 <h1>Document-oriented Databases</h1>
 
-<a name="Overview"></a>
-<h1>Overview</h1>
-
-<ul>
-<li>Known databases: MongoDB, CouchDB</li>
-</ul>
-
-
 <a name="MongoDB"></a>
 <h2>MongoDB</h2>
 
 <p><img class="right" src="/technology/mongo-datatypes.png" width="500" height="500"></p>
 
 <ul>
-<li>supports consistency</li>
+<li>supports consistency. Supports ACID properties at single-document level only.</li>
 <li>offers atomic read-write operations such as incrementing a value and deep querying of nested document structures.</li>
 <li>Using JavaScript for its query language, MongoDB supports both simple queries and complex mapreduce jobs.</li>
 <li>It is a document database, which allows data to persist in a nested state, and importantly, it can query that nested data in an ad hoc fashion. It enforces no schema.</li>
@@ -403,8 +376,125 @@ messageStyle: "none",
 </ul>
 
 
+<a name="Data.modelling"></a>
+<h3>Data modelling</h3>
+
+<a name="Embedded.document.model"></a>
+<h4>Embedded document model</h4>
+
+<ul>
+<li><p><strong>Pros</strong></p></li>
+<li><p>Locality. Less disk seeks and hence faster.</p></li>
+<li><p>Atomicity &amp; Isolation during mutant operations.</p></li>
+<li><p><strong>Cons</strong></p></li>
+<li><p>Querying for all sub-documents with a matching condition would return the sub-document along with parent as well. Major drawback of this approach is that we get back much more data than we actually need.</p></li>
+<li>For example, in a document like below, querying for all the comments by John would return all the books where John has commented, not just the comments. Also it is not possible to sort or limit the comments returned.</li>
+</ul>
+
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>{
+</span><span class='line'>  "book": "Head First Java",
+</span><span class='line'>  "text": "This is a book",
+</span><span class='line'>  "comments": [
+</span><span class='line'>    {"author": "John", "text": "..."},
+</span><span class='line'>    {"author": "Jack", "text": "..."},
+</span><span class='line'>    {"author": "John", "text": "..."},
+</span><span class='line'>  ]
+</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+
+
+<ul>
+<li><p>Embedding carries significant penalties with it:</p>
+
+<ul>
+<li>The larger a document is, the more RAM it uses.</li>
+<li>Growing documents must eventually be copied to larger spaces. As you append to the large document, eventually MongoDB is  going to need to move the document to an area with more space available. This movement, when it happens, significantly  slows update performance</li>
+<li>MongoDB documents have a hard size limit of 16 MB.</li>
+</ul>
+</li>
+<li><p>When to use</p>
+
+<ul>
+<li>If your application’s query pattern is well-known and data tends to be accessed in only one way, an embedded approach works well.</li>
+</ul>
+</li>
+</ul>
+
+
+<a name="Referenced.document.model"></a>
+<h4>Referenced document model</h4>
+
+<ul>
+<li>Pros
+
+<ul>
+<li>Flexibility</li>
+<li>Best fit for many-to-many relationships.</li>
+</ul>
+</li>
+<li>Cons
+
+<ul>
+<li>No joins hence needs multiple network calls to retrieve complete data.</li>
+<li>There is no multi-document transaction in Mongodb. In other words, unlike SQL you cannot edit/delete multiple documents in a single transaction. If a business entity spans across multiple collections, you cannot alter that entity from different collections atomically.</li>
+</ul>
+</li>
+<li>When to use
+
+<ul>
+<li>If your application may query data in many different ways, or you are not able to anticipate the patterns in which data may be queried, a more “normalized” approach may be better.</li>
+<li>Another factor that may weigh in favor of a more normalized model using document references is when you have one-to-many relationships with very high or unpredictable <em>arity</em>.</li>
+</ul>
+</li>
+</ul>
+
+
+<a name="Advanced.Concepts"></a>
+<h3>Advanced Concepts</h3>
+
+<a name="Why.no.transactions."></a>
+<h4>Why no transactions?</h4>
+
+<ul>
+<li>MongoDB was designed from the ground up to be easy to scale to multiple distributed servers. Two of the biggest problems in distributed database design are distributed join operations and distributed transactions.</li>
+<li>Both of these operations are complex to implement, and can yield poor performance or even downtime in the event that a server becomes unreachable. By “punting” on these problems and not supporting</li>
+<li>joins or multidocument transactions at all, MongoDB has been able to implement an automatic sharding solution with much better scaling and performance characteristics than you’d normally be stuck with if you had to take relational joins and transactions into account.</li>
+</ul>
+
+
+<a name="Write.concern"></a>
+<h4>Write concern</h4>
+
+<ul>
+<li>MongoDB has a configurable write concern. This capability allows you to balance the importance of guaranteeing that all writes are fully recorded in the database with the speed of the insert.</li>
+<li>For example, if you issue writes to MongoDB and do not require that the database issue any response, the write operations will return very fast (since the application needs to wait for a response from the database) but you cannot be certain that all writes succeeded. Conversely, if you require that MongoDB acknowledge every write operation, the database will not return as quickly but you can be certain that every item will be present in the database.</li>
+<li>The proper write concern is often an application-specific decision, and depends on the reporting requirements and uses of your analytics application.</li>
+</ul>
+
+
+<p><strong>Insert acknowledgement</strong></p>
+
+<p>By setting w=0, you do not require that MongoDB acknowledge receipt of the insert. <code>db.events.insert(event, w=0)</code></p>
+
+<p><strong>Journal write acknowledgement</strong>
+If you want to ensure that MongoDB not only acknowledges receipt of a write operation but also commits the write operation to the on-disk journal before returning successfully to the application, you can use the j=True option: <code>db.events.insert(event, j=True)</code>.</p>
+
+<p>MongoDB uses an on-disk journal file to persist data before writing the updates back to the “regular” data files. Since journal writes are significantly slower than in-memory updates (which are, in turn, much slower than “regular” data file updates), MongoDB batches up journal writes into “group commits” that occur every 100 ms unless overridden in your server settings. What this means for the application developer is that, on average, any individual writes with j=True will take around 50 ms to complete, which is generally even more time than it would take to replicate the data to another server.</p>
+
+<p><strong>Replication acknowledgement</strong>
+To acknowledge that the data has replicated to two members of the replica set before returning: <code>db.events.insert(event, w=2)</code>.</p>
+
 <a name="Aggregation.Framework"></a>
-<h3>Aggregation Framework</h3>
+<h4>Aggregation Framework</h4>
 
 <ul>
 <li>a pipeline that processes a stream of documents through several building blocks: filtering, projecting, grouping, sorting, limiting, and skipping.</li>
@@ -414,7 +504,7 @@ messageStyle: "none",
 
 
 <a name="Sharding"></a>
-<h3>Sharding</h3>
+<h4>Sharding</h4>
 
 <ul>
 <li>One of the central reasons for Mongo to exist is to safely and quickly handle very large datasets. The clearest method of achieving this is through horizontal sharding by value ranges—or just sharding for brevity. Rather than a single server hosting all values in a collection, some range of values are split (or in other words, sharded) onto other servers. For example, in our phone numbers collection, we may put all phone numbers less than 1-500-000-0000 onto Mongo server A and put numbers greater than or equal to 1-500-000-0001 onto a server B. Mongo makes this easier by autosharding, managing this division for you.</li>
@@ -574,8 +664,8 @@ messageStyle: "none",
 <a name="Graph.Databases"></a>
 <h1>Graph Databases</h1>
 
-<a name="Graph.Database.Concepts"></a>
-<h2>Graph Database Concepts</h2>
+<a name="Concepts"></a>
+<h2>Concepts</h2>
 
 <a name="Types.of.technologies.in.Graph.space"></a>
 <h3>Types of technologies in Graph space</h3>

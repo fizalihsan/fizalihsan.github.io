@@ -9,8 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Spring Overview Scope Profiles Overview Dependency injection types: Setter-based, Constructor-based and Annotation-based.
-@Autowired - on a field &hellip;">
+<meta name="description" content="Spring Overview Scope Profiles Overview Dependency injection types: Setter-based, Constructor-based and Annotation-based. @Autowired - on a field &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -34,6 +33,7 @@
 <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
+
 <!-- mathjax config similar to math.stackexchange -->
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -48,8 +48,7 @@ messageStyle: "none",
 "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
 });
 </script>
-
-<script src="/mathjax/unpacked/MathJax.js"></script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
 
   
 
@@ -86,106 +85,89 @@ messageStyle: "none",
     
   </header>
   
-  <p><ul>
- <li><a href="#Overview">Overview</a>
- <ul>
-  <li><a href="#Scope">Scope</a></li>
-  <li><a href="#Profiles">Profiles</a></li>
- </ul>
- </li>
+  <ul id="markdown-toc">
+  <li><a href="#overview">Overview</a>    <ul>
+      <li><a href="#scope">Scope</a></li>
+      <li><a href="#profiles">Profiles</a></li>
+    </ul>
+  </li>
 </ul>
 
-</p>
-
-<a name="Overview"></a>
-<h1>Overview</h1>
+<h1 id="overview">Overview</h1>
 
 <ul>
-<li>Dependency injection types: Setter-based, Constructor-based and Annotation-based.</li>
-<li><code>@Autowired</code> - on a field denotes the bean implementation will injected</li>
-<li><code>@Inject</code> and <code>@Resource</code>. Last 2 are Java JSR-330 based.</li>
-<li><code>ApplicationContext</code> - different ways to configure. via XML or Java. Multiple application contexts can be defined in a hierarchy.</li>
-<li><code>@Configuration</code> - marks the class as config class.
+  <li>Dependency injection types: Setter-based, Constructor-based and Annotation-based. </li>
+  <li><code>@Autowired</code> - on a field denotes the bean implementation will injected</li>
+  <li><code>@Inject</code> and <code>@Resource</code>. Last 2 are Java JSR-330 based.</li>
+  <li><code>ApplicationContext</code> - different ways to configure. via XML or Java. Multiple application contexts can be defined in a hierarchy.</li>
+  <li><code>@Configuration</code> - marks the class as config class. 
+    <ul>
+      <li>Classes can be abstract but not final. </li>
+      <li>Class with no <code>@Bean</code> annotation is now allowed.</li>
+    </ul>
+  </li>
+  <li><code>@Bean</code> - </li>
+  <li>Resource Loading
+    <ul>
+      <li>Prefixes are classpath:, file: and http:</li>
+      <li>Ant-style wild cards - e.g., classpath:/META-INF/spring/<em>.xml, file:/var/conf/**/</em>.properties</li>
+    </ul>
+  </li>
+  <li>Component Scanning
+    <ul>
+      <li>Enables Spring to scan classpath for classes that are annotated with @Component (or one of the specialized annotations like @Service, @Repository, @Controller, or @Configuration). Application Context needs to be enabled for component scanning via @ComponentScan annotation.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Configuration</span>
+</span><span class="line"><span class="nd">@ComponentScan</span><span class="o">(</span><span class="n">basePackages</span> <span class="o">=</span> <span class="o">{</span><span class="s">&quot;com.apress.prospringmvc.moneytransfer.scanning&quot;</span><span class="o">,</span><span class="s">&quot;com.apress.prospringmvc.moneytransfer.repository&quot;</span> <span class="o">})</span>
+</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ApplicationContextConfiguration</span> <span class="o">{}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="scope">Scope</h2>
+<ul>
+  <li>By default, all beans in Spring application context is singleton.</li>
+  <li>singleton - </li>
+  <li>prototype - new instance of bean is created every time</li>
+  <li>thread - new bean created and bound to current thread. Thread dies - bean destroyed.</li>
+  <li>request - new bean created and bound to the current javax.servlet.ServletRequest. Request dies - bean destroyed.</li>
+  <li>session - new bean created and bound to the current javax.servlet.HttpSession. Request dies - bean destroyed.</li>
+  <li>globalSession - new bean is created when needed and stored in the globally available session (which is available in Portlet environments). If no such session is available, the scope reverts to the session scope functionality.</li>
+  <li>application - This scope is very similar to the singleton scope; however, beans with this scope are also registered in javax.servlet.ServletContext.</li>
+</ul>
+
+<h2 id="profiles">Profiles</h2>
+<ul>
+  <li>Enables creating different configuration for different environments like testing, local deployment, cloud deployment, etc.</li>
+  <li>To enable a profile, tell the application context which profiles are activeby setting a system property called ‘spring.profiles.active’ (in a web environment, this can be a servlet initialization parameter or web context parameter).</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Configuration</span>
+</span><span class="line"><span class="nd">@Profile</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;test&quot;</span><span class="o">)</span>
+</span><span class="line"><span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">TestContextConfiguration</span> <span class="o">{</span>
+</span><span class="line">   <span class="nd">@Bean</span>
+</span><span class="line">   <span class="kd">public</span> <span class="n">TransactionRepository</span> <span class="nf">transactionRepository</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">      <span class="k">return</span> <span class="k">new</span> <span class="nf">StubTransactionRepository</span><span class="o">();</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <ul>
-<li>Classes can be abstract but not final.</li>
-<li>Class with no <code>@Bean</code> annotation is now allowed.</li>
+  <li>@EnableCaching - Enables support for bean methods with the @Cacheable annotation.</li>
+  <li>@EnableWebMvc - Enables support for the powerful and flexible annotation-driven controllers with request handling methods. This feature detects beans with the @Controller annotation and binds methods with the @RequestMapping annotations to URLs.</li>
 </ul>
-</li>
-<li><code>@Bean</code> -</li>
-<li>Resource Loading
-
-<ul>
-<li>Prefixes are classpath:, file: and <a href="http:">http:</a></li>
-<li>Ant-style wild cards - e.g., classpath:/META-INF/spring/<em>.xml, file:/var/conf/**/</em>.properties</li>
-</ul>
-</li>
-<li>Component Scanning
-
-<ul>
-<li>Enables Spring to scan classpath for classes that are annotated with @Component (or one of the specialized annotations like @Service, @Repository, @Controller, or @Configuration). Application Context needs to be enabled for component scanning via @ComponentScan annotation.</li>
-</ul>
-</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Configuration</span>
-</span><span class='line'><span class="nd">@ComponentScan</span><span class="o">(</span><span class="n">basePackages</span> <span class="o">=</span> <span class="o">{</span><span class="s">&quot;com.apress.prospringmvc.moneytransfer.scanning&quot;</span><span class="o">,</span><span class="s">&quot;com.apress.prospringmvc.moneytransfer.repository&quot;</span> <span class="o">})</span>
-</span><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ApplicationContextConfiguration</span> <span class="o">{}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<a name="Scope"></a>
-<h2>Scope</h2>
-
-<ul>
-<li>By default, all beans in Spring application context is singleton.</li>
-<li>singleton -</li>
-<li>prototype - new instance of bean is created every time</li>
-<li>thread - new bean created and bound to current thread. Thread dies - bean destroyed.</li>
-<li>request - new bean created and bound to the current javax.servlet.ServletRequest. Request dies - bean destroyed.</li>
-<li>session - new bean created and bound to the current javax.servlet.HttpSession. Request dies - bean destroyed.</li>
-<li>globalSession - new bean is created when needed and stored in the globally available session (which is available in Portlet environments). If no such session is available, the scope reverts to the session scope functionality.</li>
-<li>application - This scope is very similar to the singleton scope; however, beans with this scope are also registered in javax.servlet.ServletContext.</li>
-</ul>
-
-
-<a name="Profiles"></a>
-<h2>Profiles</h2>
-
-<ul>
-<li>Enables creating different configuration for different environments like testing, local deployment, cloud deployment, etc.</li>
-<li>To enable a profile, tell the application context which profiles are activeby setting a system property called &lsquo;spring.profiles.active&rsquo; (in a web environment, this can be a servlet initialization parameter or web context parameter).</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="nd">@Configuration</span>
-</span><span class='line'><span class="nd">@Profile</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;test&quot;</span><span class="o">)</span>
-</span><span class='line'><span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">TestContextConfiguration</span> <span class="o">{</span>
-</span><span class='line'>   <span class="nd">@Bean</span>
-</span><span class='line'>   <span class="kd">public</span> <span class="n">TransactionRepository</span> <span class="nf">transactionRepository</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>      <span class="k">return</span> <span class="k">new</span> <span class="nf">StubTransactionRepository</span><span class="o">();</span>
-</span><span class='line'>   <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>@EnableCaching - Enables support for bean methods with the @Cacheable annotation.</li>
-<li>@EnableWebMvc - Enables support for the powerful and flexible annotation-driven controllers with request handling methods. This feature detects beans with the @Controller annotation and binds methods with the @RequestMapping annotations to URLs.</li>
-</ul>
-
 
   
     <footer>
@@ -241,7 +223,7 @@ messageStyle: "none",
 
 		<li>
 			<h3>General Concepts</h3>
-			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/webprogramming/webconcepts.html">Web Concepts</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/webconcepts.html">Web Concepts</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
 		</li>
 
 		<h2>Non-Techninal</h2>

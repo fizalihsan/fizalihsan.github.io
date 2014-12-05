@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Big Data Big Data Concepts MapReduce (Programming Model) Big Data Ecology Apache Hadoop HDFS (Hadoop Distributed File System) Daemons MapReduce ( &hellip;">
+<meta name="description" content="Big Data Big Data Concepts MapReduce (Programming Model) Big Data Ecology HDFS (Hadoop Distributed File System) Daemons MapReduce (Hadoop &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -33,6 +33,7 @@
 <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
+
 <!-- mathjax config similar to math.stackexchange -->
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -47,8 +48,7 @@ messageStyle: "none",
 "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
 });
 </script>
-
-<script src="/mathjax/unpacked/MathJax.js"></script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
 
   
 
@@ -85,378 +85,316 @@ messageStyle: "none",
     
   </header>
   
-  <p><ul>
- <li><a href="#Big.Data.Concepts">Big Data Concepts</a></li>
- <li><a href="#MapReduce..Programming.Model.">MapReduce (Programming Model)</a></li>
- <li><a href="#Big.Data.Ecology">Big Data Ecology</a>
- <ul>
-  <li><a href="#Apache.Hadoop">Apache Hadoop</a>
-  <ul>
-   <li><a href="#HDFS..Hadoop.Distributed.File.System.">HDFS (Hadoop Distributed File System)</a></li>
-   <li><a href="#Daemons">Daemons</a></li>
-   <li><a href="#MapReduce..Hadoop.Implementation.">MapReduce (Hadoop Implementation)</a></li>
-  </ul>
+  <ul id="markdown-toc">
+  <li><a href="#big-data-concepts">Big Data Concepts</a></li>
+  <li><a href="#mapreduce-programming-model">MapReduce (Programming Model)</a></li>
+  <li><a href="#big-data-ecology">Big Data Ecology</a>    <ul>
+      <li><a href="#hdfs-hadoop-distributed-file-system">HDFS (Hadoop Distributed File System)</a></li>
+      <li><a href="#daemons">Daemons</a></li>
+      <li><a href="#mapreduce-hadoop-implementation">MapReduce (Hadoop Implementation)</a></li>
+      <li><a href="#hcatalog">HCatalog</a></li>
+      <li><a href="#hive">Hive</a></li>
+      <li><a href="#pig">Pig</a>        <ul>
+          <li><a href="#pig-latin">1. Pig Latin</a></li>
+          <li><a href="#grunt">2) Grunt</a></li>
+          <li><a href="#piggybank">3) Piggybank</a></li>
+        </ul>
+      </li>
+    </ul>
   </li>
-  <li><a href="#HCatalog">HCatalog</a></li>
-  <li><a href="#Hive">Hive</a></li>
-  <li><a href="#Pig">Pig</a>
-  <ul>
-   <li><a href="#L1..Pig.Latin">1. Pig Latin</a></li>
-   <li><a href="#L2..Grunt">2) Grunt</a></li>
-   <li><a href="#L3..Piggybank">3) Piggybank</a>
-</li>
-  </ul>
+  <li><a href="#clustering">Clustering</a></li>
+  <li><a href="#bibliography">Bibliography</a></li>
+</ul>
+
+<h1 id="big-data-concepts">Big Data Concepts</h1>
+
+<ul>
+  <li>Large data processing in low latency</li>
+  <li>Process unstructured data</li>
+  <li>3Vs of Big Data - Volume, Velocity and Variety</li>
+  <li><a href="http://fizalihsan.wordpress.com/2014/01/02/7vs-of-big-data-briefly/">7Vs of Big Data</a> - Volume, Velocity and Variety, Veracity, Variability, Visualization and Value</li>
+  <li>Why Big Data?
+    <ul>
+      <li>Old data mining systems were expensive, not easily scalable</li>
+    </ul>
   </li>
- </ul>
- </li>
- <li><a href="#Clustering">Clustering</a></li>
- <li><a href="#Bibliography">Bibliography</a></li>
+  <li>Scaling concepts
+    <ul>
+      <li>Scale Up
+        <ul>
+          <li>When volume of data increases, add computing power to a single server or move to a bigger server.</li>
+          <li>Pros: no change in architecture needed.</li>
+          <li>Cons: there are limitation on how big a single host can be.</li>
+        </ul>
+      </li>
+      <li>Scale Out
+        <ul>
+          <li>Processing is handled by more than 1 server. When data volume increases, add more servers to the farm.</li>
+          <li>Pros: Cheaper purchase costs than scale up, High availability</li>
+          <li>Cons: complex data processing stratagies involved.</li>
+          <li>Features: smart-software-dumb-hardware, move-processing-not-data.</li>
+          <li>Challenges: Bottlenecks, increased risk of failure</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Consistency - CAP theorem</li>
+  <li>Caching</li>
+  <li>Adhoc query</li>
+  <li>Sharding</li>
+  <li>Replication</li>
+  <li>Fault tolerance</li>
 </ul>
 
-</p>
+<h1 id="mapreduce-programming-model">MapReduce (Programming Model)</h1>
 
-<a name="Big.Data.Concepts"></a>
-<h1>Big Data Concepts</h1>
+<blockquote>
+  <p>Source: Hadoop Operations -OReilly</p>
+</blockquote>
 
 <ul>
-<li>Large data processing in low latency</li>
-<li>Process unstructured data</li>
-<li>3Vs of Big Data - Volume, Velocity and Variety</li>
-<li><a href="http://fizalihsan.wordpress.com/2014/01/02/7vs-of-big-data-briefly/">7Vs of Big Data</a> - Volume, Velocity and Variety, Veracity, Variability, Visualization and Value</li>
-<li>Why Big Data?
+  <li>Designed to simplify the development of large-scale, distributed, fault-tolerant data processing applications</li>
+  <li>In MapReduce, developers write jobs that consist primarily of a map function and a reduce function, and the framework handles the gory details of parallelizing the work, scheduling parts of the job on worker machines, monitoring for and recovering from failures, and so forth.</li>
+  <li>User-provided code is invoked by the framework rather than the other way around.</li>
+  <li>Features
+    <ul>
+      <li><strong>Simplicity of development</strong> - Developers use functional programming concepts to operate on one record at a time. Map functions operate on these records and produce intermediate key-value pairs. The reduce function then operates on the intermediate key-value pairs, processing all values that have the same key together and outputting the result. These primitives can be used to implement filtering, projection, grouping, aggregation, and other common data processing functions.</li>
+      <li><strong>Scalability</strong> - MapReduce is designed to be a ‘share-nothing’ system. Since tasks are independent, they can run in parallel in one or more machines.</li>
+      <li><strong>Automatic parallelization and distribution of work</strong> -  Developers focus on the map and reduce functions that process individual records (where “record” is an abstract concept—it could be a line of a file or a row from a relational database) in a dataset. The storage of the dataset is not prescribed by MapReduce, although it is extremely common, as we’ll see later, that files on a distributed filesystem are an excellent pairing. The framework is responsible for splitting a MapReduce job into tasks. Tasks are then executed on worker nodes or (less pleasantly) slaves.</li>
+      <li><strong>Fault Tolerance</strong> - MapReduce treats failure as a first-class citizen and supports reexecution of failed tasks on healthy worker nodes in the cluster. Should a worker node fail, all tasks are assumed to be lost, in which case they are simply rescheduled elsewhere.</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="big-data-ecology">Big Data Ecology</h1>
+<p>## Apache Hadoop</p>
 
 <ul>
-<li>Old data mining systems were expensive, not easily scalable</li>
+  <li>Hadoop is an open source platform that provides implementations of both the MapReduce and GFS (Google File System) technologies and allows the processing of very large data sets across clusters of low-cost commodity hardware.</li>
+  <li>The terms host or server refer to the physical hardware hosting Hadoop’s various components. The term node will refer to the software component comprising a part of the cluster.</li>
+  <li>Where Hadoop is not a good fit?
+    <ul>
+      <li>not well suited for low-latency queries like websites, real time systems, etc. (HBase on top of Hadoop serves low-latency queries)</li>
+      <li>smaller data sets.</li>
+    </ul>
+  </li>
+  <li>The term <em>Hadoop Streaming</em> refers to a mechanism allowing scripting languages to be used to write map and reduce tasks</li>
+  <li>Hadoop installation consists of four types of nodes—a NameNode, DataNodes, a JobTracker, and TaskTracker HDFS nodes (NameNode and DataNodes) provide a distributed filesystem where the JobTracker manages the jobs and TaskTrackers run tasks that perform parts of the job. Users submit MapReduce jobs to the JobTracker, which runs each of the Map and Reduce parts of the initial job in TaskTrackers, collects results, and finally emits the results.</li>
 </ul>
-</li>
-<li>Scaling concepts
+
+<h3 id="hdfs-hadoop-distributed-file-system">HDFS (Hadoop Distributed File System)</h3>
 
 <ul>
-<li>Scale Up
+  <li>is a distributed filesystem that can store very large data sets by scaling out across a cluster of hosts. It has specific design and performance characteristics; in particular, it is optimized for throughput instead of latency, and it achieves high availability through replication instead of redundancy.</li>
+  <li>similar to any other linux file system like ext3 - but cannot be mounted - and requires applications to be specially built for it.</li>
+  <li>Block size in old file systems are typically 4KB or 8KB of size. In HDFS, it is 64MB to 1GB.</li>
+  <li>Replicates each block to multiple machines (default 3) in the cluster. Should the number of copies of a block drop below the configured replication factor, the filesystem automatically makes a new copy from one of the remaining replicas. </li>
+  <li>Due to replicated data, failures are easily tolerated.</li>
+  <li>not a POSIX-compliant filesystem.</li>
+  <li>HDFS is optimized for throughput over latency; it is very efficient at streaming read requests for large files but poor at seek requests for many small ones.</li>
+</ul>
+
+<p><img class="right" src="/technology/hadoop-server-roles.png" /></p>
+
+<h3 id="daemons">Daemons</h3>
 
 <ul>
-<li>When volume of data increases, add computing power to a single server or move to a bigger server.</li>
-<li>Pros: no change in architecture needed.</li>
-<li>Cons: there are limitation on how big a single host can be.</li>
+  <li>Namenode (NN)
+    <ul>
+      <li>1 per cluster</li>
+      <li>Purpose: Stores filesystem metadata, stores file to block map, and provides a global picture of the filesystem</li>
+    </ul>
+  </li>
+  <li>Secondary namenode (SNN)
+    <ul>
+      <li>1 per cluster (better not to share machine with NameNode)</li>
+      <li>Purpose: Performs internal namenode transaction log checkpointing</li>
+    </ul>
+  </li>
+  <li>DataNode 
+    <ul>
+      <li>Many per cluster</li>
+      <li>Purpose: Stores block data (file contents)</li>
+    </ul>
+  </li>
+  <li>Each storage node runs a process called a DataNode that manages the blocks on that host, and these are coordinated by a master NameNode process running on a separate host.</li>
+  <li>Instead of handling disk failures by having physical redundancies in disk arrays or similar strategies, HDFS uses replication. Each of the blocks comprising a file is stored on multiple nodes within the cluster, and the HDFS NameNode constantly monitors reports sent by each DataNode to ensure that failures have not dropped any block below the desired replication factor. If this does happen, it schedules the addition of another copy within the cluster. (include archictecture diagram from internet)</li>
+  <li>The master (NameNode) monitors the health of the cluster and handle failures by moving data blocks around.</li>
+  <li>Processes on each server (DataNode) are responsible for performing work on the physical host, receiving instructions from the NameNode nd reporting health/progress status back to it.</li>
+  <li>NameNode Federation - Since NameNodes keep all the metadata in memory, there is inherent limitation up to which it can scale up. Scaling out with multiple namenodes is called namenode federation</li>
+  <li>HDFS interface
+    <ul>
+      <li>HDFS shell</li>
+      <li>Java API</li>
+      <li>REST API - WebHDFS, HttpFS(standalone RESTful HDFS proxy service) </li>
+    </ul>
+  </li>
 </ul>
-</li>
-<li>Scale Out
+
+<h3 id="mapreduce-hadoop-implementation">MapReduce (Hadoop Implementation)</h3>
 
 <ul>
-<li>Processing is handled by more than 1 server. When data volume increases, add more servers to the farm.</li>
-<li>Pros: Cheaper purchase costs than scale up, High availability</li>
-<li>Cons: complex data processing stratagies involved.</li>
-<li>Features: smart-software-dumb-hardware, move-processing-not-data.</li>
-<li>Challenges: Bottlenecks, increased risk of failure</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Consistency - CAP theorem</li>
-<li>Caching</li>
-<li>Adhoc query</li>
-<li>Sharding</li>
-<li>Replication</li>
-<li>Fault tolerance</li>
+  <li>is a data processing paradigm that takes a specification of how the data will be input and output from its two stages (called map and reduce) and then applies this across arbitrarily large data sets. MapReduce integrates tightly with HDFS, ensuring that wherever possible, MapReduce tasks run directly on the HDFS nodes that hold the required data.</li>
+  <li>Concepts
+    <ul>
+      <li>concepts of functions called map and reduce come straight from functional programming languages where they were applied to lists of input data.</li>
+      <li>divide and conquer”, where a single problem is broken into multiple individual subtasks. This approach becomes even more powerful when the subtasks are executed in parallel;</li>
+    </ul>
+  </li>
+  <li>Unlike traditional relational databases that require structured data with well-defined schemas, MapReduce and Hadoop work best on semi-structured or unstructured data.</li>
+  <li>Instead of data conforming to rigid schemas, the requirement is instead that the data be provided to the map function as a series of key value pairs. The output of the map function is a set of other key value pairs, and the reduce function performs aggregation to collect the final set of results.</li>
+  <li>Hadoop provides a standard specification (that is, interface) for the map and reduce functions, and implementations of these are often referred to as mappers and reducers. A typical MapReduce job will comprise of a number of mappers and reducers, and it is not unusual for several of these to be extremely simple. The developer focuses on expressing the transformation between source and result data sets, and the Hadoop framework manages all aspects of job execution, parallelization, and coordination.</li>
+  <li>The master (JobTracker) monitors the health of the cluster and handle failures by rescheduling failed work.</li>
+  <li>Processes on each server (TaskTracker) are responsible for performing work on the physical host, receiving instructions from the JobTracker, and reporting health/progress status back to it.</li>
 </ul>
 
-
-<a name="MapReduce..Programming.Model."></a>
-<h1>MapReduce (Programming Model)</h1>
-
-<blockquote><p>Source: Hadoop Operations -OReilly</p></blockquote>
+<h2 id="hcatalog">HCatalog</h2>
 
 <ul>
-<li>Designed to simplify the development of large-scale, distributed, fault-tolerant data processing applications</li>
-<li>In MapReduce, developers write jobs that consist primarily of a map function and a reduce function, and the framework handles the gory details of parallelizing the work, scheduling parts of the job on worker machines, monitoring for and recovering from failures, and so forth.</li>
-<li>User-provided code is invoked by the framework rather than the other way around.</li>
-<li>Features
+  <li>provides one consistent data model for various Hadoop tools.</li>
+  <li>provides a shared schema.</li>
+  <li>allows users to see when shared data is available.</li>
+  <li>decouples tools like Pig and Hive from data location, data format, etc.</li>
+  <li>Based currently on Hive’s metastore.</li>
+</ul>
+
+<h2 id="hive">Hive</h2>
 
 <ul>
-<li><strong>Simplicity of development</strong> - Developers use functional programming concepts to operate on one record at a time. Map functions operate on these records and produce intermediate key-value pairs. The reduce function then operates on the intermediate key-value pairs, processing all values that have the same key together and outputting the result. These primitives can be used to implement filtering, projection, grouping, aggregation, and other common data processing functions.</li>
-<li><strong>Scalability</strong> - MapReduce is designed to be a &lsquo;share-nothing&rsquo; system. Since tasks are independent, they can run in parallel in one or more machines.</li>
-<li><strong>Automatic parallelization and distribution of work</strong> -  Developers focus on the map and reduce functions that process individual records (where “record” is an abstract concept—it could be a line of a file or a row from a relational database) in a dataset. The storage of the dataset is not prescribed by MapReduce, although it is extremely common, as we’ll see later, that files on a distributed filesystem are an excellent pairing. The framework is responsible for splitting a MapReduce job into tasks. Tasks are then executed on worker nodes or (less pleasantly) slaves.</li>
-<li><strong>Fault Tolerance</strong> - MapReduce treats failure as a first-class citizen and supports reexecution of failed tasks on healthy worker nodes in the cluster. Should a worker node fail, all tasks are assumed to be lost, in which case they are simply rescheduled elsewhere.</li>
+  <li>Hive is a data warehouse system layer build on Hadoop.</li>
+  <li>Allows you to define a structure for your unstructured Big Data.</li>
+  <li>Simplifies analysis and queries with an SQL-like scripting language called HiveQL for adhoc querying on HDFS data.</li>
+  <li>Hive is 
+    <ul>
+      <li>not a relational database. It uses a database to store metadata, but the data that Hive processes is stored in HDFS.</li>
+      <li>not designed for online transaction processing. not suited for real-time queries and row-level updates. </li>
+    </ul>
+  </li>
+  <li>Components
+    <ul>
+      <li>CLI, Web interface (Beeswax?), Micrsoft HDInsight</li>
+    </ul>
+  </li>
+  <li>When to use Hive? 
+    <ul>
+      <li>for adhoc querying; for analysts with SQL familiarity</li>
+    </ul>
+  </li>
+  <li>HiveQL - SQL-like syntax. based on SQL-92 specification.</li>
+  <li>Hive Table
+    <ul>
+      <li>A Hive Table consists of (1) Data: typically a file or group of files in HDFS (2) Schema: in the form of metadata stored in a database</li>
+      <li>Schema and data are separate</li>
+      <li>A schema can be defined for existing data; Data can be added/removed independently; Before querying data in HDFS using Hive, a schema needs to be defined.</li>
+    </ul>
+  </li>
 </ul>
-</li>
+
+<h2 id="pig">Pig</h2>
+
+<p>3 components of Pig: </p>
+
+<h3 id="pig-latin">1. Pig Latin</h3>
+<ul>
+  <li>High level scripting language to describe data flow - statements translate into a series of MapReduce jobs - can invoke Java, JRuby or Jython programs and vice versa - User defined functions (UDF) can be written in Java and uploaded as jar.</li>
+  <li>Sample Pig Latin script
+&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span></figure></notextile></li>
 </ul>
-
-
-<a name="Big.Data.Ecology"></a>
-<h1>Big Data Ecology</h1>
-
-<a name="Apache.Hadoop"></a>
-<h2>Apache Hadoop</h2>
+<p>&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class=""><span class="line"> a = LOAD 'nyse_stocks' using org.apache.hcatalog.pig.HCatLoader();
+</span><span class="line"> b = filter a by stock_symbol == 'IBM';
+</span><span class="line"> c = group b all;
+</span><span class="line"> d = foreach c generate AVG(b.stock_volume);
+</span><span class="line"> dump d;</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;</p>
 
 <ul>
-<li>Hadoop is an open source platform that provides implementations of both the MapReduce and GFS (Google File System) technologies and allows the processing of very large data sets across clusters of low-cost commodity hardware.</li>
-<li>The terms host or server refer to the physical hardware hosting Hadoop&rsquo;s various components. The term node will refer to the software component comprising a part of the cluster.</li>
-<li>Where Hadoop is not a good fit?
-
-<ul>
-<li>not well suited for low-latency queries like websites, real time systems, etc. (HBase on top of Hadoop serves low-latency queries)</li>
-<li>smaller data sets.</li>
+  <li>Pig Latin script describes a DAG (directed acyclic graph) - http://vkalavri.com/tag/apachepig/</li>
+  <li>Pig script is not converted to a MapReduce job unless a DUMP/STORE command is invoked.
+&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span></figure></notextile></li>
 </ul>
-</li>
-<li>The term <em>Hadoop Streaming</em> refers to a mechanism allowing scripting languages to be used to write map and reduce tasks</li>
-<li>Hadoop installation consists of four types of nodes—a NameNode, DataNodes, a JobTracker, and TaskTracker HDFS nodes (NameNode and DataNodes) provide a distributed filesystem where the JobTracker manages the jobs and TaskTrackers run tasks that perform parts of the job. Users submit MapReduce jobs to the JobTracker, which runs each of the Map and Reduce parts of the initial job in TaskTrackers, collects results, and finally emits the results.</li>
-</ul>
+<p>&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class=""><span class="line"> runs = foreach batting generate $0 as playerID, $1 as year, $8 as runs;
+</span><span class="line"> (playerID,yearID,R)
+</span><span class="line"> (john,2008,10)
+</span><span class="line"> (john,2009,22)
+</span><span class="line"> (john,2010,0)
+</span><span class="line"> (adam,2008,58)
+</span><span class="line"> (adam,2009,105)
+</span><span class="line"> (adam,2010,106)
+</span><span class="line"> (adam,2011,118)
+</span><span class="line">
+</span><span class="line"> grp_data = group runs by (year);
+</span><span class="line"> (2008, [(john,2008,10), (adam,2008,58)])
+</span><span class="line"> (2009, [(john,2009,22), (adam,2009,105)])
+</span><span class="line"> (2010, [(john,2010,0),  (adam,2010,106)])
+</span><span class="line"> (2011, [(adam,2011,118)])</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;</p>
 
-
-<a name="HDFS..Hadoop.Distributed.File.System."></a>
-<h3>HDFS (Hadoop Distributed File System)</h3>
-
-<ul>
-<li>is a distributed filesystem that can store very large data sets by scaling out across a cluster of hosts. It has specific design and performance characteristics; in particular, it is optimized for throughput instead of latency, and it achieves high availability through replication instead of redundancy.</li>
-<li>similar to any other linux file system like ext3 - but cannot be mounted - and requires applications to be specially built for it.</li>
-<li>Block size in old file systems are typically 4KB or 8KB of size. In HDFS, it is 64MB to 1GB.</li>
-<li>Replicates each block to multiple machines (default 3) in the cluster. Should the number of copies of a block drop below the configured replication factor, the filesystem automatically makes a new copy from one of the remaining replicas.</li>
-<li>Due to replicated data, failures are easily tolerated.</li>
-<li>not a POSIX-compliant filesystem.</li>
-<li>HDFS is optimized for throughput over latency; it is very efficient at streaming read requests for large files but poor at seek requests for many small ones.</li>
-</ul>
-
-
-<p><img class="right" src="/technology/hadoop-server-roles.png"></p>
-
-<a name="Daemons"></a>
-<h3>Daemons</h3>
-
-<ul>
-<li>Namenode (NN)
-
-<ul>
-<li>1 per cluster</li>
-<li>Purpose: Stores filesystem metadata, stores file to block map, and provides a global picture of the filesystem</li>
-</ul>
-</li>
-<li>Secondary namenode (SNN)
-
-<ul>
-<li>1 per cluster (better not to share machine with NameNode)</li>
-<li>Purpose: Performs internal namenode transaction log checkpointing</li>
-</ul>
-</li>
-<li>DataNode
-
-<ul>
-<li>Many per cluster</li>
-<li>Purpose: Stores block data (file contents)</li>
-</ul>
-</li>
-<li>Each storage node runs a process called a DataNode that manages the blocks on that host, and these are coordinated by a master NameNode process running on a separate host.</li>
-<li>Instead of handling disk failures by having physical redundancies in disk arrays or similar strategies, HDFS uses replication. Each of the blocks comprising a file is stored on multiple nodes within the cluster, and the HDFS NameNode constantly monitors reports sent by each DataNode to ensure that failures have not dropped any block below the desired replication factor. If this does happen, it schedules the addition of another copy within the cluster. (include archictecture diagram from internet)</li>
-<li>The master (NameNode) monitors the health of the cluster and handle failures by moving data blocks around.</li>
-<li>Processes on each server (DataNode) are responsible for performing work on the physical host, receiving instructions from the NameNode nd reporting health/progress status back to it.</li>
-<li>NameNode Federation - Since NameNodes keep all the metadata in memory, there is inherent limitation up to which it can scale up. Scaling out with multiple namenodes is called namenode federation</li>
-<li>HDFS interface
-
-<ul>
-<li>HDFS shell</li>
-<li>Java API</li>
-<li>REST API - WebHDFS, HttpFS(standalone RESTful HDFS proxy service)</li>
-</ul>
-</li>
-</ul>
-
-
-<a name="MapReduce..Hadoop.Implementation."></a>
-<h3>MapReduce (Hadoop Implementation)</h3>
-
-<ul>
-<li>is a data processing paradigm that takes a specification of how the data will be input and output from its two stages (called map and reduce) and then applies this across arbitrarily large data sets. MapReduce integrates tightly with HDFS, ensuring that wherever possible, MapReduce tasks run directly on the HDFS nodes that hold the required data.</li>
-<li>Concepts
-
-<ul>
-<li>concepts of functions called map and reduce come straight from functional programming languages where they were applied to lists of input data.</li>
-<li>divide and conquer&#8221;, where a single problem is broken into multiple individual subtasks. This approach becomes even more powerful when the subtasks are executed in parallel;</li>
-</ul>
-</li>
-<li>Unlike traditional relational databases that require structured data with well-defined schemas, MapReduce and Hadoop work best on semi-structured or unstructured data.</li>
-<li>Instead of data conforming to rigid schemas, the requirement is instead that the data be provided to the map function as a series of key value pairs. The output of the map function is a set of other key value pairs, and the reduce function performs aggregation to collect the final set of results.</li>
-<li>Hadoop provides a standard specification (that is, interface) for the map and reduce functions, and implementations of these are often referred to as mappers and reducers. A typical MapReduce job will comprise of a number of mappers and reducers, and it is not unusual for several of these to be extremely simple. The developer focuses on expressing the transformation between source and result data sets, and the Hadoop framework manages all aspects of job execution, parallelization, and coordination.</li>
-<li>The master (JobTracker) monitors the health of the cluster and handle failures by rescheduling failed work.</li>
-<li>Processes on each server (TaskTracker) are responsible for performing work on the physical host, receiving instructions from the JobTracker, and reporting health/progress status back to it.</li>
-</ul>
-
-
-<a name="HCatalog"></a>
-<h2>HCatalog</h2>
-
-<ul>
-<li>provides one consistent data model for various Hadoop tools.</li>
-<li>provides a shared schema.</li>
-<li>allows users to see when shared data is available.</li>
-<li>decouples tools like Pig and Hive from data location, data format, etc.</li>
-<li>Based currently on Hive&rsquo;s metastore.</li>
-</ul>
-
-
-<a name="Hive"></a>
-<h2>Hive</h2>
-
-<ul>
-<li>Hive is a data warehouse system layer build on Hadoop.</li>
-<li>Allows you to define a structure for your unstructured Big Data.</li>
-<li>Simplifies analysis and queries with an SQL-like scripting language called HiveQL for adhoc querying on HDFS data.</li>
-<li>Hive is
-
-<ul>
-<li>not a relational database. It uses a database to store metadata, but the data that Hive processes is stored in HDFS.</li>
-<li>not designed for online transaction processing. not suited for real-time queries and row-level updates.</li>
-</ul>
-</li>
-<li>Components
-
-<ul>
-<li>CLI, Web interface (Beeswax?), Micrsoft HDInsight</li>
-</ul>
-</li>
-<li>When to use Hive?
-
-<ul>
-<li>for adhoc querying; for analysts with SQL familiarity</li>
-</ul>
-</li>
-<li>HiveQL - SQL-like syntax. based on SQL-92 specification.</li>
-<li>Hive Table
-
-<ul>
-<li>A Hive Table consists of (1) Data: typically a file or group of files in HDFS (2) Schema: in the form of metadata stored in a database</li>
-<li>Schema and data are separate</li>
-<li>A schema can be defined for existing data; Data can be added/removed independently; Before querying data in HDFS using Hive, a schema needs to be defined.</li>
-</ul>
-</li>
-</ul>
-
-
-<a name="Pig"></a>
-<h2>Pig</h2>
-
-<p>3 components of Pig:</p>
-
-<a name="L1..Pig.Latin"></a>
-<h3>1. Pig Latin</h3>
-
-<ul>
-<li>High level scripting language to describe data flow - statements translate into a series of MapReduce jobs - can invoke Java, JRuby or Jython programs and vice versa - User defined functions (UDF) can be written in Java and uploaded as jar.</li>
-<li>Sample Pig Latin script</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'> a = LOAD 'nyse_stocks' using org.apache.hcatalog.pig.HCatLoader();
-</span><span class='line'> b = filter a by stock_symbol == 'IBM';
-</span><span class='line'> c = group b all;
-</span><span class='line'> d = foreach c generate AVG(b.stock_volume);
-</span><span class='line'> dump d;</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>Pig Latin script describes a DAG (directed acyclic graph) - <a href="http://vkalavri.com/tag/apachepig/">http://vkalavri.com/tag/apachepig/</a></li>
-<li>Pig script is not converted to a MapReduce job unless a DUMP/STORE command is invoked.</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'> runs = foreach batting generate $0 as playerID, $1 as year, $8 as runs;
-</span><span class='line'> (playerID,yearID,R)
-</span><span class='line'> (john,2008,10)
-</span><span class='line'> (john,2009,22)
-</span><span class='line'> (john,2010,0)
-</span><span class='line'> (adam,2008,58)
-</span><span class='line'> (adam,2009,105)
-</span><span class='line'> (adam,2010,106)
-</span><span class='line'> (adam,2011,118)
-</span><span class='line'>
-</span><span class='line'> grp_data = group runs by (year);
-</span><span class='line'> (2008, [(john,2008,10), (adam,2008,58)])
-</span><span class='line'> (2009, [(john,2009,22), (adam,2009,105)])
-</span><span class='line'> (2010, [(john,2010,0),  (adam,2010,106)])
-</span><span class='line'> (2011, [(adam,2011,118)])</span></code></pre></td></tr></table></div></figure>
-
-
-<a name="L2..Grunt"></a>
-<h3>2) Grunt</h3>
-
+<h3 id="grunt">2) Grunt</h3>
 <p>Interactive command-line shell</p>
 
-<a name="L3..Piggybank"></a>
-<h3>3) Piggybank</h3>
-
+<h3 id="piggybank">3) Piggybank</h3>
 <ul>
-<li>A repository to store the UDFs</li>
-<li>When to use Pig?
-
-<ul>
-<li>for ETL purposes; for preparing data for easier analysis; when you have a long series of steps to perform.</li>
-</ul>
-</li>
-<li>Data Model difference b/w Pig and Hive
-
-<ul>
-<li>In Pig, data objects exist and are operated on in the script. They are deleted after the script completes. They can be stored explicitly for later use.</li>
-<li>In Hive, data objects exist in Hadoop data store. After every line of execution, results are stored in Hadoop which can be useful for debugging.</li>
-</ul>
-</li>
+  <li>A repository to store the UDFs</li>
+  <li>When to use Pig?
+    <ul>
+      <li>for ETL purposes; for preparing data for easier analysis; when you have a long series of steps to perform.</li>
+    </ul>
+  </li>
+  <li>Data Model difference b/w Pig and Hive
+    <ul>
+      <li>In Pig, data objects exist and are operated on in the script. They are deleted after the script completes. They can be stored explicitly for later use.</li>
+      <li>In Hive, data objects exist in Hadoop data store. After every line of execution, results are stored in Hadoop which can be useful for debugging.</li>
+    </ul>
+  </li>
 </ul>
 
-
-<a name="Clustering"></a>
-<h1>Clustering</h1>
+<h1 id="clustering">Clustering</h1>
 
 <ul>
-<li>What is Clustering</li>
-<li>How clustering works</li>
-<li>Why clustering</li>
-<li>Terms to know</li>
-<li>Failover</li>
-<li>Replication</li>
-<li>Scalability vs. High availability</li>
-<li>Physical node vs. virtual node</li>
-<li>Quorum</li>
-<li>Load balancing</li>
+  <li>What is Clustering</li>
+  <li>How clustering works</li>
+  <li>Why clustering</li>
+  <li>Terms to know</li>
+  <li>Failover</li>
+  <li>Replication</li>
+  <li>Scalability vs. High availability</li>
+  <li>Physical node vs. virtual node</li>
+  <li>Quorum</li>
+  <li>Load balancing</li>
 </ul>
 
-
-<a name="Bibliography"></a>
-<h1>Bibliography</h1>
+<h1 id="bibliography">Bibliography</h1>
 
 <ul>
-<li>Hadoop
-
-<ul>
-<li>Hadoop Beginner&rsquo;s Guide</li>
+  <li>Hadoop
+    <ul>
+      <li>Hadoop Beginner’s Guide</li>
+    </ul>
+  </li>
+  <li>Clustering
+    <ul>
+      <li>http://publib.boulder.ibm.com/infocenter/iseries/v5r4/index.jsp?topic=%2Frzaig%2Frzaigconceptsbasiccluster.htm</li>
+      <li>http://www.slideshare.net/yashamwan/cluster-16097908?from_search=9</li>
+      <li>http://www.slideshare.net/itsec/clustering-and-high-availability</li>
+    </ul>
+  </li>
 </ul>
-</li>
-<li>Clustering
-
-<ul>
-<li><a href="http://publib.boulder.ibm.com/infocenter/iseries/v5r4/index.jsp?topic=%2Frzaig%2Frzaigconceptsbasiccluster.htm">http://publib.boulder.ibm.com/infocenter/iseries/v5r4/index.jsp?topic=%2Frzaig%2Frzaigconceptsbasiccluster.htm</a></li>
-<li><a href="http://www.slideshare.net/yashamwan/cluster-16097908?from_search=9">http://www.slideshare.net/yashamwan/cluster-16097908?from_search=9</a></li>
-<li><a href="http://www.slideshare.net/itsec/clustering-and-high-availability">http://www.slideshare.net/itsec/clustering-and-high-availability</a></li>
-</ul>
-</li>
-</ul>
-
 
   
     <footer>
@@ -512,7 +450,7 @@ messageStyle: "none",
 
 		<li>
 			<h3>General Concepts</h3>
-			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/webprogramming/webconcepts.html">Web Concepts</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/webconcepts.html">Web Concepts</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
 		</li>
 
 		<h2>Non-Techninal</h2>

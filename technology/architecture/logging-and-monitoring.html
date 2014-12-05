@@ -33,6 +33,7 @@
 <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
+
 <!-- mathjax config similar to math.stackexchange -->
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -47,8 +48,7 @@ messageStyle: "none",
 "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
 });
 </script>
-
-<script src="/mathjax/unpacked/MathJax.js"></script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
 
   
 
@@ -85,314 +85,271 @@ messageStyle: "none",
     
   </header>
   
-  <p><ul>
- <li><a href="#Monitoring.Components">Monitoring Components</a></li>
- <li><a href="#Monitoring.Tools">Monitoring Tools</a>
- <ul>
-  <li><a href="#Splunk">Splunk</a>
-  <ul>
-   <li><a href="#Components">Components</a></li>
-   <li><a href="#Queries">Queries</a></li>
-   <li><a href="#Analytics">Analytics</a>
-</li>
-  </ul>
+  <ul id="markdown-toc">
+  <li><a href="#monitoring-components">Monitoring Components</a></li>
+  <li><a href="#monitoring-tools">Monitoring Tools</a>    <ul>
+      <li><a href="#splunk">Splunk</a>        <ul>
+          <li><a href="#components">Components</a></li>
+          <li><a href="#queries">Queries</a></li>
+          <li><a href="#analytics">Analytics</a></li>
+        </ul>
+      </li>
+    </ul>
   </li>
- </ul>
- </li>
- <li><a href="#Java.Logging">Java Logging</a>
- <ul>
-  <li><a href="#slf4j">slf4j</a></li>
-  <li><a href="#logback">logback</a></li>
- </ul>
- </li>
+  <li><a href="#java-logging">Java Logging</a>    <ul>
+      <li><a href="#slf4j">slf4j</a></li>
+      <li><a href="#logback">logback</a></li>
+    </ul>
+  </li>
 </ul>
-
-</p>
 
 <ul>
-<li>Metric identity name: k-tuple</li>
-<li>Metrics values
-
-<ul>
-<li>counters, gauges, percentiles, nominal, ordinal, interval, ratio, derived</li>
-</ul>
-</li>
-<li>How can we monitor?
-
-<ul>
-<li>Resolution: how frequent to collect the metrics? every 6-10secs?</li>
-<li>Latency: how long before we act on them?</li>
-<li>Diversity: are we collecting different metrics?</li>
-</ul>
-</li>
+  <li>Metric identity name: k-tuple</li>
+  <li>Metrics values
+    <ul>
+      <li>counters, gauges, percentiles, nominal, ordinal, interval, ratio, derived</li>
+    </ul>
+  </li>
+  <li>How can we monitor?
+    <ul>
+      <li>Resolution: how frequent to collect the metrics? every 6-10secs?</li>
+      <li>Latency: how long before we act on them?</li>
+      <li>Diversity: are we collecting different metrics?</li>
+    </ul>
+  </li>
 </ul>
 
+<h1 id="monitoring-components">Monitoring Components</h1>
 
-<a name="Monitoring.Components"></a>
-<h1>Monitoring Components</h1>
-
-<p><a href="https://www.usenix.org/sites/default/files/conference/protected-files/dickson.pdf">https://www.usenix.org/sites/default/files/conference/protected-files/dickson.pdf</a></p>
+<p>https://www.usenix.org/sites/default/files/conference/protected-files/dickson.pdf </p>
 
 <ol>
-<li>Sensing/Measurement: Creation of metrics</li>
-<li>various systems gather data at various speeds.</li>
-<li>various systems have various concepts of a unit of a metric identity</li>
-<li>no consistent interface</li>
-<li>e.g., <code>top</code>, <code>np</code>, <code>netstats</code>, <code>sar</code>, <code>nagios</code>.</li>
-<li>Storage</li>
-<li>Collection</li>
-<li>Analysis</li>
-<li>Alerting/Escalation</li>
-<li>Visualization - should be actionable items. Avoid pie charts for disk usage metrics. Think of visual graphs which can predict the disk size after 6 months.</li>
-<li>Configuration</li>
-<li>Configuration and Storage are cross-cutting concerns.</li>
+  <li>Sensing/Measurement: Creation of metrics
+    <ul>
+      <li>various systems gather data at various speeds.</li>
+      <li>various systems have various concepts of a unit of a metric identity</li>
+      <li>no consistent interface</li>
+      <li>e.g., <code>top</code>, <code>np</code>, <code>netstats</code>, <code>sar</code>, <code>nagios</code>.</li>
+      <li>Storage</li>
+      <li>Collection</li>
+      <li>Analysis</li>
+      <li>Alerting/Escalation</li>
+      <li>Visualization - should be actionable items. Avoid pie charts for disk usage metrics. Think of visual graphs which can predict the disk size after 6 months.</li>
+      <li>Configuration</li>
+      <li>Configuration and Storage are cross-cutting concerns.</li>
+    </ul>
+  </li>
 </ol>
 
-
-<a name="Monitoring.Tools"></a>
-<h1>Monitoring Tools</h1>
+<h1 id="monitoring-tools">Monitoring Tools</h1>
 
 <ol>
-<li>sar</li>
-<li>trace</li>
-<li><a href="http://oss.oetiker.ch/mrtg/">MRTG</a>
-
-<ul>
-<li>acronym for Multi Router Traffic Grapher</li>
-<li>free software for monitoring and measuring the traffic load on network links.</li>
-<li>gets its data via SNMP agents every few minutes</li>
-<li>results are plotted in graphs</li>
-<li>has alerting mechanism</li>
-</ul>
-</li>
-<li><a href="http://oss.oetiker.ch/rrdtool/">RRDTool</a>
-
-<ul>
-<li>acronym for Round-Robin Database Tool</li>
-<li>aims to handle time-series data like n/w bandwidth, CPU load, etc.</li>
-<li>The data are stored in a round-robin circular buffer/database, thus the system storage footprint remains constant over time.</li>
-<li>It has tools to display the data in graphical format.</li>
-</ul>
-</li>
-<li><a href="http://www.nagios.com/">Nagios</a></li>
-<li><a href="http://ganglia.info/">Ganglia</a>
-
-<ul>
-<li>a scalable distributed system monitor tool for high performance computing systems such as clusters and grids.</li>
-<li>typically used with Nagios.</li>
-</ul>
-</li>
-<li><a href="http://www.cacti.net/">Cacti</a> (mrtg++)
-
-<ul>
-<li>Network Graphing solution designed to harness the power of RRDTool&rsquo;s storage and graph functionality</li>
-</ul>
-</li>
-<li><a href="http://www.sensuapp.org/">Sensu</a>
-
-<ul>
-<li>open source monitoring framework</li>
-</ul>
-</li>
-<li>LogStash
-
-<ul>
-<li>Redis for storage</li>
-<li>RabbitMQ, grok</li>
-<li>Typical implementation: logstash + redis + elasticsearch</li>
-</ul>
-</li>
-<li>Splunk</li>
-<li><a href="http://www.fluentd.org/">FluentD</a>
-
-<ul>
-<li>an open-source tool to collect events and logs and store as JSON</li>
-<li>built on CRuby.</li>
-<li>plugins enables to store the massive data for Log Search (like ElasticSearch), Analytics and Archiving (MongoDB, S3, Hadoop)</li>
-</ul>
-</li>
-<li><a href="http://www.graylog2.com/">GrayLog2</a>
-
-<ul>
-<li>an open source data analytics system</li>
-<li>search logs, create charts, create alerts</li>
-<li>leverages Java and ElasticSearch. Communication via REST API</li>
-</ul>
-</li>
-<li><a href="http://opentsdb.net/">OpenTSDB</a>
-
-<ul>
-<li>pure storage solution</li>
-<li>a free distributed time-series database written on top of HBase.</li>
-<li>was written to store, index and serve metrics collected at a large scale, and make it easily accessible and graphable.</li>
-</ul>
-</li>
-<li>D3.js - Pure visualization solution</li>
-<li><a href="https://github.com/etsy/statsd/">Statsd</a>
-
-<ul>
-<li>listens to anything and everything</li>
-<li>written in node.js. There are alternative implementations in groovy, C, etc.</li>
-<li>listens to statistics (counters and timers) and sends aggregates to backend services like Graphite</li>
-</ul>
-</li>
-<li><a href="http://graphite.wikidot.com/">Graphite</a>
-
-<ul>
-<li>this open-source tool written on Python does 2 things: store numeric time-series data and render graphs of this data on demand</li>
-<li>does not collect data.</li>
-<li>3 components
-
-<ul>
-<li>carbon - a <a href="https://twistedmatrix.com/trac/">Twisted</a> daemon that listens for time-series data</li>
-<li>whisper - a simple database library for storing time-series data</li>
-<li>graphite-webapp - A <a href="https://www.djangoproject.com/">Django</a> webapp that renders graphs on-demand using <a href="http://www.cairographics.com/">Cairo</a>.</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="http://www.shinken-monitoring.org/">Shinken</a>
-
-<ul>
-<li>open-source Nagios like tool, redesigned and rewritten from scratch.</li>
-<li>Nagios + Graphite + Configuration</li>
-</ul>
-</li>
-<li><a href="http://www.elasticsearch.org/overview/kibana/">Kibana</a>
-
-<ul>
-<li>web interface for viewing logstash records stored in elasticsearch</li>
-</ul>
-</li>
-<li><a href="http://www.elasticsearch.org/">ElasticSearch</a></li>
-<li>Zenoss</li>
-<li>Shippers
-
-<ul>
-<li>lumberjack</li>
-<li>beaver</li>
-<li>syslog</li>
-<li>woodchuck</li>
-</ul>
-</li>
-<li>AppDynamics</li>
-<li>New Relic</li>
-<li>Other tools
-
-<ul>
-<li>monigusto</li>
-<li>collectd</li>
-<li>jmxtrans</li>
-<li>tasseo</li>
-<li>gdash</li>
-<li>librato</li>
-</ul>
-</li>
+  <li>sar
+    <ul>
+      <li>trace</li>
+      <li><a href="http://oss.oetiker.ch/mrtg/">MRTG</a>
+        <ul>
+          <li>acronym for Multi Router Traffic Grapher</li>
+          <li>free software for monitoring and measuring the traffic load on network links.</li>
+          <li>gets its data via SNMP agents every few minutes</li>
+          <li>results are plotted in graphs</li>
+          <li>has alerting mechanism</li>
+        </ul>
+      </li>
+      <li><a href="http://oss.oetiker.ch/rrdtool/">RRDTool</a>
+        <ul>
+          <li>acronym for Round-Robin Database Tool </li>
+          <li>aims to handle time-series data like n/w bandwidth, CPU load, etc. </li>
+          <li>The data are stored in a round-robin circular buffer/database, thus the system storage footprint remains constant over time. </li>
+          <li>It has tools to display the data in graphical format.</li>
+        </ul>
+      </li>
+      <li><a href="http://www.nagios.com/">Nagios</a></li>
+      <li><a href="http://ganglia.info/">Ganglia</a>
+        <ul>
+          <li>a scalable distributed system monitor tool for high performance computing systems such as clusters and grids.</li>
+          <li>typically used with Nagios. </li>
+        </ul>
+      </li>
+      <li><a href="http://www.cacti.net/">Cacti</a> (mrtg++) 
+        <ul>
+          <li>Network Graphing solution designed to harness the power of RRDTool’s storage and graph functionality</li>
+        </ul>
+      </li>
+      <li><a href="http://www.sensuapp.org/">Sensu</a> 
+        <ul>
+          <li>open source monitoring framework</li>
+        </ul>
+      </li>
+      <li>LogStash
+        <ul>
+          <li>Redis for storage</li>
+          <li>RabbitMQ, grok</li>
+          <li>Typical implementation: logstash + redis + elasticsearch</li>
+        </ul>
+      </li>
+      <li>Splunk</li>
+      <li><a href="http://www.fluentd.org/">FluentD</a>
+        <ul>
+          <li>an open-source tool to collect events and logs and store as JSON</li>
+          <li>built on CRuby.</li>
+          <li>plugins enables to store the massive data for Log Search (like ElasticSearch), Analytics and Archiving (MongoDB, S3, Hadoop)</li>
+        </ul>
+      </li>
+      <li><a href="http://www.graylog2.com/">GrayLog2</a>
+        <ul>
+          <li>an open source data analytics system </li>
+          <li>search logs, create charts, create alerts</li>
+          <li>leverages Java and ElasticSearch. Communication via REST API</li>
+        </ul>
+      </li>
+      <li><a href="http://opentsdb.net/">OpenTSDB</a>
+        <ul>
+          <li>pure storage solution</li>
+          <li>a free distributed time-series database written on top of HBase.</li>
+          <li>was written to store, index and serve metrics collected at a large scale, and make it easily accessible and graphable.</li>
+        </ul>
+      </li>
+      <li>D3.js - Pure visualization solution</li>
+      <li><a href="https://github.com/etsy/statsd/">Statsd</a>
+        <ul>
+          <li>listens to anything and everything</li>
+          <li>written in node.js. There are alternative implementations in groovy, C, etc.</li>
+          <li>listens to statistics (counters and timers) and sends aggregates to backend services like Graphite</li>
+        </ul>
+      </li>
+      <li><a href="http://graphite.wikidot.com/">Graphite</a>
+        <ul>
+          <li>this open-source tool written on Python does 2 things: store numeric time-series data and render graphs of this data on demand</li>
+          <li>does not collect data.</li>
+          <li>3 components</li>
+        </ul>
+      </li>
+      <li>carbon - a <a href="https://twistedmatrix.com/trac/">Twisted</a> daemon that listens for time-series data</li>
+      <li>whisper - a simple database library for storing time-series data</li>
+      <li>graphite-webapp - A <a href="https://www.djangoproject.com/">Django</a> webapp that renders graphs on-demand using <a href="http://www.cairographics.com/">Cairo</a>.</li>
+      <li><a href="http://www.shinken-monitoring.org/">Shinken</a>
+        <ul>
+          <li>open-source Nagios like tool, redesigned and rewritten from scratch.</li>
+          <li>Nagios + Graphite + Configuration</li>
+        </ul>
+      </li>
+      <li><a href="http://www.elasticsearch.org/overview/kibana/">Kibana</a>
+        <ul>
+          <li>web interface for viewing logstash records stored in elasticsearch</li>
+        </ul>
+      </li>
+      <li><a href="http://www.elasticsearch.org/">ElasticSearch</a></li>
+      <li>Zenoss</li>
+      <li>Shippers
+        <ul>
+          <li>lumberjack</li>
+          <li>beaver</li>
+          <li>syslog</li>
+          <li>woodchuck</li>
+        </ul>
+      </li>
+      <li>AppDynamics</li>
+      <li>New Relic</li>
+      <li>Other tools
+        <ul>
+          <li>monigusto</li>
+          <li>collectd</li>
+          <li>jmxtrans</li>
+          <li>tasseo</li>
+          <li>gdash</li>
+          <li>librato</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
 </ol>
 
-
-<a name="Splunk"></a>
-<h2>Splunk</h2>
+<h2 id="splunk">Splunk</h2>
 
 <ul>
-<li>is a time-series indexer - a product that takes care of the three Vs very well.</li>
-<li>3 main functionalities
-
-<ul>
-<li><strong>Data collection</strong>
-
-<ul>
-<li>from static source</li>
-<li>from real-time source</li>
-<li>from log files, rolling log files</li>
-<li>from databases</li>
-</ul>
-</li>
-<li>from script results</li>
-<li><strong>Data indexing</strong> - index of above data</li>
-<li><strong>Search and Analysis</strong> - Using Splunk Processing Language to search and extract results in the form of charts, events, etc.</li>
-</ul>
-</li>
-<li>Splunk breaks down log file entries into different events based on the associated timestamp. If no timestamp is found, then all the lines in the log file is considered as a single event.</li>
+  <li>is a time-series indexer - a product that takes care of the three Vs very well.</li>
+  <li>3 main functionalities
+    <ul>
+      <li><strong>Data collection</strong> 
+        <ul>
+          <li>from static source </li>
+          <li>from real-time source</li>
+          <li>from log files, rolling log files</li>
+          <li>from databases</li>
+        </ul>
+      </li>
+      <li>from script results</li>
+      <li><strong>Data indexing</strong> - index of above data</li>
+      <li><strong>Search and Analysis</strong> - Using Splunk Processing Language to search and extract results in the form of charts, events, etc.</li>
+    </ul>
+  </li>
+  <li>Splunk breaks down log file entries into different events based on the associated timestamp. If no timestamp is found, then all the lines in the log file is considered as a single event.</li>
 </ul>
 
-
-<a name="Components"></a>
-<h3>Components</h3>
+<h3 id="components">Components</h3>
 
 <ol>
-<li>Search Head</li>
-<li>Forwarders</li>
+  <li>Search Head</li>
+  <li>Forwarders</li>
 </ol>
 
-
-<a name="Queries"></a>
-<h3>Queries</h3>
+<h3 id="queries">Queries</h3>
 
 <ul>
-<li>Top browsers: <code>sourcetype="access_combined_wcookie" | top useragent</code></li>
-<li>Bottom 3 browsers: <code>sourcetype=access_combined_wcookie | rare useragent limit=3</code></li>
-<li>Top 5 IP address: <code>sourcetype="access_combined_wcookie" | top clientip limit=5</code></li>
-<li>Top Referers without percent field: <code>sourcetype=access_combined_wcookie referer != *MyGizmo* | top referer | fields - percent</code></li>
-<li>Count of 404 errors grouped by <code>source: sourcetype=access_combined_wcookie status=404 | stats count by source</code></li>
-<li>Top purchases by product: <code>sourcetype=access* | timechart count(eval(action="purchase")) by productId usenull=f</code></li>
-<li>Pages views and purchases: <code>sourcetype=access_* | timechart per_hour(eval(method="GET")) AS Views, per_hour(eval(action="purchase")) AS Purchases</code></li>
-<li>Geo location of IPs (Google Maps): <code>sourcetype=access* | geoip clientip</code></li>
+  <li>Top browsers: <code>sourcetype="access_combined_wcookie" | top useragent</code></li>
+  <li>Bottom 3 browsers: <code>sourcetype=access_combined_wcookie | rare useragent limit=3</code></li>
+  <li>Top 5 IP address: <code>sourcetype="access_combined_wcookie" | top clientip limit=5</code></li>
+  <li>Top Referers without percent field: <code>sourcetype=access_combined_wcookie referer != *MyGizmo* | top referer | fields - percent</code></li>
+  <li>Count of 404 errors grouped by <code>source: sourcetype=access_combined_wcookie status=404 | stats count by source</code></li>
+  <li>Top purchases by product: <code>sourcetype=access* | timechart count(eval(action="purchase")) by productId usenull=f</code></li>
+  <li>Pages views and purchases: <code>sourcetype=access_* | timechart per_hour(eval(method="GET")) AS Views, per_hour(eval(action="purchase")) AS Purchases</code></li>
+  <li>Geo location of IPs (Google Maps): <code>sourcetype=access* | geoip clientip</code></li>
 </ul>
 
-
-<a name="Analytics"></a>
-<h3>Analytics</h3>
+<h3 id="analytics">Analytics</h3>
 
 <ul>
-<li>also known as Business Intelligence / Data Mining / OLAP</li>
-<li>Traditional analytics are based on &lsquo;Early Structure Binding&rsquo;, where you need to know beforehand what questions are going to be asked of the data.
+  <li>also known as Business Intelligence / Data Mining / OLAP</li>
+  <li>Traditional analytics are based on ‘Early Structure Binding’, where you need to know beforehand what questions are going to be asked of the data.
+    <ul>
+      <li>The typical development steps can be summarized as follows:
+        <ul>
+          <li>Decide what questions to ask</li>
+          <li>Design the data schema</li>
+          <li>Normalize the data</li>
+          <li>Write database insertion code</li>
+          <li>Create the queries</li>
+          <li>Feed the results into an analytics tool</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Late Structure Binding, which has these simple steps:
+    <ul>
+      <li>Write data (or events) to log files</li>
+      <li>Collect the log files</li>
+      <li>Create searches, graphs, and reports using Splunk</li>
+    </ul>
+  </li>
+  <li>Operational Intelligence refers to the information collected and processed </li>
+  <li>Semantic logging as data or events that are written to log files explicitly for the purpose of gathering analytics.</li>
+</ul>
+
+<h1 id="java-logging">Java Logging</h1>
+
+<h2 id="slf4j">slf4j</h2>
 
 <ul>
-<li>The typical development steps can be summarized as follows:
-
-<ul>
-<li>Decide what questions to ask</li>
-<li>Design the data schema</li>
-<li>Normalize the data</li>
-<li>Write database insertion code</li>
-<li>Create the queries</li>
-<li>Feed the results into an analytics tool</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Late Structure Binding, which has these simple steps:
-
-<ul>
-<li>Write data (or events) to log files</li>
-<li>Collect the log files</li>
-<li>Create searches, graphs, and reports using Splunk</li>
-</ul>
-</li>
-<li>Operational Intelligence refers to the information collected and processed</li>
-<li>Semantic logging as data or events that are written to log files explicitly for the purpose of gathering analytics.</li>
+  <li>Meta logging Frameworks - http://www.slf4j.org</li>
+  <li>NDC, MDC statements - http://stackoverflow.com/questions/7404435/conditional-logging-with-log4j?</li>
+  <li>What are the classloader issues that plague JCL?</li>
+  <li>what is meant by ‘static binding approach’ in sl4j?</li>
+  <li>Marker objects</li>
+  <li>NOPLogger?</li>
 </ul>
 
-
-<a name="Java.Logging"></a>
-<h1>Java Logging</h1>
-
-<a name="slf4j"></a>
-<h2>slf4j</h2>
-
-<ul>
-<li>Meta logging Frameworks - <a href="http://www.slf4j.org">http://www.slf4j.org</a></li>
-<li>NDC, MDC statements - <a href="http://stackoverflow.com/questions/7404435/conditional-logging-with-log4j?">http://stackoverflow.com/questions/7404435/conditional-logging-with-log4j?</a></li>
-<li>What are the classloader issues that plague JCL?</li>
-<li>what is meant by &lsquo;static binding approach&rsquo; in sl4j?</li>
-<li>Marker objects</li>
-<li>NOPLogger?</li>
-</ul>
-
-
-<a name="logback"></a>
-<h2>logback</h2>
+<h2 id="logback">logback</h2>
 
   
     <footer>
@@ -448,7 +405,7 @@ messageStyle: "none",
 
 		<li>
 			<h3>General Concepts</h3>
-			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/webprogramming/webconcepts.html">Web Concepts</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/webconcepts.html">Web Concepts</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
 		</li>
 
 		<h2>Non-Techninal</h2>

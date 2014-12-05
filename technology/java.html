@@ -33,6 +33,7 @@
 <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
+
 <!-- mathjax config similar to math.stackexchange -->
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -47,8 +48,7 @@ messageStyle: "none",
 "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
 });
 </script>
-
-<script src="/mathjax/unpacked/MathJax.js"></script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
 
   
 
@@ -85,384 +85,334 @@ messageStyle: "none",
     
   </header>
   
-  <p><ul>
- <li><a href="#Fundamentals">Fundamentals</a>
- <ul>
-  <li><a href="#Data.Types">Data Types</a>
-  <ul>
-   <li><a href="#Floating.Point.Arithmetic">Floating Point Arithmetic</a></li>
-  </ul>
+  <ul id="markdown-toc">
+  <li><a href="#fundamentals">Fundamentals</a>    <ul>
+      <li><a href="#data-types">Data Types</a>        <ul>
+          <li><a href="#floating-point-arithmetic">Floating Point Arithmetic</a></li>
+        </ul>
+      </li>
+      <li><a href="#cloning">Cloning</a></li>
+      <li><a href="#date">Date</a></li>
+      <li><a href="#finalization">Finalization</a></li>
+      <li><a href="#mutability">Mutability</a></li>
+      <li><a href="#uuid">UUID</a></li>
+    </ul>
   </li>
-  <li><a href="#Cloning">Cloning</a></li>
-  <li><a href="#Date">Date</a></li>
-  <li><a href="#Finalization">Finalization</a></li>
-  <li><a href="#Mutability">Mutability</a></li>
-  <li><a href="#UUID">UUID</a></li>
- </ul>
- </li>
- <li><a href="#OOPS.Concepts">OOPS Concepts</a>
- <ul>
-  <li><a href="#Access.Modifiers">Access Modifiers</a></li>
-  <li><a href="#Overloading">Overloading</a></li>
-  <li><a href="#Overriding">Overriding</a></li>
-  <li><a href="#final.keyword">final keyword</a></li>
-  <li><a href="#static.keyword">static keyword</a></li>
-  <li><a href="#Nested.classes">Nested classes</a></li>
-  <li><a href="#Enums">Enums</a></li>
-  <li><a href="#Interfaces">Interfaces</a></li>
- </ul>
- </li>
+  <li><a href="#oops-concepts">OOPS Concepts</a>    <ul>
+      <li><a href="#access-modifiers">Access Modifiers</a></li>
+      <li><a href="#overloading">Overloading</a></li>
+      <li><a href="#overriding">Overriding</a></li>
+      <li><a href="#final-keyword">final keyword</a></li>
+      <li><a href="#static-keyword">static keyword</a></li>
+      <li><a href="#nested-classes">Nested classes</a></li>
+      <li><a href="#enums">Enums</a></li>
+      <li><a href="#interfaces">Interfaces</a></li>
+    </ul>
+  </li>
 </ul>
 
-</p>
+<h1 id="fundamentals">Fundamentals</h1>
 
-<a name="Fundamentals"></a>
-<h1>Fundamentals</h1>
+<h2 id="data-types">Data Types</h2>
 
-<a name="Data.Types"></a>
-<h2>Data Types</h2>
-
-<a name="Floating.Point.Arithmetic"></a>
-<h3>Floating Point Arithmetic</h3>
+<h3 id="floating-point-arithmetic">Floating Point Arithmetic</h3>
 
 <ul>
-<li>Java follows Binary Floating-point arithmetic standard
+  <li>Java follows Binary Floating-point arithmetic standard
+    <ul>
+      <li>“float” - 4 bytes of storage, and have 23 binary digits of precision</li>
+      <li>“double” - 8 bytes of storage, and have 52 binary digits of precision.</li>
+    </ul>
+  </li>
+  <li><code>float f = 3.0f;</code> &lt;– single precision floating-point number constant</li>
+  <li><code>double d = 3.0d;</code>&lt;– double precision floating-point number constant</li>
+  <li>Not A Number(NaN) is produced if a floating point operation has some input parameters that cause the operation to produce some undefined result. Example, <code>0.0 / 0.0</code>, <code>Math.sqrt(-2.0)</code></li>
+  <li>
+    <p><code>float pi=3.14f;</code> &lt;– suffix ‘f’ is required, since in Java real constants are by default double.</p>
+  </li>
+  <li>
+    <p>When to use and not use BigDecimal? <span style="color:red">TODO</span></p>
+  </li>
+  <li>Where primitives are stored?
+    <ul>
+      <li>Local variables -&gt; stack. </li>
+      <li>Instance and static variables -&gt; heap. </li>
+      <li>Don’t forget that for reference type variables, the value of a variable is a reference, not the object. (Arrays are reference types too - so if you have an int[], the values will be on the heap.)</li>
+      <li>Since Java 6, a smart VM may be able to detect if a particular reference type variable refers to an object which can never “escape” the current method. If that’s the case, it could potentially inline the whole object on the stack. (Read more on Escape Analysis)</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="cloning">Cloning</h2>
 
 <ul>
-<li>&ldquo;float&rdquo; - 4 bytes of storage, and have 23 binary digits of precision</li>
-<li>&ldquo;double&rdquo; - 8 bytes of storage, and have 52 binary digits of precision.</li>
+  <li>Deep copy &amp; shallow copy</li>
+  <li>Cloneable interface</li>
+  <li>Pitfalls of Cloning
+    <ul>
+      <li>Implementation can get really complex, but still leading to unsuccessful copying</li>
+      <li>Cloning does not call constructor to make a copy. As a result, it is your responsibility, as a writer of the clone method, to make sure all the members have been properly set. Here is an example of where things could go wrong. Consider a class keeping track of the total number of objects of that type, using a static int member. In the constructors you would increase the count. However, if you clone the object, since no constructor is called, the count will not truly reflect the number of objects!</li>
+      <li>Problem involving ‘final’ objects. In the below example, both the copies of ‘Dog’ will have all the 3 names, though it is not intended. The problem here is that, clone() is shallow copy, and the same List<string> is used for both objects</string></li>
+    </ul>
+  </li>
 </ul>
-</li>
-<li><code>float f = 3.0f;</code> &lt;&ndash; single precision floating-point number constant</li>
-<li><code>double d = 3.0d;</code>&lt;&ndash; double precision floating-point number constant</li>
-<li>Not A Number(NaN) is produced if a floating point operation has some input parameters that cause the operation to produce some undefined result. Example, <code>0.0 / 0.0</code>, <code>Math.sqrt(-2.0)</code></li>
-<li><p><code>float pi=3.14f;</code> &lt;&ndash; suffix &lsquo;f&rsquo; is required, since in Java real constants are by default double.</p></li>
-<li><p>When to use and not use BigDecimal? <span style="color:red">TODO</span></p></li>
-<li><p>Where primitives are stored?</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Dog</span> <span class="kd">implements</span> <span class="n">Cloneable</span> <span class="o">{</span>
+</span><span class="line">   <span class="kd">public</span> <span class="kd">final</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">names</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;();</span>
+</span><span class="line">   <span class="kd">public</span> <span class="kt">int</span> <span class="n">age</span><span class="o">;</span>
+</span><span class="line">   <span class="kd">public</span> <span class="kt">int</span> <span class="n">weight</span><span class="o">;</span>
+</span><span class="line">   <span class="kd">public</span> <span class="n">Dog</span> <span class="nf">clone</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">       <span class="k">try</span> <span class="o">{</span>
+</span><span class="line">           <span class="k">return</span> <span class="o">(</span><span class="n">Dog</span><span class="o">)</span> <span class="kd">super</span><span class="o">.</span><span class="na">clone</span><span class="o">();</span>
+</span><span class="line">       <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">CloneNotSupportedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">           <span class="k">throw</span> <span class="k">new</span> <span class="nf">Error</span><span class="o">(</span><span class="s">&quot;Is too&quot;</span><span class="o">);</span>
+</span><span class="line">       <span class="o">}</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line">   <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(){</span>
+</span><span class="line">      <span class="n">Dog</span> <span class="n">bowser</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Dog</span><span class="o">();</span>
+</span><span class="line">      <span class="n">bowser</span><span class="o">.</span><span class="na">names</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">&quot;Fido&quot;</span><span class="o">);</span>
+</span><span class="line">      <span class="n">Dog</span> <span class="n">bobBarker</span> <span class="o">=</span> <span class="n">bowser</span><span class="o">.</span><span class="na">clone</span><span class="o">();</span>
+</span><span class="line">      <span class="n">bowser</span><span class="o">.</span><span class="na">names</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">&quot;Bowser&quot;</span><span class="o">);</span>
+</span><span class="line">      <span class="n">bobBarker</span><span class="o">.</span><span class="na">names</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">&quot;Bob Barker&quot;</span><span class="o">);</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="date">Date</h2>
 
 <ul>
-<li>Local variables -> stack.</li>
-<li>Instance and static variables -> heap.</li>
-<li>Don&rsquo;t forget that for reference type variables, the value of a variable is a reference, not the object. (Arrays are reference types too - so if you have an int[], the values will be on the heap.)</li>
-<li>Since Java 6, a smart VM may be able to detect if a particular reference type variable refers to an object which can never &ldquo;escape&rdquo; the current method. If that&rsquo;s the case, it could potentially inline the whole object on the stack. (Read more on Escape Analysis)</li>
-</ul>
-</li>
-</ul>
-
-
-<a name="Cloning"></a>
-<h2>Cloning</h2>
-
-<ul>
-<li>Deep copy &amp; shallow copy</li>
-<li>Cloneable interface</li>
-<li>Pitfalls of Cloning
-
-<ul>
-<li>Implementation can get really complex, but still leading to unsuccessful copying</li>
-<li>Cloning does not call constructor to make a copy. As a result, it is your responsibility, as a writer of the clone method, to make sure all the members have been properly set. Here is an example of where things could go wrong. Consider a class keeping track of the total number of objects of that type, using a static int member. In the constructors you would increase the count. However, if you clone the object, since no constructor is called, the count will not truly reflect the number of objects!</li>
-<li>Problem involving &lsquo;final&rsquo; objects. In the below example, both the copies of &lsquo;Dog&rsquo; will have all the 3 names, though it is not intended. The problem here is that, clone() is shallow copy, and the same List<String> is used for both objects</li>
-</ul>
-</li>
+  <li>Java date – timezone – database timezone support?</li>
+  <li>http://www.date4j.net/</li>
+  <li>jodatime <span style="color:red">TODO</span></li>
+  <li>TimeZone uncertainity - http://martinfowler.com/bliki/TimeZoneUncertainty.html <span style="color:red">TODO</span></li>
+  <li>http://c2.com/cgi/wiki/wiki?JavaUtilDate</li>
+  <li>Date &amp; Time - GregorianCalendar, TimeZone</li>
+  <li>Issues with Java Date API <span style="color:red">TODO</span></li>
 </ul>
 
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Dog</span> <span class="kd">implements</span> <span class="n">Cloneable</span> <span class="o">{</span>
-</span><span class='line'>   <span class="kd">public</span> <span class="kd">final</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">names</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;();</span>
-</span><span class='line'>   <span class="kd">public</span> <span class="kt">int</span> <span class="n">age</span><span class="o">;</span>
-</span><span class='line'>   <span class="kd">public</span> <span class="kt">int</span> <span class="n">weight</span><span class="o">;</span>
-</span><span class='line'>   <span class="kd">public</span> <span class="n">Dog</span> <span class="nf">clone</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>       <span class="k">try</span> <span class="o">{</span>
-</span><span class='line'>           <span class="k">return</span> <span class="o">(</span><span class="n">Dog</span><span class="o">)</span> <span class="kd">super</span><span class="o">.</span><span class="na">clone</span><span class="o">();</span>
-</span><span class='line'>       <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">CloneNotSupportedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>           <span class="k">throw</span> <span class="k">new</span> <span class="nf">Error</span><span class="o">(</span><span class="s">&quot;Is too&quot;</span><span class="o">);</span>
-</span><span class='line'>       <span class="o">}</span>
-</span><span class='line'>   <span class="o">}</span>
-</span><span class='line'>   <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(){</span>
-</span><span class='line'>      <span class="n">Dog</span> <span class="n">bowser</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Dog</span><span class="o">();</span>
-</span><span class='line'>      <span class="n">bowser</span><span class="o">.</span><span class="na">names</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">&quot;Fido&quot;</span><span class="o">);</span>
-</span><span class='line'>      <span class="n">Dog</span> <span class="n">bobBarker</span> <span class="o">=</span> <span class="n">bowser</span><span class="o">.</span><span class="na">clone</span><span class="o">();</span>
-</span><span class='line'>      <span class="n">bowser</span><span class="o">.</span><span class="na">names</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">&quot;Bowser&quot;</span><span class="o">);</span>
-</span><span class='line'>      <span class="n">bobBarker</span><span class="o">.</span><span class="na">names</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">&quot;Bob Barker&quot;</span><span class="o">);</span>
-</span><span class='line'>   <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<a name="Date"></a>
-<h2>Date</h2>
-
-<ul>
-<li>Java date – timezone – database timezone support?</li>
-<li><a href="http://www.date4j.net/">http://www.date4j.net/</a></li>
-<li>jodatime <span style="color:red">TODO</span></li>
-<li>TimeZone uncertainity - <a href="http://martinfowler.com/bliki/TimeZoneUncertainty.html">http://martinfowler.com/bliki/TimeZoneUncertainty.html</a> <span style="color:red">TODO</span></li>
-<li><a href="http://c2.com/cgi/wiki/wiki?JavaUtilDate">http://c2.com/cgi/wiki/wiki?JavaUtilDate</a></li>
-<li>Date &amp; Time - GregorianCalendar, TimeZone</li>
-<li>Issues with Java Date API <span style="color:red">TODO</span></li>
-</ul>
-
-
-<a name="Finalization"></a>
-<h2>Finalization</h2>
-
+<h2 id="finalization">Finalization</h2>
 <p><code>java.lang.System.runFinalization()</code> - Runs the finalization methods of any objects pending finalization. Calling this method suggests that the Java Virtual Machine expend effort toward running the finalize methods of objects that have been found to be discarded but whose finalize methods have not yet been run. When control returns from the method call, the Java Virtual Machine has made a best effort to complete all outstanding finalizations.</p>
 
-<a name="Mutability"></a>
-<h2>Mutability</h2>
-
+<h2 id="mutability">Mutability</h2>
 <p>An immutable object is one whose externally visible state cannot change after it is instantiated.eg., String, Integer, BigDecimal, etc. For all immutable objects, it’s better to hide constructors and use factories.</p>
 
 <ul>
-<li>Why Hashtable keys needs to be immutable objects?
+  <li>Why Hashtable keys needs to be immutable objects?
+    <ul>
+      <li>If you use mutable object as Hashtable key and if the object’s state changes, then the Hashtable implementation would get confused since the hashcode would have changed.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="uuid">UUID</h2>
+<p><span style="color:red">TODO</span></p>
+
+<h1 id="oops-concepts">OOPS Concepts</h1>
+
+<h2 id="access-modifiers">Access Modifiers</h2>
 
 <ul>
-<li>If you use mutable object as Hashtable key and if the object&rsquo;s state changes, then the Hashtable implementation would get confused since the hashcode would have changed.</li>
+  <li><strong>public</strong>
+    <ul>
+      <li>can be applied to class (both inner &amp; outer), method, field.</li>
+      <li>A public method in a class is accessible to the outside world only if the class is declared as public. If the class does not specify any access modifier, then the public method is accessible only within the containing package.</li>
+    </ul>
+  </li>
+  <li><strong>private</strong>
+    <ul>
+      <li>can only be applied inner class, method and field.</li>
+    </ul>
+  </li>
+  <li><strong>protected</strong>
+    <ul>
+      <li>can be applied to inner class, method, field.</li>
+    </ul>
+  </li>
+  <li><strong>default</strong>
+    <ul>
+      <li>can be applied to class(both inner &amp; outer), method, field.</li>
+      <li>One significant difference between these two access modifiers arises when we talk about a subclass belonging to another package than its superclass. In this case, protected members are accessible in the subclass, whereas default members are not.</li>
+    </ul>
+  </li>
 </ul>
-</li>
-</ul>
 
-
-<a name="UUID"></a>
-<h2>UUID</h2>
-
-<p>  <span style="color:red">TODO</span></p>
-
-<a name="OOPS.Concepts"></a>
-<h1>OOPS Concepts</h1>
-
-<a name="Access.Modifiers"></a>
-<h2>Access Modifiers</h2>
+<h2 id="overloading">Overloading</h2>
 
 <ul>
-<li><strong>public</strong>
+  <li>The signature of a method is made up of the method name, number of arguments, and types of arguments. You can overload methods with same name but with different signatures.</li>
+  <li>Overloading is an example of static polymorphism - meaning different forms of the method is resolved at compile-time.</li>
+  <li>Method &amp; Constructor Overloading</li>
+  <li><strong>Overload resolution</strong> - set of rules used by compiler to resolve which method to call. For resolving a method call, it first looks for the exact match—the method definition with exactly same number of parameters and types of parameters. If it can’t find an exact match, it looks for the closest match by using upcasts. The compiler throws error if there are no matches or ambiguous matches.</li>
+</ul>
+
+<h2 id="overriding">Overriding</h2>
 
 <ul>
-<li>can be applied to class (both inner &amp; outer), method, field.</li>
-<li>A public method in a class is accessible to the outside world only if the class is declared as public. If the class does not specify any access modifier, then the public method is accessible only within the containing package.</li>
+  <li>You can invoke methods from the base class reference; however, the actual method invocation depends on the dynamic type of the object pointed to by the base class reference. The type of the base class reference is known as the <strong>static type</strong> of the object and the actual object pointed by the reference at runtime is known as the <strong>dynamic type</strong> of the object. </li>
+  <li>When the compiler sees the invocation of a method from a base class reference and if the method is an overridable method (a non-static and non-final method), the compiler defers determining the exact method to be called to runtime (late binding). At runtime, based on the actual dynamic type of the object, an appropriate method is invoked. This mechanism is known as <strong>dynamic method resolution</strong> or <strong>dynamic method invocation</strong>.</li>
+  <li>A static method is resolved statically. Inside the static method, a virtual method is invoked, which is resolved dynamically.</li>
+  <li>Things to watch while overriding
+    <ul>
+      <li>Should have the same argument list types (or compatible types) as the base version.</li>
+      <li>Should have the same return type. But from Java 5 onwards, the return type can be a subclass–covariant return types.</li>
+      <li>Should not have a more restrictive access modifier than the base version. But it may have a less restrictive access modifier.</li>
+      <li>Should not throw new or broader checked exceptions. But it may throw fewer or narrower checked exceptions, or any unchecked exception.</li>
+    </ul>
+  </li>
+  <li><strong>Covariant Return Types</strong> - copy() method is overridden in line 8 returning Shape, due to which explicit downcasting is needed on line 13. Since Java 5, overridden methods can return a sub-class covariant type to avoid this (returning Circle in this case). </li>
 </ul>
-</li>
-<li><strong>private</strong>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">Shape</span> <span class="o">{</span>
+</span><span class="line">	<span class="c1">// other methods...</span>
+</span><span class="line">	<span class="kd">public</span> <span class="kd">abstract</span> <span class="n">Shape</span> <span class="nf">copy</span><span class="o">();</span>
+</span><span class="line"><span class="o">}</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">class</span> <span class="nc">Circle</span> <span class="kd">extends</span> <span class="n">Shape</span> <span class="o">{</span>
+</span><span class="line">	<span class="c1">// other methods...</span>
+</span><span class="line">	<span class="kd">public</span> <span class="nf">Circle</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">,</span> <span class="kt">int</span> <span class="n">y</span><span class="o">,</span> <span class="kt">int</span> <span class="n">radius</span><span class="o">)</span> <span class="o">{</span> <span class="cm">/* initialize fields here */</span> <span class="o">}</span>
+</span><span class="line">
+</span><span class="line">	<span class="kd">public</span> <span class="n">Shape</span> <span class="nf">copy</span><span class="o">()</span> <span class="o">{</span> <span class="cm">/* return a copy of this object */</span> <span class="o">}</span>
+</span><span class="line">
+</span><span class="line">	<span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
+</span><span class="line">		<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span> <span class="o">[]</span><span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">		<span class="n">Circle</span> <span class="n">c1</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Circle</span><span class="o">(</span><span class="mi">10</span><span class="o">,</span> <span class="mi">20</span><span class="o">,</span> <span class="mi">30</span><span class="o">);</span>
+</span><span class="line">		<span class="n">Circle</span> <span class="n">c2</span> <span class="o">=</span> <span class="o">(</span><span class="n">Circle</span><span class="o">)</span><span class="n">c1</span><span class="o">.</span><span class="na">copy</span><span class="o">();</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <ul>
-<li>can only be applied inner class, method and field.</li>
+  <li><code>@Override</code> - In order to overcome the subtle problems of overloading, Java 5 introduced @Override annotation. This explicitly expresses to the Java compiler the intention of the programmer to use method overriding. In case the compiler is not satisfied with your overridden method, it will issue a complaint. Also, the annotation makes you understand that you are overriding a method.</li>
+  <li>abstract method inside an interface - what does that mean? <span style="color:red">TODO</span></li>
 </ul>
-</li>
-<li><strong>protected</strong>
+
+<h2 id="final-keyword">final keyword</h2>
 
 <ul>
-<li>can be applied to inner class, method, field.</li>
+  <li>Final class - is a non-inheritable class. </li>
+  <li>In general, OOP suggests that a class should be open for extension but closed for modification (Open/Closed Principle). However, it is useful for important reasons</li>
+  <li>To prevent a behavior change by subclassing. e.g. java.lang.System, java.lang.String</li>
+  <li>Improved performance (moderate)- All method calls of a final class can be resolved at compile time itself. As there is no possibility of overriding the methods, it is not necessary to resolve the actual call at runtime for final classes, which translates to improved performance. For the same reason, final classes encourage the inlining of methods. If the calls are to be resolved at runtime, they cannot be inlined.</li>
+  <li>Final methods are non-overrideable</li>
+  <li>Final variables are constants - The value of a final parameter cannot be changed once assigned. Here, it is important to note that the “value” is implicitly understood for primitive types. However, the “value” for an object refers to the object reference, not its state. Therefore, you can change the internal state of the passed final object, but you cannot change the reference itself.</li>
 </ul>
-</li>
-<li><strong>default</strong>
+
+<h2 id="static-keyword">static keyword</h2>
+<ul>
+  <li>static variable
+    <ul>
+      <li>is called class variable since it is associated with its class rather than the object.</li>
+      <li>is initialized when the class is loaded first.</li>
+      <li>A local variable (within a block or method) cannot be declared as static.</li>
+    </ul>
+  </li>
+  <li>static method
+    <ul>
+      <li>invoked by using class names. It is not recommended to use instance variables to call a static method.</li>
+      <li>cannot access instance variables and methods. It can only access static variables and can call only static methods. In contrast, an instance method (non-static) may call a static method or access a static variable.</li>
+      <li>cannot use the this keyword in its body since it is associated with a class and not an instance. Only instance methods have an implicit reference associated with them; hence class methods do not have a this reference associated with them.</li>
+      <li>cannot be overridden. Because, based on the instance type, the method call is resolved with runtime polymorphism. Since static methods are associated with a class (and not with an instance), you cannot override static methods, and runtime polymorphism is not possible with static methods.</li>
+      <li>cannot use the super keyword in its body. Why? You use the super keyword for invoking the base class method from the overriding method in the derived class. Since you cannot override static methods, you cannot use the super keyword in its body.</li>
+    </ul>
+  </li>
+  <li>static block
+    <ul>
+      <li>will be executed by JVM when it loads the class into memory.</li>
+    </ul>
+  </li>
+  <li>static class - only an inner class can be defined static.</li>
+</ul>
+
+<h2 id="nested-classes">Nested classes</h2>
 
 <ul>
-<li>can be applied to class(both inner &amp; outer), method, field.</li>
-<li>One significant difference between these two access modifiers arises when we talk about a subclass belonging to another package than its superclass. In this case, protected members are accessible in the subclass, whereas default members are not.</li>
+  <li>Nested class is a class defined inside the body of another class (or interface).</li>
+  <li>Types
+    <ul>
+      <li>Static nested classes
+        <ul>
+          <li>can access static members on the outer class.</li>
+          <li>The outer class can also access the members (even private members) of the nested class through an object of nested class. If you don’t declare an instance of the nested class, the outer class cannot access nested class elements directly.</li>
+          <li>A class or an interface defined inside an interface is implicitly static.</li>
+        </ul>
+      </li>
+      <li>Inner classes
+        <ul>
+          <li>Every inner class is associated with an instance of the outer class.</li>
+          <li>The accessibility (public, protected, etc.) of the inner class is defined by the outer class.</li>
+          <li>Outer &amp; inner classes can access members of each other regardless of the access specifiers.</li>
+          <li>You can access members of an outer class within an inner class without creating an instance; but this is not the case with an outer class.</li>
+          <li>Limitation: cannot declare static members in an inner class. </li>
+        </ul>
+      </li>
+      <li>Local inner classes
+        <ul>
+          <li>Unlike static nested classes and inner classes, local inner classes are not members of an outer class; they are just local to the method or code in which they are defined.</li>
+          <li>Since you cannot declare a local variable static, you also cannot declare a local class static.</li>
+          <li>Since you cannot define methods in interfaces, you cannot have local classes or interfaces inside an interface. Nor can you create local interfaces</li>
+          <li>can acces the method arguments and all the variables defined in the body of the code only if they are declared final.</li>
+        </ul>
+      </li>
+      <li>Anonymous classes
+        <ul>
+          <li>Same as local inner class without a name. </li>
+          <li>cannot have explicit constructors since there is no name.</li>
+          <li>can acces the method arguments and all the variables defined in the body of the code only if they are declared final.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
 </ul>
-</li>
-</ul>
-
-
-<a name="Overloading"></a>
-<h2>Overloading</h2>
-
-<ul>
-<li>The signature of a method is made up of the method name, number of arguments, and types of arguments. You can overload methods with same name but with different signatures.</li>
-<li>Overloading is an example of static polymorphism - meaning different forms of the method is resolved at compile-time.</li>
-<li>Method &amp; Constructor Overloading</li>
-<li><strong>Overload resolution</strong> - set of rules used by compiler to resolve which method to call. For resolving a method call, it first looks for the exact match—the method definition with exactly same number of parameters and types of parameters. If it can’t find an exact match, it looks for the closest match by using upcasts. The compiler throws error if there are no matches or ambiguous matches.</li>
-</ul>
-
-
-<a name="Overriding"></a>
-<h2>Overriding</h2>
-
-<ul>
-<li>You can invoke methods from the base class reference; however, the actual method invocation depends on the dynamic type of the object pointed to by the base class reference. The type of the base class reference is known as the <strong>static type</strong> of the object and the actual object pointed by the reference at runtime is known as the <strong>dynamic type</strong> of the object.</li>
-<li>When the compiler sees the invocation of a method from a base class reference and if the method is an overridable method (a non-static and non-final method), the compiler defers determining the exact method to be called to runtime (late binding). At runtime, based on the actual dynamic type of the object, an appropriate method is invoked. This mechanism is known as <strong>dynamic method resolution</strong> or <strong>dynamic method invocation</strong>.</li>
-<li>A static method is resolved statically. Inside the static method, a virtual method is invoked, which is resolved dynamically.</li>
-<li>Things to watch while overriding
-
-<ul>
-<li>Should have the same argument list types (or compatible types) as the base version.</li>
-<li>Should have the same return type. But from Java 5 onwards, the return type can be a subclass–covariant return types.</li>
-<li>Should not have a more restrictive access modifier than the base version. But it may have a less restrictive access modifier.</li>
-<li>Should not throw new or broader checked exceptions. But it may throw fewer or narrower checked exceptions, or any unchecked exception.</li>
-</ul>
-</li>
-<li><strong>Covariant Return Types</strong> - copy() method is overridden in line 8 returning Shape, due to which explicit downcasting is needed on line 13. Since Java 5, overridden methods can return a sub-class covariant type to avoid this (returning Circle in this case).</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">Shape</span> <span class="o">{</span>
-</span><span class='line'>  <span class="c1">// other methods...</span>
-</span><span class='line'>  <span class="kd">public</span> <span class="kd">abstract</span> <span class="n">Shape</span> <span class="nf">copy</span><span class="o">();</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">class</span> <span class="nc">Circle</span> <span class="kd">extends</span> <span class="n">Shape</span> <span class="o">{</span>
-</span><span class='line'>  <span class="c1">// other methods...</span>
-</span><span class='line'>  <span class="kd">public</span> <span class="nf">Circle</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">,</span> <span class="kt">int</span> <span class="n">y</span><span class="o">,</span> <span class="kt">int</span> <span class="n">radius</span><span class="o">)</span> <span class="o">{</span> <span class="cm">/* initialize fields here */</span> <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="kd">public</span> <span class="n">Shape</span> <span class="nf">copy</span><span class="o">()</span> <span class="o">{</span> <span class="cm">/* return a copy of this object */</span> <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
-</span><span class='line'>      <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span> <span class="o">[]</span><span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>      <span class="n">Circle</span> <span class="n">c1</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Circle</span><span class="o">(</span><span class="mi">10</span><span class="o">,</span> <span class="mi">20</span><span class="o">,</span> <span class="mi">30</span><span class="o">);</span>
-</span><span class='line'>      <span class="n">Circle</span> <span class="n">c2</span> <span class="o">=</span> <span class="o">(</span><span class="n">Circle</span><span class="o">)</span><span class="n">c1</span><span class="o">.</span><span class="na">copy</span><span class="o">();</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li><code>@Override</code> - In order to overcome the subtle problems of overloading, Java 5 introduced @Override annotation. This explicitly expresses to the Java compiler the intention of the programmer to use method overriding. In case the compiler is not satisfied with your overridden method, it will issue a complaint. Also, the annotation makes you understand that you are overriding a method.</li>
-<li>abstract method inside an interface - what does that mean? <span style="color:red">TODO</span></li>
-</ul>
-
-
-<a name="final.keyword"></a>
-<h2>final keyword</h2>
-
-<ul>
-<li>Final class - is a non-inheritable class.</li>
-<li>In general, OOP suggests that a class should be open for extension but closed for modification (Open/Closed Principle). However, it is useful for important reasons</li>
-<li>To prevent a behavior change by subclassing. e.g. java.lang.System, java.lang.String</li>
-<li>Improved performance (moderate)- All method calls of a final class can be resolved at compile time itself. As there is no possibility of overriding the methods, it is not necessary to resolve the actual call at runtime for final classes, which translates to improved performance. For the same reason, final classes encourage the inlining of methods. If the calls are to be resolved at runtime, they cannot be inlined.</li>
-<li>Final methods are non-overrideable</li>
-<li>Final variables are constants - The value of a final parameter cannot be changed once assigned. Here, it is important to note that the “value” is implicitly understood for primitive types. However, the “value” for an object refers to the object reference, not its state. Therefore, you can change the internal state of the passed final object, but you cannot change the reference itself.</li>
-</ul>
-
-
-<a name="static.keyword"></a>
-<h2>static keyword</h2>
-
-<ul>
-<li>static variable
-
-<ul>
-<li>is called class variable since it is associated with its class rather than the object.</li>
-<li>is initialized when the class is loaded first.</li>
-<li>A local variable (within a block or method) cannot be declared as static.</li>
-</ul>
-</li>
-<li>static method
-
-<ul>
-<li>invoked by using class names. It is not recommended to use instance variables to call a static method.</li>
-<li>cannot access instance variables and methods. It can only access static variables and can call only static methods. In contrast, an instance method (non-static) may call a static method or access a static variable.</li>
-<li>cannot use the this keyword in its body since it is associated with a class and not an instance. Only instance methods have an implicit reference associated with them; hence class methods do not have a this reference associated with them.</li>
-<li>cannot be overridden. Because, based on the instance type, the method call is resolved with runtime polymorphism. Since static methods are associated with a class (and not with an instance), you cannot override static methods, and runtime polymorphism is not possible with static methods.</li>
-<li>cannot use the super keyword in its body. Why? You use the super keyword for invoking the base class method from the overriding method in the derived class. Since you cannot override static methods, you cannot use the super keyword in its body.</li>
-</ul>
-</li>
-<li>static block
-
-<ul>
-<li>will be executed by JVM when it loads the class into memory.</li>
-</ul>
-</li>
-<li>static class - only an inner class can be defined static.</li>
-</ul>
-
-
-<a name="Nested.classes"></a>
-<h2>Nested classes</h2>
-
-<ul>
-<li>Nested class is a class defined inside the body of another class (or interface).</li>
-<li>Types
-
-<ul>
-<li>Static nested classes
-
-<ul>
-<li>can access static members on the outer class.</li>
-<li>The outer class can also access the members (even private members) of the nested class through an object of nested class. If you don’t declare an instance of the nested class, the outer class cannot access nested class elements directly.</li>
-<li>A class or an interface defined inside an interface is implicitly static.</li>
-</ul>
-</li>
-<li>Inner classes
-
-<ul>
-<li>Every inner class is associated with an instance of the outer class.</li>
-<li>The accessibility (public, protected, etc.) of the inner class is defined by the outer class.</li>
-<li>Outer &amp; inner classes can access members of each other regardless of the access specifiers.</li>
-<li>You can access members of an outer class within an inner class without creating an instance; but this is not the case with an outer class.</li>
-<li>Limitation: cannot declare static members in an inner class.</li>
-</ul>
-</li>
-<li>Local inner classes
-
-<ul>
-<li>Unlike static nested classes and inner classes, local inner classes are not members of an outer class; they are just local to the method or code in which they are defined.</li>
-<li>Since you cannot declare a local variable static, you also cannot declare a local class static.</li>
-<li>Since you cannot define methods in interfaces, you cannot have local classes or interfaces inside an interface. Nor can you create local interfaces</li>
-<li>can acces the method arguments and all the variables defined in the body of the code only if they are declared final.</li>
-</ul>
-</li>
-<li>Anonymous classes
-
-<ul>
-<li>Same as local inner class without a name.</li>
-<li>cannot have explicit constructors since there is no name.</li>
-<li>can acces the method arguments and all the variables defined in the body of the code only if they are declared final.</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-
 
 <table>
-    <thead>
-        <tr>
-            <th>           </th>
-            <th> Static </th>
-            <th> Non-static </th>
-            <th> Anonymous </th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-            <td> <strong>Non-local</strong> </td>
-            <td style="vertical-align: top"> Static nested class
+	<thead>
+		<tr>
+			<th>           </th>
+			<th> Static </th>
+			<th> Non-static </th>
+			<th> Anonymous </th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr>
+			<td> <strong>Non-local</strong> </td>
+			<td style="vertical-align: top"> Static nested class
 <pre>
 class Outer{
    static class Inner{}
@@ -480,8 +430,8 @@ interface Outer{
    static interface Inner{}
 }
 </pre>
-            </td>
-            <td style="vertical-align: top"> Inner class 
+			</td>
+			<td style="vertical-align: top"> Inner class 
 <pre>
 class Outer{
    class InnerClass{
@@ -492,13 +442,13 @@ class Outer{
    interface Inner{}
 }
 </pre>
-            </td>
-            <td> Not possible </td>
-        </tr>
-        <tr>
-            <td> <strong>Local</strong>     </td>
-            <td> Not possible        </td>
-            <td style="vertical-align: top"> Local inner class 
+			</td>
+			<td> Not possible </td>
+		</tr>
+		<tr>
+			<td> <strong>Local</strong>     </td>
+			<td> Not possible        </td>
+			<td style="vertical-align: top"> Local inner class 
 <pre>
 class Outer{
    void foo(final Object arg){
@@ -507,8 +457,8 @@ class Outer{
    }
 }
 </pre>
-            </td>
-            <td style="vertical-align: top"> Anonymous inner class 
+			</td>
+			<td style="vertical-align: top"> Anonymous inner class 
 <pre>
 class Outer{
    Object foo(){
@@ -520,34 +470,29 @@ class Outer{
    }
 }
 </pre>
-            </td>
-        </tr>
-    </tbody>
+			</td>
+		</tr>
+	</tbody>
 </table>
 
-
-<a name="Enums"></a>
-<h2>Enums</h2>
+<h2 id="enums">Enums</h2>
 
 <ul>
-<li>A constructor in an enum class can only be specified as private.</li>
-<li>are implicitly declared public, static, and final, which means you cannot extend them.</li>
-<li>An enum implicitly inherits from java.lang.Enum and get converted internally to classes. Further, enum constants are instances of the enumeration class for which the constant is declared as a member.</li>
-<li>cannot use the new operator on enum data types, even inside the enum class.</li>
-<li>Enumeration constants cannot be cloned.</li>
+  <li>A constructor in an enum class can only be specified as private.</li>
+  <li>are implicitly declared public, static, and final, which means you cannot extend them.</li>
+  <li>An enum implicitly inherits from java.lang.Enum and get converted internally to classes. Further, enum constants are instances of the enumeration class for which the constant is declared as a member.</li>
+  <li>cannot use the new operator on enum data types, even inside the enum class.</li>
+  <li>Enumeration constants cannot be cloned.</li>
 </ul>
 
-
-<a name="Interfaces"></a>
-<h2>Interfaces</h2>
+<h2 id="interfaces">Interfaces</h2>
 
 <ul>
-<li>cannot declare static methods.</li>
-<li>All fields are implicitly considered to be declared as public, static &amp; final.</li>
-<li>only public methods and variables are allowed in an interface. No protected or private.</li>
-<li>All methods declared in an interface are implicitly considered to be abstract. You can also explicitly use the abstract qualifier for the method.</li>
+  <li>cannot declare static methods.</li>
+  <li>All fields are implicitly considered to be declared as public, static &amp; final.</li>
+  <li>only public methods and variables are allowed in an interface. No protected or private.</li>
+  <li>All methods declared in an interface are implicitly considered to be abstract. You can also explicitly use the abstract qualifier for the method.</li>
 </ul>
-
 
   
     <footer>
@@ -603,7 +548,7 @@ class Outer{
 
 		<li>
 			<h3>General Concepts</h3>
-			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/webprogramming/webconcepts.html">Web Concepts</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/webconcepts.html">Web Concepts</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
 		</li>
 
 		<h2>Non-Techninal</h2>

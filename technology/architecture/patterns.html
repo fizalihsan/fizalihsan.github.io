@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Patterns Design Patterns Adapter Object Adapter Class Adapter Bridge Builder Chain of Responsibility Circular Buffer Command Composite Decorator &hellip;">
+<meta name="description" content="Patterns Design Patterns Adapter Object Adapter Factory Idiom - Not a pattern Type 1: Parameterized Factory Method Type 2: Dynamic Class &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -33,6 +33,7 @@
 <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
+
 <!-- mathjax config similar to math.stackexchange -->
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -47,8 +48,7 @@ messageStyle: "none",
 "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
 });
 </script>
-
-<script src="/mathjax/unpacked/MathJax.js"></script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
 
   
 
@@ -85,415 +85,292 @@ messageStyle: "none",
     
   </header>
   
-  <p><ul>
- <li><a href="#Design.Patterns">Design Patterns</a>
- <ul>
-  <li><a href="#Adapter">Adapter</a>
-  <ul>
-   <li><a href="#Object.Adapter">Object Adapter</a></li>
-   <li><a href="#Class.Adapter">Class Adapter</a></li>
-  </ul>
+  <ul id="markdown-toc">
+  <li><a href="#design-patterns">Design Patterns</a>    <ul>
+      <li><a href="#adapter">Adapter</a>        <ul>
+          <li><a href="#object-adapter">Object Adapter</a></li>
+          <li><a href="#factory-idiom---not-a-pattern">Factory Idiom - Not a pattern</a>            <ul>
+              <li><a href="#type-1-parameterized-factory-method">Type 1: Parameterized Factory Method</a></li>
+              <li><a href="#type-2-dynamic-class-registration">Type 2: Dynamic Class Registration</a></li>
+            </ul>
+          </li>
+          <li><a href="#static-factory-method">Static Factory Method</a></li>
+          <li><a href="#factory-method">Factory Method</a></li>
+          <li><a href="#abstract-factory">Abstract Factory</a></li>
+        </ul>
+      </li>
+      <li><a href="#flyweight">Flyweight</a></li>
+      <li><a href="#singleton">Singleton</a>        <ul>
+          <li><a href="#type-1---early-init-with-public-static-final-field">Type 1 - Early init with public static final field</a></li>
+          <li><a href="#type-2---early-init-with-private-static-field--factory-method">Type 2 - Early init with private static field &amp; factory method</a></li>
+          <li><a href="#type-3---early-init-via-enum">Type 3 - Early init via Enum</a></li>
+          <li><a href="#type-4---lazy-init---not-thread-safe">Type 4 - Lazy init - not thread-safe</a></li>
+          <li><a href="#type-5---lazy-init---thread-safe-but-worst-performing">Type 5 - Lazy init - Thread-safe but worst performing</a></li>
+          <li><a href="#type-6---lazy-init---thread-safe-via-double-checked-lock-broken">Type 6 - Lazy init - Thread-safe via Double-checked lock (BROKEN)</a></li>
+          <li><a href="#type-7---lazy-init---thread-safe-via-dcl-and-volatile-instance-works-in-java-5">Type 7 - Lazy init - Thread-safe via DCL and volatile instance (works in Java 5+)</a></li>
+        </ul>
+      </li>
+      <li><a href="#state">State</a></li>
+      <li><a href="#recycle-bin">Recycle Bin</a></li>
+      <li><a href="#template-method">Template Method</a></li>
+      <li><a href="#transferobject">TransferObject</a></li>
+      <li><a href="#valueobject">ValueObject</a></li>
+      <li><a href="#visitor">Visitor</a></li>
+    </ul>
   </li>
-  <li><a href="#Bridge">Bridge</a></li>
-  <li><a href="#Builder">Builder</a></li>
-  <li><a href="#Chain.of.Responsibility">Chain of Responsibility</a></li>
-  <li><a href="#Circular.Buffer">Circular Buffer</a></li>
-  <li><a href="#Command">Command</a></li>
-  <li><a href="#Composite">Composite</a></li>
-  <li><a href="#Decorator">Decorator</a></li>
-  <li><a href="#Factory">Factory</a>
-  <ul>
-   <li><a href="#Factory.Idiom.-.Not.a.pattern">Factory Idiom - Not a pattern</a>
-   <ul>
-    <li><a href="#Type.1:.Parameterized.Factory.Method">Type 1: Parameterized Factory Method</a></li>
-    <li><a href="#Type.2:.Dynamic.Class.Registration">Type 2: Dynamic Class Registration</a></li>
-   </ul>
-   </li>
-   <li><a href="#Static.Factory.Method">Static Factory Method</a></li>
-   <li><a href="#Factory.Method">Factory Method</a></li>
-   <li><a href="#Abstract.Factory">Abstract Factory</a></li>
-  </ul>
+  <li><a href="#anti-patterns">Anti Patterns</a></li>
+  <li><a href="#concurrency-patterns">Concurrency Patterns</a>    <ul>
+      <li><a href="#active-object">Active Object</a></li>
+    </ul>
   </li>
-  <li><a href="#Flyweight">Flyweight</a></li>
-  <li><a href="#Interpretor">Interpretor</a></li>
-  <li><a href="#Iterator">Iterator</a></li>
-  <li><a href="#Mediator">Mediator</a></li>
-  <li><a href="#Memento">Memento</a></li>
-  <li><a href="#Observer">Observer</a></li>
-  <li><a href="#Prototype">Prototype</a></li>
-  <li><a href="#Proxy">Proxy</a>
-  <ul>
-   <li><a href="#Dynamic.Proxy">Dynamic Proxy</a>
-   <ul>
-    <li><a href="#Virtual.Proxy">Virtual Proxy</a></li>
-    <li><a href="#Counting.Proxy">Counting Proxy</a>
-</li>
-   </ul>
-   </li>
-  </ul>
+  <li><a href="#architectural-patterns">Architectural Patterns</a>    <ul>
+      <li><a href="#active-record">Active Record</a></li>
+      <li><a href="#facade">Facade</a>        <ul>
+          <li><a href="#session-facade">Session Facade</a></li>
+          <li><a href="#wrapper-facade">Wrapper Facade</a></li>
+        </ul>
+      </li>
+      <li><a href="#front-controller">Front Controller</a></li>
+      <li><a href="#interceptor">Interceptor</a></li>
+      <li><a href="#mock-object">Mock object</a></li>
+      <li><a href="#model-view-controller">Model View Controller</a></li>
+      <li><a href="#naked-objects">Naked objects</a></li>
+      <li><a href="#null-object">Null object</a></li>
+      <li><a href="#service-locator">Service Locator</a></li>
+      <li><a href="#token-synchronization">Token Synchronization</a></li>
+    </ul>
   </li>
-  <li><a href="#Singleton">Singleton</a>
-  <ul>
-   <li><a href="#Type.1.-.Early.init.with.public.static.final.field">Type 1 - Early init with public static final field</a></li>
-   <li><a href="#Type.2.-.Early.init.with.private.static.field..amp..factory.method">Type 2 - Early init with private static field &amp; factory method</a></li>
-   <li><a href="#Type.3.-.Early.init.via.Enum">Type 3 - Early init via Enum</a></li>
-   <li><a href="#Type.4.-.Lazy.init.-.not.thread-safe">Type 4 - Lazy init - not thread-safe</a></li>
-   <li><a href="#Type.5.-.Lazy.init.-.Thread-safe.but.worst.performing">Type 5 - Lazy init - Thread-safe but worst performing</a></li>
-   <li><a href="#Type.6.-.Lazy.init.-.Thread-safe.via.Double-checked.lock..BROKEN.">Type 6 - Lazy init - Thread-safe via Double-checked lock (BROKEN)</a></li>
-   <li><a href="#Type.7.-.Lazy.init.-.Thread-safe.via.DCL.and.volatile.instance..works.in.Java.5..">Type 7 - Lazy init - Thread-safe via DCL and volatile instance (works in Java 5+)</a></li>
-  </ul>
-  </li>
-  <li><a href="#State">State</a></li>
-  <li><a href="#Strategy">Strategy</a></li>
-  <li><a href="#Reactor">Reactor</a></li>
-  <li><a href="#Recycle.Bin">Recycle Bin</a></li>
-  <li><a href="#Template.Method">Template Method</a></li>
-  <li><a href="#TransferObject">TransferObject</a></li>
-  <li><a href="#ValueObject">ValueObject</a></li>
-  <li><a href="#Visitor">Visitor</a></li>
- </ul>
- </li>
- <li><a href="#Anti.Patterns">Anti Patterns</a></li>
- <li><a href="#Concurrency.Patterns">Concurrency Patterns</a>
- <ul>
-  <li><a href="#Active.Object">Active Object</a></li>
-  <li><a href="#Balking.Pattern">Balking Pattern</a></li>
-  <li><a href="#Barrier">Barrier</a></li>
-  <li><a href="#Consistent.Lock.Order">Consistent Lock Order</a></li>
-  <li><a href="#Critical.Section">Critical Section</a></li>
-  <li><a href="#Disruptor">Disruptor</a></li>
-  <li><a href="#Guarded.Suspension">Guarded Suspension</a></li>
-  <li><a href="#Monitor.Object">Monitor Object</a></li>
-  <li><a href="#Producer.Consumer.pattern">Producer/Consumer pattern</a></li>
-  <li><a href="#Read-Write.Lock">Read-Write Lock</a></li>
- </ul>
- </li>
- <li><a href="#Architectural.Patterns">Architectural Patterns</a>
- <ul>
-  <li><a href="#Active.Record">Active Record</a></li>
-  <li><a href="#Business.Delegate">Business Delegate</a></li>
-  <li><a href="#Data.Access.Object..DAO.">Data Access Object (DAO)</a></li>
-  <li><a href="#Dependency.Injection.or.IOC">Dependency Injection or IOC</a></li>
-  <li><a href="#Facade">Facade</a>
-  <ul>
-   <li><a href="#Session.Facade">Session Facade</a></li>
-   <li><a href="#Wrapper.Facade">Wrapper Facade</a></li>
-  </ul>
-  </li>
-  <li><a href="#Front.Controller">Front Controller</a></li>
-  <li><a href="#Interceptor">Interceptor</a></li>
-  <li><a href="#Mock.object">Mock object</a></li>
-  <li><a href="#Model.View.Controller">Model View Controller</a></li>
-  <li><a href="#Naked.objects">Naked objects</a></li>
-  <li><a href="#Null.object">Null object</a></li>
-  <li><a href="#Service.Locator">Service Locator</a></li>
-  <li><a href="#Token.Synchronization">Token Synchronization</a></li>
- </ul>
- </li>
- <li><a href="#Bibliography">Bibliography</a></li>
+  <li><a href="#bibliography">Bibliography</a></li>
 </ul>
 
-</p>
+<h1 id="design-patterns">Design Patterns</h1>
 
-<a name="Design.Patterns"></a>
-<h1>Design Patterns</h1>
+<h2 id="adapter">Adapter</h2>
+<p>Also called ‘Wrapper’ pattern</p>
 
-<a name="Adapter"></a>
-<h2>Adapter</h2>
-
-<p>Also called &lsquo;Wrapper&rsquo; pattern</p>
-
-<a name="Object.Adapter"></a>
-<h3>Object Adapter</h3>
-
-<a name="Class.Adapter"></a>
-<h3>Class Adapter</h3>
-
-<a name="Bridge"></a>
-<h2>Bridge</h2>
-
-<a name="Builder"></a>
-<h2>Builder</h2>
-
-<a name="Chain.of.Responsibility"></a>
-<h2>Chain of Responsibility</h2>
-
-<a name="Circular.Buffer"></a>
-<h2>Circular Buffer</h2>
-
-<a name="Command"></a>
-<h2>Command</h2>
-
-<a name="Composite"></a>
-<h2>Composite</h2>
-
-<a name="Decorator"></a>
-<h2>Decorator</h2>
-
-<a name="Factory"></a>
-<h2>Factory</h2>
+<h3 id="object-adapter">Object Adapter</h3>
+<p>### Class Adapter
+## Bridge
+## Builder
+## Chain of Responsibility
+## Circular Buffer
+## Command
+## Composite
+## Decorator
+## Factory</p>
 
 <p>Beware of the ambiguity in the names - Static Factory Method (in Effective Java) is not the same as Factory Method (in GoF)</p>
 
-<a name="Factory.Idiom.-.Not.a.pattern"></a>
-<h3>Factory Idiom - Not a pattern</h3>
+<h3 id="factory-idiom---not-a-pattern">Factory Idiom - Not a pattern</h3>
 
 <ul>
-<li>(+) Dynamically creates objects based on some input parameters. Client refers to the product via common interface.</li>
-<li>(+) Creates objects without exposing the instantiation logic to the client.</li>
-<li>(+) Since client refers to the product via a common interface, factory can change the product implementation anytime after go-live.</li>
+  <li>(+) Dynamically creates objects based on some input parameters. Client refers to the product via common interface.</li>
+  <li>(+) Creates objects without exposing the instantiation logic to the client.</li>
+  <li>(+) Since client refers to the product via a common interface, factory can change the product implementation anytime after go-live.</li>
 </ul>
-
 
 <p><strong>Implementation Variations</strong></p>
 
-<a name="Type.1:.Parameterized.Factory.Method"></a>
-<h4>Type 1: Parameterized Factory Method</h4>
-
+<h4 id="type-1-parameterized-factory-method">Type 1: Parameterized Factory Method</h4>
 <p>Classical switch-case/if-condition based factory method that takes a parameter to decide the type of product to return
 * (+) New products can be added without changing the client code.
 * (-) Tight coupling between factory and product implementations. In other words, Factory class needs to change for every new product. It violates the Open Close Principle.
 * (-) Sub-classing means replacing all the factory class references everywhere in the code.</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>public class Factory{
-</span><span class='line'>   public Product getProduct(String type){
-</span><span class='line'>      if(type==1){
-</span><span class='line'>          return new Product1();
-</span><span class='line'>      } else if(type==2){
-</span><span class='line'>          return new Product2();
-</span><span class='line'>      } ....
-</span><span class='line'>   }
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">public class Factory{
+</span><span class="line">   public Product getProduct(String type){
+</span><span class="line">      if(type==1){
+</span><span class="line">          return new Product1();
+</span><span class="line">      } else if(type==2){
+</span><span class="line">          return new Product2();
+</span><span class="line">      } ....
+</span><span class="line">   }
+</span><span class="line">}</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-
-<a name="Type.2:.Dynamic.Class.Registration"></a>
-<h4>Type 2: Dynamic Class Registration</h4>
-
+<h4 id="type-2-dynamic-class-registration">Type 2: Dynamic Class Registration</h4>
 <p>Keep the map of key and product type away from the factory. It could be a properties file or statically registered in common registry class. Factory can dynamically create an instance of the product either by Class.forName() or using reflection.
 * (+) Factory class is not changed every time a product is added
 * (-) Using reflection impacts the performance</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>public class Factory{
-</span><span class='line'>   private Map&lt;String, Class&lt;Product&gt;&gt; map = new HashMap&lt;&gt;();
-</span><span class='line'>
-</span><span class='line'>   public void register(String type, Class&lt;Product&gt; klass){
-</span><span class='line'>      map.put(type, klass);
-</span><span class='line'>   }
-</span><span class='line'>
-</span><span class='line'>   public Product getProduct(String type){
-</span><span class='line'>      Class&lt;Product&gt; klass = map.get(type);
-</span><span class='line'>
-</span><span class='line'>      //Class.forName() or Reflection
-</span><span class='line'>   }
-</span><span class='line'>} </span></code></pre></td></tr></table></div></figure>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">public class Factory{
+</span><span class="line">   private Map&lt;String, Class&lt;Product&gt;&gt; map = new HashMap&lt;&gt;();
+</span><span class="line">
+</span><span class="line">   public void register(String type, Class&lt;Product&gt; klass){
+</span><span class="line">      map.put(type, klass);
+</span><span class="line">   }
+</span><span class="line">
+</span><span class="line">   public Product getProduct(String type){
+</span><span class="line">      Class&lt;Product&gt; klass = map.get(type);
+</span><span class="line">
+</span><span class="line">      //Class.forName() or Reflection
+</span><span class="line">   }
+</span><span class="line">} </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-
-<a name="Static.Factory.Method"></a>
-<h3>Static Factory Method</h3>
+<h3 id="static-factory-method">Static Factory Method</h3>
 
 <ul>
-<li>Creates objects without exposing the instantiation logic to the client. Client refers to the product via common interface.</li>
-<li><p>The ability of static factory methods to return the same instance from repeated invocations allows classes to maintain strict control over what instances exist at any time. Such classes are called Instance-controlled classes.</p></li>
-<li><p>(+) Overloaded constructors with similar parameter list can be replaced with static factory methods with meaningful names. E.g., <code>BigInteger.probablePrime(int, int, Random)</code> is better than <code>new BigInteger(int, int, Random)</code></p></li>
-<li>(+) Unlike constructors, there is no need to create a new object every time the method is invoked. E.g.,<code>public static Boolean valueOf(boolean b) {return b ? Boolean.TRUE : Boolean.FALSE;}</code></li>
-<li>(+) Unlike constructors, they can return objects of any sub-type of their return type. Helps hiding implementation classes and exposing only the interface. E.g., Non-instantiable class <code>java.util.Collections</code> hides 32 different implementations of <code>Collection</code> interface.</li>
-<li>(+) It will also enhance the software maintainability and performance since the class of the returned object can be varied from release to release.</li>
-<li>(+) Reduces the verbosity of creating parameterized type instances. e.g., <code>Map&lt;String, List&lt;Integer&gt;&gt; m = HashMap.newInstance();</code> (Generic Type Inference)</li>
-<li>(+) Used in building internal-DSLs along with method chaining</li>
-<li>(-) Classes without public/protected constructors cannot be sub-classed</li>
-<li>(-) Static Factory methods are not easily distinguishable from other static methods</li>
+  <li>Creates objects without exposing the instantiation logic to the client. Client refers to the product via common interface. </li>
+  <li>
+    <p>The ability of static factory methods to return the same instance from repeated invocations allows classes to maintain strict control over what instances exist at any time. Such classes are called Instance-controlled classes.</p>
+  </li>
+  <li>(+) Overloaded constructors with similar parameter list can be replaced with static factory methods with meaningful names. E.g., <code>BigInteger.probablePrime(int, int, Random)</code> is better than <code>new BigInteger(int, int, Random)</code></li>
+  <li>(+) Unlike constructors, there is no need to create a new object every time the method is invoked. E.g.,<code>public static Boolean valueOf(boolean b) {return b ? Boolean.TRUE : Boolean.FALSE;}</code></li>
+  <li>(+) Unlike constructors, they can return objects of any sub-type of their return type. Helps hiding implementation classes and exposing only the interface. E.g., Non-instantiable class <code>java.util.Collections</code> hides 32 different implementations of <code>Collection</code> interface.</li>
+  <li>(+) It will also enhance the software maintainability and performance since the class of the returned object can be varied from release to release.</li>
+  <li>(+) Reduces the verbosity of creating parameterized type instances. e.g., <code>Map&lt;String, List&lt;Integer&gt;&gt; m = HashMap.newInstance();</code> (Generic Type Inference)</li>
+  <li>(+) Used in building internal-DSLs along with method chaining</li>
+  <li>(-) Classes without public/protected constructors cannot be sub-classed</li>
+  <li>(-) Static Factory methods are not easily distinguishable from other static methods</li>
 </ul>
 
-
-<a name="Factory.Method"></a>
-<h3>Factory Method</h3>
+<h3 id="factory-method">Factory Method</h3>
 
 <p>Defines an interface for creating an object, but lets subclasses decide which class to instantiate. Factory Method lets a class defer instantiation to subclasses.</p>
 
 <ul>
-<li>(+) Creates objects without exposing the instantiation logic to the client.</li>
-<li>(+) Since client refers to the product via a common interface, factory can change the product implementation anytime after go-live.</li>
-<li>(+) Used in builder pattern using which internal-DSLs are possible</li>
+  <li>(+) Creates objects without exposing the instantiation logic to the client.</li>
+  <li>(+) Since client refers to the product via a common interface, factory can change the product implementation anytime after go-live.</li>
+  <li>(+) Used in builder pattern using which internal-DSLs are possible</li>
 </ul>
-
 
 <table>
-<thead>
-<tr>
-<th>    </th>
-<th>    </th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td> <img src="/technology/architecture/FactoryMethod.png"></td>
-<td> <img src="/technology/architecture/FactoryMethodExample.png"></td>
-</tr>
-</tbody>
+  <thead>
+    <tr>
+      <th> </th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><img src="/technology/architecture/FactoryMethod.png" /></td>
+      <td><img src="/technology/architecture/FactoryMethodExample.png" /></td>
+    </tr>
+  </tbody>
 </table>
 
-
-<a name="Abstract.Factory"></a>
-<h3>Abstract Factory</h3>
+<h3 id="abstract-factory">Abstract Factory</h3>
 
 <ul>
-<li>Nothing but an additional layer of abstract on top of Factory method pattern</li>
-<li>Provide an interface for creating families of related or dependent objects without specifying their concrete classes.</li>
-<li>Unlike in Factory method pattern, Factory class in this pattern can have one or more factory methods.</li>
-<li>Type of Factory class is not known to client at compile-time.</li>
+  <li>Nothing but an additional layer of abstract on top of Factory method pattern</li>
+  <li>Provide an interface for creating families of related or dependent objects without specifying their concrete classes.</li>
+  <li>Unlike in Factory method pattern, Factory class in this pattern can have one or more factory methods.</li>
+  <li>Type of Factory class is not known to client at compile-time.</li>
 </ul>
 
-
-<blockquote><p>Read Oracle Certified Professional Java SE 7 - Programmer Exams - Page 135 for difference b/w Factory and Abstract Factory</p></blockquote>
+<blockquote>
+  <p>Read Oracle Certified Professional Java SE 7 - Programmer Exams - Page 135 for difference b/w Factory and Abstract Factory</p>
+</blockquote>
 
 <ul>
-<li>(+) Addresses the concerns in both the factory method implementations.</li>
-<li>(-) Factory cannot be a singleton</li>
-<li>(-) Relatively difficult to implement</li>
-<li>(-) A new factory has to be created for every new product</li>
+  <li>(+) Addresses the concerns in both the factory method implementations.</li>
+  <li>(-) Factory cannot be a singleton</li>
+  <li>(-) Relatively difficult to implement</li>
+  <li>(-) A new factory has to be created for every new product</li>
 </ul>
 
+<p><img src="/technology/architecture/AbstractFactory.png" /></p>
 
-<p> <img src="/technology/architecture/AbstractFactory.png"></p>
+<h2 id="flyweight">Flyweight</h2>
+<p>## Interpretor
+## Iterator
+## Mediator
+## Memento
+## Observer
+## Prototype
+## Proxy
+### Dynamic Proxy
+Mockito, Spring container
+#### Virtual Proxy
+#### Counting Proxy</p>
 
-<a name="Flyweight"></a>
-<h2>Flyweight</h2>
-
-<a name="Interpretor"></a>
-<h2>Interpretor</h2>
-
-<a name="Iterator"></a>
-<h2>Iterator</h2>
-
-<a name="Mediator"></a>
-<h2>Mediator</h2>
-
-<a name="Memento"></a>
-<h2>Memento</h2>
-
-<a name="Observer"></a>
-<h2>Observer</h2>
-
-<a name="Prototype"></a>
-<h2>Prototype</h2>
-
-<a name="Proxy"></a>
-<h2>Proxy</h2>
-
-<a name="Dynamic.Proxy"></a>
-<h3>Dynamic Proxy</h3>
-
-<p>Mockito, Spring container</p>
-
-<a name="Virtual.Proxy"></a>
-<h4>Virtual Proxy</h4>
-
-<a name="Counting.Proxy"></a>
-<h4>Counting Proxy</h4>
-
-<a name="Singleton"></a>
-<h2>Singleton</h2>
+<h2 id="singleton">Singleton</h2>
 
 <ul>
-<li>Why Singleton? Can I not achieve the same in a public static class &amp; method?</li>
-<li>All-static method class CANNOT implement an interface.</li>
-<li>All-static method class makes itself extendable. Singleton class DOESN&rsquo;T allow that.</li>
-<li>Lazy loading singletons - <a href="http://crazybob.org/2007/01/lazy-loading-singletons.html">http://crazybob.org/2007/01/lazy-loading-singletons.html</a></li>
+  <li>Why Singleton? Can I not achieve the same in a public static class &amp; method?</li>
+  <li>All-static method class CANNOT implement an interface.</li>
+  <li>All-static method class makes itself extendable. Singleton class DOESN’T allow that.</li>
+  <li>Lazy loading singletons - http://crazybob.org/2007/01/lazy-loading-singletons.html</li>
 </ul>
-
 
 <p><strong>Implementation Variations</strong></p>
 
 <ul>
-<li><strong>Early initialization</strong>
-
-<ul>
-<li>Type 1 - public static final field – Not serializable until all the instance fields are transient and override readResolve() method to return the singleton instance.</li>
-<li>Type 2 - private static final field &amp; factory method – Same issues as above. At least gives flexibility to decide whether the class should be singleton or not.</li>
-<li>Type 3 - Enum – No serialization and reflection issues.</li>
-</ul>
-</li>
-<li><strong>Lazy initialization</strong>
-
-<ul>
-<li>public static synchronized getInstance() – Performance impact due to acquiring lock for every call</li>
-<li>DCL (Double-checked locking) – Broken except for 2 conditions
-
-<ul>
-<li>Instance field is declared volatile – Works only from JDK 1.5 and above</li>
-<li>Class is immutable – All fields are final. Reading &amp; Writing references to immutable objects are atomic.</li>
-</ul>
-</li>
-<li>Use external container like Spring/Guice or custom factory to manage the number of instances created</li>
-</ul>
-</li>
-<li><strong>Issues with Singleton</strong>
-
-<ul>
-<li>Single threaded environment
-
-<ul>
-<li>Hard to unit test the class – especially when it holds state like counter, etc.
-
-<ul>
-<li>Work around: package protect constructor and reset state</li>
-</ul>
-</li>
-<li>Potentially allows multiple version - Via Serialization or Reflection
-
-<ul>
-<li>Work around: override readResolve() or use enum model</li>
-</ul>
-</li>
-<li>Violates SRP (Single Responsibility Principle)
-
-<ul>
-<li>Work around: Use external container like Spring or some kind of registry/factory to manage the number of instances created</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Multi threaded environment
-
-<ul>
-<li>Double-checked locking anti-pattern
-
-<ul>
-<li>Work around: use volatile field or make class immutable</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
+  <li><strong>Early initialization</strong>
+    <ul>
+      <li>Type 1 - public static final field – Not serializable until all the instance fields are transient and override readResolve() method to return the singleton instance.</li>
+      <li>Type 2 - private static final field &amp; factory method – Same issues as above. At least gives flexibility to decide whether the class should be singleton or not.</li>
+      <li>Type 3 - Enum – No serialization and reflection issues.</li>
+    </ul>
+  </li>
+  <li><strong>Lazy initialization</strong>
+    <ul>
+      <li>public static synchronized getInstance() – Performance impact due to acquiring lock for every call</li>
+      <li>DCL (Double-checked locking) – Broken except for 2 conditions
+        <ul>
+          <li>Instance field is declared volatile – Works only from JDK 1.5 and above</li>
+          <li>Class is immutable – All fields are final. Reading &amp; Writing references to immutable objects are atomic.</li>
+        </ul>
+      </li>
+      <li>Use external container like Spring/Guice or custom factory to manage the number of instances created</li>
+    </ul>
+  </li>
+  <li><strong>Issues with Singleton</strong>
+    <ul>
+      <li>Single threaded environment
+        <ul>
+          <li>Hard to unit test the class – especially when it holds state like counter, etc.
+            <ul>
+              <li>Work around: package protect constructor and reset state</li>
+            </ul>
+          </li>
+          <li>Potentially allows multiple version - Via Serialization or Reflection
+            <ul>
+              <li>Work around: override readResolve() or use enum model</li>
+            </ul>
+          </li>
+          <li>Violates SRP (Single Responsibility Principle)
+            <ul>
+              <li>Work around: Use external container like Spring or some kind of registry/factory to manage the number of instances created</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>Multi threaded environment
+        <ul>
+          <li>Double-checked locking anti-pattern
+            <ul>
+              <li>Work around: use volatile field or make class immutable</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
 </ul>
 
-
-<a name="Type.1.-.Early.init.with.public.static.final.field"></a>
-<h3>Type 1 - Early init with public static final field</h3>
-
+<h3 id="type-1---early-init-with-public-static-final-field">Type 1 - Early init with public static final field</h3>
 <pre>
 public class Singleton{
    <span style="color:red">public static final</span> Singleton INSTANCE = new Singleton();
@@ -501,43 +378,34 @@ public class Singleton{
 }
 </pre>
 
+<h3 id="type-2---early-init-with-private-static-field--factory-method">Type 2 - Early init with private static field &amp; factory method</h3>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">public class Singleton{
+</span><span class="line">   private static final Singleton INSTANCE = new Singleton();
+</span><span class="line">   private Singleton(){}
+</span><span class="line">
+</span><span class="line">   //static factory method
+</span><span class="line">   public static Singleton getInstance(){
+</span><span class="line">     return INSTANCE;
+</span><span class="line">   }
+</span><span class="line">}</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<a name="Type.2.-.Early.init.with.private.static.field..amp..factory.method"></a>
-<h3>Type 2 - Early init with private static field &amp; factory method</h3>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>public class Singleton{
-</span><span class='line'>   private static final Singleton INSTANCE = new Singleton();
-</span><span class='line'>   private Singleton(){}
-</span><span class='line'>
-</span><span class='line'>   //static factory method
-</span><span class='line'>   public static Singleton getInstance(){
-</span><span class='line'>     return INSTANCE;
-</span><span class='line'>   }
-</span><span class='line'>}</span></code></pre></td></tr></table></div></figure>
-
-
-<a name="Type.3.-.Early.init.via.Enum"></a>
-<h3>Type 3 - Early init via Enum</h3>
-
+<h3 id="type-3---early-init-via-enum">Type 3 - Early init via Enum</h3>
 <pre>
  public <span style="color:red">enum</span> Singleton{
     INSTANCE; //By default, public static final
  }
 </pre>
 
-
-<a name="Type.4.-.Lazy.init.-.not.thread-safe"></a>
-<h3>Type 4 - Lazy init - not thread-safe</h3>
-
+<h3 id="type-4---lazy-init---not-thread-safe">Type 4 - Lazy init - not thread-safe</h3>
 <pre>
 public class Singleton{
    private static Singleton instance;
@@ -555,10 +423,7 @@ public class Singleton{
 }
 </pre>
 
-
-<a name="Type.5.-.Lazy.init.-.Thread-safe.but.worst.performing"></a>
-<h3>Type 5 - Lazy init - Thread-safe but worst performing</h3>
-
+<h3 id="type-5---lazy-init---thread-safe-but-worst-performing">Type 5 - Lazy init - Thread-safe but worst performing</h3>
 <pre>
  public class Singleton{
    private static Singleton instance;
@@ -574,10 +439,7 @@ public class Singleton{
 }
 </pre>
 
-
-<a name="Type.6.-.Lazy.init.-.Thread-safe.via.Double-checked.lock..BROKEN."></a>
-<h3>Type 6 - Lazy init - Thread-safe via Double-checked lock (BROKEN)</h3>
-
+<h3 id="type-6---lazy-init---thread-safe-via-double-checked-lock-broken">Type 6 - Lazy init - Thread-safe via Double-checked lock (BROKEN)</h3>
 <pre>
  public class Singleton{
    private static Singleton instance;
@@ -597,10 +459,7 @@ public class Singleton{
 }
 </pre>
 
-
-<a name="Type.7.-.Lazy.init.-.Thread-safe.via.DCL.and.volatile.instance..works.in.Java.5.."></a>
-<h3>Type 7 - Lazy init - Thread-safe via DCL and volatile instance (works in Java 5+)</h3>
-
+<h3 id="type-7---lazy-init---thread-safe-via-dcl-and-volatile-instance-works-in-java-5">Type 7 - Lazy init - Thread-safe via DCL and volatile instance (works in Java 5+)</h3>
 <pre>
 public class Singleton{
    private static <span style="color:red">volatile</span> Singleton instance;
@@ -619,168 +478,112 @@ public class Singleton{
 }
 </pre>
 
+<h2 id="state">State</h2>
+<p>## Strategy
+## Reactor</p>
 
-<a name="State"></a>
-<h2>State</h2>
-
-<a name="Strategy"></a>
-<h2>Strategy</h2>
-
-<a name="Reactor"></a>
-<h2>Reactor</h2>
-
-<a name="Recycle.Bin"></a>
-<h2>Recycle Bin</h2>
-
-<p><a href="http://c2.com/cgi/wiki?RecycleBin">http://c2.com/cgi/wiki?RecycleBin</a>
+<h2 id="recycle-bin">Recycle Bin</h2>
+<p>http://c2.com/cgi/wiki?RecycleBin
 You can also find recycle bins in Java, such as in the thread pooling that you can configure using classes like ScheduledThreadPoolExecutor and ThreadPoolExecutor.</p>
 
-<a name="Template.Method"></a>
-<h2>Template Method</h2>
+<h2 id="template-method">Template Method</h2>
 
-<a name="TransferObject"></a>
-<h2>TransferObject</h2>
+<h2 id="transferobject">TransferObject</h2>
 
-<a name="ValueObject"></a>
-<h2>ValueObject</h2>
+<h2 id="valueobject">ValueObject</h2>
 
-<a name="Visitor"></a>
-<h2>Visitor</h2>
+<h2 id="visitor">Visitor</h2>
 
-<a name="Anti.Patterns"></a>
-<h1>Anti Patterns</h1>
+<h1 id="anti-patterns">Anti Patterns</h1>
 
-<blockquote><p>Excerpts from book &lsquo;Refactoring: Improving the Design of Existing Code&rsquo;)</p></blockquote>
+<blockquote>
+  <p>Excerpts from book ‘Refactoring: Improving the Design of Existing Code’)</p>
+</blockquote>
 
 <ul>
-<li>Large class</li>
-<li>Long parameter list</li>
-<li>Divergent Change
+  <li>Large class</li>
+  <li>Long parameter list</li>
+  <li>Divergent Change
+    <ul>
+      <li>Occurs when one class is commonly changed in different ways for different reasons. If you look at a class and say, “I have to change these four methods every time there is a new financial instrument,” you likely have a situation in which two objects are better than one. That way each object is changed only as a result of one kind of change. Any change to handle a variation should change a single class, and all the typing in the new class should express the variation. To clean this up you identify everything that changes for a particular cause and use <code>Extract Class</code> to put them all together.</li>
+    </ul>
+  </li>
+  <li>Shotgun Surgery
+    <ul>
+      <li>Similar to divergent change but is the opposite. You whiff this when every time you make a kind of change, you have to make a lot of little changes to a lot of different classes. When the changes are all over the place, they are hard to find, and it’s easy to miss an important change. In this case you want to use <code>Move Method</code> and <code>Move Field</code> to put all the changes into a single class. If no current class looks like a good candidate, create one. Divergent change is one class that suffers many kinds of changes, and shotgun surgery is one change that alters many classes.</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="concurrency-patterns">Concurrency Patterns</h1>
+
+<blockquote>
+  <p>Refer “Software Architecture Design Patterns” book</p>
+</blockquote>
+
+<h2 id="active-object">Active Object</h2>
+<p>## Balking Pattern
+## Barrier
+## Consistent Lock Order
+## Critical Section
+## Disruptor
+## Guarded Suspension
+## Monitor Object
+## Producer/Consumer pattern
+## Read-Write Lock</p>
+
+<h1 id="architectural-patterns">Architectural Patterns</h1>
+
+<h2 id="active-record">Active Record</h2>
+<p>## Business Delegate
+## Data Access Object (DAO)
+## Dependency Injection or IOC</p>
+
+<p>(http://www.martinfowler.com/articles/injection.html) Decoupling the implementation dependencies from the application class to a plug-in model. Types of Dependency injections</p>
 
 <ul>
-<li>Occurs when one class is commonly changed in different ways for different reasons. If you look at a class and say, &ldquo;I have to change these four methods every time there is a new financial instrument,&rdquo; you likely have a situation in which two objects are better than one. That way each object is changed only as a result of one kind of change. Any change to handle a variation should change a single class, and all the typing in the new class should express the variation. To clean this up you identify everything that changes for a particular cause and use <code>Extract Class</code> to put them all together.</li>
-</ul>
-</li>
-<li>Shotgun Surgery
-
-<ul>
-<li>Similar to divergent change but is the opposite. You whiff this when every time you make a kind of change, you have to make a lot of little changes to a lot of different classes. When the changes are all over the place, they are hard to find, and it&rsquo;s easy to miss an important change. In this case you want to use <code>Move Method</code> and <code>Move Field</code> to put all the changes into a single class. If no current class looks like a good candidate, create one. Divergent change is one class that suffers many kinds of changes, and shotgun surgery is one change that alters many classes.</li>
-</ul>
-</li>
+  <li>Constructor injection</li>
+  <li>Setter injection</li>
+  <li>Interface injection</li>
 </ul>
 
+<h2 id="facade">Facade</h2>
 
-<a name="Concurrency.Patterns"></a>
-<h1>Concurrency Patterns</h1>
+<h3 id="session-facade">Session Facade</h3>
 
-<blockquote><p>Refer &ldquo;Software Architecture Design Patterns&rdquo; book</p></blockquote>
+<h3 id="wrapper-facade">Wrapper Facade</h3>
 
-<a name="Active.Object"></a>
-<h2>Active Object</h2>
+<h2 id="front-controller">Front Controller</h2>
 
-<a name="Balking.Pattern"></a>
-<h2>Balking Pattern</h2>
+<h2 id="interceptor">Interceptor</h2>
 
-<a name="Barrier"></a>
-<h2>Barrier</h2>
+<h2 id="mock-object">Mock object</h2>
 
-<a name="Consistent.Lock.Order"></a>
-<h2>Consistent Lock Order</h2>
-
-<a name="Critical.Section"></a>
-<h2>Critical Section</h2>
-
-<a name="Disruptor"></a>
-<h2>Disruptor</h2>
-
-<a name="Guarded.Suspension"></a>
-<h2>Guarded Suspension</h2>
-
-<a name="Monitor.Object"></a>
-<h2>Monitor Object</h2>
-
-<a name="Producer.Consumer.pattern"></a>
-<h2>Producer/Consumer pattern</h2>
-
-<a name="Read-Write.Lock"></a>
-<h2>Read-Write Lock</h2>
-
-<a name="Architectural.Patterns"></a>
-<h1>Architectural Patterns</h1>
-
-<a name="Active.Record"></a>
-<h2>Active Record</h2>
-
-<a name="Business.Delegate"></a>
-<h2>Business Delegate</h2>
-
-<a name="Data.Access.Object..DAO."></a>
-<h2>Data Access Object (DAO)</h2>
-
-<a name="Dependency.Injection.or.IOC"></a>
-<h2>Dependency Injection or IOC</h2>
-
-<p>(<a href="http://www.martinfowler.com/articles/injection.html">http://www.martinfowler.com/articles/injection.html</a>) Decoupling the implementation dependencies from the application class to a plug-in model. Types of Dependency injections</p>
-
-<ul>
-<li>Constructor injection</li>
-<li>Setter injection</li>
-<li>Interface injection</li>
-</ul>
-
-
-<a name="Facade"></a>
-<h2>Facade</h2>
-
-<a name="Session.Facade"></a>
-<h3>Session Facade</h3>
-
-<a name="Wrapper.Facade"></a>
-<h3>Wrapper Facade</h3>
-
-<a name="Front.Controller"></a>
-<h2>Front Controller</h2>
-
-<a name="Interceptor"></a>
-<h2>Interceptor</h2>
-
-<a name="Mock.object"></a>
-<h2>Mock object</h2>
-
-<a name="Model.View.Controller"></a>
-<h2>Model View Controller</h2>
-
+<h2 id="model-view-controller">Model View Controller</h2>
 <p>MVC &amp; MVC2</p>
 
-<a name="Naked.objects"></a>
-<h2>Naked objects</h2>
+<h2 id="naked-objects">Naked objects</h2>
 
-<a name="Null.object"></a>
-<h2>Null object</h2>
+<h2 id="null-object">Null object</h2>
 
-<a name="Service.Locator"></a>
-<h2>Service Locator</h2>
+<h2 id="service-locator">Service Locator</h2>
 
-<a name="Token.Synchronization"></a>
-<h2>Token Synchronization</h2>
+<h2 id="token-synchronization">Token Synchronization</h2>
 
-<a name="Bibliography"></a>
-<h1>Bibliography</h1>
+<h1 id="bibliography">Bibliography</h1>
 
 <ul>
-<li>Design Patterns
-
-<ul>
-<li><a href="http://c2.com/cgi/wiki?ExecuteAroundMethod">http://c2.com/cgi/wiki?ExecuteAroundMethod</a></li>
-<li><a href="http://c2.com/cgi/wiki?CodeSmell">http://c2.com/cgi/wiki?CodeSmell</a></li>
-<li><a href="http://c2.com/cgi/wiki?LawOfDemeter">http://c2.com/cgi/wiki?LawOfDemeter</a></li>
-<li><a href="http://c2.com/cgi/wiki?TooManyParameters">http://c2.com/cgi/wiki?TooManyParameters</a></li>
-<li><a href="http://c2.com/cgi/wiki?FeatureEnvySmell">http://c2.com/cgi/wiki?FeatureEnvySmell</a></li>
-<li><a href="http://www.techjava.de/topics/2008/01/java-class-loading/">http://www.techjava.de/topics/2008/01/java-class-loading/</a></li>
+  <li>Design Patterns
+    <ul>
+      <li>http://c2.com/cgi/wiki?ExecuteAroundMethod </li>
+      <li>http://c2.com/cgi/wiki?CodeSmell</li>
+      <li>http://c2.com/cgi/wiki?LawOfDemeter</li>
+      <li>http://c2.com/cgi/wiki?TooManyParameters</li>
+      <li>http://c2.com/cgi/wiki?FeatureEnvySmell</li>
+      <li>http://www.techjava.de/topics/2008/01/java-class-loading/</li>
+    </ul>
+  </li>
 </ul>
-</li>
-</ul>
-
 
   
     <footer>
@@ -836,7 +639,7 @@ You can also find recycle bins in Java, such as in the thread pooling that you c
 
 		<li>
 			<h3>General Concepts</h3>
-			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/webprogramming/webconcepts.html">Web Concepts</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/webconcepts.html">Web Concepts</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
 		</li>
 
 		<h2>Non-Techninal</h2>

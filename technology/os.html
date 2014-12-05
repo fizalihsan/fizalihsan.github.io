@@ -9,8 +9,8 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Operating Systems UNIX Frequently used commands Find and copy files created today
-find /home/clstest -ctime -1 -exec cp {} /home/mohammo/CSW \; &hellip;">
+<meta name="description" content="Operating Systems UNIX Frequently used commands VI Tips UNIX Frequently used commands Find and copy files created today
+find /home/clstest -ctime -1 &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -34,6 +34,7 @@ find /home/clstest -ctime -1 -exec cp {} /home/mohammo/CSW \; &hellip;">
 <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
+
 <!-- mathjax config similar to math.stackexchange -->
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -48,8 +49,7 @@ messageStyle: "none",
 "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
 });
 </script>
-
-<script src="/mathjax/unpacked/MathJax.js"></script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
 
   
 
@@ -86,77 +86,64 @@ messageStyle: "none",
     
   </header>
   
-  <a name="UNIX"></a>
-<h1>UNIX</h1>
+  <ul id="markdown-toc">
+  <li><a href="#unix">UNIX</a>    <ul>
+      <li><a href="#frequently-used-commands">Frequently used commands</a></li>
+      <li><a href="#vi-tips">VI Tips</a></li>
+    </ul>
+  </li>
+</ul>
 
-<a name="Frequently.used.commands"></a>
-<h2>Frequently used commands</h2>
+<h1 id="unix">UNIX</h1>
+
+<h2 id="frequently-used-commands">Frequently used commands</h2>
 
 <ul>
-<li>Find and copy files created today
+  <li>Find and copy files created today
 <code>find /home/clstest -ctime -1 -exec cp {} /home/mohammo/CSW \;</code></li>
-<li>Suppress error message from &lsquo;find&rsquo; command
+  <li>Suppress error message from ‘find’ command
 <code>find . -name "*" -print 2&gt;/dev/null</code></li>
-<li>Tar &amp; untar directories with permissions intact</li>
+  <li>Tar &amp; untar directories with permissions intact
+&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+<span class="line-number">2</span></figure></notextile></li>
 </ul>
+<p>&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class=""><span class="line">tar -cvpf test.tar /home/mohammo/test
+</span><span class="line">tar -xvpf test.tar /home/mohammo/test</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+* Exclude certain files in ‘find’ command
+&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+<span class="line-number">2</span>
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class=""><span class="line">find . -name "*" -not -name "*.jar" -print
+</span><span class="line">find . -name "*" -not \( -name "*.jar" -o -name "*.tar" \) -print</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</figure></notextile>&lt;/div&gt;
+* Search and replace with no hassle of escaping characters
+<code>echo "/home/mohammo" | sed -e "s#/home/mohammo#/home/test#/g"</code>
+* Search for text but only display their file names
+<code>find . -name "*" -type f -exec grep -l "searchtext" {} \; -print</code>
+* Set operations - Complement (A-B)- below command prints all entries in file1 that are not in file2
+<code>comm -23 file1 file2</code>
+* Sorting files
+&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class=""><span class="line"> sort file1 file2 | uniq  //Union of unsorted files 
+</span><span class="line"> sort file1 file2 | uniq -d  //Intersection of unsorted files 
+</span><span class="line"> sort file1 file1 file2 | uniq -u //Difference of unsorted files 
+</span><span class="line"> sort file1 file2 | uniq -u  //Symmetric Difference of unsorted files </span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</figure></notextile>&lt;/div&gt;
+* When a JVM process is running in Unix/Windows, how do I check how much memory is being currently used by that JVM?</p>
 
+<h2 id="vi-tips">VI Tips</h2>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>tar -cvpf test.tar /home/mohammo/test
-</span><span class='line'>tar -xvpf test.tar /home/mohammo/test</span></code></pre></td></tr></table></div></figure>
-
+<blockquote>
+  <p>Note: Anything between [ and ] denotes a command executed from within vi.</p>
+</blockquote>
 
 <ul>
-<li>Exclude certain files in &lsquo;find&rsquo; command</li>
+  <li><code>[ !wc % ]</code> - opens a command shell and runs ‘wc’ on the current file open in vi. <code>%</code> means current file &amp; <code>!</code> is called ‘Bang’. Bang works best with non-interactive commands</li>
+  <li><code>[ qa ]</code> close all files open</li>
+  <li><code>[ ga ]</code> Show character info </li>
+  <li><code>[ ls ]</code> List buffers</li>
+  <li><code>[ % ]</code> Bracket matching</li>
 </ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>find . -name "*" -not -name "*.jar" -print
-</span><span class='line'>find . -name "*" -not \( -name "*.jar" -o -name "*.tar" \) -print</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>Search and replace with no hassle of escaping characters
-<code>echo "/home/mohammo" | sed -e "s#/home/mohammo#/home/test#/g"</code></li>
-<li>Search for text but only display their file names
-<code>find . -name "*" -type f -exec grep -l "searchtext" {} \; -print</code></li>
-<li>Set operations - Complement (A-B)- below command prints all entries in file1 that are not in file2
-<code>comm -23 file1 file2</code></li>
-<li>Sorting files</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'> sort file1 file2 | uniq  //Union of unsorted files 
-</span><span class='line'> sort file1 file2 | uniq -d  //Intersection of unsorted files 
-</span><span class='line'> sort file1 file1 file2 | uniq -u //Difference of unsorted files 
-</span><span class='line'> sort file1 file2 | uniq -u  //Symmetric Difference of unsorted files </span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>When a JVM process is running in Unix/Windows, how do I check how much memory is being currently used by that JVM?</li>
-</ul>
-
-
-<a name="VI.Tips"></a>
-<h2>VI Tips</h2>
-
-<blockquote><p>Note: Anything between [ and ] denotes a command executed from within vi.</p></blockquote>
-
-<ul>
-<li><code>[ !wc % ]</code> - opens a command shell and runs &lsquo;wc&rsquo; on the current file open in vi. <code>%</code> means current file &amp; <code>!</code> is called &lsquo;Bang&rsquo;. Bang works best with non-interactive commands</li>
-<li><code>[ qa ]</code> close all files open</li>
-<li><code>[ ga ]</code> Show character info</li>
-<li><code>[ ls ]</code> List buffers</li>
-<li><code>[ % ]</code> Bracket matching</li>
-</ul>
-
 
   
     <footer>
@@ -203,7 +190,7 @@ messageStyle: "none",
 
 		<li>
 			<h3>General Concepts</h3>
-			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/webprogramming/webconcepts.html">Web Concepts</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/webconcepts.html">Web Concepts</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
 		</li>
 
 		<h2>Non-Techninal</h2>

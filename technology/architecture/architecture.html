@@ -33,6 +33,7 @@
 <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
+
 <!-- mathjax config similar to math.stackexchange -->
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -47,8 +48,7 @@ messageStyle: "none",
 "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
 });
 </script>
-
-<script src="/mathjax/unpacked/MathJax.js"></script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
 
   
 
@@ -85,117 +85,84 @@ messageStyle: "none",
     
   </header>
   
-  <p><ul>
- <li><a href="#SDLC">SDLC</a>
- <ul>
-  <li><a href="#Continuous.integration">Continuous integration</a></li>
-  <li><a href="#Code.Analysis">Code Analysis</a></li>
-  <li><a href="#Code.Metrics">Code Metrics</a></li>
-  <li><a href="#Development.Methodologies">Development Methodologies</a>
-  <ul>
-   <li><a href="#Agile">Agile</a></li>
-   <li><a href="#XP">XP</a></li>
-   <li><a href="#Scrum">Scrum</a></li>
-   <li><a href="#KanBan">KanBan</a></li>
-  </ul>
+  <ul id="markdown-toc">
+  <li><a href="#sdlc">SDLC</a>    <ul>
+      <li><a href="#continuous-integration">Continuous integration</a></li>
+      <li><a href="#code-analysis">Code Analysis</a></li>
+      <li><a href="#code-metrics">Code Metrics</a></li>
+      <li><a href="#development-methodologies">Development Methodologies</a>        <ul>
+          <li><a href="#agile">Agile</a></li>
+          <li><a href="#xp">XP</a></li>
+          <li><a href="#scrum">Scrum</a></li>
+          <li><a href="#kanban">KanBan</a></li>
+        </ul>
+      </li>
+      <li><a href="#architecture-patterns">Architecture Patterns</a>        <ul>
+          <li><a href="#domain-driven-design">Domain Driven Design</a>            <ul>
+              <li><a href="#domain-model">Domain Model</a></li>
+              <li><a href="#value-objects">Value Objects</a></li>
+              <li><a href="#data-transfer-object">Data Transfer Object</a></li>
+              <li><a href="#service-layer">Service Layer</a></li>
+              <li><a href="#anemic-domain-model-anti-pattern">Anemic Domain Model (Anti-pattern)</a></li>
+            </ul>
+          </li>
+          <li><a href="#domain-specific-language-dsl">Domain Specific Language (DSL)</a></li>
+          <li><a href="#naked-objects-pattern">Naked Objects Pattern</a></li>
+        </ul>
+      </li>
+      <li><a href="#programming-paradigms">Programming Paradigms</a></li>
+    </ul>
   </li>
-  <li><a href="#Architecture.Patterns">Architecture Patterns</a>
-  <ul>
-   <li><a href="#Domain.Driven.Design">Domain Driven Design</a>
-   <ul>
-    <li><a href="#Domain.Model">Domain Model</a></li>
-    <li><a href="#Value.Objects">Value Objects</a></li>
-    <li><a href="#Data.Transfer.Object">Data Transfer Object</a></li>
-    <li><a href="#Service.Layer">Service Layer</a></li>
-    <li><a href="#Anemic.Domain.Model..Anti-pattern.">Anemic Domain Model (Anti-pattern)</a></li>
-   </ul>
-   </li>
-   <li><a href="#Domain.Specific.Language..DSL.">Domain Specific Language (DSL)</a></li>
-   <li><a href="#Naked.Objects.Pattern">Naked Objects Pattern</a></li>
-  </ul>
+  <li><a href="#bibliography">Bibliography</a></li>
+</ul>
+
+<h1 id="sdlc">SDLC</h1>
+
+<h2 id="continuous-integration">Continuous integration</h2>
+<ul>
+  <li>Hudson / Jenkins</li>
+  <li>TeamCity</li>
+  <li>CruiseControl</li>
+  <li>Ivy</li>
+</ul>
+
+<h2 id="code-analysis">Code Analysis</h2>
+<ul>
+  <li>Emma</li>
+  <li>Corbetura/Clover</li>
+  <li>Fortify</li>
+  <li>JDepend</li>
+  <li>FindBugs</li>
+  <li>SONAR</li>
+</ul>
+
+<h2 id="code-metrics">Code Metrics</h2>
+
+<ul>
+  <li>Novel way to visualize whole project, package structure &amp; lines of code - http://redotheweb.com/CodeFlower/</li>
+  <li>Cyclomatic Complexity - 
+    <ul>
+      <li>http://www.onjava.com/lpt/a/4917</li>
+      <li>http://c2.com/cgi/wiki?CyclomaticComplexityMetric</li>
+      <li>http://www.guru99.com/cyclomatic-complexity.html</li>
+    </ul>
   </li>
-  <li><a href="#Programming.Paradigms">Programming Paradigms</a>
-  <ul>
-   <li><a href="#Aspect.Oriented.Programming..AOP.">Aspect Oriented Programming (AOP)</a></li>
-   <li><a href="#Functional.Programming">Functional Programming</a></li>
-   <li><a href="#MDD.-.Model.Driven.Design">MDD - Model Driven Design</a></li>
-   <li><a href="#TDD.-.Test.Driven.Design">TDD - Test Driven Design</a></li>
-   <li><a href="#FDD.-.Feature.Driven.Development">FDD - Feature Driven Development</a>
-</li>
-  </ul>
-  </li>
- </ul>
- </li>
- <li><a href="#Bibliography">Bibliography</a></li>
 </ul>
 
-</p>
+<h2 id="development-methodologies">Development Methodologies</h2>
+<p>http://en.wikipedia.org/wiki/List_of_software_development_philosophies</p>
 
-<a name="SDLC"></a>
-<h1>SDLC</h1>
+<h3 id="agile">Agile</h3>
 
-<a name="Continuous.integration"></a>
-<h2>Continuous integration</h2>
+<h3 id="xp">XP</h3>
 
-<ul>
-<li>Hudson / Jenkins</li>
-<li>TeamCity</li>
-<li>CruiseControl</li>
-<li>Ivy</li>
-</ul>
+<h3 id="scrum">Scrum</h3>
 
+<h3 id="kanban">KanBan</h3>
 
-<a name="Code.Analysis"></a>
-<h2>Code Analysis</h2>
+<h2 id="architecture-patterns">Architecture Patterns</h2>
 
-<ul>
-<li>Emma</li>
-<li>Corbetura/Clover</li>
-<li>Fortify</li>
-<li>JDepend</li>
-<li>FindBugs</li>
-<li>SONAR</li>
-</ul>
-
-
-<a name="Code.Metrics"></a>
-<h2>Code Metrics</h2>
-
-<ul>
-<li>Novel way to visualize whole project, package structure &amp; lines of code - <a href="http://redotheweb.com/CodeFlower/">http://redotheweb.com/CodeFlower/</a></li>
-<li>Cyclomatic Complexity -
-
-<ul>
-<li><a href="http://www.onjava.com/lpt/a/4917">http://www.onjava.com/lpt/a/4917</a></li>
-<li><a href="http://c2.com/cgi/wiki?CyclomaticComplexityMetric">http://c2.com/cgi/wiki?CyclomaticComplexityMetric</a></li>
-<li><a href="http://www.guru99.com/cyclomatic-complexity.html">http://www.guru99.com/cyclomatic-complexity.html</a></li>
-</ul>
-</li>
-</ul>
-
-
-<a name="Development.Methodologies"></a>
-<h2>Development Methodologies</h2>
-
-<p><a href="http://en.wikipedia.org/wiki/List_of_software_development_philosophies">http://en.wikipedia.org/wiki/List_of_software_development_philosophies</a></p>
-
-<a name="Agile"></a>
-<h3>Agile</h3>
-
-<a name="XP"></a>
-<h3>XP</h3>
-
-<a name="Scrum"></a>
-<h3>Scrum</h3>
-
-<a name="KanBan"></a>
-<h3>KanBan</h3>
-
-<a name="Architecture.Patterns"></a>
-<h2>Architecture Patterns</h2>
-
-<a name="Domain.Driven.Design"></a>
-<h3>Domain Driven Design</h3>
+<h3 id="domain-driven-design">Domain Driven Design</h3>
 
 <p><strong>Tutorial</strong>
 * <a href="http://blog.fedecarg.com/2009/03/11/domain-driven-design-and-mvc-architectures/">Part 1: Domain-Driven Design and MVC Architectures</a>
@@ -203,110 +170,84 @@ messageStyle: "none",
 * <a href="http://blog.fedecarg.com/2009/03/15/domain-driven-design-the-repository/">Part 3: Domain-Driven Design: The Repository</a>
 * <a href="http://blog.fedecarg.com/2009/03/22/domain-driven-design-sample-application/">Part 4: Sample Application</a></p>
 
-<a name="Domain.Model"></a>
-<h4>Domain Model</h4>
+<h4 id="domain-model">Domain Model</h4>
 
 <ul>
-<li>Responsible only represent the concepts of the business, information about business situations and business rules</li>
-<li>Named after the nouns in domain space</li>
-<li>Should have both data and behaviour (basic idea of object oriented design)</li>
-<li>well connected with other domain objects with relationship and structure</li>
-<li>Examples of behaviour - validations, calculations, business rules</li>
-<li>Only business logic - no persistence or presentation logic</li>
-<li>Completely persistance Ignorant (Mithra domain model breaks this)</li>
-<li>When to use?</li>
-<li>When NOT to use?</li>
+  <li>Responsible only represent the concepts of the business, information about business situations and business rules</li>
+  <li>Named after the nouns in domain space</li>
+  <li>Should have both data and behaviour (basic idea of object oriented design)</li>
+  <li>well connected with other domain objects with relationship and structure</li>
+  <li>Examples of behaviour - validations, calculations, business rules</li>
+  <li>Only business logic - no persistence or presentation logic</li>
+  <li>Completely persistance Ignorant (Mithra domain model breaks this)</li>
+  <li>When to use?</li>
+  <li>When NOT to use?</li>
 </ul>
 
-
-<a name="Value.Objects"></a>
-<h4>Value Objects</h4>
+<h4 id="value-objects">Value Objects</h4>
 
 <ul>
-<li>2 value objects are equal if all their fields are equal. Although all fields are equal, you don&rsquo;t need to compare all fields if a subset is unique - for example currency codes for currency objects are enough to test equality</li>
-<li>Should be immutable</li>
-<li>A value object should always override .equals() &amp; .hashCode() in Java</li>
-<li><a href="http://c2.com/cgi/wiki?ValueObject">http://c2.com/cgi/wiki?ValueObject</a></li>
-<li>Diff between Value objects and Domain objects?</li>
+  <li>2 value objects are equal if all their fields are equal. Although all fields are equal, you don’t need to compare all fields if a subset is unique - for example currency codes for currency objects are enough to test equality</li>
+  <li>Should be immutable</li>
+  <li>A value object should always override .equals() &amp; .hashCode() in Java</li>
+  <li>http://c2.com/cgi/wiki?ValueObject</li>
+  <li>Diff between Value objects and Domain objects?</li>
 </ul>
 
-
-<a name="Data.Transfer.Object"></a>
-<h4>Data Transfer Object</h4>
+<h4 id="data-transfer-object">Data Transfer Object</h4>
 
 <ul>
-<li>Simply contain for a set of aggregated data that needs to be transfered across process or network boundary</li>
-<li>holds only data - no business logic</li>
-<li>Needs to be serializable to work with remote interfaces</li>
-<li>Usually an assembler is used to transfer data between DTOs and Domain objects</li>
+  <li>Simply contain for a set of aggregated data that needs to be transfered across process or network boundary</li>
+  <li>holds only data - no business logic</li>
+  <li>Needs to be serializable to work with remote interfaces</li>
+  <li>Usually an assembler is used to transfer data between DTOs and Domain objects</li>
 </ul>
 
-
-<a name="Service.Layer"></a>
-<h4>Service Layer</h4>
+<h4 id="service-layer">Service Layer</h4>
 
 <ul>
-<li>Service layer on top of &lsquo;Behaviourally rich domain model&rsquo; is recommended</li>
-<li>Should be a thin layer</li>
+  <li>Service layer on top of ‘Behaviourally rich domain model’ is recommended</li>
+  <li>Should be a thin layer</li>
 </ul>
 
-
-<a name="Anemic.Domain.Model..Anti-pattern."></a>
-<h4>Anemic Domain Model (Anti-pattern)</h4>
+<h4 id="anemic-domain-model-anti-pattern">Anemic Domain Model (Anti-pattern)</h4>
 
 <ul>
-<li>Objects which has only data but no business logic.</li>
-<li>All the business logic is implemented in a separate &lsquo;Service Layer&rsquo; - Domain model is used only for data</li>
-<li>Incurs all the cost of domain model - No benefits</li>
-<li>Cost related to mapping to database</li>
+  <li>Objects which has only data but no business logic. </li>
+  <li>All the business logic is implemented in a separate ‘Service Layer’ - Domain model is used only for data</li>
+  <li>Incurs all the cost of domain model - No benefits</li>
+  <li>Cost related to mapping to database</li>
 </ul>
-
 
 <p>Martin Fowler - Service Layer, Model Layer
 Eric Evans - Application Layer, Domain Layer</p>
 
-<a name="Domain.Specific.Language..DSL."></a>
-<h3>Domain Specific Language (DSL)</h3>
+<h3 id="domain-specific-language-dsl">Domain Specific Language (DSL)</h3>
 
 <ul>
-<li>Writing internal DSL in Java - <a href="http://jmock.org/oopsla2006.pdf">http://jmock.org/oopsla2006.pdf</a></li>
-<li><a href="http://blog.jooq.org/2012/01/05/the-java-fluent-api-designer-crash-course/">http://blog.jooq.org/2012/01/05/the-java-fluent-api-designer-crash-course/</a></li>
-<li><a href="http://www.infoq.com/articles/internal-dsls-java">http://www.infoq.com/articles/internal-dsls-java</a></li>
-<li><a href="http://weblogs.java.net/blog/carcassi/archive/2010/02/04/building-fluent-api-internal-dsl-java">http://weblogs.java.net/blog/carcassi/archive/2010/02/04/building-fluent-api-internal-dsl-java</a></li>
+  <li>Writing internal DSL in Java - http://jmock.org/oopsla2006.pdf</li>
+  <li>http://blog.jooq.org/2012/01/05/the-java-fluent-api-designer-crash-course/</li>
+  <li>http://www.infoq.com/articles/internal-dsls-java</li>
+  <li>http://weblogs.java.net/blog/carcassi/archive/2010/02/04/building-fluent-api-internal-dsl-java</li>
 </ul>
 
+<h3 id="naked-objects-pattern">Naked Objects Pattern</h3>
 
-<a name="Naked.Objects.Pattern"></a>
-<h3>Naked Objects Pattern</h3>
+<h2 id="programming-paradigms">Programming Paradigms</h2>
+<p>### Aspect Oriented Programming (AOP)
+### Functional Programming
+### MDD - Model Driven Design
+### TDD - Test Driven Design
+### FDD - Feature Driven Development</p>
 
-<a name="Programming.Paradigms"></a>
-<h2>Programming Paradigms</h2>
-
-<a name="Aspect.Oriented.Programming..AOP."></a>
-<h3>Aspect Oriented Programming (AOP)</h3>
-
-<a name="Functional.Programming"></a>
-<h3>Functional Programming</h3>
-
-<a name="MDD.-.Model.Driven.Design"></a>
-<h3>MDD - Model Driven Design</h3>
-
-<a name="TDD.-.Test.Driven.Design"></a>
-<h3>TDD - Test Driven Design</h3>
-
-<a name="FDD.-.Feature.Driven.Development"></a>
-<h3>FDD - Feature Driven Development</h3>
-
-<a name="Bibliography"></a>
-<h1>Bibliography</h1>
+<h1 id="bibliography">Bibliography</h1>
 
 <ul>
-<li>Patterns of Enterprise Application Architecture - Martin Fowler</li>
-<li><a href="http://martinfowler.com/bliki/ValueObject.html">http://martinfowler.com/bliki/ValueObject.html</a></li>
-<li><a href="http://martinfowler.com/eaaCatalog/dataTransferObject.html">http://martinfowler.com/eaaCatalog/dataTransferObject.html</a></li>
-<li><a href="http://java.sun.com/blueprints/patterns/TransferObject.html">http://java.sun.com/blueprints/patterns/TransferObject.html</a></li>
+  <li>Patterns of Enterprise Application Architecture - Martin Fowler </li>
+  <li>http://martinfowler.com/bliki/ValueObject.html</li>
+  <li>http://martinfowler.com/eaaCatalog/dataTransferObject.html</li>
+  <li>http://java.sun.com/blueprints/patterns/TransferObject.html</li>
 </ul>
-
 
   
     <footer>
@@ -362,7 +303,7 @@ Eric Evans - Application Layer, Domain Layer</p>
 
 		<li>
 			<h3>General Concepts</h3>
-			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/webprogramming/webconcepts.html">Web Concepts</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/webconcepts.html">Web Concepts</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
 		</li>
 
 		<h2>Non-Techninal</h2>

@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Coding Principles Excerpts from book 'Clean Code - A Handbook of Agile Software Craftmanship - Bob Martin' Chapter 2 - Naming Chapter 3 - Function &hellip;">
+<meta name="description" content="Coding Principles Excerpts from book ‘Clean Code - A Handbook of Agile Software Craftmanship - Bob Martin’ Chapter 2 - Naming Chapter 3 - Function &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -33,6 +33,7 @@
 <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
+
 <!-- mathjax config similar to math.stackexchange -->
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -47,8 +48,7 @@ messageStyle: "none",
 "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
 });
 </script>
-
-<script src="/mathjax/unpacked/MathJax.js"></script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
 
   
 
@@ -85,113 +85,88 @@ messageStyle: "none",
     
   </header>
   
-  <p><ul>
- <li>
- <ul>
-  <li><a href="#Excerpts.from.book..Clean.Code.-.A.Handbook.of.Agile.Software.Craftmanship.-.Bob.Martin.">Excerpts from book &#8216;Clean Code - A Handbook of Agile Software Craftmanship - Bob Martin&#8217;</a>
-  <ul>
-   <li><a href="#Chapter.2.-.Naming">Chapter 2 - Naming</a></li>
-   <li><a href="#Chapter.3.-.Function">Chapter 3 - Function</a></li>
-  </ul>
+  <ul id="markdown-toc">
+  <li><a href="#excerpts-from-book-clean-code---a-handbook-of-agile-software-craftmanship---bob-martin">Excerpts from book ‘Clean Code - A Handbook of Agile Software Craftmanship - Bob Martin’</a>    <ul>
+      <li><a href="#chapter-2---naming">Chapter 2 - Naming</a></li>
+      <li><a href="#chapter-3---function">Chapter 3 - Function</a></li>
+    </ul>
   </li>
- </ul>
- </li>
 </ul>
 
-</p>
+<h2 id="excerpts-from-book-clean-code---a-handbook-of-agile-software-craftmanship---bob-martin">Excerpts from book ‘Clean Code - A Handbook of Agile Software Craftmanship - Bob Martin’</h2>
 
-<a name="Excerpts.from.book..Clean.Code.-.A.Handbook.of.Agile.Software.Craftmanship.-.Bob.Martin."></a>
-<h2>Excerpts from book &lsquo;Clean Code - A Handbook of Agile Software Craftmanship - Bob Martin&rsquo;</h2>
-
-<a name="Chapter.2.-.Naming"></a>
-<h3>Chapter 2 - Naming</h3>
-
+<h3 id="chapter-2---naming">Chapter 2 - Naming</h3>
 <ul>
-<li>Don&rsquo;t reveal implementation detail in variables. e.g., declare accounts instead accountList</li>
-<li>Use single letter variables only as a local variable</li>
-<li>No need for prefix on variables and class names. e.g., ICustomer interface</li>
-<li>Class name should NOT be a verb. Avoid words like Manager, Processor, Data or Info</li>
-<li>Use a common word per concept across method names and class names. e.g., fetch(), get(), retrieve(). Stick to one.</li>
+  <li>Don’t reveal implementation detail in variables. e.g., declare accounts instead accountList</li>
+  <li>Use single letter variables only as a local variable</li>
+  <li>No need for prefix on variables and class names. e.g., ICustomer interface</li>
+  <li>Class name should NOT be a verb. Avoid words like Manager, Processor, Data or Info</li>
+  <li>Use a common word per concept across method names and class names. e.g., fetch(), get(), retrieve(). Stick to one.</li>
 </ul>
 
-
-<a name="Chapter.3.-.Function"></a>
-<h3>Chapter 3 - Function</h3>
-
+<h3 id="chapter-3---function">Chapter 3 - Function</h3>
 <ul>
-<li>Function should one thing only. One level of abstraction per function.</li>
-<li>Switch statement - tolerated if it appears only once at very low level. Hide it with &lsquo;AbstractFactory&rsquo; and polymorphism.</li>
-<li>Function arguments
+  <li>Function should one thing only. One level of abstraction per function.</li>
+  <li>Switch statement - tolerated if it appears only once at very low level. Hide it with ‘AbstractFactory’ and polymorphism.</li>
+  <li>Function arguments
+    <ul>
+      <li>Number of arguments
+        <ul>
+          <li>Niladic (zero args) - Best</li>
+          <li>Monadic (1) - Better</li>
+          <li>Dyadic (2) - Good</li>
+          <li>Polyadic (multiple) - Needs good justification</li>
+        </ul>
+      </li>
+      <li>Avoid functions with output arguments. e.g., public boolean foo(String input, String output);</li>
+      <li>Passing flags as arguments is ugly. Based on the flag value, the function might perform one or more things. .e.g., render(boolean isSuite). Split the logic into renderForSuite() and renderForSingleTest() to make it explicit.</li>
+      <li>Ambiguity issue with dyadic or polyadic functions with same type of arguments. e.g, assertEquals(int expected, int actual). Make function explicit as assertExpectedEqualsActual(int, int).</li>
+      <li>Fix for polyadic functions
+        <ul>
+          <li>Club the different arguments into an object and pass that object as input argument</li>
+          <li>Or, make those arguments are field variables. (only for private functions)</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Side effects</strong>
+    <ul>
+      <li>A function promises to do one thing, but it also does other hidden things. e.g., checkPassword(String user, String password) method which authenticates and initializes a user session. Session initialization part is hidden from user.</li>
+      <li>Side effects create temporal couplings and order dependencies. Temporal couplings mean that the function can only be invoked at certain times. In the above example, if it is called out of order the current session data might be destroyed.</li>
+    </ul>
+  </li>
+  <li><strong>Double take</strong> - Any line of code within function forces you to look at the function signature, then it is called “double take”.</li>
+  <li><strong>Prefer exceptions to return error codes</strong> - Function should do one thing. Error handling is another thing. Extract try..catch in a separate function.</li>
+</ul>
 
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"> if (delete(page) == OK){
+</span><span class="line">       ....
+</span><span class="line"> } else {
+</span><span class="line">       Error out
+</span><span class="line"> }</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">try{
+</span><span class="line">   ...
+</span><span class="line"> } catch (...){
+</span><span class="line">    //Error processing is separated from the happy path
+</span><span class="line"> } </span></code></pre></td></tr></table></div></figure></notextile></div>
 <ul>
-<li>Number of arguments
-
-<ul>
-<li>Niladic (zero args) - Best</li>
-<li>Monadic (1) - Better</li>
-<li>Dyadic (2) - Good</li>
-<li>Polyadic (multiple) - Needs good justification</li>
+  <li><strong>Command Query Separation</strong>*: Functions should either do something or return something, but not both.
+    <ul>
+      <li>http://martinfowler.com/bliki/CommandQuerySeparation.html</li>
+    </ul>
+  </li>
 </ul>
-</li>
-<li>Avoid functions with output arguments. e.g., public boolean foo(String input, String output);</li>
-<li>Passing flags as arguments is ugly. Based on the flag value, the function might perform one or more things. .e.g., render(boolean isSuite). Split the logic into renderForSuite() and renderForSingleTest() to make it explicit.</li>
-<li>Ambiguity issue with dyadic or polyadic functions with same type of arguments. e.g, assertEquals(int expected, int actual). Make function explicit as assertExpectedEqualsActual(int, int).</li>
-<li>Fix for polyadic functions
-
-<ul>
-<li>Club the different arguments into an object and pass that object as input argument</li>
-<li>Or, make those arguments are field variables. (only for private functions)</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><strong>Side effects</strong>
-
-<ul>
-<li>A function promises to do one thing, but it also does other hidden things. e.g., checkPassword(String user, String password) method which authenticates and initializes a user session. Session initialization part is hidden from user.</li>
-<li>Side effects create temporal couplings and order dependencies. Temporal couplings mean that the function can only be invoked at certain times. In the above example, if it is called out of order the current session data might be destroyed.</li>
-</ul>
-</li>
-<li><strong>Double take</strong> - Any line of code within function forces you to look at the function signature, then it is called &ldquo;double take&rdquo;.</li>
-<li><strong>Prefer exceptions to return error codes</strong> - Function should do one thing. Error handling is another thing. Extract try..catch in a separate function.</li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'> if (delete(page) == OK){
-</span><span class='line'>       ....
-</span><span class='line'> } else {
-</span><span class='line'>       Error out
-</span><span class='line'> }</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>try{
-</span><span class='line'>   ...
-</span><span class='line'> } catch (...){
-</span><span class='line'>    //Error processing is separated from the happy path
-</span><span class='line'> } </span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li><strong>Command Query Separation</strong>*: Functions should either do something or return something, but not both.
-
-<ul>
-<li><a href="http://martinfowler.com/bliki/CommandQuerySeparation.html">http://martinfowler.com/bliki/CommandQuerySeparation.html</a></li>
-</ul>
-</li>
-</ul>
-
 
   
     <footer>
@@ -247,7 +222,7 @@ messageStyle: "none",
 
 		<li>
 			<h3>General Concepts</h3>
-			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/webprogramming/webconcepts.html">Web Concepts</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/webconcepts.html">Web Concepts</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
 		</li>
 
 		<h2>Non-Techninal</h2>

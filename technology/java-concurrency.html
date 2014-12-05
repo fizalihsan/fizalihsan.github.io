@@ -33,6 +33,7 @@
 <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
+
 <!-- mathjax config similar to math.stackexchange -->
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -47,8 +48,7 @@ messageStyle: "none",
 "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
 });
 </script>
-
-<script src="/mathjax/unpacked/MathJax.js"></script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
 
   
 
@@ -85,486 +85,384 @@ messageStyle: "none",
     
   </header>
   
-  <p><ul>
- <li><a href="#Basics.Concepts">Basics Concepts</a>
- <ul>
-  <li><a href="#Threading.Models">Threading Models</a>
-  <ul>
-   <li><a href="#Pre-emptive.multi-threading">Pre-emptive multi-threading</a></li>
-   <li><a href="#Co-operative.multi-threading">Co-operative multi-threading</a></li>
-  </ul>
+  <ul id="markdown-toc">
+  <li><a href="#basics-concepts">Basics Concepts</a>    <ul>
+      <li><a href="#threading-models">Threading Models</a>        <ul>
+          <li><a href="#pre-emptive-multi-threading">Pre-emptive multi-threading</a></li>
+          <li><a href="#co-operative-multi-threading">Co-operative multi-threading</a></li>
+        </ul>
+      </li>
+      <li><a href="#thread-types">Thread Types</a>        <ul>
+          <li><a href="#green-thread">Green thread</a></li>
+          <li><a href="#native-thread">Native thread</a></li>
+        </ul>
+      </li>
+      <li><a href="#atomicity">Atomicity</a>        <ul>
+          <li><a href="#read-modify-write">Read-modify-write</a></li>
+        </ul>
+      </li>
+      <li><a href="#visibility">Visibility</a></li>
+      <li><a href="#synchronization">Synchronization</a>        <ul>
+          <li><a href="#mutex-locks">(1) Mutex locks</a></li>
+          <li><a href="#readwrite-locks">(2) Read/write locks</a></li>
+          <li><a href="#condition-variables">(3) Condition variables</a></li>
+          <li><a href="#counting-semaphores">(4) Counting semaphores</a></li>
+        </ul>
+      </li>
+    </ul>
   </li>
-  <li><a href="#Thread.Types">Thread Types</a>
-  <ul>
-   <li><a href="#Green.thread">Green thread</a></li>
-   <li><a href="#Native.thread">Native thread</a></li>
-  </ul>
+  <li><a href="#locks">Locks</a>    <ul>
+      <li><a href="#intrinsic-lock-synchronized-keyword">Intrinsic Lock (synchronized keyword)</a>        <ul>
+          <li><a href="#what-should-be-used-as-a-monitor">What should be used as a monitor?</a></li>
+          <li><a href="#what-should-not-be-used-as-a-monitor">What SHOULD NOT be used as a monitor?</a></li>
+          <li><a href="#limitations">Limitations</a></li>
+        </ul>
+      </li>
+      <li><a href="#extrinsic-lock">Extrinsic Lock</a>        <ul>
+          <li><a href="#lock-interface">Lock Interface</a></li>
+          <li><a href="#re-entrant-locksrecursive-locking">Re-entrant locks/Recursive locking</a></li>
+          <li><a href="#condition">Condition</a></li>
+        </ul>
+      </li>
+    </ul>
   </li>
-  <li><a href="#Atomicity">Atomicity</a>
-  <ul>
-   <li><a href="#Check-then-act">Check-then-act</a></li>
-   <li><a href="#Read-modify-write">Read-modify-write</a></li>
-  </ul>
+  <li><a href="#sharing-objects">Sharing Objects</a>    <ul>
+      <li><a href="#re-ordering">Re-ordering</a></li>
+      <li><a href="#volatile-variables">Volatile Variables</a>        <ul>
+          <li><a href="#pros-of-volatile">Pros of volatile</a></li>
+          <li><a href="#limitations-of-volatile">Limitations of volatile</a></li>
+        </ul>
+      </li>
+    </ul>
   </li>
-  <li><a href="#Visibility">Visibility</a></li>
-  <li><a href="#Synchronization">Synchronization</a>
-  <ul>
-   <li><a href="#L.1..Mutex.locks">(1) Mutex locks</a></li>
-   <li><a href="#L.2..Read.write.locks">(2) Read/write locks</a></li>
-   <li><a href="#L.3..Condition.variables">(3) Condition variables</a></li>
-   <li><a href="#L.4..Counting.semaphores">(4) Counting semaphores</a>
-</li>
-  </ul>
+  <li><a href="#publishing-and-escaping">Publishing and Escaping</a>    <ul>
+      <li><a href="#things-to-avoid">Things to avoid</a></li>
+      <li><a href="#thread-confinement">Thread Confinement</a></li>
+      <li><a href="#data-sharing-options">Data Sharing Options</a></li>
+      <li><a href="#immutability">Immutability</a></li>
+      <li><a href="#safe-publication">Safe Publication</a></li>
+    </ul>
   </li>
- </ul>
- </li>
- <li><a href="#Locks">Locks</a>
- <ul>
-  <li><a href="#Intrinsic.Lock..synchronized.keyword.">Intrinsic Lock (synchronized keyword)</a>
-  <ul>
-   <li><a href="#What.should.be.used.as.a.monitor.">What should be used as a monitor?</a></li>
-   <li><a href="#What.SHOULD.NOT.be.used.as.a.monitor.">What SHOULD NOT be used as a monitor?</a></li>
-   <li><a href="#Limitations">Limitations</a></li>
-  </ul>
+  <li><a href="#concurrency-problems">Concurrency Problems</a>    <ul>
+      <li><a href="#race-condition">1) Race condition</a></li>
+      <li><a href="#deadlock">2) Deadlock</a>        <ul>
+          <li><a href="#type-1-lock-ordering-deadlock">Type 1: Lock-Ordering Deadlock</a>            <ul>
+              <li><a href="#dynamic-lock-ordering-deadlocks">Dynamic lock-ordering deadlocks</a></li>
+              <li><a href="#open-calls">Open Calls</a></li>
+            </ul>
+          </li>
+          <li><a href="#type-2-thread-starvation-deadlocks">Type 2: Thread-starvation deadlocks</a></li>
+          <li><a href="#how-to-avoid-deadlocks">How to avoid deadlocks?</a></li>
+        </ul>
+      </li>
+      <li><a href="#starvation">3) Starvation</a></li>
+      <li><a href="#livelocks">4) Livelocks</a></li>
+      <li><a href="#missed-signals">5) Missed Signals</a></li>
+      <li><a href="#fairness">6) Fairness</a></li>
+    </ul>
   </li>
-  <li><a href="#Extrinsic.Lock">Extrinsic Lock</a>
-  <ul>
-   <li><a href="#Lock.Interface">Lock Interface</a></li>
-   <li><a href="#Re-entrant.locks.Recursive.locking">Re-entrant locks/Recursive locking</a></li>
-   <li><a href="#Condition">Condition</a>
-</li>
-  </ul>
+  <li><a href="#concurrency-limitations">Concurrency Limitations</a></li>
+  <li><a href="#executors-framework">Executors Framework</a>    <ul>
+      <li><a href="#disadvantages-of-unbounded-thread-creation">Disadvantages of unbounded thread creation</a></li>
+      <li><a href="#task-execution-policy">Task Execution Policy</a></li>
+    </ul>
   </li>
- </ul>
- </li>
- <li><a href="#Sharing.Objects">Sharing Objects</a>
- <ul>
-  <li><a href="#Re-ordering">Re-ordering</a></li>
-  <li><a href="#Volatile.Variables">Volatile Variables</a>
-  <ul>
-   <li><a href="#Pros.of.volatile">Pros of volatile</a></li>
-   <li><a href="#Limitations.of.volatile">Limitations of volatile</a>
-</li>
-  </ul>
+  <li><a href="#of-threads---------singlemulti-threaded">of threads       -&gt; single/multi-threaded</a>    <ul>
+      <li><a href="#task-types">Task Types</a></li>
+      <li><a href="#class-diagram">Class diagram</a></li>
+    </ul>
   </li>
- </ul>
- </li>
- <li><a href="#Publishing.and.Escaping">Publishing and Escaping</a>
- <ul>
-  <li><a href="#Things.to.avoid">Things to avoid</a></li>
-  <li><a href="#Thread.Confinement">Thread Confinement</a></li>
-  <li><a href="#Data.Sharing.Options">Data Sharing Options</a></li>
-  <li><a href="#Immutability">Immutability</a></li>
-  <li><a href="#Safe.Publication">Safe Publication</a></li>
- </ul>
- </li>
- <li><a href="#Concurrency.Problems">Concurrency Problems</a>
- <ul>
-  <li><a href="#L1..Race.condition">1) Race condition</a></li>
-  <li><a href="#L2..Deadlock">2) Deadlock</a>
-  <ul>
-   <li><a href="#Type.1:.Lock-Ordering.Deadlock">Type 1: Lock-Ordering Deadlock</a>
-   <ul>
-    <li><a href="#Dynamic.lock-ordering.deadlocks">Dynamic lock-ordering deadlocks</a></li>
-    <li><a href="#Open.Calls">Open Calls</a></li>
-   </ul>
-   </li>
-   <li><a href="#Type.2:.Thread-starvation.deadlocks">Type 2: Thread-starvation deadlocks</a></li>
-   <li><a href="#How.to.avoid.deadlocks.">How to avoid deadlocks?</a></li>
-  </ul>
+  <li><a href="#concurrent-data-structures">Concurrent Data Structures</a>    <ul>
+      <li><a href="#blocking-data-structures">Blocking Data Structures</a></li>
+    </ul>
   </li>
-  <li><a href="#L3..Starvation">3) Starvation</a></li>
-  <li><a href="#L4..Livelocks">4) Livelocks</a></li>
-  <li><a href="#L5..Missed.Signals">5) Missed Signals</a></li>
-  <li><a href="#L6..Fairness">6) Fairness</a></li>
- </ul>
- </li>
- <li><a href="#Concurrency.Limitations">Concurrency Limitations</a></li>
- <li><a href="#Executors.Framework">Executors Framework</a>
- <ul>
-  <li><a href="#Disadvantages.of.unbounded.thread.creation">Disadvantages of unbounded thread creation</a></li>
-  <li><a href="#Task.Execution.Policy">Task Execution Policy</a></li>
-  <li><a href="#Task.Types">Task Types</a></li>
-  <li><a href="#Class.diagram">Class diagram</a></li>
- </ul>
- </li>
- <li><a href="#Concurrent.Data.Structures">Concurrent Data Structures</a>
- <ul>
-  <li><a href="#Blocking.Data.Structures">Blocking Data Structures</a></li>
- </ul>
- </li>
- <li><a href="#Synchronizers">Synchronizers</a>
- <ul>
-  <li><a href="#L1..FutureTask">1) FutureTask</a></li>
-  <li><a href="#L2..Sempahore">2) Sempahore</a></li>
-  <li><a href="#L3..Latches">3) Latches</a>
-  <ul>
-   <li><a href="#Limitations">Limitations</a></li>
-  </ul>
+  <li><a href="#synchronizers">Synchronizers</a>    <ul>
+      <li><a href="#futuretask">1) FutureTask</a></li>
+      <li><a href="#sempahore">2) Sempahore</a></li>
+      <li><a href="#latches">3) Latches</a>        <ul>
+          <li><a href="#limitations-1">Limitations</a></li>
+        </ul>
+      </li>
+      <li><a href="#barriers">4) Barriers</a>        <ul>
+          <li><a href="#limitations-2">Limitations</a></li>
+        </ul>
+      </li>
+      <li><a href="#exchanger">5) Exchanger</a></li>
+      <li><a href="#phaser-17">6) Phaser (1.7)</a></li>
+      <li><a href="#forkjoinpool-17">7) ForkJoinPool (1.7)</a></li>
+      <li><a href="#stampedlock-18">8) StampedLock (1.8)</a></li>
+    </ul>
   </li>
-  <li><a href="#L4..Barriers">4) Barriers</a>
-  <ul>
-   <li><a href="#Limitations">Limitations</a></li>
-  </ul>
-  </li>
-  <li><a href="#L5..Exchanger">5) Exchanger</a></li>
-  <li><a href="#L6..Phaser..1.7.">6) Phaser (1.7)</a></li>
-  <li><a href="#L7..ForkJoinPool..1.7.">7) ForkJoinPool (1.7)</a></li>
-  <li><a href="#L8..StampedLock..1.8.">8) StampedLock (1.8)</a></li>
- </ul>
- </li>
- <li><a href="#Java.Memory.Model">Java Memory Model</a></li>
- <li><a href="#Concurrency.Programming.Models">Concurrency Programming Models</a></li>
- <li><a href="#Concurrency.Frameworks">Concurrency Frameworks</a></li>
- <li><a href="#FAQs">FAQs</a></li>
- <li><a href="#Bibliography">Bibliography</a></li>
+  <li><a href="#java-memory-model">Java Memory Model</a></li>
+  <li><a href="#concurrency-programming-models">Concurrency Programming Models</a></li>
+  <li><a href="#concurrency-frameworks">Concurrency Frameworks</a></li>
+  <li><a href="#faqs">FAQs</a></li>
+  <li><a href="#bibliography">Bibliography</a></li>
 </ul>
 
-</p>
+<p>Memory Consistency - http://docs.oracle.com/javase/tutorial/essential/concurrency/memconsist.html 
+Memory consistent properties - happens-before? Read more on Java Language Specification book </p>
 
-<p>Memory Consistency - <a href="http://docs.oracle.com/javase/tutorial/essential/concurrency/memconsist.html">http://docs.oracle.com/javase/tutorial/essential/concurrency/memconsist.html</a>
-Memory consistent properties - happens-before? Read more on Java Language Specification book</p>
-
-<a name="Basics.Concepts"></a>
-<h1>Basics Concepts</h1>
+<h1 id="basics-concepts">Basics Concepts</h1>
 
 <ul>
-<li>Thread
+  <li>Thread
+    <ul>
+      <li>Each thread has its own stack and local variable.</li>
+      <li>Threads share the memory address space of the owning process; due to this, all threads have access to the same variables and allocate objects from same heap.</li>
+    </ul>
+  </li>
+  <li>Definitions
+    <ul>
+      <li>Parallel processing - refers to two or more threads running simultaneously, on different cores (processors), in the same computer. It is essentially a hardware term.</li>
+      <li>Concurrent processing - refers to two or more threads running asynchronously, on one or more cores, usually in the same computer. It is essentially a software term.</li>
+      <li>Distributed processing - refers to two or more processes running asynchronously on one or more JVMs or boxes.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="threading-models">Threading Models</h2>
+
+<h3 id="pre-emptive-multi-threading">Pre-emptive multi-threading</h3>
 
 <ul>
-<li>Each thread has its own stack and local variable.</li>
-<li>Threads share the memory address space of the owning process; due to this, all threads have access to the same variables and allocate objects from same heap.</li>
+  <li>OS determines when a context switch should occur</li>
+  <li>System may make context switch at an inappropriate time</li>
+  <li>This model is widely used nowadays</li>
 </ul>
-</li>
-<li>Definitions
+
+<h3 id="co-operative-multi-threading">Co-operative multi-threading</h3>
 
 <ul>
-<li>Parallel processing - refers to two or more threads running simultaneously, on different cores (processors), in the same computer. It is essentially a hardware term.</li>
-<li>Concurrent processing - refers to two or more threads running asynchronously, on one or more cores, usually in the same computer. It is essentially a software term.</li>
-<li>Distributed processing - refers to two or more processes running asynchronously on one or more JVMs or boxes.</li>
-</ul>
-</li>
+  <li>The threads themselves determine relinquish control once they are at a stopping point.</li>
+  <li>Can create problems if a thread is waiting for a resource to become available.</li>
 </ul>
 
+<h2 id="thread-types">Thread Types</h2>
 
-<a name="Threading.Models"></a>
-<h2>Threading Models</h2>
-
-<a name="Pre-emptive.multi-threading"></a>
-<h3>Pre-emptive multi-threading</h3>
+<h3 id="green-thread">Green thread</h3>
 
 <ul>
-<li>OS determines when a context switch should occur</li>
-<li>System may make context switch at an inappropriate time</li>
-<li>This model is widely used nowadays</li>
+  <li>Green threads emulate multithreaded environments without relying on any native OS capabilities. They run code in user space that manages and schedules threads;</li>
+  <li>Scheduled by JVM rather underlying OS</li>
+  <li>Sun wrote green threads to enable Java to work in environments that do not have native thread support.</li>
+  <li>Uses cooperative multitasking - dangerous</li>
 </ul>
 
-
-<a name="Co-operative.multi-threading"></a>
-<h3>Co-operative multi-threading</h3>
+<h3 id="native-thread">Native thread</h3>
 
 <ul>
-<li>The threads themselves determine relinquish control once they are at a stopping point.</li>
-<li>Can create problems if a thread is waiting for a resource to become available.</li>
+  <li>Uses underlying OS native threads</li>
+  <li>Can be scheduled across cores in multi-core or multiprocessor systems</li>
+  <li>Performs better than green threads even in single-core</li>
 </ul>
 
+<h2 id="atomicity">Atomicity</h2>
 
-<a name="Thread.Types"></a>
-<h2>Thread Types</h2>
+<p>Compound Action Anti-Patterns
+### Check-then-act</p>
 
-<a name="Green.thread"></a>
-<h3>Green thread</h3>
-
-<ul>
-<li>Green threads emulate multithreaded environments without relying on any native OS capabilities. They run code in user space that manages and schedules threads;</li>
-<li>Scheduled by JVM rather underlying OS</li>
-<li>Sun wrote green threads to enable Java to work in environments that do not have native thread support.</li>
-<li>Uses cooperative multitasking - dangerous</li>
-</ul>
-
-
-<a name="Native.thread"></a>
-<h3>Native thread</h3>
-
-<ul>
-<li>Uses underlying OS native threads</li>
-<li>Can be scheduled across cores in multi-core or multiprocessor systems</li>
-<li>Performs better than green threads even in single-core</li>
-</ul>
-
-
-<a name="Atomicity"></a>
-<h2>Atomicity</h2>
-
-<p>Compound Action Anti-Patterns</p>
-
-<a name="Check-then-act"></a>
-<h3>Check-then-act</h3>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="k">if</span><span class="o">(</span><span class="n">foo</span><span class="o">==</span><span class="kc">null</span><span class="o">)</span> <span class="c1">//Another thread could set foo to non-null. </span>
-</span><span class='line'>    <span class="n">foo</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Foo</span><span class="o">();</span>
-</span></code></pre></td></tr></table></div></figure>
-
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="k">if</span><span class="o">(</span><span class="n">foo</span><span class="o">==</span><span class="kc">null</span><span class="o">)</span> <span class="c1">//Another thread could set foo to non-null. </span>
+</span><span class="line">    <span class="n">foo</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Foo</span><span class="o">();</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p><strong>Solution</strong>: synchronize or use concurrent methods like <code>ConcurrentHashMap.putIfAbsent()</code></p>
 
-<a name="Read-modify-write"></a>
-<h3>Read-modify-write</h3>
+<h3 id="read-modify-write">Read-modify-write</h3>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="o">++</span><span class="n">numRequests</span><span class="o">;</span> <span class="c1">//non-atomic compound action</span>
-</span></code></pre></td></tr></table></div></figure>
-
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="o">++</span><span class="n">numRequests</span><span class="o">;</span> <span class="c1">//non-atomic compound action</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p><strong>Solution</strong>: synchronize or use atomic objects <code>AtomicInteger.getAndSet()</code></p>
 
-<a name="Visibility"></a>
-<h2>Visibility</h2>
+<h2 id="visibility">Visibility</h2>
 
-<p>Changes made by one thread may not be visible to other threads since the data could be residing in local working memory of a thread instead of main memory. In order to make it visible, <strong>Memory Barrier</strong> is needed. &ldquo;Memory Barrier&rdquo; means copying data from local working memory to main memory.</p>
+<p>Changes made by one thread may not be visible to other threads since the data could be residing in local working memory of a thread instead of main memory. In order to make it visible, <strong>Memory Barrier</strong> is needed. “Memory Barrier” means copying data from local working memory to main memory.</p>
 
 <p>A change made by one thread is guaranteed to be visible to another thread only if the writing thread crosses the memory barrier and then the reading thread crosses the memory barrier. <strong>synchronized</strong> and <strong>volatile</strong> keywords force that the changes are globally visible on a timely basis; these help cross the memory barrier.</p>
 
-<p><img class="right" src="/technology/memory-barrier.jpg"></p>
+<p><img class="right" src="/technology/memory-barrier.jpg" /></p>
 
-<a name="Synchronization"></a>
-<h2>Synchronization</h2>
+<h2 id="synchronization">Synchronization</h2>
 
 <p>Synchronization allows you to control program flow and access to shared data for concurrently executing threads.</p>
 
 <p>The four synchronization models are mutex locks, read/write locks, condition variables, and semaphores.</p>
 
-<a name="L.1..Mutex.locks"></a>
-<h3>(1) Mutex locks</h3>
+<h3 id="mutex-locks">(1) Mutex locks</h3>
 
 <ul>
-<li>allow only one thread at a time to execute a specific section of code, or to access specific data.</li>
-<li>Each Java class and object has their own mutex locks. Each thread has it&rsquo;s own separate call stack.</li>
+  <li>allow only one thread at a time to execute a specific section of code, or to access specific data.</li>
+  <li>Each Java class and object has their own mutex locks. Each thread has it’s own separate call stack.</li>
 </ul>
 
-
-<a name="L.2..Read.write.locks"></a>
-<h3>(2) Read/write locks</h3>
+<h3 id="readwrite-locks">(2) Read/write locks</h3>
 
 <ul>
-<li>permit concurrent reads and exclusive writes to a protected shared resource. To modify a resource, a thread must first acquire the exclusive write lock. An exclusive write lock is not permitted until all read locks have been released.</li>
+  <li>permit concurrent reads and exclusive writes to a protected shared resource. To modify a resource, a thread must first acquire the exclusive write lock. An exclusive write lock is not permitted until all read locks have been released.</li>
 </ul>
-
 
 <p>e.g., Java ReadWriteLock</p>
 
-<a name="L.3..Condition.variables"></a>
-<h3>(3) Condition variables</h3>
+<h3 id="condition-variables">(3) Condition variables</h3>
 
 <ul>
-<li>block threads until a particular condition is true.</li>
+  <li>block threads until a particular condition is true.</li>
 </ul>
 
-
-<a name="L.4..Counting.semaphores"></a>
-<h3>(4) Counting semaphores</h3>
+<h3 id="counting-semaphores">(4) Counting semaphores</h3>
 
 <ul>
-<li>typically coordinate access to resources. The count is the limit on how many threads can have access to a semaphore. When the count is reached, the semaphore blocks.</li>
+  <li>typically coordinate access to resources. The count is the limit on how many threads can have access to a semaphore. When the count is reached, the semaphore blocks.</li>
 </ul>
 
+<h1 id="locks">Locks</h1>
 
-<a name="Locks"></a>
-<h1>Locks</h1>
+<h2 id="intrinsic-lock-synchronized-keyword">Intrinsic Lock (synchronized keyword)</h2>
 
-<a name="Intrinsic.Lock..synchronized.keyword."></a>
-<h2>Intrinsic Lock (synchronized keyword)</h2>
-
-<a name="What.should.be.used.as.a.monitor."></a>
-<h3>What should be used as a monitor?</h3>
+<h3 id="what-should-be-used-as-a-monitor">What should be used as a monitor?</h3>
 
 <ul>
-<li>The field being protected. e.g.,</li>
+  <li>The field being protected. e.g., 
+&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;figcaption&gt;<span></span>&lt;/figcaption&gt;&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+<span class="line-number">2</span></figure></notextile></li>
+</ul>
+<p>&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class="java"><span class="line"><span class="kd">private</span> <span class="kd">final</span> <span class="n">Map</span> <span class="n">map</span> <span class="o">=</span> <span class="o">...;</span>
+</span><span class="line"><span class="kd">synchronized</span><span class="o">(</span><span class="n">map</span><span class="o">){...}</span>
+</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+* an explicit private lock  e.g., 
+&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;figcaption&gt;<span></span>&lt;/figcaption&gt;&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+<span class="line-number">2</span>
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class="java"><span class="line"><span class="kd">private</span> <span class="kd">final</span> <span class="n">Object</span> <span class="n">lock</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Object</span><span class="o">();</span>
+</span><span class="line"><span class="kd">synchronized</span><span class="o">(</span><span class="n">lock</span><span class="o">){...}</span>
+</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</figure></notextile>&lt;/div&gt;
+* <code>this</code> object 
+&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;figcaption&gt;<span></span>&lt;/figcaption&gt;&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class="java"><span class="line"><span class="kd">synchronized</span><span class="o">(</span><span class="k">this</span><span class="o">){...}</span> <span class="c1">//uses current object&#39;s lock</span>
+</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</figure></notextile>&lt;/div&gt;
+* Class-level lock 
+&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;figcaption&gt;<span></span>&lt;/figcaption&gt;&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class="java"><span class="line"><span class="kd">synchronized</span><span class="o">(</span><span class="n">Foo</span><span class="o">.</span><span class="na">class</span><span class="o">){...}</span>
+</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</figure></notextile>&lt;/div&gt;</p>
+
+<h3 id="what-should-not-be-used-as-a-monitor">What SHOULD NOT be used as a monitor?</h3>
+<ul>
+  <li>DO NOT synchronize on objects that can be re-used. Examples below: (For more information: <a href="https://www.securecoding.cert.org/confluence/display/java/LCK01-J.+Do+not+synchronize+on+objects+that+may+be+reused">Securecoding.cert.org - Do not synchronize on objects that may be reused)</a>
+&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;figcaption&gt;<span></span>&lt;/figcaption&gt;&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span></figure></notextile></li>
+</ul>
+<p>&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class="java"><span class="line"><span class="kd">private</span> <span class="kd">final</span> <span class="n">Boolean</span> <span class="n">lock</span> <span class="o">=</span> <span class="n">Boolean</span><span class="o">.</span><span class="na">FALSE</span><span class="o">;</span> <span class="c1">//UNSAFE if some other thread uses the same reused object from heap it could lead to unexpected overhead and deadlock</span>
+</span><span class="line"><span class="kd">private</span> <span class="kd">final</span> <span class="n">Integer</span> <span class="n">lock</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span> <span class="c1">//UNSAFE if autoboxed primitive value is shared from heap</span>
+</span><span class="line"><span class="kd">private</span> <span class="kd">final</span> <span class="n">Integer</span> <span class="n">lock</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Integer</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span> <span class="c1">//SAFE. explicitly constructed Integer object has a unique reference and its own intrinsic lock is distinct not only from other Integer objects, but also from boxed integers that have the same value.</span>
+</span><span class="line"><span class="kd">private</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">lock</span> <span class="o">=</span> <span class="s">&quot;LOCK&quot;</span><span class="o">;</span> <span class="c1">//UNSAFE if some other thread uses the same reused object from heap.</span>
+</span><span class="line"><span class="kd">private</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">lock</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">String</span><span class="o">(</span><span class="s">&quot;LOCK&quot;</span><span class="o">).</span><span class="na">intern</span><span class="o">();</span> <span class="c1">//UNSAFE interned strings act like a global variable in a JVM.</span>
+</span><span class="line"><span class="kd">private</span> <span class="kd">final</span> <span class="n">Object</span> <span class="n">lock</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Object</span><span class="o">();</span> <span class="c1">//SAFE.</span>
+</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+* DO NOT synchronize on Lock objects.
+&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;figcaption&gt;<span></span>&lt;/figcaption&gt;&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+<span class="line-number">2</span>
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class="java"><span class="line"><span class="kd">private</span> <span class="kd">final</span> <span class="n">Lock</span> <span class="n">lock</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">ReEntrantLock</span><span class="o">();</span>
+</span><span class="line"><span class="kd">synchronized</span><span class="o">(</span><span class="n">lock</span><span class="o">){...}</span>
+</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</figure></notextile>&lt;/div&gt;</p>
+
+<h3 id="limitations">Limitations</h3>
+<ul>
+  <li>Single monitor per object</li>
+  <li>Not possible to interrupt thread waiting for lock</li>
+  <li>Not possible to time-out when waiting for a lock</li>
+  <li>Acquiring multiple locks is complex.</li>
 </ul>
 
+<h2 id="extrinsic-lock">Extrinsic Lock</h2>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">private</span> <span class="kd">final</span> <span class="n">Map</span> <span class="n">map</span> <span class="o">=</span> <span class="o">...;</span>
-</span><span class='line'><span class="kd">synchronized</span><span class="o">(</span><span class="n">map</span><span class="o">){...}</span>
-</span></code></pre></td></tr></table></div></figure>
-
+<h3 id="lock-interface">Lock Interface</h3>
 
 <ul>
-<li>an explicit private lock  e.g.,</li>
+  <li>implementations provide more extensive locking operations than can be obtained using synchronized methods and statements.</li>
+  <li>Commonly, a lock provides exclusive access to a shared resource: only one thread at a time can acquire the lock and all access to the shared resource requires that the lock be acquired first. However, some locks may allow concurrent access to a shared resource, such as the read lock of a ReadWriteLock.</li>
+  <li>offers more flexible lock acquiring and releasing. For example, some algorithms for traversing concurrently accessed data structures require the use of “hand-over-hand” or “chain locking”: you acquire the lock of node A, then node B, then release A and acquire C, then release B and acquire D and so on. Implementations of the Lock interface enable the use of such techniques by allowing a lock to be acquired and released in different scopes, and allowing multiple locks to be acquired and released in any order.</li>
+  <li>Lock implementations provide additional functionality over the use of synchronized methods and statements by providing a non-blocking attempt to acquire a lock (<code>tryLock()</code>), an attempt to acquire the lock that can be interrupted (<code>lockInterruptibly()</code>, and an attempt to acquire the lock that can timeout (<code>tryLock(long, TimeUnit)</code>).</li>
+  <li>Never use a Lock object as a monitor in a synchronized block</li>
+  <li>Common idiom to follow</li>
 </ul>
 
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">Lock</span> <span class="n">l</span> <span class="o">=</span> <span class="o">...;</span>
+</span><span class="line"><span class="n">l</span><span class="o">.</span><span class="na">lock</span><span class="o">();</span>
+</span><span class="line"><span class="k">try</span> <span class="o">{</span>
+</span><span class="line">   <span class="c1">// access the resource protected by this lock</span>
+</span><span class="line"><span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+</span><span class="line">   <span class="n">l</span><span class="o">.</span><span class="na">unlock</span><span class="o">();</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">private</span> <span class="kd">final</span> <span class="n">Object</span> <span class="n">lock</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Object</span><span class="o">();</span>
-</span><span class='line'><span class="kd">synchronized</span><span class="o">(</span><span class="n">lock</span><span class="o">){...}</span>
-</span></code></pre></td></tr></table></div></figure>
+<h3 id="re-entrant-locksrecursive-locking">Re-entrant locks/Recursive locking</h3>
 
+<p>Once a thread acquires the lock of an object, it can call other synchronized methods on that object without having to wait to acquire the lock again. Otherwise the method call would get into deadlock. </p>
 
-<ul>
-<li><code>this</code> object</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">synchronized</span><span class="o">(</span><span class="k">this</span><span class="o">){...}</span> <span class="c1">//uses current object&#39;s lock</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>Class-level lock</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">synchronized</span><span class="o">(</span><span class="n">Foo</span><span class="o">.</span><span class="na">class</span><span class="o">){...}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<a name="What.SHOULD.NOT.be.used.as.a.monitor."></a>
-<h3>What SHOULD NOT be used as a monitor?</h3>
-
-<ul>
-<li>DO NOT synchronize on objects that can be re-used. Examples below: (For more information: <a href="https://www.securecoding.cert.org/confluence/display/java/LCK01-J.+Do+not+synchronize+on+objects+that+may+be+reused">Securecoding.cert.org - Do not synchronize on objects that may be reused)</a></li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">private</span> <span class="kd">final</span> <span class="n">Boolean</span> <span class="n">lock</span> <span class="o">=</span> <span class="n">Boolean</span><span class="o">.</span><span class="na">FALSE</span><span class="o">;</span> <span class="c1">//UNSAFE if some other thread uses the same reused object from heap it could lead to unexpected overhead and deadlock</span>
-</span><span class='line'><span class="kd">private</span> <span class="kd">final</span> <span class="n">Integer</span> <span class="n">lock</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span> <span class="c1">//UNSAFE if autoboxed primitive value is shared from heap</span>
-</span><span class='line'><span class="kd">private</span> <span class="kd">final</span> <span class="n">Integer</span> <span class="n">lock</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Integer</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span> <span class="c1">//SAFE. explicitly constructed Integer object has a unique reference and its own intrinsic lock is distinct not only from other Integer objects, but also from boxed integers that have the same value.</span>
-</span><span class='line'><span class="kd">private</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">lock</span> <span class="o">=</span> <span class="s">&quot;LOCK&quot;</span><span class="o">;</span> <span class="c1">//UNSAFE if some other thread uses the same reused object from heap.</span>
-</span><span class='line'><span class="kd">private</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">lock</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">String</span><span class="o">(</span><span class="s">&quot;LOCK&quot;</span><span class="o">).</span><span class="na">intern</span><span class="o">();</span> <span class="c1">//UNSAFE interned strings act like a global variable in a JVM.</span>
-</span><span class='line'><span class="kd">private</span> <span class="kd">final</span> <span class="n">Object</span> <span class="n">lock</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Object</span><span class="o">();</span> <span class="c1">//SAFE.</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li>DO NOT synchronize on Lock objects.</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">private</span> <span class="kd">final</span> <span class="n">Lock</span> <span class="n">lock</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">ReEntrantLock</span><span class="o">();</span>
-</span><span class='line'><span class="kd">synchronized</span><span class="o">(</span><span class="n">lock</span><span class="o">){...}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<a name="Limitations"></a>
-<h3>Limitations</h3>
-
-<ul>
-<li>Single monitor per object</li>
-<li>Not possible to interrupt thread waiting for lock</li>
-<li>Not possible to time-out when waiting for a lock</li>
-<li>Acquiring multiple locks is complex.</li>
-</ul>
-
-
-<a name="Extrinsic.Lock"></a>
-<h2>Extrinsic Lock</h2>
-
-<a name="Lock.Interface"></a>
-<h3>Lock Interface</h3>
-
-<ul>
-<li>implementations provide more extensive locking operations than can be obtained using synchronized methods and statements.</li>
-<li>Commonly, a lock provides exclusive access to a shared resource: only one thread at a time can acquire the lock and all access to the shared resource requires that the lock be acquired first. However, some locks may allow concurrent access to a shared resource, such as the read lock of a ReadWriteLock.</li>
-<li>offers more flexible lock acquiring and releasing. For example, some algorithms for traversing concurrently accessed data structures require the use of &ldquo;hand-over-hand&rdquo; or &ldquo;chain locking&rdquo;: you acquire the lock of node A, then node B, then release A and acquire C, then release B and acquire D and so on. Implementations of the Lock interface enable the use of such techniques by allowing a lock to be acquired and released in different scopes, and allowing multiple locks to be acquired and released in any order.</li>
-<li>Lock implementations provide additional functionality over the use of synchronized methods and statements by providing a non-blocking attempt to acquire a lock (<code>tryLock()</code>), an attempt to acquire the lock that can be interrupted (<code>lockInterruptibly()</code>, and an attempt to acquire the lock that can timeout (<code>tryLock(long, TimeUnit)</code>).</li>
-<li>Never use a Lock object as a monitor in a synchronized block</li>
-<li>Common idiom to follow</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">Lock</span> <span class="n">l</span> <span class="o">=</span> <span class="o">...;</span>
-</span><span class='line'><span class="n">l</span><span class="o">.</span><span class="na">lock</span><span class="o">();</span>
-</span><span class='line'><span class="k">try</span> <span class="o">{</span>
-</span><span class='line'>   <span class="c1">// access the resource protected by this lock</span>
-</span><span class='line'><span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
-</span><span class='line'>   <span class="n">l</span><span class="o">.</span><span class="na">unlock</span><span class="o">();</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<a name="Re-entrant.locks.Recursive.locking"></a>
-<h3>Re-entrant locks/Recursive locking</h3>
-
-<p>Once a thread acquires the lock of an object, it can call other synchronized methods on that object without having to wait to acquire the lock again. Otherwise the method call would get into deadlock.</p>
-
-<a name="Condition"></a>
-<h3>Condition</h3>
+<h3 id="condition">Condition</h3>
 
 <p>instead of spin wait(sleep until a flag is true) which is inefficient, use <code>Condition</code>. Even better is to use coordination classes like <code>CountDownLatch</code> or <code>CyclicBarrier</code> which is concise and better than <code>Condition</code>.</p>
 
-<a name="Sharing.Objects"></a>
-<h1>Sharing Objects</h1>
+<h1 id="sharing-objects">Sharing Objects</h1>
 
 <ul>
-<li>&ldquo;synchronized&rdquo; guarantess 2 things
-
-<ul>
-<li>ensures <strong>atomicity</strong> or demarcates &lsquo;critical section&rsquo;</li>
-<li><strong>memory visibility</strong> - ensures other threads see the state change from a given thread</li>
+  <li>“synchronized” guarantess 2 things
+    <ul>
+      <li>ensures <strong>atomicity</strong> or demarcates ‘critical section’</li>
+      <li><strong>memory visibility</strong> - ensures other threads see the state change from a given thread</li>
+    </ul>
+  </li>
 </ul>
-</li>
-</ul>
 
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">NoVisibility</span><span class="o">{</span>
-</span><span class='line'>   <span class="kd">private</span> <span class="kd">static</span> <span class="kt">boolean</span> <span class="n">ready</span><span class="o">;</span>
-</span><span class='line'>   <span class="kd">private</span> <span class="kd">static</span> <span class="kt">int</span> <span class="n">number</span><span class="o">;</span>
-</span><span class='line'>
-</span><span class='line'>   <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">ReaderThread</span> <span class="kd">extends</span> <span class="n">Thread</span><span class="o">{</span>
-</span><span class='line'>      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">(){</span>
-</span><span class='line'>         <span class="k">while</span><span class="o">(!</span><span class="n">ready</span><span class="o">)</span> <span class="n">Thread</span><span class="o">.</span><span class="na">yield</span><span class="o">();</span>
-</span><span class='line'>         <span class="n">println</span><span class="o">(</span><span class="n">number</span><span class="o">);</span>
-</span><span class='line'>      <span class="o">}</span>
-</span><span class='line'>   <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>   <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(){</span>
-</span><span class='line'>      <span class="k">new</span> <span class="nf">ReaderThread</span><span class="o">().</span><span class="na">start</span><span class="o">();</span>
-</span><span class='line'>      <span class="n">number</span> <span class="o">=</span> <span class="mi">42</span><span class="o">;</span>
-</span><span class='line'>      <span class="n">ready</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
-</span><span class='line'>   <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p></p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">NoVisibility</span><span class="o">{</span>
+</span><span class="line">   <span class="kd">private</span> <span class="kd">static</span> <span class="kt">boolean</span> <span class="n">ready</span><span class="o">;</span>
+</span><span class="line">   <span class="kd">private</span> <span class="kd">static</span> <span class="kt">int</span> <span class="n">number</span><span class="o">;</span>
+</span><span class="line">
+</span><span class="line">   <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">ReaderThread</span> <span class="kd">extends</span> <span class="n">Thread</span><span class="o">{</span>
+</span><span class="line">      <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">(){</span>
+</span><span class="line">         <span class="k">while</span><span class="o">(!</span><span class="n">ready</span><span class="o">)</span> <span class="n">Thread</span><span class="o">.</span><span class="na">yield</span><span class="o">();</span>
+</span><span class="line">         <span class="n">println</span><span class="o">(</span><span class="n">number</span><span class="o">);</span>
+</span><span class="line">      <span class="o">}</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line">
+</span><span class="line">   <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(){</span>
+</span><span class="line">      <span class="k">new</span> <span class="nf">ReaderThread</span><span class="o">().</span><span class="na">start</span><span class="o">();</span>
+</span><span class="line">      <span class="n">number</span> <span class="o">=</span> <span class="mi">42</span><span class="o">;</span>
+</span><span class="line">      <span class="n">ready</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p><strong>Possible outcomes</strong>
 * prints zero and exists
@@ -575,198 +473,172 @@ Memory consistent properties - happens-before? Read more on Java Language Specif
 * Stale values are visible
 * changes made by main thread were visible to ReaderThread in a different order</p>
 
-<a name="Re-ordering"></a>
-<h2>Re-ordering</h2>
+<h2 id="re-ordering">Re-ordering</h2>
 
 <ul>
-<li>Processor: could rearrange the execution order of machine instructions.</li>
-<li>Compiler: could optimize by rearranging the order of the statements.</li>
-<li>Memory: could rearrange the order in which the writes are committed to the memory cells.</li>
-<li><a href="http://gee.cs.oswego.edu/dl/cpj/jmm.html">http://gee.cs.oswego.edu/dl/cpj/jmm.html</a></li>
-<li><a href="http://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html">http://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html</a></li>
+  <li>Processor: could rearrange the execution order of machine instructions.</li>
+  <li>Compiler: could optimize by rearranging the order of the statements.</li>
+  <li>Memory: could rearrange the order in which the writes are committed to the memory cells.</li>
+  <li>http://gee.cs.oswego.edu/dl/cpj/jmm.html</li>
+  <li>http://www.cs.umd.edu/~pugh/java/memoryModel/DoubleCheckedLocking.html</li>
 </ul>
 
+<blockquote>
+  <p>Note: Always run server apps with “-server” JVM setting to catch re-ordering related bugs in development stage instead of prod.</p>
+</blockquote>
 
-<blockquote><p>Note: Always run server apps with &ldquo;-server&rdquo; JVM setting to catch re-ordering related bugs in development stage instead of prod.</p></blockquote>
+<p>Non-atomic 64-bit operations - JMM requires the read and write operations to be atomic, except ‘long’ and ‘double’ variables unless it is declared ‘volatile’. JVM is permitted to treat 64-bit read/write as two separate 32-bit operations.</p>
 
-<p>Non-atomic 64-bit operations - JMM requires the read and write operations to be atomic, except &lsquo;long&rsquo; and &lsquo;double&rsquo; variables unless it is declared &lsquo;volatile&rsquo;. JVM is permitted to treat 64-bit read/write as two separate 32-bit operations.</p>
+<h2 id="volatile-variables">Volatile Variables</h2>
 
-<a name="Volatile.Variables"></a>
-<h2>Volatile Variables</h2>
-
-<p><img class="right" src="/technology/memory-cache.png"></p>
+<p><img class="right" src="/technology/memory-cache.png" /></p>
 
 <p>In Java, volatile keyword does 3 things:</p>
 
 <ul>
-<li>prevents re-ordering of statements by processor/compiler/memory</li>
-<li>forces to read the values from memory instead of cache.</li>
-<li>guarantees atomicity in 64-bit data type assignments.</li>
+  <li>prevents re-ordering of statements by processor/compiler/memory</li>
+  <li>forces to read the values from memory instead of cache.</li>
+  <li>guarantees atomicity in 64-bit data type assignments. </li>
 </ul>
 
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">private</span> <span class="kt">long</span> <span class="n">x</span><span class="o">;</span>
+</span><span class="line"><span class="kd">private</span> <span class="kt">double</span> <span class="n">y</span><span class="o">;</span>
+</span><span class="line"><span class="kd">public</span> <span class="nf">Foo</span><span class="o">(</span><span class="kt">long</span> <span class="n">longValue</span><span class="o">,</span> <span class="kt">double</span> <span class="n">doubleValue</span><span class="o">){</span>
+</span><span class="line">   <span class="k">this</span><span class="o">.</span><span class="na">x</span> <span class="o">=</span> <span class="n">longValue</span><span class="o">;</span> <span class="c1">//not atomic</span>
+</span><span class="line">   <span class="k">this</span><span class="o">.</span><span class="na">y</span> <span class="o">=</span> <span class="n">doubleValue</span><span class="o">;</span> <span class="c1">//not atomic</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">private</span> <span class="kt">long</span> <span class="n">x</span><span class="o">;</span>
-</span><span class='line'><span class="kd">private</span> <span class="kt">double</span> <span class="n">y</span><span class="o">;</span>
-</span><span class='line'><span class="kd">public</span> <span class="nf">Foo</span><span class="o">(</span><span class="kt">long</span> <span class="n">longValue</span><span class="o">,</span> <span class="kt">double</span> <span class="n">doubleValue</span><span class="o">){</span>
-</span><span class='line'>   <span class="k">this</span><span class="o">.</span><span class="na">x</span> <span class="o">=</span> <span class="n">longValue</span><span class="o">;</span> <span class="c1">//not atomic</span>
-</span><span class='line'>   <span class="k">this</span><span class="o">.</span><span class="na">y</span> <span class="o">=</span> <span class="n">doubleValue</span><span class="o">;</span> <span class="c1">//not atomic</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<p>More info:
+<p>More info: 
 * <a href="http://www.codeproject.com/Articles/31283/Volatile-fields-in-NET-A-look-inside">Volatile fields and memory barrier: A look inside</a>
 * <a href="http://www.infoq.com/articles/memory_barriers_jvm_concurrency">InfoQ: Memory Barriers and JVM Concurrency</a></p>
 
-<a name="Pros.of.volatile"></a>
-<h3>Pros of volatile</h3>
-
+<h3 id="pros-of-volatile">Pros of volatile</h3>
 <ul>
-<li>weaker form of synchronization</li>
-<li>notices JIT compiler and runtime that &ldquo;re-ordering&rdquo; SHOULD NOT happen.</li>
-<li>It warns the compiler that the variable may change behind the back of a thread and that each access, read or write, to this variable should bypass cache and go all the way to the memory.</li>
-<li>don&rsquo;t rely too much on volatile for visibility</li>
-<li>when to use volatiles??????</li>
+  <li>weaker form of synchronization</li>
+  <li>notices JIT compiler and runtime that “re-ordering” SHOULD NOT happen.</li>
+  <li>It warns the compiler that the variable may change behind the back of a thread and that each access, read or write, to this variable should bypass cache and go all the way to the memory.</li>
+  <li>don’t rely too much on volatile for visibility</li>
+  <li>when to use volatiles??????</li>
 </ul>
 
-
-<a name="Limitations.of.volatile"></a>
-<h3>Limitations of volatile</h3>
-
+<h3 id="limitations-of-volatile">Limitations of volatile</h3>
 <ul>
-<li>Synchronization guarantees both atomicity and visibility</li>
-<li>Volatile guarantees only visibility</li>
-<li>Making all variables volatile will result in poor performance since every access to cross the memory barrier</li>
-<li>volatile arrays? is this safe?
+  <li>Synchronization guarantees both atomicity and visibility </li>
+  <li>Volatile guarantees only visibility</li>
+  <li>Making all variables volatile will result in poor performance since every access to cross the memory barrier</li>
+  <li>volatile arrays? is this safe? 
 <code>private volatile int[] vals;</code></li>
 </ul>
 
-
-<a name="Publishing.and.Escaping"></a>
-<h1>Publishing and Escaping</h1>
+<h1 id="publishing-and-escaping">Publishing and Escaping</h1>
 
 <ul>
-<li><strong>Publishing</strong> - making an object available to code outside of current scope. 2 ways of publishing - returning objects and passing it as parameter to another method.</li>
-<li><strong>Escaping</strong> - An object published when it should not have been. e.g., partially constructed (Object reference visible to another thread does not necessarily mean that the state of the object is visible.)</li>
+  <li><strong>Publishing</strong> - making an object available to code outside of current scope. 2 ways of publishing - returning objects and passing it as parameter to another method.</li>
+  <li><strong>Escaping</strong> - An object published when it should not have been. e.g., partially constructed (Object reference visible to another thread does not necessarily mean that the state of the object is visible.)</li>
 </ul>
 
-
-<a name="Things.to.avoid"></a>
-<h2>Things to avoid</h2>
+<h2 id="things-to-avoid">Things to avoid</h2>
 
 <ul>
-<li><strong>Do not publish state</strong> via &lsquo;public static&rsquo; fields. Solution: Use encapsulation</li>
-<li><strong>Do not allow internal mutable state to escape</strong>
-
-<ul>
-<li>(a) e.g., <code>public String[] foo();</code> &lt;&mdash; Caller can modify the array. Solution: Use defensive copy.</li>
-<li>(b) e.g., <code>public void foo(Set&lt;Car&gt; car){}</code> &lt;&mdash; calling a method passing the reference. &lsquo;foo&rsquo; can potentially modify &lsquo;Car&rsquo; object. Solution: Use defensive copy.</li>
-<li>&copy; sub-classes can violate by overriding methods. Solution: Use final methods.</li>
+  <li><strong>Do not publish state</strong> via ‘public static’ fields. Solution: Use encapsulation</li>
+  <li><strong>Do not allow internal mutable state to escape</strong> 
+    <ul>
+      <li>(a) e.g., <code>public String[] foo();</code> &lt;— Caller can modify the array. Solution: Use defensive copy.</li>
+      <li>(b) e.g., <code>public void foo(Set&lt;Car&gt; car){}</code> &lt;— calling a method passing the reference. ‘foo’ can potentially modify ‘Car’ object. Solution: Use defensive copy.</li>
+      <li>(c) sub-classes can violate by overriding methods. Solution: Use final methods.</li>
+    </ul>
+  </li>
+  <li><strong>Do not allow ‘this’ reference to escape via inner classes</strong> (Try examples??????) Solution: Use factory methods
+&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;figcaption&gt;<span></span>&lt;/figcaption&gt;&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span></figure></notextile></li>
 </ul>
-</li>
-<li><strong>Do not allow &lsquo;this&rsquo; reference to escape via inner classes</strong> (Try examples??????) Solution: Use factory methods</li>
-</ul>
+<p>&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">EventListener2</span> <span class="o">{</span>
+</span><span class="line">  <span class="kd">public</span> <span class="nf">EventListener2</span><span class="o">(</span><span class="n">EventSource</span> <span class="n">eventSource</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">
+</span><span class="line">    <span class="n">eventSource</span><span class="o">.</span><span class="na">registerListener</span><span class="o">(</span>
+</span><span class="line">      <span class="k">new</span> <span class="nf">EventListener</span><span class="o">()</span> <span class="o">{</span> <span class="c1">//indirectly this non-static anonymous class publishes a reference to an instance of parent EventListener2</span>
+</span><span class="line">        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onEvent</span><span class="o">(</span><span class="n">Event</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">          <span class="n">eventReceived</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+</span><span class="line">        <span class="o">}</span>
+</span><span class="line">      <span class="o">});</span>
+</span><span class="line">  <span class="o">}</span>
+</span><span class="line">
+</span><span class="line">  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">eventReceived</span><span class="o">(</span><span class="n">Event</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">  <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+* <strong>Don’t start threads from within constructors</strong> - A special case of the problem above is starting a thread from within a constructor, because often when an object owns a thread, either that thread is an inner class or we pass the this reference to its constructor (or the class itself extends the Thread class). If an object is going to own a thread, it is best if the object provides a start() method, just like Thread does, and starts the thread from the start() method instead of from the constructor. While this does expose some implementation details (such as the possible existence of an owned thread) of the class via the interface, which is often not desirable, in this case the risks of starting the thread from the constructor outweigh the benefit of implementation hiding.
+&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;figcaption&gt;<span></span>&lt;/figcaption&gt;&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">EventListener2</span> <span class="o">{</span>
+</span><span class="line">  <span class="kd">public</span> <span class="nf">EventListener2</span><span class="o">(</span><span class="n">EventSource</span> <span class="n">eventSource</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">
+</span><span class="line">        <span class="k">new</span> <span class="nf">Thread</span><span class="o">(){</span>
+</span><span class="line">            <span class="nd">@Override</span>
+</span><span class="line">            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">                <span class="o">...</span> <span class="c1">// &#39;this&#39; escapes here</span>
+</span><span class="line">            <span class="o">}</span>
+</span><span class="line">        <span class="o">}.</span><span class="na">start</span><span class="o">();</span>
+</span><span class="line">  <span class="o">}</span>
+</span><span class="line">
+</span><span class="line">  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">eventReceived</span><span class="o">(</span><span class="n">Event</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">  <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</figure></notextile>&lt;/div&gt;</p>
 
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">EventListener2</span> <span class="o">{</span>
-</span><span class='line'>  <span class="kd">public</span> <span class="nf">EventListener2</span><span class="o">(</span><span class="n">EventSource</span> <span class="n">eventSource</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>
-</span><span class='line'>    <span class="n">eventSource</span><span class="o">.</span><span class="na">registerListener</span><span class="o">(</span>
-</span><span class='line'>      <span class="k">new</span> <span class="nf">EventListener</span><span class="o">()</span> <span class="o">{</span> <span class="c1">//indirectly this non-static anonymous class publishes a reference to an instance of parent EventListener2</span>
-</span><span class='line'>        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onEvent</span><span class="o">(</span><span class="n">Event</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>          <span class="n">eventReceived</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
-</span><span class='line'>        <span class="o">}</span>
-</span><span class='line'>      <span class="o">});</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">eventReceived</span><span class="o">(</span><span class="n">Event</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li><strong>Don&rsquo;t start threads from within constructors</strong> - A special case of the problem above is starting a thread from within a constructor, because often when an object owns a thread, either that thread is an inner class or we pass the this reference to its constructor (or the class itself extends the Thread class). If an object is going to own a thread, it is best if the object provides a start() method, just like Thread does, and starts the thread from the start() method instead of from the constructor. While this does expose some implementation details (such as the possible existence of an owned thread) of the class via the interface, which is often not desirable, in this case the risks of starting the thread from the constructor outweigh the benefit of implementation hiding.</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">public</span> <span class="kd">class</span> <span class="nc">EventListener2</span> <span class="o">{</span>
-</span><span class='line'>  <span class="kd">public</span> <span class="nf">EventListener2</span><span class="o">(</span><span class="n">EventSource</span> <span class="n">eventSource</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>
-</span><span class='line'>        <span class="k">new</span> <span class="nf">Thread</span><span class="o">(){</span>
-</span><span class='line'>            <span class="nd">@Override</span>
-</span><span class='line'>            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
-</span><span class='line'>                <span class="o">...</span> <span class="c1">// &#39;this&#39; escapes here</span>
-</span><span class='line'>            <span class="o">}</span>
-</span><span class='line'>        <span class="o">}.</span><span class="na">start</span><span class="o">();</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'>  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">eventReceived</span><span class="o">(</span><span class="n">Event</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-</span><span class='line'>  <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<a name="Thread.Confinement"></a>
-<h2>Thread Confinement</h2>
+<h2 id="thread-confinement">Thread Confinement</h2>
 
 <p>Do not share anything outside of the scope or at least outside of the thread.</p>
 
 <p>(1) Adhoc - manually ensuring the object does not escape to more than a thread.
 (2) Stack confinement - make it a local variable.
-(3) ThreadLocal confinement - ensures each thread has its own copy of the object.</p>
+(3) ThreadLocal confinement - ensures each thread has its own copy of the object. </p>
 
-<a name="Data.Sharing.Options"></a>
-<h2>Data Sharing Options</h2>
+<h2 id="data-sharing-options">Data Sharing Options</h2>
 
 <ol>
-<li>DO NOT share anything out of current scope</li>
-<li>DO NOT share anything out of current thread</li>
-<li>Share only immutable data</li>
-<li>Share mutable data - make vars volatile (thread safety not guaranteed)</li>
-<li>Share mutable data - make vars atomic</li>
-<li>Share mutable data - protect data using lock (intrinsic-lock synchronized or extrinsic-lock)</li>
+  <li>DO NOT share anything out of current scope</li>
+  <li>DO NOT share anything out of current thread</li>
+  <li>Share only immutable data</li>
+  <li>Share mutable data - make vars volatile (thread safety not guaranteed)</li>
+  <li>Share mutable data - make vars atomic</li>
+  <li>Share mutable data - protect data using lock (intrinsic-lock synchronized or extrinsic-lock)</li>
 </ol>
 
+<h2 id="immutability">Immutability</h2>
 
-<a name="Immutability"></a>
-<h2>Immutability</h2>
-
-<p>Immutable objects
+<p>Immutable objects 
 - are inherently thread-safe since the state cannot be changed.
 - Initialization Safety - JMM guarantees that immutables are published safely - meaning when the reference to an immutable is published, it is guaranteed that - the object is fully constructed
 Immutables offer additional performance advantage such as reduced need for locking or defensive copies.</p>
@@ -774,514 +646,438 @@ Immutables offer additional performance advantage such as reduced need for locki
 <p>An object is immutable if</p>
 
 <ol>
-<li>its state cannot be modified after construction</li>
-<li>all its fields are final (not necessarily)</li>
-<li>it is properly constructed (&lsquo;this&rsquo; does not escape during its construction)</li>
+  <li>its state cannot be modified after construction</li>
+  <li>all its fields are final (not necessarily)</li>
+  <li>it is properly constructed (‘this’ does not escape during its construction)</li>
 </ol>
 
-
-<a name="Safe.Publication"></a>
-<h2>Safe Publication</h2>
+<h2 id="safe-publication">Safe Publication</h2>
 
 <p>To publish an object safely, both the reference to the object and the state of the object must be visible to the other thread at the same time.</p>
 
 <p>A properly constructed object can be safely published by:</p>
 
 <ol>
-<li>Initializing an object reference from static initializer (executed by JVM at class initialization)</li>
-<li>storing the reference in a &lsquo;volatile&rsquo; field or &lsquo;AtomicReference&rsquo;</li>
-<li>storing the reference in a &lsquo;final&rsquo; field of a properly constructed object</li>
-<li>storing the reference in a field guarded by a lock</li>
+  <li>Initializing an object reference from static initializer (executed by JVM at class initialization)</li>
+  <li>storing the reference in a ‘volatile’ field or ‘AtomicReference’</li>
+  <li>storing the reference in a ‘final’ field of a properly constructed object</li>
+  <li>storing the reference in a field guarded by a lock</li>
 </ol>
 
+<h1 id="concurrency-problems">Concurrency Problems</h1>
 
-<a name="Concurrency.Problems"></a>
-<h1>Concurrency Problems</h1>
+<h2 id="race-condition">1) Race condition</h2>
 
-<a name="L1..Race.condition"></a>
-<h2>1) Race condition</h2>
-
-<p><img class="right" src="/technology/deadlock.png"></p>
+<p><img class="right" src="/technology/deadlock.png" /></p>
 
 <ul>
-<li>If 2 threads compete to use the same resource of data, we have a race condition</li>
-<li>A race condition doesn&rsquo;t just happen when 2 threads modify data. It can happen even when one is changing data while the other is trying to read it.</li>
-<li>Race conditions can render a program&rsquo;s behavior unpredictable, produce incorrect execution, and yield incorrect results.</li>
+  <li>If 2 threads compete to use the same resource of data, we have a race condition</li>
+  <li>A race condition doesn’t just happen when 2 threads modify data. It can happen even when one is changing data while the other is trying to read it.</li>
+  <li>Race conditions can render a program’s behavior unpredictable, produce incorrect execution, and yield incorrect results.</li>
 </ul>
-
 
 <p>Hazards of Liveness - deadlocks, livelocks, starvation and missed signals</p>
 
-<a name="L2..Deadlock"></a>
-<h2>2) Deadlock</h2>
+<h2 id="deadlock">2) Deadlock</h2>
 
-<a name="Type.1:.Lock-Ordering.Deadlock"></a>
-<h3>Type 1: Lock-Ordering Deadlock</h3>
+<h3 id="type-1-lock-ordering-deadlock">Type 1: Lock-Ordering Deadlock</h3>
 
 <ul>
-<li>Thread 1 holds lock A and waits for lock B. Thread 2 holds lock B and waits for lock A. (e.g., Dining philosopher&rsquo;s problem) This is a cyclic locking dependency, otherwise called &lsquo;deadly embrace&rsquo;.</li>
-<li>DBs handle deadlock by victimizing one of the threads. JVMs don&rsquo;t have that feature.</li>
+  <li>Thread 1 holds lock A and waits for lock B. Thread 2 holds lock B and waits for lock A. (e.g., Dining philosopher’s problem) This is a cyclic locking dependency, otherwise called ‘deadly embrace’.</li>
+  <li>DBs handle deadlock by victimizing one of the threads. JVMs don’t have that feature.</li>
 </ul>
 
-
-<a name="Dynamic.lock-ordering.deadlocks"></a>
-<h4>Dynamic lock-ordering deadlocks</h4>
+<h4 id="dynamic-lock-ordering-deadlocks">Dynamic lock-ordering deadlocks</h4>
 
 <p>below code deadlocks if 2 threads pass in the same objects in different order</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kt">void</span> <span class="nf">foo</span><span class="o">(</span><span class="n">Object</span> <span class="n">A</span><span class="o">,</span> <span class="n">Object</span> <span class="n">B</span><span class="o">){</span>
-</span><span class='line'>  <span class="n">lock</span> <span class="n">A</span><span class="o">,</span> <span class="n">then</span> <span class="n">B</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kt">void</span> <span class="nf">foo</span><span class="o">(</span><span class="n">Object</span> <span class="n">A</span><span class="o">,</span> <span class="n">Object</span> <span class="n">B</span><span class="o">){</span>
+</span><span class="line">	<span class="n">lock</span> <span class="n">A</span><span class="o">,</span> <span class="n">then</span> <span class="n">B</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 <p>To prevent this, use some kind of unique values like System.identityHashCode() to define the order of locking. If the objects being locked has unique, immutable and compareable-keys, then inducing locking order is even easier.</p>
 
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">Object</span> <span class="n">tieBreaker</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Object</span><span class="o">();</span>
-</span><span class='line'>
-</span><span class='line'><span class="kt">void</span> <span class="nf">foo</span><span class="o">(</span><span class="n">Object</span> <span class="n">A</span><span class="o">,</span> <span class="n">Object</span> <span class="n">B</span><span class="o">){</span>
-</span><span class='line'> <span class="k">if</span> <span class="o">(</span><span class="n">hashA</span> <span class="o">&lt;</span> <span class="n">hashB</span><span class="o">){</span> <span class="n">lock</span> <span class="n">A</span><span class="o">,</span> <span class="n">then</span> <span class="n">B</span><span class="o">}</span>
-</span><span class='line'> <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">hashA</span> <span class="o">&gt;</span> <span class="n">hashB</span><span class="o">){</span> <span class="n">lock</span> <span class="n">B</span><span class="o">,</span> <span class="n">then</span> <span class="n">A</span> <span class="o">}</span>
-</span><span class='line'> <span class="k">else</span> <span class="o">{</span> <span class="n">lock</span> <span class="n">tieBreaker</span><span class="o">,</span> <span class="n">lock</span> <span class="n">A</span><span class="o">,</span> <span class="n">lock</span> <span class="n">B</span><span class="o">}</span> <span class="c1">//during hash-collision, due tie-breaker locks</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">Object</span> <span class="n">tieBreaker</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Object</span><span class="o">();</span>
+</span><span class="line">
+</span><span class="line"><span class="kt">void</span> <span class="nf">foo</span><span class="o">(</span><span class="n">Object</span> <span class="n">A</span><span class="o">,</span> <span class="n">Object</span> <span class="n">B</span><span class="o">){</span>
+</span><span class="line"> <span class="k">if</span> <span class="o">(</span><span class="n">hashA</span> <span class="o">&lt;</span> <span class="n">hashB</span><span class="o">){</span> <span class="n">lock</span> <span class="n">A</span><span class="o">,</span> <span class="n">then</span> <span class="n">B</span><span class="o">}</span>
+</span><span class="line"> <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">hashA</span> <span class="o">&gt;</span> <span class="n">hashB</span><span class="o">){</span> <span class="n">lock</span> <span class="n">B</span><span class="o">,</span> <span class="n">then</span> <span class="n">A</span> <span class="o">}</span>
+</span><span class="line"> <span class="k">else</span> <span class="o">{</span> <span class="n">lock</span> <span class="n">tieBreaker</span><span class="o">,</span> <span class="n">lock</span> <span class="n">A</span><span class="o">,</span> <span class="n">lock</span> <span class="n">B</span><span class="o">}</span> <span class="c1">//during hash-collision, due tie-breaker locks</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
+<h4 id="open-calls">Open Calls</h4>
 
-<a name="Open.Calls"></a>
-<h4>Open Calls</h4>
+<p>Calling an alien method with no locks held is known as ‘open-calls’. Invoking alien method with locks held is asking for liveness trouble because the alient method might acquire other locks leading to lock-order deadlocks. Here is an innocent looking example: Thread 1 calls setLocation() locking Taxi and waiting for lock on Dispatcher. Thread 2 calls getStatus() locking dispatcher and waiting for lock on Taxi.
+&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;figcaption&gt;<span></span>&lt;/figcaption&gt;&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class="java"><span class="line"><span class="kd">class</span> <span class="nc">Taxi</span><span class="o">{</span>
+</span><span class="line"> <span class="kd">private</span> <span class="n">Dispatcher</span> <span class="n">dispatcher</span><span class="o">;</span>
+</span><span class="line"> <span class="kd">public</span> <span class="nf">Taxi</span><span class="o">(</span><span class="n">Dispatcher</span> <span class="n">dispatcher</span><span class="o">){</span><span class="k">this</span><span class="o">.</span><span class="na">dispatcher</span> <span class="o">=</span> <span class="n">dispatcher</span><span class="o">;}</span>
+</span><span class="line">
+</span><span class="line"> <span class="kd">public</span> <span class="kd">synchronized</span> <span class="kt">void</span> <span class="nf">setLocation</span><span class="o">(){</span>
+</span><span class="line"> <span class="n">dispatcher</span><span class="o">.</span><span class="na">notify</span><span class="o">();</span>
+</span><span class="line"> <span class="o">}</span>
+</span><span class="line">
+</span><span class="line"> <span class="kd">public</span> <span class="kd">synchronized</span> <span class="n">Object</span> <span class="nf">getLocation</span><span class="o">(){</span>
+</span><span class="line"> <span class="o">...</span>
+</span><span class="line"> <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">class</span> <span class="nc">Dispatcher</span><span class="o">{</span>
+</span><span class="line"> <span class="kd">private</span> <span class="n">Set</span><span class="o">&lt;</span><span class="n">Taxi</span><span class="o">&gt;</span> <span class="n">taxis</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashSet</span><span class="o">&lt;&gt;();</span>
+</span><span class="line">
+</span><span class="line"> <span class="kd">public</span> <span class="kd">synchronized</span> <span class="kt">void</span> <span class="nf">getStatus</span><span class="o">(</span><span class="n">Taxi</span> <span class="n">taxi</span><span class="o">){</span>
+</span><span class="line"> <span class="n">taxi</span><span class="o">.</span><span class="na">getLocation</span><span class="o">();</span>
+</span><span class="line"> <span class="o">}</span>
+</span><span class="line">
+</span><span class="line"> <span class="kd">public</span> <span class="kd">synchronized</span> <span class="kt">void</span> <span class="nf">notify</span><span class="o">(){</span>
+</span><span class="line"> <span class="o">...</span>
+</span><span class="line"> <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</figure></notextile>&lt;/div&gt;</p>
 
-<p>Calling an alien method with no locks held is known as &lsquo;open-calls&rsquo;. Invoking alien method with locks held is asking for liveness trouble because the alient method might acquire other locks leading to lock-order deadlocks. Here is an innocent looking example: Thread 1 calls setLocation() locking Taxi and waiting for lock on Dispatcher. Thread 2 calls getStatus() locking dispatcher and waiting for lock on Taxi.</p>
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-<span class='line-number'>17</span>
-<span class='line-number'>18</span>
-<span class='line-number'>19</span>
-<span class='line-number'>20</span>
-<span class='line-number'>21</span>
-<span class='line-number'>22</span>
-<span class='line-number'>23</span>
-<span class='line-number'>24</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kd">class</span> <span class="nc">Taxi</span><span class="o">{</span>
-</span><span class='line'> <span class="kd">private</span> <span class="n">Dispatcher</span> <span class="n">dispatcher</span><span class="o">;</span>
-</span><span class='line'> <span class="kd">public</span> <span class="nf">Taxi</span><span class="o">(</span><span class="n">Dispatcher</span> <span class="n">dispatcher</span><span class="o">){</span><span class="k">this</span><span class="o">.</span><span class="na">dispatcher</span> <span class="o">=</span> <span class="n">dispatcher</span><span class="o">;}</span>
-</span><span class='line'>
-</span><span class='line'> <span class="kd">public</span> <span class="kd">synchronized</span> <span class="kt">void</span> <span class="nf">setLocation</span><span class="o">(){</span>
-</span><span class='line'> <span class="n">dispatcher</span><span class="o">.</span><span class="na">notify</span><span class="o">();</span>
-</span><span class='line'> <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'> <span class="kd">public</span> <span class="kd">synchronized</span> <span class="n">Object</span> <span class="nf">getLocation</span><span class="o">(){</span>
-</span><span class='line'> <span class="o">...</span>
-</span><span class='line'> <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'><span class="kd">class</span> <span class="nc">Dispatcher</span><span class="o">{</span>
-</span><span class='line'> <span class="kd">private</span> <span class="n">Set</span><span class="o">&lt;</span><span class="n">Taxi</span><span class="o">&gt;</span> <span class="n">taxis</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashSet</span><span class="o">&lt;&gt;();</span>
-</span><span class='line'>
-</span><span class='line'> <span class="kd">public</span> <span class="kd">synchronized</span> <span class="kt">void</span> <span class="nf">getStatus</span><span class="o">(</span><span class="n">Taxi</span> <span class="n">taxi</span><span class="o">){</span>
-</span><span class='line'> <span class="n">taxi</span><span class="o">.</span><span class="na">getLocation</span><span class="o">();</span>
-</span><span class='line'> <span class="o">}</span>
-</span><span class='line'>
-</span><span class='line'> <span class="kd">public</span> <span class="kd">synchronized</span> <span class="kt">void</span> <span class="nf">notify</span><span class="o">(){</span>
-</span><span class='line'> <span class="o">...</span>
-</span><span class='line'> <span class="o">}</span>
-</span><span class='line'><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<a name="Type.2:.Thread-starvation.deadlocks"></a>
-<h3>Type 2: Thread-starvation deadlocks</h3>
+<h3 id="type-2-thread-starvation-deadlocks">Type 2: Thread-starvation deadlocks</h3>
 
 <p>Task that submits a task and waits for its result in a single-threaded executor
-Bounded pools and inter-dependent tasks don&rsquo;t mix well.</p>
+Bounded pools and inter-dependent tasks don’t mix well.</p>
 
-<a name="How.to.avoid.deadlocks."></a>
-<h3>How to avoid deadlocks?</h3>
-
+<h3 id="how-to-avoid-deadlocks">How to avoid deadlocks?</h3>
 <ol>
-<li>Avoid acquiring multiple locks</li>
-<li>If not, establish lock-ordering protocol</li>
-<li>Use open-calls while invoking alient methods</li>
-<li>Avoid mixing bounded pools and inter-dependent tasks</li>
-<li>Attempt timed-locks (lock-wait timeouts)</li>
+  <li>Avoid acquiring multiple locks</li>
+  <li>If not, establish lock-ordering protocol</li>
+  <li>Use open-calls while invoking alient methods</li>
+  <li>Avoid mixing bounded pools and inter-dependent tasks</li>
+  <li>Attempt timed-locks (lock-wait timeouts)</li>
 </ol>
 
+<h2 id="starvation">3) Starvation</h2>
 
-<a name="L3..Starvation"></a>
-<h2>3) Starvation</h2>
+<p>occurs when a thread is perpetually denied access to a resource it needs to make progress; most commonly the CPU cycles. In Java it typically happens due to inappropriate use of thread priorities. </p>
 
-<p>occurs when a thread is perpetually denied access to a resource it needs to make progress; most commonly the CPU cycles. In Java it typically happens due to inappropriate use of thread priorities.</p>
+<h2 id="livelocks">4) Livelocks</h2>
 
-<a name="L4..Livelocks"></a>
-<h2>4) Livelocks</h2>
+<p>is a form of liveness failure in which a thread, while not blocked, still cannot make progress because it keeps retrying an operation that will always fail. It often occurs in transactional messaging applications, where the messaging infrastructure rolls back a transaction if a message cannot be processed successfully, and puts it back at the head of the queue. (This is often also called ‘poison message’ problem).</p>
 
-<p>is a form of liveness failure in which a thread, while not blocked, still cannot make progress because it keeps retrying an operation that will always fail. It often occurs in transactional messaging applications, where the messaging infrastructure rolls back a transaction if a message cannot be processed successfully, and puts it back at the head of the queue. (This is often also called &lsquo;poison message&rsquo; problem).</p>
-
-<a name="L5..Missed.Signals"></a>
-<h2>5) Missed Signals</h2>
+<h2 id="missed-signals">5) Missed Signals</h2>
 
 <p>???</p>
 
-<a name="L6..Fairness"></a>
-<h2>6) Fairness</h2>
+<h2 id="fairness">6) Fairness</h2>
 
-<p>???</p>
+<p>??? </p>
 
-<a name="Concurrency.Limitations"></a>
-<h1>Concurrency Limitations</h1>
+<h1 id="concurrency-limitations">Concurrency Limitations</h1>
 
-<p>Concurrency/Parallelism does not necessarily make a program run faster; it may even make it slower. Here&rsquo;s why:</p>
+<p>Concurrency/Parallelism does not necessarily make a program run faster; it may even make it slower. Here’s why:</p>
 
 <ul>
-<li><strong>Overhead</strong> is work that a sequential program does not need to do. Creating, initializing, and destroying threads adds overhead, and may result in a slower program. Using thread pools may reduce the overhead somewhat.</li>
-<li><strong>Non-parallelizable computation</strong>:  Some things can only be done sequentially.
+  <li><strong>Overhead</strong> is work that a sequential program does not need to do. Creating, initializing, and destroying threads adds overhead, and may result in a slower program. Using thread pools may reduce the overhead somewhat.</li>
+  <li><strong>Non-parallelizable computation</strong>:  Some things can only be done sequentially.
+    <ul>
+      <li><strong>Amdahl’s law</strong> states that if 1/S of a computation is inherently sequential, then the computation can be speeded up by at most a factor of S. For example, if 1/5 of a computation must be done sequentially and 4/5 can be done in parallel, then (assuming unlimited parallelism with zero additional overhead) the 4/5 can be done “instantaneously”, the 1/5 is not speeded up at all, and the program can execute 5 times faster.</li>
+      <li><strong>Idle processors</strong>: Unless all processors get exactly the same amount of work, some will be idle. Threads may need to wait for a lock, processes may need to wait for a message.</li>
+    </ul>
+  </li>
+  <li><strong>Contention for resources</strong>: Shared state requires synchronization, which is expensive.</li>
+</ul>
+
+<h1 id="executors-framework">Executors Framework</h1>
 
 <ul>
-<li><strong>Amdahl&rsquo;s law</strong> states that if 1/S of a computation is inherently sequential, then the computation can be speeded up by at most a factor of S. For example, if 1/5 of a computation must be done sequentially and 4/5 can be done in parallel, then (assuming unlimited parallelism with zero additional overhead) the 4/5 can be done &ldquo;instantaneously&rdquo;, the 1/5 is not speeded up at all, and the program can execute 5 times faster.</li>
-<li><strong>Idle processors</strong>: Unless all processors get exactly the same amount of work, some will be idle. Threads may need to wait for a lock, processes may need to wait for a message.</li>
-</ul>
-</li>
-<li><strong>Contention for resources</strong>: Shared state requires synchronization, which is expensive.</li>
+  <li>Executor framework provides a standard means of decoupling ‘task submission’ and ‘task execution’</li>
+  <li>Independent Task  - task that doesn’t depend on the state/result of other tasks</li>
+  <li>Only independent tasks should be submitted to executors/thread pool. Otherwise leads to starvation deadlock</li>
 </ul>
 
-
-<a name="Executors.Framework"></a>
-<h1>Executors Framework</h1>
-
-<ul>
-<li>Executor framework provides a standard means of decoupling &lsquo;task submission&rsquo; and &lsquo;task execution&rsquo;</li>
-<li>Independent Task  - task that doesn&rsquo;t depend on the state/result of other tasks</li>
-<li>Only independent tasks should be submitted to executors/thread pool. Otherwise leads to starvation deadlock</li>
-</ul>
-
-
-<a name="Disadvantages.of.unbounded.thread.creation"></a>
-<h2>Disadvantages of unbounded thread creation</h2>
+<h2 id="disadvantages-of-unbounded-thread-creation">Disadvantages of unbounded thread creation</h2>
 
 <ol>
-<li>Overhead involved in thread creation and teardown</li>
-<li>Resource consumption - threads consume memory and adds pressure to GC</li>
-<li>Stability - there is a limit on how many threads could be created. Breaching that will crash the program.</li>
+  <li>Overhead involved in thread creation and teardown</li>
+  <li>Resource consumption - threads consume memory and adds pressure to GC</li>
+  <li>Stability - there is a limit on how many threads could be created. Breaching that will crash the program.</li>
 </ol>
 
-
-<a name="Task.Execution.Policy"></a>
-<h2>Task Execution Policy</h2>
+<h2 id="task-execution-policy">Task Execution Policy</h2>
 
 <ul>
-<li><a name="of.threads.......-..single.multi-threaded"></a>
-<h1>of threads       -> single/multi-threaded</h1></li>
-<li>queue              -> bounded/unbounded queue</li>
-<li>order of execution -> FIFO, LIFO, priority order</li>
+  <li>
+    <h1 id="of-threads---------singlemulti-threaded">of threads       -&gt; single/multi-threaded</h1>
+  </li>
+  <li>queue              -&gt; bounded/unbounded queue</li>
+  <li>order of execution -&gt; FIFO, LIFO, priority order</li>
 </ul>
 
-
-<a name="Task.Types"></a>
-<h2>Task Types</h2>
+<h2 id="task-types">Task Types</h2>
 
 <ul>
-<li><code>Runnable</code> &amp; <code>Callable</code> - represent abstract computation tasks. Runnable neither returns results nor throws exception</li>
-<li><code>Future</code> - represents lifecycle of a task and provides methods to test whether the task completed/cancelled/result available.
+  <li><code>Runnable</code> &amp; <code>Callable</code> - represent abstract computation tasks. Runnable neither returns results nor throws exception</li>
+  <li><code>Future</code> - represents lifecycle of a task and provides methods to test whether the task completed/cancelled/result available.
+    <ul>
+      <li>Future.get() call blocks until the result is available</li>
+      <li>Instead of polling on Futures, use CompletionService</li>
+    </ul>
+  </li>
+  <li><strong>Periodic tasks</strong>
+    <ul>
+      <li><code>Timer</code> - supports only absolute timing
+        <ul>
+          <li>If a recurring TimerTask is scheduled to run every 10 ms and another Timer-Task takes 40 ms to run, the recurring task either (depending on whether it was scheduled at fixed rate or fixed delay) gets called four times in rapid succession after the long-running task completes, or “misses” four invocations completely. Scheduled thread pools address this limitation by letting you provide multiple threads for executing deferred and periodic tasks.</li>
+          <li>Timer thread doesn’t catch the exception, so an unchecked exception thrown from a TimerTask terminates the timer thread.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code>ScheduledThreadPoolExecutor</code> - supports only relative timing. Always prefer this over Timer.</li>
+</ul>
+
+<h2 id="class-diagram">Class diagram</h2>
+
+<p><img src="/technology/executor-class-diagram.png" /></p>
 
 <ul>
-<li>Future.get() call blocks until the result is available</li>
-<li>Instead of polling on Futures, use CompletionService</li>
+  <li><code>Executor</code> Interface 
+    <ul>
+      <li>has only one method - <code>execute(Runnable)</code></li>
+      <li>useful tool to solve producer-consumer type problems</li>
+      <li>Executors decouple task execution &amp; task submission</li>
+    </ul>
+  </li>
+  <li><code>ExecutorService</code> interface
+    <ul>
+      <li>extends Executor interface</li>
+      <li>provides additional methods to shutdown executor either forcefully/gracefully</li>
+    </ul>
+  </li>
 </ul>
-</li>
-<li><strong>Periodic tasks</strong>
+
+<h1 id="concurrent-data-structures">Concurrent Data Structures</h1>
+
+<h2 id="blocking-data-structures">Blocking Data Structures</h2>
 
 <ul>
-<li><code>Timer</code> - supports only absolute timing
+  <li>Blocking Queue - used in producer-consumer problems.
+    <ul>
+      <li>Bounded Queue - blocks read when empty and blocks write when full</li>
+      <li>Unbounded Queue - blocks read when empty and never full</li>
+      <li>ArrayBlockingQueue - FIFO</li>
+      <li>LinkedBlockingQueue - FIFO</li>
+      <li>PriorityBlockingQueue - Priority-ordered</li>
+    </ul>
+  </li>
+  <li>SynchronousQueue - No storage space (size=0). Producer blocks until consumer is available.</li>
+  <li>Semaphore - Explained below</li>
+  <li>Blocking Deque (double-ended queue)
+    <ul>
+      <li>Deque &amp; Blocking Deque are good for “work stealing pattern” which is better than producer-consumer pattern.</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="synchronizers">Synchronizers</h1>
+
+<p>Synchronizer is any object that keeps the shared mutable data consistent. Don’t need it if we can make immutable or unshared data.</p>
+
+<blockquote>
+  <p>Note: Blocking Queue is both collection and a synchronizer</p>
+</blockquote>
+
+<h2 id="futuretask">1) FutureTask</h2>
+<ul>
+  <li>represents asynchronous tasks (implement Future) </li>
+  <li>acts like a latch. </li>
+  <li>Future.get()
+    <ul>
+      <li>if complete, returns computation result</li>
+      <li>if not, blocks until result is available or an exception is thrown</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="sempahore">2) Sempahore</h2>
+
+<p><img class="right" src="/technology/semaphore.png" /></p>
+
+<p><img class="right" src="/technology/mutex.png" /></p>
 
 <ul>
-<li>If a recurring TimerTask is scheduled to run every 10 ms and another Timer-Task takes 40 ms to run, the recurring task either (depending on whether it was scheduled at fixed rate or fixed delay) gets called four times in rapid succession after the long-running task completes, or “misses” four invocations completely. Scheduled thread pools address this limitation by letting you provide multiple threads for executing deferred and periodic tasks.</li>
-<li>Timer thread doesn’t catch the exception, so an unchecked exception thrown from a TimerTask terminates the timer thread.</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><code>ScheduledThreadPoolExecutor</code> - supports only relative timing. Always prefer this over Timer.</li>
+  <li>Counting semaphores control the number of activities that can access a certain resource or perform a given action at the same time.</li>
+  <li>semaphores manage a set of virtual permits</li>
+  <li>activities acquire permit and release them</li>
+  <li>if no permit available, acquire blocks</li>
+  <li>semaphore with 1 permit acts as a mutex</li>
+  <li>can be used to convert any collection into a ‘blocking bounded collection’</li>
+  <li>semaphore does not associate permits with threads. So a permit acquired in one thread can be release from another thread.</li>
 </ul>
 
+<h2 id="latches">3) Latches</h2>
 
-<a name="Class.diagram"></a>
-<h2>Class diagram</h2>
-
-<p><img src="/technology/executor-class-diagram.png"></p>
+<p><img class="right" src="/technology/latches.jpg" /></p>
 
 <ul>
-<li><code>Executor</code> Interface
+  <li>acts as a gate: </li>
+  <li>initially when the gate is closed, no threads can pass. </li>
+  <li>gate opens after the terminal state is reached and all threads pass. </li>
+  <li>once open the gate never closes</li>
+  <li>any thread is allowed to call countDown() as many times as they like. Coordinating thread which called await() is blocked until the count reaches zero.</li>
+</ul>
+
+<h3 id="limitations-1">Limitations</h3>
+<ul>
+  <li>A latch cannot be reused after reaching the final count</li>
+  <li>number of participating threads should be specified at creation time and cannot be changed.</li>
+  <li>In the picture, Thread TA waits until all the 3 threads (1-3) complete.</li>
+</ul>
+
+<h2 id="barriers">4) Barriers</h2>
+
+<p><img class="right" src="/technology/cyclicbarrier.jpg" /></p>
 
 <ul>
-<li>has only one method - <code>execute(Runnable)</code></li>
-<li>useful tool to solve producer-consumer type problems</li>
-<li>Executors decouple task execution &amp; task submission</li>
+  <li><code>CyclicBarrier</code> lets a group of threads wait for each other to reach a common barrier point. </li>
+  <li>It also allows you to get the number of clients waiting at the barrier and the number required to trigger the barrier. Once triggered the barrier is reset and can be used again.</li>
+  <li>Unlike CountdownLatch, barrier can be reused by calling reset() (hence the name cyclic). </li>
+  <li><code>CyclicBarrier</code> can be provided an optional Runnable to execute after reaching the barrier point.</li>
+  <li>Useful in loop/phased computations where a set of threads need to synchronize before starting the next iteration/phase.</li>
+  <li><code>CyclicBarrier</code> - if a thread has a problem (timeout, interrupted…), all the others that have reached await() get an exception. The CyclicBarrier uses an all-or-none breakage model for failed synchronization attempts: If a thread leaves a barrier point prematurely because of interruption, failure, or timeout, all other threads waiting at that barrier point will also leave abnormally via BrokenBarrierException (or InterruptedException if they too were interrupted at about the same time).</li>
 </ul>
-</li>
-<li><code>ExecutorService</code> interface
+
+<h3 id="limitations-2">Limitations</h3>
 
 <ul>
-<li>extends Executor interface</li>
-<li>provides additional methods to shutdown executor either forcefully/gracefully</li>
-</ul>
-</li>
+  <li>number of participating threads should be specified at creation time and cannot be changed.</li>
 </ul>
 
-
-<a name="Concurrent.Data.Structures"></a>
-<h1>Concurrent Data Structures</h1>
-
-<a name="Blocking.Data.Structures"></a>
-<h2>Blocking Data Structures</h2>
-
-<ul>
-<li>Blocking Queue - used in producer-consumer problems.
-
-<ul>
-<li>Bounded Queue - blocks read when empty and blocks write when full</li>
-<li>Unbounded Queue - blocks read when empty and never full</li>
-<li>ArrayBlockingQueue - FIFO</li>
-<li>LinkedBlockingQueue - FIFO</li>
-<li>PriorityBlockingQueue - Priority-ordered</li>
-</ul>
-</li>
-<li>SynchronousQueue - No storage space (size=0). Producer blocks until consumer is available.</li>
-<li>Semaphore - Explained below</li>
-<li>Blocking Deque (double-ended queue)
-
-<ul>
-<li>Deque &amp; Blocking Deque are good for &ldquo;work stealing pattern&rdquo; which is better than producer-consumer pattern.</li>
-</ul>
-</li>
-</ul>
-
-
-<a name="Synchronizers"></a>
-<h1>Synchronizers</h1>
-
-<p>Synchronizer is any object that keeps the shared mutable data consistent. Don&rsquo;t need it if we can make immutable or unshared data.</p>
-
-<blockquote><p>Note: Blocking Queue is both collection and a synchronizer</p></blockquote>
-
-<a name="L1..FutureTask"></a>
-<h2>1) FutureTask</h2>
-
-<ul>
-<li>represents asynchronous tasks (implement Future)</li>
-<li>acts like a latch.</li>
-<li>Future.get()
-
-<ul>
-<li>if complete, returns computation result</li>
-<li>if not, blocks until result is available or an exception is thrown</li>
-</ul>
-</li>
-</ul>
-
-
-<a name="L2..Sempahore"></a>
-<h2>2) Sempahore</h2>
-
-<p><img class="right" src="/technology/semaphore.png"></p>
-
-<p><img class="right" src="/technology/mutex.png"></p>
-
-<ul>
-<li>Counting semaphores control the number of activities that can access a certain resource or perform a given action at the same time.</li>
-<li>semaphores manage a set of virtual permits</li>
-<li>activities acquire permit and release them</li>
-<li>if no permit available, acquire blocks</li>
-<li>semaphore with 1 permit acts as a mutex</li>
-<li>can be used to convert any collection into a &lsquo;blocking bounded collection&rsquo;</li>
-<li>semaphore does not associate permits with threads. So a permit acquired in one thread can be release from another thread.</li>
-</ul>
-
-
-<a name="L3..Latches"></a>
-<h2>3) Latches</h2>
-
-<p><img class="right" src="/technology/latches.jpg"></p>
-
-<ul>
-<li>acts as a gate:</li>
-<li>initially when the gate is closed, no threads can pass.</li>
-<li>gate opens after the terminal state is reached and all threads pass.</li>
-<li>once open the gate never closes</li>
-<li>any thread is allowed to call countDown() as many times as they like. Coordinating thread which called await() is blocked until the count reaches zero.</li>
-</ul>
-
-
-<a name="Limitations"></a>
-<h3>Limitations</h3>
-
-<ul>
-<li>A latch cannot be reused after reaching the final count</li>
-<li>number of participating threads should be specified at creation time and cannot be changed.</li>
-<li>In the picture, Thread TA waits until all the 3 threads (1-3) complete.</li>
-</ul>
-
-
-<a name="L4..Barriers"></a>
-<h2>4) Barriers</h2>
-
-<p><img class="right" src="/technology/cyclicbarrier.jpg"></p>
-
-<ul>
-<li><code>CyclicBarrier</code> lets a group of threads wait for each other to reach a common barrier point.</li>
-<li>It also allows you to get the number of clients waiting at the barrier and the number required to trigger the barrier. Once triggered the barrier is reset and can be used again.</li>
-<li>Unlike CountdownLatch, barrier can be reused by calling reset() (hence the name cyclic).</li>
-<li><code>CyclicBarrier</code> can be provided an optional Runnable to execute after reaching the barrier point.</li>
-<li>Useful in loop/phased computations where a set of threads need to synchronize before starting the next iteration/phase.</li>
-<li><code>CyclicBarrier</code> - if a thread has a problem (timeout, interrupted&hellip;), all the others that have reached await() get an exception. The CyclicBarrier uses an all-or-none breakage model for failed synchronization attempts: If a thread leaves a barrier point prematurely because of interruption, failure, or timeout, all other threads waiting at that barrier point will also leave abnormally via BrokenBarrierException (or InterruptedException if they too were interrupted at about the same time).</li>
-</ul>
-
-
-<a name="Limitations"></a>
-<h3>Limitations</h3>
-
-<ul>
-<li>number of participating threads should be specified at creation time and cannot be changed.</li>
-</ul>
-
-
-<a name="L5..Exchanger"></a>
-<h2>5) Exchanger</h2>
+<h2 id="exchanger">5) Exchanger</h2>
 
 <p>An Exchanger lets a pair of threads exchange objects at a synchronization point.</p>
 
 <p><span style="color:red">TODO</span></p>
 
-<a name="L6..Phaser..1.7."></a>
-<h2>6) Phaser (1.7)</h2>
+<h2 id="phaser-17">6) Phaser (1.7)</h2>
 
 <ul>
-<li>A flexible synchronizer to do latch and barrier semantics</li>
-<li>with less code and better interrupt management</li>
-<li>only synchronizer in Java that is compatible with fork/join framework</li>
+  <li>A flexible synchronizer to do latch and barrier semantics</li>
+  <li>with less code and better interrupt management</li>
+  <li>only synchronizer in Java that is compatible with fork/join framework</li>
 </ul>
 
+<p><span style="color:red">TODO</span></p>
+
+<h2 id="forkjoinpool-17">7) ForkJoinPool (1.7)</h2>
 
 <p><span style="color:red">TODO</span></p>
 
-<a name="L7..ForkJoinPool..1.7."></a>
-<h2>7) ForkJoinPool (1.7)</h2>
-
-<p><span style="color:red">TODO</span></p>
-
-<a name="L8..StampedLock..1.8."></a>
-<h2>8) StampedLock (1.8)</h2>
+<h2 id="stampedlock-18">8) StampedLock (1.8)</h2>
 
 <p><span style="color:red">TODO</span>
 <a href="http://vimeo.com/74553130">Phaser and StampedLock Concurrency Synchronizers (Heinz Kabutz) </a></p>
 
-<a name="Java.Memory.Model"></a>
-<h1>Java Memory Model</h1>
+<h1 id="java-memory-model">Java Memory Model</h1>
 
 <p><span style="color:red">TODO</span></p>
 
-<a name="Concurrency.Programming.Models"></a>
-<h1>Concurrency Programming Models</h1>
+<h1 id="concurrency-programming-models">Concurrency Programming Models</h1>
 
 <p><span style="color:red">TODO</span></p>
 
 <ul>
-<li>ForkJoin model</li>
-<li>Actor Model</li>
-<li>STM model</li>
+  <li>ForkJoin model</li>
+  <li>Actor Model</li>
+  <li>STM model</li>
 </ul>
 
-
-<a name="Concurrency.Frameworks"></a>
-<h1>Concurrency Frameworks</h1>
+<h1 id="concurrency-frameworks">Concurrency Frameworks</h1>
 
 <p><span style="color:red">TODO</span></p>
 
-<p><a href="http://lmax-exchange.github.io/disruptor/">LMAX Disruptor</a> - High Performance Inter-Thread Messaging Library. Excellent blog on this topic : <a href="http://mechanitis.blogspot.com/2011_07_01_archive.html">http://mechanitis.blogspot.com/2011_07_01_archive.html</a></p>
+<p><a href="http://lmax-exchange.github.io/disruptor/">LMAX Disruptor</a> - High Performance Inter-Thread Messaging Library. Excellent blog on this topic : http://mechanitis.blogspot.com/2011_07_01_archive.html</p>
 
-<a name="FAQs"></a>
-<h1>FAQs</h1>
-
-<ul>
-<li>how to test throughput of concurrent programs?</li>
-<li>System.millis and System.nanos</li>
-<li>Work stealing pattern - learn</li>
-<li>CompletionService</li>
-<li>Why thread.start() shouldn&rsquo;t be invoked from a constructor?</li>
-<li>Java 1.5 Double-checked locking mechanism</li>
-<li>What is the significance of Stack Size in a thread? (JVM Option -Xss)</li>
-<li>Difference between sleep(), yield(), and wait()
+<h1 id="faqs">FAQs</h1>
 
 <ul>
-<li><code>sleep(n)</code> says “I’m done with my time slice, and please don’t give me another one for at least n milliseconds.” The OS doesn&rsquo;t even try to schedule the sleeping thread until requested time has passed.</li>
-<li><code>yield()</code> says “I’m done with my time slice, but I still have work to do.” The OS is free to immediately give the thread another time slice, or to give some other thread or process the CPU the yielding thread just gave up.</li>
-<li><code>wait()</code> says “I’m done with my time slice. Don’t give me another time slice until someone calls notify().” As with sleep(), the OS won’t even try to schedule your task unless someone calls notify() (or one of a few other wake up scenarios occurs).</li>
-</ul>
-</li>
-<li>THOU SHALT NOT
-
-<ul>
-<li>call <code>Thread.stop()</code> - All monitors unlocked by ThreadDeath</li>
-<li>call <code>Thread.suspend()</code> or <code>Thread.resume()</code> - Can lead to deadlock</li>
-<li>call <code>Thread.destroy()</code> - Not implemented (or safe)</li>
-<li>call <code>Thread.run()</code> - Wonʼt start Thread! Still in caller Thread.</li>
-<li>use ThreadGroups - Use a ThreadPoolExecutor instead.</li>
-</ul>
-</li>
+  <li>how to test throughput of concurrent programs?</li>
+  <li>System.millis and System.nanos</li>
+  <li>Work stealing pattern - learn</li>
+  <li>CompletionService</li>
+  <li>Why thread.start() shouldn’t be invoked from a constructor?</li>
+  <li>Java 1.5 Double-checked locking mechanism</li>
+  <li>What is the significance of Stack Size in a thread? (JVM Option -Xss)</li>
+  <li>Difference between sleep(), yield(), and wait()
+    <ul>
+      <li><code>sleep(n)</code> says “I’m done with my time slice, and please don’t give me another one for at least n milliseconds.” The OS doesn’t even try to schedule the sleeping thread until requested time has passed. </li>
+      <li><code>yield()</code> says “I’m done with my time slice, but I still have work to do.” The OS is free to immediately give the thread another time slice, or to give some other thread or process the CPU the yielding thread just gave up. </li>
+      <li><code>wait()</code> says “I’m done with my time slice. Don’t give me another time slice until someone calls notify().” As with sleep(), the OS won’t even try to schedule your task unless someone calls notify() (or one of a few other wake up scenarios occurs).</li>
+    </ul>
+  </li>
+  <li>THOU SHALT NOT
+    <ul>
+      <li>call <code>Thread.stop()</code> - All monitors unlocked by ThreadDeath </li>
+      <li>call <code>Thread.suspend()</code> or <code>Thread.resume()</code> - Can lead to deadlock </li>
+      <li>call <code>Thread.destroy()</code> - Not implemented (or safe) </li>
+      <li>call <code>Thread.run()</code> - Wonʼt start Thread! Still in caller Thread. </li>
+      <li>use ThreadGroups - Use a ThreadPoolExecutor instead.</li>
+    </ul>
+  </li>
 </ul>
 
-
-<a name="Bibliography"></a>
-<h1>Bibliography</h1>
+<h1 id="bibliography">Bibliography</h1>
 
 <ul>
-<li>Books
-
-<ul>
-<li>Java Concurrency in Practice</li>
-<li>The CERT Oracle Secure Coding Standard for Java</li>
-</ul>
-</li>
-<li>Blogs &amp; Articles
-
-<ul>
-<li>Oracle&rsquo;s Multithreaded Programming Guide - concepts and terminologies</li>
-<li>Alex Miller&rsquo;s Concurrency Gotchas - <a href="http://www.slideshare.net/alexmiller/java-concurrency-gotchas-3666977">http://www.slideshare.net/alexmiller/java-concurrency-gotchas-3666977</a></li>
-<li><a href="http://www.slideshare.net/nadeembtech/java-concurrecny">http://www.slideshare.net/nadeembtech/java-concurrecny</a></li>
-<li><a href="http://www-128.ibm.com/developerworks/library/j-csp1.html">http://www-128.ibm.com/developerworks/library/j-csp1.html</a></li>
-<li><a href="http://www-128.ibm.com/developerworks/library/j-csp2.html">http://www-128.ibm.com/developerworks/library/j-csp2.html</a></li>
-<li><a href="http://www-128.ibm.com/developerworks/library/j-csp3.html">http://www-128.ibm.com/developerworks/library/j-csp3.html</a></li>
-<li><a href="http://www.javaworld.com/javaworld/jw-10-1998/jw-10-toolbox_p.html">http://www.javaworld.com/javaworld/jw-10-1998/jw-10-toolbox_p.html</a></li>
-<li><a href="http://www.baptiste-wicht.com/series/java-concurrency-tutorial/">http://www.baptiste-wicht.com/series/java-concurrency-tutorial/</a></li>
-<li><a href="http://www.slideshare.net/sjlee0/robust-and-scalable-concurrent-programming-lesson-from-the-trenches">http://www.slideshare.net/sjlee0/robust-and-scalable-concurrent-programming-lesson-from-the-trenches</a></li>
-<li><a href="http://www.slideshare.net/choksheak/advanced-introduction-to-java-multi-threading-full-chok">http://www.slideshare.net/choksheak/advanced-introduction-to-java-multi-threading-full-chok</a></li>
-<li><a href="http://www.ibm.com/developerworks/library/j-jtp08223/">http://www.ibm.com/developerworks/library/j-jtp08223/</a></li>
-<li><a href="https://docs.google.com/file/d/0BwRO-bJaP9EvU1M5d3pCc3BGVnc/edit?usp=sharing">DZone RefCard - Java Concurrency</a></li>
-</ul>
-</li>
+  <li>Books
+    <ul>
+      <li>Java Concurrency in Practice</li>
+      <li>The CERT Oracle Secure Coding Standard for Java</li>
+    </ul>
+  </li>
+  <li>Blogs &amp; Articles
+    <ul>
+      <li>Oracle’s Multithreaded Programming Guide - concepts and terminologies</li>
+      <li>Alex Miller’s Concurrency Gotchas - http://www.slideshare.net/alexmiller/java-concurrency-gotchas-3666977</li>
+      <li>http://www.slideshare.net/nadeembtech/java-concurrecny</li>
+      <li>http://www-128.ibm.com/developerworks/library/j-csp1.html </li>
+      <li>http://www-128.ibm.com/developerworks/library/j-csp2.html </li>
+      <li>http://www-128.ibm.com/developerworks/library/j-csp3.html </li>
+      <li>http://www.javaworld.com/javaworld/jw-10-1998/jw-10-toolbox_p.html</li>
+      <li>http://www.baptiste-wicht.com/series/java-concurrency-tutorial/</li>
+      <li>http://www.slideshare.net/sjlee0/robust-and-scalable-concurrent-programming-lesson-from-the-trenches</li>
+      <li>http://www.slideshare.net/choksheak/advanced-introduction-to-java-multi-threading-full-chok</li>
+      <li>http://www.ibm.com/developerworks/library/j-jtp08223/</li>
+      <li><a href="https://docs.google.com/file/d/0BwRO-bJaP9EvU1M5d3pCc3BGVnc/edit?usp=sharing">DZone RefCard - Java Concurrency</a></li>
+    </ul>
+  </li>
 </ul>
 
 
@@ -1339,7 +1135,7 @@ Bounded pools and inter-dependent tasks don&rsquo;t mix well.</p>
 
 		<li>
 			<h3>General Concepts</h3>
-			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/webprogramming/webconcepts.html">Web Concepts</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/webconcepts.html">Web Concepts</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
 		</li>
 
 		<h2>Non-Techninal</h2>

@@ -33,6 +33,7 @@
 <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
+
 <!-- mathjax config similar to math.stackexchange -->
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -47,8 +48,7 @@ messageStyle: "none",
 "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
 });
 </script>
-
-<script src="/mathjax/unpacked/MathJax.js"></script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
 
   
 
@@ -85,283 +85,238 @@ messageStyle: "none",
     
   </header>
   
-  <p><ul>
- <li><a href="#Memory">Memory</a>
- <ul>
-  <li><a href="#JVM.Architecture">JVM Architecture</a>
-  <ul>
-   <li><a href="#Class.loader.subsystem">Class loader subsystem</a></li>
-   <li><a href="#Execution.engine">Execution engine</a></li>
-   <li><a href="#Native.interface">Native interface</a></li>
-   <li><a href="#Runtime.data.areas">Runtime data areas</a>
-   <ul>
-    <li><a href="#Runtime.data.areas.shared.among.all.threads">Runtime data areas shared among all threads</a></li>
-    <li><a href="#Thread-specific.runtime.data.areas">Thread-specific runtime data areas</a>
-</li>
-   </ul>
-   </li>
-  </ul>
+  <ul id="markdown-toc">
+  <li><a href="#memory">Memory</a>    <ul>
+      <li><a href="#jvm-architecture">JVM Architecture</a>        <ul>
+          <li><a href="#class-loader-subsystem">Class loader subsystem</a></li>
+          <li><a href="#execution-engine">Execution engine</a></li>
+          <li><a href="#native-interface">Native interface</a></li>
+          <li><a href="#runtime-data-areas">Runtime data areas</a>            <ul>
+              <li><a href="#runtime-data-areas-shared-among-all-threads">Runtime data areas shared among all threads</a></li>
+              <li><a href="#thread-specific-runtime-data-areas">Thread-specific runtime data areas</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><a href="#garbage-collection">Garbage Collection</a>        <ul>
+          <li><a href="#phases">Phases</a></li>
+          <li><a href="#jvm-generations">JVM Generations</a></li>
+          <li><a href="#generational-gc-process">Generational GC Process</a></li>
+          <li><a href="#garbage-collection-algorithms">Garbage Collection Algorithms</a></li>
+        </ul>
+      </li>
+      <li><a href="#reference-types">Reference Types</a>        <ul>
+          <li><a href="#weakreference">WeakReference</a></li>
+          <li><a href="#softreference">SoftReference</a></li>
+          <li><a href="#phantomreference">PhantomReference</a></li>
+        </ul>
+      </li>
+    </ul>
   </li>
-  <li><a href="#Garbage.Collection">Garbage Collection</a>
-  <ul>
-   <li><a href="#Phases">Phases</a></li>
-   <li><a href="#JVM.Generations">JVM Generations</a></li>
-   <li><a href="#Generational.GC.Process">Generational GC Process</a></li>
-   <li><a href="#Garbage.Collection.Algorithms">Garbage Collection Algorithms</a></li>
-  </ul>
+  <li><a href="#performance-metrics">Performance Metrics</a></li>
+  <li><a href="#profiling">Profiling</a></li>
+  <li><a href="#benchmarking">Benchmarking</a></li>
+  <li><a href="#jvm-profiling-tools">JVM Profiling Tools</a>    <ul>
+      <li><a href="#hprof">HPROF</a></li>
+      <li><a href="#visualvm">VisualVM</a></li>
+      <li><a href="#mat">MAT</a></li>
+      <li><a href="#btrace">BTrace</a></li>
+      <li><a href="#tools-shipped-with-java">Tools shipped with Java</a></li>
+      <li><a href="#hp-jtune">HP JTune</a></li>
+      <li><a href="#hp-jmeter">HP JMeter</a></li>
+    </ul>
   </li>
-  <li><a href="#Reference.Types">Reference Types</a>
-  <ul>
-   <li><a href="#WeakReference">WeakReference</a></li>
-   <li><a href="#SoftReference">SoftReference</a></li>
-   <li><a href="#PhantomReference">PhantomReference</a>
-</li>
-  </ul>
-  </li>
- </ul>
- </li>
- <li><a href="#Performance.Metrics">Performance Metrics</a></li>
- <li><a href="#Profiling">Profiling</a></li>
- <li><a href="#Benchmarking">Benchmarking</a></li>
- <li><a href="#JVM.Profiling.Tools">JVM Profiling Tools</a>
- <ul>
-  <li><a href="#HPROF">HPROF</a></li>
-  <li><a href="#VisualVM">VisualVM</a></li>
-  <li><a href="#MAT">MAT</a></li>
-  <li><a href="#BTrace">BTrace</a></li>
-  <li><a href="#Tools.shipped.with.Java">Tools shipped with Java</a></li>
-  <li><a href="#HP.JTune">HP JTune</a></li>
-  <li><a href="#HP.JMeter">HP JMeter</a></li>
- </ul>
- </li>
- <li><a href="#Bibliography">Bibliography</a></li>
+  <li><a href="#bibliography">Bibliography</a></li>
 </ul>
 
-</p>
-
-<a name="Memory"></a>
-<h1>Memory</h1>
+<h1 id="memory">Memory</h1>
 
 <p>Any Java object occupies at least 16 bytes, 12 out of which are occupied by a Java object header. Besides that, all Java objects are aligned by 8 bytes boundary. It means that, for example, an object containing 2 fields: int and byte will occupy not 17 (12 + 4 + 1), but 24 bytes (17 aligned by 8 bytes).</p>
 
 <p>Each Object reference occupies 4 bytes if the Java heap is under 32G and <code>XX:+UseCompressedOops</code> is turned on (it is turned on by default in the recent Oracle JVM versions). Otherwise, Object references occupy 8 bytes.</p>
 
 <ul>
-<li><a href="http://java-performance.info/memory-introspection-using-sun-misc-unsafe-and-reflection/">http://java-performance.info/memory-introspection-using-sun-misc-unsafe-and-reflection/</a></li>
-<li><a href="http://java-performance.info/overview-of-memory-saving-techniques-java/">http://java-performance.info/overview-of-memory-saving-techniques-java/</a></li>
-<li><a href="http://apmblog.compuware.com/2011/04/20/the-top-java-memory-problems-part-1/">Top Java Memory Problems - Part 1</a></li>
-<li><a href="http://docs.oracle.com/javase/6/docs/technotes/guides/management/jconsole.html#gddzt">Garbage Collection</a></li>
+  <li>http://java-performance.info/memory-introspection-using-sun-misc-unsafe-and-reflection/</li>
+  <li>http://java-performance.info/overview-of-memory-saving-techniques-java/</li>
+  <li><a href="http://apmblog.compuware.com/2011/04/20/the-top-java-memory-problems-part-1/">Top Java Memory Problems - Part 1</a></li>
+  <li><a href="http://docs.oracle.com/javase/6/docs/technotes/guides/management/jconsole.html#gddzt">Garbage Collection</a></li>
 </ul>
-
 
 <p>Understand the implications of moving b/w 32-bit and 64-bit JVMs especially in terms of memory usage and allocation.</p>
 
-<a name="JVM.Architecture"></a>
-<h2>JVM Architecture</h2>
+<h2 id="jvm-architecture">JVM Architecture</h2>
 
-<p><img class="right" src="/technology/jvm-architecture.png"></p>
+<p><img class="right" src="/technology/jvm-architecture.png" /></p>
 
 <p><a href="http://www.cubrid.org/blog/dev-platform/understanding-jvm-internals/">Understanding JVM Internals</a></p>
 
-<a name="Class.loader.subsystem"></a>
-<h3>Class loader subsystem</h3>
+<h3 id="class-loader-subsystem">Class loader subsystem</h3>
 
 <p>Responsible for loading classes and interfaces</p>
 
-<a name="Execution.engine"></a>
-<h3>Execution engine</h3>
+<h3 id="execution-engine">Execution engine</h3>
 
 <p>Responsible for the execution of the instructions specified in the classes.</p>
 
-<a name="Native.interface"></a>
-<h3>Native interface</h3>
+<h3 id="native-interface">Native interface</h3>
 
 <p>interacts with the native libraries.</p>
 
-<a name="Runtime.data.areas"></a>
-<h3>Runtime data areas</h3>
+<h3 id="runtime-data-areas">Runtime data areas</h3>
 
 <p>Mechanism to hold all kinds of data items such as instructions, object data, local variable data, return values &amp; intermediate results. How runtime data are stored in the runtime data areas depends on the implementation of the JVM. Some implementation may enjoy the availability of memory and some others may not. The abstract nature of runtime data area specification allows the implementation of JVM in different machines easier. Some runtime data areas are shared among all the threads in the application, while some others are too specific to an active thread.</p>
 
-<a name="Runtime.data.areas.shared.among.all.threads"></a>
-<h4>Runtime data areas shared among all threads</h4>
+<h4 id="runtime-data-areas-shared-among-all-threads">Runtime data areas shared among all threads</h4>
 
 <ul>
-<li><strong>Method area</strong>: holds the details of each class loaded by the class loader subsystem.</li>
-<li><strong>Heap</strong>: holds every object being created by the threads during execution</li>
+  <li><strong>Method area</strong>: holds the details of each class loaded by the class loader subsystem. </li>
+  <li><strong>Heap</strong>: holds every object being created by the threads during execution</li>
 </ul>
 
-
-<a name="Thread-specific.runtime.data.areas"></a>
-<h4>Thread-specific runtime data areas</h4>
+<h4 id="thread-specific-runtime-data-areas">Thread-specific runtime data areas</h4>
 
 <ul>
-<li><strong>Program counter register</strong>: points to the next instruction to be executed.</li>
-<li><strong>Java stack</strong>: hold the state of each method (java method, not a native method) invocations for the thread such as the local variables, method arguments, return values, intermediate results. Each entry in the Java stack is called “stack frames“. Whenever a method is invoked a new stack frame is added to the stack and corresponding frame is removed when its execution is completed.</li>
-<li><strong>Native method stack</strong>: holds the state of each native method call in an implementation dependent way.</li>
+  <li><strong>Program counter register</strong>: points to the next instruction to be executed.</li>
+  <li><strong>Java stack</strong>: hold the state of each method (java method, not a native method) invocations for the thread such as the local variables, method arguments, return values, intermediate results. Each entry in the Java stack is called “stack frames“. Whenever a method is invoked a new stack frame is added to the stack and corresponding frame is removed when its execution is completed.</li>
+  <li><strong>Native method stack</strong>: holds the state of each native method call in an implementation dependent way.</li>
 </ul>
 
+<h2 id="garbage-collection">Garbage Collection</h2>
 
-<a name="Garbage.Collection"></a>
-<h2>Garbage Collection</h2>
+<p><img src="/technology/java-gc1.png" /></p>
 
-<p><img src="/technology/java-gc1.png"></p>
-
-<p><img class="right" src="/technology/java-gc2.png"></p>
+<p><img class="right" src="/technology/java-gc2.png" /></p>
 
 <ul>
-<li>Definition: process of looking at heap memory, identifying which objects are in use and which are not, and deleting the unused objects.</li>
-<li><a href="http://www.oracle.com/technetwork/java/gc-tuning-5-138395.html">Tuning GC</a></li>
-<li><a href="http://architects.dzone.com/articles/how-tune-java-garbage">How to tune GC</a></li>
+  <li>Definition: process of looking at heap memory, identifying which objects are in use and which are not, and deleting the unused objects.</li>
+  <li><a href="http://www.oracle.com/technetwork/java/gc-tuning-5-138395.html">Tuning GC</a></li>
+  <li><a href="http://architects.dzone.com/articles/how-tune-java-garbage">How to tune GC</a></li>
 </ul>
 
-
-<a name="Phases"></a>
-<h3>Phases</h3>
+<h3 id="phases">Phases</h3>
 
 <ul>
-<li>Mark phase - garbage collector identifies which pieces of memory are in use and which are not. Unused memory is cleaned up.</li>
-<li>Normal deletion removes unreferenced objects leaving referenced objects and pointers to free space.</li>
-<li>Compact phase - To further improve performance, in addition to deleting unreferenced objects, you can also compact the remaining referenced objects. By moving referenced object together, this makes new memory allocation much easier and faster.</li>
+  <li>Mark phase - garbage collector identifies which pieces of memory are in use and which are not. Unused memory is cleaned up.</li>
+  <li>Normal deletion removes unreferenced objects leaving referenced objects and pointers to free space.</li>
+  <li>Compact phase - To further improve performance, in addition to deleting unreferenced objects, you can also compact the remaining referenced objects. By moving referenced object together, this makes new memory allocation much easier and faster.</li>
 </ul>
 
-
-<a name="JVM.Generations"></a>
-<h3>JVM Generations</h3>
+<h3 id="jvm-generations">JVM Generations</h3>
 
 <ul>
-<li>Young Generation
+  <li>Young Generation
+    <ul>
+      <li>all new objects are allocated and aged. </li>
+      <li>causes a minor GC when this fills up.</li>
+      <li>relatively quicker to collect than other generations</li>
+      <li>Stop the World event: All minor GCs are “Stop the World” events which means all the app threads are stopped until the GC completes.</li>
+    </ul>
+  </li>
+  <li>Old Generation
+    <ul>
+      <li>stores long surviving objects. </li>
+      <li>a threshold is set for young generation objects and when the age is met, the objects gets moved to old generation.</li>
+      <li>causes a major GC when this fills up. Also, a “Stop the World” event.</li>
+    </ul>
+  </li>
+  <li>Permanent Generation
+    <ul>
+      <li>stores metadata required by the JVM to describe the classes and methods used in the app. Java SE library classes and method may be stored here.</li>
+      <li>class may get collected/unloaded if they are no longer needed. Causes a Full GC</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="generational-gc-process">Generational GC Process</h3>
 
 <ul>
-<li>all new objects are allocated and aged.</li>
-<li>causes a minor GC when this fills up.</li>
-<li>relatively quicker to collect than other generations</li>
-<li>Stop the World event: All minor GCs are &ldquo;Stop the World&rdquo; events which means all the app threads are stopped until the GC completes.</li>
+  <li>1st minor GC
+    <ul>
+      <li>New objects are allocated in eden space. Both survivor spaces start out empty.</li>
+      <li>When eden space fills up, a minor GC is triggered.</li>
+      <li>referenced objects are moved to 1st survivor space (S0)</li>
+      <li>Eden space is cleared.</li>
+    </ul>
+  </li>
+  <li>2nd minor GC
+    <ul>
+      <li>When eden space fills up, a minor GC is triggered.</li>
+      <li>referenced objects are moved to 2nd survivor space (S1). </li>
+      <li>In addition, objects from 1st survivor space (S0) have their age incremented and get moved to S1.</li>
+      <li>Eden &amp; S0 space is cleared.</li>
+    </ul>
+  </li>
+  <li>3rd minor GC
+    <ul>
+      <li>When eden space fills up, a minor GC is triggered.</li>
+      <li>referenced objects are moved to S0.  </li>
+      <li>In addition, objects from S1 have their age incremented and get moved to S0.</li>
+      <li>Plus, objects that reached the threshold age are moved to old generation.</li>
+      <li>Eden &amp; S1 space are cleared.</li>
+    </ul>
+  </li>
+  <li>1st major GC
+    <ul>
+      <li>When tenure space fills up, a major GC is triggered. It cleans up and compacts that space.</li>
+    </ul>
+  </li>
 </ul>
-</li>
-<li>Old Generation
+
+<h3 id="garbage-collection-algorithms">Garbage Collection Algorithms</h3>
 
 <ul>
-<li>stores long surviving objects.</li>
-<li>a threshold is set for young generation objects and when the age is met, the objects gets moved to old generation.</li>
-<li>causes a major GC when this fills up. Also, a &ldquo;Stop the World&rdquo; event.</li>
-</ul>
-</li>
-<li>Permanent Generation
-
-<ul>
-<li>stores metadata required by the JVM to describe the classes and methods used in the app. Java SE library classes and method may be stored here.</li>
-<li>class may get collected/unloaded if they are no longer needed. Causes a Full GC</li>
-</ul>
-</li>
-</ul>
-
-
-<a name="Generational.GC.Process"></a>
-<h3>Generational GC Process</h3>
-
-<ul>
-<li>1st minor GC
-
-<ul>
-<li>New objects are allocated in eden space. Both survivor spaces start out empty.</li>
-<li>When eden space fills up, a minor GC is triggered.</li>
-<li>referenced objects are moved to 1st survivor space (S0)</li>
-<li>Eden space is cleared.</li>
-</ul>
-</li>
-<li>2nd minor GC
-
-<ul>
-<li>When eden space fills up, a minor GC is triggered.</li>
-<li>referenced objects are moved to 2nd survivor space (S1).</li>
-<li>In addition, objects from 1st survivor space (S0) have their age incremented and get moved to S1.</li>
-<li>Eden &amp; S0 space is cleared.</li>
-</ul>
-</li>
-<li>3rd minor GC
-
-<ul>
-<li>When eden space fills up, a minor GC is triggered.</li>
-<li>referenced objects are moved to S0.</li>
-<li>In addition, objects from S1 have their age incremented and get moved to S0.</li>
-<li>Plus, objects that reached the threshold age are moved to old generation.</li>
-<li>Eden &amp; S1 space are cleared.</li>
-</ul>
-</li>
-<li>1st major GC
-
-<ul>
-<li>When tenure space fills up, a major GC is triggered. It cleans up and compacts that space.</li>
-</ul>
-</li>
+  <li>The Serial GC
+    <ul>
+      <li>default collector for client style machines in Java SE 5 &amp; 6.</li>
+      <li>Both minor &amp; major GCs are done serially using a single virtual CPU.</li>
+      <li>Uses a mark-compact collection method.</li>
+      <li>Option: <code>-XX:+UserSerialGC</code>.</li>
+      <li>Usages: </li>
+      <li>For longer apps with no low pause time requirements</li>
+      <li>For apps which run on machine that hosts more JVMs than available processors.In such environment, GC of one app shouldn’t affect all other JVMs.</li>
+    </ul>
+  </li>
+  <li>The Parallel GC
+    <ul>
+      <li>uses multiple threads  to perform the young generation GC.</li>
+      <li>By default, on a host with ‘N’ CPUs, the parallel GC uses N GC threads in the collection. The number of GC threads can be controlled: <code>-XX:ParallelGCThreads=&lt;num&gt;</code></li>
+      <li>Parallel GC is also called a throughput collector.</li>
+      <li>Usages:</li>
+      <li>apps where high throughput is required and long pauses are accepted.</li>
+      <li>2 flavors of Parallel GC</li>
+      <li>Option: <code>-XX:+UseParallelGC</code> - does multi-threaded young generation GC, single-threaded old generation collection and compaction.</li>
+      <li>Option: <code>-XX:+UseParallelOldGC</code> - does multi-threaded young, multi-thread old generation collection and compaction. (HotSpot does compaction only in the old generation)</li>
+    </ul>
+  </li>
+  <li>The Concurrent Mark Sweep (CMS) Collector
+    <ul>
+      <li>Also called Concurrent Low Pause Collector.</li>
+      <li>For younger generation, uses the same algorithm as Parallel GC</li>
+      <li>For older generation, it minimizes the pauses by doing GC concurrently with the application threads.</li>
+      <li>Does not copy or compact the live objects. If fragmentation becomes an issue, allocate larger heap.</li>
+      <li>Option: <code>-XX:+UseConcMarkSweepGC</code></li>
+    </ul>
+  </li>
+  <li>The G1 collector
+    <ul>
+      <li>Also called Garbage First Collector.</li>
+      <li>Replacement for CMS collector.</li>
+      <li>G1 is a parallel, concurrent, and incrementally compacting low-pause collector that has a different layout from other collectors above.</li>
+      <li>More details here</li>
+      <li>Option: <code>-XX:+UserG1GC</code></li>
+    </ul>
+  </li>
 </ul>
 
+<h2 id="reference-types">Reference Types</h2>
 
-<a name="Garbage.Collection.Algorithms"></a>
-<h3>Garbage Collection Algorithms</h3>
-
-<ul>
-<li>The Serial GC
-
-<ul>
-<li>default collector for client style machines in Java SE 5 &amp; 6.</li>
-<li>Both minor &amp; major GCs are done serially using a single virtual CPU.</li>
-<li>Uses a mark-compact collection method.</li>
-<li>Option: <code>-XX:+UserSerialGC</code>.</li>
-<li>Usages:</li>
-<li>For longer apps with no low pause time requirements</li>
-<li>For apps which run on machine that hosts more JVMs than available processors.In such environment, GC of one app shouldn&rsquo;t affect all other JVMs.</li>
-</ul>
-</li>
-<li>The Parallel GC
-
-<ul>
-<li>uses multiple threads  to perform the young generation GC.</li>
-<li>By default, on a host with &lsquo;N&rsquo; CPUs, the parallel GC uses N GC threads in the collection. The number of GC threads can be controlled: <code>-XX:ParallelGCThreads=&lt;num&gt;</code></li>
-<li>Parallel GC is also called a throughput collector.</li>
-<li>Usages:</li>
-<li>apps where high throughput is required and long pauses are accepted.</li>
-<li>2 flavors of Parallel GC</li>
-<li>Option: <code>-XX:+UseParallelGC</code> - does multi-threaded young generation GC, single-threaded old generation collection and compaction.</li>
-<li>Option: <code>-XX:+UseParallelOldGC</code> - does multi-threaded young, multi-thread old generation collection and compaction. (HotSpot does compaction only in the old generation)</li>
-</ul>
-</li>
-<li>The Concurrent Mark Sweep (CMS) Collector
-
-<ul>
-<li>Also called Concurrent Low Pause Collector.</li>
-<li>For younger generation, uses the same algorithm as Parallel GC</li>
-<li>For older generation, it minimizes the pauses by doing GC concurrently with the application threads.</li>
-<li>Does not copy or compact the live objects. If fragmentation becomes an issue, allocate larger heap.</li>
-<li>Option: <code>-XX:+UseConcMarkSweepGC</code></li>
-</ul>
-</li>
-<li>The G1 collector
-
-<ul>
-<li>Also called Garbage First Collector.</li>
-<li>Replacement for CMS collector.</li>
-<li>G1 is a parallel, concurrent, and incrementally compacting low-pause collector that has a different layout from other collectors above.</li>
-<li>More details here</li>
-<li>Option: <code>-XX:+UserG1GC</code></li>
-</ul>
-</li>
-</ul>
-
-
-<a name="Reference.Types"></a>
-<h2>Reference Types</h2>
-
-<a name="WeakReference"></a>
-<h3>WeakReference</h3>
+<h3 id="weakreference">WeakReference</h3>
 
 <p>Weak reference objects, which do not prevent their referents from being made finalizable, finalized, and then reclaimed. Weak references are most often used to implement canonicalizing mappings.</p>
 
 <p>Suppose that the garbage collector determines at a certain point in time that an object is weakly reachable. At that time it will atomically clear all weak references to that object and all weak references to any other weakly-reachable objects from which that object is reachable through a chain of strong and soft references. At the same time it will declare all of the formerly weakly-reachable objects to be finalizable. At the same time or at some later time it will enqueue those newly-cleared weak references that are registered with reference queues.</p>
 
-<a name="SoftReference"></a>
-<h3>SoftReference</h3>
+<h3 id="softreference">SoftReference</h3>
 
 <p>Soft reference objects, which are cleared at the discretion of the garbage collector in response to memory demand. Soft references are most often used to implement memory-sensitive caches.</p>
 
@@ -371,8 +326,7 @@ messageStyle: "none",
 
 <p>Direct instances of this class may be used to implement simple caches; this class or derived subclasses may also be used in larger data structures to implement more sophisticated caches. As long as the referent of a soft reference is strongly reachable, that is, is actually in use, the soft reference will not be cleared. Thus a sophisticated cache can, for example, prevent its most recently used entries from being discarded by keeping strong referents to those entries, leaving the remaining entries to be discarded at the discretion of the garbage collector.</p>
 
-<a name="PhantomReference"></a>
-<h3>PhantomReference</h3>
+<h3 id="phantomreference">PhantomReference</h3>
 
 <p>Phantom reference objects, which are enqueued after the collector determines that their referents may otherwise be reclaimed. Phantom references are most often used for scheduling pre-mortem cleanup actions in a more flexible way than is possible with the Java finalization mechanism.</p>
 
@@ -384,147 +338,126 @@ messageStyle: "none",
 
 <hr />
 
-<a name="Performance.Metrics"></a>
-<h1>Performance Metrics</h1>
+<h1 id="performance-metrics">Performance Metrics</h1>
 
 <ul>
-<li>Responsiveness
+  <li>Responsiveness
+    <ul>
+      <li>Refers to how quickly an app responds with a requested piece of data. e.g., how quickly a website returns a page.</li>
+      <li>The focus is on responding in short period of time and long pause times are not acceptable. </li>
+    </ul>
+  </li>
+  <li>Throughput
+    <ul>
+      <li>focus is on maximizing the amount of work done by an app in a specific period of time. e.g., no. of transactions in a given time</li>
+      <li>The focus is on high throughput over longer periods of time and long pause times are acceptable. Quick response is not a consideration.</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="profiling">Profiling</h1>
 
 <ul>
-<li>Refers to how quickly an app responds with a requested piece of data. e.g., how quickly a website returns a page.</li>
-<li>The focus is on responding in short period of time and long pause times are not acceptable.</li>
+  <li>What is profiling?
+    <ul>
+      <li>Measurement of program behavior</li>
+      <li>Gathering of statistics about program execution</li>
+    </ul>
+  </li>
+  <li>What can profiling tell you?
+    <ul>
+      <li>How your program is spending time
+        <ul>
+          <li>Which methods were called? How often?</li>
+          <li>How long did those methods take to return?</li>
+        </ul>
+      </li>
+      <li>How your program is allocating space
+        <ul>
+          <li>Which objects were created? How many?</li>
+          <li>How much memory are those objects using?</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Difference between Profiling &amp; Benchmarking
+    <ul>
+      <li>Profiling
+        <ul>
+          <li>Aims to identify how an application executes</li>
+          <li>Does not accurately measure execution time</li>
+        </ul>
+      </li>
+      <li>Benchmarking
+        <ul>
+          <li>Aims to accurately measure execution time</li>
+          <li>Does not identify ways to improve code</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Types
+    <ul>
+      <li>Sample-based: sample relevant statistics at intervals during execution
+        <ul>
+          <li>Less overhead</li>
+          <li>Less accuracy</li>
+        </ul>
+      </li>
+      <li>Instrumentation-based: modify application execution to generate detailed traces
+        <ul>
+          <li>More overhead</li>
+          <li>More accuracy</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
 </ul>
-</li>
-<li>Throughput
+
+<h1 id="benchmarking">Benchmarking</h1>
 
 <ul>
-<li>focus is on maximizing the amount of work done by an app in a specific period of time. e.g., no. of transactions in a given time</li>
-<li>The focus is on high throughput over longer periods of time and long pause times are acceptable. Quick response is not a consideration.</li>
-</ul>
-</li>
-</ul>
-
-
-<a name="Profiling"></a>
-<h1>Profiling</h1>
-
-<ul>
-<li>What is profiling?
-
-<ul>
-<li>Measurement of program behavior</li>
-<li>Gathering of statistics about program execution</li>
-</ul>
-</li>
-<li>What can profiling tell you?
-
-<ul>
-<li>How your program is spending time
-
-<ul>
-<li>Which methods were called? How often?</li>
-<li>How long did those methods take to return?</li>
-</ul>
-</li>
-<li>How your program is allocating space
-
-<ul>
-<li>Which objects were created? How many?</li>
-<li>How much memory are those objects using?</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Difference between Profiling &amp; Benchmarking
-
-<ul>
-<li>Profiling
-
-<ul>
-<li>Aims to identify how an application executes</li>
-<li>Does not accurately measure execution time</li>
-</ul>
-</li>
-<li>Benchmarking
-
-<ul>
-<li>Aims to accurately measure execution time</li>
-<li>Does not identify ways to improve code</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Types
-
-<ul>
-<li>Sample-based: sample relevant statistics at intervals during execution
-
-<ul>
-<li>Less overhead</li>
-<li>Less accuracy</li>
-</ul>
-</li>
-<li>Instrumentation-based: modify application execution to generate detailed traces
-
-<ul>
-<li>More overhead</li>
-<li>More accuracy</li>
-</ul>
-</li>
-</ul>
-</li>
+  <li>https://code.google.com/p/caliper/wiki/JavaMicrobenchmarks</li>
+  <li>http://www.ibm.com/developerworks/java/library/j-benchmark1/index.html</li>
+  <li>https://code.google.com/p/javamelody/ - To capture SQL calls</li>
+  <li>
+    <p><a href="https://github.com/dropwizard/metrics">CodeHale</a> <span style="color:red">TODO</span></p>
+  </li>
+  <li>Benchmarking issues
+    <ul>
+      <li>What are you trying to test?</li>
+      <li>Optimization requires warm-up</li>
+      <li>Timing API accuracy</li>
+      <li>GC latency</li>
+    </ul>
+  </li>
+  <li>The right way
+    <ul>
+      <li>Simulate production (dataset, hardware, etc)</li>
+      <li>Run for an extended period of time</li>
+      <li>Warm up HotSpot™ with 10,000 iterations of benchmark code</li>
+      <li>Calculate scores based on average execution time</li>
+      <li>Identify outliers</li>
+    </ul>
+  </li>
+  <li>Never micro-benchmark. E.g.,</li>
 </ul>
 
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kt">long</span> <span class="n">start</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">nanoTime</span><span class="o">();</span>
+</span><span class="line"><span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">count</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span>
+</span><span class="line"><span class="n">Math</span><span class="o">.</span><span class="na">sqrt</span><span class="o">(</span><span class="mi">1234</span><span class="o">);</span>
+</span><span class="line"><span class="kt">long</span> <span class="n">stop</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">nanoTime</span><span class="o">();</span>
+</span><span class="line"><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;time &quot;</span> <span class="o">+</span> <span class="o">(</span><span class="n">stop</span> <span class="o">-</span> <span class="n">start</span><span class="o">)/</span><span class="mi">1000</span><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<a name="Benchmarking"></a>
-<h1>Benchmarking</h1>
+<h1 id="jvm-profiling-tools">JVM Profiling Tools</h1>
 
-<ul>
-<li><a href="https://code.google.com/p/caliper/wiki/JavaMicrobenchmarks">https://code.google.com/p/caliper/wiki/JavaMicrobenchmarks</a></li>
-<li><a href="http://www.ibm.com/developerworks/java/library/j-benchmark1/index.html">http://www.ibm.com/developerworks/java/library/j-benchmark1/index.html</a></li>
-<li><a href="https://code.google.com/p/javamelody/">https://code.google.com/p/javamelody/</a> - To capture SQL calls</li>
-<li><p><a href="https://github.com/dropwizard/metrics">CodeHale</a> <span style="color:red">TODO</span></p></li>
-<li><p>Benchmarking issues</p>
-
-<ul>
-<li>What are you trying to test?</li>
-<li>Optimization requires warm-up</li>
-<li>Timing API accuracy</li>
-<li>GC latency</li>
-</ul>
-</li>
-<li>The right way
-
-<ul>
-<li>Simulate production (dataset, hardware, etc)</li>
-<li>Run for an extended period of time</li>
-<li>Warm up HotSpot™ with 10,000 iterations of benchmark code</li>
-<li>Calculate scores based on average execution time</li>
-<li>Identify outliers</li>
-</ul>
-</li>
-<li>Never micro-benchmark. E.g.,</li>
-</ul>
-
-
-<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="kt">long</span> <span class="n">start</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">nanoTime</span><span class="o">();</span>
-</span><span class='line'><span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">count</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span>
-</span><span class='line'><span class="n">Math</span><span class="o">.</span><span class="na">sqrt</span><span class="o">(</span><span class="mi">1234</span><span class="o">);</span>
-</span><span class='line'><span class="kt">long</span> <span class="n">stop</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">nanoTime</span><span class="o">();</span>
-</span><span class='line'><span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;time &quot;</span> <span class="o">+</span> <span class="o">(</span><span class="n">stop</span> <span class="o">-</span> <span class="n">start</span><span class="o">)/</span><span class="mi">1000</span><span class="o">);</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<a name="JVM.Profiling.Tools"></a>
-<h1>JVM Profiling Tools</h1>
-
-<a name="HPROF"></a>
-<h2>HPROF</h2>
+<h2 id="hprof">HPROF</h2>
 
 <p>Command-line tool for heap and CPU profiling
 Not the most convenient or usable tool
@@ -534,278 +467,244 @@ A reasonable instructional tool
 Heap and CPU profiling
 Sample- and instrumentation-based approaches</p>
 
-<figure class='code'><figcaption><span>HPROF (heap=sites)</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">javac</span> <span class="o">-</span><span class="n">J</span><span class="o">-</span><span class="nl">agentlib:</span><span class="n">hprof</span><span class="o">=</span><span class="n">heap</span><span class="o">=</span><span class="n">sites</span> <span class="n">Hello</span><span class="o">.</span><span class="na">java</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">TRACE</span> <span class="mi">301926</span><span class="o">:</span> <span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">zip</span><span class="o">.</span><span class="na">ZipEntry</span><span class="o">.&lt;</span><span class="n">init</span><span class="o">&gt;(</span><span class="n">ZipEntry</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">101</span><span class="o">)</span> <span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">zip</span><span class="o">.</span><span class="na">ZipFile</span><span class="o">+</span><span class="mi">3</span><span class="o">.</span><span class="na">nextElement</span><span class="o">(</span><span class="n">ZipFile</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">417</span><span class="o">)</span> <span class="n">com</span><span class="o">.</span><span class="na">sun</span><span class="o">.</span><span class="na">tools</span><span class="o">.</span><span class="na">javac</span><span class="o">.</span><span class="na">jvm</span><span class="o">.</span><span class="na">ClassReader</span><span class="o">.</span><span class="na">openArchive</span><span class="o">(</span><span class="n">ClassReader</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">1374</span><span class="o">)</span> <span class="n">com</span><span class="o">.</span><span class="na">sun</span><span class="o">.</span><span class="na">tools</span><span class="o">.</span><span class="na">javac</span><span class="o">.</span><span class="na">jvm</span><span class="o">.</span><span class="na">ClassReader</span><span class="o">.</span><span class="na">list</span><span class="o">(</span><span class="n">ClassReader</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">1631</span><span class="o">)</span>
-</span><span class='line'><span class="n">TRACE</span> <span class="mi">301927</span><span class="o">:</span> <span class="n">com</span><span class="o">.</span><span class="na">sun</span><span class="o">.</span><span class="na">tools</span><span class="o">.</span><span class="na">javac</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">List</span><span class="o">.&lt;</span><span class="n">init</span><span class="o">&gt;(</span><span class="n">List</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">42</span><span class="o">)</span> <span class="n">com</span><span class="o">.</span><span class="na">sun</span><span class="o">.</span><span class="na">tools</span><span class="o">.</span><span class="na">javac</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">List</span><span class="o">.&lt;</span><span class="n">init</span><span class="o">&gt;(</span><span class="n">List</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">50</span><span class="o">)</span> <span class="n">com</span><span class="o">.</span><span class="na">sun</span><span class="o">.</span><span class="na">tools</span><span class="o">.</span><span class="na">javac</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">ListBuffer</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">ListBuffer</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">94</span><span class="o">)</span> <span class="n">com</span><span class="o">.</span><span class="na">sun</span><span class="o">.</span><span class="na">tools</span><span class="o">.</span><span class="na">javac</span><span class="o">.</span><span class="na">jvm</span><span class="o">.</span><span class="na">ClassReader</span><span class="o">.</span><span class="na">openArchive</span><span class="o">(</span><span class="n">ClassReader</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">1374</span><span class="o">)</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">SITES</span> <span class="nf">BEGIN</span> <span class="o">(</span><span class="n">ordered</span> <span class="n">by</span> <span class="n">live</span> <span class="n">bytes</span><span class="o">)</span> <span class="n">Wed</span> <span class="n">Oct</span> <span class="mi">4</span> <span class="mi">13</span><span class="o">:</span><span class="mi">13</span><span class="o">:</span><span class="mi">42</span> <span class="mi">2006</span>
-</span><span class='line'><span class="n">percent</span> <span class="n">live</span> <span class="n">alloc</span><span class="err">&#39;</span><span class="n">ed</span> <span class="n">stack</span> <span class="kd">class</span> <span class="nc">rank</span> <span class="n">self</span> <span class="n">accum</span> <span class="n">bytes</span> <span class="n">objs</span> <span class="n">bytes</span> <span class="n">objs</span> <span class="n">trace</span> <span class="n">name</span>
-</span><span class='line'><span class="mi">1</span> <span class="mf">44.13</span><span class="o">%</span> <span class="mf">44.13</span><span class="o">%</span> <span class="mi">1117360</span> <span class="mi">13967</span> <span class="mi">1117360</span> <span class="mi">13967</span> <span class="mi">301926</span> <span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">zip</span><span class="o">.</span><span class="na">ZipEntry</span>
-</span><span class='line'><span class="mi">2</span> <span class="mf">8.83</span><span class="o">%</span> <span class="mf">52.95</span><span class="o">%</span> <span class="mi">223472</span> <span class="mi">13967</span> <span class="mi">223472</span> <span class="mi">13967</span> <span class="mi">301927</span> <span class="n">com</span><span class="o">.</span><span class="na">sun</span><span class="o">.</span><span class="na">tools</span><span class="o">.</span><span class="na">javac</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">List</span>
-</span><span class='line'><span class="mi">3</span> <span class="mf">5.18</span><span class="o">%</span> <span class="mf">58.13</span><span class="o">%</span> <span class="mi">131088</span> <span class="mi">1</span> <span class="mi">131088</span> <span class="mi">1</span> <span class="mi">300996</span> <span class="kt">byte</span><span class="o">[]</span>
-</span><span class='line'><span class="mi">4</span> <span class="mf">5.18</span><span class="o">%</span> <span class="mf">63.31</span><span class="o">%</span> <span class="mi">131088</span> <span class="mi">1</span> <span class="mi">131088</span> <span class="mi">1</span> <span class="mi">300995</span> <span class="n">com</span><span class="o">.</span><span class="na">sun</span><span class="o">.</span><span class="na">tools</span><span class="o">.</span><span class="na">javac</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">Name</span><span class="o">[]</span>
-</span></code></pre></td></tr></table></div></figure>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>HPROF (heap=sites)</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">javac</span> <span class="o">-</span><span class="n">J</span><span class="o">-</span><span class="nl">agentlib:</span><span class="n">hprof</span><span class="o">=</span><span class="n">heap</span><span class="o">=</span><span class="n">sites</span> <span class="n">Hello</span><span class="o">.</span><span class="na">java</span>
+</span><span class="line">
+</span><span class="line"><span class="n">TRACE</span> <span class="mi">301926</span><span class="o">:</span> <span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">zip</span><span class="o">.</span><span class="na">ZipEntry</span><span class="o">.&lt;</span><span class="n">init</span><span class="o">&gt;(</span><span class="n">ZipEntry</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">101</span><span class="o">)</span> <span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">zip</span><span class="o">.</span><span class="na">ZipFile</span><span class="o">+</span><span class="mi">3</span><span class="o">.</span><span class="na">nextElement</span><span class="o">(</span><span class="n">ZipFile</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">417</span><span class="o">)</span> <span class="n">com</span><span class="o">.</span><span class="na">sun</span><span class="o">.</span><span class="na">tools</span><span class="o">.</span><span class="na">javac</span><span class="o">.</span><span class="na">jvm</span><span class="o">.</span><span class="na">ClassReader</span><span class="o">.</span><span class="na">openArchive</span><span class="o">(</span><span class="n">ClassReader</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">1374</span><span class="o">)</span> <span class="n">com</span><span class="o">.</span><span class="na">sun</span><span class="o">.</span><span class="na">tools</span><span class="o">.</span><span class="na">javac</span><span class="o">.</span><span class="na">jvm</span><span class="o">.</span><span class="na">ClassReader</span><span class="o">.</span><span class="na">list</span><span class="o">(</span><span class="n">ClassReader</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">1631</span><span class="o">)</span>
+</span><span class="line"><span class="n">TRACE</span> <span class="mi">301927</span><span class="o">:</span> <span class="n">com</span><span class="o">.</span><span class="na">sun</span><span class="o">.</span><span class="na">tools</span><span class="o">.</span><span class="na">javac</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">List</span><span class="o">.&lt;</span><span class="n">init</span><span class="o">&gt;(</span><span class="n">List</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">42</span><span class="o">)</span> <span class="n">com</span><span class="o">.</span><span class="na">sun</span><span class="o">.</span><span class="na">tools</span><span class="o">.</span><span class="na">javac</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">List</span><span class="o">.&lt;</span><span class="n">init</span><span class="o">&gt;(</span><span class="n">List</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">50</span><span class="o">)</span> <span class="n">com</span><span class="o">.</span><span class="na">sun</span><span class="o">.</span><span class="na">tools</span><span class="o">.</span><span class="na">javac</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">ListBuffer</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">ListBuffer</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">94</span><span class="o">)</span> <span class="n">com</span><span class="o">.</span><span class="na">sun</span><span class="o">.</span><span class="na">tools</span><span class="o">.</span><span class="na">javac</span><span class="o">.</span><span class="na">jvm</span><span class="o">.</span><span class="na">ClassReader</span><span class="o">.</span><span class="na">openArchive</span><span class="o">(</span><span class="n">ClassReader</span><span class="o">.</span><span class="na">java</span><span class="o">:</span><span class="mi">1374</span><span class="o">)</span>
+</span><span class="line">
+</span><span class="line"><span class="n">SITES</span> <span class="nf">BEGIN</span> <span class="o">(</span><span class="n">ordered</span> <span class="n">by</span> <span class="n">live</span> <span class="n">bytes</span><span class="o">)</span> <span class="n">Wed</span> <span class="n">Oct</span> <span class="mi">4</span> <span class="mi">13</span><span class="o">:</span><span class="mi">13</span><span class="o">:</span><span class="mi">42</span> <span class="mi">2006</span>
+</span><span class="line"><span class="n">percent</span> <span class="n">live</span> <span class="n">alloc</span><span class="err">&#39;</span><span class="n">ed</span> <span class="n">stack</span> <span class="kd">class</span> <span class="nc">rank</span> <span class="n">self</span> <span class="n">accum</span> <span class="n">bytes</span> <span class="n">objs</span> <span class="n">bytes</span> <span class="n">objs</span> <span class="n">trace</span> <span class="n">name</span>
+</span><span class="line"><span class="mi">1</span> <span class="mf">44.13</span><span class="o">%</span> <span class="mf">44.13</span><span class="o">%</span> <span class="mi">1117360</span> <span class="mi">13967</span> <span class="mi">1117360</span> <span class="mi">13967</span> <span class="mi">301926</span> <span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">zip</span><span class="o">.</span><span class="na">ZipEntry</span>
+</span><span class="line"><span class="mi">2</span> <span class="mf">8.83</span><span class="o">%</span> <span class="mf">52.95</span><span class="o">%</span> <span class="mi">223472</span> <span class="mi">13967</span> <span class="mi">223472</span> <span class="mi">13967</span> <span class="mi">301927</span> <span class="n">com</span><span class="o">.</span><span class="na">sun</span><span class="o">.</span><span class="na">tools</span><span class="o">.</span><span class="na">javac</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">List</span>
+</span><span class="line"><span class="mi">3</span> <span class="mf">5.18</span><span class="o">%</span> <span class="mf">58.13</span><span class="o">%</span> <span class="mi">131088</span> <span class="mi">1</span> <span class="mi">131088</span> <span class="mi">1</span> <span class="mi">300996</span> <span class="kt">byte</span><span class="o">[]</span>
+</span><span class="line"><span class="mi">4</span> <span class="mf">5.18</span><span class="o">%</span> <span class="mf">63.31</span><span class="o">%</span> <span class="mi">131088</span> <span class="mi">1</span> <span class="mi">131088</span> <span class="mi">1</span> <span class="mi">300995</span> <span class="n">com</span><span class="o">.</span><span class="na">sun</span><span class="o">.</span><span class="na">tools</span><span class="o">.</span><span class="na">javac</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">Name</span><span class="o">[]</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>HPROF (cpu=samples)</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">javac</span> <span class="o">-</span><span class="n">J</span><span class="o">-</span><span class="nl">agentlib:</span><span class="n">hprof</span><span class="o">=</span><span class="n">cpu</span><span class="o">=</span><span class="n">samples</span> <span class="n">Hello</span><span class="o">.</span><span class="na">java</span>
+</span><span class="line">
+</span><span class="line"><span class="n">CPU</span> <span class="n">SAMPLES</span> <span class="nf">BEGIN</span> <span class="o">(</span><span class="n">total</span> <span class="o">=</span> <span class="mi">462</span><span class="o">)</span> <span class="n">Wed</span> <span class="n">Oct</span> <span class="mi">4</span> <span class="mi">13</span><span class="o">:</span><span class="mi">33</span><span class="o">:</span><span class="mi">07</span> <span class="mi">2006</span>
+</span><span class="line"><span class="n">rank</span> <span class="n">self</span> <span class="n">accum</span> <span class="n">count</span> <span class="n">trace</span> <span class="n">method</span>
+</span><span class="line"><span class="mi">1</span> <span class="mf">49.57</span><span class="o">%</span> <span class="mf">49.57</span><span class="o">%</span> <span class="mi">229</span> <span class="mi">300187</span> <span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">zip</span><span class="o">.</span><span class="na">ZipFile</span><span class="o">.</span><span class="na">getNextEntry</span>
+</span><span class="line"><span class="mi">2</span> <span class="mf">6.93</span><span class="o">%</span> <span class="mf">56.49</span><span class="o">%</span> <span class="mi">32</span> <span class="mi">300190</span> <span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">zip</span><span class="o">.</span><span class="na">ZipEntry</span><span class="o">.</span><span class="na">initFields</span>
+</span><span class="line"><span class="mi">3</span> <span class="mf">4.76</span><span class="o">%</span> <span class="mf">61.26</span><span class="o">%</span> <span class="mi">22</span> <span class="mi">300122</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">ClassLoader</span><span class="o">.</span><span class="na">defineClass2</span>
+</span><span class="line"><span class="mi">4</span> <span class="mf">2.81</span><span class="o">%</span> <span class="mf">64.07</span><span class="o">%</span> <span class="mi">13</span> <span class="mi">300188</span> <span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">zip</span><span class="o">.</span><span class="na">ZipFile</span><span class="o">.</span><span class="na">freeEntry</span>
+</span><span class="line"><span class="mi">5</span> <span class="mf">1.95</span><span class="o">%</span> <span class="mf">66.02</span><span class="o">%</span> <span class="mi">9</span> <span class="mi">300129</span> <span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">Vector</span><span class="o">.</span><span class="na">addElement</span>
+</span><span class="line"><span class="mi">6</span> <span class="mf">1.73</span><span class="o">%</span> <span class="mf">67.75</span><span class="o">%</span> <span class="mi">8</span> <span class="mi">300124</span> <span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">zip</span><span class="o">.</span><span class="na">ZipFile</span><span class="o">.</span><span class="na">getEntry</span>
+</span><span class="line"><span class="mi">7</span> <span class="mf">1.52</span><span class="o">%</span> <span class="mf">69.26</span><span class="o">%</span> <span class="mi">7</span> <span class="mi">300125</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">ClassLoader</span><span class="o">.</span><span class="na">findBootstrapClass</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>HPROF (cpu=times)</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">javac</span> <span class="o">-</span><span class="n">J</span><span class="o">-</span><span class="nl">agentlib:</span><span class="n">hprof</span><span class="o">=</span><span class="n">cpu</span><span class="o">=</span><span class="n">times</span> <span class="n">Hello</span><span class="o">.</span><span class="na">java</span>
+</span><span class="line"><span class="n">CPU</span> <span class="nf">TIME</span> <span class="o">(</span><span class="n">ms</span><span class="o">)</span> <span class="n">BEGIN</span> <span class="o">(</span><span class="n">total</span> <span class="o">=</span> <span class="mi">2082665289</span><span class="o">)</span> <span class="n">Wed</span> <span class="n">oct</span> <span class="mi">4</span> <span class="mi">13</span><span class="o">:</span><span class="mi">43</span><span class="o">:</span><span class="mi">42</span> <span class="mi">2006</span>
+</span><span class="line"><span class="n">rank</span> <span class="n">self</span> <span class="n">accum</span> <span class="n">count</span> <span class="n">trace</span> <span class="n">method</span>
+</span><span class="line"><span class="mi">1</span> <span class="mf">3.70</span><span class="o">%</span> <span class="mf">3.70</span><span class="o">%</span> <span class="mi">1</span> <span class="mi">311243</span> <span class="n">com</span><span class="o">.</span><span class="na">sun</span><span class="o">.</span><span class="na">tools</span><span class="o">.</span><span class="na">javac</span><span class="o">.</span><span class="na">Main</span><span class="o">.</span><span class="na">compile</span>
+</span><span class="line"><span class="mi">2</span> <span class="mf">3.64</span><span class="o">%</span> <span class="mf">7.34</span><span class="o">%</span> <span class="mi">1</span> <span class="mi">311242</span> <span class="n">com</span><span class="o">.</span><span class="na">sun</span><span class="o">.</span><span class="na">tools</span><span class="o">.</span><span class="na">javac</span><span class="o">.</span><span class="na">main</span><span class="o">.</span><span class="na">Main</span><span class="o">.</span><span class="na">compile</span>
+</span><span class="line"><span class="mi">3</span> <span class="mf">3.64</span><span class="o">%</span> <span class="mf">10.97</span><span class="o">%</span> <span class="mi">1</span> <span class="mi">311241</span> <span class="n">com</span><span class="o">.</span><span class="na">sun</span><span class="o">.</span><span class="na">tools</span><span class="o">.</span><span class="na">javac</span><span class="o">.</span><span class="na">main</span><span class="o">.</span><span class="na">Main</span><span class="o">.</span><span class="na">compile</span>
+</span><span class="line"><span class="mi">4</span> <span class="mf">3.11</span><span class="o">%</span> <span class="mf">14.08</span><span class="o">%</span> <span class="mi">1</span> <span class="mi">311173</span> <span class="n">com</span><span class="o">.</span><span class="na">sun</span><span class="o">.</span><span class="na">tools</span><span class="o">.</span><span class="na">javac</span><span class="o">.</span><span class="na">main</span><span class="o">.</span><span class="na">JavaCompiler</span><span class="o">.</span><span class="na">compile</span>
+</span><span class="line"><span class="mi">5</span> <span class="mf">2.54</span><span class="o">%</span> <span class="mf">16.62</span><span class="o">%</span> <span class="mi">8</span> <span class="mi">306183</span> <span class="n">com</span><span class="o">.</span><span class="na">sun</span><span class="o">.</span><span class="na">tools</span><span class="o">.</span><span class="na">javac</span><span class="o">.</span><span class="na">jvm</span><span class="o">.</span><span class="na">ClassReader</span><span class="o">.</span><span class="na">listAll</span>
+</span><span class="line"><span class="mi">6</span> <span class="mf">2.53</span><span class="o">%</span> <span class="mf">19.15</span><span class="o">%</span> <span class="mi">36</span> <span class="mi">306182</span> <span class="n">com</span><span class="o">.</span><span class="na">sun</span><span class="o">.</span><span class="na">tools</span><span class="o">.</span><span class="na">javac</span><span class="o">.</span><span class="na">jvm</span><span class="o">.</span><span class="na">ClassReader</span><span class="o">.</span><span class="na">list</span>
+</span><span class="line"><span class="mi">7</span> <span class="mf">2.03</span><span class="o">%</span> <span class="mf">21.18</span><span class="o">%</span> <span class="mi">1</span> <span class="mi">307195</span> <span class="n">com</span><span class="o">.</span><span class="na">sun</span><span class="o">.</span><span class="na">tools</span><span class="o">.</span><span class="na">javac</span><span class="o">.</span><span class="na">comp</span><span class="o">.</span><span class="na">Enter</span><span class="o">.</span><span class="na">main</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-
-<figure class='code'><figcaption><span>HPROF (cpu=samples)</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">javac</span> <span class="o">-</span><span class="n">J</span><span class="o">-</span><span class="nl">agentlib:</span><span class="n">hprof</span><span class="o">=</span><span class="n">cpu</span><span class="o">=</span><span class="n">samples</span> <span class="n">Hello</span><span class="o">.</span><span class="na">java</span>
-</span><span class='line'>
-</span><span class='line'><span class="n">CPU</span> <span class="n">SAMPLES</span> <span class="nf">BEGIN</span> <span class="o">(</span><span class="n">total</span> <span class="o">=</span> <span class="mi">462</span><span class="o">)</span> <span class="n">Wed</span> <span class="n">Oct</span> <span class="mi">4</span> <span class="mi">13</span><span class="o">:</span><span class="mi">33</span><span class="o">:</span><span class="mi">07</span> <span class="mi">2006</span>
-</span><span class='line'><span class="n">rank</span> <span class="n">self</span> <span class="n">accum</span> <span class="n">count</span> <span class="n">trace</span> <span class="n">method</span>
-</span><span class='line'><span class="mi">1</span> <span class="mf">49.57</span><span class="o">%</span> <span class="mf">49.57</span><span class="o">%</span> <span class="mi">229</span> <span class="mi">300187</span> <span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">zip</span><span class="o">.</span><span class="na">ZipFile</span><span class="o">.</span><span class="na">getNextEntry</span>
-</span><span class='line'><span class="mi">2</span> <span class="mf">6.93</span><span class="o">%</span> <span class="mf">56.49</span><span class="o">%</span> <span class="mi">32</span> <span class="mi">300190</span> <span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">zip</span><span class="o">.</span><span class="na">ZipEntry</span><span class="o">.</span><span class="na">initFields</span>
-</span><span class='line'><span class="mi">3</span> <span class="mf">4.76</span><span class="o">%</span> <span class="mf">61.26</span><span class="o">%</span> <span class="mi">22</span> <span class="mi">300122</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">ClassLoader</span><span class="o">.</span><span class="na">defineClass2</span>
-</span><span class='line'><span class="mi">4</span> <span class="mf">2.81</span><span class="o">%</span> <span class="mf">64.07</span><span class="o">%</span> <span class="mi">13</span> <span class="mi">300188</span> <span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">zip</span><span class="o">.</span><span class="na">ZipFile</span><span class="o">.</span><span class="na">freeEntry</span>
-</span><span class='line'><span class="mi">5</span> <span class="mf">1.95</span><span class="o">%</span> <span class="mf">66.02</span><span class="o">%</span> <span class="mi">9</span> <span class="mi">300129</span> <span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">Vector</span><span class="o">.</span><span class="na">addElement</span>
-</span><span class='line'><span class="mi">6</span> <span class="mf">1.73</span><span class="o">%</span> <span class="mf">67.75</span><span class="o">%</span> <span class="mi">8</span> <span class="mi">300124</span> <span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">zip</span><span class="o">.</span><span class="na">ZipFile</span><span class="o">.</span><span class="na">getEntry</span>
-</span><span class='line'><span class="mi">7</span> <span class="mf">1.52</span><span class="o">%</span> <span class="mf">69.26</span><span class="o">%</span> <span class="mi">7</span> <span class="mi">300125</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">ClassLoader</span><span class="o">.</span><span class="na">findBootstrapClass</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-
-
-<figure class='code'><figcaption><span>HPROF (cpu=times)</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class='java'><span class='line'><span class="n">javac</span> <span class="o">-</span><span class="n">J</span><span class="o">-</span><span class="nl">agentlib:</span><span class="n">hprof</span><span class="o">=</span><span class="n">cpu</span><span class="o">=</span><span class="n">times</span> <span class="n">Hello</span><span class="o">.</span><span class="na">java</span>
-</span><span class='line'><span class="n">CPU</span> <span class="nf">TIME</span> <span class="o">(</span><span class="n">ms</span><span class="o">)</span> <span class="n">BEGIN</span> <span class="o">(</span><span class="n">total</span> <span class="o">=</span> <span class="mi">2082665289</span><span class="o">)</span> <span class="n">Wed</span> <span class="n">oct</span> <span class="mi">4</span> <span class="mi">13</span><span class="o">:</span><span class="mi">43</span><span class="o">:</span><span class="mi">42</span> <span class="mi">2006</span>
-</span><span class='line'><span class="n">rank</span> <span class="n">self</span> <span class="n">accum</span> <span class="n">count</span> <span class="n">trace</span> <span class="n">method</span>
-</span><span class='line'><span class="mi">1</span> <span class="mf">3.70</span><span class="o">%</span> <span class="mf">3.70</span><span class="o">%</span> <span class="mi">1</span> <span class="mi">311243</span> <span class="n">com</span><span class="o">.</span><span class="na">sun</span><span class="o">.</span><span class="na">tools</span><span class="o">.</span><span class="na">javac</span><span class="o">.</span><span class="na">Main</span><span class="o">.</span><span class="na">compile</span>
-</span><span class='line'><span class="mi">2</span> <span class="mf">3.64</span><span class="o">%</span> <span class="mf">7.34</span><span class="o">%</span> <span class="mi">1</span> <span class="mi">311242</span> <span class="n">com</span><span class="o">.</span><span class="na">sun</span><span class="o">.</span><span class="na">tools</span><span class="o">.</span><span class="na">javac</span><span class="o">.</span><span class="na">main</span><span class="o">.</span><span class="na">Main</span><span class="o">.</span><span class="na">compile</span>
-</span><span class='line'><span class="mi">3</span> <span class="mf">3.64</span><span class="o">%</span> <span class="mf">10.97</span><span class="o">%</span> <span class="mi">1</span> <span class="mi">311241</span> <span class="n">com</span><span class="o">.</span><span class="na">sun</span><span class="o">.</span><span class="na">tools</span><span class="o">.</span><span class="na">javac</span><span class="o">.</span><span class="na">main</span><span class="o">.</span><span class="na">Main</span><span class="o">.</span><span class="na">compile</span>
-</span><span class='line'><span class="mi">4</span> <span class="mf">3.11</span><span class="o">%</span> <span class="mf">14.08</span><span class="o">%</span> <span class="mi">1</span> <span class="mi">311173</span> <span class="n">com</span><span class="o">.</span><span class="na">sun</span><span class="o">.</span><span class="na">tools</span><span class="o">.</span><span class="na">javac</span><span class="o">.</span><span class="na">main</span><span class="o">.</span><span class="na">JavaCompiler</span><span class="o">.</span><span class="na">compile</span>
-</span><span class='line'><span class="mi">5</span> <span class="mf">2.54</span><span class="o">%</span> <span class="mf">16.62</span><span class="o">%</span> <span class="mi">8</span> <span class="mi">306183</span> <span class="n">com</span><span class="o">.</span><span class="na">sun</span><span class="o">.</span><span class="na">tools</span><span class="o">.</span><span class="na">javac</span><span class="o">.</span><span class="na">jvm</span><span class="o">.</span><span class="na">ClassReader</span><span class="o">.</span><span class="na">listAll</span>
-</span><span class='line'><span class="mi">6</span> <span class="mf">2.53</span><span class="o">%</span> <span class="mf">19.15</span><span class="o">%</span> <span class="mi">36</span> <span class="mi">306182</span> <span class="n">com</span><span class="o">.</span><span class="na">sun</span><span class="o">.</span><span class="na">tools</span><span class="o">.</span><span class="na">javac</span><span class="o">.</span><span class="na">jvm</span><span class="o">.</span><span class="na">ClassReader</span><span class="o">.</span><span class="na">list</span>
-</span><span class='line'><span class="mi">7</span> <span class="mf">2.03</span><span class="o">%</span> <span class="mf">21.18</span><span class="o">%</span> <span class="mi">1</span> <span class="mi">307195</span> <span class="n">com</span><span class="o">.</span><span class="na">sun</span><span class="o">.</span><span class="na">tools</span><span class="o">.</span><span class="na">javac</span><span class="o">.</span><span class="na">comp</span><span class="o">.</span><span class="na">Enter</span><span class="o">.</span><span class="na">main</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<a name="VisualVM"></a>
-<h2>VisualVM</h2>
+<h2 id="visualvm">VisualVM</h2>
 
 <ul>
-<li><a href="http://java.dzone.com/announcements/visualvm-12-great-java">http://java.dzone.com/announcements/visualvm-12-great-java</a></li>
-<li>JVM diagnostics</li>
-<li>CPU and heap profiling</li>
-<li>JMX console (with MBeans plugin)</li>
-<li>Integrates a number of tools for JVM diagnostics
+  <li>http://java.dzone.com/announcements/visualvm-12-great-java</li>
+  <li>JVM diagnostics</li>
+  <li>CPU and heap profiling</li>
+  <li>JMX console (with MBeans plugin)</li>
+  <li>Integrates a number of tools for JVM diagnostics
+    <ul>
+      <li>jmap, jhat, jstack, jstat, and jinfo</li>
+      <li>JConsole</li>
+      <li>Netbeans profiler (JFluid)</li>
+    </ul>
+  </li>
+  <li>Requires Java 6
+    <ul>
+      <li>Included with Java 6 Update 7+</li>
+      <li>Available as a separate download for lower versions</li>
+    </ul>
+  </li>
+  <li>Runs locally or remotely (except profiler)</li>
+</ul>
+
+<h2 id="mat">MAT</h2>
 
 <ul>
-<li>jmap, jhat, jstack, jstat, and jinfo</li>
-<li>JConsole</li>
-<li>Netbeans profiler (JFluid)</li>
+  <li>Detailed heap analysis</li>
+  <li>Memory leak identification</li>
+  <li>Memory usage optimization</li>
+  <li>Eclipse Memory Analyzer
+    <ul>
+      <li>Integrated into Eclipse 3.5 Galileo</li>
+      <li>Plugin for earlier versions of Eclipse</li>
+      <li>Standalone RCP app</li>
+    </ul>
+  </li>
+  <li>Good performance characteristics
+    <ul>
+      <li>Loads heap dump files incrementally</li>
+      <li>Generated indexes</li>
+    </ul>
+  </li>
+  <li>Feature-rich (if not intuitive) user interface
+    <ul>
+      <li>Well, it is an Eclipse application after all</li>
+      <li>Multitude of pre-canned reports</li>
+    </ul>
+  </li>
 </ul>
-</li>
-<li>Requires Java 6
+
+<h2 id="btrace">BTrace</h2>
 
 <ul>
-<li>Included with Java 6 Update 7+</li>
-<li>Available as a separate download for lower versions</li>
-</ul>
-</li>
-<li>Runs locally or remotely (except profiler)</li>
+  <li>Targeted, programmable profiling</li>
+  <li>Live tracing and debugging</li>
+  <li>Dynamic tracing tool for Java
+    <ul>
+      <li>Declare probe points: locations at or events on which to trace</li>
+      <li>Program trace actions to execute when a probe fires</li>
+    </ul>
+  </li>
+  <li>Key differentiators:
+    <ul>
+      <li>Targeted nature incurs minimal performance overhead</li>
+      <li>Programmability enables correlation of metrics to application state and method parameters</li>
+      <li>Restricted programming model “guarantees” safety</li>
+    </ul>
+  </li>
+  <li>BTrace scripts cannot:
+    <ul>
+      <li>Create objects or arrays</li>
+      <li>Throw or catch exceptions</li>
+      <li>Call arbitrary static or instance methods</li>
+      <li>Assign to static or instance variables of the target program</li>
+      <li>Contain synchronized blocks or methods</li>
+      <li>Loop (for, while, or do…while)</li>
+      <li>Assert</li>
+      <li>Extend arbitrary classes or implement arbitrary interfaces</li>
+      <li>Have outer, inner, nested, or local classes</li>
+    </ul>
+  </li>
 </ul>
 
+<p>Apache JMeter - http://jmeter.apache.org/</p>
 
-<a name="MAT"></a>
-<h2>MAT</h2>
+<h2 id="tools-shipped-with-java">Tools shipped with Java</h2>
 
 <ul>
-<li>Detailed heap analysis</li>
-<li>Memory leak identification</li>
-<li>Memory usage optimization</li>
-<li>Eclipse Memory Analyzer
+  <li>jmap
+    <ul>
+      <li>Prints heap memory details of a given process, core, or remote debug server</li>
+      <li>Usage:</li>
+      <li><code>jmap –histo:live &lt;pid&gt;</code></li>
+      <li><code>jmap –dump:live,format=b &lt;pid&gt;</code></li>
+      <li>TIP: prefer JMX-triggered heap dumps</li>
+      <li>JConsole or VisualVM with MBeans plugin</li>
+      <li>Safer than jmap</li>
+    </ul>
+  </li>
+  <li>jhat
+    <ul>
+      <li>Parses heap dumps and launches server for heap browsing and query</li>
+      <li>Usage: <code>jhat &lt;binary heap dump file&gt;</code></li>
+      <li>TIP: prefer Eclipse MAT for heap analysis</li>
+      <li>Vastly better performance</li>
+      <li>Vastly better usability</li>
+    </ul>
+  </li>
+  <li>jstack
+    <ul>
+      <li>Prints stack traces of executing threads for a given process, core file, or remote debug server</li>
+      <li>Usage: <code>jstack [-l] &lt;pid&gt;</code></li>
+      <li>The [-l] option (Java 6+) includes information on java.util.concurrent locks in addition to monitors</li>
+      <li>TIP: on *nix systems, prefer kill –QUIT (or kill –3)</li>
+      <li>Safer than jstack</li>
+      <li>Multiple calls will quickly provide insight into execution</li>
+    </ul>
+  </li>
+  <li>jstat
+    <ul>
+      <li>Displays performance statistics for the targeted process</li>
+      <li>Class loader</li>
+      <li>HotSpot™ compiler</li>
+      <li>Garbage collector</li>
+      <li>Usage: <code>jstat [output options] &lt;pid&gt; [interval]</code></li>
+      <li>TIP: a reasonable way to view individual statistics…</li>
+      <li>…if the command line is all that’s available</li>
+      <li>Otherwise, JConsole and VisualVM provide far more context</li>
+    </ul>
+  </li>
+  <li>jps
+    <ul>
+      <li>Lists all java processes on the given server</li>
+      <li>Usage: <code>jps [&lt;hostname&gt;]</code></li>
+    </ul>
+  </li>
+  <li>jinfo
+    <ul>
+      <li>Prints system properties and JVM startup options for the given process, core, or remote debug server</li>
+      <li>Usage: <code>jinfo &lt;pid&gt;</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="hp-jtune">HP JTune</h2>
+
+<h2 id="hp-jmeter">HP JMeter</h2>
+
+<h1 id="bibliography">Bibliography</h1>
 
 <ul>
-<li>Integrated into Eclipse 3.5 Galileo</li>
-<li>Plugin for earlier versions of Eclipse</li>
-<li>Standalone RCP app</li>
+  <li>Books
+    <ul>
+      <li>Java - The Good Parts</li>
+      <li>Inside the Java Virtual Machine - Bill Venners</li>
+    </ul>
+  </li>
+  <li>http://www.codinghorror.com/blog/2008/12/hardware-is-cheap-programmers-are-expensive.html</li>
+  <li>http://www.infoq.com/articles/9_Fallacies_Java_Performance?utm_source=infoq&amp;utm_medium=popular_links_homepage</li>
+  <li>http://www.javacodegeeks.com/2012/09/visualvm-monitoring-remote-jvm-over-ssh.html</li>
+  <li>http://www.javacodegeeks.com/resources#Profilers</li>
+  <li>http://blog.javabenchmark.org/2013/03/write-your-own-profiler-with-jee6.html</li>
+  <li>http://hype-free.blogspot.com/2010/01/choosing-java-profiler.html</li>
+  <li>http://psy-lob-saw.blogspot.com/2013/04/writing-java-micro-benchmarks-with-jmh.html</li>
+  <li><a href="http://theholyjava.wordpress.com/2013/04/01/the-value-and-perils-of-performance-benchmarks-in-the-wake-of-techempowers-web-framework-benchmark/">The Value and Perils of Performance Benchmarks in the Wake of TechEmpower’s Web Framework Benchmark</a></li>
+  <li>Programmers Need To Learn Statistics Or I Will Kill Them All</li>
+  <li>5 things you didn’t know about Java Performance - <a href="http://www.ibm.com/developerworks/java/library/j-5things7/index.html">Part 1</a>, <a href="http://www.ibm.com/developerworks/java/library/j-5things8/index.html">Part 2</a></li>
 </ul>
-</li>
-<li>Good performance characteristics
-
-<ul>
-<li>Loads heap dump files incrementally</li>
-<li>Generated indexes</li>
-</ul>
-</li>
-<li>Feature-rich (if not intuitive) user interface
-
-<ul>
-<li>Well, it is an Eclipse application after all</li>
-<li>Multitude of pre-canned reports</li>
-</ul>
-</li>
-</ul>
-
-
-<a name="BTrace"></a>
-<h2>BTrace</h2>
-
-<ul>
-<li>Targeted, programmable profiling</li>
-<li>Live tracing and debugging</li>
-<li>Dynamic tracing tool for Java
-
-<ul>
-<li>Declare probe points: locations at or events on which to trace</li>
-<li>Program trace actions to execute when a probe fires</li>
-</ul>
-</li>
-<li>Key differentiators:
-
-<ul>
-<li>Targeted nature incurs minimal performance overhead</li>
-<li>Programmability enables correlation of metrics to application state and method parameters</li>
-<li>Restricted programming model “guarantees” safety</li>
-</ul>
-</li>
-<li>BTrace scripts cannot:
-
-<ul>
-<li>Create objects or arrays</li>
-<li>Throw or catch exceptions</li>
-<li>Call arbitrary static or instance methods</li>
-<li>Assign to static or instance variables of the target program</li>
-<li>Contain synchronized blocks or methods</li>
-<li>Loop (for, while, or do…while)</li>
-<li>Assert</li>
-<li>Extend arbitrary classes or implement arbitrary interfaces</li>
-<li>Have outer, inner, nested, or local classes</li>
-</ul>
-</li>
-</ul>
-
-
-<p>Apache JMeter - <a href="http://jmeter.apache.org/">http://jmeter.apache.org/</a></p>
-
-<a name="Tools.shipped.with.Java"></a>
-<h2>Tools shipped with Java</h2>
-
-<ul>
-<li>jmap
-
-<ul>
-<li>Prints heap memory details of a given process, core, or remote debug server</li>
-<li>Usage:</li>
-<li><code>jmap –histo:live &lt;pid&gt;</code></li>
-<li><code>jmap –dump:live,format=b &lt;pid&gt;</code></li>
-<li>TIP: prefer JMX-triggered heap dumps</li>
-<li>JConsole or VisualVM with MBeans plugin</li>
-<li>Safer than jmap</li>
-</ul>
-</li>
-<li>jhat
-
-<ul>
-<li>Parses heap dumps and launches server for heap browsing and query</li>
-<li>Usage: <code>jhat &lt;binary heap dump file&gt;</code></li>
-<li>TIP: prefer Eclipse MAT for heap analysis</li>
-<li>Vastly better performance</li>
-<li>Vastly better usability</li>
-</ul>
-</li>
-<li>jstack
-
-<ul>
-<li>Prints stack traces of executing threads for a given process, core file, or remote debug server</li>
-<li>Usage: <code>jstack [-l] &lt;pid&gt;</code></li>
-<li>The [-l] option (Java 6+) includes information on java.util.concurrent locks in addition to monitors</li>
-<li>TIP: on *nix systems, prefer kill –QUIT (or kill –3)</li>
-<li>Safer than jstack</li>
-<li>Multiple calls will quickly provide insight into execution</li>
-</ul>
-</li>
-<li>jstat
-
-<ul>
-<li>Displays performance statistics for the targeted process</li>
-<li>Class loader</li>
-<li>HotSpot™ compiler</li>
-<li>Garbage collector</li>
-<li>Usage: <code>jstat [output options] &lt;pid&gt; [interval]</code></li>
-<li>TIP: a reasonable way to view individual statistics…</li>
-<li>…if the command line is all that’s available</li>
-<li>Otherwise, JConsole and VisualVM provide far more context</li>
-</ul>
-</li>
-<li>jps
-
-<ul>
-<li>Lists all java processes on the given server</li>
-<li>Usage: <code>jps [&lt;hostname&gt;]</code></li>
-</ul>
-</li>
-<li>jinfo
-
-<ul>
-<li>Prints system properties and JVM startup options for the given process, core, or remote debug server</li>
-<li>Usage: <code>jinfo &lt;pid&gt;</code></li>
-</ul>
-</li>
-</ul>
-
-
-<a name="HP.JTune"></a>
-<h2>HP JTune</h2>
-
-<a name="HP.JMeter"></a>
-<h2>HP JMeter</h2>
-
-<a name="Bibliography"></a>
-<h1>Bibliography</h1>
-
-<ul>
-<li>Books
-
-<ul>
-<li>Java - The Good Parts</li>
-<li>Inside the Java Virtual Machine - Bill Venners</li>
-</ul>
-</li>
-<li><a href="http://www.codinghorror.com/blog/2008/12/hardware-is-cheap-programmers-are-expensive.html">http://www.codinghorror.com/blog/2008/12/hardware-is-cheap-programmers-are-expensive.html</a></li>
-<li><a href="http://www.infoq.com/articles/9_Fallacies_Java_Performance?utm_source=infoq&amp;utm_medium=popular_links_homepage">http://www.infoq.com/articles/9_Fallacies_Java_Performance?utm_source=infoq&amp;utm_medium=popular_links_homepage</a></li>
-<li><a href="http://www.javacodegeeks.com/2012/09/visualvm-monitoring-remote-jvm-over-ssh.html">http://www.javacodegeeks.com/2012/09/visualvm-monitoring-remote-jvm-over-ssh.html</a></li>
-<li><a href="http://www.javacodegeeks.com/resources#Profilers">http://www.javacodegeeks.com/resources#Profilers</a></li>
-<li><a href="http://blog.javabenchmark.org/2013/03/write-your-own-profiler-with-jee6.html">http://blog.javabenchmark.org/2013/03/write-your-own-profiler-with-jee6.html</a></li>
-<li><a href="http://hype-free.blogspot.com/2010/01/choosing-java-profiler.html">http://hype-free.blogspot.com/2010/01/choosing-java-profiler.html</a></li>
-<li><a href="http://psy-lob-saw.blogspot.com/2013/04/writing-java-micro-benchmarks-with-jmh.html">http://psy-lob-saw.blogspot.com/2013/04/writing-java-micro-benchmarks-with-jmh.html</a></li>
-<li><a href="http://theholyjava.wordpress.com/2013/04/01/the-value-and-perils-of-performance-benchmarks-in-the-wake-of-techempowers-web-framework-benchmark/">The Value and Perils of Performance Benchmarks in the Wake of TechEmpower’s Web Framework Benchmark</a></li>
-<li>Programmers Need To Learn Statistics Or I Will Kill Them All</li>
-<li>5 things you didn&rsquo;t know about Java Performance - <a href="http://www.ibm.com/developerworks/java/library/j-5things7/index.html">Part 1</a>, <a href="http://www.ibm.com/developerworks/java/library/j-5things8/index.html">Part 2</a></li>
-</ul>
-
 
   
     <footer>
@@ -861,7 +760,7 @@ Sample- and instrumentation-based approaches</p>
 
 		<li>
 			<h3>General Concepts</h3>
-			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/webprogramming/webconcepts.html">Web Concepts</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/webconcepts.html">Web Concepts</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
 		</li>
 
 		<h2>Non-Techninal</h2>

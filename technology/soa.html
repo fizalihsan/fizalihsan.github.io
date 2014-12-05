@@ -33,6 +33,7 @@
 <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
+
 <!-- mathjax config similar to math.stackexchange -->
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -47,8 +48,7 @@ messageStyle: "none",
 "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
 });
 </script>
-
-<script src="/mathjax/unpacked/MathJax.js"></script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
 
   
 
@@ -85,326 +85,279 @@ messageStyle: "none",
     
   </header>
   
-  <p><ul>
- <li><a href="#Concepts">Concepts</a>
- <ul>
-  <li><a href="#What.is.SOA.">What is SOA?</a></li>
-  <li><a href="#Why.SOA.">Why SOA?</a></li>
-  <li><a href="#SOA.Operations">SOA Operations</a></li>
-  <li><a href="#Characteristics.of.contemporary.SOA">Characteristics of contemporary SOA</a></li>
-  <li><a href="#Message.Exchange.Patterns..MEP.">Message Exchange Patterns (MEP)</a>
-  <ul>
-   <li><a href="#Primitive.MEPs">Primitive MEPs</a></li>
-   <li><a href="#Complex.MEPs">Complex MEPs</a></li>
-   <li><a href="#MEPs.and.WSDL">MEPs and WSDL</a>
-   <ul>
-    <li><a href="#WSDL.1.1.Spec">WSDL 1.1 Spec</a></li>
-    <li><a href="#WSDL.2.0.Spec">WSDL 2.0 Spec</a>
-</li>
-   </ul>
-   </li>
-  </ul>
+  <ul id="markdown-toc">
+  <li><a href="#concepts">Concepts</a>    <ul>
+      <li><a href="#what-is-soa">What is SOA?</a></li>
+      <li><a href="#why-soa">Why SOA?</a></li>
+      <li><a href="#soa-operations">SOA Operations</a></li>
+      <li><a href="#characteristics-of-contemporary-soa">Characteristics of contemporary SOA</a></li>
+      <li><a href="#message-exchange-patterns-mep">Message Exchange Patterns (MEP)</a>        <ul>
+          <li><a href="#primitive-meps">Primitive MEPs</a></li>
+          <li><a href="#complex-meps">Complex MEPs</a></li>
+          <li><a href="#meps-and-wsdl">MEPs and WSDL</a>            <ul>
+              <li><a href="#wsdl-11-spec">WSDL 1.1 Spec</a></li>
+              <li><a href="#wsdl-20-spec">WSDL 2.0 Spec</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><a href="#primitive-soa--first-generation-web-services-framework">Primitive SOA / First Generation Web-services Framework</a>        <ul>
+          <li><a href="#service-roles">Service Roles</a></li>
+          <li><a href="#service-models">Service Models</a></li>
+          <li><a href="#service-endpoint-or-service-description-wsdl">Service Endpoint or Service Description (WSDL)</a></li>
+          <li><a href="#service-contract-or-service-metadata">Service Contract or Service Metadata</a></li>
+        </ul>
+      </li>
+    </ul>
   </li>
-  <li><a href="#Primitive.SOA...First.Generation.Web-services.Framework">Primitive SOA / First Generation Web-services Framework</a>
-  <ul>
-   <li><a href="#Service.Roles">Service Roles</a></li>
-   <li><a href="#Service.Models">Service Models</a></li>
-   <li><a href="#Service.Endpoint.or.Service.Description..WSDL.">Service Endpoint or Service Description (WSDL)</a></li>
-   <li><a href="#Service.Contract.or.Service.Metadata">Service Contract or Service Metadata</a>
-</li>
-  </ul>
+  <li><a href="#bibliography">Bibliography</a></li>
+</ul>
+
+<h1 id="concepts">Concepts</h1>
+
+<h2 id="what-is-soa">What is SOA?</h2>
+
+<ul>
+  <li>SOA is a software system structuring principle based on the idea of self-describing service providers.</li>
+  <li>a service is a function (usually a business function) that is accomplished by the interchange of messages between two entities: a service provider, and a service consumer. </li>
+  <li>SOA is just a methodology, an architectural design choice. It has nothing to do with a particular technology </li>
+  <li>It is a type of distributed computing </li>
+  <li>Web services is a realization of SOA </li>
+</ul>
+
+<h2 id="why-soa">Why SOA?</h2>
+
+<ul>
+  <li>Reduces coupling between the consumer and provider. This permits controlled changes to the provider, that will not have unforeseen effects on the consumer. It also allows the consumer to switch providers easily, provided only that a compatible service interface is provided. Decoupling allows changes to occur incrementally.</li>
+  <li>Increases inter-operability across different systems, technologies and languages like Java, .Net, etc.</li>
+  <li>Since heavy monolithic systems are divided into discrete services, development, upgrade, etc. can happen independently.</li>
+  <li>Reusability of services </li>
+  <li>Predecessors of SOA : CORBA, DCOM, EJB (all 3 are RPC based), SOAP based Web services </li>
+  <li>Downside of the SOA predecessors 
+    <ul>
+      <li>Interoperability across systems and technologies proved to be nettlesome. EJB &amp; DCOM are tied to specific platforms</li>
+      <li>For data exchange, proprietary, binary-based technologies were used unlike XML in SOA</li>
+    </ul>
   </li>
- </ul>
- </li>
- <li><a href="#Bibliography">Bibliography</a></li>
+  <li>Downsides of RPC based solutions 
+    <ul>
+      <li>tight coupling between server and client </li>
+      <li>repeated RPC calls increases network load </li>
+      <li>data type support between 2 incompatible languages, such as C++ and Java is complicated and challenging. </li>
+      <li>When should SOA be used and should NOT be used?</li>
+    </ul>
+  </li>
 </ul>
 
-</p>
+<h2 id="soa-operations">SOA Operations</h2>
 
-<a name="Concepts"></a>
-<h1>Concepts</h1>
-
-<a name="What.is.SOA."></a>
-<h2>What is SOA?</h2>
-
-<ul>
-<li>SOA is a software system structuring principle based on the idea of self-describing service providers.</li>
-<li>a service is a function (usually a business function) that is accomplished by the interchange of messages between two entities: a service provider, and a service consumer.</li>
-<li>SOA is just a methodology, an architectural design choice. It has nothing to do with a particular technology</li>
-<li>It is a type of distributed computing</li>
-<li>Web services is a realization of SOA</li>
-</ul>
-
-
-<a name="Why.SOA."></a>
-<h2>Why SOA?</h2>
-
-<ul>
-<li>Reduces coupling between the consumer and provider. This permits controlled changes to the provider, that will not have unforeseen effects on the consumer. It also allows the consumer to switch providers easily, provided only that a compatible service interface is provided. Decoupling allows changes to occur incrementally.</li>
-<li>Increases inter-operability across different systems, technologies and languages like Java, .Net, etc.</li>
-<li>Since heavy monolithic systems are divided into discrete services, development, upgrade, etc. can happen independently.</li>
-<li>Reusability of services</li>
-<li>Predecessors of SOA : CORBA, DCOM, EJB (all 3 are RPC based), SOAP based Web services</li>
-<li>Downside of the SOA predecessors
-
-<ul>
-<li>Interoperability across systems and technologies proved to be nettlesome. EJB &amp; DCOM are tied to specific platforms</li>
-<li>For data exchange, proprietary, binary-based technologies were used unlike XML in SOA</li>
-</ul>
-</li>
-<li>Downsides of RPC based solutions
-
-<ul>
-<li>tight coupling between server and client</li>
-<li>repeated RPC calls increases network load</li>
-<li>data type support between 2 incompatible languages, such as C++ and Java is complicated and challenging.</li>
-<li>When should SOA be used and should NOT be used?</li>
-</ul>
-</li>
-</ul>
-
-
-<a name="SOA.Operations"></a>
-<h2>SOA Operations</h2>
-
-<p><img class="right" src="/technology/soa-operations.png"></p>
+<p><img class="right" src="/technology/soa-operations.png" /></p>
 
 <ol>
-<li>Publish</li>
-<li>Find</li>
-<li>Bind</li>
+  <li>Publish</li>
+  <li>Find</li>
+  <li>Bind</li>
 </ol>
 
-
-<a name="Characteristics.of.contemporary.SOA"></a>
-<h2>Characteristics of contemporary SOA</h2>
+<h2 id="characteristics-of-contemporary-soa">Characteristics of contemporary SOA</h2>
 
 <ol>
-<li>QoS (Quality of Service) - security, reliability (in message delivery or notification), transactional capabilities (to protect the integrity of the business tasks)</li>
-<li>Autonomous - services should be independent and self-contained</li>
-<li>Based on Open Standards - Data exchange is governed by open standards like SOAP, WSDL, XML, etc.</li>
-<li>Promotes Discovery</li>
-<li>Interoperability - disparate technologies should not prevent service-oriented solutions from interoperating</li>
-<li>Composability - composing 1 or more fine-grained services to form a coarse-grained service. Different solutions can be composed of different extensions and can continue to interoperate as long as they support the common extensions required</li>
-<li>Reusability of services</li>
-<li>Extensibility of services</li>
-<li>Layers of abstraction - encapsulates application logic and technology resources</li>
-<li>Promotes loose-coupling - separation of concerns</li>
-<li>Stateless</li>
-<li>Location-, Language- &amp; Protocol-independent</li>
+  <li>QoS (Quality of Service) - security, reliability (in message delivery or notification), transactional capabilities (to protect the integrity of the business tasks)
+    <ul>
+      <li>Autonomous - services should be independent and self-contained</li>
+      <li>Based on Open Standards - Data exchange is governed by open standards like SOAP, WSDL, XML, etc.</li>
+      <li>Promotes Discovery</li>
+      <li>Interoperability - disparate technologies should not prevent service-oriented solutions from interoperating</li>
+      <li>Composability - composing 1 or more fine-grained services to form a coarse-grained service. Different solutions can be composed of different extensions and can continue to interoperate as long as they support the common extensions required</li>
+      <li>Reusability of services</li>
+      <li>Extensibility of services</li>
+      <li>Layers of abstraction - encapsulates application logic and technology resources</li>
+      <li>Promotes loose-coupling - separation of concerns</li>
+      <li>Stateless</li>
+      <li>Location-, Language- &amp; Protocol-independent</li>
+    </ul>
+  </li>
 </ol>
 
-
-<a name="Message.Exchange.Patterns..MEP."></a>
-<h2>Message Exchange Patterns (MEP)</h2>
+<h2 id="message-exchange-patterns-mep">Message Exchange Patterns (MEP)</h2>
 
 <ul>
-<li>An MEP is a generic interaction pattern that defines the message exchange between two services</li>
-<li>MEPs can composed to support the creation of large, more complex patterns.</li>
+  <li>An MEP is a generic interaction pattern that defines the message exchange between two services</li>
+  <li>MEPs can composed to support the creation of large, more complex patterns.</li>
 </ul>
 
+<h3 id="primitive-meps">Primitive MEPs</h3>
+<ol>
+  <li>Request-response
+    <ul>
+      <li>this could be synchronous or asynchronous</li>
+      <li>typically a “correlation” is used to associate a response with the request </li>
+    </ul>
+  </li>
+  <li>Fire-and-forget
+    <ul>
+      <li>This simple asynchronous pattern is based on a <em>unidirectional</em> transmission of messages from a source to one or more destinations. </li>
+      <li>There are few variations in this MEP.</li>
+      <li><em>single-destination</em> pattern - a source sends a message to one destination only</li>
+      <li><em>multi-cast</em> pattern - a source sends messages to a predefined set of destinations</li>
+      <li><em>broadcast</em> pattern - same as multi-cast pattern, except that the message is sent out to a broader range of recipient destinations</li>
+    </ul>
+  </li>
+</ol>
 
-<a name="Primitive.MEPs"></a>
-<h3>Primitive MEPs</h3>
+<h3 id="complex-meps">Complex MEPs</h3>
+
+<ul>
+  <li>Example of a complex MEP is <strong>Publish-and-subscribe</strong> model</li>
+</ul>
+
+<h3 id="meps-and-wsdl">MEPs and WSDL</h3>
+
+<h4 id="wsdl-11-spec">WSDL 1.1 Spec</h4>
 
 <ol>
-<li>Request-response</li>
-<li>this could be synchronous or asynchronous</li>
-<li>typically a &ldquo;correlation&rdquo; is used to associate a response with the request</li>
-<li>Fire-and-forget</li>
-<li>This simple asynchronous pattern is based on a <em>unidirectional</em> transmission of messages from a source to one or more destinations.</li>
-<li>There are few variations in this MEP.
-
-<ul>
-<li><em>single-destination</em> pattern - a source sends a message to one destination only</li>
-<li><em>multi-cast</em> pattern - a source sends messages to a predefined set of destinations</li>
-<li><em>broadcast</em> pattern - same as multi-cast pattern, except that the message is sent out to a broader range of recipient destinations</li>
-</ul>
-</li>
+  <li><strong>Request-response operation</strong> - upon receiving a message, the service must response with a standard message or a fault message</li>
+  <li><strong>Solicit-response operation</strong> - upon submitting a message to a service requestor, the service expects a standard response message or a fault message</li>
+  <li><strong>One-way operation</strong> - the service expects a single message and is not obligated to respond.</li>
+  <li><strong>Notification operation</strong> - The service sends a message and expects no response.</li>
 </ol>
 
-
-<a name="Complex.MEPs"></a>
-<h3>Complex MEPs</h3>
-
-<ul>
-<li>Example of a complex MEP is <strong>Publish-and-subscribe</strong> model</li>
-</ul>
-
-
-<a name="MEPs.and.WSDL"></a>
-<h3>MEPs and WSDL</h3>
-
-<a name="WSDL.1.1.Spec"></a>
-<h4>WSDL 1.1 Spec</h4>
+<h4 id="wsdl-20-spec">WSDL 2.0 Spec</h4>
 
 <ol>
-<li><strong>Request-response operation</strong> - upon receiving a message, the service must response with a standard message or a fault message</li>
-<li><strong>Solicit-response operation</strong> - upon submitting a message to a service requestor, the service expects a standard response message or a fault message</li>
-<li><strong>One-way operation</strong> - the service expects a single message and is not obligated to respond.</li>
-<li><strong>Notification operation</strong> - The service sends a message and expects no response.</li>
+  <li><strong>in-out</strong> pattern - equivalent to WSDL 1.1 request-response</li>
+  <li><strong>out-in</strong> pattern - equivalent to WSDL 1.1 solicit-response</li>
+  <li><strong>in-only</strong> pattern - equivalent to WSDL 1.1 one-way</li>
+  <li><strong>out-only</strong> pattern - equivalent to WSDL 1.1 notification</li>
+  <li><strong>robust in-only</strong> pattern - a variation of the in-only pattern that provides the option of launching a fault response message as a result of a transmission or processing error</li>
+  <li><strong>robust out-only</strong> pattern - like out-only pattern, has an outbound message initiating the transmission. the difference here is that a fault message can be issued in response to the receipt of this message</li>
+  <li><strong>in-optional-out</strong> pattern - similar to in-out with an exception. This variation introduces a rule stating that the delivery of a response message is optional and should therefore not be expected by the service requetor that originated the communication. This pattern also supports the generation of a fault message.</li>
+  <li><strong>out-optional-in</strong> pattern - reverse of the in-optional-out, where the incoming message is optional. Fault message generation is also supported.</li>
 </ol>
 
+<h2 id="primitive-soa--first-generation-web-services-framework">Primitive SOA / First Generation Web-services Framework</h2>
 
-<a name="WSDL.2.0.Spec"></a>
-<h4>WSDL 2.0 Spec</h4>
+<h3 id="service-roles">Service Roles</h3>
+
+<ul>
+  <li>Service Provider - who creates a service description and deploys it. (server side)</li>
+  <li>Service Requestor / Service Consumer - who consumes the service
+    <ul>
+      <li>service provider entity - the organization providing the WS.</li>
+      <li>service provider agent - the web service itself.</li>
+    </ul>
+  </li>
+  <li>Service Registry - who publishes the service description. match maker between provider and requestor.</li>
+  <li>Intermediary service (routing service)
+    <ol>
+      <li>Passive Intermediary service - It is typically responsible for routing messages to a subsequent location. It may use information in the SOAP message header to determine the routing path, or it may employ native routing logic to achieve some level of load balancing. Either way, what makes this type of intermediary passive is that it does not modify the message.</li>
+      <li>Active intermediaries - also route messages to a forwarding destination. Prior to transmitting a message, however, these services actively process and alter the message contents (Figure 5.7). Typically, active intermediaries will look for particular SOAP header blocks and perform some action in response to the information they find there. They almost always alter data in header blocks and may insert or even delete header blocks entirely. </li>
+    </ol>
+  </li>
+  <li>Initial sender and ultimate receiver - Initial senders are simply service requestors that initiate the transmission of a message. Therefore, the initial sender is always the first Web service in a message path. The counterpart to this role is the ultimate receiver. This label identifies service providers that exist as the last Web service along a message’s path</li>
+  <li>Service Composition / Service Assemblies - A service can invoke one or more other services to complete a task. Each service participating in such composition is called as ‘service composition member’. Service composition is frequently governed by WS-* composition extensions, such as WS-BPEL and WS-CDL, which introduce the related concepts of orchestration and choreography.</li>
+</ul>
+
+<h3 id="service-models">Service Models</h3>
+
+<ul>
+  <li>Business service model</li>
+  <li>Utility service model - a generic webservice designed for re-use and non-application specific in nature</li>
+  <li>Controller service model - Service compositions are comprised of a set of independent services that each contribute to the execution of the overall business task. The assembly and coordination of these services is often a task in itself and one that can be assigned as the primary function of a dedicated service or as the secondary function of a service that is fully capable of executing a business task independently. The controller service fulfills this role, acting as the parent service to service composition members.</li>
+</ul>
+
+<h3 id="service-endpoint-or-service-description-wsdl">Service Endpoint or Service Description (WSDL)</h3>
+
+<ul>
+  <li>Service Endpoint - A WSDL describes the point of contact for a service provider, also known as the service endpoint or just endpoint. It provides a formal definition of the endpoint interface and also establishes the physical location (address) of the service.</li>
+  <li>2 categories of WSDL Description
+    <ol>
+      <li>Abstract description
+        <ul>
+          <li>Describes the interface characteristics of the Web service without any reference to the technology used to host.</li>
+          <li>It contains <code>portType</code> (or <code>interface</code> from WSDL 2.0), <code>operation</code> and <code>message</code></li>
+        </ul>
+      </li>
+    </ol>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>WSDL Abstract description</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;portType</span> <span class="na">name=</span><span class="s">&quot;glossaryTerms&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">  <span class="nt">&lt;operation</span> <span class="na">name=</span><span class="s">&quot;setTerm&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;input</span> <span class="na">name=</span><span class="s">&quot;newTerm&quot;</span> <span class="na">message=</span><span class="s">&quot;newTermValues&quot;</span><span class="nt">/&gt;</span>
+</span><span class="line">  <span class="nt">&lt;/operation&gt;</span>
+</span><span class="line"><span class="nt">&lt;/portType &gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <ol>
-<li><strong>in-out</strong> pattern - equivalent to WSDL 1.1 request-response</li>
-<li><strong>out-in</strong> pattern - equivalent to WSDL 1.1 solicit-response</li>
-<li><strong>in-only</strong> pattern - equivalent to WSDL 1.1 one-way</li>
-<li><strong>out-only</strong> pattern - equivalent to WSDL 1.1 notification</li>
-<li><strong>robust in-only</strong> pattern - a variation of the in-only pattern that provides the option of launching a fault response message as a result of a transmission or processing error</li>
-<li><strong>robust out-only</strong> pattern - like out-only pattern, has an outbound message initiating the transmission. the difference here is that a fault message can be issued in response to the receipt of this message</li>
-<li><strong>in-optional-out</strong> pattern - similar to in-out with an exception. This variation introduces a rule stating that the delivery of a response message is optional and should therefore not be expected by the service requetor that originated the communication. This pattern also supports the generation of a fault message.</li>
-<li><strong>out-optional-in</strong> pattern - reverse of the in-optional-out, where the incoming message is optional. Fault message generation is also supported.</li>
+  <li>Concrete description - contains
+    * Describes the concrete technology used for physical transport.
+    * It contains
+    <ul>
+      <li>binding -  represents the transport technology the service can use to communicate. Typically it is SOAP. A binding can apply to a particular operation or all operations.</li>
+      <li>port (or endpoint from WSDL 2.0) - represents the physical address at which a service can be accessed with a specific protocol.</li>
+      <li>service</li>
+    </ul>
+  </li>
 </ol>
 
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>WSDL Concrete description</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;binding</span> <span class="na">type=</span><span class="s">&quot;glossaryTerms&quot;</span> <span class="na">name=</span><span class="s">&quot;b1&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">   <span class="nt">&lt;soap:binding</span> <span class="na">style=</span><span class="s">&quot;document&quot;</span>
+</span><span class="line">   <span class="na">transport=</span><span class="s">&quot;http://schemas.xmlsoap.org/soap/http&quot;</span> <span class="nt">/&gt;</span>
+</span><span class="line">   <span class="nt">&lt;operation&gt;</span>
+</span><span class="line">     <span class="nt">&lt;soap:operation</span> <span class="na">soapAction=</span><span class="s">&quot;http://example.com/getTerm&quot;</span><span class="nt">/&gt;</span>
+</span><span class="line">     <span class="nt">&lt;input&gt;&lt;soap:body</span> <span class="na">use=</span><span class="s">&quot;literal&quot;</span><span class="nt">/&gt;&lt;/input&gt;</span>
+</span><span class="line">     <span class="nt">&lt;output&gt;&lt;soap:body</span> <span class="na">use=</span><span class="s">&quot;literal&quot;</span><span class="nt">/&gt;&lt;/output&gt;</span>
+</span><span class="line">  <span class="nt">&lt;/operation&gt;</span>
+</span><span class="line"><span class="nt">&lt;/binding&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<a name="Primitive.SOA...First.Generation.Web-services.Framework"></a>
-<h2>Primitive SOA / First Generation Web-services Framework</h2>
-
-<a name="Service.Roles"></a>
-<h3>Service Roles</h3>
-
-<ul>
-<li>Service Provider - who creates a service description and deploys it. (server side)</li>
-<li>Service Requestor / Service Consumer - who consumes the service
-
-<ul>
-<li>service provider entity - the organization providing the WS.</li>
-<li>service provider agent - the web service itself.</li>
-</ul>
-</li>
-<li>Service Registry - who publishes the service description. match maker between provider and requestor.</li>
-<li>Intermediary service (routing service)
-
-<ol>
-<li>Passive Intermediary service - It is typically responsible for routing messages to a subsequent location. It may use information in the SOAP message header to determine the routing path, or it may employ native routing logic to achieve some level of load balancing. Either way, what makes this type of intermediary passive is that it does not modify the message.</li>
-<li>Active intermediaries - also route messages to a forwarding destination. Prior to transmitting a message, however, these services actively process and alter the message contents (Figure 5.7). Typically, active intermediaries will look for particular SOAP header blocks and perform some action in response to the information they find there. They almost always alter data in header blocks and may insert or even delete header blocks entirely.</li>
-</ol>
-</li>
-<li>Initial sender and ultimate receiver - Initial senders are simply service requestors that initiate the transmission of a message. Therefore, the initial sender is always the first Web service in a message path. The counterpart to this role is the ultimate receiver. This label identifies service providers that exist as the last Web service along a message&rsquo;s path</li>
-<li>Service Composition / Service Assemblies - A service can invoke one or more other services to complete a task. Each service participating in such composition is called as &lsquo;service composition member&rsquo;. Service composition is frequently governed by WS-* composition extensions, such as WS-BPEL and WS-CDL, which introduce the related concepts of orchestration and choreography.</li>
-</ul>
-
-
-<a name="Service.Models"></a>
-<h3>Service Models</h3>
-
-<ul>
-<li>Business service model</li>
-<li>Utility service model - a generic webservice designed for re-use and non-application specific in nature</li>
-<li>Controller service model - Service compositions are comprised of a set of independent services that each contribute to the execution of the overall business task. The assembly and coordination of these services is often a task in itself and one that can be assigned as the primary function of a dedicated service or as the secondary function of a service that is fully capable of executing a business task independently. The controller service fulfills this role, acting as the parent service to service composition members.</li>
-</ul>
-
-
-<a name="Service.Endpoint.or.Service.Description..WSDL."></a>
-<h3>Service Endpoint or Service Description (WSDL)</h3>
-
-<ul>
-<li>Service Endpoint - A WSDL describes the point of contact for a service provider, also known as the service endpoint or just endpoint. It provides a formal definition of the endpoint interface and also establishes the physical location (address) of the service.</li>
-<li>2 categories of WSDL Description
-
-<ol>
-<li>Abstract description</li>
-<li>Describes the interface characteristics of the Web service without any reference to the technology used to host.</li>
-<li>It contains <code>portType</code> (or <code>interface</code> from WSDL 2.0), <code>operation</code> and <code>message</code></li>
-</ol>
-</li>
-</ul>
-
-
-<figure class='code'><figcaption><span>WSDL Abstract description</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;portType</span> <span class="na">name=</span><span class="s">&quot;glossaryTerms&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;operation</span> <span class="na">name=</span><span class="s">&quot;setTerm&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>    <span class="nt">&lt;input</span> <span class="na">name=</span><span class="s">&quot;newTerm&quot;</span> <span class="na">message=</span><span class="s">&quot;newTermValues&quot;</span><span class="nt">/&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;/operation&gt;</span>
-</span><span class='line'><span class="nt">&lt;/portType &gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<ol>
-<li> Concrete description - contains
-
-<ul>
-<li>Describes the concrete technology used for physical transport.</li>
-<li>It contains
-
-<ul>
-<li>binding -  represents the transport technology the service can use to communicate. Typically it is SOAP. A binding can apply to a particular operation or all operations.</li>
-<li>port (or endpoint from WSDL 2.0) - represents the physical address at which a service can be accessed with a specific protocol.</li>
-<li>service</li>
-</ul>
-</li>
-</ul>
-</li>
-</ol>
-
-
-<figure class='code'><figcaption><span>WSDL Concrete description</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class='xml'><span class='line'><span class="nt">&lt;binding</span> <span class="na">type=</span><span class="s">&quot;glossaryTerms&quot;</span> <span class="na">name=</span><span class="s">&quot;b1&quot;</span><span class="nt">&gt;</span>
-</span><span class='line'>   <span class="nt">&lt;soap:binding</span> <span class="na">style=</span><span class="s">&quot;document&quot;</span>
-</span><span class='line'>   <span class="na">transport=</span><span class="s">&quot;http://schemas.xmlsoap.org/soap/http&quot;</span> <span class="nt">/&gt;</span>
-</span><span class='line'>   <span class="nt">&lt;operation&gt;</span>
-</span><span class='line'>     <span class="nt">&lt;soap:operation</span> <span class="na">soapAction=</span><span class="s">&quot;http://example.com/getTerm&quot;</span><span class="nt">/&gt;</span>
-</span><span class='line'>     <span class="nt">&lt;input&gt;&lt;soap:body</span> <span class="na">use=</span><span class="s">&quot;literal&quot;</span><span class="nt">/&gt;&lt;/input&gt;</span>
-</span><span class='line'>     <span class="nt">&lt;output&gt;&lt;soap:body</span> <span class="na">use=</span><span class="s">&quot;literal&quot;</span><span class="nt">/&gt;&lt;/output&gt;</span>
-</span><span class='line'>  <span class="nt">&lt;/operation&gt;</span>
-</span><span class='line'><span class="nt">&lt;/binding&gt;</span>
-</span></code></pre></td></tr></table></div></figure>
-
-
-<a name="Service.Contract.or.Service.Metadata"></a>
-<h3>Service Contract or Service Metadata</h3>
+<h3 id="service-contract-or-service-metadata">Service Contract or Service Metadata</h3>
 
 <p>A service contract is comprised of the following documents:</p>
 
 <ul>
-<li>WSDL definition</li>
-<li>XSD schema</li>
-<li>Policy document - provides rules, preferences, and processing details above and beyond what is expressed in WSDL &amp; XSD.</li>
-<li>Other legal documents</li>
+  <li>WSDL definition</li>
+  <li>XSD schema</li>
+  <li>Policy document - provides rules, preferences, and processing details above and beyond what is expressed in WSDL &amp; XSD.</li>
+  <li>Other legal documents</li>
 </ul>
 
-
-<a name="Bibliography"></a>
-<h1>Bibliography</h1>
+<h1 id="bibliography">Bibliography</h1>
 
 <ul>
-<li>Books
-
-<ul>
-<li>Service Oriented Architecture - Concepts, Technology and Design - Thomas Erl (2005)</li>
-<li>SOA - Principles of Service Design - Thomas Erl</li>
+  <li>Books
+    <ul>
+      <li>Service Oriented Architecture - Concepts, Technology and Design - Thomas Erl (2005)</li>
+      <li>SOA - Principles of Service Design - Thomas Erl</li>
+    </ul>
+  </li>
+  <li>Sites
+    <ul>
+      <li>http://www.service-architecture.com/articles/web-services/index.html</li>
+      <li>http://www.servicetechbooks.com/</li>
+      <li>http://www.servicetechspecs.com</li>
+      <li>http://www.serviceorientation.com</li>
+      <li>http://www.soaglossary.com</li>
+      <li>http://www.whatisrest.com</li>
+      <li>http://www.servicetechmag.com</li>
+    </ul>
+  </li>
 </ul>
-</li>
-<li>Sites
-
-<ul>
-<li><a href="http://www.service-architecture.com/articles/web-services/index.html">http://www.service-architecture.com/articles/web-services/index.html</a></li>
-<li><a href="http://www.servicetechbooks.com/">http://www.servicetechbooks.com/</a></li>
-<li><a href="http://www.servicetechspecs.com">http://www.servicetechspecs.com</a></li>
-<li><a href="http://www.serviceorientation.com">http://www.serviceorientation.com</a></li>
-<li><a href="http://www.soaglossary.com">http://www.soaglossary.com</a></li>
-<li><a href="http://www.whatisrest.com">http://www.whatisrest.com</a></li>
-<li><a href="http://www.servicetechmag.com">http://www.servicetechmag.com</a></li>
-</ul>
-</li>
-</ul>
-
 
   
     <footer>
@@ -460,7 +413,7 @@ messageStyle: "none",
 
 		<li>
 			<h3>General Concepts</h3>
-			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/webprogramming/webconcepts.html">Web Concepts</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/webconcepts.html">Web Concepts</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
 		</li>
 
 		<h2>Non-Techninal</h2>

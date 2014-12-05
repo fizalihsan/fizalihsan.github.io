@@ -33,6 +33,7 @@
 <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
+
 <!-- mathjax config similar to math.stackexchange -->
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -47,8 +48,7 @@ messageStyle: "none",
 "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
 });
 </script>
-
-<script src="/mathjax/unpacked/MathJax.js"></script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
 
   
 
@@ -85,457 +85,376 @@ messageStyle: "none",
     
   </header>
   
-  <p><ul>
- <li>
- <ul>
-  <li><a href="#Data.Types">Data Types</a>
-  <ul>
-   <li><a href="#Basic.Data.Types">Basic Data Types</a></li>
-   <li><a href="#Complex.Data.Types">Complex Data Types</a>
-   <ul>
-    <li><a href="#Vectors">Vectors</a></li>
-    <li><a href="#Factors">Factors</a></li>
-    <li><a href="#Data.Frames">Data Frames</a>
-</li>
-   </ul>
-   </li>
-  </ul>
+  <ul id="markdown-toc">
+  <li><a href="#data-types">Data Types</a>    <ul>
+      <li><a href="#basic-data-types">Basic Data Types</a></li>
+      <li><a href="#complex-data-types">Complex Data Types</a>        <ul>
+          <li><a href="#vectors">Vectors</a></li>
+          <li><a href="#factors">Factors</a></li>
+          <li><a href="#data-frames">Data Frames</a></li>
+        </ul>
+      </li>
+    </ul>
   </li>
-  <li><a href="#Basics.Statistic.Functions">Basics Statistic Functions</a></li>
-  <li><a href="#Graphs">Graphs</a></li>
-  <li><a href="#Appendix">Appendix</a>
-  <ul>
-   <li><a href="#Command.Reference">Command Reference</a></li>
-   <li><a href="#Packages">Packages</a></li>
-   <li><a href="#Help">Help</a>
-</li>
-  </ul>
+  <li><a href="#basics-statistic-functions">Basics Statistic Functions</a></li>
+  <li><a href="#graphs">Graphs</a></li>
+  <li><a href="#appendix">Appendix</a>    <ul>
+      <li><a href="#command-reference">Command Reference</a></li>
+      <li><a href="#packages">Packages</a></li>
+      <li><a href="#help">Help</a></li>
+    </ul>
   </li>
- </ul>
- </li>
- <li><a href="#Bibliography">Bibliography</a></li>
+  <li><a href="#bibliography">Bibliography</a></li>
 </ul>
 
-</p>
+<h2 id="data-types">Data Types</h2>
 
-<a name="Data.Types"></a>
-<h2>Data Types</h2>
-
-<a name="Basic.Data.Types"></a>
-<h3>Basic Data Types</h3>
-
+<h3 id="basic-data-types">Basic Data Types</h3>
 <p>R has five basic or “atomic” classes of objects:</p>
 
 <ol>
-<li><strong>character</strong></li>
-<li><strong>numeric</strong> (real numbers)
-
-<ul>
-<li>Numbers in R as numeric objects by default. (<em>Double precision real numbers</em>)</li>
-<li><code>Inf</code> represents infinity.</li>
-<li><code>NA</code> &amp; <code>NaN</code> represents an undefined value and not a number.
-
-<ul>
-<li><code>is.na()</code> and <code>is.nan()</code> are used to test objects.</li>
-<li><code>NA</code> values have a class also, so there are integer <code>NA</code>, character <code>NA</code>, etc.</li>
-<li>A <code>NaN</code> value is also <code>NA</code> but the converse is not true.</li>
-</ul>
-</li>
-<li>Attributes of an object like length and other metadata can be access using the <code>attributes()</code> function.</li>
-</ul>
-</li>
-<li><strong>integer</strong> -
-<code>1</code> is a numeric object. <code>1L</code> is an integer.</li>
-<li><strong>complex</strong></li>
-<li><strong>logical</strong> (True/False)</li>
+  <li><strong>character</strong>
+    <ul>
+      <li><strong>numeric</strong> (real numbers) 
+        <ul>
+          <li>Numbers in R as numeric objects by default. (<em>Double precision real numbers</em>)</li>
+          <li><code>Inf</code> represents infinity. </li>
+          <li><code>NA</code> &amp; <code>NaN</code> represents an undefined value and not a number.</li>
+        </ul>
+      </li>
+      <li><code>is.na()</code> and <code>is.nan()</code> are used to test objects.</li>
+      <li><code>NA</code> values have a class also, so there are integer <code>NA</code>, character <code>NA</code>, etc.</li>
+      <li>A <code>NaN</code> value is also <code>NA</code> but the converse is not true.</li>
+      <li>Attributes of an object like length and other metadata can be access using the <code>attributes()</code> function.</li>
+      <li><strong>integer</strong> -
+ <code>1</code> is a numeric object. <code>1L</code> is an integer.</li>
+      <li><strong>complex</strong></li>
+      <li><strong>logical</strong> (True/False)</li>
+    </ul>
+  </li>
 </ol>
 
+<h3 id="complex-data-types">Complex Data Types</h3>
 
-<a name="Complex.Data.Types"></a>
-<h3>Complex Data Types</h3>
-
-<a name="Vectors"></a>
-<h4>Vectors</h4>
-
-<p>The most basic object is a vector.
+<h4 id="vectors">Vectors</h4>
+<p>The most basic object is a vector. 
 *  A vector can only contain objects of the same class.
 * BUT: The one exception is a list, which is represented as a vector but can contain objects of
 different classes (indeed, that’s usually why we use them)
 * Empty vectors can be created with the <code>vector()</code> function.
-* Vector examples</p>
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; x &lt;- c(0.5, 0.6) ## numeric
-</span><span class='line'>&gt; x &lt;- c(TRUE, FALSE) ## logical
-</span><span class='line'>&gt; x &lt;- c(T, F) ## logical
-</span><span class='line'>&gt; x &lt;- c("a", "b", "c") ## character
-</span><span class='line'>&gt; x &lt;- 9:29 ## integer
-</span><span class='line'>&gt; x &lt;- c(1+0i, 2+4i) ## complex</span></code></pre></td></tr></table></div></figure>
-
+* Vector examples
+&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class=""><span class="line">&gt; x &lt;- c(0.5, 0.6) ## numeric
+</span><span class="line">&gt; x &lt;- c(TRUE, FALSE) ## logical
+</span><span class="line">&gt; x &lt;- c(T, F) ## logical
+</span><span class="line">&gt; x &lt;- c("a", "b", "c") ## character
+</span><span class="line">&gt; x &lt;- 9:29 ## integer
+</span><span class="line">&gt; x &lt;- c(1+0i, 2+4i) ## complex</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</figure></notextile>&lt;/div&gt;</p>
 
 <ul>
-<li>Lists are a special type of vector that can contain elements of different classes.</li>
+  <li>Lists are a special type of vector that can contain elements of different classes.
+&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span></figure></notextile></li>
 </ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; x &lt;- list(1, "a", TRUE, 1 + 4i) 
-</span><span class='line'>&gt; # mixed types allowed, lists are recursive, lists are vectors
-</span><span class='line'>&gt; alist &lt;- list(c("a", "b", "c"), c(1,2,3,4), c(8e6, 5.2e9, -9.3e7))
-</span><span class='line'>&gt; alist[[1]] # return one column
-</span><span class='line'>&gt; alist[1] # extracts a list
-</span><span class='line'>&gt; alist[[3:2]] # gets 2nd element from 3rd vector of the list (5.2e9)
-</span><span class='line'>&gt; is.list(alist) #TRUE
-</span><span class='line'>&gt; is.vector(alist) #TRUE</span></code></pre></td></tr></table></div></figure>
-
+<p>&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class=""><span class="line">&gt; x &lt;- list(1, "a", TRUE, 1 + 4i) 
+</span><span class="line">&gt; # mixed types allowed, lists are recursive, lists are vectors
+</span><span class="line">&gt; alist &lt;- list(c("a", "b", "c"), c(1,2,3,4), c(8e6, 5.2e9, -9.3e7))
+</span><span class="line">&gt; alist[[1]] # return one column
+</span><span class="line">&gt; alist[1] # extracts a list
+</span><span class="line">&gt; alist[[3:2]] # gets 2nd element from 3rd vector of the list (5.2e9)
+</span><span class="line">&gt; is.list(alist) #TRUE
+</span><span class="line">&gt; is.vector(alist) #TRUE</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;</p>
 
 <ul>
-<li><strong>Mixing Objects</strong><br/>
+  <li><strong>Mixing Objects</strong><br />
 When different objects are mixed in a vector, <em>coercion</em> occurs so that every element in the vector is
-of the same class.</li>
+of the same class.
+&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span></figure></notextile></li>
 </ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; y &lt;- c(1.7, "a") ## character
-</span><span class='line'>&gt; y &lt;- c(TRUE, 2) ## numeric
-</span><span class='line'>&gt; y &lt;- c("a", TRUE) ## character</span></code></pre></td></tr></table></div></figure>
-
+<p>&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class=""><span class="line">&gt; y &lt;- c(1.7, "a") ## character
+</span><span class="line">&gt; y &lt;- c(TRUE, 2) ## numeric
+</span><span class="line">&gt; y &lt;- c("a", TRUE) ## character</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;</p>
 
 <ul>
-<li><strong>Explicit Coercion</strong><br/>
-Objects can be explicitly coerced from one class to another using the <code>as.*()</code> functions, if available.</li>
+  <li><strong>Explicit Coercion</strong><br />
+Objects can be explicitly coerced from one class to another using the <code>as.*()</code> functions, if available.
+&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span></figure></notextile></li>
 </ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; x &lt;- 0:6
-</span><span class='line'>&gt; class(x)
-</span><span class='line'>[1] "integer"
-</span><span class='line'>&gt; as.numeric(x)
-</span><span class='line'>[1] 0 1 2 3 4 5 6
-</span><span class='line'>&gt; as.logical(x)
-</span><span class='line'>[1] FALSE TRUE TRUE TRUE TRUE TRUE TRUE
-</span><span class='line'>&gt; as.character(x)
-</span><span class='line'>[1] "0" "1" "2" "3" "4" "5" "6"</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li><strong>Nonsensical coercion results in NAs</strong></li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; x &lt;- c("a", "b", "c")
-</span><span class='line'>&gt; as.numeric(x)
-</span><span class='line'>[1] NA NA NA
-</span><span class='line'>Warning message:
-</span><span class='line'>NAs introduced by coercion
-</span><span class='line'>&gt; as.logical(x)
-</span><span class='line'>[1] NA NA NA
-</span><span class='line'>&gt; as.complex(x)
-</span><span class='line'>[1] 0+0i 1+0i 2+0i 3+0i 4+0i 5+0i 6+0i</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li><strong>Matrices</strong>
+<p>&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class=""><span class="line">&gt; x &lt;- 0:6
+</span><span class="line">&gt; class(x)
+</span><span class="line">[1] "integer"
+</span><span class="line">&gt; as.numeric(x)
+</span><span class="line">[1] 0 1 2 3 4 5 6
+</span><span class="line">&gt; as.logical(x)
+</span><span class="line">[1] FALSE TRUE TRUE TRUE TRUE TRUE TRUE
+</span><span class="line">&gt; as.character(x)
+</span><span class="line">[1] "0" "1" "2" "3" "4" "5" "6"</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
+* <strong>Nonsensical coercion results in NAs</strong>
+&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class=""><span class="line">&gt; x &lt;- c("a", "b", "c")
+</span><span class="line">&gt; as.numeric(x)
+</span><span class="line">[1] NA NA NA
+</span><span class="line">Warning message:
+</span><span class="line">NAs introduced by coercion
+</span><span class="line">&gt; as.logical(x)
+</span><span class="line">[1] NA NA NA
+</span><span class="line">&gt; as.complex(x)
+</span><span class="line">[1] 0+0i 1+0i 2+0i 3+0i 4+0i 5+0i 6+0i</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</figure></notextile>&lt;/div&gt;
+* <strong>Matrices</strong>
 Matrices are vectors with a <em>dimension</em> attribute. The dimension attribute is itself an integer vector of
-length 2 (nrow, ncol).</li>
+length 2 (nrow, ncol).
+&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class=""><span class="line">&gt; m &lt;- matrix(nrow = 2, ncol = 3) 
+</span><span class="line">&gt; m
+</span><span class="line"> [,1] [,2] [,3]
+</span><span class="line">[1,] NA NA NA
+</span><span class="line">[2,] NA NA NA
+</span><span class="line">&gt; dim(m)
+</span><span class="line">[1] 2 3
+</span><span class="line">&gt; attributes(m)
+</span><span class="line">$dim
+</span><span class="line">[1] 2 3</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</figure></notextile>&lt;/div&gt;
+* <strong>cbind-ing and rbind-ing</strong>
+Matrices can be created by column-binding or row-binding with <code>cbind()</code> and <code>rbind()</code>.
+&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class=""><span class="line">&gt; x &lt;- 1:3
+</span><span class="line">&gt; y &lt;- 10:12
+</span><span class="line">&gt; cbind(x, y)
+</span><span class="line"> x y 
+</span><span class="line">[1,] 1 10
+</span><span class="line">[2,] 2 11
+</span><span class="line">[3,] 3 12
+</span><span class="line">&gt; rbind(x, y) 
+</span><span class="line"> [,1] [,2] [,3]
+</span><span class="line">x 1 2 3
+</span><span class="line">y 10 11 12</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</figure></notextile>&lt;/div&gt;</p>
+
+<h4 id="factors">Factors</h4>
+<ul>
+  <li>Factors are nothing but enumeration data types used to represent categorical data.</li>
+  <li>Can be ordered or unordered.</li>
+  <li>Factor can be thought of as an integer vector where each integer has a <em>label</em>. 
+&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span></figure></notextile></li>
 </ul>
+<p>&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class=""><span class="line">&gt; x &lt;- factor(c("yes", "yes", "no", "yes", "no")) 
+</span><span class="line">&gt; x
+</span><span class="line">[1] yes yes no yes no
+</span><span class="line">Levels: no yes
+</span><span class="line">&gt; table(x) 
+</span><span class="line">x
+</span><span class="line">no yes 
+</span><span class="line">2 3
+</span><span class="line">&gt; unclass(x)
+</span><span class="line">[1] 2 2 1 2 1
+</span><span class="line">attr(,"levels")
+</span><span class="line">[1] "no" "yes"</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;</p>
 
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; m &lt;- matrix(nrow = 2, ncol = 3) 
-</span><span class='line'>&gt; m
-</span><span class='line'> [,1] [,2] [,3]
-</span><span class='line'>[1,] NA NA NA
-</span><span class='line'>[2,] NA NA NA
-</span><span class='line'>&gt; dim(m)
-</span><span class='line'>[1] 2 3
-</span><span class='line'>&gt; attributes(m)
-</span><span class='line'>$dim
-</span><span class='line'>[1] 2 3</span></code></pre></td></tr></table></div></figure>
-
+<h4 id="data-frames">Data Frames</h4>
+<ul>
+  <li>A special type of list where every list is of same length.</li>
+  <li>All columns in data frame must have names</li>
+  <li>
+    <ul>
+      <li>Unlike matrices, data frames can store different classes of objects in each column.</li>
+    </ul>
+  </li>
+  <li>To create - <code>read.table()</code> or <code>read.csv()</code></li>
+  <li>To convert to a matrix - <code>data.matrix()</code>
+&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span></figure></notextile></li>
+</ul>
+<p>&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class=""><span class="line">&gt; read.table() # space is the default delimiter
+</span><span class="line">&gt; read.csv() # by default expects a file header
+</span><span class="line">&gt; read.csv2()
+</span><span class="line">&gt; read.delim()
+</span><span class="line">&gt; read.delim2()
+</span><span class="line">&gt; x &lt;- data.frame(foo = 1:4, bar = c(T, T, F, F)) 
+</span><span class="line">&gt; x
+</span><span class="line"> foo bar
+</span><span class="line">1 1 TRUE
+</span><span class="line">2 2 TRUE
+</span><span class="line">3 3 FALSE
+</span><span class="line">4 4 FALSE
+</span><span class="line">&gt; nrow(x)
+</span><span class="line">[1] 4
+</span><span class="line">&gt; ncol(x)
+</span><span class="line">[1] 2</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;</p>
 
 <ul>
-<li><strong>cbind-ing and rbind-ing</strong>
-Matrices can be created by column-binding or row-binding with <code>cbind()</code> and <code>rbind()</code>.</li>
+  <li><code>data.frame()</code> # create data frame or table e.g., <code>test.data.frame&lt;-data.frame(id=c(1,2,3,4,5),name=c("a","b","c","d","e"))</code></li>
+  <li><code>edit(framename)</code> # edit the content of the table</li>
+  <li><code>str(frame)</code> # prints the structure and data types of the data frame</li>
+  <li><code>names(framename)</code> – prints the column names</li>
+  <li><code>dataframe[index.ROW, index.COLUMN]</code></li>
+  <li><code>dataframe[[1]]</code> # returns the first column as a vector</li>
+  <li><code>dataframe[1]</code> # returns the first column wrapped in a data frame</li>
+  <li><code>dataframe[c(1,3)]</code> # returns the 1st and 3rd column wrapped in a data frame</li>
+  <li><code>dataframe[1:3,]</code> # displays all columns but first 1-3 rows only</li>
+  <li><code>is.data.frame(framename)</code> #checks if an object is a data frame</li>
 </ul>
 
+<h2 id="basics-statistic-functions">Basics Statistic Functions</h2>
+<ul>
+  <li><code>mean(x)</code> # x is a vector</li>
+  <li><code>median(x)</code></li>
+  <li><code>sd(x)</code></li>
+  <li><code>var(x)</code></li>
+  <li><code>cor(x,y)</code></li>
+  <li><code>cov(x,y)</code></li>
+  <li><code>lapply(dataframe, function)</code> # Apply function like mean/median over a list/dataframe</li>
+</ul>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; x &lt;- 1:3
-</span><span class='line'>&gt; y &lt;- 10:12
-</span><span class='line'>&gt; cbind(x, y)
-</span><span class='line'> x y 
-</span><span class='line'>[1,] 1 10
-</span><span class='line'>[2,] 2 11
-</span><span class='line'>[3,] 3 12
-</span><span class='line'>&gt; rbind(x, y) 
-</span><span class='line'> [,1] [,2] [,3]
-</span><span class='line'>x 1 2 3
-</span><span class='line'>y 10 11 12</span></code></pre></td></tr></table></div></figure>
+<h2 id="graphs">Graphs</h2>
+<ul>
+  <li><code>plot(x,y)</code> # Scatter plot. Only numeric vectors or dataframes are allowed.</li>
+  <li><code>barplot()</code> - Bar Chart</li>
+  <li><code>boxplot()</code> - Box Plot. Provides a quick visual summary of a dataset. Thick line in middle is the median. Box identifies the 1st(bottom) and 3rd(top) quartiles.</li>
+  <li><code>hist(x)</code> -	Histogram. Groups data into bins</li>
+</ul>
 
+<h2 id="appendix">Appendix</h2>
 
-<a name="Factors"></a>
-<h4>Factors</h4>
+<h3 id="command-reference">Command Reference</h3>
+<ul>
+  <li><code>ls()</code> or <code>ls(all.names = TRUE)</code> # Lists all variables/objects defined in the * session</li>
+  <li><code>setwd(“c:/xyz”)</code> # sets working directory</li>
+  <li><code>getwd()</code> # Gets working directory</li>
+  <li><code>runif(8)</code> # generates 8 random numbers</li>
+  <li><code>x &lt;- 9</code> # assigns 9 to object x in workspace</li>
+  <li><code>x</code> # prints the value of x</li>
+  <li><code>rm(x)</code> # removes the object x</li>
+  <li><code>rm(list=ls())</code> # removes all objects in workspace</li>
+  <li>Save &amp; Load (Binary)
+    <ul>
+      <li><code>save()</code> # saves all objects to default file .RData. Objects still exist in * <code>memory</code> (binary format)</li>
+      <li><code>save(obj1, obj2, file=”filename”)</code></li>
+      <li><code>load(“filename”)</code> # loads from file to memory</li>
+    </ul>
+  </li>
+  <li>Save &amp; Load (Text)
+    <ul>
+      <li><code>write.table(obj1, file=”filename”)</code> # only 1 obj at a time</li>
+      <li><code>load.table()</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="packages">Packages</h3>
+<ul>
+  <li><code>install.packages(c("ggplot2", "devtools", "KernSmooth")</code> # install the collection of packages from CRAN</li>
+  <li><code>library()</code>        #list all available packages</li>
+  <li><code>library(package)</code> # loads package on to memory</li>
+  <li><code>require(package)</code> # loads package on to memory. Used in scripts. Returns loading status as boolean.</li>
+  <li><code>detach(package:name)</code> # unloads package from memory.</li>
+</ul>
+
+<h3 id="help">Help</h3>
+<ul>
+  <li><code>?func</code>           # open help page on function ‘func’</li>
+  <li><code>help(func)</code>      # same as above</li>
+  <li><code>apropos("foo")</code>  # list all functions containing string foo</li>
+  <li><code>example(foo)</code>    # show an example of function foo</li>
+  <li><code>vignette()</code>      # show available vignettes on installed packages</li>
+  <li><code>vignette("foo")</code> # show specific vignette</li>
+</ul>
+
+<h1 id="bibliography">Bibliography</h1>
 
 <ul>
-<li>Factors are nothing but enumeration data types used to represent categorical data.</li>
-<li>Can be ordered or unordered.</li>
-<li>Factor can be thought of as an integer vector where each integer has a <em>label</em>.</li>
+  <li>R Inferno</li>
+  <li>Software for Data Analysis - Programming with R (http://www.springer.com/statistics/computational+statistics/book/978-0-387-75935-7)</li>
+  <li>The R book (http://www.wiley.com/WileyCDA/WileyTitle/productCd-0470973927.html)</li>
+  <li>The Art of R Programming </li>
+  <li>R in Action</li>
+  <li>Ref Cards
+    <ul>
+      <li>http://cran.r-project.org/doc/contrib/Short-refcard.pdf</li>
+      <li>http://www.statmethods.net/interface/help.html</li>
+    </ul>
+  </li>
+  <li>Tutorials
+    <ul>
+      <li>http://www.johndcook.com/R_language_for_programmers.html</li>
+      <li>http://cran.r-project.org/doc/manuals/R-intro.pdf</li>
+      <li>http://www.decisionsciencenews.com/?p=261</li>
+      <li>http://www.r-tutor.com/r-introduction/data-frame</li>
+      <li>http://tryr.codeschool.com/levels/2/challenges/1</li>
+    </ul>
+  </li>
 </ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; x &lt;- factor(c("yes", "yes", "no", "yes", "no")) 
-</span><span class='line'>&gt; x
-</span><span class='line'>[1] yes yes no yes no
-</span><span class='line'>Levels: no yes
-</span><span class='line'>&gt; table(x) 
-</span><span class='line'>x
-</span><span class='line'>no yes 
-</span><span class='line'>2 3
-</span><span class='line'>&gt; unclass(x)
-</span><span class='line'>[1] 2 2 1 2 1
-</span><span class='line'>attr(,"levels")
-</span><span class='line'>[1] "no" "yes"</span></code></pre></td></tr></table></div></figure>
-
-
-<a name="Data.Frames"></a>
-<h4>Data Frames</h4>
-
-<ul>
-<li>A special type of list where every list is of same length.</li>
-<li>All columns in data frame must have names</li>
-<li><ul>
-<li>Unlike matrices, data frames can store different classes of objects in each column.</li>
-</ul>
-</li>
-<li>To create - <code>read.table()</code> or <code>read.csv()</code></li>
-<li>To convert to a matrix - <code>data.matrix()</code></li>
-</ul>
-
-
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-<span class='line-number'>6</span>
-<span class='line-number'>7</span>
-<span class='line-number'>8</span>
-<span class='line-number'>9</span>
-<span class='line-number'>10</span>
-<span class='line-number'>11</span>
-<span class='line-number'>12</span>
-<span class='line-number'>13</span>
-<span class='line-number'>14</span>
-<span class='line-number'>15</span>
-<span class='line-number'>16</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>&gt; read.table() # space is the default delimiter
-</span><span class='line'>&gt; read.csv() # by default expects a file header
-</span><span class='line'>&gt; read.csv2()
-</span><span class='line'>&gt; read.delim()
-</span><span class='line'>&gt; read.delim2()
-</span><span class='line'>&gt; x &lt;- data.frame(foo = 1:4, bar = c(T, T, F, F)) 
-</span><span class='line'>&gt; x
-</span><span class='line'> foo bar
-</span><span class='line'>1 1 TRUE
-</span><span class='line'>2 2 TRUE
-</span><span class='line'>3 3 FALSE
-</span><span class='line'>4 4 FALSE
-</span><span class='line'>&gt; nrow(x)
-</span><span class='line'>[1] 4
-</span><span class='line'>&gt; ncol(x)
-</span><span class='line'>[1] 2</span></code></pre></td></tr></table></div></figure>
-
-
-<ul>
-<li><code>data.frame()</code> # create data frame or table e.g., <code>test.data.frame&lt;-data.frame(id=c(1,2,3,4,5),name=c("a","b","c","d","e"))</code></li>
-<li><code>edit(framename)</code> # edit the content of the table</li>
-<li><code>str(frame)</code> # prints the structure and data types of the data frame</li>
-<li><code>names(framename)</code> – prints the column names</li>
-<li><code>dataframe[index.ROW, index.COLUMN]</code></li>
-<li><code>dataframe[[1]]</code> # returns the first column as a vector</li>
-<li><code>dataframe[1]</code> # returns the first column wrapped in a data frame</li>
-<li><code>dataframe[c(1,3)]</code> # returns the 1st and 3rd column wrapped in a data frame</li>
-<li><code>dataframe[1:3,]</code> # displays all columns but first 1-3 rows only</li>
-<li><code>is.data.frame(framename)</code> #checks if an object is a data frame</li>
-</ul>
-
-
-<a name="Basics.Statistic.Functions"></a>
-<h2>Basics Statistic Functions</h2>
-
-<ul>
-<li><code>mean(x)</code> # x is a vector</li>
-<li><code>median(x)</code></li>
-<li><code>sd(x)</code></li>
-<li><code>var(x)</code></li>
-<li><code>cor(x,y)</code></li>
-<li><code>cov(x,y)</code></li>
-<li><code>lapply(dataframe, function)</code> # Apply function like mean/median over a list/dataframe</li>
-</ul>
-
-
-<a name="Graphs"></a>
-<h2>Graphs</h2>
-
-<ul>
-<li><code>plot(x,y)</code> # Scatter plot. Only numeric vectors or dataframes are allowed.</li>
-<li><code>barplot()</code> - Bar Chart</li>
-<li><code>boxplot()</code> - Box Plot. Provides a quick visual summary of a dataset. Thick line in middle is the median. Box identifies the 1st(bottom) and 3rd(top) quartiles.</li>
-<li><code>hist(x)</code> -   Histogram. Groups data into bins</li>
-</ul>
-
-
-<a name="Appendix"></a>
-<h2>Appendix</h2>
-
-<a name="Command.Reference"></a>
-<h3>Command Reference</h3>
-
-<ul>
-<li><code>ls()</code> or <code>ls(all.names = TRUE)</code> # Lists all variables/objects defined in the * session</li>
-<li><code>setwd(“c:/xyz”)</code> # sets working directory</li>
-<li><code>getwd()</code> # Gets working directory</li>
-<li><code>runif(8)</code> # generates 8 random numbers</li>
-<li><code>x &lt;- 9</code> # assigns 9 to object x in workspace</li>
-<li><code>x</code> # prints the value of x</li>
-<li><code>rm(x)</code> # removes the object x</li>
-<li><code>rm(list=ls())</code> # removes all objects in workspace</li>
-<li>Save &amp; Load (Binary)
-
-<ul>
-<li><code>save()</code> # saves all objects to default file .RData. Objects still exist in * <code>memory</code> (binary format)</li>
-<li><code>save(obj1, obj2, file=”filename”)</code></li>
-<li><code>load(“filename”)</code> # loads from file to memory</li>
-</ul>
-</li>
-<li>Save &amp; Load (Text)
-
-<ul>
-<li><code>write.table(obj1, file=”filename”)</code> # only 1 obj at a time</li>
-<li><code>load.table()</code></li>
-</ul>
-</li>
-</ul>
-
-
-<a name="Packages"></a>
-<h3>Packages</h3>
-
-<ul>
-<li><code>install.packages(c("ggplot2", "devtools", "KernSmooth")</code> # install the collection of packages from CRAN</li>
-<li><code>library()</code>        #list all available packages</li>
-<li><code>library(package)</code> # loads package on to memory</li>
-<li><code>require(package)</code> # loads package on to memory. Used in scripts. Returns loading status as boolean.</li>
-<li><code>detach(package:name)</code> # unloads package from memory.</li>
-</ul>
-
-
-<a name="Help"></a>
-<h3>Help</h3>
-
-<ul>
-<li><code>?func</code>           # open help page on function &lsquo;func&rsquo;</li>
-<li><code>help(func)</code>      # same as above</li>
-<li><code>apropos("foo")</code>  # list all functions containing string foo</li>
-<li><code>example(foo)</code>    # show an example of function foo</li>
-<li><code>vignette()</code>      # show available vignettes on installed packages</li>
-<li><code>vignette("foo")</code> # show specific vignette</li>
-</ul>
-
-
-<a name="Bibliography"></a>
-<h1>Bibliography</h1>
-
-<ul>
-<li>R Inferno</li>
-<li>Software for Data Analysis - Programming with R (<a href="http://www.springer.com/statistics/computational+statistics/book/978-0-387-75935-7">http://www.springer.com/statistics/computational+statistics/book/978-0-387-75935-7</a>)</li>
-<li>The R book (<a href="http://www.wiley.com/WileyCDA/WileyTitle/productCd-0470973927.html">http://www.wiley.com/WileyCDA/WileyTitle/productCd-0470973927.html</a>)</li>
-<li>The Art of R Programming</li>
-<li>R in Action</li>
-<li>Ref Cards
-
-<ul>
-<li><a href="http://cran.r-project.org/doc/contrib/Short-refcard.pdf">http://cran.r-project.org/doc/contrib/Short-refcard.pdf</a></li>
-<li><a href="http://www.statmethods.net/interface/help.html">http://www.statmethods.net/interface/help.html</a></li>
-</ul>
-</li>
-<li>Tutorials
-
-<ul>
-<li><a href="http://www.johndcook.com/R_language_for_programmers.html">http://www.johndcook.com/R_language_for_programmers.html</a></li>
-<li><a href="http://cran.r-project.org/doc/manuals/R-intro.pdf">http://cran.r-project.org/doc/manuals/R-intro.pdf</a></li>
-<li><a href="http://www.decisionsciencenews.com/?p=261">http://www.decisionsciencenews.com/?p=261</a></li>
-<li><a href="http://www.r-tutor.com/r-introduction/data-frame">http://www.r-tutor.com/r-introduction/data-frame</a></li>
-<li><a href="http://tryr.codeschool.com/levels/2/challenges/1">http://tryr.codeschool.com/levels/2/challenges/1</a></li>
-</ul>
-</li>
-</ul>
-
 
   
     <footer>
@@ -591,7 +510,7 @@ Matrices can be created by column-binding or row-binding with <code>cbind()</cod
 
 		<li>
 			<h3>General Concepts</h3>
-			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/webprogramming/webconcepts.html">Web Concepts</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/webconcepts.html">Web Concepts</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
 		</li>
 
 		<h2>Non-Techninal</h2>

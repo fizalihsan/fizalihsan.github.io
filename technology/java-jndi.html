@@ -33,6 +33,7 @@
 <link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 
+
 <!-- mathjax config similar to math.stackexchange -->
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -47,8 +48,7 @@ messageStyle: "none",
 "HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
 });
 </script>
-
-<script src="/mathjax/unpacked/MathJax.js"></script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
 
   
 
@@ -85,47 +85,41 @@ messageStyle: "none",
     
   </header>
   
-  <p><ul>
- <li><a href="#Overview">Overview</a></li>
- <li><a href="#JNDI">JNDI</a></li>
+  <ul id="markdown-toc">
+  <li><a href="#overview">Overview</a></li>
+  <li><a href="#jndi">JNDI</a></li>
 </ul>
 
-</p>
-
-<a name="Overview"></a>
-<h1>Overview</h1>
+<h1 id="overview">Overview</h1>
 
 <ul>
-<li>A naming service associates names with distributed objects, files, and devices so that they can be located on the network using simple names instead of cryptic network address. An example of a naming service is the DNS, which converts an Internet hostname like www.google.com into a network address that browsers use to connect to web servers.</li>
-<li>Naming services allow printers, distributed objects, and JMS administered objects to be bound to names and organized in a hierarchy similar to a filesystem.</li>
-<li>A directory service is a more sophisticated kind of naming service.</li>
+  <li>A naming service associates names with distributed objects, files, and devices so that they can be located on the network using simple names instead of cryptic network address. An example of a naming service is the DNS, which converts an Internet hostname like www.google.com into a network address that browsers use to connect to web servers.</li>
+  <li>Naming services allow printers, distributed objects, and JMS administered objects to be bound to names and organized in a hierarchy similar to a filesystem.</li>
+  <li>A directory service is a more sophisticated kind of naming service.</li>
 </ul>
 
-
-<a name="JNDI"></a>
-<h1>JNDI</h1>
+<h1 id="jndi">JNDI</h1>
 
 <ul>
-<li>JNDI (Java Naming &amp; Directory Interface) is a standard Java extension that provides a uniform API for accessing a variety of naming &amp; directory services.</li>
-<li>JNDI lets you write code that can access different directory and naming services like LDAP, NDS, CORBA Naming Service, and proprietary naming services provided by JMS servers.</li>
-<li>JNDI is both virtual and dynamic.
-
-<ul>
-<li>It is virtual because it allows one naming service to be linked to another. Using JNDI, you can drill down through directories to files, printers, JMS administered objects, and other resources following virtual links between naming services. The user doesn’t know or care where the directories are actually located. As an administrator, you can create virtual directories that span a variety of different services over many different physical locations.</li>
-<li>JNDI is dynamic because it allows the JNDI drivers for specific types of naming and directory services to be loaded dynamically at runtime. A driver maps a specific kind of naming or directory service into the standard JNDI class interfaces. Drivers have been created for LDAP, Novell NetWare NDS, Sun Solaris NIS+, CORBA CosNaming, and many other types of naming and directory services, including proprietary ones. Dynamically loading JNDI drivers (service providers) makes it possible for a client to navigate across arbitrary directory services without knowing in advance what kinds of services it is likely to find.</li>
+  <li>JNDI (Java Naming &amp; Directory Interface) is a standard Java extension that provides a uniform API for accessing a variety of naming &amp; directory services.</li>
+  <li>JNDI lets you write code that can access different directory and naming services like LDAP, NDS, CORBA Naming Service, and proprietary naming services provided by JMS servers.</li>
+  <li>JNDI is both virtual and dynamic. 
+    <ul>
+      <li>It is virtual because it allows one naming service to be linked to another. Using JNDI, you can drill down through directories to files, printers, JMS administered objects, and other resources following virtual links between naming services. The user doesn’t know or care where the directories are actually located. As an administrator, you can create virtual directories that span a variety of different services over many different physical locations.</li>
+      <li>JNDI is dynamic because it allows the JNDI drivers for specific types of naming and directory services to be loaded dynamically at runtime. A driver maps a specific kind of naming or directory service into the standard JNDI class interfaces. Drivers have been created for LDAP, Novell NetWare NDS, Sun Solaris NIS+, CORBA CosNaming, and many other types of naming and directory services, including proprietary ones. Dynamically loading JNDI drivers (service providers) makes it possible for a client to navigate across arbitrary directory services without knowing in advance what kinds of services it is likely to find.</li>
+    </ul>
+  </li>
 </ul>
-</li>
-</ul>
 
-
-<pre><code class="java Sample jndi.properties"> java.naming.factory.initial = org.apache.activemq.jndi.ActiveMQInitialContextFactory
+<p>&#8220;` java Sample jndi.properties
+ java.naming.factory.initial = org.apache.activemq.jndi.ActiveMQInitialContextFactory
  java.naming.provider.url = tcp://localhost:61616
  java.naming.security.principal=system
- java.naming.security.credentials=manager
+ java.naming.security.credentials=manager</p>
 
- connectionFactoryNames = TopicCF
+<p>connectionFactoryNames = TopicCF
  topic.topic1 = jms.topic1
-</code></pre>
+ &#8220;`</p>
 
   
     <footer>
@@ -181,7 +175,7 @@ messageStyle: "none",
 
 		<li>
 			<h3>General Concepts</h3>
-			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/webprogramming/webconcepts.html">Web Concepts</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/webconcepts.html">Web Concepts</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
 		</li>
 
 		<h2>Non-Techninal</h2>

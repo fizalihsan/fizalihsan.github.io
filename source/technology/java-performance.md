@@ -5,10 +5,8 @@ comments: true
 sharing: true
 footer: true
 ---
-
-[TOC]
-
-
+* list element with functor item
+{:toc}
 
 # Memory
 

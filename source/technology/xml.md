@@ -6,6 +6,8 @@ sharing: true
 footer: true
 ---
 
+* list element with functor item
+{:toc}
 
 ## DTD & XSD
 * Commonly used DTDs - FpML, DocBook, HRML, RDF

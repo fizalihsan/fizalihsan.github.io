@@ -6,6 +6,8 @@ sharing: false
 footer: true
 ---
 
+* list element with functor item
+{:toc}
 
 ## Abstraction 
 hides internal implementation level details and exposes only the relevant details of the class to the users..

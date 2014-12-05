@@ -7,7 +7,8 @@ footer: true
 keywords: statistics, mean, median, mode, bar chart, standard deviation
 ---
 
-[TOC]
+* list element with functor item
+{:toc}
 
 # Charts
 
@@ -33,13 +34,14 @@ keywords: statistics, mean, median, mode, bar chart, standard deviation
 > Rule: When using percentages in charts, show frequency also. 
 
 ## What type of chart to use?
+
 | To show                                 | use           |
 | ----------------------------------------|---------------|
 | Category + Frequency                    | Pie chart     | 
 | Category + Percentage                   | Bar chart     |
 | Category + Frequency + Percentage       | Segmented Bar |
 | Range of numbers + Frequency            | Histogram     |
-| Range of numbers + Cumulative Frequency | Line chart    |  
+| Range of numbers + Cumulative Frequency | Line chart    |
 
 ---
 
@@ -100,20 +102,18 @@ that P<sub>90</sub> = 50, you’d have beaten or matched the score of 90% of oth
 ## Variance & Standard Deviation ($\sigma$)
 * The variance is a way of measuring spread, and it’s the average of the distance of values from the mean squared.
 
-\(
-  Variance = \frac{\Sigma(x-\mu)^2} {n} 
-\)
+$$ Variance = \frac{\Sigma(x-\mu)^2} {n} $$
 
-* For faster variance calculation, use below formula. Here you don’t have to calculate \({\Sigma(x-\mu)^2}\) for every number. 
+* For faster variance calculation, use below formula. Here you don’t have to calculate ${\Sigma(x-\mu)^2}$ for every number. 
 
-\( Variance = \frac{\Sigma x^2} {n} - \mu^2 \)
+$$ Variance = \frac{\Sigma x^2} {n} - \mu^2 $$
 
-* **Standard Deviation** is a way of saying how far typical values are from the mean. The smaller the standard deviation, the closer values are to the mean. The smallest value the standard deviation can take is 0. \(\sigma = \sqrt{variance}\)
+* **Standard Deviation** is a way of saying how far typical values are from the mean. The smaller the standard deviation, the closer values are to the mean. The smallest value the standard deviation can take is 0. $\sigma = \sqrt{variance}$
 
 ## Standard Score ($z$)
 * Standard scores give you a way of comparing values across different sets of data
 where the mean and standard deviation differ. They’re a way of comparing
-related data values in different circumstances. \( z = \frac{x - \mu} {\sigma} \)
+related data values in different circumstances. $ z = \frac{x - \mu} {\sigma} $
 * You find the standard score of a particular value using the mean and standard
 deviation of the entire data set.
 
@@ -123,11 +123,11 @@ standard deviation of 10%.
 In a particular practice session, Player 1 gets the ball into the net 75% of the time, and Player 2 makes a basket 55% of the time. Which player does best against their personal track record?
 
 
-Player 1                       |   | Player 2                      
+Player 1                       |   | Player 2
 ------------------------------ |---|-------------------------------
-$x$ = 75                       |   | $x$ = 55                      
-$\mu$ = 70                     |   | $\mu$ = 40                    
-$\sigma$ = 20                  |   | $\sigma$ = 10                 
+$x$ = 75                       |   | $x$ = 55
+$\mu$ = 70                     |   | $\mu$ = 40
+$\sigma$ = 20                  |   | $\sigma$ = 10
 $z1 = \frac{75-70}{20} = 0.25$ |   | $z2 = \frac{55-40}{10} = 1.5 $
 
 # Probability
@@ -157,11 +157,13 @@ where
 
 * Adding probabilities - e.g., what is the probability of getting an even number in a dice throw.
 
-\(
+$$
+\begin{split}
 P(even) = P(2) + P(4) + P(6) \\
         = 1/6 + 1/6 + 1/6 \\
         = 3/6 = 0.5
-\)
+\end{split}
+$$
 
 ### Exclusive events
 
@@ -170,51 +172,38 @@ P(even) = P(2) + P(4) + P(6) \\
 ### Intersection events
 
 * If two events intersect, it’s possible they can occur simultaneously. e.g., black and even number in roulette 
-* **i\(\bigcap\)tersection**
-  * \(A \bigcap B\) refers to intersection between event A and B. 
+* **i$\bigcap$tersection**
+  * $A \bigcap B$ refers to intersection between event A and B. 
   * Think of this symbol as **and**
-* **\(\bigcup\)nion**
-  * \(A \bigcup B\) refers to union of A and B. It includes all of the elements in A and B.
+* **$\bigcup$nion**
+  * $A \bigcup B$ refers to union of A and B. It includes all of the elements in A and B.
   * Think of this symbol as **or**
-  * If \(A \bigcup B = 1\), then A and B are said to be **exhaustive**. Between them, they make up the whole of S.
+  * If $A \bigcup B = 1$, then A and B are said to be **exhaustive**. Between them, they make up the whole of S.
 
-\(
-  P(A \bigcup B) = P(A) + P(B) + P(A \bigcap B) \\
-  where P(A \bigcup B) is P(A or B) \\
-  P(A \bigcap B) is P(A and B)
-\)
+$$ P(A \bigcup B) = P(A) + P(B) + P(A \bigcap B) $$
 
-* Mutually exclusive events have no elements in common with each other, so \(P(A \bigcap B) = 0\)
+where
+
+$$ 
+P(A \bigcup B) = P(A or B) \\
+P(A \bigcap B) = P(A and B)
+$$
+
+* Mutually exclusive events have no elements in common with each other, so $$P(A \bigcap B) = 0$$
 
 ### Conditional probabilities
 
 {% img right /datascience/decision-tree.png %} 
 
 * measures the probability of an event occurring relative to another occurring.
-* it is represented by symbol "|". e.g., P(A|B) is read as the probability of A given that wek now B has happened.
+* it is represented by pipe symbol. e.g., P(A|B) is read as the probability of A given that wek now B has happened.
 * conditional probabilities are best visualized using probability tree.
 
-\(
-  \begin{split}
-  P(A | B) = \frac{P(A \bigcap B)} {P(B)} \\
-  which means, P(A \bigcap B)} = P(A | B) \times P(B) \\
-  \end{split}
-\)
+$$P(A | B) = \frac {P(A \bigcap B)} {P(B)}$$
 
-Square bracket
+which means
 
-\[
-  P(A | B) = \frac {P(A \bigcap B)} {P(B)} \\
-  which means, P(A \bigcap B)} = P(A | B) \times P(B) \\
-\]
-
-
-Dollar
-
-$$
-  P(A | B) = \frac {P(A \bigcap B)} {P(B)} \\
-  which means, P(A \bigcap B)} = P(A | B) \times P(B) \\
-$$
+$$P(A \bigcap B) = P(A | B) \times P(B) $$
 
 # Appendix
 

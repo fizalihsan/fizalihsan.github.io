@@ -6,6 +6,8 @@ sharing: false
 footer: true
 ---
 
+* list element with functor item
+{:toc}
 
 # UNIX
 

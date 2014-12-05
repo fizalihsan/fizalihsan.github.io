@@ -6,8 +6,8 @@ sharing: true
 footer: true
 ---
 
-[TOC]
-
+* list element with functor item
+{:toc}
 
 # Best Practices
 * [Issue 039] Why I don't read your code comments ...

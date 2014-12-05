@@ -6,7 +6,8 @@ sharing: true
 footer: true
 ---
 
-[TOC]
+* list element with functor item
+{:toc}
 
 
 Memory Consistency - http://docs.oracle.com/javase/tutorial/essential/concurrency/memconsist.html 

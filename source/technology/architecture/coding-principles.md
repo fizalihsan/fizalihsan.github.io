@@ -6,7 +6,8 @@ sharing: true
 footer: true
 ---
 
-[TOC]
+* list element with functor item
+{:toc}
 
 ## Excerpts from book 'Clean Code - A Handbook of Agile Software Craftmanship - Bob Martin'
 

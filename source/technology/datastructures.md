@@ -6,6 +6,9 @@ sharing: false
 footer: true
 ---
 
+* list element with functor item
+{:toc}
+
 Data Structures
 
 * Heap sort visualization - http://www2.hawaii.edu/~copley/665/HSApplet.html

@@ -50,7 +50,7 @@ footer: true
     * [Operating Systems]({{ root_url }}/technology/os.html)
     * [Security]({{ root_url }}/technology/security.html)
     * [VCS]({{ root_url }}/technology/vcs.html)
-    * [Web Concepts]({{ root_url }}/technology/webprogramming/webconcepts.html)
+    * [Web Concepts]({{ root_url }}/technology/webconcepts.html)
     * [XML]({{ root_url }}/technology/xml.html)
     * [Coding Bibliography]({{ root_url }}/technology/coding_bibliography.html)
 

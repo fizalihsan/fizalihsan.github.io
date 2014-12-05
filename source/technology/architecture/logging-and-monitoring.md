@@ -6,7 +6,8 @@ sharing: true
 footer: true
 ---
 
-[TOC]
+* list element with functor item
+{:toc}
 
 * Metric identity name: k-tuple
 * Metrics values

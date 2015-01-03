@@ -106,6 +106,7 @@ messageStyle: "none",
               <li><a href="#lock-escalation">Lock Escalation</a></li>
             </ul>
           </li>
+          <li><a href="#performance">Performance</a></li>
           <li><a href="#db-federation">DB Federation</a>            <ul>
               <li><a href="#db-partitioning">DB Partitioning</a></li>
               <li><a href="#partitioning-types">Partitioning Types</a></li>
@@ -293,6 +294,12 @@ To create a table in a given table space, use the CREATE TABLE statement with th
 <h4 id="lock-escalation">Lock Escalation</h4>
 <p>A lock escalation occurs when the number of locks held on rows and tables in the db equals the percentage of the locklist specified by the ‘maxlocks’ db config param. To reduce the no. of locks, db manager begins converting many small row/block level locks to table locks for all active tables, starting from any locks on LOBs or VARCHARs. Then the table with the next highest no. of locks and so on, until the no. of locks held is decreased to about half of the value specified by ‘maxlocks’ Exclusive Lock Escalation An exclusive lock escalation is a lock escalation in which the table lock acquired is an ‘exclusive lock’. Lock escalations reduce concurrency. Conditions that might cause lock escalations should be avoided. </p>
 
+<h3 id="performance">Performance</h3>
+
+<ul>
+  <li><a href="https://www.ibm.com/developerworks/data/library/techarticle/dm-0606fechner/">Distribution statistics uses with the DB2 Optimizer</a></li>
+</ul>
+
 <h3 id="db-federation">DB Federation</h3>
 
 <p>Database federated support in DB2 allows tables from multiple databases to be presented as local tables to a DB2 server. The databases may be local or remote; they can also belong to different. </p>
@@ -430,7 +437,7 @@ To create a table in a given table space, use the CREATE TABLE statement with th
 
 		<li>
 			<h3>Architecture</h3>
-			<a href="/technology/architecture/architecture.html">Overview</a>  |  <a href="/technology/architecture/coding-principles.html">Coding Principles</a>  |  <a href="/technology/architecture/design-principles.html">Design Principles</a>  |  <a href="/technology/architecture/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/architecture/patterns.html">Patterns</a>  |  <a href="/technology/transaction.html">Transactions</a>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/transaction.html">Transactions</a>
 		</li>
 
 		<li>
@@ -498,7 +505,7 @@ To create a table in a given table space, use the CREATE TABLE statement with th
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - Mohamed Fizal Ihsan Mohamed -
+  Copyright &copy; 2015 - Mohamed Fizal Ihsan Mohamed -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

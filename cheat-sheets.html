@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>XML - KnowledgeShop</title>
+  <title>Cheat Sheets - KnowledgeShop</title>
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="XML DTD &amp; XSD XML Parsing Data Binding What is XML Data Binding? JAXB XMLBeans DTD &amp; XSD Commonly used DTDs - FpML, DocBook, HRML, RDF In &hellip;">
+<meta name="description" content="Cheat Sheets Octopress Cheat Sheet Installation Getting Started Site changes Github commands Octopress Cheat Sheet Installation Download &amp; &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://fizalihsan.github.io/technology/xml.html">
+  <link rel="canonical" href="http://fizalihsan.github.io/cheat-sheets.html">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <!-- Below custom CSS is for table border styling -->
@@ -81,116 +81,112 @@ messageStyle: "none",
 <article role="article">
   
   <header>
-    <h1 class="entry-title">XML</h1>
+    <h1 class="entry-title">Cheat Sheets</h1>
     
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#dtd--xsd">DTD &amp; XSD</a></li>
-  <li><a href="#xml-parsing">XML Parsing</a></li>
-  <li><a href="#data-binding">Data Binding</a>    <ul>
-      <li><a href="#what-is-xml-data-binding">What is XML Data Binding?</a></li>
-      <li><a href="#jaxb">JAXB</a></li>
-      <li><a href="#xmlbeans">XMLBeans</a></li>
+  <li><a href="#octopress-cheat-sheet">Octopress Cheat Sheet</a>    <ul>
+      <li><a href="#installation">Installation</a></li>
+      <li><a href="#getting-started">Getting Started</a></li>
+      <li><a href="#site-changes">Site changes</a></li>
+      <li><a href="#github-commands">Github commands</a></li>
     </ul>
   </li>
 </ul>
 
-<h2 id="dtd--xsd">DTD &amp; XSD</h2>
-<ul>
-  <li>Commonly used DTDs - FpML, DocBook, HRML, RDF</li>
-  <li>In XML DTD, how do you create an external entity reference in an attribute value? XML DTD dont support external entity reference in attribute values</li>
-  <li>How would you build a search engine for large volumes of XML data?</li>
-  <li>Diff b/w DTD &amp; XML schema?
-    <ul>
-      <li>DTD doesn’t have external entity reference</li>
-      <li>XSD supports data types</li>
-      <li>XSD supports namespaces - solves the problem of tag name conflicts</li>
-    </ul>
-  </li>
-  <li>Namespaces-</li>
-  <li>XPath, XSLT, XLink, XPointer, XQuery</li>
-</ul>
+<h1 id="octopress-cheat-sheet">Octopress Cheat Sheet</h1>
 
-<h2 id="xml-parsing">XML Parsing</h2>
+<h2 id="installation">Installation</h2>
+
 <ul>
-  <li>Steps to parse an XML with an example - DOM &amp; SAX - Event-based parser</li>
-  <li>SAX (Sequential Access/Push)
+  <li>Download &amp; Install 
     <ul>
-      <li>Disadvantage—user must keep track of previous events</li>
-    </ul>
-  </li>
-  <li>DOM (Random Access/Pull)
-    <ul>
-      <li>Advantage—simple to find particular elements</li>
-    </ul>
-  </li>
-  <li>XMLPullParser (Sequential Access/Pull)
-    <ul>
-      <li>Advantage—flow may be familiar to more programmers</li>
-      <li>Disadvantage—may have more code than the other two alternatives</li>
-    </ul>
-  </li>
-  <li>Diff b/w DOM &amp; SAX?</li>
-  <li>Types
-    <ul>
-      <li>Validating &amp; Non-validating parsers</li>
-      <li>Push parsers
+      <li><strong>Ruby 1.9.3-p550</strong></li>
+      <li>Devkit for Ruby 1.9.3
         <ul>
-          <li>Advantage—can be simpler code, once paradigm is understood</li>
-        </ul>
-      </li>
-      <li>Pull parsers
-        <ul>
-          <li>Advantage—appears as a common control style (e.g., loop) in multiple languages</li>
+          <li>Execute below commands
+            <ul>
+              <li><code>ruby dk.rb init</code></li>
+              <li>Enter the ruby home path in <code>config.yml</code> file here</li>
+              <li><code>ruby dk.rb review</code></li>
+              <li><code>ruby dk.rb install</code></li>
+            </ul>
+          </li>
+          <li>Python27</li>
         </ul>
       </li>
     </ul>
   </li>
-</ul>
-
-<table>
-  <thead>
-    <tr>
-      <th> </th>
-      <th>Sequential</th>
-      <th>Random</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Push</td>
-      <td>SAX</td>
-      <td>None</td>
-    </tr>
-    <tr>
-      <td>Pull</td>
-      <td>XMLPullParser</td>
-      <td>DOM</td>
-    </tr>
-  </tbody>
-</table>
-
-<h2 id="data-binding">Data Binding</h2>
-
-<h3 id="what-is-xml-data-binding">What is XML Data Binding?</h3>
-<ul>
-  <li>http://www-128.ibm.com/developerworks/library/x-databdopt/</li>
-  <li>What other XML binding tools are available? - Sun’s JAXB, Castor</li>
-  <li>Advantages
+  <li>Execute below commands from folder where Octopress GemFile is
     <ul>
-      <li>DOM generates an in-memory tree for the entire document. In cases where the document is very large, DOM becomes quite memory intensive and performance degrades substantially. XMLBeans scores well on performance by doing incremental unmarshalling and providing xget methods to access built-in schema data types.</li>
-      <li>SAX is less memory intensive compared to DOM. However SAX requires that developers write callback methods for event handlers. This is not required by XMLBeans.</li>
-      <li>JAXB and Castor are XML/Java technology binding technologies like XMLBeans, but none of these provide 100 percent schema support. One of the biggest advantages of XMLBeans is its nearly 100 percent support for XML Schema. Also, XMLBeans allow access to the full XML Infoset. This is useful because the order of the elements or comments might be critical for an application.</li>
-      <li>XMLBeans also provide for on-time validation of the XML instance being parsed.</li>
-      <li>XMLBeans include innovative features such as XML cursors and support for XQuery expressions.</li>
+      <li><code>gem install bundler</code></li>
+      <li><code>bundle install</code></li>
+      <li><code>gem install hitimes -v '1.2.2'​</code></li>
     </ul>
   </li>
 </ul>
 
-<h3 id="jaxb">JAXB</h3>
+<h2 id="getting-started">Getting Started</h2>
 
-<h3 id="xmlbeans">XMLBeans</h3>
+<ul>
+  <li><code>gem update</code> # updates all ruby gems</li>
+  <li><code>rake new_page[name]</code> #To create a new page </li>
+  <li>How to start the local server
+  <code>rake generate</code> # generates the static site 
+  <code>rake preview</code> # starts server on localhost:4000</li>
+</ul>
+
+<h2 id="site-changes">Site changes</h2>
+
+<p><a href="http://octopress.org/docs/theme/styles/">http://octopress.org/docs/theme/styles/</a></p>
+
+<ul>
+  <li>To override styles <code>sass/custom/_styles.scss</code></li>
+  <li>To change colors in the site <code>/sass/base/_theme.scss</code></li>
+  <li>To customize your color scheme edit <code>sass/custom/_colors.scss</code> and override the colors in <code>sass/base/_theme.scss</code>.</li>
+  <li>To change fonts <code>/source/_includes/custom/head.html</code></li>
+  <li>To change header <code>/source/_includes/custom/header.html</code></li>
+  <li>To change sidebar edit <code>default_asides</code> section in <code>_config.yml</code></li>
+  <li>To change navigation <code>/source/_includes/custom/navigation.html</code></li>
+  <li>To change navigation link on the side bar <code>/source/_includes/asides/recent_posts.html</code></li>
+</ul>
+
+<h2 id="github-commands">Github commands</h2>
+
+<p>To clone the site to a new machine</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">$ git clone -b source git@github.com:username/username.github.com.git knowledgeshop
+</span><span class="line">$ cd ./_deploy
+</span><span class="line">$ git clone git@github.com:username/username.github.com.git _deploy </span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>To deploy the Octopress site to Github. Note the source files go to source branch and the static site to be hosted goes to master branch.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">$ rake generate
+</span><span class="line">$ git add .
+</span><span class="line">$ git commit -am "Some comment here." 
+</span><span class="line">$ git push origin source  # update the static site in remote source branch 
+</span><span class="line">$ rake deploy             # update the _deploy/ folder in remote master branch</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>To update the changes from remote</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">$ cd knowledgeshop
+</span><span class="line">$ git pull origin source  # update the local source branch
+</span><span class="line">$ cd ./_deploy
+</span><span class="line">$ git pull origin master  # update the local master branch</span></code></pre></td></tr></table></div></figure></notextile></div>
+
 
   
     <footer>
@@ -198,7 +194,7 @@ messageStyle: "none",
       
         <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/xml.html" data-via="" data-counturl="http://fizalihsan.github.io/technology/xml.html" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/cheat-sheets.html" data-via="" data-counturl="http://fizalihsan.github.io/cheat-sheets.html" >Tweet</a>
   
   
   

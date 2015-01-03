@@ -115,27 +115,24 @@ messageStyle: "none",
               <li><a href="#rules-of-index-design">Rules of Index Design</a></li>
             </ul>
           </li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li><a href="#any-fields-that-will-be-queried-by-equality-should-occur-first-in-the-index-definition">Any fields that will be queried by <em>equality</em> should occur first in the index definition.</a>    <ul>
-      <li><a href="#profiling">Profiling</a></li>
-      <li><a href="#data-modelling">Data modelling</a>        <ul>
-          <li><a href="#embedded-document-model">Embedded document model</a></li>
-          <li><a href="#referenced-document-model">Referenced document model</a></li>
-        </ul>
-      </li>
-      <li><a href="#transaction-management">Transaction Management</a>        <ul>
-          <li><a href="#why-no-transactions">Why no transactions?</a></li>
-          <li><a href="#write-concern">Write concern</a></li>
-        </ul>
-      </li>
-      <li><a href="#aggregation-framework">Aggregation Framework</a></li>
-      <li><a href="#sharding">Sharding</a>        <ul>
-          <li><a href="#setup">Setup</a></li>
-          <li><a href="#shard-keys">Shard Keys</a></li>
-          <li><a href="#sharding-concerns">Sharding concerns</a></li>
+          <li><a href="#profiling">Profiling</a></li>
+          <li><a href="#data-modelling">Data modelling</a>            <ul>
+              <li><a href="#embedded-document-model">Embedded document model</a></li>
+              <li><a href="#referenced-document-model">Referenced document model</a></li>
+            </ul>
+          </li>
+          <li><a href="#transaction-management">Transaction Management</a>            <ul>
+              <li><a href="#why-no-transactions">Why no transactions?</a></li>
+              <li><a href="#write-concern">Write concern</a></li>
+            </ul>
+          </li>
+          <li><a href="#aggregation-framework">Aggregation Framework</a></li>
+          <li><a href="#sharding">Sharding</a>            <ul>
+              <li><a href="#setup">Setup</a></li>
+              <li><a href="#shard-keys">Shard Keys</a></li>
+              <li><a href="#sharding-concerns">Sharding concerns</a></li>
+            </ul>
+          </li>
         </ul>
       </li>
       <li><a href="#couchdb">CouchDb</a>        <ul>
@@ -204,7 +201,7 @@ messageStyle: "none",
       <li>R is the number of nodes required to read a value successfully. If R is greater than the number of copies available, the request will fail. If R=1, there is a potential chance to read stale values. If R=N, then if any of those N nodes become unavailable, read requests would fail. </li>
     </ul>
   </li>
-  <li>** Conflict Resolution **
+  <li><strong>Conflict Resolution</strong>
     <ul>
       <li>Riak uses vector clocks. A vector clock is a token that distributed systems like Riak use to keep the order of conflicting key-value updates intact. Timestamps cannot be used since the clocks across servers may not be synchronized.</li>
     </ul>
@@ -328,8 +325,8 @@ arrays</li>
 
 <h4 id="rules-of-index-design">Rules of Index Design</h4>
 
-<h1 id="any-fields-that-will-be-queried-by-equality-should-occur-first-in-the-index-definition">Any fields that will be queried by <em>equality</em> should occur first in the index definition.</h1>
 <ul>
+  <li>Any fields that will be queried by <em>equality</em> should occur first in the index definition.</li>
   <li>Fields used to sort should occur next in the index definition. If multiple fields are being sorted (such as (last_name, first_name), then they should occur in the same order in the index definition.</li>
   <li>Fields that are queried by range should occur last in the index definition.</li>
 </ul>
@@ -829,8 +826,8 @@ To acknowledge that the data has replicated to two members of the replica set be
 <ul>
   <li>Seven Databases in Seven Weeks</li>
   <li>Graph Databases - O’Reilly</li>
-  <li>http://nosql.findthebest.com/</li>
-  <li>http://www.slideshare.net/samof76/distributed-keyvalue-stores-featuring-riak</li>
+  <li><a href="http://nosql.findthebest.com/">http://nosql.findthebest.com/</a></li>
+  <li><a href="http://www.slideshare.net/samof76/distributed-keyvalue-stores-featuring-riak">http://www.slideshare.net/samof76/distributed-keyvalue-stores-featuring-riak</a></li>
   <li>MongoDb
     <ul>
       <li>MongoDb - The Definitive Guide</li>
@@ -842,8 +839,8 @@ To acknowledge that the data has replicated to two members of the replica set be
   <li>CouchDb
     <ul>
       <li>Getting Started with CouchDb</li>
-      <li>http://www.couchbase.com/press-releases/couchbase-and-spring-data-make-it-easier-developers-build-next-generation-enterprise</li>
-      <li>http://projects.spring.io/spring-data-couchbase/</li>
+      <li><a href="http://www.couchbase.com/press-releases/couchbase-and-spring-data-make-it-easier-developers-build-next-generation-enterprise">http://www.couchbase.com/press-releases/couchbase-and-spring-data-make-it-easier-developers-build-next-generation-enterprise</a></li>
+      <li><a href="http://projects.spring.io/spring-data-couchbase/">http://projects.spring.io/spring-data-couchbase/</a></li>
     </ul>
   </li>
 </ul>
@@ -877,7 +874,7 @@ To acknowledge that the data has replicated to two members of the replica set be
 
 		<li>
 			<h3>Architecture</h3>
-			<a href="/technology/architecture/architecture.html">Overview</a>  |  <a href="/technology/architecture/coding-principles.html">Coding Principles</a>  |  <a href="/technology/architecture/design-principles.html">Design Principles</a>  |  <a href="/technology/architecture/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/architecture/patterns.html">Patterns</a>  |  <a href="/technology/transaction.html">Transactions</a>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/transaction.html">Transactions</a>
 		</li>
 
 		<li>
@@ -945,7 +942,7 @@ To acknowledge that the data has replicated to two members of the replica set be
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2014 - Mohamed Fizal Ihsan Mohamed -
+  Copyright &copy; 2015 - Mohamed Fizal Ihsan Mohamed -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

@@ -8,11 +8,11 @@ footer: true
 
 ## Technical
   * Architecture
-    * [Overview]({{ root_url }}/technology/architecture/architecture.html)
-    * [Coding Principles]({{ root_url }}/technology/architecture/coding-principles.html)
-    * [Design Principles]({{ root_url }}/technology/architecture/design-principles.html)
-    * [Logging & Monitoring]({{ root_url }}/technology/architecture/logging-and-monitoring.html)
-    * [Patterns]({{ root_url }}/technology/architecture/patterns.html)
+    * [Overview]({{ root_url }}/technology/architecture.html)
+    * [Coding Principles]({{ root_url }}/technology/coding-principles.html)
+    * [Design Principles]({{ root_url }}/technology/design-principles.html)
+    * [Logging & Monitoring]({{ root_url }}/technology/logging-and-monitoring.html)
+    * [Patterns]({{ root_url }}/technology/patterns.html)
     * [Transactions]({{ root_url }}/technology/transaction.html)
   * Database
     * [Big Data]({{ root_url }}/technology/bigdata.html)

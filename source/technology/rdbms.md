@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "DBMS Concepts"
+title: "RDBMS Concepts"
 comments: true
 sharing: true
 footer: true
@@ -114,8 +114,9 @@ Each time you fetch a row from the cursor,it results in a network round trip, wh
 * Building the hash needs temporary space and increasing work_mem sometimes helps.
 * The hash join is also a good candidate for parallel processing. 
 
-* http://etutorials.org/Misc/advanced+dba+certification+guide+and+reference/Chapter+6.+The+DB2+Optimizer/Joining+in+DB2+UDB/
-* http://pic.dhe.ibm.com/infocenter/db2luw/v9r7/index.jsp?topic=%2Fcom.ibm.db2.luw.admin.perf.doc%2Fdoc%2Fc0005311.html
+* [Joining in DB2](http://etutorials.org/Misc/advanced+dba+certification+guide+and+reference/Chapter+6.+The+DB2+Optimizer/Joining+in+DB2+UDB/)
+* [Join Methods and Strategies](http://pic.dhe.ibm.com/infocenter/db2luw/v9r7/index.jsp?topic=%2Fcom.ibm.db2.luw.admin.perf.doc%2Fdoc%2Fc0005311.html)
+* [Getting the Most from Hash Joins](http://www3.software.ibm.com/ibmdl/pub/software/dw/dm/db2/0208zubiri/0208zubiri.pdf)
 
 # Design
 

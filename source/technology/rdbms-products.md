@@ -144,6 +144,10 @@ A buffer pool is an area in physical memory that caches the database information
 #### Lock Escalation 
 A lock escalation occurs when the number of locks held on rows and tables in the db equals the percentage of the locklist specified by the 'maxlocks' db config param. To reduce the no. of locks, db manager begins converting many small row/block level locks to table locks for all active tables, starting from any locks on LOBs or VARCHARs. Then the table with the next highest no. of locks and so on, until the no. of locks held is decreased to about half of the value specified by 'maxlocks' Exclusive Lock Escalation An exclusive lock escalation is a lock escalation in which the table lock acquired is an 'exclusive lock'. Lock escalations reduce concurrency. Conditions that might cause lock escalations should be avoided. 
 
+### Performance
+
+* [Distribution statistics uses with the DB2 Optimizer](https://www.ibm.com/developerworks/data/library/techarticle/dm-0606fechner/)
+
 ### DB Federation
 
 Database federated support in DB2 allows tables from multiple databases to be presented as local tables to a DB2 server. The databases may be local or remote; they can also belong to different. 

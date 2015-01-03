@@ -9,46 +9,53 @@ footer: true
 * list element with functor item
 {:toc}
 
-Data Structures
+# Data Types
 
-* Heap sort visualization - http://www2.hawaii.edu/~copley/665/HSApplet.html
+## Lists
+
+* Array
+* LinkedList
+  * [Basics](/technology/LinkedListBasics.pdf)
+  * [Problems](/technology/LinkedListProblems.pdf)
+* Skiplist (invented by William Pugh - look paper on alternative to Binary Tree - learn the Java implementations - when to prepare this over Maps)
+
+## Trees 
+
+### Tree Types
+[Trees Basics](http://webdocs.cs.ualberta.ca/~holte/T26/top.realTop.html)
+
+* Binary Tree
+  * [Binary Tree Problems](/technology/BinaryTrees.pdf)
+  * [Tree-List Recursion Problems](/technology/TreeListRecursion.pdf)
+* Binary search tree (BST)
+* B trees: Perfectly Height-balanced M-way search trees
+* Balanced tree
+* Height-balanced binary search tree (OR) AVL tree (after their Russian inventors  * Adelson-Velskii and Landis.)
 * B+ tree & Balanced B+ tree - used in DB indexes
-* Red-Black tree - implemented in java.util.TreeMap
-* Basics
-* Iteration
-* Sorting
-* Hashing
-* Searching
-* [Guide - An Extensive Examination of Data Structures Using C# 2.0](http://msdn.microsoft.com/en-US/library/ms379570(v=vs.80).aspx)
-* http://www.mpi-inf.mpg.de/~mehlhorn/Toolbox.html 
-* http://www.cs.auckland.ac.nz/software/AlgAnim/ds_ToC.html
+* Self-balanced tree
+* M-way trees
+* 2-3-4 trees
+* Red-Black trees
+  * implemented in java.util.TreeMap
 
-* List
-  * Array
-  * LinkedList
-  * Skiplist (invented by William Pugh - look paper on alternative to Binary Tree - learn the Java implementations - when to prepare this over Maps)
-* Trees (http://webdocs.cs.ualberta.ca/~holte/T26/top.realTop.html)
-  * Types
-  * Binary search tree (BST)
-  * Balanced tree or 
-  * Height-balanced binary search tree (OR) AVL tree (after their Russian inventors  * Adelson-Velskii and Landis.)
-  * Self-balanced tree
-  * M-way trees
-  * B trees: Perfectly Height-balanced M-way search trees
-  * 2-3-4 trees
-  * Red-Black trees
-  * Heap
-  * Operations
-  * Insertion, Deletions
-  * Traversals - inorder, pre-order, post-order
-  * Tree Rotation
-* Graphs
-  * Types - Directed, Undirected, Weighted
-  * Operations
-  * Algorithms
- 
+### Tree Algorithms
 
-## Algorithms
+* Insertion, Deletions
+* Traversals - inorder, pre-order, post-order
+* Tree Rotation
+
+## Graphs
+
+### Graph Types 
+
+Directed, Undirected, Weighted
+
+### Graph Algorithms
+
+
+# Algorithms
+
+## Algorithm Basics
 
 * Space-time complexity
 
@@ -71,3 +78,19 @@ A good algorithm is economical in its use of two resources: time and space. The 
 | 6 | | **Amortized Constant Time** | adding an element to the end of an ArrayList can normally be done in constant time, unless the ArrayList has reached its capacity. In that case, a new and larger array must be allocated, and the contents of the old array transferred into it. The cost of this operation is linear in the number of elements in the array, but it happens relatively rarely. In situations like this, we calculate the amortized cost of the operation—that is, the total cost of performing it n times divided by n, taken to the limit as n becomes arbitrarily large. In the case of adding an element to an ArrayList, the total cost for N elements is O(N), so the amortized cost is O(1). ([Wiki link](http://en.wikipedia.org/wiki/Big_O_notation#Orders_of_common_functions) for more examples)||
 
 * Download algorithms and solutions from book site : Cracking coding interviews
+
+## Sorting
+
+* Heap sort visualization - http://www2.hawaii.edu/~copley/665/HSApplet.html
+* Sorting
+* Hashing
+
+## Searching
+
+* [Guide - An Extensive Examination of Data Structures Using C# 2.0](http://msdn.microsoft.com/en-US/library/ms379570(v=vs.80).aspx)
+* [1](http://www.mpi-inf.mpg.de/~mehlhorn/Toolbox.html)
+* [2](http://www.cs.auckland.ac.nz/software/AlgAnim/ds_ToC.html)
+
+# Pointers and Memory
+
+* [Pointers and Memory](/technology/PointersAndMemory.pdf)

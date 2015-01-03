@@ -42,7 +42,7 @@ footer: true
   * N is the number of nodes a write ultimately replicates to, in other words, the number of copies in the cluster. 
   * W is the number of nodes that must be successfully written to before a successful response. If W is less than N, a write will be considered successful even while Riak is still copying the value in background. 
   * R is the number of nodes required to read a value successfully. If R is greater than the number of copies available, the request will fail. If R=1, there is a potential chance to read stale values. If R=N, then if any of those N nodes become unavailable, read requests would fail. 
-* ** Conflict Resolution **
+* **Conflict Resolution**
   * Riak uses vector clocks. A vector clock is a token that distributed systems like Riak use to keep the order of conflicting key-value updates intact. Timestamps cannot be used since the clocks across servers may not be synchronized.
 
 ### Downsides/Limitations/Trade-offs
@@ -458,8 +458,8 @@ RDBMS is optimized for aggregated data. Neo4j is optimized for highly connected 
 
 * Seven Databases in Seven Weeks
 * Graph Databases - O'Reilly
-* http://nosql.findthebest.com/
-* http://www.slideshare.net/samof76/distributed-keyvalue-stores-featuring-riak
+* [http://nosql.findthebest.com/](http://nosql.findthebest.com/)
+* [http://www.slideshare.net/samof76/distributed-keyvalue-stores-featuring-riak](http://www.slideshare.net/samof76/distributed-keyvalue-stores-featuring-riak)
 * MongoDb
   * MongoDb - The Definitive Guide
   * MongoDB Applied Design Patterns
@@ -467,5 +467,5 @@ RDBMS is optimized for aggregated data. Neo4j is optimized for highly connected 
   * 50 Tips & Tricks for MongoDb Developers
 * CouchDb
   * Getting Started with CouchDb
-  * http://www.couchbase.com/press-releases/couchbase-and-spring-data-make-it-easier-developers-build-next-generation-enterprise
-  * http://projects.spring.io/spring-data-couchbase/
+  * [http://www.couchbase.com/press-releases/couchbase-and-spring-data-make-it-easier-developers-build-next-generation-enterprise](http://www.couchbase.com/press-releases/couchbase-and-spring-data-make-it-easier-developers-build-next-generation-enterprise)
+  * [http://projects.spring.io/spring-data-couchbase/](http://projects.spring.io/spring-data-couchbase/)

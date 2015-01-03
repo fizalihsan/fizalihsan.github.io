@@ -99,7 +99,7 @@ Defines an interface for creating an object, but lets subclasses decide which cl
 
 |    |    |
 | -- | -- |
-| {% img /technology/architecture/FactoryMethod.png %}| {% img /technology/architecture/FactoryMethodExample.png %}|
+| {% img /technology/FactoryMethod.png %}| {% img /technology/FactoryMethodExample.png %}|
 
 ### Abstract Factory
 
@@ -116,7 +116,7 @@ Defines an interface for creating an object, but lets subclasses decide which cl
 * (-) Relatively difficult to implement
 * (-) A new factory has to be created for every new product
 
- {% img /technology/architecture/AbstractFactory.png %}
+ {% img /technology/AbstractFactory.png %}
 
 ## Flyweight
 ## Interpretor

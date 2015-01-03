@@ -6,6 +6,8 @@ sharing: true
 footer: true
 ---
 
+* list element with functor item
+{:toc}
 
 # Excerpts from book: Presentation Zen
 
@@ -60,3 +62,49 @@ footer: true
   * reading deck - standalone at a computer screen
   * discussion deck - printed and discussed in a team meeting
   * briefing deck - presented to a roomful of decision-makers
+
+# Excerpts from training session: Speak to be heard
+
+## Prepare
+
+* Prepare message
+  * What do I want to achieve?
+  * Why should it be done?
+  * When does it need to be done?
+  * How should it be done?
+  * Where should it be done?
+  * Who is receiving the information?
+* Tailor to suit the recipient
+  * Who is the receiver?
+  * What information do they need?
+  * What do they know about the subject?
+  * Are they on your side or do you have to win them over?
+* Delivery method
+  * Step-by-step approach
+  * Fast delivery
+* Practice
+* Prepare recipient
+
+## Deliver
+
+* Deliver message – eye contact, right tone, talk slowly, watch & listen to audience
+  * Introduce your message – background and outlook
+  * Explain why it is important to the audience
+  * Speak clearly and confidently
+  * Body language
+    * Head – keep it straight. Bent side or forward means apologetic.
+    * Eyes – Do not stare or look passive
+    * Hands – Don’t clench your fist or move arms all over
+* Get feedback
+  * ask open questions – typically the audience shouldn’t be able to answer these questions with yes or no answer
+  * observe facial expression
+  * ask them to repeat
+  * listen to audience feedback and recap what they said to ensure you understood
+ 
+## Proposing ideas and obtaining agreement
+
+* Be honest and direct
+* Emphasize the benefit
+* Talk about your needs
+* Ask about their concerns
+* Speak with enthusiasm and passion

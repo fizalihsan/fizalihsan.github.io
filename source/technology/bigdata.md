@@ -28,12 +28,28 @@ footer: true
     * Cons: complex data processing stratagies involved.
     * Features: smart-software-dumb-hardware, move-processing-not-data.
     * Challenges: Bottlenecks, increased risk of failure
-* Consistency - CAP theorem
 * Caching
 * Adhoc query
 * Sharding
 * Replication
 * Fault tolerance
+
+## CAP Theorem
+
+In a distributed system, managing consistency(C), availability(A) and partition toleration(P) is important, Eric Brewer put forth the CAP theorem which states that in any distributed system we can choose only two of consistency, availability or partition tolerance. Many NoSQL databases try to provide options where the developer has choices where they can tune the database as per their needs. 
+
+For example if you consider a distributed database. There are essentially three variables r, w, n where
+
+* `r` = number of nodes that should respond to a read request before its considered successful.
+* `w` = number of nodes that should respond to a write request before its considered successful.
+* `n` = number of nodes where the data is replicated aka replication factor.
+
+In a cluster with 5 nodes, 
+
+* we can tweak the r,w,n values to make the system very consistent by setting r=5 and w=5 but now we have made the cluster susceptible to network partitions since any write will not be considered successful when any node is not responding. 
+* We can make the same cluster highly available for writes or reads by setting r=1 and w=1  but now consistency can be compromised since some nodes may not have the latest copy of the data. 
+
+The CAP theorem states that if you get a network partition, you have to trade off availability of data versus consistency of data. Durability can also be traded off against latency, particularly if you want to survive failures with replicated data
 
 # MapReduce (Programming Model)
 

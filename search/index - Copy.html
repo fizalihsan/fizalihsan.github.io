@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Coding Principles - KnowledgeShop</title>
+  <title>Search Results - KnowledgeShop</title>
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Coding Principles Excerpts from book ‘Clean Code - A Handbook of Agile Software Craftmanship - Bob Martin’ Chapter 2 - Naming Chapter 3 - Function &hellip;">
+<meta name="description" content="Search Results Search results Technical Architecture Overview | Coding Principles | Design Principles | Logging &amp; Monitoring | Patterns | &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://fizalihsan.github.io/technology/coding-principles.html">
+  <link rel="canonical" href="http://fizalihsan.github.io/search/index%20-%20Copy.html">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <!-- Below custom CSS is for table border styling -->
@@ -82,107 +82,16 @@ messageStyle: "none",
 <article role="article">
   
   <header>
-    <h1 class="entry-title">Coding Principles</h1>
+    <h1 class="entry-title">Search Results</h1>
     
   </header>
   
-  <ul id="markdown-toc">
-  <li><a href="#excerpts-from-book-clean-code---a-handbook-of-agile-software-craftmanship---bob-martin">Excerpts from book ‘Clean Code - A Handbook of Agile Software Craftmanship - Bob Martin’</a>    <ul>
-      <li><a href="#chapter-2---naming">Chapter 2 - Naming</a></li>
-      <li><a href="#chapter-3---function">Chapter 3 - Function</a></li>
-    </ul>
-  </li>
-</ul>
+  <section id="search-results" style="display: none;">
+  <p>Search results</p>
+  <div class="entries">
+  </div>
+</section>
 
-<h2 id="excerpts-from-book-clean-code---a-handbook-of-agile-software-craftmanship---bob-martin">Excerpts from book ‘Clean Code - A Handbook of Agile Software Craftmanship - Bob Martin’</h2>
-
-<h3 id="chapter-2---naming">Chapter 2 - Naming</h3>
-<ul>
-  <li>Don’t reveal implementation detail in variables. e.g., declare accounts instead accountList</li>
-  <li>Use single letter variables only as a local variable</li>
-  <li>No need for prefix on variables and class names. e.g., ICustomer interface</li>
-  <li>Class name should NOT be a verb. Avoid words like Manager, Processor, Data or Info</li>
-  <li>Use a common word per concept across method names and class names. e.g., fetch(), get(), retrieve(). Stick to one.</li>
-</ul>
-
-<h3 id="chapter-3---function">Chapter 3 - Function</h3>
-<ul>
-  <li>Function should one thing only. One level of abstraction per function.</li>
-  <li>Switch statement - tolerated if it appears only once at very low level. Hide it with ‘AbstractFactory’ and polymorphism.</li>
-  <li>Function arguments
-    <ul>
-      <li>Number of arguments
-        <ul>
-          <li>Niladic (zero args) - Best</li>
-          <li>Monadic (1) - Better</li>
-          <li>Dyadic (2) - Good</li>
-          <li>Polyadic (multiple) - Needs good justification</li>
-        </ul>
-      </li>
-      <li>Avoid functions with output arguments. e.g., public boolean foo(String input, String output);</li>
-      <li>Passing flags as arguments is ugly. Based on the flag value, the function might perform one or more things. .e.g., render(boolean isSuite). Split the logic into renderForSuite() and renderForSingleTest() to make it explicit.</li>
-      <li>Ambiguity issue with dyadic or polyadic functions with same type of arguments. e.g, assertEquals(int expected, int actual). Make function explicit as assertExpectedEqualsActual(int, int).</li>
-      <li>Fix for polyadic functions
-        <ul>
-          <li>Club the different arguments into an object and pass that object as input argument</li>
-          <li>Or, make those arguments are field variables. (only for private functions)</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li><strong>Side effects</strong>
-    <ul>
-      <li>A function promises to do one thing, but it also does other hidden things. e.g., checkPassword(String user, String password) method which authenticates and initializes a user session. Session initialization part is hidden from user.</li>
-      <li>Side effects create temporal couplings and order dependencies. Temporal couplings mean that the function can only be invoked at certain times. In the above example, if it is called out of order the current session data might be destroyed.</li>
-    </ul>
-  </li>
-  <li><strong>Double take</strong> - Any line of code within function forces you to look at the function signature, then it is called “double take”.</li>
-  <li><strong>Prefer exceptions to return error codes</strong> - Function should do one thing. Error handling is another thing. Extract try..catch in a separate function.</li>
-</ul>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-</pre></td><td class="code"><pre><code class=""><span class="line"> if (delete(page) == OK){
-</span><span class="line">       ....
-</span><span class="line"> } else {
-</span><span class="line">       Error out
-</span><span class="line"> }</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">try{
-</span><span class="line">   ...
-</span><span class="line"> } catch (...){
-</span><span class="line">    //Error processing is separated from the happy path
-</span><span class="line"> } </span></code></pre></td></tr></table></div></figure></notextile></div>
-<ul>
-  <li><strong>Command Query Separation</strong>*: Functions should either do something or return something, but not both.
-    <ul>
-      <li>http://martinfowler.com/bliki/CommandQuerySeparation.html</li>
-    </ul>
-  </li>
-</ul>
-
-  
-    <footer>
-      
-      
-        <div class="sharing">
-  
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/coding-principles.html" data-via="" data-counturl="http://fizalihsan.github.io/technology/coding-principles.html" >Tweet</a>
-  
-  
-  
-</div>
-
-      
-    </footer>
   
 </article>
 

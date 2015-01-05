@@ -6,6 +6,7 @@ group :development do
   gem 'octopress-hooks', '~> 2.2'
   gem 'octopress-date-format', '~> 2.0'
   gem 'jekyll-sitemap'
+  # gem 'jekyll-lunr-js-search'
   # gem 'rdiscount', '~> 2.0'
   # gem 'rdiscount', '9.0.0.0' # For LaTeX purposes. More details: https://liangsun.org/posts/write-latex-with-octopress-mathjax/
   # gem 'rdiscount', :git => "git://github.com/fizalihsan/rdiscount"
@@ -21,3 +22,5 @@ group :development do
 end
 
 gem 'sinatra', '~> 1.4.2'
+#gem 'nokogiri'
+#gem 'therubyracer', :platform => :ruby #'~> 0.12.1'

@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Web Services RESTful Services What is REST? REST basic definitions How REST works? RESTful Architectural Principles Addressable resources A uniform &hellip;">
+<meta name="description" content="Web Services Service Design Patterns API Styles 1. RPC API 2. Message API 3. Resource API Client-Service Interactions Advantages of REST API QoS ( &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -100,6 +100,18 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
+  <li><a href="#service-design-patterns">Service Design Patterns</a>    <ul>
+      <li><a href="#api-styles">API Styles</a>        <ul>
+          <li><a href="#rpc-api">1. RPC API</a></li>
+          <li><a href="#message-api">2. Message API</a></li>
+          <li><a href="#resource-api">3. Resource API</a></li>
+        </ul>
+      </li>
+      <li><a href="#client-service-interactions">Client-Service Interactions</a></li>
+      <li><a href="#advantages-of-rest-api">Advantages of REST API</a></li>
+      <li><a href="#qos-quality-of-service">QoS (Quality of Service)</a></li>
+    </ul>
+  </li>
   <li><a href="#restful-services">RESTful Services</a>    <ul>
       <li><a href="#what-is-rest">What is REST?</a></li>
       <li><a href="#rest-basic-definitions">REST basic definitions</a></li>
@@ -158,6 +170,77 @@ messageStyle: "none",
   <li><a href="#tools">Tools</a></li>
   <li><a href="#bibliography">Bibliography</a></li>
 </ul>
+
+<h1 id="service-design-patterns">Service Design Patterns</h1>
+
+<h2 id="api-styles">API Styles</h2>
+
+<h3 id="rpc-api">1. RPC API</h3>
+
+<p>Request/Response or Request/Acknowledge</p>
+
+<h3 id="message-api">2. Message API</h3>
+<ul>
+  <li><strong>Command Messages</strong> [EIP] are used to ask the receiving system to carry out a specific task (e.g., process loan). </li>
+  <li><strong>Event Messages</strong> [EIP] notify the receiver about interesting events (e.g., inventory was depleted)</li>
+  <li><strong>Document Messages</strong> [EIP] are like business documents (e.g., purchase orders).</li>
+</ul>
+
+<h3 id="resource-api">3. Resource API</h3>
+
+<ul>
+  <li>POSTed requests can’t be cached by intermediaries.</li>
+  <li><strong>Safe operations</strong> are supposed to have no side effects. That is, they should not trigger write operations (i.e., creates, updates, or deletes). E.g., GET, HEAD, and OPTIONS.</li>
+  <li><strong>Idempotence</strong> means that no matter how many times a procedure is invoked with the same data, the same results should occur. GET, HEAD, PUT, DELETE, and OPTIONS are idempotent. POST, on the other hand, is not.</li>
+</ul>
+
+<p><strong>Post-Once-Exactly Pattern</strong>
+For example, if a client sends the same order over and over again, the client shouldn’t have to worry about duplicate orders. This means that the service must differentiate one POST from another. The easiest approach is to have the client insert a unique key (i.e., identifier) into the request that is examined by the service before executing its main logic. If the service finds that it has already processed a request with the identifier, it can reject the new request. The problem is ensuring that these identifiers will indeed be unique. Another approach is to have the client query a service to retrieve a unique URI that may be used exclusively for the subsequent POST. This pattern is known as Post-Once-Exactly.</p>
+
+<h2 id="client-service-interactions">Client-Service Interactions</h2>
+
+<p><strong>1. Request/Response</strong></p>
+
+<p><strong>2. Request/Acknowledge</strong>
+    Steps involved
+    * i. Receive the request.
+    * ii. Authenticate client credentials (optional).
+    * iii. Authorize the client for the requested operation (optional).
+    * iv. Validate the request (optional).
+    * v. Generate a Request Identifier or URI.
+    * vi. Store and forward the request.
+    * vii. Return an acknowledgment.</p>
+
+<p>a. <strong><em>Request/Acknowledge/Poll</em></strong></p>
+
+<ul>
+  <li>Client polls using the request identifier for the status update.</li>
+  <li>Cons - Client polling too often for status could put excessive load on the server and cause network traffic.</li>
+</ul>
+
+<p>b. <strong><em>Request/Acknowledge/Callbacks</em></strong>
+   Rather than having the client poll a second service for results, a request processor (i.e., background process) pushes information back to the client or forwards it to other parties. For this to happen, the client should have a service running that could be called. </p>
+
+<p>The callback service details could be sent as part of the request or queried from a data store. However, when callback recipients are identified in the request, special precautions must be taken to ensure that they cannot be seen or altered by anyone except the authorized parties. The easiest way to protect the request is through Transport Layer Security (TLS).</p>
+
+<p><em>Cons</em>
+* Complex to implement
+* This pattern cannot be used if the client is unable to or unwilling to provide a publicly addressable callback service.
+* Callback service could go down in which case the request processor should implement ‘Idempotent Retry’ pattern. </p>
+
+<p><strong>3. Media Type Negotiation</strong></p>
+
+<h2 id="advantages-of-rest-api">Advantages of REST API</h2>
+<p>### Ability to leverage commodity caching technologies
+This API style leverages commodity caching technologies designed specifically with HTTP in mind. If, for example, a client requests a product that hasn’t changed within the past day, and information on that product can be found in a Reverse Proxy, then the cached representation will be returned and service execution can be bypassed. This reduces the load on the Origin Server, especially in cases where the service would have queried a database or performed a CPU- or memory-intensive computation</p>
+
+<h2 id="qos-quality-of-service">QoS (Quality of Service)</h2>
+<p>### How to reduce load on the server?
+#### Service Interceptor pattern</p>
+
+<p>An inbound interceptor may, for example, be configured to check to see if the requested data can be found in a distributed memory cache that is shared across web servers. If the requested information can be found in this cache, then the information may be returned directly from the interceptor, and the request handler will not be called.</p>
+
+<p>Server load can be reduced by configuring Reverse Proxies to cache responses. In this case, the proxy evaluates the client’s criterion against its cache and will return a representation if the criterion is met. Regardless of the caching approach, the service owner must determine how long data may be kept in any cache before it is considered stale.</p>
 
 <h1 id="restful-services">RESTful Services</h1>
 
@@ -681,7 +764,7 @@ body. This means any other parameters must be annotated with one of the JAX-RS a
 
 		<li>
 			<h3>SOA</h3>
-			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/messaging.html">Messaging</a>  |  <a href="/technology/webservices.html">Web Services</a>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/messaging.html">Messaging</a>  |  <a href="/technology/webservices.html">Web Services</a>  |  <a href="/technology/xml.html">XML</a>
 		</li>
 
 		<li>
@@ -691,7 +774,7 @@ body. This means any other parameters must be annotated with one of the JAX-RS a
 
 		<li>
 			<h3>General Concepts</h3>
-			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
 		</li>
 
 		<h2>Non-Techninal</h2>

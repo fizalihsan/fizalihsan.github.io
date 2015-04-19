@@ -156,56 +156,26 @@ messageStyle: "none",
 * BUT: The one exception is a list, which is represented as a vector but can contain objects of
 different classes (indeed, that’s usually why we use them)
 * Empty vectors can be created with the <code>vector()</code> function.
-* Vector examples
-&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+* Vector examples</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
 <span class="line-number">5</span>
 <span class="line-number">6</span>
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class=""><span class="line">&gt; x &lt;- c(0.5, 0.6) ## numeric
+</pre></td><td class="code"><pre><code class=""><span class="line">&gt; x &lt;- c(0.5, 0.6) ## numeric
 </span><span class="line">&gt; x &lt;- c(TRUE, FALSE) ## logical
 </span><span class="line">&gt; x &lt;- c(T, F) ## logical
 </span><span class="line">&gt; x &lt;- c("a", "b", "c") ## character
 </span><span class="line">&gt; x &lt;- 9:29 ## integer
-</span><span class="line">&gt; x &lt;- c(1+0i, 2+4i) ## complex</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</figure></notextile>&lt;/div&gt;</p>
+</span><span class="line">&gt; x &lt;- c(1+0i, 2+4i) ## complex</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <ul>
-  <li>Lists are a special type of vector that can contain elements of different classes.
-&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span></figure></notextile></li>
+  <li>Lists are a special type of vector that can contain elements of different classes.</li>
 </ul>
-<p>&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class=""><span class="line">&gt; x &lt;- list(1, "a", TRUE, 1 + 4i) 
-</span><span class="line">&gt; # mixed types allowed, lists are recursive, lists are vectors
-</span><span class="line">&gt; alist &lt;- list(c("a", "b", "c"), c(1,2,3,4), c(8e6, 5.2e9, -9.3e7))
-</span><span class="line">&gt; alist[[1]] # return one column
-</span><span class="line">&gt; alist[1] # extracts a list
-</span><span class="line">&gt; alist[[3:2]] # gets 2nd element from 3rd vector of the list (5.2e9)
-</span><span class="line">&gt; is.list(alist) #TRUE
-</span><span class="line">&gt; is.vector(alist) #TRUE</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;</p>
 
-<ul>
-  <li><strong>Mixing Objects</strong><br />
-When different objects are mixed in a vector, <em>coercion</em> occurs so that every element in the vector is
-of the same class.
-&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span></figure></notextile></li>
-</ul>
-<p>&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class=""><span class="line">&gt; y &lt;- c(1.7, "a") ## character
-</span><span class="line">&gt; y &lt;- c(TRUE, 2) ## numeric
-</span><span class="line">&gt; y &lt;- c("a", TRUE) ## character</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;</p>
-
-<ul>
-  <li><strong>Explicit Coercion</strong><br />
-Objects can be explicitly coerced from one class to another using the <code>as.*()</code> functions, if available.
-&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
@@ -213,19 +183,34 @@ Objects can be explicitly coerced from one class to another using the <code>as.*
 <span class="line-number">6</span>
 <span class="line-number">7</span>
 <span class="line-number">8</span>
-<span class="line-number">9</span></figure></notextile></li>
+</pre></td><td class="code"><pre><code class=""><span class="line">&gt; x &lt;- list(1, "a", TRUE, 1 + 4i) 
+</span><span class="line">&gt; # mixed types allowed, lists are recursive, lists are vectors
+</span><span class="line">&gt; alist &lt;- list(c("a", "b", "c"), c(1,2,3,4), c(8e6, 5.2e9, -9.3e7))
+</span><span class="line">&gt; alist[[1]] # return one column
+</span><span class="line">&gt; alist[1] # extracts a list
+</span><span class="line">&gt; alist[[3:2]] # gets 2nd element from 3rd vector of the list (5.2e9)
+</span><span class="line">&gt; is.list(alist) #TRUE
+</span><span class="line">&gt; is.vector(alist) #TRUE</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><strong>Mixing Objects</strong><br />
+When different objects are mixed in a vector, <em>coercion</em> occurs so that every element in the vector is
+of the same class.</li>
 </ul>
-<p>&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class=""><span class="line">&gt; x &lt;- 0:6
-</span><span class="line">&gt; class(x)
-</span><span class="line">[1] "integer"
-</span><span class="line">&gt; as.numeric(x)
-</span><span class="line">[1] 0 1 2 3 4 5 6
-</span><span class="line">&gt; as.logical(x)
-</span><span class="line">[1] FALSE TRUE TRUE TRUE TRUE TRUE TRUE
-</span><span class="line">&gt; as.character(x)
-</span><span class="line">[1] "0" "1" "2" "3" "4" "5" "6"</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
-* <strong>Nonsensical coercion results in NAs</strong>
-&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">&gt; y &lt;- c(1.7, "a") ## character
+</span><span class="line">&gt; y &lt;- c(TRUE, 2) ## numeric
+</span><span class="line">&gt; y &lt;- c("a", TRUE) ## character</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><strong>Explicit Coercion</strong><br />
+Objects can be explicitly coerced from one class to another using the <code>as.*()</code> functions, if available.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
@@ -234,7 +219,30 @@ Objects can be explicitly coerced from one class to another using the <code>as.*
 <span class="line-number">7</span>
 <span class="line-number">8</span>
 <span class="line-number">9</span>
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class=""><span class="line">&gt; x &lt;- c("a", "b", "c")
+</pre></td><td class="code"><pre><code class=""><span class="line">&gt; x &lt;- 0:6
+</span><span class="line">&gt; class(x)
+</span><span class="line">[1] "integer"
+</span><span class="line">&gt; as.numeric(x)
+</span><span class="line">[1] 0 1 2 3 4 5 6
+</span><span class="line">&gt; as.logical(x)
+</span><span class="line">[1] FALSE TRUE TRUE TRUE TRUE TRUE TRUE
+</span><span class="line">&gt; as.character(x)
+</span><span class="line">[1] "0" "1" "2" "3" "4" "5" "6"</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><strong>Nonsensical coercion results in NAs</strong></li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">&gt; x &lt;- c("a", "b", "c")
 </span><span class="line">&gt; as.numeric(x)
 </span><span class="line">[1] NA NA NA
 </span><span class="line">Warning message:
@@ -242,11 +250,16 @@ Objects can be explicitly coerced from one class to another using the <code>as.*
 </span><span class="line">&gt; as.logical(x)
 </span><span class="line">[1] NA NA NA
 </span><span class="line">&gt; as.complex(x)
-</span><span class="line">[1] 0+0i 1+0i 2+0i 3+0i 4+0i 5+0i 6+0i</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</figure></notextile>&lt;/div&gt;
-* <strong>Matrices</strong>
+</span><span class="line">[1] 0+0i 1+0i 2+0i 3+0i 4+0i 5+0i 6+0i
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><strong>Matrices</strong>
 Matrices are vectors with a <em>dimension</em> attribute. The dimension attribute is itself an integer vector of
-length 2 (nrow, ncol).
-&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+length 2 (nrow, ncol).</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
@@ -256,7 +269,7 @@ length 2 (nrow, ncol).
 <span class="line-number">8</span>
 <span class="line-number">9</span>
 <span class="line-number">10</span>
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class=""><span class="line">&gt; m &lt;- matrix(nrow = 2, ncol = 3) 
+</pre></td><td class="code"><pre><code class=""><span class="line">&gt; m &lt;- matrix(nrow = 2, ncol = 3) 
 </span><span class="line">&gt; m
 </span><span class="line"> [,1] [,2] [,3]
 </span><span class="line">[1,] NA NA NA
@@ -265,10 +278,14 @@ length 2 (nrow, ncol).
 </span><span class="line">[1] 2 3
 </span><span class="line">&gt; attributes(m)
 </span><span class="line">$dim
-</span><span class="line">[1] 2 3</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</figure></notextile>&lt;/div&gt;
-* <strong>cbind-ing and rbind-ing</strong>
-Matrices can be created by column-binding or row-binding with <code>cbind()</code> and <code>rbind()</code>.
-&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+</span><span class="line">[1] 2 3</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><strong>cbind-ing and rbind-ing</strong>
+Matrices can be created by column-binding or row-binding with <code>cbind()</code> and <code>rbind()</code>.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
@@ -279,7 +296,7 @@ Matrices can be created by column-binding or row-binding with <code>cbind()</cod
 <span class="line-number">9</span>
 <span class="line-number">10</span>
 <span class="line-number">11</span>
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class=""><span class="line">&gt; x &lt;- 1:3
+</pre></td><td class="code"><pre><code class=""><span class="line">&gt; x &lt;- 1:3
 </span><span class="line">&gt; y &lt;- 10:12
 </span><span class="line">&gt; cbind(x, y)
 </span><span class="line"> x y 
@@ -289,14 +306,16 @@ Matrices can be created by column-binding or row-binding with <code>cbind()</cod
 </span><span class="line">&gt; rbind(x, y) 
 </span><span class="line"> [,1] [,2] [,3]
 </span><span class="line">x 1 2 3
-</span><span class="line">y 10 11 12</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</figure></notextile>&lt;/div&gt;</p>
+</span><span class="line">y 10 11 12</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h4 id="factors">Factors</h4>
 <ul>
   <li>Factors are nothing but enumeration data types used to represent categorical data.</li>
   <li>Can be ordered or unordered.</li>
-  <li>Factor can be thought of as an integer vector where each integer has a <em>label</em>. 
-&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+  <li>Factor can be thought of as an integer vector where each integer has a <em>label</em>. </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
@@ -307,9 +326,8 @@ Matrices can be created by column-binding or row-binding with <code>cbind()</cod
 <span class="line-number">9</span>
 <span class="line-number">10</span>
 <span class="line-number">11</span>
-<span class="line-number">12</span></figure></notextile></li>
-</ul>
-<p>&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class=""><span class="line">&gt; x &lt;- factor(c("yes", "yes", "no", "yes", "no")) 
+<span class="line-number">12</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">&gt; x &lt;- factor(c("yes", "yes", "no", "yes", "no")) 
 </span><span class="line">&gt; x
 </span><span class="line">[1] yes yes no yes no
 </span><span class="line">Levels: no yes
@@ -320,7 +338,7 @@ Matrices can be created by column-binding or row-binding with <code>cbind()</cod
 </span><span class="line">&gt; unclass(x)
 </span><span class="line">[1] 2 2 1 2 1
 </span><span class="line">attr(,"levels")
-</span><span class="line">[1] "no" "yes"</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;</p>
+</span><span class="line">[1] "no" "yes"</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h4 id="data-frames">Data Frames</h4>
 <ul>
@@ -332,8 +350,10 @@ Matrices can be created by column-binding or row-binding with <code>cbind()</cod
     </ul>
   </li>
   <li>To create - <code>read.table()</code> or <code>read.csv()</code></li>
-  <li>To convert to a matrix - <code>data.matrix()</code>
-&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+  <li>To convert to a matrix - <code>data.matrix()</code></li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
@@ -348,9 +368,8 @@ Matrices can be created by column-binding or row-binding with <code>cbind()</cod
 <span class="line-number">13</span>
 <span class="line-number">14</span>
 <span class="line-number">15</span>
-<span class="line-number">16</span></figure></notextile></li>
-</ul>
-<p>&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class=""><span class="line">&gt; read.table() # space is the default delimiter
+<span class="line-number">16</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">&gt; read.table() # space is the default delimiter
 </span><span class="line">&gt; read.csv() # by default expects a file header
 </span><span class="line">&gt; read.csv2()
 </span><span class="line">&gt; read.delim()
@@ -365,7 +384,7 @@ Matrices can be created by column-binding or row-binding with <code>cbind()</cod
 </span><span class="line">&gt; nrow(x)
 </span><span class="line">[1] 4
 </span><span class="line">&gt; ncol(x)
-</span><span class="line">[1] 2</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;</p>
+</span><span class="line">[1] 2</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <ul>
   <li><code>data.frame()</code> # create data frame or table e.g., <code>test.data.frame&lt;-data.frame(id=c(1,2,3,4,5),name=c("a","b","c","d","e"))</code></li>
@@ -524,7 +543,7 @@ Matrices can be created by column-binding or row-binding with <code>cbind()</cod
 
 		<li>
 			<h3>SOA</h3>
-			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/messaging.html">Messaging</a>  |  <a href="/technology/webservices.html">Web Services</a>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/messaging.html">Messaging</a>  |  <a href="/technology/webservices.html">Web Services</a>  |  <a href="/technology/xml.html">XML</a>
 		</li>
 
 		<li>
@@ -534,7 +553,7 @@ Matrices can be created by column-binding or row-binding with <code>cbind()</cod
 
 		<li>
 			<h3>General Concepts</h3>
-			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
 		</li>
 
 		<h2>Non-Techninal</h2>

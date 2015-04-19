@@ -13,10 +13,15 @@ footer: true
     * [Design Principles]({{ root_url }}/technology/design-principles.html)
     * [Logging & Monitoring]({{ root_url }}/technology/logging-and-monitoring.html)
     * [Patterns]({{ root_url }}/technology/patterns.html)
+    * [SDLC]({{ root_url }}/technology/sdlc.html)
     * [Transactions]({{ root_url }}/technology/transaction.html)
-  * Database
-    * [Big Data]({{ root_url }}/technology/bigdata.html)
+
+  * BigData
+    * [Concepts]({{ root_url }}/technology/bigdata.html)
+    * [ElasticSearch]({{ root_url }}/technology/elasticsearch.html)
     * [NoSQL]({{ root_url }}/technology/nosql.html)
+
+  * Database
     * [RDBMS]({{ root_url }}/technology/rdbms.html)
     * [RDBMS Products]({{ root_url }}/technology/rdbms-products.html)
 
@@ -42,7 +47,11 @@ footer: true
     * [SOA]({{ root_url }}/technology/soa.html)
     * [Messaging]({{ root_url }}/technology/messaging.html)
     * [Web Services]({{ root_url }}/technology/webservices.html)
+    * [XML]({{ root_url }}/technology/xml.html)
 
+  * Web Programming
+    * [Concepts]({{ root_url }}/technology/webconcepts.html)
+    * [JS Ecosystem]({{ root_url }}/technology/js-ecosystem.html)
 
   * General Concepts
     * [Data Structures]({{ root_url }}/technology/datastructures.html)
@@ -50,8 +59,6 @@ footer: true
     * [Operating Systems]({{ root_url }}/technology/os.html)
     * [Security]({{ root_url }}/technology/security.html)
     * [VCS]({{ root_url }}/technology/vcs.html)
-    * [Web Concepts]({{ root_url }}/technology/webconcepts.html)
-    * [XML]({{ root_url }}/technology/xml.html)
     * [Coding Bibliography]({{ root_url }}/technology/coding_bibliography.html)
 
 ## Non-Techninal

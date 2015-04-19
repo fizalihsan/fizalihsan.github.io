@@ -37,6 +37,7 @@ The most basic object is a vector.
 different classes (indeed, that’s usually why we use them)
 * Empty vectors can be created with the `vector()` function.
 * Vector examples
+
 ```
 > x <- c(0.5, 0.6) ## numeric
 > x <- c(TRUE, FALSE) ## logical
@@ -47,6 +48,7 @@ different classes (indeed, that’s usually why we use them)
 ```
 
 * Lists are a special type of vector that can contain elements of different classes.
+
 ```
 > x <- list(1, "a", TRUE, 1 + 4i) 
 > # mixed types allowed, lists are recursive, lists are vectors
@@ -61,6 +63,7 @@ different classes (indeed, that’s usually why we use them)
 * **Mixing Objects**  
 When different objects are mixed in a vector, *coercion* occurs so that every element in the vector is
 of the same class.
+
 ```
 > y <- c(1.7, "a") ## character
 > y <- c(TRUE, 2) ## numeric
@@ -69,6 +72,7 @@ of the same class.
 
 * **Explicit Coercion**  
 Objects can be explicitly coerced from one class to another using the `as.*()` functions, if available.
+
 ```
 > x <- 0:6
 > class(x)
@@ -80,7 +84,9 @@ Objects can be explicitly coerced from one class to another using the `as.*()` f
 > as.character(x)
 [1] "0" "1" "2" "3" "4" "5" "6"
 ```
+
 * **Nonsensical coercion results in NAs**
+
 ```
 > x <- c("a", "b", "c")
 > as.numeric(x)
@@ -91,10 +97,13 @@ NAs introduced by coercion
 [1] NA NA NA
 > as.complex(x)
 [1] 0+0i 1+0i 2+0i 3+0i 4+0i 5+0i 6+0i
+
 ```
+
 * **Matrices**
 Matrices are vectors with a *dimension* attribute. The dimension attribute is itself an integer vector of
 length 2 (nrow, ncol).
+
 ```
 > m <- matrix(nrow = 2, ncol = 3) 
 > m
@@ -107,8 +116,10 @@ length 2 (nrow, ncol).
 $dim
 [1] 2 3
 ```
+
 * **cbind-ing and rbind-ing**
 Matrices can be created by column-binding or row-binding with `cbind()` and `rbind()`.
+
 ```
 > x <- 1:3
 > y <- 10:12
@@ -127,6 +138,7 @@ y 10 11 12
 * Factors are nothing but enumeration data types used to represent categorical data.
 * Can be ordered or unordered.
 * Factor can be thought of as an integer vector where each integer has a *label*. 
+
 ```
 > x <- factor(c("yes", "yes", "no", "yes", "no")) 
 > x
@@ -149,6 +161,7 @@ attr(,"levels")
 * * Unlike matrices, data frames can store different classes of objects in each column.
 * To create - `read.table()` or `read.csv()`
 * To convert to a matrix - `data.matrix()`
+
 ```
 > read.table() # space is the default delimiter
 > read.csv() # by default expects a file header

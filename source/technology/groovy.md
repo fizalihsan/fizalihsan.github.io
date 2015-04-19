@@ -335,6 +335,7 @@ bernie.writeReport()  //invokes Worker.writeReport
 ```
 
 * `@Immutable` - Groovy adds the hashCode(), equals(), and toString() methods
+
 ``` groovy
  import groovy.transform.*
  @Immutable
@@ -454,8 +455,21 @@ class Complex{
 * what is a spaceship operator? <=>
 * how to implement dynamic parameters and method?
 * What is relaying and how dynamic typing enables to achieve it?
-* How to write new AST annotations?  
+* How to write new AST annotations?
 * Spring + Groovy
 * 'Liquid Heart' technique by Dierk Koenig, lead author of Groovy in Action [Manning, 2007]
 * Groovy iteration patterns
 * JMX 2
+
+* Closure delegation
+* Meta object protocol
+* How coercion works
+
+```
+    Point p = [1,2]
+    println p
+
+    Point p2 = [x:1, y:2]
+    println p2
+```
+

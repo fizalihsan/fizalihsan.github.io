@@ -399,24 +399,30 @@ http://msdn2.microsoft.com/en-us/library/ms171845(SQL.90).aspx
   * TRUNCATE TABLE also deletes all the rows in a table, but it won't log the deletion of each row, instead it logs the de-allocation of the data pages of the table, which makes it faster. Of course, TRUNCATE TABLE can be rolled back. 
 * Pivoting
 * Co-related subquery? Co-related query is a query in which subquery depends on execution of main query 
-``` sql
+
+```sql
 Select DeptNo,Ename,Sal From Emp e1 Where Sal=(Select Max(Sal) From Emp e2 Where e1.DeptNo=e2.DeptNo)
 ```
+
 * What is SQL Injection and how to prevent it?
 * How to select first/last/max per group in SQL : http://www.xaprb.com/blog/2006/12/07/how-to-select-the-firstleastmax-row-per-group-in-sql/ 
 * SQL query to get 4th or 5th maximum value from a table 
+
 ``` sql
 select max(id) from EMP A where N=(select count(id) From EMP B where B.ID>=A.ID) 
 OR 
 select * from (select rownum rn,id from (select distinct id From EMP order by id desc)) where rn between N-1 and N;
 ```
+
 * How to identify the performance order (Big-O notation) of a query?
 * How query execution order works when a SQL has sub-queries in it?
 * When we need to use USING clause in the sql?For example in this below: SELECT emp_name, department_name, city FROM employees e JOIN departments d USING (department_id) JOIN locations l USING (location_id) WHERE salary > 10000;
 * How to delete duplicate records in a table? 
+
 ``` sql
 DELETE FROM test t1 WHERE EXISTS ( SELECT * FROM test t2 WHERE t2.col1=t1.col1 AND t2.rowid <> t1.rowid);
 ```
+
 * What will be the o/p of this query? 
 * `SELECT 1 FROM DUAL UNION SELECT 'A' FROM DUAL;` The query would throw an error. The two data types in the union set should be same. Out here it is a 1 and 'A', datatype mismatch and hence the error.
 

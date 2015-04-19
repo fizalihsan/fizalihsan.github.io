@@ -87,24 +87,16 @@ Synchronization allows you to control program flow and access to shared data for
 The four synchronization models are mutex locks, read/write locks, condition variables, and semaphores.
 
 
-### (1) Mutex locks 
-
-* allow only one thread at a time to execute a specific section of code, or to access specific data.
-* Each Java class and object has their own mutex locks. Each thread has it's own separate call stack.
-
-### (2) Read/write locks 
-
-* permit concurrent reads and exclusive writes to a protected shared resource. To modify a resource, a thread must first acquire the exclusive write lock. An exclusive write lock is not permitted until all read locks have been released.
-
-e.g., Java ReadWriteLock
-
-### (3) Condition variables 
-
-* block threads until a particular condition is true.
-
-### (4) Counting semaphores 
-
-* typically coordinate access to resources. The count is the limit on how many threads can have access to a semaphore. When the count is reached, the semaphore blocks.
+* 1) Mutex locks 
+  * allow only one thread at a time to execute a specific section of code, or to access specific data.
+  * Each Java class and object has their own mutex locks. Each thread has it's own separate call stack.
+* 2) Read/write locks 
+  * permit concurrent reads and exclusive writes to a protected shared resource. To modify a resource, a thread must first acquire the exclusive write lock. An exclusive write lock is not permitted until all read locks have been released.
+  * e.g., Java ReadWriteLock
+* 3) Condition variables 
+  * block threads until a particular condition is true.
+* 4) Counting semaphores 
+  * typically coordinate access to resources. The count is the limit on how many threads can have access to a semaphore. When the count is reached, the semaphore blocks.
 
 # Locks
 
@@ -113,27 +105,35 @@ e.g., Java ReadWriteLock
 ### What should be used as a monitor?
 
 * The field being protected. e.g., 
-```java
+
+``` java
 private final Map map = ...;
 synchronized(map){...}
 ```
+
 * an explicit private lock  e.g., 
-```java
+
+``` java
 private final Object lock = new Object();
 synchronized(lock){...}
 ```
+
 * `this` object 
-```java
+
+``` java
 synchronized(this){...} //uses current object's lock
 ```
+
 * Class-level lock 
-```java
+
+``` java
 synchronized(Foo.class){...} 
 ```
 
-### What SHOULD NOT be used as a monitor?
+### What should not be used as a monitor?
 * DO NOT synchronize on objects that can be re-used. Examples below: (For more information: [Securecoding.cert.org - Do not synchronize on objects that may be reused)](https://www.securecoding.cert.org/confluence/display/java/LCK01-J.+Do+not+synchronize+on+objects+that+may+be+reused)
-```java
+
+``` java
 private final Boolean lock = Boolean.FALSE; //UNSAFE if some other thread uses the same reused object from heap it could lead to unexpected overhead and deadlock
 private final Integer lock = 10; //UNSAFE if autoboxed primitive value is shared from heap
 private final Integer lock = new Integer(10); //SAFE. explicitly constructed Integer object has a unique reference and its own intrinsic lock is distinct not only from other Integer objects, but also from boxed integers that have the same value.
@@ -141,13 +141,16 @@ private final String lock = "LOCK"; //UNSAFE if some other thread uses the same 
 private final String lock = new String("LOCK").intern(); //UNSAFE interned strings act like a global variable in a JVM.
 private final Object lock = new Object(); //SAFE.
 ```
+
 * DO NOT synchronize on Lock objects.
-```java
+
+``` java
 private final Lock lock = new ReEntrantLock();
 synchronized(lock){...}
 ```
 
 ### Limitations 
+
 * Single monitor per object
 * Not possible to interrupt thread waiting for lock
 * Not possible to time-out when waiting for a lock
@@ -206,7 +209,7 @@ public class NoVisibility{
       ready = true;
    }
 }
-```  
+```
 
 **Possible outcomes**
 * prints zero and exists
@@ -281,6 +284,7 @@ More info:
   * (b) e.g., `public void foo(Set<Car> car){}` <--- calling a method passing the reference. 'foo' can potentially modify 'Car' object. Solution: Use defensive copy.
   * (c) sub-classes can violate by overriding methods. Solution: Use final methods.
 * **Do not allow 'this' reference to escape via inner classes** (Try examples??????) Solution: Use factory methods
+
 ```java
 public class EventListener2 {
   public EventListener2(EventSource eventSource) {
@@ -298,6 +302,7 @@ public class EventListener2 {
 }
 ```
 * **Don't start threads from within constructors** - A special case of the problem above is starting a thread from within a constructor, because often when an object owns a thread, either that thread is an inner class or we pass the this reference to its constructor (or the class itself extends the Thread class). If an object is going to own a thread, it is best if the object provides a start() method, just like Thread does, and starts the thread from the start() method instead of from the constructor. While this does expose some implementation details (such as the possible existence of an owned thread) of the class via the interface, which is often not desirable, in this case the risks of starting the thread from the constructor outweigh the benefit of implementation hiding.
+
 ```java
 public class EventListener2 {
   public EventListener2(EventSource eventSource) {
@@ -401,8 +406,9 @@ void foo(Object A, Object B){
 #### Open Calls
 
 Calling an alien method with no locks held is known as 'open-calls'. Invoking alien method with locks held is asking for liveness trouble because the alient method might acquire other locks leading to lock-order deadlocks. Here is an innocent looking example: Thread 1 calls setLocation() locking Taxi and waiting for lock on Dispatcher. Thread 2 calls getStatus() locking dispatcher and waiting for lock on Taxi.
+
 ```java
-class Taxi{
+class Taxi {
  private Dispatcher dispatcher;
  public Taxi(Dispatcher dispatcher){this.dispatcher = dispatcher;}
  
@@ -480,7 +486,7 @@ Concurrency/Parallelism does not necessarily make a program run faster; it may e
 
 ## Task Execution Policy
 
-* # of threads       -> single/multi-threaded
+* number of threads       -> single/multi-threaded
 * queue              -> bounded/unbounded queue
 * order of execution -> FIFO, LIFO, priority order
  

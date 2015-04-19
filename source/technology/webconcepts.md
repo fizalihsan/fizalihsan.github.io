@@ -44,24 +44,31 @@ Clients invoking the services could expect the response in various data formats,
 
 * Response Data Format
   * clients could specify the response format via "Accept". If the requested format is not supported, then 'not accepted' error is returned. 
+
 ```
 GET http://example.com/stuff
 Accept: application/xml, application/json
 ```
+
   * specifying preference using wild cards. 
+
 ```
 GET http://example.com/stuff
 Accept: text/*, text/html;level=1, */*, application/xml
 ```
+
   * Order of preference
     * when multiple preference are provided, the most specific types takes priority. In above example, 'text/html;level=1' takes precedence.
     * 'q' MIME type property could be used as well. Higher the q value, more preferred it is. Default q value is 1.0. e.g., `text/*;q=0.9, */*;q=0.1, audio/mpeg, application/xml;q=0.5`. 
 * Language Negotiation
+
 ```
 GET http://example.com/stuff
 Accept-Language: fr;q=1.0, es;q=1.0, en=0.1
 ```
+
 * Encoding Negotiation
+
 ```
 GET http://example.com/stuff
 Accept-Encoding: gzip;q=1.0, compress;0.5; deflate;q=0.1
@@ -91,6 +98,7 @@ Accept-Encoding: gzip;q=1.0, compress;0.5; deflate;q=0.1
 
     * Conditional GET
        * the client may opt to revalidate its cache of the item. To do this it does a conditional GET request by passing a request header called If-Modified-Since with the value of the cached Last-Modified header. For example: 
+
 ```
 GET /customers/123 HTTP/1.1
 If-Modified-Since: Tue, 15 May 2009 09:56 EST
@@ -98,6 +106,7 @@ If-Modified-Since: Tue, 15 May 2009 09:56 EST
 
 * ETag or Entity Tag
   * The ETag header is a pseudounique identifier that represents the version of the data sent back. Its value is any arbitrary quoted string and is usually an MD5 hash. Here’s an example response:
+
 ```
 HTTP/1.1 200 OK
 Content-Type: application/xml

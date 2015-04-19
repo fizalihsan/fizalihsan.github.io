@@ -186,6 +186,7 @@ The tempdb database is a special Sybase supplied database that comes in each ser
 The system administrator can extend the size of tempdb Local variables denoted as `@varname` Global variables
 
 * `@@rowcount` - Holds the number of rows returned by the last Transact-SQL statement. Be careful, almost any statement will set this. Even an "if" statement which checks it's value. For example:
+
 ``` sql
 select * from pubs where ....
 if @@rowcount = 0 /* set to 1 after this */
@@ -214,7 +215,7 @@ Update statistics 'update statistics ' is the equivalent of runstats in db2 Supp
 
 Repeatable Read By default, reads (select) are not locked. Sometimes, this is not appropriate. If you need to guarantee that a selected row doesn't change once read during a transaction, use the select with holdlock. eg.SELECT @lcl_au_id=au_id HOLDLOCK FROM authors sp_recompile One common problem occurs when stored procedures are first executed when the tables they will be accessing are largely empty. The query plans will generally prefer to scan the tables instead of using indexes. As the tables fill with data, performance can significantly degrade.
 
-The "sp_recompile" command can be used to fix this problem: sp_recompile {table_name} This will set a flag in each stored procedure that needs to be recompiled (i.e, that references the specified table). The next time one of these stored procedures is invoked, it will automatically be recompiled Note 'truncate table' and 'bcp' commands bypass triggers.
+The `sp_recompile` command can be used to fix this problem: sp_recompile {table_name} This will set a flag in each stored procedure that needs to be recompiled (i.e, that references the specified table). The next time one of these stored procedures is invoked, it will automatically be recompiled Note 'truncate table' and 'bcp' commands bypass triggers.
 
 * How to select first/last/max per group in SQL : http://www.xaprb.com/blog/2006/12/07/how-to-select-the-firstleastmax-row-per-group-in-sql/
 * How to identify the performance order (Big-O notation) of a query

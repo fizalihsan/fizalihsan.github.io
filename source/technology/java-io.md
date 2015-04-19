@@ -20,6 +20,7 @@ footer: true
   * `short` - 2-byte, big endian, two's complement integers (rarely used)
   * `byte` - 1-byte, big endian, two's complement integer from -128 to 127 (heavily used in I/O)
 * There are no short or byte literals in Java. 
+
 ``` java
 byte b = 42; //though 42 is an int, compiler specially converts them to narrower type 
 short s = 24000; //same as above
@@ -262,6 +263,7 @@ private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundE
 ## Customize your own protocol 
 
 If you dont want to use the default java serialization technique, you can define your own technique by implementing 'Externalizable' instead of 'Serializable'. Following 2 methods needs to be implemented by your class which would contain the algorithm to persist your object. 
+
 ``` java
 public void writeExternal(ObjectOutput out) throws IOException; 
 public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException; 

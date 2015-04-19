@@ -155,6 +155,7 @@ The CAP theorem states that if you get a network partition, you have to trade of
 ### 1. Pig Latin
 * High level scripting language to describe data flow - statements translate into a series of MapReduce jobs - can invoke Java, JRuby or Jython programs and vice versa - User defined functions (UDF) can be written in Java and uploaded as jar.
 * Sample Pig Latin script
+
 ```
  a = LOAD 'nyse_stocks' using org.apache.hcatalog.pig.HCatLoader();
  b = filter a by stock_symbol == 'IBM';
@@ -165,6 +166,7 @@ The CAP theorem states that if you get a network partition, you have to trade of
 
 * Pig Latin script describes a DAG (directed acyclic graph) - http://vkalavri.com/tag/apachepig/
 * Pig script is not converted to a MapReduce job unless a DUMP/STORE command is invoked.
+
 ```
  runs = foreach batting generate $0 as playerID, $1 as year, $8 as runs;
  (playerID,yearID,R)

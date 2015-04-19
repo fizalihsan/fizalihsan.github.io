@@ -254,7 +254,7 @@ stack.pop()
  then:
  EmptyStackException e = thrown()
  e.cause == null
- ```
+```
 
 ``` groovy Example 3:
  when: 

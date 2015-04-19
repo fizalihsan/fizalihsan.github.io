@@ -17,7 +17,7 @@ footer: true
 * Orthogonal concerns (design & architecture)
 * RIA technolgies?
 * Data extraction patterns
-* Backward Compatibility (Refer to *Practical API Design - Confessions of a Java * Framework Architect*)
+* Backward Compatibility (Refer to *Practical API Design - Confessions of a Java Framework Architect*)
   * Source Compatibility
   * Binary Compatibility
   * Functional Compatibility
@@ -46,6 +46,7 @@ footer: true
 ## Interface Types
 
 (Refer to *Interface Oriented Design*)
+
 * Data Interfaces & Service Interfaces
 * Data Access Interface Structures
   * Sequential Vs. Random retrieval

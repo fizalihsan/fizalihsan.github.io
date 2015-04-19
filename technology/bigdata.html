@@ -334,23 +334,26 @@ messageStyle: "none",
 <h3 id="pig-latin">1. Pig Latin</h3>
 <ul>
   <li>High level scripting language to describe data flow - statements translate into a series of MapReduce jobs - can invoke Java, JRuby or Jython programs and vice versa - User defined functions (UDF) can be written in Java and uploaded as jar.</li>
-  <li>Sample Pig Latin script
-&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+  <li>Sample Pig Latin script</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
-<span class="line-number">5</span></figure></notextile></li>
-</ul>
-<p>&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class=""><span class="line"> a = LOAD 'nyse_stocks' using org.apache.hcatalog.pig.HCatLoader();
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"> a = LOAD 'nyse_stocks' using org.apache.hcatalog.pig.HCatLoader();
 </span><span class="line"> b = filter a by stock_symbol == 'IBM';
 </span><span class="line"> c = group b all;
 </span><span class="line"> d = foreach c generate AVG(b.stock_volume);
-</span><span class="line"> dump d;</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;</p>
+</span><span class="line"> dump d;</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <ul>
   <li>Pig Latin script describes a DAG (directed acyclic graph) - http://vkalavri.com/tag/apachepig/</li>
-  <li>Pig script is not converted to a MapReduce job unless a DUMP/STORE command is invoked.
-&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+  <li>Pig script is not converted to a MapReduce job unless a DUMP/STORE command is invoked.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
@@ -364,9 +367,8 @@ messageStyle: "none",
 <span class="line-number">12</span>
 <span class="line-number">13</span>
 <span class="line-number">14</span>
-<span class="line-number">15</span></figure></notextile></li>
-</ul>
-<p>&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class=""><span class="line"> runs = foreach batting generate $0 as playerID, $1 as year, $8 as runs;
+<span class="line-number">15</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"> runs = foreach batting generate $0 as playerID, $1 as year, $8 as runs;
 </span><span class="line"> (playerID,yearID,R)
 </span><span class="line"> (john,2008,10)
 </span><span class="line"> (john,2009,22)
@@ -380,7 +382,7 @@ messageStyle: "none",
 </span><span class="line"> (2008, [(john,2008,10), (adam,2008,58)])
 </span><span class="line"> (2009, [(john,2009,22), (adam,2009,105)])
 </span><span class="line"> (2010, [(john,2010,0),  (adam,2010,106)])
-</span><span class="line"> (2011, [(adam,2011,118)])</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;</p>
+</span><span class="line"> (2011, [(adam,2011,118)])</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h3 id="grunt">2) Grunt</h3>
 <p>Interactive command-line shell</p>
@@ -462,12 +464,17 @@ messageStyle: "none",
 
 		<li>
 			<h3>Architecture</h3>
-			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/transaction.html">Transactions</a>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+		
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/nosql.html">NoSQL</a>
 		</li>
 
 		<li>
 			<h3>Database</h3>
-			<a href="/technology/bigdata.html">Big Data</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/rdbms.html">RDBMS</a>  |  <a href="/technology/rdbms-products.html">RDBMS Products</a>
+			<a href="/technology/rdbms.html">RDBMS</a>  |  <a href="/technology/rdbms-products.html">RDBMS Products</a>
 		</li>
 
 		<li>
@@ -482,12 +489,17 @@ messageStyle: "none",
 
 		<li>
 			<h3>SOA</h3>
-			<a href="/technology/soa.html">SOA Concepts</a>  |  <a href="/technology/messaging.html">Messaging</a>  |  <a href="/technology/webservices.html">Web Services</a>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/messaging.html">Messaging</a>  |  <a href="/technology/webservices.html">Web Services</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/js-ecosystem.html">JS Ecosystem</a> | <a href="/technology/webconcepts.html">Web Concepts</a>
 		</li>
 
 		<li>
 			<h3>General Concepts</h3>
-			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/webconcepts.html">Web Concepts</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
 		</li>
 
 		<h2>Non-Techninal</h2>

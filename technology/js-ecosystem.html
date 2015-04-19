@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>ElasticSearch - KnowledgeShop</title>
+  <title>JavaScript Ecosystem - KnowledgeShop</title>
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="ElasticSearch Commands Commands To check status: curl "http://localhost:9200/?pretty" Print all docs: GET _search { "query": { "match_all": {} } } &hellip;">
+<meta name="description" content="JavaScript Ecosystem AngularJS AngularJS Angular compiles takes a ‘template’, loads, compiles, tranforms and renders to DOM called ‘view’. Templates &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://fizalihsan.github.io/technology/elasticsearch.html">
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/js-ecosystem.html">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <!-- Below custom CSS is for table border styling -->
@@ -95,71 +95,49 @@ messageStyle: "none",
 <article role="article">
   
   <header>
-    <h1 class="entry-title">ElasticSearch</h1>
+    <h1 class="entry-title">JavaScript Ecosystem</h1>
     
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#commands">Commands</a></li>
+  <li><a href="#angularjs">AngularJS</a></li>
 </ul>
 
-<h1 id="commands">Commands</h1>
+<h1 id="angularjs">AngularJS</h1>
 
 <ul>
-  <li>To check status: <code>curl "http://localhost:9200/?pretty"</code></li>
-  <li>Print all docs: <code>GET _search { "query": { "match_all": {} } } </code></li>
-</ul>
-
-<p>Elasticsearch and Lucene use a structure called an inverted index (similar to B-tree in relational databases).</p>
-
-<ul>
-  <li>Query String Search
+  <li>Angular compiles takes a ‘template’, loads, compiles, tranforms and renders to DOM called ‘view’.</li>
+  <li><strong>Templates</strong>
     <ul>
-      <li><code>GET /olive/vendors/_search</code></li>
-      <li><code>GET /olive/vendors/_count</code></li>
-      <li><code>GET /olive/vendors/_search?q=city:charlotte</code></li>
+      <li>Templates once received from server are cacheable. Only the data changes from then on.</li>
     </ul>
   </li>
-  <li>Query DSL</li>
+  <li>2 types of markups
+    <ul>
+      <li>Directives - apply special behavior to attributes or elements in the HTML.</li>
+      <li>Double curly braces - &#8220; - An “expression” in a template is a JavaScript-like code snippet that allows to read and write variables.A filter formats the value of an expression for display to the user.</li>
+    </ul>
+  </li>
+  <li><strong>2-way data binding</strong> - Angular provides live bindings or “two-way data binding”: Whenever the input values change, the value of the expressions are automatically recalculated and the DOM is updated with their values. </li>
+  <li><strong>Controllers</strong> - The purpose of controllers is to expose variables and functionality to expressions and directives. </li>
+  <li><strong>Services</strong> - The purpose of services is to expose view-independent business logic.</li>
+  <li><strong>Factory</strong>
+  ???</li>
+  <li><strong>Modules</strong> - is where all the things need for Angular DI (Dependency Injection) is registered. When Angular starts, it will use the configuration of the module with the name defined by the ng-app directive, including the configuration of all modules that this module depends on.</li>
+  <li><strong>Common Directives</strong>
+    <ul>
+      <li><code>ng-app</code> - automatically initializes an application</li>
+      <li><code>ng-bind</code> is same as &#8220;</li>
+      <li><code>ng-model</code> - stores/updates the value of the input field into/from a variable.</li>
+      <li><code>ng-controller</code> - tells angular that an instance of a Controller is responsible for the element with the directive and all of the element’s children.</li>
+      <li><code>ng-repeat</code></li>
+      <li><code>ng-submit</code> - to group inputs in a form</li>
+      <li><code>ng-click</code></li>
+      <li><code>ng-dblclick</code></li>
+      <li><code>ng-show</code>/<code>ng-hide</code></li>
+    </ul>
+  </li>
 </ul>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">GET /olive/vendors/_search
-</span><span class="line">{
-</span><span class="line">  "query": {
-</span><span class="line">    "match": {
-</span><span class="line">      "city": "charlotte"
-</span><span class="line">    }
-</span><span class="line">  }
-</span><span class="line">}</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">GET /olive/vendors/_search
-</span><span class="line">{
-</span><span class="line">  "aggs": {
-</span><span class="line">    "city_vendors": {
-</span><span class="line">      "terms": {
-</span><span class="line">        "field": "contact.address.city"
-</span><span class="line">      }
-</span><span class="line">    }
-</span><span class="line">  }
-</span><span class="line">}</span></code></pre></td></tr></table></div></figure></notextile></div>
 
   
     <footer>
@@ -167,7 +145,7 @@ messageStyle: "none",
       
         <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/elasticsearch.html" data-via="" data-counturl="http://fizalihsan.github.io/technology/elasticsearch.html" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/js-ecosystem.html" data-via="" data-counturl="http://fizalihsan.github.io/technology/js-ecosystem.html" >Tweet</a>
   
   
   

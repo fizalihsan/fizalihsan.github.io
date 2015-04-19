@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Architecture SDLC Continuous integration Code Analysis Code Metrics Development Methodologies Agile XP Scrum KanBan Architecture Patterns Domain &hellip;">
+<meta name="description" content="Architecture Architecture Patterns Domain Driven Design Domain Model Value Objects Data Transfer Object Service Layer Anemic Domain Model (Anti- &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -100,83 +100,26 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#sdlc">SDLC</a>    <ul>
-      <li><a href="#continuous-integration">Continuous integration</a></li>
-      <li><a href="#code-analysis">Code Analysis</a></li>
-      <li><a href="#code-metrics">Code Metrics</a></li>
-      <li><a href="#development-methodologies">Development Methodologies</a>        <ul>
-          <li><a href="#agile">Agile</a></li>
-          <li><a href="#xp">XP</a></li>
-          <li><a href="#scrum">Scrum</a></li>
-          <li><a href="#kanban">KanBan</a></li>
+  <li><a href="#architecture-patterns">Architecture Patterns</a>    <ul>
+      <li><a href="#domain-driven-design">Domain Driven Design</a>        <ul>
+          <li><a href="#domain-model">Domain Model</a></li>
+          <li><a href="#value-objects">Value Objects</a></li>
+          <li><a href="#data-transfer-object">Data Transfer Object</a></li>
+          <li><a href="#service-layer">Service Layer</a></li>
+          <li><a href="#anemic-domain-model-anti-pattern">Anemic Domain Model (Anti-pattern)</a></li>
         </ul>
       </li>
-      <li><a href="#architecture-patterns">Architecture Patterns</a>        <ul>
-          <li><a href="#domain-driven-design">Domain Driven Design</a>            <ul>
-              <li><a href="#domain-model">Domain Model</a></li>
-              <li><a href="#value-objects">Value Objects</a></li>
-              <li><a href="#data-transfer-object">Data Transfer Object</a></li>
-              <li><a href="#service-layer">Service Layer</a></li>
-              <li><a href="#anemic-domain-model-anti-pattern">Anemic Domain Model (Anti-pattern)</a></li>
-            </ul>
-          </li>
-          <li><a href="#domain-specific-language-dsl">Domain Specific Language (DSL)</a></li>
-          <li><a href="#naked-objects-pattern">Naked Objects Pattern</a></li>
-        </ul>
-      </li>
-      <li><a href="#programming-paradigms">Programming Paradigms</a></li>
+      <li><a href="#domain-specific-language-dsl">Domain Specific Language (DSL)</a></li>
+      <li><a href="#naked-objects-pattern">Naked Objects Pattern</a></li>
     </ul>
   </li>
+  <li><a href="#programming-paradigms">Programming Paradigms</a></li>
   <li><a href="#bibliography">Bibliography</a></li>
 </ul>
 
-<h1 id="sdlc">SDLC</h1>
+<h1 id="architecture-patterns">Architecture Patterns</h1>
 
-<h2 id="continuous-integration">Continuous integration</h2>
-<ul>
-  <li>Hudson / Jenkins</li>
-  <li>TeamCity</li>
-  <li>CruiseControl</li>
-  <li>Ivy</li>
-</ul>
-
-<h2 id="code-analysis">Code Analysis</h2>
-<ul>
-  <li>Emma</li>
-  <li>Corbetura/Clover</li>
-  <li>Fortify</li>
-  <li>JDepend</li>
-  <li>FindBugs</li>
-  <li>SONAR</li>
-</ul>
-
-<h2 id="code-metrics">Code Metrics</h2>
-
-<ul>
-  <li>Novel way to visualize whole project, package structure &amp; lines of code - http://redotheweb.com/CodeFlower/</li>
-  <li>Cyclomatic Complexity - 
-    <ul>
-      <li>http://www.onjava.com/lpt/a/4917</li>
-      <li>http://c2.com/cgi/wiki?CyclomaticComplexityMetric</li>
-      <li>http://www.guru99.com/cyclomatic-complexity.html</li>
-    </ul>
-  </li>
-</ul>
-
-<h2 id="development-methodologies">Development Methodologies</h2>
-<p>http://en.wikipedia.org/wiki/List_of_software_development_philosophies</p>
-
-<h3 id="agile">Agile</h3>
-
-<h3 id="xp">XP</h3>
-
-<h3 id="scrum">Scrum</h3>
-
-<h3 id="kanban">KanBan</h3>
-
-<h2 id="architecture-patterns">Architecture Patterns</h2>
-
-<h3 id="domain-driven-design">Domain Driven Design</h3>
+<h2 id="domain-driven-design">Domain Driven Design</h2>
 
 <p><strong>Tutorial</strong>
 * <a href="http://blog.fedecarg.com/2009/03/11/domain-driven-design-and-mvc-architectures/">Part 1: Domain-Driven Design and MVC Architectures</a>
@@ -184,7 +127,7 @@ messageStyle: "none",
 * <a href="http://blog.fedecarg.com/2009/03/15/domain-driven-design-the-repository/">Part 3: Domain-Driven Design: The Repository</a>
 * <a href="http://blog.fedecarg.com/2009/03/22/domain-driven-design-sample-application/">Part 4: Sample Application</a></p>
 
-<h4 id="domain-model">Domain Model</h4>
+<h3 id="domain-model">Domain Model</h3>
 
 <ul>
   <li>Responsible only represent the concepts of the business, information about business situations and business rules</li>
@@ -198,7 +141,7 @@ messageStyle: "none",
   <li>When NOT to use?</li>
 </ul>
 
-<h4 id="value-objects">Value Objects</h4>
+<h3 id="value-objects">Value Objects</h3>
 
 <ul>
   <li>2 value objects are equal if all their fields are equal. Although all fields are equal, you don’t need to compare all fields if a subset is unique - for example currency codes for currency objects are enough to test equality</li>
@@ -208,7 +151,7 @@ messageStyle: "none",
   <li>Diff between Value objects and Domain objects?</li>
 </ul>
 
-<h4 id="data-transfer-object">Data Transfer Object</h4>
+<h3 id="data-transfer-object">Data Transfer Object</h3>
 
 <ul>
   <li>Simply contain for a set of aggregated data that needs to be transfered across process or network boundary</li>
@@ -217,14 +160,14 @@ messageStyle: "none",
   <li>Usually an assembler is used to transfer data between DTOs and Domain objects</li>
 </ul>
 
-<h4 id="service-layer">Service Layer</h4>
+<h3 id="service-layer">Service Layer</h3>
 
 <ul>
   <li>Service layer on top of ‘Behaviourally rich domain model’ is recommended</li>
   <li>Should be a thin layer</li>
 </ul>
 
-<h4 id="anemic-domain-model-anti-pattern">Anemic Domain Model (Anti-pattern)</h4>
+<h3 id="anemic-domain-model-anti-pattern">Anemic Domain Model (Anti-pattern)</h3>
 
 <ul>
   <li>Objects which has only data but no business logic. </li>
@@ -236,7 +179,7 @@ messageStyle: "none",
 <p>Martin Fowler - Service Layer, Model Layer
 Eric Evans - Application Layer, Domain Layer</p>
 
-<h3 id="domain-specific-language-dsl">Domain Specific Language (DSL)</h3>
+<h2 id="domain-specific-language-dsl">Domain Specific Language (DSL)</h2>
 
 <ul>
   <li>Writing internal DSL in Java - http://jmock.org/oopsla2006.pdf</li>
@@ -245,14 +188,14 @@ Eric Evans - Application Layer, Domain Layer</p>
   <li>http://weblogs.java.net/blog/carcassi/archive/2010/02/04/building-fluent-api-internal-dsl-java</li>
 </ul>
 
-<h3 id="naked-objects-pattern">Naked Objects Pattern</h3>
+<h2 id="naked-objects-pattern">Naked Objects Pattern</h2>
 
-<h2 id="programming-paradigms">Programming Paradigms</h2>
-<p>### Aspect Oriented Programming (AOP)
-### Functional Programming
-### MDD - Model Driven Design
-### TDD - Test Driven Design
-### FDD - Feature Driven Development</p>
+<h1 id="programming-paradigms">Programming Paradigms</h1>
+<p>## Aspect Oriented Programming (AOP)
+## Functional Programming
+## MDD - Model Driven Design
+## TDD - Test Driven Design
+## FDD - Feature Driven Development</p>
 
 <h1 id="bibliography">Bibliography</h1>
 
@@ -292,12 +235,17 @@ Eric Evans - Application Layer, Domain Layer</p>
 
 		<li>
 			<h3>Architecture</h3>
-			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/transaction.html">Transactions</a>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+		
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/nosql.html">NoSQL</a>
 		</li>
 
 		<li>
 			<h3>Database</h3>
-			<a href="/technology/bigdata.html">Big Data</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/rdbms.html">RDBMS</a>  |  <a href="/technology/rdbms-products.html">RDBMS Products</a>
+			<a href="/technology/rdbms.html">RDBMS</a>  |  <a href="/technology/rdbms-products.html">RDBMS Products</a>
 		</li>
 
 		<li>
@@ -312,12 +260,17 @@ Eric Evans - Application Layer, Domain Layer</p>
 
 		<li>
 			<h3>SOA</h3>
-			<a href="/technology/soa.html">SOA Concepts</a>  |  <a href="/technology/messaging.html">Messaging</a>  |  <a href="/technology/webservices.html">Web Services</a>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/messaging.html">Messaging</a>  |  <a href="/technology/webservices.html">Web Services</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/js-ecosystem.html">JS Ecosystem</a> | <a href="/technology/webconcepts.html">Web Concepts</a>
 		</li>
 
 		<li>
 			<h3>General Concepts</h3>
-			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/webconcepts.html">Web Concepts</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
 		</li>
 
 		<h2>Non-Techninal</h2>

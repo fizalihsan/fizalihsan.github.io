@@ -357,15 +357,16 @@ To create a table in a given table space, use the CREATE TABLE statement with th
 <p>The system administrator can extend the size of tempdb Local variables denoted as <code>@varname</code> Global variables</p>
 
 <ul>
-  <li><code>@@rowcount</code> - Holds the number of rows returned by the last Transact-SQL statement. Be careful, almost any statement will set this. Even an “if” statement which checks it’s value. For example:
-&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;figcaption&gt;<span></span>&lt;/figcaption&gt;&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span></figure></notextile></li>
+  <li><code>@@rowcount</code> - Holds the number of rows returned by the last Transact-SQL statement. Be careful, almost any statement will set this. Even an “if” statement which checks it’s value. For example:</li>
 </ul>
-<p>&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class="sql"><span class="line"><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">pubs</span> <span class="k">where</span> <span class="p">....</span>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">pubs</span> <span class="k">where</span> <span class="p">....</span>
 </span><span class="line"><span class="n">if</span> <span class="o">@@</span><span class="n">rowcount</span> <span class="o">=</span> <span class="mi">0</span> <span class="cm">/* set to 1 after this */</span>
 </span><span class="line"><span class="n">print</span> <span class="ss">&quot;no rows returned&quot;</span>
-</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;</p>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <ul>
   <li><code>@@error</code> - Holds status of last statement executed. Zero is success. Once again almost any statement sets this, so use it’s value immediately (or save it in a local variable).</li>
@@ -396,7 +397,7 @@ To create a table in a given table space, use the CREATE TABLE statement with th
 
 <p>Repeatable Read By default, reads (select) are not locked. Sometimes, this is not appropriate. If you need to guarantee that a selected row doesn’t change once read during a transaction, use the select with holdlock. eg.SELECT @lcl_au_id=au_id HOLDLOCK FROM authors sp_recompile One common problem occurs when stored procedures are first executed when the tables they will be accessing are largely empty. The query plans will generally prefer to scan the tables instead of using indexes. As the tables fill with data, performance can significantly degrade.</p>
 
-<p>The “sp_recompile” command can be used to fix this problem: sp_recompile {table_name} This will set a flag in each stored procedure that needs to be recompiled (i.e, that references the specified table). The next time one of these stored procedures is invoked, it will automatically be recompiled Note ‘truncate table’ and ‘bcp’ commands bypass triggers.</p>
+<p>The <code>sp_recompile</code> command can be used to fix this problem: sp_recompile {table_name} This will set a flag in each stored procedure that needs to be recompiled (i.e, that references the specified table). The next time one of these stored procedures is invoked, it will automatically be recompiled Note ‘truncate table’ and ‘bcp’ commands bypass triggers.</p>
 
 <ul>
   <li>How to select first/last/max per group in SQL : http://www.xaprb.com/blog/2006/12/07/how-to-select-the-firstleastmax-row-per-group-in-sql/</li>
@@ -451,12 +452,17 @@ To create a table in a given table space, use the CREATE TABLE statement with th
 
 		<li>
 			<h3>Architecture</h3>
-			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/transaction.html">Transactions</a>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+		
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/nosql.html">NoSQL</a>
 		</li>
 
 		<li>
 			<h3>Database</h3>
-			<a href="/technology/bigdata.html">Big Data</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/rdbms.html">RDBMS</a>  |  <a href="/technology/rdbms-products.html">RDBMS Products</a>
+			<a href="/technology/rdbms.html">RDBMS</a>  |  <a href="/technology/rdbms-products.html">RDBMS Products</a>
 		</li>
 
 		<li>
@@ -471,12 +477,17 @@ To create a table in a given table space, use the CREATE TABLE statement with th
 
 		<li>
 			<h3>SOA</h3>
-			<a href="/technology/soa.html">SOA Concepts</a>  |  <a href="/technology/messaging.html">Messaging</a>  |  <a href="/technology/webservices.html">Web Services</a>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/messaging.html">Messaging</a>  |  <a href="/technology/webservices.html">Web Services</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/js-ecosystem.html">JS Ecosystem</a> | <a href="/technology/webconcepts.html">Web Concepts</a>
 		</li>
 
 		<li>
 			<h3>General Concepts</h3>
-			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/webconcepts.html">Web Concepts</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
 		</li>
 
 		<h2>Non-Techninal</h2>

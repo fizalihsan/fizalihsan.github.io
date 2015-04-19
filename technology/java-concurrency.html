@@ -116,19 +116,13 @@ messageStyle: "none",
         </ul>
       </li>
       <li><a href="#visibility">Visibility</a></li>
-      <li><a href="#synchronization">Synchronization</a>        <ul>
-          <li><a href="#mutex-locks">(1) Mutex locks</a></li>
-          <li><a href="#readwrite-locks">(2) Read/write locks</a></li>
-          <li><a href="#condition-variables">(3) Condition variables</a></li>
-          <li><a href="#counting-semaphores">(4) Counting semaphores</a></li>
-        </ul>
-      </li>
+      <li><a href="#synchronization">Synchronization</a></li>
     </ul>
   </li>
   <li><a href="#locks">Locks</a>    <ul>
       <li><a href="#intrinsic-lock-synchronized-keyword">Intrinsic Lock (synchronized keyword)</a>        <ul>
           <li><a href="#what-should-be-used-as-a-monitor">What should be used as a monitor?</a></li>
-          <li><a href="#what-should-not-be-used-as-a-monitor">What SHOULD NOT be used as a monitor?</a></li>
+          <li><a href="#what-should-not-be-used-as-a-monitor">What should not be used as a monitor?</a></li>
           <li><a href="#limitations">Limitations</a></li>
         </ul>
       </li>
@@ -179,9 +173,6 @@ messageStyle: "none",
   <li><a href="#executors-framework">Executors Framework</a>    <ul>
       <li><a href="#disadvantages-of-unbounded-thread-creation">Disadvantages of unbounded thread creation</a></li>
       <li><a href="#task-execution-policy">Task Execution Policy</a></li>
-    </ul>
-  </li>
-  <li><a href="#of-threads---------singlemulti-threaded">of threads       -&gt; single/multi-threaded</a>    <ul>
       <li><a href="#task-types">Task Types</a></li>
       <li><a href="#class-diagram">Class diagram</a></li>
     </ul>
@@ -306,31 +297,29 @@ Memory consistent properties - happens-before? Read more on Java Language Specif
 
 <p>The four synchronization models are mutex locks, read/write locks, condition variables, and semaphores.</p>
 
-<h3 id="mutex-locks">(1) Mutex locks</h3>
-
 <ul>
-  <li>allow only one thread at a time to execute a specific section of code, or to access specific data.</li>
-  <li>Each Java class and object has their own mutex locks. Each thread has it’s own separate call stack.</li>
-</ul>
-
-<h3 id="readwrite-locks">(2) Read/write locks</h3>
-
-<ul>
-  <li>permit concurrent reads and exclusive writes to a protected shared resource. To modify a resource, a thread must first acquire the exclusive write lock. An exclusive write lock is not permitted until all read locks have been released.</li>
-</ul>
-
-<p>e.g., Java ReadWriteLock</p>
-
-<h3 id="condition-variables">(3) Condition variables</h3>
-
-<ul>
-  <li>block threads until a particular condition is true.</li>
-</ul>
-
-<h3 id="counting-semaphores">(4) Counting semaphores</h3>
-
-<ul>
-  <li>typically coordinate access to resources. The count is the limit on how many threads can have access to a semaphore. When the count is reached, the semaphore blocks.</li>
+  <li>1) Mutex locks 
+    <ul>
+      <li>allow only one thread at a time to execute a specific section of code, or to access specific data.</li>
+      <li>Each Java class and object has their own mutex locks. Each thread has it’s own separate call stack.</li>
+    </ul>
+  </li>
+  <li>2) Read/write locks 
+    <ul>
+      <li>permit concurrent reads and exclusive writes to a protected shared resource. To modify a resource, a thread must first acquire the exclusive write lock. An exclusive write lock is not permitted until all read locks have been released.</li>
+      <li>e.g., Java ReadWriteLock</li>
+    </ul>
+  </li>
+  <li>3) Condition variables 
+    <ul>
+      <li>block threads until a particular condition is true.</li>
+    </ul>
+  </li>
+  <li>4) Counting semaphores 
+    <ul>
+      <li>typically coordinate access to resources. The count is the limit on how many threads can have access to a semaphore. When the count is reached, the semaphore blocks.</li>
+    </ul>
+  </li>
 </ul>
 
 <h1 id="locks">Locks</h1>
@@ -340,53 +329,72 @@ Memory consistent properties - happens-before? Read more on Java Language Specif
 <h3 id="what-should-be-used-as-a-monitor">What should be used as a monitor?</h3>
 
 <ul>
-  <li>The field being protected. e.g., 
-&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;figcaption&gt;<span></span>&lt;/figcaption&gt;&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
-<span class="line-number">2</span></figure></notextile></li>
+  <li>The field being protected. e.g., </li>
 </ul>
-<p>&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class="java"><span class="line"><span class="kd">private</span> <span class="kd">final</span> <span class="n">Map</span> <span class="n">map</span> <span class="o">=</span> <span class="o">...;</span>
-</span><span class="line"><span class="kd">synchronized</span><span class="o">(</span><span class="n">map</span><span class="o">){...}</span>
-</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
-* an explicit private lock  e.g., 
-&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;figcaption&gt;<span></span>&lt;/figcaption&gt;&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
-<span class="line-number">2</span>
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class="java"><span class="line"><span class="kd">private</span> <span class="kd">final</span> <span class="n">Object</span> <span class="n">lock</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Object</span><span class="o">();</span>
-</span><span class="line"><span class="kd">synchronized</span><span class="o">(</span><span class="n">lock</span><span class="o">){...}</span>
-</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</figure></notextile>&lt;/div&gt;
-* <code>this</code> object 
-&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;figcaption&gt;<span></span>&lt;/figcaption&gt;&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class="java"><span class="line"><span class="kd">synchronized</span><span class="o">(</span><span class="k">this</span><span class="o">){...}</span> <span class="c1">//uses current object&#39;s lock</span>
-</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</figure></notextile>&lt;/div&gt;
-* Class-level lock 
-&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;figcaption&gt;<span></span>&lt;/figcaption&gt;&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class="java"><span class="line"><span class="kd">synchronized</span><span class="o">(</span><span class="n">Foo</span><span class="o">.</span><span class="na">class</span><span class="o">){...}</span>
-</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</figure></notextile>&lt;/div&gt;</p>
 
-<h3 id="what-should-not-be-used-as-a-monitor">What SHOULD NOT be used as a monitor?</h3>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">private</span> <span class="kd">final</span> <span class="n">Map</span> <span class="n">map</span> <span class="o">=</span> <span class="o">...;</span>
+</span><span class="line"><span class="kd">synchronized</span><span class="o">(</span><span class="n">map</span><span class="o">){...}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
 <ul>
-  <li>DO NOT synchronize on objects that can be re-used. Examples below: (For more information: <a href="https://www.securecoding.cert.org/confluence/display/java/LCK01-J.+Do+not+synchronize+on+objects+that+may+be+reused">Securecoding.cert.org - Do not synchronize on objects that may be reused)</a>
-&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;figcaption&gt;<span></span>&lt;/figcaption&gt;&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+  <li>an explicit private lock  e.g., </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">private</span> <span class="kd">final</span> <span class="n">Object</span> <span class="n">lock</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Object</span><span class="o">();</span>
+</span><span class="line"><span class="kd">synchronized</span><span class="o">(</span><span class="n">lock</span><span class="o">){...}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><code>this</code> object </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">synchronized</span><span class="o">(</span><span class="k">this</span><span class="o">){...}</span> <span class="c1">//uses current object&#39;s lock</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Class-level lock </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">synchronized</span><span class="o">(</span><span class="n">Foo</span><span class="o">.</span><span class="na">class</span><span class="o">){...}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="what-should-not-be-used-as-a-monitor">What should not be used as a monitor?</h3>
+<ul>
+  <li>DO NOT synchronize on objects that can be re-used. Examples below: (For more information: <a href="https://www.securecoding.cert.org/confluence/display/java/LCK01-J.+Do+not+synchronize+on+objects+that+may+be+reused">Securecoding.cert.org - Do not synchronize on objects that may be reused)</a></li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
 <span class="line-number">5</span>
-<span class="line-number">6</span></figure></notextile></li>
-</ul>
-<p>&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class="java"><span class="line"><span class="kd">private</span> <span class="kd">final</span> <span class="n">Boolean</span> <span class="n">lock</span> <span class="o">=</span> <span class="n">Boolean</span><span class="o">.</span><span class="na">FALSE</span><span class="o">;</span> <span class="c1">//UNSAFE if some other thread uses the same reused object from heap it could lead to unexpected overhead and deadlock</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">private</span> <span class="kd">final</span> <span class="n">Boolean</span> <span class="n">lock</span> <span class="o">=</span> <span class="n">Boolean</span><span class="o">.</span><span class="na">FALSE</span><span class="o">;</span> <span class="c1">//UNSAFE if some other thread uses the same reused object from heap it could lead to unexpected overhead and deadlock</span>
 </span><span class="line"><span class="kd">private</span> <span class="kd">final</span> <span class="n">Integer</span> <span class="n">lock</span> <span class="o">=</span> <span class="mi">10</span><span class="o">;</span> <span class="c1">//UNSAFE if autoboxed primitive value is shared from heap</span>
 </span><span class="line"><span class="kd">private</span> <span class="kd">final</span> <span class="n">Integer</span> <span class="n">lock</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Integer</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span> <span class="c1">//SAFE. explicitly constructed Integer object has a unique reference and its own intrinsic lock is distinct not only from other Integer objects, but also from boxed integers that have the same value.</span>
 </span><span class="line"><span class="kd">private</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">lock</span> <span class="o">=</span> <span class="s">&quot;LOCK&quot;</span><span class="o">;</span> <span class="c1">//UNSAFE if some other thread uses the same reused object from heap.</span>
 </span><span class="line"><span class="kd">private</span> <span class="kd">final</span> <span class="n">String</span> <span class="n">lock</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">String</span><span class="o">(</span><span class="s">&quot;LOCK&quot;</span><span class="o">).</span><span class="na">intern</span><span class="o">();</span> <span class="c1">//UNSAFE interned strings act like a global variable in a JVM.</span>
 </span><span class="line"><span class="kd">private</span> <span class="kd">final</span> <span class="n">Object</span> <span class="n">lock</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Object</span><span class="o">();</span> <span class="c1">//SAFE.</span>
-</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
-* DO NOT synchronize on Lock objects.
-&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;figcaption&gt;<span></span>&lt;/figcaption&gt;&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>DO NOT synchronize on Lock objects.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class="java"><span class="line"><span class="kd">private</span> <span class="kd">final</span> <span class="n">Lock</span> <span class="n">lock</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">ReEntrantLock</span><span class="o">();</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">private</span> <span class="kd">final</span> <span class="n">Lock</span> <span class="n">lock</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">ReEntrantLock</span><span class="o">();</span>
 </span><span class="line"><span class="kd">synchronized</span><span class="o">(</span><span class="n">lock</span><span class="o">){...}</span>
-</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</figure></notextile>&lt;/div&gt;</p>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h3 id="limitations">Limitations</h3>
+
 <ul>
   <li>Single monitor per object</li>
   <li>Not possible to interrupt thread waiting for lock</li>
@@ -569,39 +577,10 @@ Memory consistent properties - happens-before? Read more on Java Language Specif
       <li>(c) sub-classes can violate by overriding methods. Solution: Use final methods.</li>
     </ul>
   </li>
-  <li><strong>Do not allow ‘this’ reference to escape via inner classes</strong> (Try examples??????) Solution: Use factory methods
-&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;figcaption&gt;<span></span>&lt;/figcaption&gt;&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span></figure></notextile></li>
+  <li><strong>Do not allow ‘this’ reference to escape via inner classes</strong> (Try examples??????) Solution: Use factory methods</li>
 </ul>
-<p>&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">EventListener2</span> <span class="o">{</span>
-</span><span class="line">  <span class="kd">public</span> <span class="nf">EventListener2</span><span class="o">(</span><span class="n">EventSource</span> <span class="n">eventSource</span><span class="o">)</span> <span class="o">{</span>
-</span><span class="line">
-</span><span class="line">    <span class="n">eventSource</span><span class="o">.</span><span class="na">registerListener</span><span class="o">(</span>
-</span><span class="line">      <span class="k">new</span> <span class="nf">EventListener</span><span class="o">()</span> <span class="o">{</span> <span class="c1">//indirectly this non-static anonymous class publishes a reference to an instance of parent EventListener2</span>
-</span><span class="line">        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onEvent</span><span class="o">(</span><span class="n">Event</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-</span><span class="line">          <span class="n">eventReceived</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
-</span><span class="line">        <span class="o">}</span>
-</span><span class="line">      <span class="o">});</span>
-</span><span class="line">  <span class="o">}</span>
-</span><span class="line">
-</span><span class="line">  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">eventReceived</span><span class="o">(</span><span class="n">Event</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-</span><span class="line">  <span class="o">}</span>
-</span><span class="line"><span class="o">}</span>
-</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;&lt;/figure&gt;&lt;/notextile&gt;&lt;/div&gt;
-* <strong>Don’t start threads from within constructors</strong> - A special case of the problem above is starting a thread from within a constructor, because often when an object owns a thread, either that thread is an inner class or we pass the this reference to its constructor (or the class itself extends the Thread class). If an object is going to own a thread, it is best if the object provides a start() method, just like Thread does, and starts the thread from the start() method instead of from the constructor. While this does expose some implementation details (such as the possible existence of an owned thread) of the class via the interface, which is often not desirable, in this case the risks of starting the thread from the constructor outweigh the benefit of implementation hiding.
-&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;figcaption&gt;<span></span>&lt;/figcaption&gt;&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
@@ -615,7 +594,40 @@ Memory consistent properties - happens-before? Read more on Java Language Specif
 <span class="line-number">12</span>
 <span class="line-number">13</span>
 <span class="line-number">14</span>
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">EventListener2</span> <span class="o">{</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">EventListener2</span> <span class="o">{</span>
+</span><span class="line">  <span class="kd">public</span> <span class="nf">EventListener2</span><span class="o">(</span><span class="n">EventSource</span> <span class="n">eventSource</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">
+</span><span class="line">    <span class="n">eventSource</span><span class="o">.</span><span class="na">registerListener</span><span class="o">(</span>
+</span><span class="line">      <span class="k">new</span> <span class="nf">EventListener</span><span class="o">()</span> <span class="o">{</span> <span class="c1">//indirectly this non-static anonymous class publishes a reference to an instance of parent EventListener2</span>
+</span><span class="line">        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onEvent</span><span class="o">(</span><span class="n">Event</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">          <span class="n">eventReceived</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+</span><span class="line">        <span class="o">}</span>
+</span><span class="line">      <span class="o">});</span>
+</span><span class="line">  <span class="o">}</span>
+</span><span class="line">
+</span><span class="line">  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">eventReceived</span><span class="o">(</span><span class="n">Event</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">  <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<ul>
+  <li><strong>Don’t start threads from within constructors</strong> - A special case of the problem above is starting a thread from within a constructor, because often when an object owns a thread, either that thread is an inner class or we pass the this reference to its constructor (or the class itself extends the Thread class). If an object is going to own a thread, it is best if the object provides a start() method, just like Thread does, and starts the thread from the start() method instead of from the constructor. While this does expose some implementation details (such as the possible existence of an owned thread) of the class via the interface, which is often not desirable, in this case the risks of starting the thread from the constructor outweigh the benefit of implementation hiding.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">EventListener2</span> <span class="o">{</span>
 </span><span class="line">  <span class="kd">public</span> <span class="nf">EventListener2</span><span class="o">(</span><span class="n">EventSource</span> <span class="n">eventSource</span><span class="o">)</span> <span class="o">{</span>
 </span><span class="line">
 </span><span class="line">        <span class="k">new</span> <span class="nf">Thread</span><span class="o">(){</span>
@@ -629,7 +641,7 @@ Memory consistent properties - happens-before? Read more on Java Language Specif
 </span><span class="line">  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">eventReceived</span><span class="o">(</span><span class="n">Event</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
 </span><span class="line">  <span class="o">}</span>
 </span><span class="line"><span class="o">}</span>
-</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</figure></notextile>&lt;/div&gt;</p>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h2 id="thread-confinement">Thread Confinement</h2>
 
@@ -732,8 +744,9 @@ Immutables offer additional performance advantage such as reduced need for locki
 
 <h4 id="open-calls">Open Calls</h4>
 
-<p>Calling an alien method with no locks held is known as ‘open-calls’. Invoking alien method with locks held is asking for liveness trouble because the alient method might acquire other locks leading to lock-order deadlocks. Here is an innocent looking example: Thread 1 calls setLocation() locking Taxi and waiting for lock on Dispatcher. Thread 2 calls getStatus() locking dispatcher and waiting for lock on Taxi.
-&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;figcaption&gt;<span></span>&lt;/figcaption&gt;&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+<p>Calling an alien method with no locks held is known as ‘open-calls’. Invoking alien method with locks held is asking for liveness trouble because the alient method might acquire other locks leading to lock-order deadlocks. Here is an innocent looking example: Thread 1 calls setLocation() locking Taxi and waiting for lock on Dispatcher. Thread 2 calls getStatus() locking dispatcher and waiting for lock on Taxi.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
@@ -757,7 +770,7 @@ Immutables offer additional performance advantage such as reduced need for locki
 <span class="line-number">22</span>
 <span class="line-number">23</span>
 <span class="line-number">24</span>
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class="java"><span class="line"><span class="kd">class</span> <span class="nc">Taxi</span><span class="o">{</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">class</span> <span class="nc">Taxi</span> <span class="o">{</span>
 </span><span class="line"> <span class="kd">private</span> <span class="n">Dispatcher</span> <span class="n">dispatcher</span><span class="o">;</span>
 </span><span class="line"> <span class="kd">public</span> <span class="nf">Taxi</span><span class="o">(</span><span class="n">Dispatcher</span> <span class="n">dispatcher</span><span class="o">){</span><span class="k">this</span><span class="o">.</span><span class="na">dispatcher</span> <span class="o">=</span> <span class="n">dispatcher</span><span class="o">;}</span>
 </span><span class="line">
@@ -781,7 +794,7 @@ Immutables offer additional performance advantage such as reduced need for locki
 </span><span class="line"> <span class="o">...</span>
 </span><span class="line"> <span class="o">}</span>
 </span><span class="line"><span class="o">}</span>
-</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</figure></notextile>&lt;/div&gt;</p>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h3 id="type-2-thread-starvation-deadlocks">Type 2: Thread-starvation deadlocks</h3>
 
@@ -847,9 +860,7 @@ Bounded pools and inter-dependent tasks don’t mix well.</p>
 <h2 id="task-execution-policy">Task Execution Policy</h2>
 
 <ul>
-  <li>
-    <h1 id="of-threads---------singlemulti-threaded">of threads       -&gt; single/multi-threaded</h1>
-  </li>
+  <li>number of threads       -&gt; single/multi-threaded</li>
   <li>queue              -&gt; bounded/unbounded queue</li>
   <li>order of execution -&gt; FIFO, LIFO, priority order</li>
 </ul>
@@ -1124,12 +1135,17 @@ Bounded pools and inter-dependent tasks don’t mix well.</p>
 
 		<li>
 			<h3>Architecture</h3>
-			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/transaction.html">Transactions</a>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+		
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/nosql.html">NoSQL</a>
 		</li>
 
 		<li>
 			<h3>Database</h3>
-			<a href="/technology/bigdata.html">Big Data</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/rdbms.html">RDBMS</a>  |  <a href="/technology/rdbms-products.html">RDBMS Products</a>
+			<a href="/technology/rdbms.html">RDBMS</a>  |  <a href="/technology/rdbms-products.html">RDBMS Products</a>
 		</li>
 
 		<li>
@@ -1144,12 +1160,17 @@ Bounded pools and inter-dependent tasks don’t mix well.</p>
 
 		<li>
 			<h3>SOA</h3>
-			<a href="/technology/soa.html">SOA Concepts</a>  |  <a href="/technology/messaging.html">Messaging</a>  |  <a href="/technology/webservices.html">Web Services</a>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/messaging.html">Messaging</a>  |  <a href="/technology/webservices.html">Web Services</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/js-ecosystem.html">JS Ecosystem</a> | <a href="/technology/webconcepts.html">Web Concepts</a>
 		</li>
 
 		<li>
 			<h3>General Concepts</h3>
-			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/webconcepts.html">Web Concepts</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/xml.html">XML</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
 		</li>
 
 		<h2>Non-Techninal</h2>

@@ -9,17 +9,19 @@ footer: true
 * list element with functor item
 {:toc}
 
-## Excerpts from book 'Clean Code - A Handbook of Agile Software Craftmanship - Bob Martin'
 
-### Chapter 2 - Naming
+# Clean Code
+***A Handbook of Agile Software Craftmanship - Bob Martin***
+
+## Naming
 * Don't reveal implementation detail in variables. e.g., declare accounts instead accountList
 * Use single letter variables only as a local variable
 * No need for prefix on variables and class names. e.g., ICustomer interface
 * Class name should NOT be a verb. Avoid words like Manager, Processor, Data or Info
 * Use a common word per concept across method names and class names. e.g., fetch(), get(), retrieve(). Stick to one.
 
-### Chapter 3 - Function
-* Function should one thing only. One level of abstraction per function.
+## Function
+* Function should do one thing only. One level of abstraction per function.
 * Switch statement - tolerated if it appears only once at very low level. Hide it with 'AbstractFactory' and polymorphism.
 * Function arguments
   * Number of arguments
@@ -54,5 +56,17 @@ try{
     //Error processing is separated from the happy path
  } 
 ```
-* **Command Query Separation***: Functions should either do something or return something, but not both.
+* **Command Query Separation**: Functions should either do something or return something, but not both.
   * http://martinfowler.com/bliki/CommandQuerySeparation.html
+
+## Formatting
+* **Vertical Openness** - Each group of lines should represent a thought. e.g., given, when & then blocks in unit testing
+* Vertical density implies close association of those lines
+* **Vertical distance** - concepts that are closely related should be kept close to each other. e.g., 
+  * local variable declarations should right before its usage. 
+  * Instance variables should be at the top of the file, not bottom.
+  * Dependent functions should be closer to each other.
+
+## Object and Data Structures 
+* Getters & Setters - Think before adding them. Blindly adding on every variable beats the purpose of abstraction.
+* **Law of Demeter** - method chaining on data structure method is ok.

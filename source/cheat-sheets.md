@@ -54,6 +54,7 @@ footer: true
 To clone the site to a new machine
 
 ```
+# To clone the branch 'source' to local under folder 'knowledgeshop'
 $ git clone -b source git@github.com:username/username.github.com.git knowledgeshop
 $ cd ./_deploy
 $ git clone git@github.com:username/username.github.com.git _deploy 

@@ -10,6 +10,19 @@ footer: true
 {:toc}
 
 
+# Enterprise Architecture
+
+## Enterprise Integration Approaches
+
+There have historically been four approaches to integration: file transfer, sharing a database, leveraging services, and asynchronous messaging. One way to look at these approaches is how they affect coupling in your architecture. Broadly, there are three types of coupling:
+
+1. **Spatial coupling (communication)**: Spatial coupling describes the requirement of a producer to know how to communicate with another and how to overcome error scenarios in the communication. A server side fault in an RPC operation, for example, is an example of spatial coupling.
+2. **Temporal coupling (buffering)**: Temporal coupling describes the requirement of a producer to be aware of, and available for, a consumer to share data. A decoupled system uses buffering so that a message may be sent, even if the consumer isn’t available to receive it.
+3. **Logical coupling (routing)**: Logical coupling describes the requirement of a producer to know how to connect with the consumer. One way to fix this is to introduce a central, shared location where both parties exchange data. Then, if a producer decides to move (change IP, put up a firewall, and so on) or decides to add extra steps before publishing messages, the client remains
+
+
+
+
 # Architecture Patterns
 
 ## Domain Driven Design
@@ -73,13 +86,6 @@ Eric Evans - Application Layer, Domain Layer
 * http://weblogs.java.net/blog/carcassi/archive/2010/02/04/building-fluent-api-internal-dsl-java
 
 ## Naked Objects Pattern
-
-# Programming Paradigms
-## Aspect Oriented Programming (AOP)
-## Functional Programming
-## MDD - Model Driven Design
-## TDD - Test Driven Design
-## FDD - Feature Driven Development
 
 
 # Bibliography

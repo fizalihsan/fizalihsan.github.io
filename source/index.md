@@ -40,6 +40,7 @@ footer: true
     * [Java Specialist Newsletters]({{ root_url }}/technology/java-newsletters.html)
 
   * Languages
+    * [Functional Programming]({{ root_url }}/technology/functionalprogramming.html)
     * [Groovy]({{ root_url }}/technology/groovy.html)
     * [Scala]({{ root_url }}/technology/scala.html)
 

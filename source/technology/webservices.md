@@ -36,39 +36,53 @@ For example, if a client sends the same order over and over again, the client sh
 **1. Request/Response**
 
 **2. Request/Acknowledge**
-    Steps involved
-    * i. Receive the request.
-    * ii. Authenticate client credentials (optional).
-    * iii. Authorize the client for the requested operation (optional).
-    * iv. Validate the request (optional).
-    * v. Generate a Request Identifier or URI.
-    * vi. Store and forward the request.
-    * vii. Return an acknowledgment.
- 
-  a. ***Request/Acknowledge/Poll***
-  
-  * Client polls using the request identifier for the status update.
-  * Cons - Client polling too often for status could put excessive load on the server and cause network traffic.
 
-  b. ***Request/Acknowledge/Callbacks***
-   Rather than having the client poll a second service for results, a request processor (i.e., background process) pushes information back to the client or forwards it to other parties. For this to happen, the client should have a service running that could be called. 
+Steps involved
 
-   The callback service details could be sent as part of the request or queried from a data store. However, when callback recipients are identified in the request, special precautions must be taken to ensure that they cannot be seen or altered by anyone except the authorized parties. The easiest way to protect the request is through Transport Layer Security (TLS).
+* i. Receive the request.
+* ii. Authenticate client credentials (optional).
+* iii. Authorize the client for the requested operation (optional).
+* iv. Validate the request (optional).
+* v. Generate a Request Identifier or URI.
+* vi. Store and forward the request.
+* vii. Return an acknowledgment.
+
+a. ***Request/Acknowledge/Poll***
+
+* Client polls using the request identifier for the status update.
+* Cons - Client polling too often for status could put excessive load on the server and cause network traffic.
+
+b. ***Request/Acknowledge/Callbacks***
+ Rather than having the client poll a second service for results, a request processor (i.e., background process) pushes information back to the client or forwards it to other parties. For this to happen, the client should have a service running that could be called. 
+
+ The callback service details could be sent as part of the request or queried from a data store. However, when callback recipients are identified in the request, special precautions must be taken to ensure that they cannot be seen or altered by anyone except the authorized parties. The easiest way to protect the request is through Transport Layer Security (TLS).
 
 *Cons*
+
 * Complex to implement
 * This pattern cannot be used if the client is unable to or unwilling to provide a publicly addressable callback service.
 * Callback service could go down in which case the request processor should implement 'Idempotent Retry' pattern. 
 
 **3. Media Type Negotiation**
 
+**4. Linked Services**
 
-## Advantages of REST API
-### Ability to leverage commodity caching technologies
-This API style leverages commodity caching technologies designed specifically with HTTP in mind. If, for example, a client requests a product that hasn’t changed within the past day, and information on that product can be found in a Reverse Proxy, then the cached representation will be returned and service execution can be bypassed. This reduces the load on the Origin Server, especially in cases where the service would have queried a database or performed a CPU- or memory-intensive computation
+## Request & Response Patterns
+
+* **Service Controller** 
+  * Receives requests, evaluate the request’s meaning, and route requests to procedures (i.e., class methods, request handlers), which implement the desired service behaviors.
+  * When a web server receives a request, the framework (like JAX-RS) selects and invokes handlers by evaluating various aspects of the request against these expressions. The rules that define which handlers should be invoked for different requests are provided through annotations known collectively as ***Routing Expressions***.
+  * This pattern also makes it easy to leverage data-binding technologies that automatically deserialize requests and serialize responses. The methods on Service Controllers can be
+* **Request Mapper**
+  * How can a service process data from requests that are structurally different yet semantically equivalent? 
+* **Response Mapper**
+  * How can the logic required to construct a response be reused by multiple services? 
+
 
 ## QoS (Quality of Service)
+
 ### How to reduce load on the server?
+
 #### Service Interceptor pattern
 
 An inbound interceptor may, for example, be configured to check to see if the requested data can be found in a distributed memory cache that is shared across web servers. If the requested information can be found in this cache, then the information may be returned directly from the interceptor, and the request handler will not be called.
@@ -116,6 +130,11 @@ from the service machine to the requester machine. In a REST-style web service, 
 As web-based informational items, resources are pointless unless they have at least one representation. In the Web, representations are MIME typed. The most common type of resource representation is probably still text/html, but nowadays resources tend to have multiple representations.
  
 For the record, RESTful web services are Turing complete; that is, these services are equal in power to any computational system, including a system that consists of SOAP-based web services or DOA stubs and skeletons.
+
+## Advantages of REST API
+
+* **Ability to leverage commodity caching technologies**
+This API style leverages commodity caching technologies designed specifically with HTTP in mind. If, for example, a client requests a product that hasn’t changed within the past day, and information on that product can be found in a Reverse Proxy, then the cached representation will be returned and service execution can be bypassed. This reduces the load on the Origin Server, especially in cases where the service would have queried a database or performed a CPU- or memory-intensive computation
 
 ## RESTful Architectural Principles
 

@@ -9,7 +9,8 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Coding Principles Excerpts from book ‘Clean Code - A Handbook of Agile Software Craftmanship - Bob Martin’ Chapter 2 - Naming Chapter 3 - Function &hellip;">
+<meta name="description" content="Coding Principles Clean Code Naming Function Formatting Object and Data Structures Clean Code
+A Handbook of Agile Software Craftmanship - Bob Martin &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -100,16 +101,19 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#excerpts-from-book-clean-code---a-handbook-of-agile-software-craftmanship---bob-martin">Excerpts from book ‘Clean Code - A Handbook of Agile Software Craftmanship - Bob Martin’</a>    <ul>
-      <li><a href="#chapter-2---naming">Chapter 2 - Naming</a></li>
-      <li><a href="#chapter-3---function">Chapter 3 - Function</a></li>
+  <li><a href="#clean-code">Clean Code</a>    <ul>
+      <li><a href="#naming">Naming</a></li>
+      <li><a href="#function">Function</a></li>
+      <li><a href="#formatting">Formatting</a></li>
+      <li><a href="#object-and-data-structures">Object and Data Structures</a></li>
     </ul>
   </li>
 </ul>
 
-<h2 id="excerpts-from-book-clean-code---a-handbook-of-agile-software-craftmanship---bob-martin">Excerpts from book ‘Clean Code - A Handbook of Agile Software Craftmanship - Bob Martin’</h2>
+<h1 id="clean-code">Clean Code</h1>
+<p><strong><em>A Handbook of Agile Software Craftmanship - Bob Martin</em></strong></p>
 
-<h3 id="chapter-2---naming">Chapter 2 - Naming</h3>
+<h2 id="naming">Naming</h2>
 <ul>
   <li>Don’t reveal implementation detail in variables. e.g., declare accounts instead accountList</li>
   <li>Use single letter variables only as a local variable</li>
@@ -118,9 +122,9 @@ messageStyle: "none",
   <li>Use a common word per concept across method names and class names. e.g., fetch(), get(), retrieve(). Stick to one.</li>
 </ul>
 
-<h3 id="chapter-3---function">Chapter 3 - Function</h3>
+<h2 id="function">Function</h2>
 <ul>
-  <li>Function should one thing only. One level of abstraction per function.</li>
+  <li>Function should do one thing only. One level of abstraction per function.</li>
   <li>Switch statement - tolerated if it appears only once at very low level. Hide it with ‘AbstractFactory’ and polymorphism.</li>
   <li>Function arguments
     <ul>
@@ -175,11 +179,30 @@ messageStyle: "none",
 </span><span class="line">    //Error processing is separated from the happy path
 </span><span class="line"> } </span></code></pre></td></tr></table></div></figure></notextile></div>
 <ul>
-  <li><strong>Command Query Separation</strong>*: Functions should either do something or return something, but not both.
+  <li><strong>Command Query Separation</strong>: Functions should either do something or return something, but not both.
     <ul>
       <li>http://martinfowler.com/bliki/CommandQuerySeparation.html</li>
     </ul>
   </li>
+</ul>
+
+<h2 id="formatting">Formatting</h2>
+<ul>
+  <li><strong>Vertical Openness</strong> - Each group of lines should represent a thought. e.g., given, when &amp; then blocks in unit testing</li>
+  <li>Vertical density implies close association of those lines</li>
+  <li><strong>Vertical distance</strong> - concepts that are closely related should be kept close to each other. e.g., 
+    <ul>
+      <li>local variable declarations should right before its usage. </li>
+      <li>Instance variables should be at the top of the file, not bottom.</li>
+      <li>Dependent functions should be closer to each other.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="object-and-data-structures">Object and Data Structures</h2>
+<ul>
+  <li>Getters &amp; Setters - Think before adding them. Blindly adding on every variable beats the purpose of abstraction.</li>
+  <li><strong>Law of Demeter</strong> - method chaining on data structure method is ok.</li>
 </ul>
 
   

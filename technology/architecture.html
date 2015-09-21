@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Architecture Architecture Patterns Domain Driven Design Domain Model Value Objects Data Transfer Object Service Layer Anemic Domain Model (Anti- &hellip;">
+<meta name="description" content="Architecture Enterprise Architecture Enterprise Integration Approaches Architecture Patterns Domain Driven Design Domain Model Value Objects Data &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -100,6 +100,10 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
+  <li><a href="#enterprise-architecture">Enterprise Architecture</a>    <ul>
+      <li><a href="#enterprise-integration-approaches">Enterprise Integration Approaches</a></li>
+    </ul>
+  </li>
   <li><a href="#architecture-patterns">Architecture Patterns</a>    <ul>
       <li><a href="#domain-driven-design">Domain Driven Design</a>        <ul>
           <li><a href="#domain-model">Domain Model</a></li>
@@ -113,9 +117,20 @@ messageStyle: "none",
       <li><a href="#naked-objects-pattern">Naked Objects Pattern</a></li>
     </ul>
   </li>
-  <li><a href="#programming-paradigms">Programming Paradigms</a></li>
   <li><a href="#bibliography">Bibliography</a></li>
 </ul>
+
+<h1 id="enterprise-architecture">Enterprise Architecture</h1>
+
+<h2 id="enterprise-integration-approaches">Enterprise Integration Approaches</h2>
+
+<p>There have historically been four approaches to integration: file transfer, sharing a database, leveraging services, and asynchronous messaging. One way to look at these approaches is how they affect coupling in your architecture. Broadly, there are three types of coupling:</p>
+
+<ol>
+  <li><strong>Spatial coupling (communication)</strong>: Spatial coupling describes the requirement of a producer to know how to communicate with another and how to overcome error scenarios in the communication. A server side fault in an RPC operation, for example, is an example of spatial coupling.</li>
+  <li><strong>Temporal coupling (buffering)</strong>: Temporal coupling describes the requirement of a producer to be aware of, and available for, a consumer to share data. A decoupled system uses buffering so that a message may be sent, even if the consumer isn’t available to receive it.</li>
+  <li><strong>Logical coupling (routing)</strong>: Logical coupling describes the requirement of a producer to know how to connect with the consumer. One way to fix this is to introduce a central, shared location where both parties exchange data. Then, if a producer decides to move (change IP, put up a firewall, and so on) or decides to add extra steps before publishing messages, the client remains</li>
+</ol>
 
 <h1 id="architecture-patterns">Architecture Patterns</h1>
 
@@ -192,13 +207,6 @@ Eric Evans - Application Layer, Domain Layer</p>
 </ul>
 
 <h2 id="naked-objects-pattern">Naked Objects Pattern</h2>
-
-<h1 id="programming-paradigms">Programming Paradigms</h1>
-<p>## Aspect Oriented Programming (AOP)
-## Functional Programming
-## MDD - Model Driven Design
-## TDD - Test Driven Design
-## FDD - Feature Driven Development</p>
 
 <h1 id="bibliography">Bibliography</h1>
 

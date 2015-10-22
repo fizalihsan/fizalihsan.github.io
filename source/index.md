@@ -10,6 +10,7 @@ footer: true
   * Architecture
     * [Overview]({{ root_url }}/technology/architecture.html)
     * [Coding Principles]({{ root_url }}/technology/coding-principles.html)
+    * [Concurrency & Parallelism]({{ root_url }}/technology/concurrency-parallelism.html)
     * [Design Principles]({{ root_url }}/technology/design-principles.html)
     * [Logging & Monitoring]({{ root_url }}/technology/logging-and-monitoring.html)
     * [Patterns]({{ root_url }}/technology/patterns.html)
@@ -22,7 +23,9 @@ footer: true
     * [NoSQL]({{ root_url }}/technology/nosql.html)
 
   * Database
-    * [RDBMS]({{ root_url }}/technology/rdbms.html)
+    * [Concepts]({{ root_url }}/technology/rdbms.html)
+    * [Design]({{ root_url }}/technology/db-design.html)
+    * [Performance]({{ root_url }}/technology/db-performance.html)
     * [RDBMS Products]({{ root_url }}/technology/rdbms-products.html)
 
   * Java

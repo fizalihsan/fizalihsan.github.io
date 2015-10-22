@@ -16,7 +16,7 @@ footer: true
 	* Functional programming is primarily declarative, where we define properties and relations, and let the runtime figure out how to compute what we want. E.g., calculating factorial in a recursive method without any mutations.
 	* Declarative programming is made easier by lazy evaluation, because laziness gives the runtime the opportunity to “understand” all the properties and relations, then determine the optimal way to compute values on demand. Like lazy evaluation, declarative programming is largely incompatible with mutability and functions with side effects.
 
-# Basic principles of FP
+# FP principles & concepts
 
 * **Avoiding mutable state**
 	* eases concurrent programming. We still need to handle mutations in a thread-safe way. Software Transactional Memory and the Actor Model give us this safety
@@ -24,6 +24,7 @@ footer: true
 	* A method is associated with a class or an object. A function is more general and is not associated with anything.
 	* Java only has methods and methods aren’t first-class in Java. You can’t pass a method as an argument to another method, return a method from a method, or assign a method as a value to a variable.
 * **Lambdas and Closures**
+	* A closure is a function that carries an implicit binding to all the variables referenced within it.
 * **Higher-order functions**
 	* Higher-order functions is a special term for functions that take other functions as arguments or return them as results. These are a powerful tool for building abstractions and composing behavior.
 * **Side-Effect-Free Functions**
@@ -32,6 +33,48 @@ footer: true
 * **Lazy vs. Eager Evaluation**
 	* Lazy representation of infinite data structures wouldn’t be possible without this feature! Both referential transparency and lazy evaluation require side-effect-free functions and immutable values.
 	* Finally, lazy evaluation is useful for deferring expensive operations until needed or never executing them at all.
+	* Defer expensive calculation as much later as possible
+	* Allows to create infinite collections, which keep delivering elements as long as they keep receiving requests.
+* Referential Transparency
+	* A function is considered referentially transparent, if it has the same effect and output on the same input. If not, it is called *referentially opaque*.
+	* If a function can also throw an exception, it isn’t a safe substitute for a value.
+* Currying
+	* Both currying and partial application give you the ability to manipulate the number of arguments to functions or methods, typically by supplying one or more default values for some arguments (known as *fixing arguments*)
+	* Currying describes the conversion of a multiargument function into a chain of single-argument functions. It describes the transformation process, not the invocation of the converted function. The caller can decide how many arguments to apply, thereby creating a derived function with that smaller number of arguments.
+	* Use currying to construct specific functions from general ones.
+	* Currying is a metafunction technique: doing something to the function itself rather than the function results. 
+	* Currying acts as a factory (pattern) for functions.
+
+```java Example 1
+	def product = { x, y -> 
+		println "x = $x, y = $y"
+		x * y 
+	}
+
+	def quadrate = product.curry(4)
+	println quadrate.call(2) 
+
+	//x = 4, y = 2
+	//8
+```
+
+```java Example 2
+	println product.curry(4).curry(2).call() //same result as above
+```
+
+```java Example 3
+	def productWithX = product.curry(4)
+	println productWithX(2) //same result as above
+```
+
+* **Memoization**
+	* The word memoization was coined by Donald Michie, a British artificial-intelligence researcher, to refer to function-level caching for repeating values.
+	* In order to memoize a function in Groovy, you define it as a closure, then execute the `memoize()` method to return a function whose results will be cached.
+	* Groovy built memoization into its Closure class; other languages implement it differently.
+	* Memoization acts as a flyweight (pattern) for functions.
+
+* **Command-Query Responsibility Segregation (CQRS)**
+
 
 # Data Structures
 
@@ -61,16 +104,24 @@ The Actor model isn’t really a functional approach to concurrency, but it fits
 # Lambdas
 
 ## Java 8 Lambda Styles
-	Runnable noArguments = () -> System.out.println("Hello World");
-	ActionListener oneArgument = event -> System.out.println("button clicked");
-	Runnable multiStatement = () -> {
-		System.out.print("Hello");
-		System.out.println(" World");
-	};
-	BinaryOperator<Long> add = (x, y) -> x + y;
-	BinaryOperator<Long> addExplicit = (Long x, Long y) -> x + y;
+
+```java
+Runnable noArguments = () -> System.out.println("Hello World");
+
+ActionListener oneArgument = event -> System.out.println("button clicked");
+
+Runnable multiStatement = () -> {
+	System.out.print("Hello");
+	System.out.println(" World");
+};
+
+BinaryOperator<Long> add = (x, y) -> x + y;
+
+BinaryOperator<Long> addExplicit = (Long x, Long y) -> x + y;
+```
 
 ## Concepts
+
 * Lambda expression’s type is context dependent and it gets inferred by the compiler.
 * Lambda expressions capture values, not variables.
 
@@ -161,5 +212,6 @@ Libraries
 
 # References
 
-* Functional Programming for Java Developers
-* Java 8 Lambdas
+* Functional Programming for Java Developers - Venkat Subramaniam - Pragmatic Programmers
+* Java 8 Lambdas - O'Reilly
+* Functional Thinking - by Neal Ford - O'Reilly

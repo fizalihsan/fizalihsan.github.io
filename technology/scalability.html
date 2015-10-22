@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>JavaScript Ecosystem - KnowledgeShop</title>
+  <title>Big Data Scalability - KnowledgeShop</title>
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="JavaScript Ecosystem AngularJS AngularJS Angular compiles takes a ‘template’, loads, compiles, tranforms and renders to DOM called ‘view’. Templates &hellip;">
+<meta name="description" content="Big Data Scalability Sharding Consistent hashing Black-Box Sharding Relational Sharding References Options for increasing the DB performance &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://fizalihsan.github.io/technology/js-ecosystem.html">
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/scalability.html">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <!-- Below custom CSS is for table border styling -->
@@ -95,62 +95,100 @@ messageStyle: "none",
 <article role="article">
   
   <header>
-    <h1 class="entry-title">JavaScript Ecosystem</h1>
+    <h1 class="entry-title">Big Data Scalability</h1>
     
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#angularjs">AngularJS</a></li>
+  <li><a href="#sharding">Sharding</a>    <ul>
+      <li><a href="#consistent-hashing">Consistent hashing</a></li>
+      <li><a href="#black-box-sharding">Black-Box Sharding</a></li>
+      <li><a href="#relational-sharding">Relational Sharding</a></li>
+    </ul>
+  </li>
+  <li><a href="#references">References</a></li>
 </ul>
 
-<h1 id="angularjs">AngularJS</h1>
+<p><em>Options for increasing the DB performance</em></p>
+
+<ol>
+  <li>Performance improvements on the existing monolithic DB</li>
+  <li>
+    <p>Vertical Scaling</p>
+
+    <ul>
+      <li><strong>CPU Upgrades</strong> - 
+        <ul>
+          <li>typically this is due to slow read queries. Optimizing those offensive queries can most of the times solve the issue. </li>
+          <li>If the CPU is high due to too many users, then typically scaling out is the only option.</li>
+          <li>If the memory is low, CPU usage can be high due to <em>disk swapping</em>.</li>
+        </ul>
+      </li>
+      <li><strong>Memory Upgrades</strong>
+        <ul>
+          <li>Memory is heavily used for caching results, index caching, sorting, aggregation, etc.</li>
+          <li>If the memory runs low, CPU automatically swaps the contents to disk which is typically 100 times slower. Adding more memory generally solves the problem, but there is a limit.</li>
+          <li>Highly inefficient queries also sometimes contribute to high memory usage.</li>
+        </ul>
+      </li>
+      <li><strong>Disk Upgrades</strong>
+        <ul>
+          <li>Full table scan queries or high user/transaction volume lead to high disk usage.</li>
+          <li>Using RAID subsystems or Solid State Drives (SSD) sometimes solve the issue. But upgrading disks rarely solve performance issues.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Read Scaling</p>
+
+    <ul>
+      <li>Read scaling is a simple technique of creating read-only replicas of the monolithic DB server to reduce the read-only queries on a single DB.</li>
+    </ul>
+  </li>
+  <li>
+    <p>Horizontal Scaling</p>
+
+    <ul>
+      <li>When your application involves heavy data reads/writes and heavy transactional volumes, and if none of the above techniques work, then scaling horizontally is the only option.</li>
+      <li>Partitioning/Sharding data across multiple nodes/servers in a cluster also introduces multiple failure points. DB cluster must be <em>highly available</em> to ensure the interim server failures do not interrupt the live operations.</li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="sharding">Sharding</h1>
+
+<h2 id="consistent-hashing">Consistent hashing</h2>
+
+<p>is a special kind of hashing such that when a hash table is resized and consistent hashing is used, only K/n keys need to be remapped on average, where K is the number of keys, and n is the number of slots. In contrast, in most traditional hash tables, a change in the number of array slots causes nearly all keys to be remapped.</p>
+
+<p>The advantage of Consistent Hashing with sharding is to reduce the number of rows affected (i.e., that need to be moved) as new physical shard servers are added or removed.</p>
+
+<h2 id="black-box-sharding">Black-Box Sharding</h2>
+
+<p>The most common sharding technique in existence is black-box sharding, meaning that the shard distribution logic is controlled internally by the toolkit or product, and not exposed to the application.</p>
+
+<p>The primary drawback for the black-box sharding approach is when you need to obtain related data, such as lists of items that have to do with a particular data element. I often refer to this as a <em>scatter-gather approach</em>: the data is scattered by key across the cluster, and must be gathered into meaningful lists of related data</p>
+
+<h2 id="relational-sharding">Relational Sharding</h2>
+
+<p>With relational sharding, the application or database architect defines the sharding schema along the natural data relationships in the data model. The advantage is that related data is <em>co-located</em> in the same physical server, allowing more application queries to be resolved with a single invocation to a given shard server.</p>
+
+<p>The sharding strategy for the relational approach also uses a hash function to partition the data, again typically using a modulus or consistent hash approach. It is also possible to partition data using a key range scheme, where shard keys are grouped together by a range (such as a date range).</p>
+
+<p>While it is true that relational sharding is easiest to implement with a relational DBMS engine, the advantages of this technique can be applied to other types of DBMS engines as well. It can even be used with an object database, through clever utilization of secondary indexes – particularly if the engine stores sharded data in range-based chunks.</p>
+
+<p>Allows easy join of related data unlike in black-box sharding.</p>
+
+<h1 id="references">References</h1>
 
 <ul>
-  <li>Angular compiles takes a ‘template’, loads, compiles, tranforms and renders to DOM called ‘view’.</li>
-  <li><strong>Templates</strong>
-    <ul>
-      <li>Templates once received from server are cacheable. Only the data changes from then on.</li>
-    </ul>
-  </li>
-  <li>2 types of markups
-    <ul>
-      <li>Directives - apply special behavior to attributes or elements in the HTML.</li>
-      <li>Double curly braces - &#8220; - An “expression” in a template is a JavaScript-like code snippet that allows to read and write variables.A filter formats the value of an expression for display to the user.</li>
-    </ul>
-  </li>
-  <li><strong>2-way data binding</strong> - Angular provides live bindings or “two-way data binding”: Whenever the input values change, the value of the expressions are automatically recalculated and the DOM is updated with their values. </li>
-  <li><strong>Controllers</strong> - The purpose of controllers is to expose variables and functionality to expressions and directives. </li>
-  <li><strong>Services</strong> - The purpose of services is to expose view-independent business logic.</li>
-  <li><strong>Factory</strong>
-  ???</li>
-  <li><strong>Modules</strong> - is where all the things need for Angular DI (Dependency Injection) is registered. When Angular starts, it will use the configuration of the module with the name defined by the ng-app directive, including the configuration of all modules that this module depends on.</li>
-  <li><strong>Common Directives</strong>
-    <ul>
-      <li><code>ng-app</code> - automatically initializes an application</li>
-      <li><code>ng-bind</code> is same as &#8220;</li>
-      <li><code>ng-model</code> - stores/updates the value of the input field into/from a variable.</li>
-      <li><code>ng-controller</code> - tells angular that an instance of a Controller is responsible for the element with the directive and all of the element’s children.</li>
-      <li><code>ng-repeat</code></li>
-      <li><code>ng-submit</code> - to group inputs in a form</li>
-      <li><code>ng-click</code></li>
-      <li><code>ng-dblclick</code></li>
-      <li><code>ng-show</code>/<code>ng-hide</code></li>
-    </ul>
-  </li>
+  <li>Understanding Big Data Scalability - Cory Isaacson</li>
 </ul>
 
   
     <footer>
       
-      
-        <div class="sharing">
-  
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/js-ecosystem.html" data-via="" data-counturl="http://fizalihsan.github.io/technology/js-ecosystem.html" >Tweet</a>
-  
-  
-  
-</div>
-
       
     </footer>
   

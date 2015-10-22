@@ -42,10 +42,10 @@ footer: true
 * **Fold or Reduce or Inject or Accumulate**
 	* Starting with a “seed” value, traverse through the collection and use each element to build up a new final value where each element from the original collection “contributes” to the final value. An example is summing a list of integers.
 
-				Combinators (Filter, map and fold) are modular, composable & reusable.
-				filter and map, return a new List, while fold can return anything we want.
-				Recursion can be avoided by using combinators.
-			Persistent Data Structures - ??? Software Transactional Memory
+* Combinators (Filter, map and fold) are modular, composable & reusable.
+	* filter and map, return a new List, while fold can return anything we want.
+	* Recursion can be avoided by using combinators.
+	* Persistent Data Structures - ??? Software Transactional Memory
 		
 # Concurrency Principles
 
@@ -79,7 +79,7 @@ The Actor model isn’t really a functional approach to concurrency, but it fits
 		return name -> name.startsWith(letter);
 	}
 			
-* In return name -> name.startsWith(letter), it’s clear what name is: it’s the parameter passed to this lambda expression. But what’s the variable letter bound to? Since that’s not in the scope of this anonymous function, Java reaches over to the scope of the definition of this lambda expression and finds the variable letter in that scope. This is called lexical scoping. Since this lambda expression closes over the scope of its definition, it’s also referred to as a closure.
+* In `return name -> name.startsWith(letter)`, it’s clear what name is: it’s the parameter passed to this lambda expression. But what’s the variable letter bound to? Since that’s not in the scope of this anonymous function, Java reaches over to the scope of the definition of this lambda expression and finds the variable letter in that scope. This is called lexical scoping. Since this lambda expression closes over the scope of its definition, it’s also referred to as a closure.
 * Local variables referenced from a lambda expression must be final or effectively final.
 
 ### Data Type Inference
@@ -92,12 +92,14 @@ In the following example, data type of the parameters are inferred by the compil
 * For those reasons, all functional interfaces should annotate with `@FunctionalInterface`.
 * Some useful functional interfaces
 
-	Predicate<T> - input = T, output = boolean
-	Consumer<T> - input = T, output = none
-	Function<T,R> - input = T, output = R
-	Supplier<T> - input = None, output = T
-	UnaryOperator<T> - input = T1, output = T2
-	BinaryOperator<T> - input = (T1, T2), output = T3
+```java
+Predicate<T> - input = T, output = boolean
+Consumer<T> - input = T, output = none
+Function<T,R> - input = T, output = R
+Supplier<T> - input = None, output = T
+UnaryOperator<T> - input = T1, output = T2
+BinaryOperator<T> - input = (T1, T2), output = T3
+```
 
 ### Default Methods
 * default methods are designed primarily to allow binary compatible API evolution. It allows API providers to add new methods to interfaces, and clients no longer are forced to implement them.
@@ -109,13 +111,17 @@ In the following example, data type of the parameters are inferred by the compil
 * With default methods, interfaces have now become like abstract classes. The only difference is abstract classes can have state while the interfaces can't.
 
 * ***Rules of Default Methods**
+
 1. Any class wins over any interface. So if there’s a method with a body, or an abstract declaration, in the superclass chain, we can ignore the interfaces completely.
 2. Subtype wins over supertype. If we have a situation in which two interfaces are competing to provide a default method and one interface extends the other, the subclass wins.
 3. No rule 3. If the previous two rules don’t give us the answer, the subclass must either implement the method or declare it abstract.
 
 ### Method References
-	artist -> artist.getName()    == 		Artist::getName
-	Classname::new - is for call constructors.
+
+```java
+artist -> artist.getName() == Artist::getName
+Classname::new - is for call constructors.
+```
 
 * The above two statements are one and the same. The standard form is `Classname::methodName`. Remember that even though it’s a method, you don’t need to use brackets because you’re not actually calling the method. You’re providing the equivalent of a lambda expression that can be called in order to call the method.
 * Method references can refer to static methods, non-static methods and methods with input parameters.
@@ -129,7 +135,9 @@ allArtists.stream().filter(artist -> artist.isFrom("London")).count();
 * It’s very easy to figure out whether an operation is eager or lazy: look at what it returns. If it gives you back a Stream, it’s lazy; if it gives you back another value or void, then it’s eager. This makes sense because the preferred way of using these methods is to form a sequence of lazy operations chained together and then to have a single eager operation at the end that generates your result.
 * This whole approach is somewhat similar to the familiar builder pattern. In the builder pattern, there are a sequence of calls that set up properties or configuration, followed by a single call to a build method. The object being created isn’t created until the call to build occurs.
 
-			List<String> collected = Stream.of("a", "b", "hello") .map(string -> string.toUpperCase()) .collect(toList());
+```java
+List<String> collected = Stream.of("a", "b", "hello") .map(string -> string.toUpperCase()) .collect(toList());
+```
 
 ### Data Parallelism
 * Data parallelism is a way to split up work to be done on many cores at the same time. In streams framework, we can utilize data parallelism by calling the parallel or parallelStream methods.
@@ -139,17 +147,19 @@ allArtists.stream().filter(artist -> artist.isFrom("London")).count();
 * The five main factors influencing performance are the data size, the source data structure, whether the values are packed, the number of available cores, and how much processing time is spent on each element.
 
 Libraries
+
 * Java 8 introduces default methods and static methods on interfaces. This change means that methods on interfaces can now have bodies and contain code.
 * As a consequence of these performance overheads, the streams library differentiates between the primitive and boxed versions of some library functions. The mapToLong higher-order function and ToLongFunction, shown in Figure 4-1, are examples of this effort. Only the int, long, and double types have been chosen as the focus of the primitive specialization implementation in Java 8 because the impact is most noticeable in numerical algorithms.
 
 ## Lambdas and Patterns
+
 * Loan Pattern -
-* Execute Around Method
-	A synchronized block of code, such as synchronized { ... }, is a realization of the execute around method pattern.
+* Execute Around Method - A synchronized block of code, such as synchronized { ... }, is a realization of the execute around method pattern.
 * Referential transparency
 * Tail-Call Optimization
-The biggest hurdle to using recursion is the risk of stack overflow for problems with large inputs. The brilliant TCO technique can remove that concern. A tail call is a recursive call in which the last operation performed is a call to itself. Java does not directly support TCO at the compiler level, but we can use lambda expressions to implement it in a few lines of code. This is called 'trampoline calls' and lets enjoy the power of recursion without the concern of blowing up the stack.
+	* The biggest hurdle to using recursion is the risk of stack overflow for problems with large inputs. The brilliant TCO technique can remove that concern. A tail call is a recursive call in which the last operation performed is a call to itself. Java does not directly support TCO at the compiler level, but we can use lambda expressions to implement it in a few lines of code. This is called 'trampoline calls' and lets enjoy the power of recursion without the concern of blowing up the stack.
 
 # References
+
 * Functional Programming for Java Developers
 * Java 8 Lambdas

@@ -82,12 +82,12 @@ footer: true
 Storing multi-level hierarchical data like organization chart, threaded discussion and comments, directory structure, etc.
 
 ```sql
-	CREATE TABLE Comment (
-		id INT PRIMARY KEY
-		parent_id INT,
-		....
-		FOREIGN KEY (parent_id) REFERENCES Comment (id)
-	)
+CREATE TABLE Comment (
+	id INT PRIMARY KEY
+	parent_id INT,
+	....
+	FOREIGN KEY (parent_id) REFERENCES Comment (id)
+)
 ```
 
 **Pros**
@@ -108,12 +108,12 @@ Storing multi-level hierarchical data like organization chart, threaded discussi
 	* Instead of storing parent_id, store the path to each node in unix file path like format in varchar column. E.g., 1/2/4/5.
 
 ```sql
-		CREATE TABLE Comment (
-			id INT PRIMARY KEY
-			path VARCHAR(1000), <------
-			....
-			FOREIGN KEY (parent_id) REFERENCES Comment (id)
-		)
+CREATE TABLE Comment (
+	id INT PRIMARY KEY
+	path VARCHAR(1000), <------
+	....
+	FOREIGN KEY (parent_id) REFERENCES Comment (id)
+)
 ```
 **Pros**
 

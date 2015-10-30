@@ -6,10 +6,31 @@ sharing: true
 footer: true
 ---
 
+* list element with functor item
+{:toc}
 
 
-## Excerpts from book: HBR Guide to Better Business Writing
+*Simple tips for business writings*
 
+* Avoid passive voices
+* Avoid sarcasm
+* Avoid overblown/pompous words and prefer every equivalents
+* Avoid buzz words or cliche
+* Avoid monotony
+* Avoid acronyms
+* Avoid repetition of a word
+
+* Use personal pronouns (don't overuse **I**)
+* Drop prepositions
+* Replace every **-ion** with a verb
+* Replace **is** & **was** with a stronger verb
+* Vary length and structure of sentences. 
+* Use personal touch
+* Don't use a distant tone with a closest colleague. Don't use a chummy tone with someone you don't know well.
+* Never make your reader admit that they are in wrong
+* Layout important points chronologically
+* Break down your email or document into smaller sections
+* Review and find a shorter phrase to express the ideas
 * Under the purpose of writing
   * Know why you are writing. Know what you want the outcome to be.
   * Say clearly and convincingly, what the issue is and what you want to accomplish.
@@ -42,7 +63,7 @@ footer: true
 * How will your communication benefit your readers? Make it clear to readers how you're meeting their needs.
 
 
-### Sample Sentences
+*Sample Sentences*
 
 * Friendly Tone 
   * Could it be that the work isn't finished?
@@ -53,3 +74,7 @@ footer: true
   * We are **delighted**...
 * Bad news
   * We are **troubled** to learn...
+
+# References
+
+* HBR Guide to Better Business Writing

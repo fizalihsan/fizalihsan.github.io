@@ -219,3 +219,16 @@ There are 4 things to do when one goes out in the path of Allah
 5. Do not stress too much to give names to go out in the path of Allah
 6. Explain the virtues of striving in the path of Allah
 
+## A'maal for ladies at home
+
+1. Punctuality in 5 fardh salaah and nawaafil
+2. Daily ta'leem at home (*same place & time*)
+3. Reciting Quran (*2 khatam per year or 1 juz per day*) and making dhikr
+	* After fajr - Surah Yaseen
+	* After zohar - Surah Fatah
+	* After asr - Surah Naba
+	* After maghrib - Surah Waqiah
+	* After isha - Surah Mulk
+4. Tarbiyat of the children
+5. Simplicity at home in dressing and all affairs
+6. Going out in the path of Allah for 72 hrs every 3 months.

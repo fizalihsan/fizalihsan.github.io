@@ -79,6 +79,38 @@ $ cd ./_deploy
 $ git pull origin master  # update the local master branch
 ```
 
+# Amazon EC2 Cheat Sheet
+
+Instance Id: i-55f0535b
+Public DNS: ec2-54-152-49-108.compute-1.amazonaws.com
+
+User: Nasrin
+  Access Key ID: AKIAIQYPAAODJJP4OFFQ
+  Secret Access Key: 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
+
+Set up instructions
+  * Create an instance from AMI
+  * Create security group
+  * Create new user from IAM console
+  * To connect to EC2 instance via AWS CLI
+    * Download AWS CLI
+    * Configure AWS CLI - http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html
+  * To test if the AWS instance is working
+    * aws ec2 get-console-output --instance-id instance_id
+  * To connect via PuTTY - https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/putty.html
+  * To connect via ssh in windows CLI
+    ssh -i C:\Fizal\ImportantDocuments\AmazonAWS\salaamah.pem ubuntu@54.191.204.118
+  * To configure FileZilla for ftp
+  * To install Java 7 in Ubuntu
+    sudo add-apt-repository ppa:webupd8team/java
+    sudo apt-get update
+    sudo apt-get install oracle-java7-installer
+
+    To automatically set up the Java 7 environment variables JAVA_HOME and PATH
+      sudo apt-get install oracle-java7-set-default
+  * To install Tomcat 8 on Ubuntu
+    wget --no-check-certificate http://apache.arvixe.com/tomcat/tomcat-8/v8.0.17/bin/apache-tomcat-8.0.17.tar.gz
+
 
 
 

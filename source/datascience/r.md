@@ -11,7 +11,7 @@ footer: true
 
 ## Data Types
 
-### Basic Data Types
+### Basic Data Types - Hello
 R has five basic or “atomic” classes of objects:
 
 1. **character**

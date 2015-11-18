@@ -88,9 +88,32 @@ Eric Evans - Application Layer, Domain Layer
 ## Naked Objects Pattern
 
 
+# Agile Software Architecture
+
+* Agile-centric or plan-centric development. Architecture before or refactoring later?
+* (-) academic style of writing. 
+* attribute-driven design (ADD) method 
+* business architecture process and organization
+* the Rationale Unified Process's 4+1 Views 
+* Siemens' 4 Views 
+* architectural separation of concerns
+
+# Software Architecture Documentation
+
+## Rationale Unified Process's 4+1 Views
+
+The 4+1 view model intends to describe an architecture using five concurrent views. Each of them addresses a specific set of concerns.
+
+1. *Logical view* denotes the partitions of the functional requirements onto the logical entities in an architecture. This view illustrates a design's object model in an object-oriented design approach.
+2. *Process view* is used to represent some types of ASRs, such as concurrency and performance. This view can be described at several levels of abstraction, each of which addresses an individual issue.
+3. *Development view* illustrates the organization of the actual software modules in the software development environment. This view also represents internal properties, such as reusability, ease of development, testability, and commonality. It is usually made up of subsystems, which are organized in a hierarchy of layers. This view also supports allocation of requirements and work division, cost assessment, planning, progress monitoring, and reasoning about reuse, portability and security.
+4. *Physical view* represents the mapping of the architectural elements captured in the logical, process, and development views onto networks of computers. This view takes into consideration the NFRs (e.g., availability, reliability (fault tolerance), performance (throughput), and scalability).
+5. *Scenarios* are used to demonstrate that the elements of other views can work together seamlessly.
+
 # Bibliography
 
 * Patterns of Enterprise Application Architecture - Martin Fowler 
+* Agile Software Architecture
 * http://martinfowler.com/bliki/ValueObject.html
 * http://martinfowler.com/eaaCatalog/dataTransferObject.html
 * http://java.sun.com/blueprints/patterns/TransferObject.html

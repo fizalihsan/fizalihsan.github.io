@@ -15,6 +15,7 @@ footer: true
     * [Logging & Monitoring]({{ root_url }}/technology/logging-and-monitoring.html)
     * [Patterns]({{ root_url }}/technology/patterns.html)
     * [SDLC]({{ root_url }}/technology/sdlc.html)
+    * [Security]({{ root_url }}/technology/security.html)
     * [Transactions]({{ root_url }}/technology/transaction.html)
 
   * BigData
@@ -27,6 +28,11 @@ footer: true
     * [Design]({{ root_url }}/technology/db-design.html)
     * [Performance]({{ root_url }}/technology/db-performance.html)
     * [RDBMS Products]({{ root_url }}/technology/rdbms-products.html)
+
+  * Functional Programming
+    * [Concepts]({{ root_url }}/technology/functionalprogramming.html)
+    * [Groovy]({{ root_url }}/technology/groovy.html)
+    * [Scala]({{ root_url }}/technology/scala.html)
 
   * Java
     * [Core Concepts]({{ root_url }}/technology/java.html)
@@ -42,15 +48,12 @@ footer: true
     * [Web]({{ root_url }}/technology/java-web.html)
     * [Java Specialist Newsletters]({{ root_url }}/technology/java-newsletters.html)
 
-  * Languages
-    * [Functional Programming]({{ root_url }}/technology/functionalprogramming.html)
-    * [Groovy]({{ root_url }}/technology/groovy.html)
-    * [Scala]({{ root_url }}/technology/scala.html)
-
   * SOA
     * [SOA]({{ root_url }}/technology/soa.html)
     * [Messaging]({{ root_url }}/technology/messaging.html)
     * [Web Services]({{ root_url }}/technology/webservices.html)
+    * [REST Services]({{ root_url }}/technology/rest-services.html)
+    * [SOAP Services]({{ root_url }}/technology/soap-services.html)
     * [XML]({{ root_url }}/technology/xml.html)
 
   * Web Programming
@@ -61,7 +64,6 @@ footer: true
     * [Data Structures]({{ root_url }}/technology/datastructures.html)
     * [OOPS]({{ root_url }}/technology/oops.html)
     * [Operating Systems]({{ root_url }}/technology/os.html)
-    * [Security]({{ root_url }}/technology/security.html)
     * [VCS]({{ root_url }}/technology/vcs.html)
     * [Coding Bibliography]({{ root_url }}/technology/coding_bibliography.html)
 

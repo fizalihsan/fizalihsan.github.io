@@ -10,5 +10,6 @@ footer: false
 {:toc}
 
 * [Environmental Setup - Cheat Sheets]({{ root_url }}/cheat-sheets.html)
-* [Tabligh]({{ root_url }}/islamic/dawah.html)
 * [Interview]({{ root_url }}/softskills/interview.html)
+* [Physics]({{ root_url }}/misc/physics.html)
+* [Tabligh]({{ root_url }}/islamic/dawah.html)

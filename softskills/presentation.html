@@ -269,7 +269,7 @@ messageStyle: "none",
       
         <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/softskills/presentation.html" data-via="" data-counturl="http://fizalihsan.github.io/softskills/presentation.html" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/softskills/presentation.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/softskills/presentation.html" >Tweet</a>
   
   
   
@@ -292,7 +292,7 @@ messageStyle: "none",
 
 		<li>
 			<h3>Architecture</h3>
-			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/concurrency-parallelism.html">Concurrency & Parallelism</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>  |  <a href="/technology/transaction.html">Transactions</a>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/concurrency-parallelism.html">Concurrency & Parallelism</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
 		</li>
 		
 		<li>
@@ -306,18 +306,18 @@ messageStyle: "none",
 		</li>
 
 		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>  |  <a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
 			<h3>Java</h3>
 			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-io.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/spring.html">Spring</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
 		</li>
 
 		<li>
-			<h3>Languages</h3>
-			<a href="/technology/functionalprogramming.html">Functional Programming</a>  |  <a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/scala.html">Scala</a>
-		</li>
-
-		<li>
 			<h3>SOA</h3>
-			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/messaging.html">Messaging</a>  |  <a href="/technology/webservices.html">Web Services</a>  |  <a href="/technology/xml.html">XML</a>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/messaging.html">Messaging</a>  |  <a href="/technology/webservices.html">Web Services</a>   |  <a href="/technology/rest-services.html">REST Services</a>  |  <a href="/technology/soap-services.html">SOAP Services</a> |  <a href="/technology/xml.html">XML</a>
 		</li>
 
 		<li>
@@ -327,7 +327,7 @@ messageStyle: "none",
 
 		<li>
 			<h3>General Concepts</h3>
-			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
 		</li>
 
 		<h2>Non-Techninal</h2>
@@ -357,6 +357,35 @@ messageStyle: "none",
     <li><a href="/datascience/statistics.html">Statistics</a></li>
     <li><a href="/datascience/r.html">R Programming</a></li>
   </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
 </section>
 
 

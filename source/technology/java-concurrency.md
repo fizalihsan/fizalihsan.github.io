@@ -504,7 +504,7 @@ Concurrency/Parallelism does not necessarily make a program run faster; it may e
 
 ## Class diagram
 
-{% img /technology/executor-class-diagram.png %}
+{% img right /technology/executor-class-diagram.png %}
 
 * `Executor` Interface 
   * has only one method - `execute(Runnable)`

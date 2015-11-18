@@ -57,29 +57,16 @@ For the record, RESTful web services are Turing complete; that is, these service
 
 # RESTful Architectural Principles
 
-## Addressable resources
-
-The key abstraction of information and data in REST is a resource, and each resource must be addressable via a URI (Uniform Resource Identifier).
-
-## A uniform, constrained interface
-
-The Uniform, Constrained Interface - The idea behind it is that you stick to the finite set of operations of the application protocol you’re distributing your services upon. This means that you don’t have an “action” parameter in your URI and use only the methods of HTTP for your web services. HTTP has a small, fixed set of operational methods. Use a small set of well-defined methods to manipulate your resources.
-
-## Representation-oriented
-
-interact with services using representations of that service. A resource referenced by one URI can have different formats. Different platforms need different formats. For example, browsers need HTML, JavaScript needs JSON (JavaScript Object Notation), and a Java application may need XML.
-
-## Communicate statelessly
-
-stateless means that there is no client session data stored on the server. Client should maintain sessions, if required. A service layer that does not have to maintain client sessions is a lot easier to scale, as it has to do a lot fewer expensive replications in a clustered environment. It’s a lot easier to scale up, because all you have to do is add machines.
-
-## Hypermedia As The Engine Of Application State (HATEOAS)
-
-* Hypermedia is a document-centric approach with the added support for embedding links to other services and information within that document format. The more interesting part of HATEOAS is the “engine.”  Let your data formats drive state transitions in your applications.
-* The architectural principle that describes linking and form submission is called HATEOAS. 
-* HATEOAS stands for Hypermedia As The Engine Of Application State.
-* The idea of HATEOAS is that your data format provides extra information on how to change the state of your application. On the Web, HTML links allow you to change the state of your browser. When reading a web page, a link tells you which possible documents (states) you can view next. When you click a link, your browser’s state changes as it visits and renders a new web page. HTML forms, on the other hand, provide a way for you to change the state of a specific resource on your server. When you buy something on the Internet through an HTML form, you are creating two new resources on the server: a credit card transaction and an order entry.
-* When applying HATEOAS to web services, the idea is to embed links within your XML or JSON documents. While this can be as easy as inserting a URL as the value of an element or attribute, most XML-based RESTful applications use syntax from the Atom* Syndication Format as a means to implement HATEOAS.
+* **Addressable resources** - The key abstraction of information and data in REST is a resource, and each resource must be addressable via a URI (Uniform Resource Identifier).
+* **A uniform, constrained interface** - The Uniform, Constrained Interface - The idea behind it is that you stick to the finite set of operations of the application protocol you’re distributing your services upon. This means that you don’t have an “action” parameter in your URI and use only the methods of HTTP for your web services. HTTP has a small, fixed set of operational methods. Use a small set of well-defined methods to manipulate your resources.
+* **Representation-oriented** - interact with services using representations of that service. A resource referenced by one URI can have different formats. Different platforms need different formats. For example, browsers need HTML, JavaScript needs JSON (JavaScript Object Notation), and a Java application may need XML.
+* **Communicate statelessly** - stateless means that there is no client session data stored on the server. Client should maintain sessions, if required. A service layer that does not have to maintain client sessions is a lot easier to scale, as it has to do a lot fewer expensive replications in a clustered environment. It’s a lot easier to scale up, because all you have to do is add machines.
+* **Hypermedia As The Engine Of Application State (HATEOAS)**
+	* Hypermedia is a document-centric approach with the added support for embedding links to other services and information within that document format. The more interesting part of HATEOAS is the “engine.”  Let your data formats drive state transitions in your applications.
+	* The architectural principle that describes linking and form submission is called HATEOAS. 
+	* HATEOAS stands for Hypermedia As The Engine Of Application State.
+	* The idea of HATEOAS is that your data format provides extra information on how to change the state of your application. On the Web, HTML links allow you to change the state of your browser. When reading a web page, a link tells you which possible documents (states) you can view next. When you click a link, your browser’s state changes as it visits and renders a new web page. HTML forms, on the other hand, provide a way for you to change the state of a specific resource on your server. When you buy something on the Internet through an HTML form, you are creating two new resources on the server: a credit card transaction and an order entry.
+	* When applying HATEOAS to web services, the idea is to embed links within your XML or JSON documents. While this can be as easy as inserting a URL as the value of an element or attribute, most XML-based RESTful applications use syntax from the Atom  Syndication Format as a means to implement HATEOAS.
 
 
 # WADL

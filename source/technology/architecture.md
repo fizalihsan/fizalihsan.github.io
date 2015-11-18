@@ -21,8 +21,6 @@ There have historically been four approaches to integration: file transfer, shar
 3. **Logical coupling (routing)**: Logical coupling describes the requirement of a producer to know how to connect with the consumer. One way to fix this is to introduce a central, shared location where both parties exchange data. Then, if a producer decides to move (change IP, put up a firewall, and so on) or decides to add extra steps before publishing messages, the client remains
 
 
-
-
 # Architecture Patterns
 
 ## Domain Driven Design
@@ -42,16 +40,14 @@ There have historically been four approaches to integration: file transfer, shar
 * well connected with other domain objects with relationship and structure
 * Examples of behaviour - validations, calculations, business rules
 * Only business logic - no persistence or presentation logic
-* Completely persistance Ignorant (Mithra domain model breaks this)
-* When to use?
-* When NOT to use?
+* Completely persistance ignorant (Mithra domain model breaks this)
 
 ### Value Objects
 
 * 2 value objects are equal if all their fields are equal. Although all fields are equal, you don't need to compare all fields if a subset is unique - for example currency codes for currency objects are enough to test equality
 * Should be immutable
 * A value object should always override .equals() & .hashCode() in Java
-* http://c2.com/cgi/wiki?ValueObject
+* [ValueObject](http://c2.com/cgi/wiki?ValueObject)
 * Diff between Value objects and Domain objects?
 
 ### Data Transfer Object
@@ -80,7 +76,6 @@ Eric Evans - Application Layer, Domain Layer
 
 ## Domain Specific Language (DSL)
 
-* Writing internal DSL in Java - http://jmock.org/oopsla2006.pdf
 * http://blog.jooq.org/2012/01/05/the-java-fluent-api-designer-crash-course/
 * http://www.infoq.com/articles/internal-dsls-java
 * http://weblogs.java.net/blog/carcassi/archive/2010/02/04/building-fluent-api-internal-dsl-java

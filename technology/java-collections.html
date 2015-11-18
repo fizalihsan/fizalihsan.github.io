@@ -81,6 +81,22 @@ messageStyle: "none",
   
 </ul>
   
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+  
+    <form action="/search" method="get">
+  <fieldset role ="search">
+    <input type="text" id="search-query" name="q" placeholder="Search" autocomplete="off" class="search" />
+  </fieldset>
+</form>
+
+  
 <ul class="main-navigation">
   <li><a href="/">Home</a></li>
   <li><a href="/blog/archives">Archives</a></li>
@@ -226,7 +242,7 @@ messageStyle: "none",
       <td>Unbounded wildcard</td>
       <td><code>List&lt;?&gt;</code></td>
       <td>Any type</td>
-      <td>Only get is allowed. <br />&lt;p&gt;<code>List&lt;?&gt; nums = new ArrayList<integer>(); <br />nums.add(1); //not allowed <br />nums.add(null); //exception: allowed &lt;/code&gt;&lt;/p&gt;</integer></code></td>
+      <td>Only get is allowed. <br />&lt;p&gt;<code>List&lt;?&gt; nums = new ArrayList&lt;Integer&gt;(); &lt;br/&gt;nums.add(1); //not allowed &lt;br/&gt;nums.add(null); //exception: allowed </code>&lt;/p&gt;</td>
     </tr>
     <tr>
       <td>3</td>
@@ -282,12 +298,13 @@ messageStyle: "none",
   <li><strong>Contravariant</strong> - Wildcards also introduce contravariant subtyping for generics, in that type <code>List&lt;S&gt;</code> is considered to be a subtype of <code>List&lt;? super T&gt;</code> when S is a supertype of T (as opposed to a subtype). Arrays do not support contravariant subtyping.</li>
 </ul>
 
-<blockquote>
-  <p><strong>Points to remember</strong>
-* Avoid mixing raw type and generic type.
-* (T t = new T(); //not allowed, where T is a generic type
-* Do not mix generics and varargs - http://www.javaspecialists.eu/archive/Issue140.html</p>
-</blockquote>
+<p><strong>Points to remember</strong></p>
+
+<ul>
+  <li>Avoid mixing raw type and generic type.</li>
+  <li><code>(T t = new T(); //not allowed, where T is a generic type</code></li>
+  <li>Do not mix generics and varargs - http://www.javaspecialists.eu/archive/Issue140.html</li>
+</ul>
 
 <h2 id="type-erasure">Type Erasure</h2>
 

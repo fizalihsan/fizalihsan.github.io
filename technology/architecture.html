@@ -81,6 +81,22 @@ messageStyle: "none",
   
 </ul>
   
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+  
+    <form action="/search" method="get">
+  <fieldset role ="search">
+    <input type="text" id="search-query" name="q" placeholder="Search" autocomplete="off" class="search" />
+  </fieldset>
+</form>
+
+  
 <ul class="main-navigation">
   <li><a href="/">Home</a></li>
   <li><a href="/blog/archives">Archives</a></li>
@@ -159,9 +175,7 @@ messageStyle: "none",
   <li>well connected with other domain objects with relationship and structure</li>
   <li>Examples of behaviour - validations, calculations, business rules</li>
   <li>Only business logic - no persistence or presentation logic</li>
-  <li>Completely persistance Ignorant (Mithra domain model breaks this)</li>
-  <li>When to use?</li>
-  <li>When NOT to use?</li>
+  <li>Completely persistance ignorant (Mithra domain model breaks this)</li>
 </ul>
 
 <h3 id="value-objects">Value Objects</h3>
@@ -170,7 +184,7 @@ messageStyle: "none",
   <li>2 value objects are equal if all their fields are equal. Although all fields are equal, you don’t need to compare all fields if a subset is unique - for example currency codes for currency objects are enough to test equality</li>
   <li>Should be immutable</li>
   <li>A value object should always override .equals() &amp; .hashCode() in Java</li>
-  <li>http://c2.com/cgi/wiki?ValueObject</li>
+  <li><a href="http://c2.com/cgi/wiki?ValueObject">ValueObject</a></li>
   <li>Diff between Value objects and Domain objects?</li>
 </ul>
 
@@ -205,7 +219,6 @@ Eric Evans - Application Layer, Domain Layer</p>
 <h2 id="domain-specific-language-dsl">Domain Specific Language (DSL)</h2>
 
 <ul>
-  <li>Writing internal DSL in Java - http://jmock.org/oopsla2006.pdf</li>
   <li>http://blog.jooq.org/2012/01/05/the-java-fluent-api-designer-crash-course/</li>
   <li>http://www.infoq.com/articles/internal-dsls-java</li>
   <li>http://weblogs.java.net/blog/carcassi/archive/2010/02/04/building-fluent-api-internal-dsl-java</li>

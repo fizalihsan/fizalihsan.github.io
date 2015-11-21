@@ -10,7 +10,7 @@ footer: true
 {:toc}
 
 # Best Practices
-* [Issue 039] Why I don't read your code comments ...
+* [Issue 039](http://www.javaspecialists.eu/archive/Issue039.html) Why I don't read your code comments ...
 * [Issue 050] Commenting out your code?
 * [Issue 116] Closing Database Statements Don't Repeat Yourself. The mantra of the good Java programmer. But database code often leads to this antipattern. Here is a neat simple solution from the Jakarta Commons DbUtils project.
 * [Issue 051] Java Import Statement Cleanup

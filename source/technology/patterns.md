@@ -15,14 +15,23 @@ footer: true
 Also called 'Wrapper' pattern
 
 ### Object Adapter
+
 ### Class Adapter
+
 ## Bridge
+
 ## Builder
+
 ## Chain of Responsibility
+
 ## Circular Buffer
+
 ## Command
+
 ## Composite
+
 ## Decorator
+
 ## Factory
 
 Beware of the ambiguity in the names - Static Factory Method (in Effective Java) is not the same as Factory Method (in GoF)
@@ -33,9 +42,7 @@ Beware of the ambiguity in the names - Static Factory Method (in Effective Java)
 * (+) Creates objects without exposing the instantiation logic to the client.
 * (+) Since client refers to the product via a common interface, factory can change the product implementation anytime after go-live.
 
-**Implementation Variations**
-
-#### Type 1: Parameterized Factory Method
+**Type 1: Parameterized Factory Method**
 Classical switch-case/if-condition based factory method that takes a parameter to decide the type of product to return
 * (+) New products can be added without changing the client code.
 * (-) Tight coupling between factory and product implementations. In other words, Factory class needs to change for every new product. It violates the Open Close Principle.
@@ -53,7 +60,7 @@ public class Factory{
 }
 ```
 
-#### Type 2: Dynamic Class Registration
+**Type 2: Dynamic Class Registration**
 Keep the map of key and product type away from the factory. It could be a properties file or statically registered in common registry class. Factory can dynamically create an instance of the product either by Class.forName() or using reflection.
 * (+) Factory class is not changed every time a product is added
 * (-) Using reflection impacts the performance
@@ -119,16 +126,27 @@ Defines an interface for creating an object, but lets subclasses decide which cl
  {% img /technology/AbstractFactory.png %}
 
 ## Flyweight
+
 ## Interpretor
+
 ## Iterator
+
 ## Mediator
+
 ## Memento
+
 ## Observer
+
 ## Prototype
+
 ## Proxy
+
 ### Dynamic Proxy
+
 Mockito, Spring container
+
 #### Virtual Proxy
+
 #### Counting Proxy
 
 ## Singleton
@@ -163,7 +181,7 @@ Mockito, Spring container
       * Work around: use volatile field or make class immutable
 
 
-### Type 1 - Early init with public static final field	
+** Type 1 - Early init with public static final field	**
 <pre>
 public class Singleton{
    <span style="color:red">public static final</span> Singleton INSTANCE = new Singleton();
@@ -171,7 +189,7 @@ public class Singleton{
 }
 </pre>
 
-### Type 2 - Early init with private static field & factory method
+** Type 2 - Early init with private static field & factory method**
 ```
 public class Singleton{
    private static final Singleton INSTANCE = new Singleton();
@@ -184,14 +202,14 @@ public class Singleton{
 }
 ```
 
-### Type 3 - Early init via Enum
+**Type 3 - Early init via Enum**
 <pre>
  public <span style="color:red">enum</span> Singleton{
     INSTANCE; //By default, public static final
  }
 </pre>
 
-### Type 4 - Lazy init - not thread-safe
+**Type 4 - Lazy init - not thread-safe**
 <pre>
 public class Singleton{
    private static Singleton instance;
@@ -209,7 +227,7 @@ public class Singleton{
 }
 </pre>
 
-### Type 5 - Lazy init - Thread-safe but worst performing
+**Type 5 - Lazy init - Thread-safe but worst performing**
 <pre>
  public class Singleton{
    private static Singleton instance;
@@ -225,7 +243,7 @@ public class Singleton{
 }
 </pre>
 
-###  Type 6 - Lazy init - Thread-safe via Double-checked lock (BROKEN)
+**Type 6 - Lazy init - Thread-safe via Double-checked lock (BROKEN)**
 <pre>
  public class Singleton{
    private static Singleton instance;
@@ -245,7 +263,7 @@ public class Singleton{
 }
 </pre>
 
-###  Type 7 - Lazy init - Thread-safe via DCL and volatile instance (works in Java 5+)
+**Type 7 - Lazy init - Thread-safe via DCL and volatile instance (works in Java 5+)**
 <pre>
 public class Singleton{
    private static <span style="color:red">volatile</span> Singleton instance;
@@ -265,10 +283,13 @@ public class Singleton{
 </pre>
 
 ## State
+
 ## Strategy
+
 ## Reactor
 
 ## Recycle Bin
+
 http://c2.com/cgi/wiki?RecycleBin
 You can also find recycle bins in Java, such as in the thread pooling that you can configure using classes like ScheduledThreadPoolExecutor and ThreadPoolExecutor.
 
@@ -297,24 +318,38 @@ You can also find recycle bins in Java, such as in the thread pooling that you c
 > Refer "Software Architecture Design Patterns" book
 
 ## Active Object
+
 ## Balking Pattern
+
 ## Barrier
+
 ## Consistent Lock Order
+
 ## Critical Section
+
 ## Disruptor
+
 ## Guarded Suspension
+
 ## Monitor Object
+
 ## Producer/Consumer pattern
+
 ## Read-Write Lock
 
 # Architectural Patterns
 
 ## Active Record
+
 ## Business Delegate
+
 ## Data Access Object (DAO)
+
 ## Dependency Injection or IOC
 
-(http://www.martinfowler.com/articles/injection.html) Decoupling the implementation dependencies from the application class to a plug-in model. Types of Dependency injections
+(http://www.martinfowler.com/articles/injection.html) Decoupling the implementation dependencies from the application class to a plug-in model. 
+
+Types of Dependency injections
 
 * Constructor injection
 * Setter injection
@@ -335,6 +370,7 @@ You can also find recycle bins in Java, such as in the thread pooling that you c
 
 
 ## Model View Controller 
+
 MVC & MVC2
 
 ## Naked objects

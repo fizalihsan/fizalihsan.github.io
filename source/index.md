@@ -20,6 +20,7 @@ footer: true
 
   * BigData
     * [Concepts]({{ root_url }}/technology/bigdata.html)
+    * [Concepts]({{ root_url }}/technology/distributedcomputing.html)
     * [ElasticSearch]({{ root_url }}/technology/elasticsearch.html)
     * [NoSQL]({{ root_url }}/technology/nosql.html)
 
@@ -61,6 +62,7 @@ footer: true
     * [JS Ecosystem]({{ root_url }}/technology/js-ecosystem.html)
 
   * General Concepts
+    * [Algorithms]({{ root_url }}/technology/algorithms.html)
     * [Data Structures]({{ root_url }}/technology/datastructures.html)
     * [OOPS]({{ root_url }}/technology/oops.html)
     * [Operating Systems]({{ root_url }}/technology/os.html)

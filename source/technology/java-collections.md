@@ -43,6 +43,11 @@ footer: true
 
 ## Variance
 
+* Types
+  * **Covariant**: a `Cat[]` is an `Animal[]`. Java arrays are covariant.
+  * **Contravariant**: an `Animal[]` is a `Cat[]`
+  * **Invariant**: an `Animal[]` is not a `Cat[]` and a `Cat[]` is not an `Animal[]`?. Java generics are invariant.
+
 * **Covariant** - Java arrays are covariant, meaning that type S[] is considered to be a subtype of T[] whenever S is a subtype of T. Due to this nature, the following code throws exception at runtime. When an array is allocated (as on the first line), it is tagged with its reified type (a run-time representation of its component type, in this case, Integer), and every time an array is assigned into (as on the third line), an array store exception is raised if the reified type is not compatible with the assigned value (in this case, a double cannot be stored into an array of Integer).
 
 ```java
@@ -88,43 +93,50 @@ String s = ((String)words.get(0))+((String)words.get(1));
 assert s.equals("Hello world!");
 ```
 
+* Java has *typed erased generics* which loses type information at runtime. JetBrains'' Kotlin language has *reified generics* which retains the type information at runtime.
+
 # Collections Framework
 
 ## Concurrent Collections
 
 The latest concurrent collections achieve thread-safety by different mechanisms. 
 
-* **Copy-On-Write**: Classes that use copy-on-write store their values in an internal array, which is effectively immutable; any change to the value of the collection results in a new array being created to represent the new values. 
-  * Synchronization is used by these classes, though only briefly, during the creation of a new array; because read operations do not need to be synchronized, copy-on-write collections perform well in the situations for which they are designed—those in which reads greatly predominate over writes. 
-* **Copy-on-write** is used by the collection classes `CopyOnWriteArrayList` and `CopyOnWriteArraySet`.
-  * **Compare-and-Swap (CAS)**: A second group of thread-safe collections relies on compare-and-swap (CAS), a fundamental improvement on traditional synchronization. To see how it works, consider a computation in which the value of a single variable is used as input to a long-running calculation whose eventual result is used to update the variable. Traditional synchronization makes the whole computation atomic, excluding any other thread from concurrently accessing the variable. This reduces opportunities for parallel execution and hurts throughput. An algorithm based on CAS behaves differently: it makes a local copy of the variable and performs the calculation without getting exclusive access. Only when it is ready to update the variable does it call CAS, which in one atomic operation compares the variable’s value with its value at the start and, if they are the same, updates it with the new value. If they are not the same, the variable must have been modified by another thread; in this situation, the CAS thread can try the whole computation again using the new value, or give up, or—in some algorithms— continue, because the interference will have actually done its work for it! 
+* **1. Copy-On-Write** 
+  * Classes that use copy-on-write store their values in an internal array, which is effectively immutable; any change to the value of the collection results in a new array being created to represent the new values.
+  * Synchronization is used by these classes, though only briefly, during the creation of a new array; because read operations do not need to be synchronized, copy-on-write collections perform well in the situations for which they are designed—those in which reads greatly predominate over writes.
+  * *Copy-on-write* is used by the collection classes `CopyOnWriteArrayList` and `CopyOnWriteArraySet`.
+* **2. Compare-and-Swap (CAS)**
+  * A 2nd group of thread-safe collections relies on compare-and-swap (CAS), a fundamental improvement on traditional synchronization. To see how it works, consider a computation in which the value of a single variable is used as input to a long-running calculation whose eventual result is used to update the variable. Traditional synchronization makes the whole computation atomic, excluding any other thread from concurrently accessing the variable. This reduces opportunities for parallel execution and hurts throughput. An algorithm based on CAS behaves differently: it makes a local copy of the variable and performs the calculation without getting exclusive access. Only when it is ready to update the variable does it call CAS, which in one atomic operation compares the variable’s value with its value at the start and, if they are the same, updates it with the new value. If they are not the same, the variable must have been modified by another thread; in this situation, the CAS thread can try the whole computation again using the new value, or give up, or—in some algorithms— continue, because the interference will have actually done its work for it! 
   * Collections using CAS include `ConcurrentLinkedQueue` and `ConcurrentSkipListMap`.
-* **Lock interface**: The third group uses implementations of java.util.concurrent.locks.Lock interface. Some of the collection classes in this group make use of these facilities to divide the collection into parts that can be separately locked, giving improved concurrency. 
+* **3. Lock interface**: 
+  * The 3rd group uses implementations of `java.util.concurrent.locks.Lock` interface. Some of the collection classes in this group make use of these facilities to divide the collection into parts that can be separately locked, giving improved concurrency. 
   * For example, `LinkedBlockingQueue` has separate locks for the head and tail ends of the queue, so that elements can be added and removed in parallel. 
   * Other collections using these locks include `ConcurrentHashMap` and most of the implementations of `BlockingQueue`.
 
 ## Iterators
 
-* Purpose: The purpose of iterators is to provide a uniform way of accessing collection elements sequentially
+* The purpose of iterators is to provide a uniform way of accessing collection elements sequentially
 * Any class that implements `java.lang.Iterable` can be used in foreach statement. `Collection implements Iterable`.
 
-### Types
+### Fail-fast iterators
 
-#### Fail-fast iterators
 * Iterators throw `ConcurrentModificationException` whenever they detect that the collection from which they were derived has been structurally changed (i.e., elements have been added or removed). 
 * Iterators are implemented as a view of their underlying collection so, if that collection is structurally changed, the iterator may well not be able to continue operating correctly when it reaches the changed part of the collection. 
 * Instead of allowing the manifestation of failure to be delayed, making diagnosis difficult, the general-purpose Collections Framework iterators are fail-fast. The methods of a fail-fast iterator check that the underlying collection has not been structurally changed (by another iterator, or by the methods of the collection itself) since the last iterator method call. If they detect a change, they throw `ConcurrentModificationException`. 
 
-  * #### Fail-safe iterators
+### Fail-safe iterators
+
 * **Snapshot iterators**
   * Copy-on-write collections have snapshot iterators. These collections are backed by arrays which, once created, are never changed; if a value in the collection needs to be changed, a new array is created. So an iterator can read the values in one of these arrays (but never modify them) without danger of them being changed by another thread. Snapshot iterators do not throw `ConcurrentModificationException`.
 * **Weakly consistent iterators**
   * Collections which rely on CAS have weakly consistent iterators, which reflect some but not necessarily all of the changes that have been made to their backing collection since they were created. For example, if elements in the collection have been modified or removed before the iterator reaches them, it definitely will reflect these changes, but no such guarantee is made for insertions. Weakly consistent iterators also do not throw `ConcurrentModificationException`. 
   * can tolerate concurrent modiﬁcation, traverses elements as they existed when the iterator was constructed, and may (but is not guaranteed to) reﬂect modiﬁcations to the collection after the construction of the iterator. `ConcurrentHashMap` and other concurrent collections create such iterators. 
-  * The third group described above also have weakly consistent iterators. In Java 6 this includes `DelayQueue` and `PriorityBlockingQueue`, which in Java 5 had fail-fast iterators. This means that you cannot iterate over the Java 5 version of these queues unless they are quiescent, at a time when no elements are being added or inserted; at other times you have to copy their elements into an array using toArray and iterate over that instead.
+  * Collections implemented using `Lock` interface also have weakly consistent iterators. In Java 6 this includes `DelayQueue` and `PriorityBlockingQueue`, which in Java 5 had fail-fast iterators. This means that you cannot iterate over the Java 5 version of these queues unless they are quiescent, at a time when no elements are being added or inserted; at other times you have to copy their elements into an array using toArray and iterate over that instead.
 
-#### ListIterator 
-`ListIterator` offers the following benefits over a regular Iterator. Since Set does not have the concept of a 'given point', there is no SetIterator.
+### ListIterator 
+
+`ListIterator` offers the following benefits over a regular Iterator. (*There is no `SetIterator`, since `Set` does not have the concept of a 'given point'.*)
+
 * iterate backwards
 * modify the list safely while iterating
 
@@ -143,8 +155,6 @@ The latest concurrent collections achieve thread-safety by different mechanisms.
   * Access elements has constant time
   * Insert/update/delete at the tail is cheap - constant complexity
   * Insert/update/delete  at the head is expensive - linear complexity (everything to the right from the update position must be moved to the right for insertions and to the left for removals)
-  * cost of array size doubling???
-* CPU-cache friendly collection due to being backed by an array (unfortunately, not too friendly, because contains Objects, which are just pointers to the actual objects).
 
 ### LinkedList
 
@@ -154,19 +164,13 @@ The latest concurrent collections achieve thread-safety by different mechanisms.
   * Updating an element has linear complexity (due to an optimization, these methods do not traverse more than a half of the list, so the most expensive elements are located in the middle of the list).
   * Insert/Delete elements - at head/tail - constant time
 * You need to use ListIterators if you want to try to write fast LinkedList code. If you want a Queue/Deque implementation (you need to access only first and last elements) – consider using ArrayDeque instead.
-* Why is ListIterator faster???
-* when to prefer linkedlist over ArrayList???
-
 
 ### CopyOnWriteArrayList
 
 * List implementation -  A thread-safe variant of ArrayList in which all mutative operations (add, set, and so on) are implemented by making a fresh copy of the underlying array. 
 * Copying is an expensive operation, so this class should be used only when traversals seriously outnumber updates. The usual use case for this collection is listeners/observers collection.
 * Element-changing operations on iterators themselves (remove, set, and add) are not supported. These methods throw UnsupportedOperationException.
-* Iterator is fail-safe and doesn't throw ConcurrentModificationException.
-* BigO cost
-  * Accessing elements - how fast???
-  * Updating elements - how slow???
+* Returns snapshot-style fail-safe iterator
 
 ## Queues and Deques
 

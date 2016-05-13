@@ -127,12 +127,9 @@ messageStyle: "none",
   <li><a href="#collections-framework">Collections Framework</a>    <ul>
       <li><a href="#concurrent-collections">Concurrent Collections</a></li>
       <li><a href="#iterators">Iterators</a>        <ul>
-          <li><a href="#types-1">Types</a>            <ul>
-              <li><a href="#fail-fast-iterators">Fail-fast iterators</a></li>
-              <li><a href="#fail-safe-iterators">Fail-safe iterators</a></li>
-              <li><a href="#listiterator">ListIterator</a></li>
-            </ul>
-          </li>
+          <li><a href="#fail-fast-iterators">Fail-fast iterators</a></li>
+          <li><a href="#fail-safe-iterators">Fail-safe iterators</a></li>
+          <li><a href="#listiterator">ListIterator</a></li>
         </ul>
       </li>
       <li><a href="#lists">Lists</a>        <ul>
@@ -271,6 +268,13 @@ messageStyle: "none",
 <h2 id="variance">Variance</h2>
 
 <ul>
+  <li>Types
+    <ul>
+      <li><strong>Covariant</strong>: a <code>Cat[]</code> is an <code>Animal[]</code>. Java arrays are covariant.</li>
+      <li><strong>Contravariant</strong>: an <code>Animal[]</code> is a <code>Cat[]</code></li>
+      <li><strong>Invariant</strong>: an <code>Animal[]</code> is not a <code>Cat[]</code> and a <code>Cat[]</code> is not an <code>Animal[]</code>?. Java generics are invariant.</li>
+    </ul>
+  </li>
   <li><strong>Covariant</strong> - Java arrays are covariant, meaning that type S[] is considered to be a subtype of T[] whenever S is a subtype of T. Due to this nature, the following code throws exception at runtime. When an array is allocated (as on the first line), it is tagged with its reified type (a run-time representation of its component type, in this case, Integer), and every time an array is assigned into (as on the third line), an array store exception is raised if the reified type is not compatible with the assigned value (in this case, a double cannot be stored into an array of Integer).</li>
 </ul>
 
@@ -337,6 +341,10 @@ messageStyle: "none",
 </span><span class="line"><span class="k">assert</span> <span class="n">s</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="s">&quot;Hello world!&quot;</span><span class="o">);</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
+<ul>
+  <li>Java has <em>typed erased generics</em> which loses type information at runtime. JetBrains’’ Kotlin language has <em>reified generics</em> which retains the type information at runtime.</li>
+</ul>
+
 <h1 id="collections-framework">Collections Framework</h1>
 
 <h2 id="concurrent-collections">Concurrent Collections</h2>
@@ -344,19 +352,22 @@ messageStyle: "none",
 <p>The latest concurrent collections achieve thread-safety by different mechanisms. </p>
 
 <ul>
-  <li><strong>Copy-On-Write</strong>: Classes that use copy-on-write store their values in an internal array, which is effectively immutable; any change to the value of the collection results in a new array being created to represent the new values. 
+  <li><strong>1. Copy-On-Write</strong> 
     <ul>
-      <li>Synchronization is used by these classes, though only briefly, during the creation of a new array; because read operations do not need to be synchronized, copy-on-write collections perform well in the situations for which they are designed—those in which reads greatly predominate over writes. </li>
+      <li>Classes that use copy-on-write store their values in an internal array, which is effectively immutable; any change to the value of the collection results in a new array being created to represent the new values.</li>
+      <li>Synchronization is used by these classes, though only briefly, during the creation of a new array; because read operations do not need to be synchronized, copy-on-write collections perform well in the situations for which they are designed—those in which reads greatly predominate over writes.</li>
+      <li><em>Copy-on-write</em> is used by the collection classes <code>CopyOnWriteArrayList</code> and <code>CopyOnWriteArraySet</code>.</li>
     </ul>
   </li>
-  <li><strong>Copy-on-write</strong> is used by the collection classes <code>CopyOnWriteArrayList</code> and <code>CopyOnWriteArraySet</code>.
+  <li><strong>2. Compare-and-Swap (CAS)</strong>
     <ul>
-      <li><strong>Compare-and-Swap (CAS)</strong>: A second group of thread-safe collections relies on compare-and-swap (CAS), a fundamental improvement on traditional synchronization. To see how it works, consider a computation in which the value of a single variable is used as input to a long-running calculation whose eventual result is used to update the variable. Traditional synchronization makes the whole computation atomic, excluding any other thread from concurrently accessing the variable. This reduces opportunities for parallel execution and hurts throughput. An algorithm based on CAS behaves differently: it makes a local copy of the variable and performs the calculation without getting exclusive access. Only when it is ready to update the variable does it call CAS, which in one atomic operation compares the variable’s value with its value at the start and, if they are the same, updates it with the new value. If they are not the same, the variable must have been modified by another thread; in this situation, the CAS thread can try the whole computation again using the new value, or give up, or—in some algorithms— continue, because the interference will have actually done its work for it! </li>
+      <li>A 2nd group of thread-safe collections relies on compare-and-swap (CAS), a fundamental improvement on traditional synchronization. To see how it works, consider a computation in which the value of a single variable is used as input to a long-running calculation whose eventual result is used to update the variable. Traditional synchronization makes the whole computation atomic, excluding any other thread from concurrently accessing the variable. This reduces opportunities for parallel execution and hurts throughput. An algorithm based on CAS behaves differently: it makes a local copy of the variable and performs the calculation without getting exclusive access. Only when it is ready to update the variable does it call CAS, which in one atomic operation compares the variable’s value with its value at the start and, if they are the same, updates it with the new value. If they are not the same, the variable must have been modified by another thread; in this situation, the CAS thread can try the whole computation again using the new value, or give up, or—in some algorithms— continue, because the interference will have actually done its work for it! </li>
       <li>Collections using CAS include <code>ConcurrentLinkedQueue</code> and <code>ConcurrentSkipListMap</code>.</li>
     </ul>
   </li>
-  <li><strong>Lock interface</strong>: The third group uses implementations of java.util.concurrent.locks.Lock interface. Some of the collection classes in this group make use of these facilities to divide the collection into parts that can be separately locked, giving improved concurrency. 
+  <li><strong>3. Lock interface</strong>: 
     <ul>
+      <li>The 3rd group uses implementations of <code>java.util.concurrent.locks.Lock</code> interface. Some of the collection classes in this group make use of these facilities to divide the collection into parts that can be separately locked, giving improved concurrency. </li>
       <li>For example, <code>LinkedBlockingQueue</code> has separate locks for the head and tail ends of the queue, so that elements can be added and removed in parallel. </li>
       <li>Other collections using these locks include <code>ConcurrentHashMap</code> and most of the implementations of <code>BlockingQueue</code>.</li>
     </ul>
@@ -366,25 +377,21 @@ messageStyle: "none",
 <h2 id="iterators">Iterators</h2>
 
 <ul>
-  <li>Purpose: The purpose of iterators is to provide a uniform way of accessing collection elements sequentially</li>
+  <li>The purpose of iterators is to provide a uniform way of accessing collection elements sequentially</li>
   <li>Any class that implements <code>java.lang.Iterable</code> can be used in foreach statement. <code>Collection implements Iterable</code>.</li>
 </ul>
 
-<h3 id="types-1">Types</h3>
+<h3 id="fail-fast-iterators">Fail-fast iterators</h3>
 
-<h4 id="fail-fast-iterators">Fail-fast iterators</h4>
 <ul>
   <li>Iterators throw <code>ConcurrentModificationException</code> whenever they detect that the collection from which they were derived has been structurally changed (i.e., elements have been added or removed). </li>
   <li>Iterators are implemented as a view of their underlying collection so, if that collection is structurally changed, the iterator may well not be able to continue operating correctly when it reaches the changed part of the collection. </li>
-  <li>
-    <p>Instead of allowing the manifestation of failure to be delayed, making diagnosis difficult, the general-purpose Collections Framework iterators are fail-fast. The methods of a fail-fast iterator check that the underlying collection has not been structurally changed (by another iterator, or by the methods of the collection itself) since the last iterator method call. If they detect a change, they throw <code>ConcurrentModificationException</code>. </p>
+  <li>Instead of allowing the manifestation of failure to be delayed, making diagnosis difficult, the general-purpose Collections Framework iterators are fail-fast. The methods of a fail-fast iterator check that the underlying collection has not been structurally changed (by another iterator, or by the methods of the collection itself) since the last iterator method call. If they detect a change, they throw <code>ConcurrentModificationException</code>. </li>
+</ul>
 
-    <ul>
-      <li>
-        <h4 id="fail-safe-iterators">Fail-safe iterators</h4>
-      </li>
-    </ul>
-  </li>
+<h3 id="fail-safe-iterators">Fail-safe iterators</h3>
+
+<ul>
   <li><strong>Snapshot iterators</strong>
     <ul>
       <li>Copy-on-write collections have snapshot iterators. These collections are backed by arrays which, once created, are never changed; if a value in the collection needs to be changed, a new array is created. So an iterator can read the values in one of these arrays (but never modify them) without danger of them being changed by another thread. Snapshot iterators do not throw <code>ConcurrentModificationException</code>.</li>
@@ -394,15 +401,19 @@ messageStyle: "none",
     <ul>
       <li>Collections which rely on CAS have weakly consistent iterators, which reflect some but not necessarily all of the changes that have been made to their backing collection since they were created. For example, if elements in the collection have been modified or removed before the iterator reaches them, it definitely will reflect these changes, but no such guarantee is made for insertions. Weakly consistent iterators also do not throw <code>ConcurrentModificationException</code>. </li>
       <li>can tolerate concurrent modiﬁcation, traverses elements as they existed when the iterator was constructed, and may (but is not guaranteed to) reﬂect modiﬁcations to the collection after the construction of the iterator. <code>ConcurrentHashMap</code> and other concurrent collections create such iterators. </li>
-      <li>The third group described above also have weakly consistent iterators. In Java 6 this includes <code>DelayQueue</code> and <code>PriorityBlockingQueue</code>, which in Java 5 had fail-fast iterators. This means that you cannot iterate over the Java 5 version of these queues unless they are quiescent, at a time when no elements are being added or inserted; at other times you have to copy their elements into an array using toArray and iterate over that instead.</li>
+      <li>Collections implemented using <code>Lock</code> interface also have weakly consistent iterators. In Java 6 this includes <code>DelayQueue</code> and <code>PriorityBlockingQueue</code>, which in Java 5 had fail-fast iterators. This means that you cannot iterate over the Java 5 version of these queues unless they are quiescent, at a time when no elements are being added or inserted; at other times you have to copy their elements into an array using toArray and iterate over that instead.</li>
     </ul>
   </li>
 </ul>
 
-<h4 id="listiterator">ListIterator</h4>
-<p><code>ListIterator</code> offers the following benefits over a regular Iterator. Since Set does not have the concept of a ‘given point’, there is no SetIterator.
-* iterate backwards
-* modify the list safely while iterating</p>
+<h3 id="listiterator">ListIterator</h3>
+
+<p><code>ListIterator</code> offers the following benefits over a regular Iterator. (<em>There is no <code>SetIterator</code>, since <code>Set</code> does not have the concept of a ‘given point’.</em>)</p>
+
+<ul>
+  <li>iterate backwards</li>
+  <li>modify the list safely while iterating</li>
+</ul>
 
 <h2 id="lists">Lists</h2>
 
@@ -423,10 +434,8 @@ messageStyle: "none",
       <li>Access elements has constant time</li>
       <li>Insert/update/delete at the tail is cheap - constant complexity</li>
       <li>Insert/update/delete  at the head is expensive - linear complexity (everything to the right from the update position must be moved to the right for insertions and to the left for removals)</li>
-      <li>cost of array size doubling???</li>
     </ul>
   </li>
-  <li>CPU-cache friendly collection due to being backed by an array (unfortunately, not too friendly, because contains Objects, which are just pointers to the actual objects).</li>
 </ul>
 
 <h3 id="linkedlist">LinkedList</h3>
@@ -441,8 +450,6 @@ messageStyle: "none",
     </ul>
   </li>
   <li>You need to use ListIterators if you want to try to write fast LinkedList code. If you want a Queue/Deque implementation (you need to access only first and last elements) – consider using ArrayDeque instead.</li>
-  <li>Why is ListIterator faster???</li>
-  <li>when to prefer linkedlist over ArrayList???</li>
 </ul>
 
 <h3 id="copyonwritearraylist">CopyOnWriteArrayList</h3>
@@ -451,13 +458,7 @@ messageStyle: "none",
   <li>List implementation -  A thread-safe variant of ArrayList in which all mutative operations (add, set, and so on) are implemented by making a fresh copy of the underlying array. </li>
   <li>Copying is an expensive operation, so this class should be used only when traversals seriously outnumber updates. The usual use case for this collection is listeners/observers collection.</li>
   <li>Element-changing operations on iterators themselves (remove, set, and add) are not supported. These methods throw UnsupportedOperationException.</li>
-  <li>Iterator is fail-safe and doesn’t throw ConcurrentModificationException.</li>
-  <li>BigO cost
-    <ul>
-      <li>Accessing elements - how fast???</li>
-      <li>Updating elements - how slow???</li>
-    </ul>
-  </li>
+  <li>Returns snapshot-style fail-safe iterator</li>
 </ul>
 
 <h2 id="queues-and-deques">Queues and Deques</h2>
@@ -948,7 +949,7 @@ messageStyle: "none",
 		
 		<li>
 			<h3>BigData</h3>
-			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/nosql.html">NoSQL</a>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/nosql.html">NoSQL</a>
 		</li>
 
 		<li>
@@ -978,7 +979,7 @@ messageStyle: "none",
 
 		<li>
 			<h3>General Concepts</h3>
-			<a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
 		</li>
 
 		<h2>Non-Techninal</h2>
@@ -1050,7 +1051,7 @@ messageStyle: "none",
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2015 - Mohamed Fizal Ihsan Mohamed -
+  Copyright &copy; 2016 - Mohamed Fizal Ihsan Mohamed -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

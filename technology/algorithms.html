@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>JNDI - KnowledgeShop</title>
+  <title>Algorithms - KnowledgeShop</title>
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="JNDI Overview JNDI Overview A naming service associates names with distributed objects, files, and devices so that they can be located on the &hellip;">
+<meta name="description" content="Algorithms Big-O Notation How to find Big-O in interviews? Reference Big-O Notation O(1)/Constant Complexity: Constant. Irrespective of the size of &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://fizalihsan.github.io/technology/java-jndi.html">
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/algorithms.html">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <!-- Below custom CSS is for table border styling -->
@@ -111,58 +111,89 @@ messageStyle: "none",
 <article role="article">
   
   <header>
-    <h1 class="entry-title">JNDI</h1>
+    <h1 class="entry-title">Algorithms</h1>
     
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#overview">Overview</a></li>
-  <li><a href="#jndi">JNDI</a></li>
+  <li><a href="#big-o-notation">Big-O Notation</a>    <ul>
+      <li><a href="#how-to-find-big-o-in-interviews">How to find Big-O in interviews?</a></li>
+    </ul>
+  </li>
+  <li><a href="#reference">Reference</a></li>
 </ul>
 
-<h1 id="overview">Overview</h1>
+<h2 id="big-o-notation">Big-O Notation</h2>
 
 <ul>
-  <li>A naming service associates names with distributed objects, files, and devices so that they can be located on the network using simple names instead of cryptic network address. An example of a naming service is the DNS, which converts an Internet hostname like www.google.com into a network address that browsers use to connect to web servers.</li>
-  <li>Naming services allow printers, distributed objects, and JMS administered objects to be bound to names and organized in a hierarchy similar to a filesystem.</li>
-  <li>A directory service is a more sophisticated kind of naming service.</li>
-</ul>
-
-<h1 id="jndi">JNDI</h1>
-
-<ul>
-  <li>JNDI (Java Naming &amp; Directory Interface) is a standard Java extension that provides a uniform API for accessing a variety of naming &amp; directory services.</li>
-  <li>JNDI lets you write code that can access different directory and naming services like LDAP, NDS, CORBA Naming Service, and proprietary naming services provided by JMS servers.</li>
-  <li>JNDI is both virtual and dynamic. 
+  <li><strong>O(1)/Constant Complexity</strong>: 
     <ul>
-      <li>It is virtual because it allows one naming service to be linked to another. Using JNDI, you can drill down through directories to files, printers, JMS administered objects, and other resources following virtual links between naming services. The user doesn’t know or care where the directories are actually located. As an administrator, you can create virtual directories that span a variety of different services over many different physical locations.</li>
-      <li>JNDI is dynamic because it allows the JNDI drivers for specific types of naming and directory services to be loaded dynamically at runtime. A driver maps a specific kind of naming or directory service into the standard JNDI class interfaces. Drivers have been created for LDAP, Novell NetWare NDS, Sun Solaris NIS+, CORBA CosNaming, and many other types of naming and directory services, including proprietary ones. Dynamically loading JNDI drivers (service providers) makes it possible for a client to navigate across arbitrary directory services without knowing in advance what kinds of services it is likely to find.</li>
+      <li>Constant.  Irrespective of the size of the data set the algorithm will always take a constant time. </li>
+      <li>Example: <code>HashMap.get()</code> operation</li>
+    </ul>
+  </li>
+  <li><strong>O(log n)/Logarithmic Complexity</strong>: 
+    <ul>
+      <li>Not as good as constant, but still pretty good.  The time taken increases with the size of the data set, but not proportionately so. This means the algorithm takes longer per item on smaller datasets relative to larger ones.   1 item takes 1 second, 10 items takes 2 seconds, 100 items takes 3 seconds. This makes log n algorithms very scalable.</li>
+      <li>Example: Binary search </li>
+    </ul>
+  </li>
+  <li><strong>O(n)/Linear Complexity</strong>: 
+    <ul>
+      <li>The larger the data set, the time taken grows proportionately.  1 item takes 1 second, 10 items takes 10 seconds, 100 items takes 100 seconds.</li>
+      <li>Example: To find an element T which is the last item in the <code>LinkedList</code></li>
+    </ul>
+  </li>
+  <li><strong>O(n log n)</strong>: 
+    <ul>
+      <li>A nice combination of the previous two.  Normally there’s 2 parts to the sort, the first loop is O(n), the second is O(log n), combining to form O(n log n) 1 item takes 2 seconds, 10 items takes 12 seconds, 100 items takes 103 seconds.</li>
+      <li>Example: MergeSort. To explain why this is <code>O(n log n)</code> is a bit more complex.  In the below example of 8 numbers, we have 3 levels of sorting:
+        <ul>
+          <li>4 list sorts when the list sizes are 2</li>
+          <li>2 list sorts when the list sizes are 4</li>
+          <li>1 list sort when the list size is 8
+Now consider if I were to double the number of elements to 16: this would only require one more level of sorting. This is a <code>log n</code> scale. However, on each level of sorting a total of <code>n</code> operations takes place (look at the red boxes in the diagram above).  this results in (n * log n) operations.
+<img src="http://www.corejavainterviewquestions.com/wp-content/uploads/2014/12/Merge-sort-example-300px.gif" alt="MergeSort Explained" /></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>O(n^2)/Polynomial or Quadratic Complexity</strong>: 
+    <ul>
+      <li>Things are getting extra slow. 1 item takes 1 second, 10 items takes 100, 100 items takes 10000.</li>
+      <li>Example: Bubble Sort. If you need a reminder; we go through the list and compare each element with the one next to it, swapping the elements if they are out of order. At the end of the first iteration, we then start again from the beginning, with the caveat that we now know the last element is correct. </li>
+    </ul>
+  </li>
+  <li><strong>O(2^n)/Exponential Growth</strong>: 
+    <ul>
+      <li>The algorithm takes twice as long for every new element added.  1 item takes 1 second, 10 items takes 1024 seconds, 100 items takes 1267650600228229401496703205376 seconds.</li>
+      <li>Example: Take for example trying to find combinations; imagine a list of 150 people and to find every combination of groupings; everyone by themselves, all of the groups of 2 people, all of the groups of 3 people etc. Using a simple program which takes each person and loops through the combinations,  if I add one extra person then it’s going to increase the processing time exponentially. Every new element will double processing time.</li>
     </ul>
   </li>
 </ul>
 
-<p>&#8220;` java Sample jndi.properties
- java.naming.factory.initial = org.apache.activemq.jndi.ActiveMQInitialContextFactory
- java.naming.provider.url = tcp://localhost:61616
- java.naming.security.principal=system
- java.naming.security.credentials=manager</p>
+<p><img src="http://bigocheatsheet.com/img/big-o-complexity.png" alt="enter image description here" /></p>
 
-<p>connectionFactoryNames = TopicCF
- topic.topic1 = jms.topic1
- &#8220;`</p>
+<h3 id="how-to-find-big-o-in-interviews">How to find Big-O in interviews?</h3>
+
+<p>Break down the loops and processing.</p>
+
+<ul>
+  <li>Does it have to go through the entire list? There will be an <code>n</code> in there somewhere.</li>
+  <li>Does the algorithms processing time increase at a slower rate than the size of the data set? Then there’s probably a <code>log n</code> in there.</li>
+  <li>Are there nested loops? You’re probably looking at <code>n^2</code> or <code>n^3</code>.</li>
+  <li>Is access time constant irrelevant of the size of the dataset?? <code>O(1)</code></li>
+</ul>
+
+<h2 id="reference">Reference</h2>
+
+<ul>
+  <li><a href="http://www.corejavainterviewquestions.com/idiots-guide-big-o/">Idiot’s guide to BigO</a></li>
+</ul>
 
   
     <footer>
       
-      
-        <div class="sharing">
-  
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/java-jndi.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/java-jndi.html" >Tweet</a>
-  
-  
-  
-</div>
-
       
     </footer>
   

@@ -452,12 +452,6 @@ backed up a `CopyOnWriteArrayList` and shares its properties
 List<X> list = Arrays.asList(new X[desiredSize]); 
 ```
 
-### Collections
-
-* Collections.sort() - what if the object is not Comparable???
-* Collections.rotate() and Arrays.rotate() ???
-* To create read-only collections? - Collections.unmodifiableCollection() or unmodifiableList(), unmodifiableSet(), etc.
-
 ## Comparable & Comparator
 
 | # | Comparable interface| Comparator interface | 

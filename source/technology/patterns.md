@@ -12,17 +12,62 @@ footer: true
 # Design Patterns
 
 ## Adapter
-Also called 'Wrapper' pattern
 
-### Object Adapter
+* Also called 'Wrapper' pattern
+* converts the interface of a class into another interface the clients expect. Adapter lets classes work together that couldn't otherwise because of incompatible interfaces.
+* OO Principle followed: composition over inheritance
 
-### Class Adapter
+| {% img /technology/adapter.png %} | {% img /technology/adapter_example.png %} |
+
+```java
+MallardDuck duck = new MallardDuck();
+WildTurkey turkey = new WildTurkey();
+
+Duck adapter = new TurkeyAdapter(turkey);
+adapter.quack();
+```
 
 ## Bridge
 
 ## Builder
 
+**Benefits**
+
+* Encapsulates the way a complex object is constructed
+* Allows objects to be constructed in a multistep and varying process as opposed to one step factories. Used in building fluent APIs.
+* Product implementations can be swapped in and out because the client only sees an abstract interface.
+* Prevents telescoping constructor problem
+
+
 ## Chain of Responsibility
+
+* Use this pattern when you want to give more than one object a chance to handle a request
+
+**Benefits**
+
+* Decouples the sender of the request and its receivers
+* Simplifies your object because it doesn't have to know the chain's structure and keep direct references to its members.
+* Allows you to add or remove responsibilities dynamically by changing the members or order of the chain.
+* Used in applying filters in servlet request processing, logging a message to multiple channels, etc.
+
+**Drawbacks**
+
+* Execution of the request isn't guaranteed; it may fall off the end of the chain if no object handles it. This can be an advantage or a disadvantage. One can always implement a catch-all handler.
+* Can be hard to observe and debug at runtime
+
+| {% img /technology/Chain_of_responsibility.png %} | {% img /technology/Chain_of_responsibility_example.png %} |
+
+```java
+
+ManagerPurchasePower manager = new ManagerPurchasePower();
+VPPurchasePower vp = new VPPurchasePower();
+CEOPurchasePower ceo = new CEOPurchasePower();
+manager.setSuccessor(vp);
+vp.setSuccessor(ceo);
+
+manager.approve(request); // if manager is not authorized to approve the request, it will be delegated VP. 
+ 
+```
 
 ## Circular Buffer
 
@@ -31,6 +76,29 @@ Also called 'Wrapper' pattern
 ## Composite
 
 ## Decorator
+
+* Attach additional responsibilities to an object dynamically.
+* Decorators provide a flexible alternative to subclassing for extending functionality
+* OO Principle followed: open-closed principle - classes should be open for extension, closed for modification
+
+| {% img /technology/decorator.png %} | {% img /technology/decorator_example.png %} | 
+
+```java
+InputStream in = new LineNumberInputStream(
+                    new BufferedInputStream(
+                        new FileInputStream("test.txt")
+                    )
+                );
+```
+
+## Facade
+
+* Provides a unified interrace to a set of interfaces in a subsystem. 
+* Facade defines a higher level interface that makes the subsystems easier to use
+* Not only does it simplify an interface, it also decouples a client from a subsystem of components
+* OO Principle followed: Principle of least knowledge - talk only to your immediate friends.
+
+{% img /technology/facade.png %} 
 
 ## Factory
 
@@ -43,7 +111,9 @@ Beware of the ambiguity in the names - Static Factory Method (in Effective Java)
 * (+) Since client refers to the product via a common interface, factory can change the product implementation anytime after go-live.
 
 **Type 1: Parameterized Factory Method**
+
 Classical switch-case/if-condition based factory method that takes a parameter to decide the type of product to return
+
 * (+) New products can be added without changing the client code.
 * (-) Tight coupling between factory and product implementations. In other words, Factory class needs to change for every new product. It violates the Open Close Principle.
 * (-) Sub-classing means replacing all the factory class references everywhere in the code.
@@ -61,7 +131,9 @@ public class Factory{
 ```
 
 **Type 2: Dynamic Class Registration**
+
 Keep the map of key and product type away from the factory. It could be a properties file or statically registered in common registry class. Factory can dynamically create an instance of the product either by Class.forName() or using reflection.
+
 * (+) Factory class is not changed every time a product is added
 * (-) Using reflection impacts the performance
 
@@ -133,7 +205,22 @@ Defines an interface for creating an object, but lets subclasses decide which cl
 
 ## Mediator
 
+* Use this pattern to centralize complex communications and control between related objects.
+
+**Benefits**
+
+* Increases the reusability of the objects supported by the mediator by decoupling them from the system
+* Simplifies maintenance of the system by centralizing control logic.
+* Simplifies and reduces the variety of messages sent between objects in the system. 
+
+**Drawbacks**
+
+* Without proper design, the Mediator object itself can become overly complex.
+
 ## Memento
+
+* Use this pattern when you need to be able to return an object to one of its
+previous states; for instance, if your user requests an undo.
 
 ## Observer
 
@@ -181,16 +268,18 @@ Mockito, Spring container
       * Work around: use volatile field or make class immutable
 
 
-** Type 1 - Early init with public static final field	**
-<pre>
+**Type 1 - Early init with public static final field	**
+
+```java
 public class Singleton{
-   <span style="color:red">public static final</span> Singleton INSTANCE = new Singleton();
+   public static final Singleton INSTANCE = new Singleton();
    private Singleton(){}
 }
-</pre>
-
-** Type 2 - Early init with private static field & factory method**
 ```
+
+**Type 2 - Early init with private static field & factory method**
+
+```java
 public class Singleton{
    private static final Singleton INSTANCE = new Singleton();
    private Singleton(){}
@@ -203,70 +292,52 @@ public class Singleton{
 ```
 
 **Type 3 - Early init via Enum**
-<pre>
- public <span style="color:red">enum</span> Singleton{
+
+```java
+ public enum Singleton{
     INSTANCE; //By default, public static final
  }
-</pre>
+```
 
 **Type 4 - Lazy init - not thread-safe**
-<pre>
+
+```java
 public class Singleton{
    private static Singleton instance;
    private Singleton(){}
 
    //static factory method
    public static Singleton getInstance(){
-     <span style="color:red">
      if(instance==null){
         instance = new Singleton();
      }
      return instance;
-     </span>
    }
 }
-</pre>
+```
 
 **Type 5 - Lazy init - Thread-safe but worst performing**
-<pre>
+
+```java
  public class Singleton{
    private static Singleton instance;
    private Singleton(){}
 
    //static factory method
-   public <span style="color:red">synchronized</span> static Singleton getInstance(){
+   public synchronized static Singleton getInstance(){
      if(instance==null){
         instance = new Singleton();
      }
      return instance;
    }
 }
-</pre>
+```
 
 **Type 6 - Lazy init - Thread-safe via Double-checked lock (BROKEN)**
-<pre>
+
+```java
  public class Singleton{
    private static Singleton instance;
-   private Singleton(){}
-
-   public static Singleton getInstance(){
-   <span style="color:red">
-     if(instance==null){ //check
-        synchronized(Singleton.class){ //lock
-           if(instance==null){//check</span>
-              instance = new Singleton();
-           }
-        }
-     }
-     return instance;
-   }
-}
-</pre>
-
-**Type 7 - Lazy init - Thread-safe via DCL and volatile instance (works in Java 5+)**
-<pre>
-public class Singleton{
-   private static <span style="color:red">volatile</span> Singleton instance;
    private Singleton(){}
 
    public static Singleton getInstance(){
@@ -280,7 +351,27 @@ public class Singleton{
      return instance;
    }
 }
-</pre>
+```
+
+**Type 7 - Lazy init - Thread-safe via DCL and volatile instance (works in Java 5+)**
+
+```java
+public class Singleton{
+   private static volatile Singleton instance;
+   private Singleton(){}
+
+   public static Singleton getInstance(){
+     if(instance==null){ //check
+        synchronized(Singleton.class){ //lock
+           if(instance==null){//check
+              instance = new Singleton();
+           }
+        }
+     }
+     return instance;
+   }
+}
+```
 
 ## State
 
@@ -294,6 +385,13 @@ http://c2.com/cgi/wiki?RecycleBin
 You can also find recycle bins in Java, such as in the thread pooling that you can configure using classes like ScheduledThreadPoolExecutor and ThreadPoolExecutor.
 
 ## Template Method
+
+* Defines the skeleton of an algorithm in a method, deferring some steps to
+subclasses to provide the implementation.
+* Lets subclasses redefine certain steps of an algorithm without changing the algorithm structure
+* OO Principle followed: Hollywood principle - Don't call us, we'll call you
+
+{% img /technology/template.png %}
 
 ## TransferObject
 

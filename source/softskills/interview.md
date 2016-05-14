@@ -40,14 +40,24 @@ footer: true
 
 # Behavioral Questions
 
-*  What are your strenths and weaknesses?
-*  What motivates you?
-*  What makes you the ideal candidate for this job?
-*  Demonstrate your leadership, teamwork, ability to overcome obstacles and challenges
-*  What bothers you most about other people?
+
+* What do you enjoy about going to work?
+* What do you dislike about being a developer?
+* Why are you leaving your current job?
+* If you could change one thing about your current team what would it be?
+* What does a good team good like?
+* What makes a good developer?
+* Tell me about a time you had a conflict at work. How did you deal with it?
+  * War on naming conventions, checked vs. unchecked exceptions
+* Tell me about the biggest mistake you made at work?
+* What are your strenths and weaknesses?
+* What motivates you?
+* What makes you the ideal candidate for this job?
+* Demonstrate your leadership, teamwork, ability to overcome obstacles and challenges
+* What bothers you most about other people?
   * No response to emails. Lack of accountability
-*  Tell me about a day when everything went wrong
-*  Tell me about a colleague you really got along with and why you think you did
+* Tell me about a day when everything went wrong
+* Tell me about a colleague you really got along with and why you think you did
   * (Don't make it too formal. Keep it humorous)
 *  What's something that you can teach me?
   * (Test for patience, body language, communication skills)
@@ -84,6 +94,16 @@ footer: true
   * What do you know about the culture of our company
   * Company's stock price last time you checked
 
+# Questions to the interviewer
+
+* Please can you tell me a bit more about the team? What size is it? What experience levels?
+* Is the team based in one region or geographically split?
+* How does the team work? Do you use agile?
+* What's your biggest frustration in your current job?
+* What's your favorite part of working at the company and in the team?
+* What does an average day look like?
+* How hard is it to use new technologies in your company?
+* What training exists?
 
 # Useful links
 
@@ -91,6 +111,7 @@ footer: true
 	* http://jobs.rubynow.com/create-a-great-rails-resume
 	* [JobScan.co - CV Optimization](https://www.jobscan.co/)
 	* [HTML CV Templates](http://idesignow.com/template-2/40-great-html-cv-resume-templates.html#.Uj-C3oZ02Sp)
+	* [Sarah Sellers' podcast on resume writing](http://www.corejavainterviewquestions.com/podcast5)
 * *Technical Interview Questions*
 	* [algorithmist.com](http://www.algorithmist.com)
     * [codechef.com](http://www.codechef.com)
@@ -119,7 +140,10 @@ footer: true
   * Clutch Talent
   * NACE Partners 
   * http://www.msearchllc.com
-  * http://www.ingenium.agency/
+  * [ingenium.agency](http://www.ingenium.agency)
+* FinTech Recruiters 
+  * [ikasinternational.com](http://www.ikasinternational.com)
+  * [bahpartners.com](http://www.bahpartners.com/)
 
 # References
 

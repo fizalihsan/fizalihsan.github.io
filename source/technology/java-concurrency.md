@@ -10,18 +10,15 @@ footer: true
 {:toc}
 
 
-Memory Consistency - http://docs.oracle.com/javase/tutorial/essential/concurrency/memconsist.html 
-Memory consistent properties - happens-before? Read more on Java Language Specification book 
-
 # Basics Concepts
 
 * Thread
   * Each thread has its own stack and local variable.
   * Threads share the memory address space of the owning process; due to this, all threads have access to the same variables and allocate objects from same heap.
 * Definitions
-   * Parallel processing - refers to two or more threads running simultaneously, on different cores (processors), in the same computer. It is essentially a hardware term.
-  * Concurrent processing - refers to two or more threads running asynchronously, on one or more cores, usually in the same computer. It is essentially a software term.
-  * Distributed processing - refers to two or more processes running asynchronously on one or more JVMs or boxes.
+  * *Parallel processing* - refers to two or more threads running simultaneously, on different cores (processors), in the same computer. It is essentially a hardware term.
+  * *Concurrent processing* - refers to two or more threads running asynchronously, on one or more cores, usually in the same computer. It is essentially a software term.
+  * *Distributed processing* - refers to two or more processes running asynchronously on one or more JVMs or boxes.
 
 
 ## Threading Models
@@ -55,6 +52,7 @@ Memory consistent properties - happens-before? Read more on Java Language Specif
 ## Atomicity
 
 Compound Action Anti-Patterns
+
 ### Check-then-act
 
 ```java
@@ -86,17 +84,15 @@ Synchronization allows you to control program flow and access to shared data for
 
 The four synchronization models are mutex locks, read/write locks, condition variables, and semaphores.
 
-
-* 1) Mutex locks 
+* 1) **Mutex locks** 
   * allow only one thread at a time to execute a specific section of code, or to access specific data.
   * Each Java class and object has their own mutex locks. Each thread has it's own separate call stack.
-* 2) Read/write locks 
-  * permit concurrent reads and exclusive writes to a protected shared resource. To modify a resource, a thread must first acquire the exclusive write lock. An exclusive write lock is not permitted until all read locks have been released.
-  * e.g., Java ReadWriteLock
-* 3) Condition variables 
-  * block threads until a particular condition is true.
-* 4) Counting semaphores 
-  * typically coordinate access to resources. The count is the limit on how many threads can have access to a semaphore. When the count is reached, the semaphore blocks.
+* 2) **Read/write locks** 
+  * permit concurrent reads and exclusive writes to a protected shared resource. To modify a resource, a thread must first acquire the exclusive write lock. An exclusive write lock is not permitted until all read locks have been released. e.g., `ReadWriteLock`
+* 3) **Condition variables** 
+  * block threads until a particular condition is true.e.g., `java.util.concurrent.locks.Condition`
+* 4) **Counting semaphores** 
+  * typically coordinate access to resources. The count is the limit on how many threads can have access to a semaphore. When the count is reached, the semaphore blocks. e.g., `java.util.concurrent.Semaphore`
 
 # Locks
 
@@ -183,7 +179,7 @@ Once a thread acquires the lock of an object, it can call other synchronized met
 
 ### Condition
 
-instead of spin wait(sleep until a flag is true) which is inefficient, use `Condition`. Even better is to use coordination classes like `CountDownLatch` or `CyclicBarrier` which is concise and better than `Condition`.
+instead of *spin wait* (sleep until a flag is true) which is inefficient, use `Condition`. Even better is to use coordination classes like `CountDownLatch` or `CyclicBarrier` which is concise and better than `Condition`.
 
 # Sharing Objects
 
@@ -212,10 +208,12 @@ public class NoVisibility{
 ```
 
 **Possible outcomes**
+
 * prints zero and exists
 * prints nothing and never ends
 
 **Reason**
+
 * changes made by main thread are not visitible to ReaderThread
 * Stale values are visible
 * changes made by main thread were visible to ReaderThread in a different order
@@ -238,6 +236,8 @@ Non-atomic 64-bit operations - JMM requires the read and write operations to be 
 
 {% img right /technology/memory-cache.png %}
 
+   In modern processors a lot goes on to try and optimise memory and throughput such as *caching*. This is where regularly accessed variables are kept in a small amount of memory close to a specific processor to increase processing speed; it reduces the time the processor has to go to disk to get information (which can be very slow). However, in a multithreaded environment this can be very dangerous as it means that two threads could see a different version of a variable if it has been updated in cache and not written back to memory; *processor A* may think `int i=2` whereas *processor B* thinks `int i=4`. This is where **volatile**  comes in. It tells Java that this variable could be accessed by multiple threads and therefore should not be cached, this guaranteeing the value is correct when accessing. It also stops the compiler from trying to optimise the code by reordering it.
+
 In Java, volatile keyword does 3 things:
 
 * prevents re-ordering of statements by processor/compiler/memory
@@ -253,7 +253,30 @@ public Foo(long longValue, double doubleValue){
 }
 ```
 
+### Volatile Arrays
+
+Declaring an array volatile does not give volatile access to its fields! In other words:
+
+* it is unsafe to call `arr[x] = y` on an array (even if declared volatile) in one thread and then expect `arr[x]` to return `y` from another thread;
+* on the other hand, it is safe to call `arr = new int[]` (or whatever) and expect another thread to then read the new array as that referenced by `arr`: this is what is meant by declaring the array reference volatile.
+
+**Solution 1**: use `AtomicIntegerArray` or `AtomicLongArray`
+
+The `AtomicIntegerArray` class implements an int array whose individual fields can be accessed with volatile semantics, via the class's `get()` and `set()` methods. Calling `arr.set(x, y)` from one thread will then guarantee that another thread calling `arr.get(x)` will read the value y (until another value is read to position x).
+
+**Solution 2**: re-write the array reference after each field write
+
+This is slightly kludgy and slightly inefficient (since what would be one write now involves two writes) but is theoretically correct. After setting an element of the array, we re-set the array reference to be itself. 
+
+```java
+volatile int[] arr = new int[...];
+...
+arr[4] = 100;
+arr = arr;
+```
+
 More info: 
+
 * [Volatile fields and memory barrier: A look inside](http://www.codeproject.com/Articles/31283/Volatile-fields-in-NET-A-look-inside)
 * [InfoQ: Memory Barriers and JVM Concurrency](http://www.infoq.com/articles/memory_barriers_jvm_concurrency)
 
@@ -262,14 +285,10 @@ More info:
 * notices JIT compiler and runtime that "re-ordering" SHOULD NOT happen.
 * It warns the compiler that the variable may change behind the back of a thread and that each access, read or write, to this variable should bypass cache and go all the way to the memory.
 * don't rely too much on volatile for visibility
-* when to use volatiles??????
 
 ### Limitations of volatile
-* Synchronization guarantees both atomicity and visibility 
-* Volatile guarantees only visibility
+* Synchronization guarantees both atomicity and visibility. Volatile guarantees only visibility
 * Making all variables volatile will result in poor performance since every access to cross the memory barrier
-* volatile arrays? is this safe? 
-`private volatile int[] vals;`
 
 # Publishing and Escaping
 
@@ -283,7 +302,7 @@ More info:
   * (a) e.g., `public String[] foo();` <--- Caller can modify the array. Solution: Use defensive copy.
   * (b) e.g., `public void foo(Set<Car> car){}` <--- calling a method passing the reference. 'foo' can potentially modify 'Car' object. Solution: Use defensive copy.
   * (c) sub-classes can violate by overriding methods. Solution: Use final methods.
-* **Do not allow 'this' reference to escape via inner classes** (Try examples??????) Solution: Use factory methods
+* **Do not allow 'this' reference to escape via inner classes** Solution: Use factory methods
 
 ```java
 public class EventListener2 {
@@ -324,9 +343,9 @@ public class EventListener2 {
 
 Do not share anything outside of the scope or at least outside of the thread.
 
-(1) Adhoc - manually ensuring the object does not escape to more than a thread.
-(2) Stack confinement - make it a local variable.
-(3) ThreadLocal confinement - ensures each thread has its own copy of the object. 
+1. Adhoc - manually ensuring the object does not escape to more than a thread.
+2. Stack confinement - make it a local variable.
+3. ThreadLocal confinement - ensures each thread has its own copy of the object. 
 
 ## Data Sharing Options
 
@@ -339,12 +358,12 @@ Do not share anything outside of the scope or at least outside of the thread.
 
 ## Immutability
 
-Immutable objects 
-- are inherently thread-safe since the state cannot be changed.
-- Initialization Safety - JMM guarantees that immutables are published safely - meaning when the reference to an immutable is published, it is guaranteed that - the object is fully constructed
-Immutables offer additional performance advantage such as reduced need for locking or defensive copies.
+* Immutable objects 
+  - are inherently thread-safe since the state cannot be changed.
+  - Initialization Safety - JMM guarantees that immutables are published safely - meaning when the reference to an immutable is published, it is guaranteed that - the object is fully constructed
+* Immutables offer additional performance advantage such as reduced need for locking or defensive copies.
  
-An object is immutable if
+An object is immutable if and only if
 
 1. its state cannot be modified after construction
 2. all its fields are final (not necessarily)
@@ -379,7 +398,7 @@ Hazards of Liveness - deadlocks, livelocks, starvation and missed signals
 ### Type 1: Lock-Ordering Deadlock
 
 
-* Thread 1 holds lock A and waits for lock B. Thread 2 holds lock B and waits for lock A. (e.g., Dining philosopher's problem) This is a cyclic locking dependency, otherwise called 'deadly embrace'.
+* Thread 1 holds lock A and waits for lock B. Thread 2 holds lock B and waits for lock A. (e.g., Dining philosopher's problem) This is a *cyclic locking dependency*, otherwise called '*deadly embrace*'.
 * DBs handle deadlock by victimizing one of the threads. JVMs don't have that feature.
 
 #### Dynamic lock-ordering deadlocks 
@@ -391,7 +410,7 @@ void foo(Object A, Object B){
 	lock A, then B 
 }
 ```
-To prevent this, use some kind of unique values like System.identityHashCode() to define the order of locking. If the objects being locked has unique, immutable and compareable-keys, then inducing locking order is even easier.
+To prevent this, use some kind of unique values like `System.identityHashCode()` to define the order of locking. If the objects being locked has unique, immutable and compareable-keys, then inducing locking order is even easier.
 
 ```java 
 Object tieBreaker = new Object();
@@ -405,7 +424,7 @@ void foo(Object A, Object B){
 
 #### Open Calls
 
-Calling an alien method with no locks held is known as 'open-calls'. Invoking alien method with locks held is asking for liveness trouble because the alient method might acquire other locks leading to lock-order deadlocks. Here is an innocent looking example: Thread 1 calls setLocation() locking Taxi and waiting for lock on Dispatcher. Thread 2 calls getStatus() locking dispatcher and waiting for lock on Taxi.
+Calling an alien method with no locks held is known as 'open-calls'. Invoking alien method with locks held is asking for liveness trouble because the alien method might acquire other locks leading to lock-order deadlocks. Here is an innocent looking example: Thread 1 calls setLocation() locking Taxi and waiting for lock on Dispatcher. Thread 2 calls getStatus() locking dispatcher and waiting for lock on Taxi.
 
 ```java
 class Taxi {
@@ -413,7 +432,7 @@ class Taxi {
  public Taxi(Dispatcher dispatcher){this.dispatcher = dispatcher;}
  
  public synchronized void setLocation(){
- dispatcher.notify();
+    dispatcher.notify();
  }
  
  public synchronized Object getLocation(){
@@ -425,7 +444,7 @@ class Dispatcher{
  private Set<Taxi> taxis = new HashSet<>();
  
  public synchronized void getStatus(Taxi taxi){
- taxi.getLocation();
+    taxi.getLocation();
  }
  
  public synchronized void notify(){
@@ -436,14 +455,13 @@ class Dispatcher{
 
 ### Type 2: Thread-starvation deadlocks
 
-Task that submits a task and waits for its result in a single-threaded executor
-Bounded pools and inter-dependent tasks don't mix well.
+* Task that submits a task and waits for its result in a single-threaded executor
+* Bounded pools and inter-dependent tasks don't mix well.
 
 ### How to avoid deadlocks?
-1. Avoid acquiring multiple locks
-2. If not, establish lock-ordering protocol
-3. Use open-calls while invoking alient methods
-4. Avoid mixing bounded pools and inter-dependent tasks
+1. Avoid acquiring multiple locks. If not, establish lock-ordering protocol
+2. Use open-calls while invoking alien methods
+3. Avoid mixing bounded pools and inter-dependent tasks
 5. Attempt timed-locks (lock-wait timeouts)
 
 ## 3) Starvation
@@ -495,10 +513,10 @@ Concurrency/Parallelism does not necessarily make a program run faster; it may e
 * `Runnable` & `Callable` - represent abstract computation tasks. Runnable neither returns results nor throws exception
 * `Future` - represents lifecycle of a task and provides methods to test whether the task completed/cancelled/result available.
   * Future.get() call blocks until the result is available
-  * Instead of polling on Futures, use CompletionService
+  * Instead of polling on Futures, use `CompletionService`
 * **Periodic tasks**
   * `Timer` - supports only absolute timing
-    * If a recurring TimerTask is scheduled to run every 10 ms and another Timer-Task takes 40 ms to run, the recurring task either (depending on whether it was scheduled at fixed rate or fixed delay) gets called four times in rapid succession after the long-running task completes, or “misses” four invocations completely. Scheduled thread pools address this limitation by letting you provide multiple threads for executing deferred and periodic tasks.
+    * If a recurring TimerTask is scheduled to run every 10 ms and another TimerTask takes 40 ms to run, the recurring task either (depending on whether it was scheduled at fixed rate or fixed delay) gets called four times in rapid succession after the long-running task completes, or “misses” four invocations completely. Scheduled thread pools address this limitation by letting you provide multiple threads for executing deferred and periodic tasks.
     * Timer thread doesn’t catch the exception, so an unchecked exception thrown from a TimerTask terminates the timer thread.
 * `ScheduledThreadPoolExecutor` - supports only relative timing. Always prefer this over Timer.
 
@@ -525,13 +543,13 @@ Concurrency/Parallelism does not necessarily make a program run faster; it may e
   * LinkedBlockingQueue - FIFO
   * PriorityBlockingQueue - Priority-ordered
 * SynchronousQueue - No storage space (size=0). Producer blocks until consumer is available.
-* Semaphore - Explained below
+* Semaphore
 * Blocking Deque (double-ended queue)
   * Deque & Blocking Deque are good for "work stealing pattern" which is better than producer-consumer pattern.
 
 # Synchronizers
 
-Synchronizer is any object that keeps the shared mutable data consistent. Don't need it if we can make immutable or unshared data.
+Synchronizer is any object that keeps the shared mutable data consistent. We don't need them if we can make data immutable or unshared.
  
 > Note: Blocking Queue is both collection and a synchronizer
 
@@ -548,6 +566,7 @@ Synchronizer is any object that keeps the shared mutable data consistent. Don't 
 
 {% img right /technology/mutex.png %}
 
+* Semaphores are often used to restrict the number of threads than can access some (physical or logical) resource.
 * Counting semaphores control the number of activities that can access a certain resource or perform a given action at the same time.
 * semaphores manage a set of virtual permits
 * activities acquire permit and release them
@@ -631,10 +650,7 @@ An Exchanger lets a pair of threads exchange objects at a synchronization point.
 # FAQs
 
 * how to test throughput of concurrent programs?
-* System.millis and System.nanos
 * Work stealing pattern - learn
-* CompletionService
-* Why thread.start() shouldn't be invoked from a constructor?
 * Java 1.5 Double-checked locking mechanism
 * What is the significance of Stack Size in a thread? (JVM Option -Xss)
 * Difference between sleep(), yield(), and wait()

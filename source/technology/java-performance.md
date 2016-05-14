@@ -100,7 +100,7 @@ Mechanism to hold all kinds of data items such as instructions, object data, loc
   * Eden & S0 space is cleared.
 * 3rd minor GC
   * When eden space fills up, a minor GC is triggered.
-  * referenced objects are moved to S0.  
+  * referenced objects are moved to S0. 
   * In addition, objects from S1 have their age incremented and get moved to S0.
   * Plus, objects that reached the threshold age are moved to old generation.
   * Eden & S1 space are cleared.
@@ -114,15 +114,14 @@ Mechanism to hold all kinds of data items such as instructions, object data, loc
   * Both minor & major GCs are done serially using a single virtual CPU.
   * Uses a mark-compact collection method.
   * Option: `-XX:+UserSerialGC`.
-  * Usages: 
-  * For longer apps with no low pause time requirements
-  * For apps which run on machine that hosts more JVMs than available processors.In such environment, GC of one app shouldn't affect all other JVMs.
+  * **Usages**: 
+    * For longer apps with no low pause time requirements
+    * For apps which run on machine that hosts more JVMs than available processors.In such environment, GC of one app shouldn't affect all other JVMs.
 * The Parallel GC
   * uses multiple threads  to perform the young generation GC.
   * By default, on a host with 'N' CPUs, the parallel GC uses N GC threads in the collection. The number of GC threads can be controlled: `-XX:ParallelGCThreads=<num>`
   * Parallel GC is also called a throughput collector.
-  * Usages:
-  * apps where high throughput is required and long pauses are accepted.
+  * **Usages**: apps where high throughput is required and long pauses are accepted.
   * 2 flavors of Parallel GC
   * Option: `-XX:+UseParallelGC` - does multi-threaded young generation GC, single-threaded old generation collection and compaction.
   * Option: `-XX:+UseParallelOldGC` - does multi-threaded young, multi-thread old generation collection and compaction. (HotSpot does compaction only in the old generation)
@@ -136,7 +135,7 @@ Mechanism to hold all kinds of data items such as instructions, object data, loc
   * Also called Garbage First Collector.
   * Replacement for CMS collector.
   * G1 is a parallel, concurrent, and incrementally compacting low-pause collector that has a different layout from other collectors above.
-  * More details here
+  * More details [here](http://www.oracle.com/technetwork/tutorials/tutorials-1876574.html)
   * Option: `-XX:+UserG1GC`
 
 ## Reference Types

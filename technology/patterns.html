@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Patterns Design Patterns Adapter Object Adapter Class Adapter Bridge Builder Chain of Responsibility Circular Buffer Command Composite Decorator &hellip;">
+<meta name="description" content="Patterns Design Patterns Adapter Bridge Builder Chain of Responsibility Circular Buffer Command Composite Decorator Facade Factory Factory Idiom - &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -24,7 +24,7 @@
   <!-- Below custom CSS is for table border styling -->
   <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
 
-  <link href="/atom.xml" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
   <script src="/javascripts/modernizr-2.0.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
@@ -77,7 +77,7 @@ messageStyle: "none",
 
 </header>
   <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
   
 </ul>
   
@@ -117,11 +117,7 @@ messageStyle: "none",
   
   <ul id="markdown-toc">
   <li><a href="#design-patterns">Design Patterns</a>    <ul>
-      <li><a href="#adapter">Adapter</a>        <ul>
-          <li><a href="#object-adapter">Object Adapter</a></li>
-          <li><a href="#class-adapter">Class Adapter</a></li>
-        </ul>
-      </li>
+      <li><a href="#adapter">Adapter</a></li>
       <li><a href="#bridge">Bridge</a></li>
       <li><a href="#builder">Builder</a></li>
       <li><a href="#chain-of-responsibility">Chain of Responsibility</a></li>
@@ -129,6 +125,7 @@ messageStyle: "none",
       <li><a href="#command">Command</a></li>
       <li><a href="#composite">Composite</a></li>
       <li><a href="#decorator">Decorator</a></li>
+      <li><a href="#facade">Facade</a></li>
       <li><a href="#factory">Factory</a>        <ul>
           <li><a href="#factory-idiom---not-a-pattern">Factory Idiom - Not a pattern</a></li>
           <li><a href="#static-factory-method">Static Factory Method</a></li>
@@ -181,7 +178,7 @@ messageStyle: "none",
       <li><a href="#business-delegate">Business Delegate</a></li>
       <li><a href="#data-access-object-dao">Data Access Object (DAO)</a></li>
       <li><a href="#dependency-injection-or-ioc">Dependency Injection or IOC</a></li>
-      <li><a href="#facade">Facade</a>        <ul>
+      <li><a href="#facade-1">Facade</a>        <ul>
           <li><a href="#session-facade">Session Facade</a></li>
           <li><a href="#wrapper-facade">Wrapper Facade</a></li>
         </ul>
@@ -202,17 +199,95 @@ messageStyle: "none",
 <h1 id="design-patterns">Design Patterns</h1>
 
 <h2 id="adapter">Adapter</h2>
-<p>Also called ‘Wrapper’ pattern</p>
 
-<h3 id="object-adapter">Object Adapter</h3>
+<ul>
+  <li>Also called ‘Wrapper’ pattern</li>
+  <li>converts the interface of a class into another interface the clients expect. Adapter lets classes work together that couldn’t otherwise because of incompatible interfaces.</li>
+  <li>OO Principle followed: composition over inheritance</li>
+</ul>
 
-<h3 id="class-adapter">Class Adapter</h3>
+<table>
+  <tbody>
+    <tr>
+      <td><img src="/technology/adapter.png" /></td>
+      <td><img src="/technology/adapter_example.png" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">MallardDuck</span> <span class="n">duck</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">MallardDuck</span><span class="o">();</span>
+</span><span class="line"><span class="n">WildTurkey</span> <span class="n">turkey</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">WildTurkey</span><span class="o">();</span>
+</span><span class="line">
+</span><span class="line"><span class="n">Duck</span> <span class="n">adapter</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">TurkeyAdapter</span><span class="o">(</span><span class="n">turkey</span><span class="o">);</span>
+</span><span class="line"><span class="n">adapter</span><span class="o">.</span><span class="na">quack</span><span class="o">();</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h2 id="bridge">Bridge</h2>
 
 <h2 id="builder">Builder</h2>
 
+<p><strong>Benefits</strong></p>
+
+<ul>
+  <li>Encapsulates the way a complex object is constructed</li>
+  <li>Allows objects to be constructed in a multistep and varying process as opposed to one step factories. Used in building fluent APIs.</li>
+  <li>Product implementations can be swapped in and out because the client only sees an abstract interface.</li>
+  <li>Prevents telescoping constructor problem</li>
+</ul>
+
 <h2 id="chain-of-responsibility">Chain of Responsibility</h2>
+
+<ul>
+  <li>Use this pattern when you want to give more than one object a chance to handle a request</li>
+</ul>
+
+<p><strong>Benefits</strong></p>
+
+<ul>
+  <li>Decouples the sender of the request and its receivers</li>
+  <li>Simplifies your object because it doesn’t have to know the chain’s structure and keep direct references to its members.</li>
+  <li>Allows you to add or remove responsibilities dynamically by changing the members or order of the chain.</li>
+  <li>Used in applying filters in servlet request processing, logging a message to multiple channels, etc.</li>
+</ul>
+
+<p><strong>Drawbacks</strong></p>
+
+<ul>
+  <li>Execution of the request isn’t guaranteed; it may fall off the end of the chain if no object handles it. This can be an advantage or a disadvantage. One can always implement a catch-all handler.</li>
+  <li>Can be hard to observe and debug at runtime</li>
+</ul>
+
+<table>
+  <tbody>
+    <tr>
+      <td><img src="/technology/Chain_of_responsibility.png" /></td>
+      <td><img src="/technology/Chain_of_responsibility_example.png" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">ManagerPurchasePower</span> <span class="n">manager</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">ManagerPurchasePower</span><span class="o">();</span>
+</span><span class="line"><span class="n">VPPurchasePower</span> <span class="n">vp</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">VPPurchasePower</span><span class="o">();</span>
+</span><span class="line"><span class="n">CEOPurchasePower</span> <span class="n">ceo</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">CEOPurchasePower</span><span class="o">();</span>
+</span><span class="line"><span class="n">manager</span><span class="o">.</span><span class="na">setSuccessor</span><span class="o">(</span><span class="n">vp</span><span class="o">);</span>
+</span><span class="line"><span class="n">vp</span><span class="o">.</span><span class="na">setSuccessor</span><span class="o">(</span><span class="n">ceo</span><span class="o">);</span>
+</span><span class="line">
+</span><span class="line"><span class="n">manager</span><span class="o">.</span><span class="na">approve</span><span class="o">(</span><span class="n">request</span><span class="o">);</span> <span class="c1">// if manager is not authorized to approve the request, it will be delegated VP. </span>
+</span><span class="line">
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h2 id="circular-buffer">Circular Buffer</h2>
 
@@ -221,6 +296,44 @@ messageStyle: "none",
 <h2 id="composite">Composite</h2>
 
 <h2 id="decorator">Decorator</h2>
+
+<ul>
+  <li>Attach additional responsibilities to an object dynamically.</li>
+  <li>Decorators provide a flexible alternative to subclassing for extending functionality</li>
+  <li>OO Principle followed: open-closed principle - classes should be open for extension, closed for modification</li>
+</ul>
+
+<table>
+  <tbody>
+    <tr>
+      <td><img src="/technology/decorator.png" /></td>
+      <td><img src="/technology/decorator_example.png" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">InputStream</span> <span class="n">in</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">LineNumberInputStream</span><span class="o">(</span>
+</span><span class="line">                    <span class="k">new</span> <span class="nf">BufferedInputStream</span><span class="o">(</span>
+</span><span class="line">                        <span class="k">new</span> <span class="nf">FileInputStream</span><span class="o">(</span><span class="s">&quot;test.txt&quot;</span><span class="o">)</span>
+</span><span class="line">                    <span class="o">)</span>
+</span><span class="line">                <span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="facade">Facade</h2>
+
+<ul>
+  <li>Provides a unified interrace to a set of interfaces in a subsystem. </li>
+  <li>Facade defines a higher level interface that makes the subsystems easier to use</li>
+  <li>Not only does it simplify an interface, it also decouples a client from a subsystem of components</li>
+  <li>OO Principle followed: Principle of least knowledge - talk only to your immediate friends.</li>
+</ul>
+
+<p><img src="/technology/facade.png" /> </p>
 
 <h2 id="factory">Factory</h2>
 
@@ -234,13 +347,17 @@ messageStyle: "none",
   <li>(+) Since client refers to the product via a common interface, factory can change the product implementation anytime after go-live.</li>
 </ul>
 
-<p><strong>Type 1: Parameterized Factory Method</strong>
-Classical switch-case/if-condition based factory method that takes a parameter to decide the type of product to return
-* (+) New products can be added without changing the client code.
-* (-) Tight coupling between factory and product implementations. In other words, Factory class needs to change for every new product. It violates the Open Close Principle.
-* (-) Sub-classing means replacing all the factory class references everywhere in the code.</p>
+<p><strong>Type 1: Parameterized Factory Method</strong></p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<p>Classical switch-case/if-condition based factory method that takes a parameter to decide the type of product to return</p>
+
+<ul>
+  <li>(+) New products can be added without changing the client code.</li>
+  <li>(-) Tight coupling between factory and product implementations. In other words, Factory class needs to change for every new product. It violates the Open Close Principle.</li>
+  <li>(-) Sub-classing means replacing all the factory class references everywhere in the code.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
@@ -249,22 +366,27 @@ Classical switch-case/if-condition based factory method that takes a parameter t
 <span class="line-number">7</span>
 <span class="line-number">8</span>
 <span class="line-number">9</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">public class Factory{
-</span><span class="line">   public Product getProduct(String type){
-</span><span class="line">      if(type==1){
-</span><span class="line">          return new Product1();
-</span><span class="line">      } else if(type==2){
-</span><span class="line">          return new Product2();
-</span><span class="line">      } ....
-</span><span class="line">   }
-</span><span class="line">}</span></code></pre></td></tr></table></div></figure></notextile></div>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Factory</span><span class="o">{</span>
+</span><span class="line">   <span class="kd">public</span> <span class="n">Product</span> <span class="nf">getProduct</span><span class="o">(</span><span class="n">String</span> <span class="n">type</span><span class="o">){</span>
+</span><span class="line">      <span class="k">if</span><span class="o">(</span><span class="n">type</span><span class="o">==</span><span class="mi">1</span><span class="o">){</span>
+</span><span class="line">          <span class="k">return</span> <span class="k">new</span> <span class="nf">Product1</span><span class="o">();</span>
+</span><span class="line">      <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span><span class="o">(</span><span class="n">type</span><span class="o">==</span><span class="mi">2</span><span class="o">){</span>
+</span><span class="line">          <span class="k">return</span> <span class="k">new</span> <span class="nf">Product2</span><span class="o">();</span>
+</span><span class="line">      <span class="o">}</span> <span class="o">....</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p><strong>Type 2: Dynamic Class Registration</strong>
-Keep the map of key and product type away from the factory. It could be a properties file or statically registered in common registry class. Factory can dynamically create an instance of the product either by Class.forName() or using reflection.
-* (+) Factory class is not changed every time a product is added
-* (-) Using reflection impacts the performance</p>
+<p><strong>Type 2: Dynamic Class Registration</strong></p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<p>Keep the map of key and product type away from the factory. It could be a properties file or statically registered in common registry class. Factory can dynamically create an instance of the product either by Class.forName() or using reflection.</p>
+
+<ul>
+  <li>(+) Factory class is not changed every time a product is added</li>
+  <li>(-) Using reflection impacts the performance</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
@@ -277,19 +399,20 @@ Keep the map of key and product type away from the factory. It could be a proper
 <span class="line-number">11</span>
 <span class="line-number">12</span>
 <span class="line-number">13</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">public class Factory{
-</span><span class="line">   private Map&lt;String, Class&lt;Product&gt;&gt; map = new HashMap&lt;&gt;();
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Factory</span><span class="o">{</span>
+</span><span class="line">   <span class="kd">private</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Class</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;();</span>
 </span><span class="line">
-</span><span class="line">   public void register(String type, Class&lt;Product&gt; klass){
-</span><span class="line">      map.put(type, klass);
-</span><span class="line">   }
+</span><span class="line">   <span class="kd">public</span> <span class="kt">void</span> <span class="nf">register</span><span class="o">(</span><span class="n">String</span> <span class="n">type</span><span class="o">,</span> <span class="n">Class</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span> <span class="n">klass</span><span class="o">){</span>
+</span><span class="line">      <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">type</span><span class="o">,</span> <span class="n">klass</span><span class="o">);</span>
+</span><span class="line">   <span class="o">}</span>
 </span><span class="line">
-</span><span class="line">   public Product getProduct(String type){
-</span><span class="line">      Class&lt;Product&gt; klass = map.get(type);
+</span><span class="line">   <span class="kd">public</span> <span class="n">Product</span> <span class="nf">getProduct</span><span class="o">(</span><span class="n">String</span> <span class="n">type</span><span class="o">){</span>
+</span><span class="line">      <span class="n">Class</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span> <span class="n">klass</span> <span class="o">=</span> <span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">type</span><span class="o">);</span>
 </span><span class="line">
-</span><span class="line">      //Class.forName() or Reflection
-</span><span class="line">   }
-</span><span class="line">} </span></code></pre></td></tr></table></div></figure></notextile></div>
+</span><span class="line">      <span class="c1">//Class.forName() or Reflection</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h3 id="static-factory-method">Static Factory Method</h3>
 
@@ -363,7 +486,30 @@ Keep the map of key and product type away from the factory. It could be a proper
 
 <h2 id="mediator">Mediator</h2>
 
+<ul>
+  <li>Use this pattern to centralize complex communications and control between related objects.</li>
+</ul>
+
+<p><strong>Benefits</strong></p>
+
+<ul>
+  <li>Increases the reusability of the objects supported by the mediator by decoupling them from the system</li>
+  <li>Simplifies maintenance of the system by centralizing control logic.</li>
+  <li>Simplifies and reduces the variety of messages sent between objects in the system. </li>
+</ul>
+
+<p><strong>Drawbacks</strong></p>
+
+<ul>
+  <li>Without proper design, the Mediator object itself can become overly complex.</li>
+</ul>
+
 <h2 id="memento">Memento</h2>
+
+<ul>
+  <li>Use this pattern when you need to be able to return an object to one of its
+previous states; for instance, if your user requests an undo.</li>
+</ul>
 
 <h2 id="observer">Observer</h2>
 
@@ -444,16 +590,21 @@ Keep the map of key and product type away from the factory. It could be a proper
   </li>
 </ul>
 
-<p>** Type 1 - Early init with public static final field	**</p>
-<pre>
-public class Singleton{
-   <span style="color:red">public static final</span> Singleton INSTANCE = new Singleton();
-   private Singleton(){}
-}
-</pre>
+<p>**Type 1 - Early init with public static final field	**</p>
 
-<p>** Type 2 - Early init with private static field &amp; factory method**
-&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Singleton</span><span class="o">{</span>
+</span><span class="line">   <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Singleton</span> <span class="n">INSTANCE</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Singleton</span><span class="o">();</span>
+</span><span class="line">   <span class="kd">private</span> <span class="nf">Singleton</span><span class="o">(){}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Type 2 - Early init with private static field &amp; factory method</strong></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
@@ -462,95 +613,150 @@ public class Singleton{
 <span class="line-number">7</span>
 <span class="line-number">8</span>
 <span class="line-number">9</span>
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class=""><span class="line">public class Singleton{
-</span><span class="line">   private static final Singleton INSTANCE = new Singleton();
-</span><span class="line">   private Singleton(){}
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Singleton</span><span class="o">{</span>
+</span><span class="line">   <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Singleton</span> <span class="n">INSTANCE</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Singleton</span><span class="o">();</span>
+</span><span class="line">   <span class="kd">private</span> <span class="nf">Singleton</span><span class="o">(){}</span>
 </span><span class="line">
-</span><span class="line">   //static factory method
-</span><span class="line">   public static Singleton getInstance(){
-</span><span class="line">     return INSTANCE;
-</span><span class="line">   }
-</span><span class="line">}</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</figure></notextile>&lt;/div&gt;</p>
+</span><span class="line">   <span class="c1">//static factory method</span>
+</span><span class="line">   <span class="kd">public</span> <span class="kd">static</span> <span class="n">Singleton</span> <span class="nf">getInstance</span><span class="o">(){</span>
+</span><span class="line">     <span class="k">return</span> <span class="n">INSTANCE</span><span class="o">;</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p><strong>Type 3 - Early init via Enum</strong></p>
-<pre>
- public <span style="color:red">enum</span> Singleton{
-    INSTANCE; //By default, public static final
- }
-</pre>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"> <span class="kd">public</span> <span class="kd">enum</span> <span class="n">Singleton</span><span class="o">{</span>
+</span><span class="line">    <span class="n">INSTANCE</span><span class="o">;</span> <span class="c1">//By default, public static final</span>
+</span><span class="line"> <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p><strong>Type 4 - Lazy init - not thread-safe</strong></p>
-<pre>
-public class Singleton{
-   private static Singleton instance;
-   private Singleton(){}
 
-   //static factory method
-   public static Singleton getInstance(){
-     <span style="color:red">
-     if(instance==null){
-        instance = new Singleton();
-     }
-     return instance;
-     </span>
-   }
-}
-</pre>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Singleton</span><span class="o">{</span>
+</span><span class="line">   <span class="kd">private</span> <span class="kd">static</span> <span class="n">Singleton</span> <span class="n">instance</span><span class="o">;</span>
+</span><span class="line">   <span class="kd">private</span> <span class="nf">Singleton</span><span class="o">(){}</span>
+</span><span class="line">
+</span><span class="line">   <span class="c1">//static factory method</span>
+</span><span class="line">   <span class="kd">public</span> <span class="kd">static</span> <span class="n">Singleton</span> <span class="nf">getInstance</span><span class="o">(){</span>
+</span><span class="line">     <span class="k">if</span><span class="o">(</span><span class="n">instance</span><span class="o">==</span><span class="kc">null</span><span class="o">){</span>
+</span><span class="line">        <span class="n">instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Singleton</span><span class="o">();</span>
+</span><span class="line">     <span class="o">}</span>
+</span><span class="line">     <span class="k">return</span> <span class="n">instance</span><span class="o">;</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p><strong>Type 5 - Lazy init - Thread-safe but worst performing</strong></p>
-<pre>
- public class Singleton{
-   private static Singleton instance;
-   private Singleton(){}
 
-   //static factory method
-   public <span style="color:red">synchronized</span> static Singleton getInstance(){
-     if(instance==null){
-        instance = new Singleton();
-     }
-     return instance;
-   }
-}
-</pre>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"> <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Singleton</span><span class="o">{</span>
+</span><span class="line">   <span class="kd">private</span> <span class="kd">static</span> <span class="n">Singleton</span> <span class="n">instance</span><span class="o">;</span>
+</span><span class="line">   <span class="kd">private</span> <span class="nf">Singleton</span><span class="o">(){}</span>
+</span><span class="line">
+</span><span class="line">   <span class="c1">//static factory method</span>
+</span><span class="line">   <span class="kd">public</span> <span class="kd">synchronized</span> <span class="kd">static</span> <span class="n">Singleton</span> <span class="nf">getInstance</span><span class="o">(){</span>
+</span><span class="line">     <span class="k">if</span><span class="o">(</span><span class="n">instance</span><span class="o">==</span><span class="kc">null</span><span class="o">){</span>
+</span><span class="line">        <span class="n">instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Singleton</span><span class="o">();</span>
+</span><span class="line">     <span class="o">}</span>
+</span><span class="line">     <span class="k">return</span> <span class="n">instance</span><span class="o">;</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p><strong>Type 6 - Lazy init - Thread-safe via Double-checked lock (BROKEN)</strong></p>
-<pre>
- public class Singleton{
-   private static Singleton instance;
-   private Singleton(){}
 
-   public static Singleton getInstance(){
-   <span style="color:red">
-     if(instance==null){ //check
-        synchronized(Singleton.class){ //lock
-           if(instance==null){//check</span>
-              instance = new Singleton();
-           }
-        }
-     }
-     return instance;
-   }
-}
-</pre>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"> <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Singleton</span><span class="o">{</span>
+</span><span class="line">   <span class="kd">private</span> <span class="kd">static</span> <span class="n">Singleton</span> <span class="n">instance</span><span class="o">;</span>
+</span><span class="line">   <span class="kd">private</span> <span class="nf">Singleton</span><span class="o">(){}</span>
+</span><span class="line">
+</span><span class="line">   <span class="kd">public</span> <span class="kd">static</span> <span class="n">Singleton</span> <span class="nf">getInstance</span><span class="o">(){</span>
+</span><span class="line">     <span class="k">if</span><span class="o">(</span><span class="n">instance</span><span class="o">==</span><span class="kc">null</span><span class="o">){</span> <span class="c1">//check</span>
+</span><span class="line">        <span class="kd">synchronized</span><span class="o">(</span><span class="n">Singleton</span><span class="o">.</span><span class="na">class</span><span class="o">){</span> <span class="c1">//lock</span>
+</span><span class="line">           <span class="k">if</span><span class="o">(</span><span class="n">instance</span><span class="o">==</span><span class="kc">null</span><span class="o">){</span><span class="c1">//check</span>
+</span><span class="line">              <span class="n">instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Singleton</span><span class="o">();</span>
+</span><span class="line">           <span class="o">}</span>
+</span><span class="line">        <span class="o">}</span>
+</span><span class="line">     <span class="o">}</span>
+</span><span class="line">     <span class="k">return</span> <span class="n">instance</span><span class="o">;</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p><strong>Type 7 - Lazy init - Thread-safe via DCL and volatile instance (works in Java 5+)</strong></p>
-<pre>
-public class Singleton{
-   private static <span style="color:red">volatile</span> Singleton instance;
-   private Singleton(){}
 
-   public static Singleton getInstance(){
-     if(instance==null){ //check
-        synchronized(Singleton.class){ //lock
-           if(instance==null){//check
-              instance = new Singleton();
-           }
-        }
-     }
-     return instance;
-   }
-}
-</pre>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Singleton</span><span class="o">{</span>
+</span><span class="line">   <span class="kd">private</span> <span class="kd">static</span> <span class="kd">volatile</span> <span class="n">Singleton</span> <span class="n">instance</span><span class="o">;</span>
+</span><span class="line">   <span class="kd">private</span> <span class="nf">Singleton</span><span class="o">(){}</span>
+</span><span class="line">
+</span><span class="line">   <span class="kd">public</span> <span class="kd">static</span> <span class="n">Singleton</span> <span class="nf">getInstance</span><span class="o">(){</span>
+</span><span class="line">     <span class="k">if</span><span class="o">(</span><span class="n">instance</span><span class="o">==</span><span class="kc">null</span><span class="o">){</span> <span class="c1">//check</span>
+</span><span class="line">        <span class="kd">synchronized</span><span class="o">(</span><span class="n">Singleton</span><span class="o">.</span><span class="na">class</span><span class="o">){</span> <span class="c1">//lock</span>
+</span><span class="line">           <span class="k">if</span><span class="o">(</span><span class="n">instance</span><span class="o">==</span><span class="kc">null</span><span class="o">){</span><span class="c1">//check</span>
+</span><span class="line">              <span class="n">instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Singleton</span><span class="o">();</span>
+</span><span class="line">           <span class="o">}</span>
+</span><span class="line">        <span class="o">}</span>
+</span><span class="line">     <span class="o">}</span>
+</span><span class="line">     <span class="k">return</span> <span class="n">instance</span><span class="o">;</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h2 id="state">State</h2>
 
@@ -564,6 +770,15 @@ public class Singleton{
 You can also find recycle bins in Java, such as in the thread pooling that you can configure using classes like ScheduledThreadPoolExecutor and ThreadPoolExecutor.</p>
 
 <h2 id="template-method">Template Method</h2>
+
+<ul>
+  <li>Defines the skeleton of an algorithm in a method, deferring some steps to
+subclasses to provide the implementation.</li>
+  <li>Lets subclasses redefine certain steps of an algorithm without changing the algorithm structure</li>
+  <li>OO Principle followed: Hollywood principle - Don’t call us, we’ll call you</li>
+</ul>
+
+<p><img src="/technology/template.png" /></p>
 
 <h2 id="transferobject">TransferObject</h2>
 
@@ -638,7 +853,7 @@ You can also find recycle bins in Java, such as in the thread pooling that you c
   <li>Interface injection</li>
 </ul>
 
-<h2 id="facade">Facade</h2>
+<h2 id="facade-1">Facade</h2>
 
 <h3 id="session-facade">Session Facade</h3>
 

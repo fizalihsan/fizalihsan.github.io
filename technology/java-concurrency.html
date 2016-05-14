@@ -24,7 +24,7 @@
   <!-- Below custom CSS is for table border styling -->
   <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
 
-  <link href="/atom.xml" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
   <script src="/javascripts/modernizr-2.0.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
@@ -77,7 +77,7 @@ messageStyle: "none",
 
 </header>
   <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
   
 </ul>
   
@@ -128,6 +128,7 @@ messageStyle: "none",
         </ul>
       </li>
       <li><a href="#atomicity">Atomicity</a>        <ul>
+          <li><a href="#check-then-act">Check-then-act</a></li>
           <li><a href="#read-modify-write">Read-modify-write</a></li>
         </ul>
       </li>
@@ -153,6 +154,7 @@ messageStyle: "none",
   <li><a href="#sharing-objects">Sharing Objects</a>    <ul>
       <li><a href="#re-ordering">Re-ordering</a></li>
       <li><a href="#volatile-variables">Volatile Variables</a>        <ul>
+          <li><a href="#volatile-arrays">Volatile Arrays</a></li>
           <li><a href="#pros-of-volatile">Pros of volatile</a></li>
           <li><a href="#limitations-of-volatile">Limitations of volatile</a></li>
         </ul>
@@ -221,9 +223,6 @@ messageStyle: "none",
   <li><a href="#bibliography">Bibliography</a></li>
 </ul>
 
-<p>Memory Consistency - http://docs.oracle.com/javase/tutorial/essential/concurrency/memconsist.html 
-Memory consistent properties - happens-before? Read more on Java Language Specification book </p>
-
 <h1 id="basics-concepts">Basics Concepts</h1>
 
 <ul>
@@ -235,9 +234,9 @@ Memory consistent properties - happens-before? Read more on Java Language Specif
   </li>
   <li>Definitions
     <ul>
-      <li>Parallel processing - refers to two or more threads running simultaneously, on different cores (processors), in the same computer. It is essentially a hardware term.</li>
-      <li>Concurrent processing - refers to two or more threads running asynchronously, on one or more cores, usually in the same computer. It is essentially a software term.</li>
-      <li>Distributed processing - refers to two or more processes running asynchronously on one or more JVMs or boxes.</li>
+      <li><em>Parallel processing</em> - refers to two or more threads running simultaneously, on different cores (processors), in the same computer. It is essentially a hardware term.</li>
+      <li><em>Concurrent processing</em> - refers to two or more threads running asynchronously, on one or more cores, usually in the same computer. It is essentially a software term.</li>
+      <li><em>Distributed processing</em> - refers to two or more processes running asynchronously on one or more JVMs or boxes.</li>
     </ul>
   </li>
 </ul>
@@ -280,8 +279,9 @@ Memory consistent properties - happens-before? Read more on Java Language Specif
 
 <h2 id="atomicity">Atomicity</h2>
 
-<p>Compound Action Anti-Patterns
-### Check-then-act</p>
+<p>Compound Action Anti-Patterns</p>
+
+<h3 id="check-then-act">Check-then-act</h3>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -314,26 +314,25 @@ Memory consistent properties - happens-before? Read more on Java Language Specif
 <p>The four synchronization models are mutex locks, read/write locks, condition variables, and semaphores.</p>
 
 <ul>
-  <li>1) Mutex locks 
+  <li>1) <strong>Mutex locks</strong> 
     <ul>
       <li>allow only one thread at a time to execute a specific section of code, or to access specific data.</li>
       <li>Each Java class and object has their own mutex locks. Each thread has it’s own separate call stack.</li>
     </ul>
   </li>
-  <li>2) Read/write locks 
+  <li>2) <strong>Read/write locks</strong> 
     <ul>
-      <li>permit concurrent reads and exclusive writes to a protected shared resource. To modify a resource, a thread must first acquire the exclusive write lock. An exclusive write lock is not permitted until all read locks have been released.</li>
-      <li>e.g., Java ReadWriteLock</li>
+      <li>permit concurrent reads and exclusive writes to a protected shared resource. To modify a resource, a thread must first acquire the exclusive write lock. An exclusive write lock is not permitted until all read locks have been released. e.g., <code>ReadWriteLock</code></li>
     </ul>
   </li>
-  <li>3) Condition variables 
+  <li>3) <strong>Condition variables</strong> 
     <ul>
-      <li>block threads until a particular condition is true.</li>
+      <li>block threads until a particular condition is true.e.g., <code>java.util.concurrent.locks.Condition</code></li>
     </ul>
   </li>
-  <li>4) Counting semaphores 
+  <li>4) <strong>Counting semaphores</strong> 
     <ul>
-      <li>typically coordinate access to resources. The count is the limit on how many threads can have access to a semaphore. When the count is reached, the semaphore blocks.</li>
+      <li>typically coordinate access to resources. The count is the limit on how many threads can have access to a semaphore. When the count is reached, the semaphore blocks. e.g., <code>java.util.concurrent.Semaphore</code></li>
     </ul>
   </li>
 </ul>
@@ -453,7 +452,7 @@ Memory consistent properties - happens-before? Read more on Java Language Specif
 
 <h3 id="condition">Condition</h3>
 
-<p>instead of spin wait(sleep until a flag is true) which is inefficient, use <code>Condition</code>. Even better is to use coordination classes like <code>CountDownLatch</code> or <code>CyclicBarrier</code> which is concise and better than <code>Condition</code>.</p>
+<p>instead of <em>spin wait</em> (sleep until a flag is true) which is inefficient, use <code>Condition</code>. Even better is to use coordination classes like <code>CountDownLatch</code> or <code>CyclicBarrier</code> which is concise and better than <code>Condition</code>.</p>
 
 <h1 id="sharing-objects">Sharing Objects</h1>
 
@@ -502,14 +501,20 @@ Memory consistent properties - happens-before? Read more on Java Language Specif
 </span><span class="line"><span class="o">}</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p><strong>Possible outcomes</strong>
-* prints zero and exists
-* prints nothing and never ends</p>
+<p><strong>Possible outcomes</strong></p>
 
-<p><strong>Reason</strong>
-* changes made by main thread are not visitible to ReaderThread
-* Stale values are visible
-* changes made by main thread were visible to ReaderThread in a different order</p>
+<ul>
+  <li>prints zero and exists</li>
+  <li>prints nothing and never ends</li>
+</ul>
+
+<p><strong>Reason</strong></p>
+
+<ul>
+  <li>changes made by main thread are not visitible to ReaderThread</li>
+  <li>Stale values are visible</li>
+  <li>changes made by main thread were visible to ReaderThread in a different order</li>
+</ul>
 
 <h2 id="re-ordering">Re-ordering</h2>
 
@@ -530,6 +535,8 @@ Memory consistent properties - happens-before? Read more on Java Language Specif
 <h2 id="volatile-variables">Volatile Variables</h2>
 
 <p><img class="right" src="/technology/memory-cache.png" /></p>
+
+<p>In modern processors a lot goes on to try and optimise memory and throughput such as <em>caching</em>. This is where regularly accessed variables are kept in a small amount of memory close to a specific processor to increase processing speed; it reduces the time the processor has to go to disk to get information (which can be very slow). However, in a multithreaded environment this can be very dangerous as it means that two threads could see a different version of a variable if it has been updated in cache and not written back to memory; <em>processor A</em> may think <code>int i=2</code> whereas <em>processor B</em> thinks <code>int i=4</code>. This is where <strong>volatile</strong>  comes in. It tells Java that this variable could be accessed by multiple threads and therefore should not be cached, this guaranteeing the value is correct when accessing. It also stops the compiler from trying to optimise the code by reordering it.</p>
 
 <p>In Java, volatile keyword does 3 things:</p>
 
@@ -553,9 +560,39 @@ Memory consistent properties - happens-before? Read more on Java Language Specif
 </span><span class="line"><span class="o">}</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>More info: 
-* <a href="http://www.codeproject.com/Articles/31283/Volatile-fields-in-NET-A-look-inside">Volatile fields and memory barrier: A look inside</a>
-* <a href="http://www.infoq.com/articles/memory_barriers_jvm_concurrency">InfoQ: Memory Barriers and JVM Concurrency</a></p>
+<h3 id="volatile-arrays">Volatile Arrays</h3>
+
+<p>Declaring an array volatile does not give volatile access to its fields! In other words:</p>
+
+<ul>
+  <li>it is unsafe to call <code>arr[x] = y</code> on an array (even if declared volatile) in one thread and then expect <code>arr[x]</code> to return <code>y</code> from another thread;</li>
+  <li>on the other hand, it is safe to call <code>arr = new int[]</code> (or whatever) and expect another thread to then read the new array as that referenced by <code>arr</code>: this is what is meant by declaring the array reference volatile.</li>
+</ul>
+
+<p><strong>Solution 1</strong>: use <code>AtomicIntegerArray</code> or <code>AtomicLongArray</code></p>
+
+<p>The <code>AtomicIntegerArray</code> class implements an int array whose individual fields can be accessed with volatile semantics, via the class’s <code>get()</code> and <code>set()</code> methods. Calling <code>arr.set(x, y)</code> from one thread will then guarantee that another thread calling <code>arr.get(x)</code> will read the value y (until another value is read to position x).</p>
+
+<p><strong>Solution 2</strong>: re-write the array reference after each field write</p>
+
+<p>This is slightly kludgy and slightly inefficient (since what would be one write now involves two writes) but is theoretically correct. After setting an element of the array, we re-set the array reference to be itself. </p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">volatile</span> <span class="kt">int</span><span class="o">[]</span> <span class="n">arr</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[...];</span>
+</span><span class="line"><span class="o">...</span>
+</span><span class="line"><span class="n">arr</span><span class="o">[</span><span class="mi">4</span><span class="o">]</span> <span class="o">=</span> <span class="mi">100</span><span class="o">;</span>
+</span><span class="line"><span class="n">arr</span> <span class="o">=</span> <span class="n">arr</span><span class="o">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>More info: </p>
+
+<ul>
+  <li><a href="http://www.codeproject.com/Articles/31283/Volatile-fields-in-NET-A-look-inside">Volatile fields and memory barrier: A look inside</a></li>
+  <li><a href="http://www.infoq.com/articles/memory_barriers_jvm_concurrency">InfoQ: Memory Barriers and JVM Concurrency</a></li>
+</ul>
 
 <h3 id="pros-of-volatile">Pros of volatile</h3>
 <ul>
@@ -563,16 +600,12 @@ Memory consistent properties - happens-before? Read more on Java Language Specif
   <li>notices JIT compiler and runtime that “re-ordering” SHOULD NOT happen.</li>
   <li>It warns the compiler that the variable may change behind the back of a thread and that each access, read or write, to this variable should bypass cache and go all the way to the memory.</li>
   <li>don’t rely too much on volatile for visibility</li>
-  <li>when to use volatiles??????</li>
 </ul>
 
 <h3 id="limitations-of-volatile">Limitations of volatile</h3>
 <ul>
-  <li>Synchronization guarantees both atomicity and visibility </li>
-  <li>Volatile guarantees only visibility</li>
+  <li>Synchronization guarantees both atomicity and visibility. Volatile guarantees only visibility</li>
   <li>Making all variables volatile will result in poor performance since every access to cross the memory barrier</li>
-  <li>volatile arrays? is this safe? 
-<code>private volatile int[] vals;</code></li>
 </ul>
 
 <h1 id="publishing-and-escaping">Publishing and Escaping</h1>
@@ -593,7 +626,7 @@ Memory consistent properties - happens-before? Read more on Java Language Specif
       <li>(c) sub-classes can violate by overriding methods. Solution: Use final methods.</li>
     </ul>
   </li>
-  <li><strong>Do not allow ‘this’ reference to escape via inner classes</strong> (Try examples??????) Solution: Use factory methods</li>
+  <li><strong>Do not allow ‘this’ reference to escape via inner classes</strong> Solution: Use factory methods</li>
 </ul>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
@@ -663,9 +696,11 @@ Memory consistent properties - happens-before? Read more on Java Language Specif
 
 <p>Do not share anything outside of the scope or at least outside of the thread.</p>
 
-<p>(1) Adhoc - manually ensuring the object does not escape to more than a thread.
-(2) Stack confinement - make it a local variable.
-(3) ThreadLocal confinement - ensures each thread has its own copy of the object. </p>
+<ol>
+  <li>Adhoc - manually ensuring the object does not escape to more than a thread.</li>
+  <li>Stack confinement - make it a local variable.</li>
+  <li>ThreadLocal confinement - ensures each thread has its own copy of the object. </li>
+</ol>
 
 <h2 id="data-sharing-options">Data Sharing Options</h2>
 
@@ -680,12 +715,17 @@ Memory consistent properties - happens-before? Read more on Java Language Specif
 
 <h2 id="immutability">Immutability</h2>
 
-<p>Immutable objects 
-- are inherently thread-safe since the state cannot be changed.
-- Initialization Safety - JMM guarantees that immutables are published safely - meaning when the reference to an immutable is published, it is guaranteed that - the object is fully constructed
-Immutables offer additional performance advantage such as reduced need for locking or defensive copies.</p>
+<ul>
+  <li>Immutable objects 
+    <ul>
+      <li>are inherently thread-safe since the state cannot be changed.</li>
+      <li>Initialization Safety - JMM guarantees that immutables are published safely - meaning when the reference to an immutable is published, it is guaranteed that - the object is fully constructed</li>
+    </ul>
+  </li>
+  <li>Immutables offer additional performance advantage such as reduced need for locking or defensive copies.</li>
+</ul>
 
-<p>An object is immutable if</p>
+<p>An object is immutable if and only if</p>
 
 <ol>
   <li>its state cannot be modified after construction</li>
@@ -725,7 +765,7 @@ Immutables offer additional performance advantage such as reduced need for locki
 <h3 id="type-1-lock-ordering-deadlock">Type 1: Lock-Ordering Deadlock</h3>
 
 <ul>
-  <li>Thread 1 holds lock A and waits for lock B. Thread 2 holds lock B and waits for lock A. (e.g., Dining philosopher’s problem) This is a cyclic locking dependency, otherwise called ‘deadly embrace’.</li>
+  <li>Thread 1 holds lock A and waits for lock B. Thread 2 holds lock B and waits for lock A. (e.g., Dining philosopher’s problem) This is a <em>cyclic locking dependency</em>, otherwise called ‘<em>deadly embrace</em>’.</li>
   <li>DBs handle deadlock by victimizing one of the threads. JVMs don’t have that feature.</li>
 </ul>
 
@@ -740,7 +780,7 @@ Immutables offer additional performance advantage such as reduced need for locki
 </span><span class="line">	<span class="n">lock</span> <span class="n">A</span><span class="o">,</span> <span class="n">then</span> <span class="n">B</span>
 </span><span class="line"><span class="o">}</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>To prevent this, use some kind of unique values like System.identityHashCode() to define the order of locking. If the objects being locked has unique, immutable and compareable-keys, then inducing locking order is even easier.</p>
+<p>To prevent this, use some kind of unique values like <code>System.identityHashCode()</code> to define the order of locking. If the objects being locked has unique, immutable and compareable-keys, then inducing locking order is even easier.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -760,7 +800,7 @@ Immutables offer additional performance advantage such as reduced need for locki
 
 <h4 id="open-calls">Open Calls</h4>
 
-<p>Calling an alien method with no locks held is known as ‘open-calls’. Invoking alien method with locks held is asking for liveness trouble because the alient method might acquire other locks leading to lock-order deadlocks. Here is an innocent looking example: Thread 1 calls setLocation() locking Taxi and waiting for lock on Dispatcher. Thread 2 calls getStatus() locking dispatcher and waiting for lock on Taxi.</p>
+<p>Calling an alien method with no locks held is known as ‘open-calls’. Invoking alien method with locks held is asking for liveness trouble because the alien method might acquire other locks leading to lock-order deadlocks. Here is an innocent looking example: Thread 1 calls setLocation() locking Taxi and waiting for lock on Dispatcher. Thread 2 calls getStatus() locking dispatcher and waiting for lock on Taxi.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -791,7 +831,7 @@ Immutables offer additional performance advantage such as reduced need for locki
 </span><span class="line"> <span class="kd">public</span> <span class="nf">Taxi</span><span class="o">(</span><span class="n">Dispatcher</span> <span class="n">dispatcher</span><span class="o">){</span><span class="k">this</span><span class="o">.</span><span class="na">dispatcher</span> <span class="o">=</span> <span class="n">dispatcher</span><span class="o">;}</span>
 </span><span class="line">
 </span><span class="line"> <span class="kd">public</span> <span class="kd">synchronized</span> <span class="kt">void</span> <span class="nf">setLocation</span><span class="o">(){</span>
-</span><span class="line"> <span class="n">dispatcher</span><span class="o">.</span><span class="na">notify</span><span class="o">();</span>
+</span><span class="line">    <span class="n">dispatcher</span><span class="o">.</span><span class="na">notify</span><span class="o">();</span>
 </span><span class="line"> <span class="o">}</span>
 </span><span class="line">
 </span><span class="line"> <span class="kd">public</span> <span class="kd">synchronized</span> <span class="n">Object</span> <span class="nf">getLocation</span><span class="o">(){</span>
@@ -803,7 +843,7 @@ Immutables offer additional performance advantage such as reduced need for locki
 </span><span class="line"> <span class="kd">private</span> <span class="n">Set</span><span class="o">&lt;</span><span class="n">Taxi</span><span class="o">&gt;</span> <span class="n">taxis</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashSet</span><span class="o">&lt;&gt;();</span>
 </span><span class="line">
 </span><span class="line"> <span class="kd">public</span> <span class="kd">synchronized</span> <span class="kt">void</span> <span class="nf">getStatus</span><span class="o">(</span><span class="n">Taxi</span> <span class="n">taxi</span><span class="o">){</span>
-</span><span class="line"> <span class="n">taxi</span><span class="o">.</span><span class="na">getLocation</span><span class="o">();</span>
+</span><span class="line">    <span class="n">taxi</span><span class="o">.</span><span class="na">getLocation</span><span class="o">();</span>
 </span><span class="line"> <span class="o">}</span>
 </span><span class="line">
 </span><span class="line"> <span class="kd">public</span> <span class="kd">synchronized</span> <span class="kt">void</span> <span class="nf">notify</span><span class="o">(){</span>
@@ -814,14 +854,15 @@ Immutables offer additional performance advantage such as reduced need for locki
 
 <h3 id="type-2-thread-starvation-deadlocks">Type 2: Thread-starvation deadlocks</h3>
 
-<p>Task that submits a task and waits for its result in a single-threaded executor
-Bounded pools and inter-dependent tasks don’t mix well.</p>
+<ul>
+  <li>Task that submits a task and waits for its result in a single-threaded executor</li>
+  <li>Bounded pools and inter-dependent tasks don’t mix well.</li>
+</ul>
 
 <h3 id="how-to-avoid-deadlocks">How to avoid deadlocks?</h3>
 <ol>
-  <li>Avoid acquiring multiple locks</li>
-  <li>If not, establish lock-ordering protocol</li>
-  <li>Use open-calls while invoking alient methods</li>
+  <li>Avoid acquiring multiple locks. If not, establish lock-ordering protocol</li>
+  <li>Use open-calls while invoking alien methods</li>
   <li>Avoid mixing bounded pools and inter-dependent tasks</li>
   <li>Attempt timed-locks (lock-wait timeouts)</li>
 </ol>
@@ -888,14 +929,14 @@ Bounded pools and inter-dependent tasks don’t mix well.</p>
   <li><code>Future</code> - represents lifecycle of a task and provides methods to test whether the task completed/cancelled/result available.
     <ul>
       <li>Future.get() call blocks until the result is available</li>
-      <li>Instead of polling on Futures, use CompletionService</li>
+      <li>Instead of polling on Futures, use <code>CompletionService</code></li>
     </ul>
   </li>
   <li><strong>Periodic tasks</strong>
     <ul>
       <li><code>Timer</code> - supports only absolute timing
         <ul>
-          <li>If a recurring TimerTask is scheduled to run every 10 ms and another Timer-Task takes 40 ms to run, the recurring task either (depending on whether it was scheduled at fixed rate or fixed delay) gets called four times in rapid succession after the long-running task completes, or “misses” four invocations completely. Scheduled thread pools address this limitation by letting you provide multiple threads for executing deferred and periodic tasks.</li>
+          <li>If a recurring TimerTask is scheduled to run every 10 ms and another TimerTask takes 40 ms to run, the recurring task either (depending on whether it was scheduled at fixed rate or fixed delay) gets called four times in rapid succession after the long-running task completes, or “misses” four invocations completely. Scheduled thread pools address this limitation by letting you provide multiple threads for executing deferred and periodic tasks.</li>
           <li>Timer thread doesn’t catch the exception, so an unchecked exception thrown from a TimerTask terminates the timer thread.</li>
         </ul>
       </li>
@@ -939,7 +980,7 @@ Bounded pools and inter-dependent tasks don’t mix well.</p>
     </ul>
   </li>
   <li>SynchronousQueue - No storage space (size=0). Producer blocks until consumer is available.</li>
-  <li>Semaphore - Explained below</li>
+  <li>Semaphore</li>
   <li>Blocking Deque (double-ended queue)
     <ul>
       <li>Deque &amp; Blocking Deque are good for “work stealing pattern” which is better than producer-consumer pattern.</li>
@@ -949,7 +990,7 @@ Bounded pools and inter-dependent tasks don’t mix well.</p>
 
 <h1 id="synchronizers">Synchronizers</h1>
 
-<p>Synchronizer is any object that keeps the shared mutable data consistent. Don’t need it if we can make immutable or unshared data.</p>
+<p>Synchronizer is any object that keeps the shared mutable data consistent. We don’t need them if we can make data immutable or unshared.</p>
 
 <blockquote>
   <p>Note: Blocking Queue is both collection and a synchronizer</p>
@@ -974,6 +1015,7 @@ Bounded pools and inter-dependent tasks don’t mix well.</p>
 <p><img class="right" src="/technology/mutex.png" /></p>
 
 <ul>
+  <li>Semaphores are often used to restrict the number of threads than can access some (physical or logical) resource.</li>
   <li>Counting semaphores control the number of activities that can access a certain resource or perform a given action at the same time.</li>
   <li>semaphores manage a set of virtual permits</li>
   <li>activities acquire permit and release them</li>
@@ -1070,10 +1112,7 @@ Bounded pools and inter-dependent tasks don’t mix well.</p>
 
 <ul>
   <li>how to test throughput of concurrent programs?</li>
-  <li>System.millis and System.nanos</li>
   <li>Work stealing pattern - learn</li>
-  <li>CompletionService</li>
-  <li>Why thread.start() shouldn’t be invoked from a constructor?</li>
   <li>Java 1.5 Double-checked locking mechanism</li>
   <li>What is the significance of Stack Size in a thread? (JVM Option -Xss)</li>
   <li>Difference between sleep(), yield(), and wait()

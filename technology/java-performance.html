@@ -24,7 +24,7 @@
   <!-- Below custom CSS is for table border styling -->
   <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
 
-  <link href="/atom.xml" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
   <script src="/javascripts/modernizr-2.0.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
@@ -77,7 +77,7 @@ messageStyle: "none",
 
 </header>
   <nav role="navigation"><ul class="subscription" data-subscription="rss">
-  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
   
 </ul>
   
@@ -279,7 +279,7 @@ messageStyle: "none",
   <li>3rd minor GC
     <ul>
       <li>When eden space fills up, a minor GC is triggered.</li>
-      <li>referenced objects are moved to S0.  </li>
+      <li>referenced objects are moved to S0. </li>
       <li>In addition, objects from S1 have their age incremented and get moved to S0.</li>
       <li>Plus, objects that reached the threshold age are moved to old generation.</li>
       <li>Eden &amp; S1 space are cleared.</li>
@@ -301,9 +301,12 @@ messageStyle: "none",
       <li>Both minor &amp; major GCs are done serially using a single virtual CPU.</li>
       <li>Uses a mark-compact collection method.</li>
       <li>Option: <code>-XX:+UserSerialGC</code>.</li>
-      <li>Usages: </li>
-      <li>For longer apps with no low pause time requirements</li>
-      <li>For apps which run on machine that hosts more JVMs than available processors.In such environment, GC of one app shouldn’t affect all other JVMs.</li>
+      <li><strong>Usages</strong>: 
+        <ul>
+          <li>For longer apps with no low pause time requirements</li>
+          <li>For apps which run on machine that hosts more JVMs than available processors.In such environment, GC of one app shouldn’t affect all other JVMs.</li>
+        </ul>
+      </li>
     </ul>
   </li>
   <li>The Parallel GC
@@ -311,8 +314,7 @@ messageStyle: "none",
       <li>uses multiple threads  to perform the young generation GC.</li>
       <li>By default, on a host with ‘N’ CPUs, the parallel GC uses N GC threads in the collection. The number of GC threads can be controlled: <code>-XX:ParallelGCThreads=&lt;num&gt;</code></li>
       <li>Parallel GC is also called a throughput collector.</li>
-      <li>Usages:</li>
-      <li>apps where high throughput is required and long pauses are accepted.</li>
+      <li><strong>Usages</strong>: apps where high throughput is required and long pauses are accepted.</li>
       <li>2 flavors of Parallel GC</li>
       <li>Option: <code>-XX:+UseParallelGC</code> - does multi-threaded young generation GC, single-threaded old generation collection and compaction.</li>
       <li>Option: <code>-XX:+UseParallelOldGC</code> - does multi-threaded young, multi-thread old generation collection and compaction. (HotSpot does compaction only in the old generation)</li>
@@ -332,7 +334,7 @@ messageStyle: "none",
       <li>Also called Garbage First Collector.</li>
       <li>Replacement for CMS collector.</li>
       <li>G1 is a parallel, concurrent, and incrementally compacting low-pause collector that has a different layout from other collectors above.</li>
-      <li>More details here</li>
+      <li>More details <a href="http://www.oracle.com/technetwork/tutorials/tutorials-1876574.html">here</a></li>
       <li>Option: <code>-XX:+UserG1GC</code></li>
     </ul>
   </li>

@@ -57,13 +57,14 @@ Mechanism to hold all kinds of data items such as instructions, object data, loc
 ## Garbage Collection
 
 {% img /technology/java-gc1.png %}
-
 {% img right /technology/java-gc2.png %}
+{% img /technology/Hotspot2_JVM_Parameters_GC_Heap.png %}
+
 
 * Definition: process of looking at heap memory, identifying which objects are in use and which are not, and deleting the unused objects.
 * [Tuning GC](http://www.oracle.com/technetwork/java/gc-tuning-5-138395.html)
 * [How to tune GC](http://architects.dzone.com/articles/how-tune-java-garbage)
-
+* JVM Heap size limitations - Theoretical limit for maximum heap size on **32 bit** JVM is **4 GB (2^32)** and for **64 bit** JVM is **2^64**
 
 ### Phases
 

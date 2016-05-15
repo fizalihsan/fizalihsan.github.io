@@ -166,7 +166,7 @@ public class Factory{
 ### Static Factory Method
 
 * Creates objects without exposing the instantiation logic to the client. Client refers to the product via common interface. 
-* The ability of static factory methods to return the same instance from repeated invocations allows classes to maintain strict control over what instances exist at any time. Such classes are called Instance-controlled classes.
+* The ability of static factory methods to return the same instance from repeated invocations allows classes to maintain strict control over what instances exist at any time. Such classes are called *Instance-controlled classes*.
 
 * (+) Overloaded constructors with similar parameter list can be replaced with static factory methods with meaningful names. E.g., `BigInteger.probablePrime(int, int, Random)` is better than `new BigInteger(int, int, Random)`
 * (+) Unlike constructors, there is no need to create a new object every time the method is invoked. E.g.,`public static Boolean valueOf(boolean b) {return b ? Boolean.TRUE : Boolean.FALSE;}`
@@ -196,8 +196,9 @@ Defines an interface for creating an object, but lets subclasses decide which cl
 * Provide an interface for creating families of related or dependent objects without specifying their concrete classes.
 * Unlike in Factory method pattern, Factory class in this pattern can have one or more factory methods.
 * Type of Factory class is not known to client at compile-time.
-
-> Read Oracle Certified Professional Java SE 7 - Programmer Exams - Page 135 for difference b/w Factory and Abstract Factory
+* **Difference b/w Factory and Abstract Factory**
+  *  factory design pattern creates the requested type of object on demand. By contrast, the abstract factory is basically a factory of factories. In other words, the abstract factory design pattern introduces one more indirection to create a specified object. A client of the abstract factory design pattern first requests a proper factory from the abstract factory object, and then it requests an appropriate object from the factory object.
+  * when you have only one type of object to be created, you can use a factory design pattern; when you have a family of objects to be created, you can use an abstract factory design pattern.
 
 
 * (+) Addresses the concerns in both the factory method implementations.
@@ -402,6 +403,11 @@ public class Singleton{
 
 ## Strategy
 
+* enables an algorithm's behavior to be selected at runtime. 
+* OO Principle followed: Open-Closed principle
+
+{% img /technology/strategy.png %}
+
 ## Reactor
 
 ## Recycle Bin
@@ -423,6 +429,83 @@ subclasses to provide the implementation.
 ## ValueObject
 
 ## Visitor
+
+[Visitor Pattern Explained](http://stackoverflow.com/a/2604798/1732171)
+
+|{% img /technology/visitor.png %}|{% img /technology/visitor_example.png %}|
+
+```java
+
+public class Main {
+    public static void main(String[] args) {
+        List<Fruit> fruits = Arrays.asList(new Apple(), new Orange(), new Orange(), new Apple());
+
+        final FruitVisitor partitionVisitor = new FruitPartitionVisitor();
+        final FruitVisitor priceVisitor = new FruitPriceVisitor();
+        for (Fruit fruit : fruits) {
+            fruit.accept(partitionVisitor);
+            fruit.accept(priceVisitor);
+        }
+    }
+}
+
+-------------------------------------------------------------------------------------------------------
+public interface Fruit {
+    void accept(FruitVisitor visitor);
+}
+
+public class Apple implements Fruit {
+
+    @Override
+    public void accept(FruitVisitor visitor) {
+        visitor.visit(this);
+    }
+}
+
+public class Orange implements Fruit{
+
+    @Override
+    public void accept(FruitVisitor visitor) {
+        visitor.visit(this);
+    }
+}
+-------------------------------------------------------------------------------------------------------
+public interface FruitVisitor {
+    void visit(Apple apple);
+    void visit(Orange orange);
+}
+
+
+public class FruitPriceVisitor implements FruitVisitor {
+
+    @Override
+    public void visit(Apple apple) {
+        System.out.println("Apple price is $5/kg");
+    }
+
+    @Override
+    public void visit(Orange orange) {
+        System.out.println("Apple price is $3/kg");
+    }
+}
+
+
+public class FruitPartitionVisitor implements FruitVisitor {
+
+    @Override
+    public void visit(Apple apple) {
+        System.out.println("This is an apple");
+    }
+
+    @Override
+    public void visit(Orange orange) {
+        System.out.println("This is an orange");
+    }
+}
+-------------------------------------------------------------------------------------------------------
+
+```
+
 
 # Anti Patterns
 

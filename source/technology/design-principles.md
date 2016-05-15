@@ -62,13 +62,37 @@ footer: true
 * Minimal Vs. Complete
 * Complete Vs. Simple
 
-# 5 principles of class design (SOLID)
+# Class Design Principles
 
-1. **SRP** [The Single Responsibility Principle](https://docs.google.com/open?id=0ByOwmqah_nuGNHEtcU5OekdDMkk) - A class should have one, and only one, reason to change.
-* **OCP** [The Open Closed Principle](http://docs.google.com/a/cleancoder.com/viewer?a=v&pid=explorer&chrome=true&srcid=0BwhCYaYDn8EgN2M5MTkwM2EtNWFkZC00ZTI3LWFjZTUtNTFhZGZiYmUzODc1&hl=en) - You should be able to extend a classes behavior, without modifying it.
-* **LSP** [The Liskov Substitution Principle](http://docs.google.com/a/cleancoder.com/viewer?a=v&pid=explorer&chrome=true&srcid=0BwhCYaYDn8EgNzAzZjA5ZmItNjU3NS00MzQ5LTkwYjMtMDJhNDU5ZTM0MTlh&hl=en) - Derived classes must be substitutable for their base classes.
-* **ISP** [The Interface Segregation Principle](http://docs.google.com/a/cleancoder.com/viewer?a=v&pid=explorer&chrome=true&srcid=0BwhCYaYDn8EgOTViYjJhYzMtMzYxMC00MzFjLWJjMzYtOGJiMDc5N2JkYmJi&hl=en) - Make fine grained interfaces that are client specific.
-* **DIP** [The Dependency Inversion Principle](http://docs.google.com/a/cleancoder.com/viewer?a=v&pid=explorer&chrome=true&srcid=0BwhCYaYDn8EgMjdlMWIzNGUtZTQ0NC00ZjQ5LTkwYzQtZjRhMDRlNTQ3ZGMz&hl=en) - Depend on abstractions, not on concretions.
+## SOLID principles
+
+1. **SRP** - The Single Responsibility Principle
+  * A class should have one, and only one, reason to change.
+2. **OCP** - The Open Closed Principle 
+  * Open for extension, closed for modification. You should be able to extend a classes behavior, without modifying it.
+  * It means that you can add new features through inheritance but should not change the existing classes (other than bug fixes). 
+  * The reason is that if you modify a class, you’ll likely break the API/Contract of the class which means that the classes that depend on it might fail when you do so. If you instead inherit the class to add new features, the base contract is untouched and it’s unlikely that dependent classes will fail.
+3. **LSP** - The Liskov Substitution Principle
+  * Derived classes must be substitutable for their base classes.
+  * any method that takes class X as a parameter must be able to work with any subclasses of X.
+4. **ISP** - The Interface Segregation Principle
+  * Make fine grained interfaces that are client specific.
+  * ISP states that interfaces that have become “fat” (like [God classes](https://en.wikipedia.org/wiki/God_object)) should be split into several interfaces. Large interfaces makes it harder to extend smaller parts of the system.
+5. **DIP** - The Dependency Inversion Principle
+  * Depend on abstractions, not on concretions.
+  * The principle which is easiest to understand. DIP states that you should let the caller create the dependencies instead of letting the class itself create the dependencies. Hence inverting the dependency control.
+  * Also called '*Hollywood principle - Don't call us, we'll call you*'
+
+## Law of Demeter
+
+* Also called as *Principle of Least Knowledge* or *Don't talk to strangers* or *Talk only to your immediate friends*
+* The Law of Demeter for functions requires that a method M of an object O may only invoke the methods of the following kinds of objects:
+  * O itself
+  * M's parameters
+  * Any objects created/instantiated within M
+  * O's direct component objects
+  * A global variable, accessible by O, in the scope of M
+* Don't do this `objectA.getObjectB().getObjectC().doSomething();`
 
 # 6 principles of package design
 
@@ -79,16 +103,16 @@ The next six principles are about packages. In this context a package is a binar
 These principles are about package cohesion, they tell us what to put inside packages:
 
 1. **REP** [The Release Reuse Equivalency Principle](http://docs.google.com/a/cleancoder.com/viewer?a=v&pid=explorer&chrome=true&srcid=0BwhCYaYDn8EgOGM2ZGFhNmYtNmE4ZS00OGY5LWFkZTYtMjE0ZGNjODQ0MjEx&hl=en) - The granule of reuse is the granule of release.
-* **CCP** [The Common Closure Principle](http://docs.google.com/a/cleancoder.com/viewer?a=v&pid=explorer&chrome=true&srcid=0BwhCYaYDn8EgOGM2ZGFhNmYtNmE4ZS00OGY5LWFkZTYtMjE0ZGNjODQ0MjEx&hl=en) - Classes that change together are packaged together.
-* **CRP** [The Common Reuse Principle](http://docs.google.com/a/cleancoder.com/viewer?a=v&pid=explorer&chrome=true&srcid=0BwhCYaYDn8EgOGM2ZGFhNmYtNmE4ZS00OGY5LWFkZTYtMjE0ZGNjODQ0MjEx&hl=en) - Classes that are used together are packaged together.
+2. **CCP** [The Common Closure Principle](http://docs.google.com/a/cleancoder.com/viewer?a=v&pid=explorer&chrome=true&srcid=0BwhCYaYDn8EgOGM2ZGFhNmYtNmE4ZS00OGY5LWFkZTYtMjE0ZGNjODQ0MjEx&hl=en) - Classes that change together are packaged together.
+3. **CRP** [The Common Reuse Principle](http://docs.google.com/a/cleancoder.com/viewer?a=v&pid=explorer&chrome=true&srcid=0BwhCYaYDn8EgOGM2ZGFhNmYtNmE4ZS00OGY5LWFkZTYtMjE0ZGNjODQ0MjEx&hl=en) - Classes that are used together are packaged together.
 
 ## 3 principles of package coupling
 
 These principles are about the couplings between packages, and talk about metrics that evaluate the package structure of a system.
 
 1. **ADP** [The Acyclic Dependencies Principle](http://docs.google.com/a/cleancoder.com/viewer?a=v&pid=explorer&chrome=true&srcid=0BwhCYaYDn8EgOGM2ZGFhNmYtNmE4ZS00OGY5LWFkZTYtMjE0ZGNjODQ0MjEx&hl=en) - The dependency graph of packages must have no cycles.
-* **SDP** [The Stable Dependencies Principle](http://docs.google.com/a/cleancoder.com/viewer?a=v&pid=explorer&chrome=true&srcid=0BwhCYaYDn8EgZjI3OTU4ZTAtYmM4Mi00MWMyLTgxN2YtMzk5YTY1NTViNTBh&hl=en) - Depend in the direction of stability.
-* **SAP** [The Stable Abstractions Principle](http://docs.google.com/a/cleancoder.com/viewer?a=v&pid=explorer&chrome=true&srcid=0BwhCYaYDn8EgZjI3OTU4ZTAtYmM4Mi00MWMyLTgxN2YtMzk5YTY1NTViNTBh&hl=en) - Abstractness increases with stability.
+2. **SDP** [The Stable Dependencies Principle](http://docs.google.com/a/cleancoder.com/viewer?a=v&pid=explorer&chrome=true&srcid=0BwhCYaYDn8EgZjI3OTU4ZTAtYmM4Mi00MWMyLTgxN2YtMzk5YTY1NTViNTBh&hl=en) - Depend in the direction of stability.
+3. **SAP** [The Stable Abstractions Principle](http://docs.google.com/a/cleancoder.com/viewer?a=v&pid=explorer&chrome=true&srcid=0BwhCYaYDn8EgZjI3OTU4ZTAtYmM4Mi00MWMyLTgxN2YtMzk5YTY1NTViNTBh&hl=en) - Abstractness increases with stability.
 
 # Object Calisthenics
 
@@ -111,6 +135,3 @@ These principles are about the couplings between packages, and talk about metric
 * **Rule 8**: No classes with more than two instance variables
 * **Rule 9**: No getters/setters/properties
 
-# Law of Demeter (or Don't talk to strangers)
-
-???

@@ -293,6 +293,20 @@ messageStyle: "none",
 
 <h2 id="command">Command</h2>
 
+<ul>
+  <li>encapsulates a request as an object, thereby letting you parameterize other objects
+with different requests, queue or log requests, and support undoable operations.</li>
+  <li><code>Executor</code> framework in Java is an example of Command pattern</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Command</span> <span class="o">{</span>
+</span><span class="line">   <span class="kd">public</span> <span class="kt">void</span> <span class="nf">execute</span><span class="o">();</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
 <h2 id="composite">Composite</h2>
 
 <h2 id="decorator">Decorator</h2>
@@ -480,6 +494,15 @@ messageStyle: "none",
 
 <h2 id="flyweight">Flyweight</h2>
 
+<p>The Flyweight Pattern can be a useful pattern in situations where you have several objects, and many may represent the same value. In these instances, it can be possible to share the values as long as the objects are immutable.</p>
+
+<p>In Java, <code>Integer.valueOf(int)</code> method implements this pattern to cache values between <em>-128</em> to <em>127</em>. It checks the value of the given parameter, and if it is a precached value, the method returns the pre-constructed instance rather than creating a new copy. The cache is initialized in a static block, and so is created the first time an <code>Integer</code> is referenced in a running JVM.</p>
+
+<p>This property only holds because <code>Integer</code> objects are immutable. If you are ever creating Integer objects, always use the valueOf method to take advantage of the Flyweight Pattern. If you call new, then new instances will always be created,
+even if they are within the threshold of the cached values.</p>
+
+<p>Another implementation of the Flyweight Pattern is called the <em>Null Object Pattern</em>. This pattern uses a flyweight object to represent null.</p>
+
 <h2 id="interpretor">Interpretor</h2>
 
 <h2 id="iterator">Iterator</h2>
@@ -512,6 +535,14 @@ previous states; for instance, if your user requests an undo.</li>
 </ul>
 
 <h2 id="observer">Observer</h2>
+
+<ul>
+  <li>defines a one-to-many dependency between objects so that when one object changes state, all of its dependents are notified and updated automatically.</li>
+  <li>Java provides out-of-the-box <code>Observer</code> interface and <code>Observable</code> class in <code>java.util</code> package. However, <code>Observable</code> is a class and does not implement any interface. It has other shortcomings as well.</li>
+  <li>OO Principle followed: Strive for loosely coupled designs between objects that interact.</li>
+</ul>
+
+<p><img src="/technology/observer.png" /></p>
 
 <h2 id="prototype">Prototype</h2>
 

@@ -73,6 +73,16 @@ manager.approve(request); // if manager is not authorized to approve the request
 
 ## Command
 
+* encapsulates a request as an object, thereby letting you parameterize other objects
+with different requests, queue or log requests, and support undoable operations.
+* `Executor` framework in Java is an example of Command pattern
+
+```java
+public interface Command {
+   public void execute();
+}
+```
+
 ## Composite
 
 ## Decorator
@@ -199,6 +209,15 @@ Defines an interface for creating an object, but lets subclasses decide which cl
 
 ## Flyweight
 
+The Flyweight Pattern can be a useful pattern in situations where you have several objects, and many may represent the same value. In these instances, it can be possible to share the values as long as the objects are immutable.
+
+In Java, `Integer.valueOf(int)` method implements this pattern to cache values between *-128* to *127*. It checks the value of the given parameter, and if it is a precached value, the method returns the pre-constructed instance rather than creating a new copy. The cache is initialized in a static block, and so is created the first time an `Integer` is referenced in a running JVM.
+
+This property only holds because `Integer` objects are immutable. If you are ever creating Integer objects, always use the valueOf method to take advantage of the Flyweight Pattern. If you call new, then new instances will always be created,
+even if they are within the threshold of the cached values.
+
+Another implementation of the Flyweight Pattern is called the *Null Object Pattern*. This pattern uses a flyweight object to represent null.
+
 ## Interpretor
 
 ## Iterator
@@ -223,6 +242,12 @@ Defines an interface for creating an object, but lets subclasses decide which cl
 previous states; for instance, if your user requests an undo.
 
 ## Observer
+
+* defines a one-to-many dependency between objects so that when one object changes state, all of its dependents are notified and updated automatically.
+* Java provides out-of-the-box `Observer` interface and `Observable` class in `java.util` package. However, `Observable` is a class and does not implement any interface. It has other shortcomings as well.
+* OO Principle followed: Strive for loosely coupled designs between objects that interact.
+
+{% img /technology/observer.png %}
 
 ## Prototype
 

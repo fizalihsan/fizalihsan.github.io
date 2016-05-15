@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Algorithms Big-O Notation How to find Big-O in interviews? Linked List Reverse a singly linked list Reference Big-O Notation O(1)/Constant &hellip;">
+<meta name="description" content="Algorithms Big-O Notation How to find Big-O in interviews? Linked List Reference Big-O Notation O(1)/Constant Complexity: Constant. Irrespective of &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -121,7 +121,6 @@ messageStyle: "none",
     </ul>
   </li>
   <li><a href="#linked-list">Linked List</a>    <ul>
-      <li><a href="#reverse-a-singly-linked-list">Reverse a singly linked list</a></li>
       <li><a href="#reference">Reference</a></li>
     </ul>
   </li>
@@ -191,169 +190,9 @@ Now consider if I were to double the number of elements to 16: this would only r
 
 <h1 id="linked-list">Linked List</h1>
 
-<h2 id="reverse-a-singly-linked-list">Reverse a singly linked list</h2>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-<span class="line-number">10</span>
-<span class="line-number">11</span>
-<span class="line-number">12</span>
-<span class="line-number">13</span>
-<span class="line-number">14</span>
-<span class="line-number">15</span>
-<span class="line-number">16</span>
-<span class="line-number">17</span>
-<span class="line-number">18</span>
-<span class="line-number">19</span>
-<span class="line-number">20</span>
-<span class="line-number">21</span>
-<span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
-<span class="line-number">25</span>
-<span class="line-number">26</span>
-<span class="line-number">27</span>
-<span class="line-number">28</span>
-<span class="line-number">29</span>
-<span class="line-number">30</span>
-<span class="line-number">31</span>
-<span class="line-number">32</span>
-<span class="line-number">33</span>
-<span class="line-number">34</span>
-<span class="line-number">35</span>
-<span class="line-number">36</span>
-<span class="line-number">37</span>
-<span class="line-number">38</span>
-<span class="line-number">39</span>
-<span class="line-number">40</span>
-<span class="line-number">41</span>
-<span class="line-number">42</span>
-<span class="line-number">43</span>
-<span class="line-number">44</span>
-<span class="line-number">45</span>
-<span class="line-number">46</span>
-<span class="line-number">47</span>
-<span class="line-number">48</span>
-<span class="line-number">49</span>
-<span class="line-number">50</span>
-<span class="line-number">51</span>
-<span class="line-number">52</span>
-<span class="line-number">53</span>
-<span class="line-number">54</span>
-<span class="line-number">55</span>
-<span class="line-number">56</span>
-<span class="line-number">57</span>
-<span class="line-number">58</span>
-<span class="line-number">59</span>
-<span class="line-number">60</span>
-<span class="line-number">61</span>
-<span class="line-number">62</span>
-<span class="line-number">63</span>
-<span class="line-number">64</span>
-<span class="line-number">65</span>
-<span class="line-number">66</span>
-<span class="line-number">67</span>
-<span class="line-number">68</span>
-<span class="line-number">69</span>
-<span class="line-number">70</span>
-<span class="line-number">71</span>
-<span class="line-number">72</span>
-<span class="line-number">73</span>
-<span class="line-number">74</span>
-<span class="line-number">75</span>
-<span class="line-number">76</span>
-<span class="line-number">77</span>
-<span class="line-number">78</span>
-<span class="line-number">79</span>
-<span class="line-number">80</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ReverseSinglyLinkedList</span> <span class="o">{</span>
-</span><span class="line">    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-</span><span class="line">
-</span><span class="line">        <span class="n">Node</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Node</span><span class="o">&lt;&gt;(</span><span class="mi">1</span><span class="o">,</span>
-</span><span class="line">                <span class="k">new</span> <span class="n">Node</span><span class="o">&lt;&gt;(</span><span class="mi">2</span><span class="o">,</span>
-</span><span class="line">                        <span class="k">new</span> <span class="n">Node</span><span class="o">&lt;&gt;(</span><span class="mi">3</span><span class="o">,</span>
-</span><span class="line">                                <span class="k">new</span> <span class="n">Node</span><span class="o">&lt;&gt;(</span><span class="mi">4</span><span class="o">,</span> <span class="kc">null</span><span class="o">)</span>
-</span><span class="line">                        <span class="o">)</span>
-</span><span class="line">                <span class="o">)</span>
-</span><span class="line">        <span class="o">);</span>
-</span><span class="line">
-</span><span class="line">        <span class="n">print</span><span class="o">(</span><span class="n">list</span><span class="o">);</span>
-</span><span class="line">        <span class="n">list</span> <span class="o">=</span> <span class="n">reverse</span><span class="o">(</span><span class="n">list</span><span class="o">);</span>
-</span><span class="line">        <span class="n">print</span><span class="o">(</span><span class="n">list</span><span class="o">);</span>
-</span><span class="line">    <span class="o">}</span>
-</span><span class="line">
-</span><span class="line">    <span class="kd">private</span> <span class="kd">static</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="nf">reverse</span><span class="o">(</span><span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">){</span>
-</span><span class="line">        <span class="k">if</span><span class="o">(</span><span class="n">list</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="n">list</span><span class="o">.</span><span class="na">getNext</span><span class="o">()</span> <span class="o">==</span> <span class="kc">null</span><span class="o">){</span>
-</span><span class="line">            <span class="k">return</span> <span class="n">list</span><span class="o">;</span>
-</span><span class="line">        <span class="o">}</span>
-</span><span class="line">
-</span><span class="line">        <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">n1</span> <span class="o">=</span> <span class="n">list</span><span class="o">;</span>
-</span><span class="line">        <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">n2</span> <span class="o">=</span> <span class="n">n1</span><span class="o">.</span><span class="na">getNext</span><span class="o">();</span>
-</span><span class="line">
-</span><span class="line">        <span class="n">n1</span><span class="o">.</span><span class="na">setNext</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span>
-</span><span class="line">        <span class="k">while</span><span class="o">(</span><span class="n">n2</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">){</span>
-</span><span class="line">            <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">n2</span><span class="o">.</span><span class="na">getNext</span><span class="o">();</span>
-</span><span class="line">            <span class="n">n2</span><span class="o">.</span><span class="na">setNext</span><span class="o">(</span><span class="n">n1</span><span class="o">);</span>
-</span><span class="line">            <span class="n">n1</span> <span class="o">=</span> <span class="n">n2</span><span class="o">;</span>
-</span><span class="line">            <span class="k">if</span><span class="o">(</span><span class="n">temp</span><span class="o">==</span><span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-</span><span class="line">                <span class="k">break</span><span class="o">;</span>
-</span><span class="line">            <span class="o">}</span>
-</span><span class="line">            <span class="n">n2</span> <span class="o">=</span> <span class="n">temp</span><span class="o">;</span>
-</span><span class="line">        <span class="o">}</span>
-</span><span class="line">
-</span><span class="line">        <span class="k">return</span> <span class="n">n2</span><span class="o">;</span>
-</span><span class="line">    <span class="o">}</span>
-</span><span class="line">
-</span><span class="line">    <span class="kd">private</span> <span class="kd">static</span> <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="kt">void</span> <span class="nf">print</span><span class="o">(</span><span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">list</span><span class="o">){</span>
-</span><span class="line">        <span class="k">if</span><span class="o">(</span><span class="n">list</span> <span class="o">==</span> <span class="kc">null</span><span class="o">){</span>
-</span><span class="line">            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;null&quot;</span><span class="o">);</span>
-</span><span class="line">            <span class="k">return</span><span class="o">;</span>
-</span><span class="line">        <span class="o">}</span>
-</span><span class="line">
-</span><span class="line">        <span class="n">Node</span> <span class="n">node</span> <span class="o">=</span> <span class="n">list</span><span class="o">;</span>
-</span><span class="line">        <span class="k">while</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">getNext</span><span class="o">()!=</span><span class="kc">null</span><span class="o">){</span>
-</span><span class="line">            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="n">node</span><span class="o">.</span><span class="na">getValue</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot; -&gt; &quot;</span><span class="o">);</span>
-</span><span class="line">            <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">.</span><span class="na">getNext</span><span class="o">();</span>
-</span><span class="line">        <span class="o">}</span>
-</span><span class="line">
-</span><span class="line">        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;null&quot;</span><span class="o">);</span>
-</span><span class="line">    <span class="o">}</span>
-</span><span class="line">
-</span><span class="line">    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">{</span>
-</span><span class="line">        <span class="kd">private</span> <span class="n">T</span> <span class="n">value</span><span class="o">;</span>
-</span><span class="line">        <span class="kd">private</span> <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">next</span><span class="o">;</span>
-</span><span class="line">
-</span><span class="line">        <span class="kd">public</span> <span class="nf">Node</span><span class="o">(</span><span class="n">T</span> <span class="n">value</span><span class="o">,</span> <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">next</span><span class="o">)</span> <span class="o">{</span>
-</span><span class="line">            <span class="k">this</span><span class="o">.</span><span class="na">value</span> <span class="o">=</span> <span class="n">value</span><span class="o">;</span>
-</span><span class="line">            <span class="k">this</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">next</span><span class="o">;</span>
-</span><span class="line">        <span class="o">}</span>
-</span><span class="line">
-</span><span class="line">        <span class="kd">public</span> <span class="n">T</span> <span class="nf">getValue</span><span class="o">()</span> <span class="o">{</span>
-</span><span class="line">            <span class="k">return</span> <span class="n">value</span><span class="o">;</span>
-</span><span class="line">        <span class="o">}</span>
-</span><span class="line">
-</span><span class="line">        <span class="kd">public</span> <span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="nf">getNext</span><span class="o">()</span> <span class="o">{</span>
-</span><span class="line">            <span class="k">return</span> <span class="n">next</span><span class="o">;</span>
-</span><span class="line">        <span class="o">}</span>
-</span><span class="line">
-</span><span class="line">        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setNext</span><span class="o">(</span><span class="n">Node</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">next</span><span class="o">)</span> <span class="o">{</span>
-</span><span class="line">            <span class="k">this</span><span class="o">.</span><span class="na">next</span> <span class="o">=</span> <span class="n">next</span><span class="o">;</span>
-</span><span class="line">        <span class="o">}</span>
-</span><span class="line">
-</span><span class="line">        <span class="nd">@Override</span>
-</span><span class="line">        <span class="kd">public</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
-</span><span class="line">            <span class="k">return</span> <span class="k">new</span> <span class="nf">StringBuilder</span><span class="o">(</span><span class="s">&quot;Node{&quot;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">value</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;, &quot;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="n">next</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="sc">&#39;}&#39;</span><span class="o">).</span><span class="na">toString</span><span class="o">();</span>
-</span><span class="line">        <span class="o">}</span>
-</span><span class="line">    <span class="o">}</span>
-</span><span class="line"><span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<ul>
+  <li><a href="https://gist.github.com/fizalihsan/7486b574cefe11fe31c6da136b8bdb6b">Reverse a singly linked list</a></li>
+</ul>
 
 <h2 id="reference">Reference</h2>
 

@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Design Principles Design Idioms API Design - Best Practices Interface Interface Types Properties of an Interface 5 principles of class design (SOLID &hellip;">
+<meta name="description" content="Design Principles Design Idioms API Design - Best Practices Interface Interface Types Properties of an Interface Class Design Principles SOLID &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -123,14 +123,17 @@ messageStyle: "none",
       <li><a href="#properties-of-an-interface">Properties of an Interface</a></li>
     </ul>
   </li>
-  <li><a href="#principles-of-class-design-solid">5 principles of class design (SOLID)</a></li>
+  <li><a href="#class-design-principles">Class Design Principles</a>    <ul>
+      <li><a href="#solid-principles">SOLID principles</a></li>
+      <li><a href="#law-of-demeter">Law of Demeter</a></li>
+    </ul>
+  </li>
   <li><a href="#principles-of-package-design">6 principles of package design</a>    <ul>
       <li><a href="#principles-of-package-cohesion">3 principles of package cohesion</a></li>
       <li><a href="#principles-of-package-coupling">3 principles of package coupling</a></li>
     </ul>
   </li>
   <li><a href="#object-calisthenics">Object Calisthenics</a></li>
-  <li><a href="#law-of-demeter-or-dont-talk-to-strangers">Law of Demeter (or Don’t talk to strangers)</a></li>
 </ul>
 
 <h1 id="design-idioms">Design Idioms</h1>
@@ -209,18 +212,59 @@ messageStyle: "none",
   <li>Complete Vs. Simple</li>
 </ul>
 
-<h1 id="principles-of-class-design-solid">5 principles of class design (SOLID)</h1>
+<h1 id="class-design-principles">Class Design Principles</h1>
+
+<h2 id="solid-principles">SOLID principles</h2>
 
 <ol>
-  <li><strong>SRP</strong> <a href="https://docs.google.com/open?id=0ByOwmqah_nuGNHEtcU5OekdDMkk">The Single Responsibility Principle</a> - A class should have one, and only one, reason to change.
+  <li><strong>SRP</strong> - The Single Responsibility Principle
     <ul>
-      <li><strong>OCP</strong> <a href="http://docs.google.com/a/cleancoder.com/viewer?a=v&amp;pid=explorer&amp;chrome=true&amp;srcid=0BwhCYaYDn8EgN2M5MTkwM2EtNWFkZC00ZTI3LWFjZTUtNTFhZGZiYmUzODc1&amp;hl=en">The Open Closed Principle</a> - You should be able to extend a classes behavior, without modifying it.</li>
-      <li><strong>LSP</strong> <a href="http://docs.google.com/a/cleancoder.com/viewer?a=v&amp;pid=explorer&amp;chrome=true&amp;srcid=0BwhCYaYDn8EgNzAzZjA5ZmItNjU3NS00MzQ5LTkwYjMtMDJhNDU5ZTM0MTlh&amp;hl=en">The Liskov Substitution Principle</a> - Derived classes must be substitutable for their base classes.</li>
-      <li><strong>ISP</strong> <a href="http://docs.google.com/a/cleancoder.com/viewer?a=v&amp;pid=explorer&amp;chrome=true&amp;srcid=0BwhCYaYDn8EgOTViYjJhYzMtMzYxMC00MzFjLWJjMzYtOGJiMDc5N2JkYmJi&amp;hl=en">The Interface Segregation Principle</a> - Make fine grained interfaces that are client specific.</li>
-      <li><strong>DIP</strong> <a href="http://docs.google.com/a/cleancoder.com/viewer?a=v&amp;pid=explorer&amp;chrome=true&amp;srcid=0BwhCYaYDn8EgMjdlMWIzNGUtZTQ0NC00ZjQ5LTkwYzQtZjRhMDRlNTQ3ZGMz&amp;hl=en">The Dependency Inversion Principle</a> - Depend on abstractions, not on concretions.</li>
+      <li>A class should have one, and only one, reason to change.</li>
+    </ul>
+  </li>
+  <li><strong>OCP</strong> - The Open Closed Principle 
+    <ul>
+      <li>Open for extension, closed for modification. You should be able to extend a classes behavior, without modifying it.</li>
+      <li>It means that you can add new features through inheritance but should not change the existing classes (other than bug fixes). </li>
+      <li>The reason is that if you modify a class, you’ll likely break the API/Contract of the class which means that the classes that depend on it might fail when you do so. If you instead inherit the class to add new features, the base contract is untouched and it’s unlikely that dependent classes will fail.</li>
+    </ul>
+  </li>
+  <li><strong>LSP</strong> - The Liskov Substitution Principle
+    <ul>
+      <li>Derived classes must be substitutable for their base classes.</li>
+      <li>any method that takes class X as a parameter must be able to work with any subclasses of X.</li>
+    </ul>
+  </li>
+  <li><strong>ISP</strong> - The Interface Segregation Principle
+    <ul>
+      <li>Make fine grained interfaces that are client specific.</li>
+      <li>ISP states that interfaces that have become “fat” (like <a href="https://en.wikipedia.org/wiki/God_object">God classes</a>) should be split into several interfaces. Large interfaces makes it harder to extend smaller parts of the system.</li>
+    </ul>
+  </li>
+  <li><strong>DIP</strong> - The Dependency Inversion Principle
+    <ul>
+      <li>Depend on abstractions, not on concretions.</li>
+      <li>The principle which is easiest to understand. DIP states that you should let the caller create the dependencies instead of letting the class itself create the dependencies. Hence inverting the dependency control.</li>
+      <li>Also called ‘<em>Hollywood principle - Don’t call us, we’ll call you</em>’</li>
     </ul>
   </li>
 </ol>
+
+<h2 id="law-of-demeter">Law of Demeter</h2>
+
+<ul>
+  <li>Also called as <em>Principle of Least Knowledge</em> or <em>Don’t talk to strangers</em> or <em>Talk only to your immediate friends</em></li>
+  <li>The Law of Demeter for functions requires that a method M of an object O may only invoke the methods of the following kinds of objects:
+    <ul>
+      <li>O itself</li>
+      <li>M’s parameters</li>
+      <li>Any objects created/instantiated within M</li>
+      <li>O’s direct component objects</li>
+      <li>A global variable, accessible by O, in the scope of M</li>
+    </ul>
+  </li>
+  <li>Don’t do this <code>objectA.getObjectB().getObjectC().doSomething();</code></li>
+</ul>
 
 <h1 id="principles-of-package-design">6 principles of package design</h1>
 
@@ -231,12 +275,9 @@ messageStyle: "none",
 <p>These principles are about package cohesion, they tell us what to put inside packages:</p>
 
 <ol>
-  <li><strong>REP</strong> <a href="http://docs.google.com/a/cleancoder.com/viewer?a=v&amp;pid=explorer&amp;chrome=true&amp;srcid=0BwhCYaYDn8EgOGM2ZGFhNmYtNmE4ZS00OGY5LWFkZTYtMjE0ZGNjODQ0MjEx&amp;hl=en">The Release Reuse Equivalency Principle</a> - The granule of reuse is the granule of release.
-    <ul>
-      <li><strong>CCP</strong> <a href="http://docs.google.com/a/cleancoder.com/viewer?a=v&amp;pid=explorer&amp;chrome=true&amp;srcid=0BwhCYaYDn8EgOGM2ZGFhNmYtNmE4ZS00OGY5LWFkZTYtMjE0ZGNjODQ0MjEx&amp;hl=en">The Common Closure Principle</a> - Classes that change together are packaged together.</li>
-      <li><strong>CRP</strong> <a href="http://docs.google.com/a/cleancoder.com/viewer?a=v&amp;pid=explorer&amp;chrome=true&amp;srcid=0BwhCYaYDn8EgOGM2ZGFhNmYtNmE4ZS00OGY5LWFkZTYtMjE0ZGNjODQ0MjEx&amp;hl=en">The Common Reuse Principle</a> - Classes that are used together are packaged together.</li>
-    </ul>
-  </li>
+  <li><strong>REP</strong> <a href="http://docs.google.com/a/cleancoder.com/viewer?a=v&amp;pid=explorer&amp;chrome=true&amp;srcid=0BwhCYaYDn8EgOGM2ZGFhNmYtNmE4ZS00OGY5LWFkZTYtMjE0ZGNjODQ0MjEx&amp;hl=en">The Release Reuse Equivalency Principle</a> - The granule of reuse is the granule of release.</li>
+  <li><strong>CCP</strong> <a href="http://docs.google.com/a/cleancoder.com/viewer?a=v&amp;pid=explorer&amp;chrome=true&amp;srcid=0BwhCYaYDn8EgOGM2ZGFhNmYtNmE4ZS00OGY5LWFkZTYtMjE0ZGNjODQ0MjEx&amp;hl=en">The Common Closure Principle</a> - Classes that change together are packaged together.</li>
+  <li><strong>CRP</strong> <a href="http://docs.google.com/a/cleancoder.com/viewer?a=v&amp;pid=explorer&amp;chrome=true&amp;srcid=0BwhCYaYDn8EgOGM2ZGFhNmYtNmE4ZS00OGY5LWFkZTYtMjE0ZGNjODQ0MjEx&amp;hl=en">The Common Reuse Principle</a> - Classes that are used together are packaged together.</li>
 </ol>
 
 <h2 id="principles-of-package-coupling">3 principles of package coupling</h2>
@@ -244,12 +285,9 @@ messageStyle: "none",
 <p>These principles are about the couplings between packages, and talk about metrics that evaluate the package structure of a system.</p>
 
 <ol>
-  <li><strong>ADP</strong> <a href="http://docs.google.com/a/cleancoder.com/viewer?a=v&amp;pid=explorer&amp;chrome=true&amp;srcid=0BwhCYaYDn8EgOGM2ZGFhNmYtNmE4ZS00OGY5LWFkZTYtMjE0ZGNjODQ0MjEx&amp;hl=en">The Acyclic Dependencies Principle</a> - The dependency graph of packages must have no cycles.
-    <ul>
-      <li><strong>SDP</strong> <a href="http://docs.google.com/a/cleancoder.com/viewer?a=v&amp;pid=explorer&amp;chrome=true&amp;srcid=0BwhCYaYDn8EgZjI3OTU4ZTAtYmM4Mi00MWMyLTgxN2YtMzk5YTY1NTViNTBh&amp;hl=en">The Stable Dependencies Principle</a> - Depend in the direction of stability.</li>
-      <li><strong>SAP</strong> <a href="http://docs.google.com/a/cleancoder.com/viewer?a=v&amp;pid=explorer&amp;chrome=true&amp;srcid=0BwhCYaYDn8EgZjI3OTU4ZTAtYmM4Mi00MWMyLTgxN2YtMzk5YTY1NTViNTBh&amp;hl=en">The Stable Abstractions Principle</a> - Abstractness increases with stability.</li>
-    </ul>
-  </li>
+  <li><strong>ADP</strong> <a href="http://docs.google.com/a/cleancoder.com/viewer?a=v&amp;pid=explorer&amp;chrome=true&amp;srcid=0BwhCYaYDn8EgOGM2ZGFhNmYtNmE4ZS00OGY5LWFkZTYtMjE0ZGNjODQ0MjEx&amp;hl=en">The Acyclic Dependencies Principle</a> - The dependency graph of packages must have no cycles.</li>
+  <li><strong>SDP</strong> <a href="http://docs.google.com/a/cleancoder.com/viewer?a=v&amp;pid=explorer&amp;chrome=true&amp;srcid=0BwhCYaYDn8EgZjI3OTU4ZTAtYmM4Mi00MWMyLTgxN2YtMzk5YTY1NTViNTBh&amp;hl=en">The Stable Dependencies Principle</a> - Depend in the direction of stability.</li>
+  <li><strong>SAP</strong> <a href="http://docs.google.com/a/cleancoder.com/viewer?a=v&amp;pid=explorer&amp;chrome=true&amp;srcid=0BwhCYaYDn8EgZjI3OTU4ZTAtYmM4Mi00MWMyLTgxN2YtMzk5YTY1NTViNTBh&amp;hl=en">The Stable Abstractions Principle</a> - Abstractness increases with stability.</li>
 </ol>
 
 <h1 id="object-calisthenics">Object Calisthenics</h1>
@@ -285,9 +323,6 @@ messageStyle: "none",
   <li><strong>Rule 9</strong>: No getters/setters/properties</li>
 </ul>
 
-<h1 id="law-of-demeter-or-dont-talk-to-strangers">Law of Demeter (or Don’t talk to strangers)</h1>
-
-<p>???</p>
 
   
     <footer>

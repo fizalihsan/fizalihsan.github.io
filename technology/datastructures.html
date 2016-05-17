@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Data Structures Data Types Lists Trees Tree Types Tree Algorithms Graphs Graph Types Graph Algorithms Algorithms Algorithm Basics Efficiency and Big &hellip;">
+<meta name="description" content="Data Structures Data Types Lists Queues Trees Binary Tree Binary search tree (BST) Tree Algorithms Graphs Graph Types Graph Algorithms Algorithms &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -118,8 +118,12 @@ messageStyle: "none",
   <ul id="markdown-toc">
   <li><a href="#data-types">Data Types</a>    <ul>
       <li><a href="#lists">Lists</a></li>
+      <li><a href="#queues">Queues</a></li>
       <li><a href="#trees">Trees</a>        <ul>
-          <li><a href="#tree-types">Tree Types</a></li>
+          <li><a href="#binary-tree">Binary Tree</a>            <ul>
+              <li><a href="#binary-search-tree-bst">Binary search tree (BST)</a></li>
+            </ul>
+          </li>
           <li><a href="#tree-algorithms">Tree Algorithms</a></li>
         </ul>
       </li>
@@ -139,7 +143,6 @@ messageStyle: "none",
       <li><a href="#searching">Searching</a></li>
     </ul>
   </li>
-  <li><a href="#pointers-and-memory">Pointers and Memory</a></li>
 </ul>
 
 <h1 id="data-types">Data Types</h1>
@@ -154,41 +157,76 @@ messageStyle: "none",
       <li><a href="/technology/LinkedListProblems.pdf">Problems</a></li>
     </ul>
   </li>
-  <li>Skiplist (invented by William Pugh - look paper on alternative to Binary Tree - learn the Java implementations - when to prepare this over Maps)</li>
+  <li>Skiplist (invented by William Pugh - look paper on alternative to Binary Tree - learn the Java implementations - when to prefer this over Maps)</li>
+</ul>
+
+<h2 id="queues">Queues</h2>
+
+<ul>
+  <li><a href="https://gist.github.com/fizalihsan/26acf7f6be1c33c121a8471b2a47892b">Queue implementation using single and double stacks</a></li>
 </ul>
 
 <h2 id="trees">Trees</h2>
 
-<h3 id="tree-types">Tree Types</h3>
 <p><a href="http://webdocs.cs.ualberta.ca/~holte/T26/top.realTop.html">Trees Basics</a></p>
 
+<h3 id="binary-tree">Binary Tree</h3>
+
 <ul>
-  <li>Binary Tree
+  <li><a href="/technology/BinaryTrees.pdf">Binary Tree Problems</a></li>
+  <li><a href="/technology/TreeListRecursion.pdf">Tree-List Recursion Problems</a></li>
+  <li><strong>Full Binary Tree</strong> - Each node in a <em>full binary tree</em> is either (1) an internal node with exactly two non-empty children or (2) a leaf</li>
+  <li><strong>Complete Binary Tree</strong> - has a restricted shape obtained by starting at the root and filling the tree by levels from left to right. In the complete binary tree of height <em>d</em>, all levels except possibly level <em>d-1</em> are completely full. The bottom level has its nodes filled in from the left side.</li>
+</ul>
+
+<p><img class="right" src="/technology/full_complete_binarytrees.png" /></p>
+
+<ul>
+  <li><strong>Traversals</strong>
     <ul>
-      <li><a href="/technology/BinaryTrees.pdf">Binary Tree Problems</a></li>
-      <li><a href="/technology/TreeListRecursion.pdf">Tree-List Recursion Problems</a></li>
+      <li>Preorder traversal - <em>Parent node, left child, right child</em>. </li>
+      <li>Inorder traversal - <em>Left child, Parent node, right child</em> - An inorder traversal first visits the left child (including its entire subtree), then
+visits the node, and finally visits the right child (including its entire subtree).</li>
+      <li>Postorder traversal - <em>Left child, right child, Parent node</em></li>
+      <li><a href="https://gist.github.com/fizalihsan/cc21a12af3d751baf7ec8dac57ea8775">Binary Tree Traversal - Java Code</a></li>
     </ul>
   </li>
-  <li>Binary search tree (BST)</li>
-  <li>B trees: Perfectly Height-balanced M-way search trees</li>
-  <li>Balanced tree</li>
-  <li>Height-balanced binary search tree (OR) AVL tree (after their Russian inventors  * Adelson-Velskii and Landis.)</li>
+</ul>
+
+<h4 id="binary-search-tree-bst">Binary search tree (BST)</h4>
+<ul>
+  <li><a href="https://gist.github.com/fizalihsan/73f5326f45b0f9f438496fc12634a1a0">Check if a given tree is a Binary Search Tree</a></li>
+  <li>A BST is a binary tree that conforms to the following condition, known as the <strong>Binary Search Tree Property</strong>.
+  	* All nodes stored in the left subtree of a node whose key value is <code>K</code> have key values less than <code>K</code>. 
+  	* All nodes stored in the right subtree of a node whose key value is <code>K</code> have key values greater than or equal to <code>K</code>.</li>
+  <li>If the BST nodes are printed using an inorder traversal, the resulting enumeration will be in sorted order from lowest to highest.</li>
+</ul>
+
+<p><strong>Balanced tree</strong>
+	* If a binary tree is balanced, then the height for a tree of <em>n</em> nodes is approximately <em>log n</em>. However, if the tree is completely unbalanced, then the height for a tree with <em>n</em> nodes can be as great as <em>n</em>.
+	* a balanced BST will in the average case have operations costing <code>O(log n)</code>, while a badly unbalanced BST can have operations in the worst case costing <code>O(n)</code>.
+	* While the BST is simple to implement and efficient when the tree is balanced, the possibility of its being unbalanced is a serious liability. There are techniques for organizing a BST to guarantee good performance: like AVL tree and the splay tree.</p>
+
+<p><strong>Height-balanced binary search tree (OR) AVL tree</strong> (after their Russian inventors  <em>Adelson-Velskii and Landis</em>)</p>
+
+<ul>
   <li>B+ tree &amp; Balanced B+ tree - used in DB indexes</li>
   <li>Self-balanced tree</li>
   <li>M-way trees</li>
+  <li>B trees: Perfectly Height-balanced M-way search trees</li>
   <li>2-3-4 trees</li>
   <li>Red-Black trees
     <ul>
       <li>implemented in java.util.TreeMap</li>
     </ul>
   </li>
+  <li>Tries</li>
 </ul>
 
 <h3 id="tree-algorithms">Tree Algorithms</h3>
 
 <ul>
   <li>Insertion, Deletions</li>
-  <li>Traversals - inorder, pre-order, post-order</li>
   <li>Tree Rotation</li>
 </ul>
 
@@ -295,11 +333,6 @@ messageStyle: "none",
   <li><a href="http://www.cs.auckland.ac.nz/software/AlgAnim/ds_ToC.html">2</a></li>
 </ul>
 
-<h1 id="pointers-and-memory">Pointers and Memory</h1>
-
-<ul>
-  <li><a href="/technology/PointersAndMemory.pdf">Pointers and Memory</a></li>
-</ul>
 
   
     <footer>

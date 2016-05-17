@@ -109,6 +109,7 @@ Scalability, built-in features like versioning, compression, garbage collection 
 * In Mongo you can construct ad hoc queries by field values, ranges, or a combination of criteria.
 * MongoDB provides several of the best data structures for indexing, such as the classic B-tree, and other additions such as two-dimensional and spherical GeoSpatial indexes.
 * What makes Mongo special in the realm of document stores is its ability to scale across several servers, by replicating (copying data to other servers) or sharding collections (splitting a collection into pieces) and performing queries in parallel. Both promote availability.
+* A Namespace in Mongo is a combination of database name and collection name. e.g., `db.plans`
 * GridFS??
 
 ### Index

@@ -136,8 +136,8 @@ messageStyle: "none",
         </ul>
       </li>
       <li><a href="#reference-types">Reference Types</a>        <ul>
-          <li><a href="#weakreference">WeakReference</a></li>
           <li><a href="#softreference">SoftReference</a></li>
+          <li><a href="#weakreference">WeakReference</a></li>
           <li><a href="#phantomreference">PhantomReference</a></li>
         </ul>
       </li>
@@ -343,13 +343,17 @@ messageStyle: "none",
 
 <h2 id="reference-types">Reference Types</h2>
 
-<h3 id="weakreference">WeakReference</h3>
+<p>In the order of strength, the references can be arranged as,</p>
 
-<p>Weak reference objects, which do not prevent their referents from being made finalizable, finalized, and then reclaimed. Weak references are most often used to implement canonicalizing mappings.</p>
-
-<p>Suppose that the garbage collector determines at a certain point in time that an object is weakly reachable. At that time it will atomically clear all weak references to that object and all weak references to any other weakly-reachable objects from which that object is reachable through a chain of strong and soft references. At the same time it will declare all of the formerly weakly-reachable objects to be finalizable. At the same time or at some later time it will enqueue those newly-cleared weak references that are registered with reference queues.</p>
+<p><strong>Strong References</strong> &gt; <strong>Soft References</strong> &gt; <strong>Weak References</strong> &gt; <strong>Phantom References</strong></p>
 
 <h3 id="softreference">SoftReference</h3>
+
+<ul>
+  <li>if free heap space is available, chances are that a soft reference will not be freed during a garbage collection cycle (so it survives from GC).</li>
+  <li>Before throwing an OutOfMemoryError, JVM will attempt to reclaim memory by releasing instances that are softly reachable.  </li>
+  <li>Soft References ideal for implementing memory sensitive caches </li>
+</ul>
 
 <p>Soft reference objects, which are cleared at the discretion of the garbage collector in response to memory demand. Soft references are most often used to implement memory-sensitive caches.</p>
 
@@ -359,7 +363,92 @@ messageStyle: "none",
 
 <p>Direct instances of this class may be used to implement simple caches; this class or derived subclasses may also be used in larger data structures to implement more sophisticated caches. As long as the referent of a soft reference is strongly reachable, that is, is actually in use, the soft reference will not be cleared. Thus a sophisticated cache can, for example, prevent its most recently used entries from being discarded by keeping strong referents to those entries, leaving the remaining entries to be discarded at the discretion of the garbage collector.</p>
 
+<h3 id="weakreference">WeakReference</h3>
+
+<ul>
+  <li>Unlike Soft References, Weak References can be reclaimed by the JVM during a GC cycle, even though there’s enough free memory available.</li>
+  <li>As long as GC does not occur, we can retrieve a strong reference out of a weak reference by calling the <code>ref.get()</code> method.</li>
+</ul>
+
+<p>Weak reference objects, which do not prevent their referents from being made finalizable, finalized, and then reclaimed. Weak references are most often used to implement canonicalizing mappings.</p>
+
+<p>Suppose that the garbage collector determines at a certain point in time that an object is weakly reachable. At that time it will atomically clear all weak references to that object and all weak references to any other weakly-reachable objects from which that object is reachable through a chain of strong and soft references. At the same time it will declare all of the formerly weakly-reachable objects to be finalizable. At the same time or at some later time it will enqueue those newly-cleared weak references that are registered with reference queues.</p>
+
 <h3 id="phantomreference">PhantomReference</h3>
+
+<ul>
+  <li>Phantom references are the weakest form of referencing. Instances that are referred via a phantom reference cannot be accessed directly using a <code>get()</code> method (it always returns null). Instead, we need to rely on Reference Queues. </li>
+  <li><code>ReferenceQueue</code> is the mechanism provided by the JVM to be notified when a referenced instance is about to be garbage collected. (<code>enqueue()</code> method in this class is package scoped. )</li>
+  <li>One use case of Phantom references is to keep track of active references within an application, and to know when those instances will be garbage collected. If we use strong references, then the instance will not be eligible for GC due to the strong reference we maintain. Instead, we could rely on a phantom reference with the support of a reference queue to handle the situation.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestPhantomRefQueue</span> <span class="o">{</span>
+</span><span class="line">    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">InterruptedException</span> <span class="o">{</span>
+</span><span class="line">
+</span><span class="line">        <span class="n">Object</span> <span class="n">obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Object</span><span class="o">();</span>
+</span><span class="line">        <span class="kd">final</span> <span class="n">ReferenceQueue</span> <span class="n">queue</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">ReferenceQueue</span><span class="o">();</span>
+</span><span class="line">
+</span><span class="line">        <span class="n">PhantomReference</span> <span class="n">pRef</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">PhantomReference</span><span class="o">(</span><span class="n">obj</span><span class="o">,</span> <span class="n">queue</span><span class="o">);</span>
+</span><span class="line">
+</span><span class="line">        <span class="n">obj</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+</span><span class="line">
+</span><span class="line">        <span class="k">new</span> <span class="nf">Thread</span><span class="o">(</span><span class="k">new</span> <span class="nf">Runnable</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">                <span class="k">try</span> <span class="o">{</span>
+</span><span class="line">                    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Awaiting for GC&quot;</span><span class="o">);</span>
+</span><span class="line">
+</span><span class="line">                    <span class="c1">// This is a blocking call until GC kicks in</span>
+</span><span class="line">                    <span class="n">PhantomReference</span> <span class="n">pRef</span> <span class="o">=</span> <span class="o">(</span><span class="n">PhantomReference</span><span class="o">)</span> <span class="n">queue</span><span class="o">.</span><span class="na">remove</span><span class="o">();</span>
+</span><span class="line">
+</span><span class="line">                    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Referenced GC&#39;d&quot;</span><span class="o">);</span>
+</span><span class="line">
+</span><span class="line">                <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">                    <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+</span><span class="line">                <span class="o">}</span>
+</span><span class="line">            <span class="o">}</span>
+</span><span class="line">        <span class="o">}).</span><span class="na">start</span><span class="o">();</span>
+</span><span class="line">
+</span><span class="line">        <span class="c1">// Wait for 2nd thread to start</span>
+</span><span class="line">        <span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">2000</span><span class="o">);</span>
+</span><span class="line">
+</span><span class="line">        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Invoking GC&quot;</span><span class="o">);</span>
+</span><span class="line">        <span class="n">System</span><span class="o">.</span><span class="na">gc</span><span class="o">();</span>
+</span><span class="line">    <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>Phantom reference objects, which are enqueued after the collector determines that their referents may otherwise be reclaimed. Phantom references are most often used for scheduling pre-mortem cleanup actions in a more flexible way than is possible with the Java finalization mechanism.</p>
 
@@ -788,12 +877,12 @@ Sample- and instrumentation-based approaches</p>
 
 		<li>
 			<h3>Java</h3>
-			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-io.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/spring.html">Spring</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/spring.html">Spring</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
 		</li>
 
 		<li>
 			<h3>SOA</h3>
-			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/messaging.html">Messaging</a>  |  <a href="/technology/webservices.html">Web Services</a>   |  <a href="/technology/rest-services.html">REST Services</a>  |  <a href="/technology/soap-services.html">SOAP Services</a> |  <a href="/technology/xml.html">XML</a>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/messaging.html">Messaging</a>  |  <a href="/technology/webservices.html">Web Services</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a> |  <a href="/technology/xml.html">XML</a>
 		</li>
 
 		<li>

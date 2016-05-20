@@ -173,12 +173,9 @@ messageStyle: "none",
 <p>3 Main concepts in security</p>
 
 <ol>
-  <li>Subject - “the currently executing user”. It could be more than a human user. e.g., daemon apps, 3rd party apps, etc.
-    <ul>
-      <li>SecurityManager - manages security operations for all users</li>
-      <li>Realm - acts the bridge/connector between the security provider and your application’s security data like user accounts, access controls, etc.</li>
-    </ul>
-  </li>
+  <li>Subject - “the currently executing user”. It could be more than a human user. e.g., daemon apps, 3rd party apps, etc.</li>
+  <li>SecurityManager - manages security operations for all users</li>
+  <li>Realm - acts the bridge/connector between the security provider and your application’s security data like user accounts, access controls, etc.</li>
 </ol>
 
 <h1 id="authentication">Authentication</h1>
@@ -210,8 +207,8 @@ messageStyle: "none",
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Response to an unauthorized request</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="r"><span class="line"> HTTP<span class="o">/</span><span class="m">1.1</span> <span class="m">401</span> Unauthorized
-</span><span class="line"> WWW<span class="o">-</span>Authenticate<span class="o">:</span> Basic realm<span class="o">=</span><span class="s">&quot;CustomerDB Realm&quot;</span>
+</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="err"> </span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">401</span> <span class="ne">Unauthorized</span>
+</span><span class="line"> <span class="l">WWW-Authenticate: Basic realm=&quot;CustomerDB Realm&quot;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h3 id="response-with-authorization-details">Response with authorization details</h3>
@@ -223,8 +220,8 @@ messageStyle: "none",
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Request with authorization details</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="r"><span class="line">GET <span class="o">/</span>customers<span class="o">/</span><span class="m">333</span> HTTP<span class="o">/</span><span class="m">1.1</span>
-</span><span class="line">Authorization<span class="o">:</span> Basic YmJ1cmtlOmdlaGVpbQ<span class="o">==</span>
+</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="nf">GET</span> <span class="nn">/customers/333</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</span><span class="line"><span class="na">Authorization</span><span class="o">:</span> <span class="l">Basic YmJ1cmtlOmdlaGVpbQ==</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p><strong>Downside</strong>: The problem with this approach is that if this request is intercepted by a hostile entity on the network, the hacker can easily obtain the username and password and use it to invoke its own requests. Using an encrypted HTTP connection, HTTPS, solves this problem. With an encrypted connection, a rogue programmer on the network will be unable to decode the transmission and get at the Authorization header. Still, security-paranoid network administrators are very squeamish about sending passwords over the network, even if they are encrypted within SSL packets.</p>
@@ -242,11 +239,11 @@ messageStyle: "none",
 <span class="line-number">3</span>
 <span class="line-number">4</span>
 <span class="line-number">5</span>
-</pre></td><td class="code"><pre><code class="r"><span class="line"> HTTP<span class="o">/</span><span class="m">1.1</span> <span class="m">401</span> Unauthorized
-</span><span class="line">WWW<span class="o">-</span>Authenticate<span class="o">:</span> Digest realm<span class="o">=</span><span class="s">&quot;CustomerDB Realm&quot;</span><span class="p">,</span>
-</span><span class="line">qop<span class="o">=</span><span class="s">&quot;auth,auth-int&quot;</span><span class="p">,</span>
-</span><span class="line">nonce<span class="o">=</span><span class="s">&quot;12dcde223152321ab99cd&quot;</span><span class="p">,</span>
-</span><span class="line">opaque<span class="o">=</span><span class="s">&quot;aa9321534253bcd00121&quot;</span>
+</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="err"> </span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">401</span> <span class="ne">Unauthorized</span>
+</span><span class="line"><span class="na">WWW-Authenticate</span><span class="o">:</span> <span class="l">Digest realm=&quot;CustomerDB Realm&quot;,</span>
+</span><span class="line"><span class="err">qop=&quot;auth,auth-int&quot;,</span>
+</span><span class="line">nonce=&quot;12dcde223152321ab99cd&quot;,
+</span><span class="line">opaque=&quot;aa9321534253bcd00121&quot;
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h3 id="request-with-authorization-details">Request with Authorization details</h3>
@@ -259,12 +256,12 @@ messageStyle: "none",
   <li>The <strong>response</strong> attribute is where all the meat is. It is a hash value generated with the following pseudocode:</li>
 </ul>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Response to an unauthorized request</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="r"><span class="line">H1 <span class="o">=</span> md5<span class="p">(</span><span class="s">&quot;username:realm:password&quot;</span><span class="p">)</span>
-</span><span class="line">H2 <span class="o">=</span> md5<span class="p">(</span><span class="s">&quot;httpmethod:uri&quot;</span><span class="p">)</span>
-</span><span class="line">response <span class="o">=</span> md5<span class="p">(</span><span class="s">&quot;H1:nonce:nc:cnonce:qop:H2&quot;</span><span class="p">)</span>
+</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="err">H1 = md5(&quot;username:realm:password&quot;)</span>
+</span><span class="line"><span class="err">H2 = md5(&quot;httpmethod:uri&quot;)</span>
+</span><span class="line"><span class="err">response = md5(&quot;H1:nonce:nc:cnonce:qop:H2&quot;)</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 <ul>
   <li>When the server receives this request, it builds its own version of the <strong>response</strong> hash using its stored, secret values of the username and password. If the hashes match, the user and its credentials are valid.</li>
@@ -280,16 +277,16 @@ messageStyle: "none",
 <span class="line-number">8</span>
 <span class="line-number">9</span>
 <span class="line-number">10</span>
-</pre></td><td class="code"><pre><code class="r"><span class="line">GET <span class="o">/</span>customers<span class="o">/</span><span class="m">333</span> HTTP<span class="o">/</span><span class="m">1.1</span>
-</span><span class="line">Authorization<span class="o">:</span> Digest username<span class="o">=</span><span class="s">&quot;bburke&quot;</span><span class="p">,</span>
-</span><span class="line">realm<span class="o">=</span><span class="s">&quot;CustomerDB Realm&quot;</span><span class="p">,</span>
-</span><span class="line">nonce<span class="o">=</span><span class="s">&quot;12dcde223152321ab99cd&quot;</span><span class="p">,</span>
-</span><span class="line">uri<span class="o">=</span><span class="s">&quot;/customer/333&quot;</span><span class="p">,</span>
-</span><span class="line">qop<span class="o">=</span><span class="s">&quot;auth&quot;</span><span class="p">,</span>
-</span><span class="line">nc<span class="o">=</span><span class="m">00000001</span><span class="p">,</span>
-</span><span class="line">cnonce<span class="o">=</span><span class="s">&quot;43fea&quot;</span><span class="p">,</span>
-</span><span class="line">response<span class="o">=</span><span class="s">&quot;11132fffdeab993421&quot;</span><span class="p">,</span>
-</span><span class="line">opaque<span class="o">=</span><span class="s">&quot;aa9321534253bcd00121&quot;</span>
+</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="nf">GET</span> <span class="nn">/customers/333</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</span><span class="line"><span class="na">Authorization</span><span class="o">:</span> <span class="l">Digest username=&quot;bburke&quot;,</span>
+</span><span class="line"><span class="err">realm=&quot;CustomerDB</span> <span class="l">Realm&quot;,</span>
+</span><span class="line"><span class="err">nonce=&quot;12dcde223152321ab99cd&quot;,</span>
+</span><span class="line">uri=&quot;/customer/333&quot;,
+</span><span class="line">qop=&quot;auth&quot;,
+</span><span class="line">nc=00000001,
+</span><span class="line">cnonce=&quot;43fea&quot;,
+</span><span class="line">response=&quot;11132fffdeab993421&quot;,
+</span><span class="line">opaque=&quot;aa9321534253bcd00121&quot;
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h3 id="pros">Pros</h3>
@@ -450,12 +447,12 @@ When the server receives this request, it builds its own version of the response
 
 		<li>
 			<h3>Java</h3>
-			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-io.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/spring.html">Spring</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/spring.html">Spring</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
 		</li>
 
 		<li>
 			<h3>SOA</h3>
-			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/messaging.html">Messaging</a>  |  <a href="/technology/webservices.html">Web Services</a>   |  <a href="/technology/rest-services.html">REST Services</a>  |  <a href="/technology/soap-services.html">SOAP Services</a> |  <a href="/technology/xml.html">XML</a>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/messaging.html">Messaging</a>  |  <a href="/technology/webservices.html">Web Services</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a> |  <a href="/technology/xml.html">XML</a>
 		</li>
 
 		<li>

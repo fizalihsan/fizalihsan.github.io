@@ -53,8 +53,8 @@ footer: true
     * [SOA]({{ root_url }}/technology/soa.html)
     * [Messaging]({{ root_url }}/technology/messaging.html)
     * [Web Services]({{ root_url }}/technology/webservices.html)
-    * [REST Services]({{ root_url }}/technology/rest-services.html)
-    * [SOAP Services]({{ root_url }}/technology/soap-services.html)
+    * [REST]({{ root_url }}/technology/rest-services.html)
+    * [SOAP]({{ root_url }}/technology/soap-services.html)
     * [XML]({{ root_url }}/technology/xml.html)
 
   * Web Programming

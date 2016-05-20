@@ -294,7 +294,7 @@ Mockito, Spring container
       * Work around: use volatile field or make class immutable
 
 
-**Type 1 - Early init with public static final field	**
+**Type 1 - Early init with public static final field**
 
 ```java
 public class Singleton{

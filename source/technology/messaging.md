@@ -44,7 +44,7 @@ footer: true
 
 ### Service-Oriented Architecture (SOA)
 
-an architecture style that defines business services that are abstracted from the corresponding enterprise service implementations.
+an architecture style that defines business services that are abstracted from the corresponding enterprise service implementations. [Read more here](/technology/soa.html)
 
 ### Enterprise Service Bus (ESB)
 
@@ -182,7 +182,9 @@ ZeroMQ is a very lightweight messaging system specially designed for high throug
 
 ActiveMQ is in the middle ground. Like Zmq, it can be deployed with both broker and P2P topologies. Like RabbitMQ, it’s easier to implement advanced scenarios but usually at the cost of raw performance. It’s the Swiss army knife of messaging
 
-ActiveMQ (http://activemq.apache.org)
+## Kafka
+
+TBD
 
 # Bibliography
 

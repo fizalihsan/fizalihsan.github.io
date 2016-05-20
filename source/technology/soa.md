@@ -111,7 +111,7 @@ footer: true
 * Service Registry - who publishes the service description. match maker between provider and requestor.
 * Intermediary service (routing service)
   1. Passive Intermediary service - It is typically responsible for routing messages to a subsequent location. It may use information in the SOAP message header to determine the routing path, or it may employ native routing logic to achieve some level of load balancing. Either way, what makes this type of intermediary passive is that it does not modify the message.
-  2. Active intermediaries - also route messages to a forwarding destination. Prior to transmitting a message, however, these services actively process and alter the message contents (Figure 5.7). Typically, active intermediaries will look for particular SOAP header blocks and perform some action in response to the information they find there. They almost always alter data in header blocks and may insert or even delete header blocks entirely. 
+  2. Active intermediaries - also route messages to a forwarding destination. Prior to transmitting a message, however, these services actively process and alter the message contents. Typically, active intermediaries will look for particular SOAP header blocks and perform some action in response to the information they find there. They almost always alter data in header blocks and may insert or even delete header blocks entirely. 
 * Initial sender and ultimate receiver - Initial senders are simply service requestors that initiate the transmission of a message. Therefore, the initial sender is always the first Web service in a message path. The counterpart to this role is the ultimate receiver. This label identifies service providers that exist as the last Web service along a message's path
 * Service Composition / Service Assemblies - A service can invoke one or more other services to complete a task. Each service participating in such composition is called as 'service composition member'. Service composition is frequently governed by WS-* composition extensions, such as WS-BPEL and WS-CDL, which introduce the related concepts of orchestration and choreography.
 
@@ -172,9 +172,9 @@ A service contract is comprised of the following documents:
   * SOA - Principles of Service Design - Thomas Erl
 * Sites
   * http://www.service-architecture.com/articles/web-services/index.html
-  * http://www.servicetechbooks.com/
-  * http://www.servicetechspecs.com
-  * http://www.serviceorientation.com
-  * http://www.soaglossary.com
-  * http://www.whatisrest.com
-  * http://www.servicetechmag.com
+  * [servicetechbooks.com](http://www.servicetechbooks.com/)
+  * [servicetechspecs.com](http://www.servicetechspecs.com)
+  * [serviceorientation.com](http://www.serviceorientation.com)
+  * [soaglossary.com](http://www.soaglossary.com)
+  * [whatisrest.com](http://www.whatisrest.com)
+  * [servicetechmag.com](http://www.servicetechmag.com)

@@ -11,8 +11,73 @@ footer: true
 
 # Overview
 
-* Dependency injection types: Setter-based, Constructor-based and Annotation-based. 
+* 3 wiring mechanisms
+	* Explicit configuration in XML
+	* Explicit configuration in Java
+	* Implicit bean discovery and automatic wiring
+
+Spring attacks automatic wiring from two angles:
+
+* *Component scanning*
+	* Spring automatically discovers beans to be created in the application context.
+	* * Enables Spring to scan classpath for classes that are annotated with `@Component` (or one of the specialized annotations like `@Service`, `@Repository`, `@Controller`, or `@Configuration`). 
+	* Application Context needs to be enabled for component scanning via `@ComponentScan` annotation.
+* *Autowiring* — Spring automatically satisfies bean dependencies.
+
+```java Enabling Component Scanning via Java
+@Configuration
+@ComponentScan
+public class ApplicationContextConfiguration {}
+```
+
+```java Enabling scanning on multiple base packages (Not type safe)
+@Configuration
+@ComponentScan(basePackages = {"com.apress.prospringmvc.moneytransfer.scanning","com.apress.prospringmvc.moneytransfer.repository" })
+public class ApplicationContextConfiguration {}
+```
+
+```java Enabling scanning based on class names (type safe)
+@Configuration
+@ComponentScan(basePackageClasses = {CDPlayer.class, DVDPlayer.class})
+public class ApplicationContextConfiguration {}
+```
+
+```xml Enabling Component Scanning via XML
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context
+	http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<context:component-scan base-package="soundsystem" />
+
+</beans>
+```
+
+* Naming a bean is named using `@Component` or Java Dependency Injection Specification (JSR-330) annotation `@Named`
+
+```java
+@Component("lonelyHeartsClub")
+public class SgtPeppers {
+...
+}
+
+import javax.inject.Named;
+
+@Named("lonelyHeartsClub")
+public class SgtPeppers {
+...
+}
+```
+
 * `@Autowired` - on a field denotes the bean implementation will injected
+	* Can be used on constructors, setter methods and fields
+	* If there are no matching beans, Spring will throw an exception as the application context is being created. To avoid that exception, you can set the `required` attribute on `@Autowired` to false
+
+* Dependency injection types: Setter-based, Constructor-based and Annotation-based. 
 * `@Inject` and `@Resource`. Last 2 are Java JSR-330 based.
 * `ApplicationContext` - different ways to configure. via XML or Java. Multiple application contexts can be defined in a hierarchy.
 * `@Configuration` - marks the class as config class. 
@@ -22,14 +87,6 @@ footer: true
 * Resource Loading
   * Prefixes are classpath:, file: and http:
   * Ant-style wild cards - e.g., classpath:/META-INF/spring/*.xml, file:/var/conf/**/*.properties
-* Component Scanning
-  * Enables Spring to scan classpath for classes that are annotated with @Component (or one of the specialized annotations like @Service, @Repository, @Controller, or @Configuration). Application Context needs to be enabled for component scanning via @ComponentScan annotation.
-
-```java
-@Configuration
-@ComponentScan(basePackages = {"com.apress.prospringmvc.moneytransfer.scanning","com.apress.prospringmvc.moneytransfer.repository" })
-public class ApplicationContextConfiguration {}
-```
 
 ## Scope
 * By default, all beans in Spring application context is singleton.

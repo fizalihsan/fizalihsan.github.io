@@ -462,7 +462,17 @@ class Dispatcher{
 1. Avoid acquiring multiple locks. If not, establish lock-ordering protocol
 2. Use open-calls while invoking alien methods
 3. Avoid mixing bounded pools and inter-dependent tasks
-5. Attempt timed-locks (lock-wait timeouts)
+4. Attempt timed-locks (lock-wait timeouts)
+
+### How to detect deadlocks?
+
+* Via JConsole (detect deadlocks tab) or VisualVM
+* Using `ThreadMXBean.findDeadlockedThreads()`
+* Get thread dump via the following methods and analyse
+  * native `kill -3` command
+  * In pre-Java 8, `jstack <pid> > file.log`
+  * From Java 8, `jcmd <pid> > file.log` - for enhanced diagnostics and reduced performance overhead.
+  * `-XX:+UnlockDiagnosticVMOptions -XX:+LogVMOutput -XX:LogFile=jvm.log` - this JVM option will output all JVM logging into jvm.log file which will include thread dump as well.
 
 ## 3) Starvation
 

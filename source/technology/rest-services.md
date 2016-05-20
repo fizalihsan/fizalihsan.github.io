@@ -10,7 +10,7 @@ footer: true
 {:toc}
 
 
-# REST Concepts
+# Concepts
 
 * stands for REpresentational State Transfer
 * A resource in the RESTful sense is something that is accessible through HTTP because this thing has a name—URI (Uniform Resource Identifier). 
@@ -35,6 +35,13 @@ This API style leverages commodity caching technologies designed specifically wi
 * **What is REST?** Representational State Transfer. The server sends a representation via GET operations describing the state of a resource. The client sends a representation via POST/PUT describing the state it would like the resource to have. That’s representational state transfer.
 * **What is a safe method?** GET & HEAD are defined as safe HTTP methods. It’s just a request for information. Sending a GET request to the server should have the same effect on resource state as not sending a GET request—that is, no effect at all. Incidental side effects like logging and rate limiting are OK, but a client should never make a GET request hoping that it will change the resource state.
 * **What is Idempotence?** Sending a request twice has the same effect on resource state as sending it once. GET, DELETE and PUT are idempotent. This notion comes from math. Multiplying a number by zero or one is an idempotent operation. Once you multiply a number by zero, you can keep multiplying it by zero indefinitely and get the same result: zero. 
+
+| GET | Cacheable, Safe method (no side effects)| 
+| POST | Unsafe operation which can't be repeated| 
+| PUT | Idempotent (same request yields same result) | 
+| DELETE | Idempotent (same request yields same result)| 
+| HEAD | Safe method (no side effects), No message body| 
+
 * URL Vs URI 
   * A URI has two subtypes: 
     1. The URL, which specifies a location, and 
@@ -55,7 +62,7 @@ As web-based informational items, resources are pointless unless they have at le
 For the record, RESTful web services are Turing complete; that is, these services are equal in power to any computational system, including a system that consists of SOAP-based web services or DOA stubs and skeletons.
 
 
-# RESTful Architectural Principles
+# Architectural Principles
 
 * **Addressable resources** - The key abstraction of information and data in REST is a resource, and each resource must be addressable via a URI (Uniform Resource Identifier).
 * **A uniform, constrained interface** - The Uniform, Constrained Interface - The idea behind it is that you stick to the finite set of operations of the application protocol you’re distributing your services upon. This means that you don’t have an “action” parameter in your URI and use only the methods of HTTP for your web services. HTTP has a small, fixed set of operational methods. Use a small set of well-defined methods to manipulate your resources.
@@ -80,20 +87,7 @@ For the record, RESTful web services are Turing complete; that is, these service
   * The upside is avoiding an XML or comparable parse.
   * The downside is learning yet another API.
 
-# RESTful Frameworks
-
-Java Web Service APIs include:
-
-* HttpServlet and its equivalents (e.g., JSP scripts)
-* JAX-RS (Java API for RESTful services) - Jersey is the reference implementation
-* Restlet, which is similar in style to JAX-RS
-* JAX-WS (Java API for Web Services) which is a relatively low-level API. Metro is the reference implementation.
-
-## Servlet based Web Services
-
-JAX-RS and Restlet are roughly peers (arguably). Both of these APIs emphasize the use of Java annotations to describe the RESTful access to a particular CRUD operation. Each framework supports the automated generation of XML and JSON payloads. When published with a web server such as Tomcat or Jetty, JAX-RS and Restlet provide servlet interceptors that mediate between the client and the web service.
-
-## JAX-RS API
+# JAX-RS API
 
 JAX-RS is a framework that focuses on applying Java annotations to plain Java objects. 
 
@@ -107,17 +101,17 @@ In vanilla JAX-RS, services can either be singletons or per-request objects.
 * A singleton means that one and only one Java object services HTTP requests. 
 * Per-request means that a Java object is created to process each incoming request and is thrown away at the end of that request. Per-request also implies statelessness, as no service state is held between requests.
 
-In JAX-RS, any non-JAX-RS-annotated parameter is considered to be a representation of the HTTP input request’s message body. Only one Java method parameter can represent the HTTP message
+* In JAX-RS, any non-JAX-RS-annotated parameter is considered to be a representation of the HTTP input request’s message body. Only one Java method parameter can represent the HTTP message
 body. This means any other parameters must be annotated with one of the JAX-RS annotations.
-
-In JAX-RS, you are also allowed to define a Java interface that contains all your JAX-RS annotation metadata instead of applying all your annotations to your implementation class. This approach isolates the business logic from all the JAX-RS annotations. The JAX-RS specification also allows you to define class and interface hierarchies if you so desire.
+( In JAX-RS, you are also allowed to define a Java interface that contains all your JAX-RS annotation metadata instead of applying all your annotations to your implementation class. This approach isolates the business logic from all the JAX-RS annotations. 
+* The JAX-RS specification also allows you to define class and interface hierarchies if you so desire.
 
 * Implementations include Jersey (RI), JBoss RESTEasy, Apache Wink and Apache CXF, Apache Axis2???
 * relies upon Java annotations to advertise the RESTful role that a class and its encapsulated methods play.
 * JAX-RS has APIs for programming RESTful services and clients against such services; the two APIs can be used independently.
 * JAX-RS uses Java annotations heavily but there are no annotations to express hyperlinks
 
-### @Path
+## @Path
 
 The `@javax.ws.rs.Path` annotation in JAX-RS is used to define a URI matching pattern for incoming HTTP requests. It can be placed upon a class or on one or more Java methods. For a Java class to be eligible to receive any HTTP requests, the class must  be annotated with at least the `@Path("/")` expression. These types of classes are called JAX-RS root resources.
 
@@ -166,50 +160,80 @@ public String getCustomer(@PathParam("id") int id) {
 }
 ```
 
-#### Matrix Parameters
+### Matrix Parameters
 
 E.g., `http://example.cars.com/mercedes/e55;color=black/2006`
 
 Matrix parameters are name-value pairs associated with a URI. These are different from query parameters. These are more like adjectives and are not included to uniquely identify a resource.
 
-##### Subresource Locators
+**Subresource Locators**
 
 Subresource locators are Java methods annotated with `@Path`, but with no HTTP method annotation, like `@GET`, applied to them. This type of method returns an object that is, itself, a JAX-RS annotated service that knows how to dispatch the remainder of the request.
 
-#### JAX-RS Injections - Request header related annotations
+```java
+@Path("/item")
+public class ItemResource {
+    @Context UriInfo uriInfo;
+ 
+    @Path("content")
+    public ItemContentResource getItemContentResource() {
+        return new ItemContentResource();
+    }
+ 
+    @GET
+    @Produces("application/xml")
+        public Item get() { ... }
+    }
+}
+ 
+public class ItemContentResource {
+    @GET
+    public Response get() { ... }
+ 
+    @PUT
+    @Path("{version}")
+    public void put(@PathParam("version") int version, @Context HttpHeaders headers, byte[] in) {
+        ...
+    }
+}
+```
+
+## JAX-RS Injections
+
+(Request header related annotations)
 
 When the JAX-RS provider receives an HTTP request, it finds a Java method that will service this request. If the Java method has parameters that are annotated with any of these injection annotations, it will extract information from the HTTP request and pass it as a parameter when it invokes the method.
 
 1. `@PathParam` - to extract values from URI template parameters.
-* `@MatrixParam` - to extract values from a URI’s matrix parameters.
-* `@QueryParam` - to extract values from a URI’s query parameters.
-* `@FormParam` - to extract values from posted form data.
-* `@HeaderParam` - to extract values from HTTP request headers.
-* `@CookieParam` - to extract values from HTTP cookies set by the client.
-* `@Context` - This class is the all-purpose injection annotation. It allows you to inject various helper and informational objects that are provided by the JAX-RS API.
+2. `@MatrixParam` - to extract values from a URI’s matrix parameters.
+3. `@QueryParam` - to extract values from a URI’s query parameters.
+4. `@FormParam` - to extract values from posted form data.
+5. `@HeaderParam` - to extract values from HTTP request headers.
+6. `@CookieParam` - to extract values from HTTP cookies set by the client.
+7. `@Context` - This class is the all-purpose injection annotation. It allows you to inject various helper and informational objects that are provided by the JAX-RS API.
 
-#### HTTP Content Negotiation in JAX-RS
+## HTTP Content Negotiation
 
 There are multiple ways to implement the content negotiation discussed above:
 
 * Each method is responsible for returning response in a specific format.
 
 ``` java
-@Produces({"application/xml")
+@Produces({"application/xml"})
 public Customer getCustomerXml(@PathParam("id") int id) {...}
 
 @Produces({"application/json"})
 public Customer getCustomerJson(@PathParam("id") int id) {...}
 ```
 
-* A single method could be responsible to return responses in either xml or json format. Return type is a Java object which is annotated with JAXB annotations. Based on the information in 'Accept', either XML or JSON is returned.
+* A single method could be responsible to return responses in either xml or json format. Return type is a Java object which is annotated with JAXB annotations. Based on the information in Header 'Accept', either XML or JSON is returned.
 
 ``` java
 @Produces({"application/xml", "application/json"})
 public Customer getCustomer(@PathParam("id") int id) {...}
 ```
 
-* For complex negotiations, where multiple combinations of data formats, languages and encodings need to be dealt, JAX-RS provides classes like HttpHeaders, Variant, VariantBuilder, etc. which could be leveraged.
+* For complex negotiations, where multiple combinations of data formats, languages and encodings need to be dealt, JAX-RS provides classes like `HttpHeaders`, `Variant`, `VariantBuilder`, etc. which could be leveraged.
 * Negotiation by URI patterns: Some client like Firefox browser do not support conneg. In such cases, embed conneg information in URI. E.g., 
 
 ```
@@ -219,7 +243,7 @@ public Customer getCustomer(@PathParam("id") int id) {...}
 
 * Custom media types: Example: `application/vnd.rht.customers+xml`. The convention is to combine a vnd prefix, the name of your new format, and a concrete media type suffix  delimited by the “+” character.
 
-### Request & Response Management
+## Request & Response Management
 
 * **Service Controller** 
   * Receives requests, evaluate and route requests to procedures (i.e., class methods, request handlers), which implement the desired service behaviors.
@@ -240,6 +264,355 @@ public Customer getCustomer(@PathParam("id") int id) {...}
 * **Response Mapper**
   * decouple clients from internal representation of domain objects
 
+
+## Asynchronous JAX-RS
+
+### Client-side Async API - Using Futures
+
+* The client async API allows to spin off a bunch of HTTP requests in the background and then either poll for a response, or register a callback that is invoked when the HTTP response is available
+* To invoke an HTTP request asynchronously on the client, you interact with the `javax.ws.rs.client.AsyncInvoker` interface or the `submit()` methods on `javax.ws.rs.client.Invocation`.
+
+```java Example 1 - Using Futures
+Client client = ClientBuilder.newClient();
+
+Future<Response> future1 = client.target("http://example.com/customers/123")
+                                 .request()
+                                 .async().get();
+
+Future<Order> future2 = client.target("http://foobar.com/orders/456")
+                              .request()
+                              .async().get(Order.class);
+
+Response res1 = future1.get(); // block until complete
+try{
+   Customer result1 = res.readEntity(Customer.class);
+} catch (Throwable t){
+  t.printStackTrace()
+} finally {
+  res1.close(); //IMPORTANT
+}
+
+try {
+    Order result2 = future2.get(5, TimeUnit.SECONDS); // Wait 5 seconds
+} catch (TimeoutException timeout ) {
+    ... handle exception ...
+} catch(ExecutionException e){
+  Throwable cause = ee.getCause();
+
+  if (cause instanceof WebApplicationException) {
+    WebApplicationException wae = (WebApplicationException)cause;
+    wae.close();
+  } else if (cause instanceof ResponseProcessingException) {
+    ResponseProcessingException rpe = (ResponseProcessingException)cause;
+    rpe.close();
+  } else if (cause instanceof ProcessingException) {
+    // handle processing exception
+  } else {
+    // unknown
+  }
+}
+```
+
+* In *Example 1*, two separate requests are executed in parallel. 
+* *Blocking call*
+  * For request 1, a blocking call is made indefinitely to get the `Response` object.
+* *Blocking call with timeout*
+  * For request 2, a blocking call with timeout is made to get the business domain object *Order* directly unmarshalled from the `Response`. 
+  * If the response is something other than *200, OK*, then the JAX-RS runtime throws one of the exceptions from the JAX-RS error exception hierarchy.
+  * If the call takes longer than timeout, then `java.util.concurrent.TimeoutException` is thrown.
+* You can also invoke the non-blocking `isDone()`, `isCancelled()` methods on the Future.
+
+> Always make sure the underlying JAX-RS response is closed, otherwise the OS may exhaust the limit on allowable open connections.
+
+### Client-side Async API - Using Callbacks
+
+* Callback style has 2 interfaces: `AsyncInvoker` & `InvocationCallback` 
+
+```java AsyncInvoker methods
+package javax.ws.rs.client;
+
+public interface AsyncInvoker {
+  <T> Future<T> get(InvocationCallback<T> callback);
+  <T> Future<T> post(Entity<?> entity, InvocationCallback<T> callback);
+  <T> Future<T> put(Entity<?> entity, InvocationCallback<T> callback);
+  <T> Future<T> delete(Entity<?> entity, InvocationCallback<T> callback);
+  ...
+}
+```
+
+```java InvocationCallback methods
+package javax.rs.ws.client;
+
+public interface InvocationCallback<RESPONSE> {
+  public void completed(RESPONSE response);
+  public void failed(Throwable throwable);
+}
+```
+
+* In the below example, client wants the `Response` object from callback. If there is an issue sending the request to the server or the JAX-RS runtime is unable to create a `Response`, then `failed()` method will be invoked.
+
+```java Example getting Response from InvocationCallback
+public class CustomerCallback implements InvocationCallback<Response> {
+  public void completed(Response response) {
+    if (response.getStatus() == 200) {
+      Customer cust = response.readEntity(Customer.class);
+    } else {
+      System.err.println("Request error: " + response.getStatus());
+    }
+  }
+
+  public void failed(Throwable throwable) {
+    throwable.printStackTrace();
+  }
+}
+
+```
+
+```java Example getting unmarshalled domain object from InvocationCallback
+public class OrderCallback implements InvocationCallback<Order> {
+  public void completed(Order order) {
+    System.out.println("We received an order.");
+  }
+  
+  public void failed(Throwable throwable) {
+    if (throwable instanceof WebApplicationException) {
+      WebApplicationException wae = (WebApplicationException)throwable;
+      System.err.println("Failed with status: " + wae.getResponse().getStatus());
+    } else if (throwable instanceof ResponseProcessingException) { // when there is an issue unmarshalling
+      ResponseProcessingException rpe = (ResponseProcessingException)cause;
+      System.err.println("Failed with status: " + rpe.getResponse().getStatus());
+    } else {
+      throwable.printStackTrace();
+    }
+  }
+}
+```
+
+* Use Futures when there is a need to wait for all requests to complete and perform another task.
+
+### Server-side Async API
+
+* For a typical HTTP server, one thread is dedicated to the processing of a request and its HTTP response to the client.
+* The nature of HTTP traffic started to change somewhat as JavaScript clients started to become more prevalent. One problem that popped up often was the need for the server to push events to the client. A typical example is a stock quote application where you need to update a string of clients with the latest stock price. These clients would make an HTTP GET or POST request and just block indefinitely until the server was ready to send back a response. This resulted in a large amount of open, long-running requests that were doing nothing other than idling. Not only were there a lot of open, idle sockets, but there were also a lot of dedicated threads doing nothing at all. Most HTTP servers were designed for short-lived requests with the assumption that one thread could process requests from multiple concurrent users. When you have a very large number of threads, you start to consume a lot of operating system resources. Each thread consumes memory, and context switching between threads starts to get quite expensive when the OS has to deal with a large number of threads. It became really hard to scale these types of server-push applications since the Servlet API, and by association JAX-RS, was a “one thread per connection” model.
+* In 2009, the Servlet 3.0 specification introduced asynchronous HTTP. With the Servlet 3.0 API, you can suspend the current server-side request and have a separate thread, other than the calling thread, handle sending back a response to the client. For a serverpush app, you could then have a small handful of threads manage sending responses back to polling clients and avoid all the overhead of the “one thread per connection” model. JAX-RS 2.0 introduced a similar API.
+* Asynchronous doesn’t necessarily mean automatic scalability. For the typical web app, using server asynchronous response processing will only complicate your code and make it harder
+to maintain. It may even hurt performance.
+
+* To use server-side processing, `AsyncResponse` interface is provided.
+* Get access to an `AsyncResponse` instance by injecting it into a JAX-RS method using `@Suspended` annotation
+* When you inject an instance of AsyncResponse using the `@Suspended` annotation, the HTTP request becomes suspended from the current thread of execution. 
+* A new background thread is created to send the response back to the client by calling the `AsyncResponse.resume()` method.
+* When you invoke `AsyncResponse.resume(Object)`, the response filter and interceptor chains are invoked, and then finally the `MessageBodyWriter`. If an exception is thrown by any one of these components, then the exception is handled in the same way as its synchronous counterpart with one caveat. Unhandled exceptions are not propagated, but instead the server will return a *500, Internal Server Error* back to the client.
+* If an `AsyncResponse` is not resumed or cancelled, it will eventually time out. The default timeout is container-specific. A timeout results in a *503, Service Unavailable* response code sent back to the client. You can explicitly set the timeout by invoking: `response.setTimeout(5, TimeUnit.SECONDS);` or register a callback `response.setTimeoutHandler(new TimeoutHandler{...});`
+* Instead of creating threads manually like in below example, thread pools can be used. In case of highly CPU-intensive requests, number of requests can be limited by queueing up those requests in a thread pool that guarantees that onlya few of those expensive operations will happen concurrently.
+
+```java
+import javax.ws.rs.container.AsyncResponse;
+import javax.ws.rs.container.Suspended;
+
+@Path("/orders")
+public class OrderResource {
+  @POST
+  @Consumes("application/json")
+  @Produces("application/json")
+  public void submit(final Order order, final @Suspended AsyncResponse response) {
+     new Thread() {
+       public void run() {
+         OrderConfirmation confirmation = null;
+         try {
+           confirmation = orderProcessor.process(order);
+         } catch (Exception ex) {
+           response.resume(ex);
+           return;
+         }
+         response.resume(order);
+       }
+     }.start();
+  }
+}
+```
+
+## Exception Handling
+
+**HTTP Response Codes**
+
+* 100 to 199 - Informational response codes
+* 200 to 299 - successful response codes
+  * 200, "OK"
+  * 204, "No Content"
+* 300 to 399 - Redirection codes
+* 400 to 499 - client error codes
+  * 404, "Not Found"
+  * 405, "Method Not Found" - if client invokes an HTTP method on a valid URI to which no JAX-RS resource method is bound. *The exception to this rule is the HTTP HEAD and OPTIONS methods. If a JAX-RS resource method isn't available that can service HEAD requests for that particular URI, but can GET there does exist a method that can handle GET, JAX-RS will invoke the JAX-RS resource method that handles GET and return the response from that minus the request body. If there is no existing method that can handle OPTIONS, the JAX-RS implementation is required to send back some meaningful, automatically generated response along with the Allow header set.*
+  * 406, "Not Acceptable" - say, if the client requets a response format that is not supported/implemented
+* 500 to 599 - server error codes
+
+**Exception Handling**
+
+* Errors can be reported to a client either by creating and returning the appropriate `Response` object or by throwing an exception. 
+* Application code is allowed to throw any checked (classes extending `java.lang.Exception`) or unchecked (classes extending `java.lang.RuntimeException`) exceptions they want. 
+
+* **Exception Mappers**
+  * Thrown exceptions are handled by the JAX-RS runtime if you have registered an exception mapper. 
+  * Exception mappers can convert an exception to an HTTP response. If the thrown exception is not handled by a mapper, it is propagated and handled by the container (i.e., servlet) JAX-RS is running within.
+  * JAX-RS also provides the `javax.ws.rs.WebApplicationException`. If the application code throws this exception, JAX-RS can process it without explicitly registering a mapper.
+  * Catching and throwing all application exceptions wrapped up in `WebApplicationException` is tedious. Alternatively, one can implement `ExceptionMapper` to map an application exception to a `Response` object
+
+```java ExceptionMapper Interface
+public interface ExceptionMapper<E extends Throwable> {
+  Response toResponse(E exception);
+}
+```
+
+  * `ExceptionMapper` implementation must be annotated with `@Provider` to tell JAX-RS runtime that it is a component.
+  * JAX-RS supports exception inheritance as well. When an exception is thrown, JAX-RS will first try to find an ExceptionMapper for that exception’s type. If it cannot find one, it will look for a mapper that can handle the exception’s superclass. It will continue this process until there are no more superclasses to match against.
+
+```java Example Mapper
+@Provider
+public class EntityNotFoundMapper implements ExceptionMapper<EntityNotFoundException> {
+  public Response toResponse(EntityNotFoundException e) {
+    return Response.status(Response.Status.NOT_FOUND).build();
+  }
+}
+```
+
+## Security
+
+## Scalability
+
+### Caching
+
+* **Browser Cache** is one of the more important features of the Web. When you visit a website for the first time, your browser stores images and static text in memory and on disk. If you revisit the site within minutes, hours, days, or even months, your browser doesn’t have to reload the data over the network and can instead pick it up locally. This greatly speeds up the rendering of revisited web pages and makes the browsing experience much more fluid. Browser caching not only helps page viewing, it also cuts down on server load and reduced network traffic.
+* **Proxy caches** are pseudo–web servers that work as middlemen between browsers and websites. Their sole purpose is to ease the load on master servers by caching static content and serving it to clients directly, bypassing the main servers. Content delivery networks (CDNs) like Akamai have made multimillion-dollar businesses out of this concept. These CDNs provide you with a worldwide network of proxy caches that you can use to publish your website and scale to hundreds of thousand of users.
+
+* REST services can leverage the browser & proxy cache, if the HTTP constrained interface is followed religiously. Because any service URI that can be reached with an HTTP GET is a candidate for caching, as they are read-only and idempotent. 
+
+### HTTP Caching
+
+HTTP protocol gives fine-grained control over the caching behavior of both browser and proxy caches.
+
+**HTTP 1.0 style Expires Header**
+
+In the example below, *Expires* field in the header tells the browser that the response can be cached until the date & time provided. After expiry, the client should re-fetch the data from server.
+
+```http HTTP 1.0 Response
+HTTP/1.1 200 OK
+Content-Type: application/xml
+Expires: Tue, 15 May 2014 16:00 GMT
+<customer id="123">...</customers>
+```
+
+```java JAX-RS example of setting expires
+@Path("/customers")
+public class CustomerResource {
+  @Path("{id}")
+  @GET
+  @Produces("application/xml")
+  public Response getCustomer(@PathParam("id") int id) {
+    Customer cust = findCustomer(id);
+    Date date = Calendar.getInstance(TimeZone.getTimeZone("GMT")).set(2010, 5, 15, 16, 0);
+    
+    return Response.ok(cust, "application/xml").expires(date).build();
+  }
+}
+```
+
+**HTTP 1.1 style Cache-Control**
+
+HTTP 1.1 provides richer feature set over browser and CDN/proxy caches including cache revalidation. 
+
+```http HTTP 1.1 Response
+HTTP/1.1 200 OK
+Content-Type: application/xml
+Cache-Control: private, no-store, max-age=300
+<customers>...</customers>
+```
+
+```java JAX-RS example setting cache-control
+@Path("/customers")
+public class CustomerResource {
+  @Path("{id}")
+  @GET
+  @Produces("application/xml")
+  public Response getCustomer(@PathParam("id") int id) {
+    Customer cust = findCustomer(id);
+    CacheControl cc = new CacheControl();
+    cc.setMaxAge(300);
+    cc.setPrivate(true);
+    cc.setNoStore(true);
+    
+    return Response.ok(cust, "application/xml").cacheControl(cc).build();
+  }
+}
+```
+
+| Cache Control Directive | Description |
+| `private` | The private directive states that no shared intermediary (proxy or CDN) is allowed to cache the response. This is a great way to make sure that the client, and only the client, caches the data.| 
+| `public` | The public directive is the opposite of private. It indicates that the response may be cached by any entity within the request/response chain. | 
+| `no-cache` | Usually, this directive simply means that the response should not be cached. If it is cached anyway, the data should not be used to satisfy a request unless it is revalidated with the server (more on revalidation later).| 
+| `no-store` | A browser will store cacheable responses on disk so that they can be used after a browser restart or computer reboot. You can direct the browser or proxy cache to not store cached data on disk by using the no-store directive. | 
+| `no-transform` | Some intermediary caches have the option to automatically transform their cached data to save memory or disk space or to simply reduce network traffic. An example is compressing images. For some applications, you might want to disallow this using the no-transform directive.
+| `max-age` | This directive is how long (in seconds) the cache is valid. If both an Expires header and a max-age directive are set in the same response, the max-age always takes precedence.| 
+| `s-maxage` | The s-maxage directive is the same as the max-age directive, but it specifies the maximum time a shared, intermediary cache (like a proxy) is allowed to hold the data. This directive allows you to have different expiration times than the client.| 
+
+
+**Revalidation and Conditional GETs**
+
+* *Revalidation* - when the cache is stale, the cacher can ask the server if the data it is holding is still valid. To perform revalidation, the server will send back a `Last-Modified` and/or an `ETag` (entity tag) header with its initial response to the client.
+
+* *Last-Modified*
+  * represents a timestamp of the data sent by the server. 
+
+```http Response header with Last-Modified
+HTTP/1.1 200 OK
+Content-Type: application/xml
+Cache-Control: max-age=1000
+Last-Modified: Tue, 15 May 2013 09:56 EST
+<customer id="123">...</customer>
+```
+  * As in example below, after 1000 seconds, client may opt to revalidate its cache data by sending a *conditional GET* request by passing a request header called `If-Modified-Since` with the value of the cached `Last-Modified` header.
+  * When a service receives this GET request, it checks to see if its resource has been modified since the date provided within the `If-Modified-Since` header. If it has been changed since the timestamp provided, the server will send back a `200, “OK,”` response with the new representation of the resource. If it hasn’t been changed, the server will respond with `304, “Not Modified,”` and return no representation. In both cases, the server should send an updated `Cache-Control` and `Last-Modified` header if appropriate.
+
+```http
+GET /customers/123 HTTP/1.1
+If-Modified-Since: Tue, 15 May 2013 09:56 EST
+```
+
+* *ETag*
+
+The ETag header is a pseudounique identifier that represents the version of the data sent back. Its value is any arbitrary quoted string and is usually an MD5 hash. Here’s an example response:
+
+```http Response header with ETag
+HTTP/1.1 200 OK
+Content-Type: application/xml
+Cache-Control: max-age=1000
+ETag: "3141271342554322343200"
+<customer id="123">...</customer>
+```
+
+  * As in example below, after 1000 seconds, client may opt to revalidate by sending a *conditional GET* request by passing `If-None-Match` in header with the same has value.
+  * If the tags don’t match, the server will send back a `200, “OK,”` response with the new representation of the resource. If it hasn’t been changed, the server will respond with `304, “Not Modified,”` and return no representation. In both cases, the server should send an updated `Cache-Control` and `ETag` header if appropriate.
+  * A *strong ETag* should change whenever any bit of the resource’s representation changes. 
+  * A *weak ETag* changes only on semantically significant events. Weak ETags are identified with a *W/*prefix. e.g., `ETag: W/"3141271342554322343200"`
+  * `Last-Modified` and `ETag` can be used for concurrency control as well. In other words, when 2 clients are trying to update the same resource, these header values can be used to conditionally update only if the server value hasn't changed since. 
+
+```http
+GET /customers/123 HTTP/1.1
+If-None-Match: "3141271342554322343200"
+```
+
+# Other REST Frameworks
+
+Java Web Service APIs include:
+
+* HttpServlet and its equivalents (e.g., JSP scripts)
+* JAX-RS (Java API for RESTful services) - Jersey is the reference implementation
+* Restlet, which is similar in style to JAX-RS
+* JAX-WS (Java API for Web Services) which is a relatively low-level API. Metro is the reference implementation.
+
+## Servlet based Web Services
+
+JAX-RS and Restlet are roughly peers (arguably). Both of these APIs emphasize the use of Java annotations to describe the RESTful access to a particular CRUD operation. Each framework supports the automated generation of XML and JSON payloads. When published with a web server such as Tomcat or Jetty, JAX-RS and Restlet provide servlet interceptors that mediate between the client and the web service.
 
 ## RESTlet 
 
@@ -286,8 +659,6 @@ Following are the JAX-WS Implementations
 	* Distribution transaction in REST?
 	* REST fault messages?
 	* Things to try using JAX-RS
-		* HEAD, OPTIONS
-		* Asynchronous service
 		* how to time out a client
 		* how to restrict number of clients accessing the service
 		* how to implement pagination - Linking Services
@@ -299,5 +670,6 @@ Following are the JAX-WS Implementations
   * Building Web Services with Java (2E)
   * Java Web Services - Up & Running - O'Reilly 2013
   * RESTful Java with JAX-RS -2010
+  * RESTful Java with JAX-RS 2.0 -2013
   * RESTful Web APIs - O'Reilly 2013
   * Web Services Testing with soapUI (2012)

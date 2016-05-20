@@ -141,13 +141,15 @@ Mechanism to hold all kinds of data items such as instructions, object data, loc
 
 ## Reference Types
 
-### WeakReference
+In the order of strength, the references can be arranged as,
 
-Weak reference objects, which do not prevent their referents from being made finalizable, finalized, and then reclaimed. Weak references are most often used to implement canonicalizing mappings.
-
-Suppose that the garbage collector determines at a certain point in time that an object is weakly reachable. At that time it will atomically clear all weak references to that object and all weak references to any other weakly-reachable objects from which that object is reachable through a chain of strong and soft references. At the same time it will declare all of the formerly weakly-reachable objects to be finalizable. At the same time or at some later time it will enqueue those newly-cleared weak references that are registered with reference queues.
+**Strong References** > **Soft References** > **Weak References** > **Phantom References**
 
 ### SoftReference
+
+* if free heap space is available, chances are that a soft reference will not be freed during a garbage collection cycle (so it survives from GC).
+* Before throwing an OutOfMemoryError, JVM will attempt to reclaim memory by releasing instances that are softly reachable.  
+* Soft References ideal for implementing memory sensitive caches 
 
 Soft reference objects, which are cleared at the discretion of the garbage collector in response to memory demand. Soft references are most often used to implement memory-sensitive caches.
 
@@ -157,7 +159,56 @@ All soft references to softly-reachable objects are guaranteed to have been clea
 
 Direct instances of this class may be used to implement simple caches; this class or derived subclasses may also be used in larger data structures to implement more sophisticated caches. As long as the referent of a soft reference is strongly reachable, that is, is actually in use, the soft reference will not be cleared. Thus a sophisticated cache can, for example, prevent its most recently used entries from being discarded by keeping strong referents to those entries, leaving the remaining entries to be discarded at the discretion of the garbage collector.
 
+### WeakReference
+
+* Unlike Soft References, Weak References can be reclaimed by the JVM during a GC cycle, even though there’s enough free memory available.
+* As long as GC does not occur, we can retrieve a strong reference out of a weak reference by calling the `ref.get()` method.
+
+Weak reference objects, which do not prevent their referents from being made finalizable, finalized, and then reclaimed. Weak references are most often used to implement canonicalizing mappings.
+
+Suppose that the garbage collector determines at a certain point in time that an object is weakly reachable. At that time it will atomically clear all weak references to that object and all weak references to any other weakly-reachable objects from which that object is reachable through a chain of strong and soft references. At the same time it will declare all of the formerly weakly-reachable objects to be finalizable. At the same time or at some later time it will enqueue those newly-cleared weak references that are registered with reference queues.
+
 ### PhantomReference
+
+* Phantom references are the weakest form of referencing. Instances that are referred via a phantom reference cannot be accessed directly using a `get()` method (it always returns null). Instead, we need to rely on Reference Queues. 
+* `ReferenceQueue` is the mechanism provided by the JVM to be notified when a referenced instance is about to be garbage collected. (`enqueue()` method in this class is package scoped. )
+* One use case of Phantom references is to keep track of active references within an application, and to know when those instances will be garbage collected. If we use strong references, then the instance will not be eligible for GC due to the strong reference we maintain. Instead, we could rely on a phantom reference with the support of a reference queue to handle the situation.
+
+```java
+public class TestPhantomRefQueue {
+    public static void main(String[] args) throws InterruptedException {
+
+        Object obj = new Object();
+        final ReferenceQueue queue = new ReferenceQueue();
+
+        PhantomReference pRef = new PhantomReference(obj, queue);
+
+        obj = null;
+
+        new Thread(new Runnable() {
+            public void run() {
+                try {
+                    System.out.println("Awaiting for GC");
+
+                    // This is a blocking call until GC kicks in
+                    PhantomReference pRef = (PhantomReference) queue.remove();
+
+                    System.out.println("Referenced GC'd");
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+
+        // Wait for 2nd thread to start
+        Thread.sleep(2000);
+
+        System.out.println("Invoking GC");
+        System.gc();
+    }
+}
+```
 
 Phantom reference objects, which are enqueued after the collector determines that their referents may otherwise be reclaimed. Phantom references are most often used for scheduling pre-mortem cleanup actions in a more flexible way than is possible with the Java finalization mechanism.
 

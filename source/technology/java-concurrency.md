@@ -673,6 +673,7 @@ An Exchanger lets a pair of threads exchange objects at a synchronization point.
   * call `Thread.destroy()` - Not implemented (or safe) 
   * call `Thread.run()` - Wonʼt start Thread! Still in caller Thread. 
   * use ThreadGroups - Use a ThreadPoolExecutor instead.
+* [How to analyze Java Thread dumps](https://dzone.com/articles/how-analyze-java-thread-dumps)
 
 # Bibliography
 

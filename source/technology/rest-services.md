@@ -10,6 +10,8 @@ footer: true
 {:toc}
 
 
+[Must read on REST concepts](https://developer.github.com/v3/)
+
 # Concepts
 
 * stands for REpresentational State Transfer
@@ -476,7 +478,9 @@ public class EntityNotFoundMapper implements ExceptionMapper<EntityNotFoundExcep
 }
 ```
 
-## Security
+## Conneg (Content Negotiation)
+
+[HTTP Conneg Basics](/technology/webconcepts.html#http-content-negotiation-conneg)
 
 ## Scalability
 
@@ -600,6 +604,149 @@ ETag: "3141271342554322343200"
 GET /customers/123 HTTP/1.1
 If-None-Match: "3141271342554322343200"
 ```
+
+### Reverse proxy
+
+* One of the best way to cache your API is to put a gateway cache (or reverse proxy) in front of it. Some frameworks provide their own reverse proxies, but a very powerful, open-source one is [Varnish](https://www.varnish-cache.org/).
+* When a safe method is used on a resource URL, the reverse proxy should cache the response from the API. It will then use this cached response to answer all subsequent requests for the same resource before they hit the API. When an unsafe method is used on a resource URL, the cache ignores it and passes it to the API. The API is responsible for making sure that the cached resource is invalidated.
+* HTTP has an unofficial `PURGE` method that is used for purging caches. When an API receives a call with an unsafe method on a resource, it should fire a `PURGE` request on that resource so that the reverse proxy knows that the cached resource should be expired. Note that you will still have to configure your reverse proxy to actually remove a resource when it receives a request with the PURGE method.
+
+```http
+GET /article/1234 HTTP/1.1
+   - The resource is not cached yet
+   - Send request to the API
+   - Store response in cache and return
+
+GET /article/1234 HTTP/1.1
+   - The resource is cached
+   - Return response from cache
+
+PUT /article/1234 HTTP/1.1
+   - Unsafe method, send to API
+
+PURGE /article/1234 HTTP/1.1
+   - API sends PURGE method to the cache
+   - The resources is removed from the cache
+
+GET /article/1234 HTTP/1.1
+   - The resource is not cached yet
+   - Send request to the API
+   - Store response in cache and return
+```
+
+
+## Security
+
+[Basics of Security](/technology/security.html)
+
+### Authentication
+
+* To enable authentication, modify the */WEB-INF/web.xml* file in the war file deployed.
+* Value of `<auth-method>` could be `BASIC`, 'DIGEST' or `CLIENT_CERT`
+* The `<login-config>` element doesn’t turn on authentication. To enforce authentication, you must specify a URL pattern you want to secure. e.g., `<url-pattern>/services/customers</url-pattern>`
+* The `<http-method>` element says that we only want to secure POST requests to this URL. If we leave out this element, all HTTP methods are secured.
+* `<auth-constraint>` specifies which roles are allowed to POST to `/services/customers`
+* `<role-name>` - If you set this to `*` then it means anybody who is able to log in can access the constrained URL. Authentication with a valid user would still be required, though. 
+* *Limitation* - When declaring `<security-constraints>` for JAXRS resources, the `<url-pattern>` element does not have as rich an expression syntax as JAX-RS `@Path` annotation values. It supports only simple wildcard matches via the `*` character. No regular expressions like `/*`, `/foo/*` or `*.txt` are supported. 
+
+```xml Sample web.xml file
+<?xml version="1.0"?>
+<web-app>
+  <security-constraint>
+    <web-resource-collection>
+      <web-resource-name>customer creation</web-resource-name>
+      <url-pattern>/services/customers</url-pattern>
+      <http-method>POST</http-method>
+    </web-resource-collection>
+    <auth-constraint>
+      <role-name>admin</role-name>
+    </auth-constraint>
+  </security-constraint>
+  <login-config>
+    <auth-method>BASIC</auth-method>
+    <realm-name>jaxrs</realm-name>
+  </login-config>
+  <security-role>
+    <role-name>admin</role-name>
+  </security-role>
+</web-app>
+```
+
+* **Enforcing Encryptiong (HTTPS)** - To enforce HTTPS access for these constraints, specify a `<user-data-constraint>` as shown here. If a user tries to access the URL pattern with HTTP, she will be redirected to an HTTPS-based URL
+
+```xml Enforcing HTTPS
+<security-constraint>
+  ...
+  <user-data-constraint>
+    <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+  </user-data-constraint>
+</security-constraint>
+```
+
+### Authorization
+
+* The server and application know the permissions for each user and do not need to share this information over a communication protocol. This is why authorization is the domain of the server and application
+* JAX-RS relies on the servlet and Java EE specifications to define how authorization works. Authorization is performed in Java EE by associating one or more roles with a given user and then assigning permissions based on that role.
+* You do not assign access control on a per-user basis, but rather on a per-role basis.
+
+* Authorization can be enabled through XML or by applying annotations to JAX-RS resource classes
+
+**Authorization Annotations**
+
+* Java EE defines a set of following annotations in package `javax.annotation.security` :  
+  * `@RolesAllowed` - defines the roles permitted to execute a specific method or defines the default ACL (Access Control List) for all HTTP operations. 
+  * `@DenyAll`
+  * `@PermitAll`
+  * `@RunAs`
+
+* Pros
+  * Annotations allow to express fine-grained constraints that are not possible in *web.xml* because of the limited expression capabilities of `<url-pattern>`
+  * Allows to apply constraints at method-level using these annotations.
+
+* Cons
+  * Specify security related annotations within business logic code is a leakage of concern. To add or remove role constraints periodically, one has to recompile the whole application.
+
+```java
+@Path("/customers")
+@RolesAllowed({"ADMIN", "CUSTOMER"})
+public class CustomerResource {
+  @GET
+  @Path("{id}")
+  @Produces("application/xml")
+  public Customer getCustomer(@PathParam("id") int id) {...}
+  
+  @RolesAllowed("ADMIN")
+  @POST
+  @Consumes("application/xml")
+  public void createCustomer(Customer cust) {...}
+  
+  @PermitAll
+  @GET
+  @Produces("application/xml")
+  public Customer[] getCustomers() {}
+}
+```
+
+# Versioning
+
+[Excellent article - Nobody Understands REST or HTTP](http://blog.steveklabnik.com/posts/2011-07-03-nobody-understands-rest-or-http)
+
+* There is no established industry standard for expressing versioning information for REST service contracts. We need to select a convention that works best for our IT enterprise.
+* 3 places where versioning can be applied in a REST API
+  * Base URI
+    * This is a clean sweep approach where a new version is introduced in the base URI for any major changes. 
+    * Many major API companies use this approach. E.g.? `http://company.com/api/v3.0/customers/1234`
+  * Resource URI
+    * e.g., `http://company.com/api/customers/v3.0/1234`
+    * Permalinks?
+  * Header (Accepts)
+  * Resource/Hypermedia way
+
+```http
+Accept: application/vnd.company.myapp-v3.0+json
+Content-Type: application/vnd.company.myapp-v3.0+json 
+```
+
 
 # Other REST Frameworks
 

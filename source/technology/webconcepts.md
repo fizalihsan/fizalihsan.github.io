@@ -45,14 +45,14 @@ Clients invoking the services could expect the response in various data formats,
 * Response Data Format
   * clients could specify the response format via "Accept". If the requested format is not supported, then 'not accepted' error is returned. 
 
-```
+```http
 GET http://example.com/stuff
 Accept: application/xml, application/json
 ```
 
   * specifying preference using wild cards. 
 
-```
+```http
 GET http://example.com/stuff
 Accept: text/*, text/html;level=1, */*, application/xml
 ```
@@ -62,14 +62,14 @@ Accept: text/*, text/html;level=1, */*, application/xml
     * 'q' MIME type property could be used as well. Higher the q value, more preferred it is. Default q value is 1.0. e.g., `text/*;q=0.9, */*;q=0.1, audio/mpeg, application/xml;q=0.5`. 
 * Language Negotiation
 
-```
+```http
 GET http://example.com/stuff
 Accept-Language: fr;q=1.0, es;q=1.0, en=0.1
 ```
 
 * Encoding Negotiation
 
-```
+```http
 GET http://example.com/stuff
 Accept-Encoding: gzip;q=1.0, compress;0.5; deflate;q=0.1
 ```
@@ -90,16 +90,19 @@ Accept-Encoding: gzip;q=1.0, compress;0.5; deflate;q=0.1
   * Revalidation: When the cache is stale, the cacher can ask the server if the data it is holding is still valid. This is called revalidation. To be able to perform revalidation, the client needs some extra information from the server about the resource it is caching. The server will send back a Last-Modified and/or an ETag header with its initial response to the client. If the client supports revalidation, it will store this timestamp along with the cached data.
 
     * Last-Modified<br/>
-`HTTP/1.1 200 OK`<br/>
-`Content-Type: application/xml`<br/>
-`Cache-Control: max-age=1000`<br/>
-`Last-Modified: Tue, 15 May 2009 09:56`
+
+```http
+HTTP/1.1 200 OK
+Content-Type: application/xml
+Cache-Control: max-age=1000
+Last-Modified: Tue, 15 May 2009 09:56
+```
 
 
     * Conditional GET
        * the client may opt to revalidate its cache of the item. To do this it does a conditional GET request by passing a request header called If-Modified-Since with the value of the cached Last-Modified header. For example: 
 
-```
+```http
 GET /customers/123 HTTP/1.1
 If-Modified-Since: Tue, 15 May 2009 09:56 EST
 ```
@@ -107,7 +110,7 @@ If-Modified-Since: Tue, 15 May 2009 09:56 EST
 * ETag or Entity Tag
   * The ETag header is a pseudounique identifier that represents the version of the data sent back. Its value is any arbitrary quoted string and is usually an MD5 hash. Here’s an example response:
 
-```
+```http
 HTTP/1.1 200 OK
 Content-Type: application/xml
 Cache-Control: max-age=1000

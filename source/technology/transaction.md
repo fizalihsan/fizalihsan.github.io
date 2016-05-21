@@ -11,25 +11,30 @@ footer: true
 
 # Overview
 
-* JTA & JTS
-  * JTA is a high level, implementation-independent, protocol independent API that allows applications and application servers to access transactions. An API like JDBC implemented by vendors - typically by commercial servers or by open source txn managers such as JBoss Txn Service or JOTM.
-  * JTS (Java Transaction Services) - JTS specifies the implementation of a Transaction Manager which supports JTA and implements the Java mapping of the OMG Object Transaction Service (OTS) 1.1 specification at the level below the API. JTS propagates transactions using the Internet Inter-ORB Protocol (IIOP).
+* JTA (Java Transaction API)
+  * is a high-level, implementation-independent, protocol-independent API that allows applications and application servers to access transactions. 
+  * is an API, just like JDBC, implemented by vendors - typically by commercial servers or by open source txn managers such as JBoss Txn Service or JOTM.
+* JTS (Java Transaction Services)
+  * specifies the implementation of a Transaction Manager which supports JTA and implements the Java mapping of the OMG Object Transaction Service (OTS) 1.1 specification at the level below the API. 
+  * JTS propagates transactions using the Internet Inter-ORB Protocol (IIOP).
 * JTA interfaces
   * `UserTransaction` Interface
   * `javax.transaction.UserTransaction` - allows to programmatically begin, commit or rollback txns, or get status.
   * `TransactionManager` Interface
   * primarily used within the Declarative Txn Model.
 
-# Transaction Properties
-
-<span style="color:red">TODO </span>
+# Consistency Models
 
 ## ACID property
 
 * **Atomicity** - means a txn must either be a commit or rollback all updates as a single unit of work.
-* **Consistency** - means during the course of the txn, the resource (db or EMS) will not be left in an inconsisten state.
+* **Consistency** - means during the course of the txn, the resource (db or EMS) will not be left in an inconsistent state.
 * **Isolation** - During the course of the txn, intermittent status of various participants is not visible to the external world.
 * **Durability** - means when the txn is committed, then it is guaranteed that the txn is complete and the db or JMS updates are permanent.
+
+ACID properties mean that once a transaction is complete, its data is consistent (*tech lingo: write consistency*) and stable on disk, which may involve multiple distinct memory locations.
+
+Write consistency can be a wonderful thing for application developers, but it also requires sophisticated locking which is typically a heavyweight pattern for most use cases.
 
 ## BASE property
 
@@ -355,7 +360,7 @@ Two golden rules apply to all of the transaction strategies :
 # Bibliography
 
 * Books
-  * Java Transaction Management Strategies - Mark Richards
+  * Java Transaction Design Strategies - Mark Richards
   * Java Transaction Processing: Design and Implementation - Mark Little, Jon Maron, Greg Pavlik
   * Principles of Transaction Processing - Philip A. Bernstein, Eric Newcomer
 * Websites

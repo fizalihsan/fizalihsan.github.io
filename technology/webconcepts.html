@@ -244,19 +244,21 @@ messageStyle: "none",
   </li>
 </ul>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">GET http://example.com/stuff
-</span><span class="line">Accept: application/xml, application/json</span></code></pre></td></tr></table></div></figure></notextile></div>
+</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="err">GET http://example.com/stuff</span>
+</span><span class="line"><span class="err">Accept: application/xml, application/json</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <ul>
   <li>specifying preference using wild cards. </li>
 </ul>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">GET http://example.com/stuff
-</span><span class="line">Accept: text/*, text/html;level=1, */*, application/xml</span></code></pre></td></tr></table></div></figure></notextile></div>
+</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="err">GET http://example.com/stuff</span>
+</span><span class="line"><span class="err">Accept: text/*, text/html;level=1, */*, application/xml</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <ul>
   <li>Order of preference
@@ -268,19 +270,21 @@ messageStyle: "none",
   <li>Language Negotiation</li>
 </ul>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">GET http://example.com/stuff
-</span><span class="line">Accept-Language: fr;q=1.0, es;q=1.0, en=0.1</span></code></pre></td></tr></table></div></figure></notextile></div>
+</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="err">GET http://example.com/stuff</span>
+</span><span class="line"><span class="err">Accept-Language: fr;q=1.0, es;q=1.0, en=0.1</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <ul>
   <li>Encoding Negotiation</li>
 </ul>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">GET http://example.com/stuff
-</span><span class="line">Accept-Encoding: gzip;q=1.0, compress;0.5; deflate;q=0.1</span></code></pre></td></tr></table></div></figure></notextile></div>
+</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="err">GET http://example.com/stuff</span>
+</span><span class="line"><span class="err">Accept-Encoding: gzip;q=1.0, compress;0.5; deflate;q=0.1</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h2 id="caching">Caching</h2>
 
@@ -304,29 +308,32 @@ messageStyle: "none",
         <p>Revalidation: When the cache is stale, the cacher can ask the server if the data it is holding is still valid. This is called revalidation. To be able to perform revalidation, the client needs some extra information from the server about the resource it is caching. The server will send back a Last-Modified and/or an ETag header with its initial response to the client. If the client supports revalidation, it will store this timestamp along with the cached data.</p>
 
         <ul>
-          <li>
-            <p>Last-Modified<br />
-<code>HTTP/1.1 200 OK</code><br />
-<code>Content-Type: application/xml</code><br />
-<code>Cache-Control: max-age=1000</code><br />
-<code>Last-Modified: Tue, 15 May 2009 09:56</code></p>
-          </li>
-          <li>
-            <p>Conditional GET</p>
-            <ul>
-              <li>the client may opt to revalidate its cache of the item. To do this it does a conditional GET request by passing a request header called If-Modified-Since with the value of the cached Last-Modified header. For example: </li>
-            </ul>
-          </li>
+          <li>Last-Modified<br /></li>
         </ul>
       </li>
     </ul>
   </li>
 </ul>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">GET /customers/123 HTTP/1.1
-</span><span class="line">If-Modified-Since: Tue, 15 May 2009 09:56 EST</span></code></pre></td></tr></table></div></figure></notextile></div>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+</span><span class="line"><span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/xml</span>
+</span><span class="line"><span class="na">Cache-Control</span><span class="o">:</span> <span class="l">max-age=1000</span>
+</span><span class="line"><span class="na">Last-Modified</span><span class="o">:</span> <span class="l">Tue, 15 May 2009 09:56</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<pre><code>* Conditional GET
+   * the client may opt to revalidate its cache of the item. To do this it does a conditional GET request by passing a request header called If-Modified-Since with the value of the cached Last-Modified header. For example: 
+</code></pre>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="nf">GET</span> <span class="nn">/customers/123</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</span><span class="line"><span class="na">If-Modified-Since</span><span class="o">:</span> <span class="l">Tue, 15 May 2009 09:56 EST</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <ul>
   <li>ETag or Entity Tag
@@ -336,14 +343,15 @@ messageStyle: "none",
   </li>
 </ul>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">HTTP/1.1 200 OK
-</span><span class="line">Content-Type: application/xml
-</span><span class="line">Cache-Control: max-age=1000
-</span><span class="line">ETag: "3141271342554322343200"</span></code></pre></td></tr></table></div></figure></notextile></div>
+</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+</span><span class="line"><span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/xml</span>
+</span><span class="line"><span class="na">Cache-Control</span><span class="o">:</span> <span class="l">max-age=1000</span>
+</span><span class="line"><span class="na">ETag</span><span class="o">:</span> <span class="l">&quot;3141271342554322343200&quot;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <hr />
 

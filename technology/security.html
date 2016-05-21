@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Security Overview Core Concepts Authentication Basic Authentication Unauthorized request Response with authorization details Digest Authentication &hellip;">
+<meta name="description" content="Security Overview Core Concepts 1. Authentication Basic Authentication Unauthorized request Response with authorization details Digest &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -120,15 +120,13 @@ messageStyle: "none",
       <li><a href="#core-concepts">Core Concepts</a></li>
     </ul>
   </li>
-  <li><a href="#authentication">Authentication</a>    <ul>
+  <li><a href="#authentication">1. Authentication</a>    <ul>
       <li><a href="#basic-authentication">Basic Authentication</a>        <ul>
           <li><a href="#unauthorized-request">Unauthorized request</a></li>
           <li><a href="#response-with-authorization-details">Response with authorization details</a></li>
         </ul>
       </li>
       <li><a href="#digest-authentication">Digest Authentication</a>        <ul>
-          <li><a href="#response-to-an-unauthorized-request">Response to an unauthorized request</a></li>
-          <li><a href="#request-with-authorization-details">Request with Authorization details</a></li>
           <li><a href="#pros">Pros</a></li>
           <li><a href="#cons">Cons</a></li>
         </ul>
@@ -141,17 +139,17 @@ messageStyle: "none",
       <li><a href="#openauth-openid">OpenAuth (OpenID)</a></li>
     </ul>
   </li>
-  <li><a href="#authorization">Authorization</a>    <ul>
+  <li><a href="#authorization">2. Authorization</a>    <ul>
       <li><a href="#simple-access-control-list-acl">Simple Access Control List (ACL)</a></li>
     </ul>
   </li>
-  <li><a href="#session-management">Session Management</a></li>
-  <li><a href="#cryptography">Cryptography</a>    <ul>
+  <li><a href="#cryptography">3. Cryptography</a>    <ul>
       <li><a href="#hashing-aka-message-digest">Hashing (a.k.a Message Digest)</a></li>
       <li><a href="#cipher">Cipher</a></li>
+      <li><a href="#miscellaneous">Miscellaneous</a></li>
     </ul>
   </li>
-  <li><a href="#miscellaneous">Miscellaneous</a></li>
+  <li><a href="#session-management">4. Session Management</a></li>
   <li><a href="#bibliography">Bibliography</a></li>
 </ul>
 
@@ -178,17 +176,12 @@ messageStyle: "none",
   <li>Realm - acts the bridge/connector between the security provider and your application’s security data like user accounts, access controls, etc.</li>
 </ol>
 
-<h1 id="authentication">Authentication</h1>
+<h1 id="authentication">1. Authentication</h1>
 
 <ul>
   <li>Process of verifying a user’s identity. Also called ‘login’ process.</li>
-  <li>3 step process
-    <ul>
-      <li>Collect the user’s identifying information, called principals (e.g. username), and supporting proof of identity, called credentials (e.g. password). Combination of principal and credential is called as <strong>Authentication Token</strong></li>
-      <li>Submit the <strong>principals</strong> and <strong>credentials</strong> to the system.</li>
-      <li>If the submitted credentials match what the system expects for that user identity (principal), the user is considered authenticated. </li>
-    </ul>
-  </li>
+  <li><code>Authentication Token = Principal(username) + Credential(password)</code></li>
+  <li>If the submitted credentials match what the system expects for that user identity (principal), the user is considered authenticated. </li>
 </ul>
 
 <h2 id="basic-authentication">Basic Authentication</h2>
@@ -230,9 +223,11 @@ messageStyle: "none",
 
 <p>Digest authentication was invented so that clients would not have to send clear text passwords over HTTP. It involves exchanging a set of secure MD5 hashes of the username, password, operation, URI, and optionally the hash of the message body itself. It is a hash value generated with the following pseudocode:</p>
 
-<h3 id="response-to-an-unauthorized-request">Response to an unauthorized request</h3>
-
-<p>The <strong>nonce</strong> and <strong>opaque</strong> attributes are special server-generated keys that will be used to build the subsequent authenticated request.</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Unauthorized request</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="err"> </span><span class="nf">GET</span> <span class="nn">/dir/index.html</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.0</span>
+</span><span class="line"> <span class="l">Host: localhost</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Response to an unauthorized request</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -246,24 +241,24 @@ messageStyle: "none",
 </span><span class="line">opaque=&quot;aa9321534253bcd00121&quot;
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h3 id="request-with-authorization-details">Request with Authorization details</h3>
+<p>The <strong>nonce</strong> and <strong>opaque</strong> attributes are special server-generated keys that will be used to build the subsequent authenticated request.</p>
 
-<ul>
-  <li>The <strong>nonce</strong> and <strong>opaque</strong> attributes are a copy of the values sent with the earlier WWWAuthenticate header. </li>
-  <li>The <strong>uri</strong> attribute is the base URI you are invoking on. </li>
-  <li>The <strong>nc</strong> attribute is a request counter that should be incremented by the client with each request. This prevents hostile clients from replaying a request. </li>
-  <li>The <strong>cnonce</strong> attribute is a unique key generated by the client and can be anything the client wants. </li>
-  <li>The <strong>response</strong> attribute is where all the meat is. It is a hash value generated with the following pseudocode:</li>
-</ul>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Hash calculating algorithm</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 </pre></td><td class="code"><pre><code class="http"><span class="line"><span class="err">H1 = md5(&quot;username:realm:password&quot;)</span>
 </span><span class="line"><span class="err">H2 = md5(&quot;httpmethod:uri&quot;)</span>
 </span><span class="line"><span class="err">response = md5(&quot;H1:nonce:nc:cnonce:qop:H2&quot;)</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
+
 <ul>
+  <li>The <strong>nonce</strong> and <strong>opaque</strong> attributes are a copy of the values sent with the earlier WWWAuthenticate header. </li>
+  <li>The <strong>uri</strong> attribute is the base URI you are invoking on. </li>
+  <li>The <strong>nc</strong> attribute is a request counter that should be incremented by the client with each request. This prevents hostile clients from replaying a request. </li>
+  <li>The <strong>cnonce</strong> attribute is a unique key generated by the client and can be anything the client wants. </li>
+  <li>
+    <p>The <strong>response</strong> attribute is where all the meat is. It is a hash value generated with the following pseudocode:</p>
+  </li>
   <li>When the server receives this request, it builds its own version of the <strong>response</strong> hash using its stored, secret values of the username and password. If the hashes match, the user and its credentials are valid.</li>
 </ul>
 
@@ -306,6 +301,7 @@ When the server receives this request, it builds its own version of the response
 <p><img class="right" src="/technology/security-certs.gif" /></p>
 
 <ul>
+  <li>HTTPS is not only an encryption mechanism - it can also be used for authentication.</li>
   <li>When you first interact with a secure website, your browser receives a digitally signed certificate from the server that identifies it. </li>
   <li>Your browser verifies this certificate with a central authority like VeriSign. This is how you guarantee the identity of the server you are interacting with and make</li>
   <li>sure you’re not dealing with some man-in-the-middle security breach.</li>
@@ -334,7 +330,7 @@ When the server receives this request, it builds its own version of the response
 
 <p><span style="color:red">TODO</span></p>
 
-<h1 id="authorization">Authorization</h1>
+<h1 id="authorization">2. Authorization</h1>
 
 <p>Authorization is essentially access control - controlling what your users can access in your application, such as resources, web pages, etc. </p>
 
@@ -345,13 +341,13 @@ When the server receives this request, it builds its own version of the response
   <li>Permissions are defined for features. Users are assigned permissions. This model allows dynamic addition of users.</li>
 </ul>
 
-<h1 id="session-management">Session Management</h1>
-
-<p>Apache Shiro enables a Session programming paradigm for any application - from small daemon standalone applications to the largest clustered web applications. This means that application developers who wish to use sessions are no longer forced to use Servlet or EJB containers if they don’t need them otherwise. </p>
-
-<h1 id="cryptography">Cryptography</h1>
+<h1 id="cryptography">3. Cryptography</h1>
 
 <p>Cryptography is the process of hiding or obfuscating data so prying eyes can’t understand it. </p>
+
+<p>When a client is interacting with a RESTful web service, it is possible for hostile individuals to intercept network packets and read requests and responses if your HTTP connection is not secure.</p>
+
+<p>Sensitive data should be protected with cryptographic services like SSL. The Web defines the HTTPS protocol to leverage SSL and encryption.</p>
 
 <h2 id="hashing-aka-message-digest">Hashing (a.k.a Message Digest)</h2>
 
@@ -372,13 +368,17 @@ When the server receives this request, it builds its own version of the response
   <li>AES 257-bit cipher</li>
 </ul>
 
-<h1 id="miscellaneous">Miscellaneous</h1>
+<h2 id="miscellaneous">Miscellaneous</h2>
 
 <ul>
   <li>Kerberos - how it works</li>
   <li>PGP/GPG</li>
   <li>How to secure passwords - http://www.youtube.com/watch?v=6bR110r-RfY&amp;list=WL08D7E897CDBD47CB (Salt, Bcrypt, Ascrypt, Blowfish algo, AES 256)</li>
 </ul>
+
+<h1 id="session-management">4. Session Management</h1>
+
+<p>Apache Shiro enables a Session programming paradigm for any application - from small daemon standalone applications to the largest clustered web applications. This means that application developers who wish to use sessions are no longer forced to use Servlet or EJB containers if they don’t need them otherwise. </p>
 
 <h1 id="bibliography">Bibliography</h1>
 

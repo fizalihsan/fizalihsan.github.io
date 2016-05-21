@@ -139,14 +139,21 @@ messageStyle: "none",
         </ul>
       </li>
       <li><a href="#exception-handling">Exception Handling</a></li>
-      <li><a href="#security">Security</a></li>
+      <li><a href="#conneg-content-negotiation">Conneg (Content Negotiation)</a></li>
       <li><a href="#scalability">Scalability</a>        <ul>
           <li><a href="#caching">Caching</a></li>
           <li><a href="#http-caching">HTTP Caching</a></li>
+          <li><a href="#reverse-proxy">Reverse proxy</a></li>
+        </ul>
+      </li>
+      <li><a href="#security">Security</a>        <ul>
+          <li><a href="#authentication">Authentication</a></li>
+          <li><a href="#authorization">Authorization</a></li>
         </ul>
       </li>
     </ul>
   </li>
+  <li><a href="#versioning">Versioning</a></li>
   <li><a href="#other-rest-frameworks">Other REST Frameworks</a>    <ul>
       <li><a href="#servlet-based-web-services">Servlet based Web Services</a></li>
       <li><a href="#restlet">RESTlet</a></li>
@@ -161,6 +168,8 @@ messageStyle: "none",
   <li><a href="#open-questions">Open Questions</a></li>
   <li><a href="#references">References</a></li>
 </ul>
+
+<p><a href="https://developer.github.com/v3/">Must read on REST concepts</a></p>
 
 <h1 id="concepts">Concepts</h1>
 
@@ -899,7 +908,9 @@ to maintain. It may even hurt performance.</p>
 </span><span class="line"><span class="o">}</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h2 id="security">Security</h2>
+<h2 id="conneg-content-negotiation">Conneg (Content Negotiation)</h2>
+
+<p><a href="/technology/webconcepts.html#http-content-negotiation-conneg">HTTP Conneg Basics</a></p>
 
 <h2 id="scalability">Scalability</h2>
 
@@ -1106,6 +1117,237 @@ to maintain. It may even hurt performance.</p>
 <span class="line-number">2</span>
 </pre></td><td class="code"><pre><code class="http"><span class="line"><span class="nf">GET</span> <span class="nn">/customers/123</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
 </span><span class="line"><span class="na">If-None-Match</span><span class="o">:</span> <span class="l">&quot;3141271342554322343200&quot;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="reverse-proxy">Reverse proxy</h3>
+
+<ul>
+  <li>One of the best way to cache your API is to put a gateway cache (or reverse proxy) in front of it. Some frameworks provide their own reverse proxies, but a very powerful, open-source one is <a href="https://www.varnish-cache.org/">Varnish</a>.</li>
+  <li>When a safe method is used on a resource URL, the reverse proxy should cache the response from the API. It will then use this cached response to answer all subsequent requests for the same resource before they hit the API. When an unsafe method is used on a resource URL, the cache ignores it and passes it to the API. The API is responsible for making sure that the cached resource is invalidated.</li>
+  <li>HTTP has an unofficial <code>PURGE</code> method that is used for purging caches. When an API receives a call with an unsafe method on a resource, it should fire a <code>PURGE</code> request on that resource so that the reverse proxy knows that the cached resource should be expired. Note that you will still have to configure your reverse proxy to actually remove a resource when it receives a request with the PURGE method.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="nf">GET</span> <span class="nn">/article/1234</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</span><span class="line">   <span class="l">- The resource is not cached yet</span>
+</span><span class="line">   <span class="l">- Send request to the API</span>
+</span><span class="line">   <span class="l">- Store response in cache and return</span>
+</span><span class="line">
+</span><span class="line">GET /article/1234 HTTP/1.1
+</span><span class="line">   - The resource is cached
+</span><span class="line">   - Return response from cache
+</span><span class="line">
+</span><span class="line">PUT /article/1234 HTTP/1.1
+</span><span class="line">   - Unsafe method, send to API
+</span><span class="line">
+</span><span class="line">PURGE /article/1234 HTTP/1.1
+</span><span class="line">   - API sends PURGE method to the cache
+</span><span class="line">   - The resources is removed from the cache
+</span><span class="line">
+</span><span class="line">GET /article/1234 HTTP/1.1
+</span><span class="line">   - The resource is not cached yet
+</span><span class="line">   - Send request to the API
+</span><span class="line">   - Store response in cache and return
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="security">Security</h2>
+
+<p><a href="/technology/security.html">Basics of Security</a></p>
+
+<h3 id="authentication">Authentication</h3>
+
+<ul>
+  <li>To enable authentication, modify the <em>/WEB-INF/web.xml</em> file in the war file deployed.</li>
+  <li>Value of <code>&lt;auth-method&gt;</code> could be <code>BASIC</code>, ‘DIGEST’ or <code>CLIENT_CERT</code></li>
+  <li>The <code>&lt;login-config&gt;</code> element doesn’t turn on authentication. To enforce authentication, you must specify a URL pattern you want to secure. e.g., <code>&lt;url-pattern&gt;/services/customers&lt;/url-pattern&gt;</code></li>
+  <li>The <code>&lt;http-method&gt;</code> element says that we only want to secure POST requests to this URL. If we leave out this element, all HTTP methods are secured.</li>
+  <li><code>&lt;auth-constraint&gt;</code> specifies which roles are allowed to POST to <code>/services/customers</code></li>
+  <li><code>&lt;role-name&gt;</code> - If you set this to <code>*</code> then it means anybody who is able to log in can access the constrained URL. Authentication with a valid user would still be required, though. </li>
+  <li><em>Limitation</em> - When declaring <code>&lt;security-constraints&gt;</code> for JAXRS resources, the <code>&lt;url-pattern&gt;</code> element does not have as rich an expression syntax as JAX-RS <code>@Path</code> annotation values. It supports only simple wildcard matches via the <code>*</code> character. No regular expressions like <code>/*</code>, <code>/foo/*</code> or <code>*.txt</code> are supported. </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Sample web.xml file</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="cp">&lt;?xml version=&quot;1.0&quot;?&gt;</span>
+</span><span class="line"><span class="nt">&lt;web-app&gt;</span>
+</span><span class="line">  <span class="nt">&lt;security-constraint&gt;</span>
+</span><span class="line">    <span class="nt">&lt;web-resource-collection&gt;</span>
+</span><span class="line">      <span class="nt">&lt;web-resource-name&gt;</span>customer creation<span class="nt">&lt;/web-resource-name&gt;</span>
+</span><span class="line">      <span class="nt">&lt;url-pattern&gt;</span>/services/customers<span class="nt">&lt;/url-pattern&gt;</span>
+</span><span class="line">      <span class="nt">&lt;http-method&gt;</span>POST<span class="nt">&lt;/http-method&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/web-resource-collection&gt;</span>
+</span><span class="line">    <span class="nt">&lt;auth-constraint&gt;</span>
+</span><span class="line">      <span class="nt">&lt;role-name&gt;</span>admin<span class="nt">&lt;/role-name&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/auth-constraint&gt;</span>
+</span><span class="line">  <span class="nt">&lt;/security-constraint&gt;</span>
+</span><span class="line">  <span class="nt">&lt;login-config&gt;</span>
+</span><span class="line">    <span class="nt">&lt;auth-method&gt;</span>BASIC<span class="nt">&lt;/auth-method&gt;</span>
+</span><span class="line">    <span class="nt">&lt;realm-name&gt;</span>jaxrs<span class="nt">&lt;/realm-name&gt;</span>
+</span><span class="line">  <span class="nt">&lt;/login-config&gt;</span>
+</span><span class="line">  <span class="nt">&lt;security-role&gt;</span>
+</span><span class="line">    <span class="nt">&lt;role-name&gt;</span>admin<span class="nt">&lt;/role-name&gt;</span>
+</span><span class="line">  <span class="nt">&lt;/security-role&gt;</span>
+</span><span class="line"><span class="nt">&lt;/web-app&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><strong>Enforcing Encryptiong (HTTPS)</strong> - To enforce HTTPS access for these constraints, specify a <code>&lt;user-data-constraint&gt;</code> as shown here. If a user tries to access the URL pattern with HTTP, she will be redirected to an HTTPS-based URL</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Enforcing HTTPS</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;security-constraint&gt;</span>
+</span><span class="line">  ...
+</span><span class="line">  <span class="nt">&lt;user-data-constraint&gt;</span>
+</span><span class="line">    <span class="nt">&lt;transport-guarantee&gt;</span>CONFIDENTIAL<span class="nt">&lt;/transport-guarantee&gt;</span>
+</span><span class="line">  <span class="nt">&lt;/user-data-constraint&gt;</span>
+</span><span class="line"><span class="nt">&lt;/security-constraint&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="authorization">Authorization</h3>
+
+<ul>
+  <li>The server and application know the permissions for each user and do not need to share this information over a communication protocol. This is why authorization is the domain of the server and application</li>
+  <li>JAX-RS relies on the servlet and Java EE specifications to define how authorization works. Authorization is performed in Java EE by associating one or more roles with a given user and then assigning permissions based on that role.</li>
+  <li>
+    <p>You do not assign access control on a per-user basis, but rather on a per-role basis.</p>
+  </li>
+  <li>Authorization can be enabled through XML or by applying annotations to JAX-RS resource classes</li>
+</ul>
+
+<p><strong>Authorization Annotations</strong></p>
+
+<ul>
+  <li>Java EE defines a set of following annotations in package <code>javax.annotation.security</code> :<br />
+    <ul>
+      <li><code>@RolesAllowed</code> - defines the roles permitted to execute a specific method or defines the default ACL (Access Control List) for all HTTP operations. </li>
+      <li><code>@DenyAll</code></li>
+      <li><code>@PermitAll</code></li>
+      <li><code>@RunAs</code></li>
+    </ul>
+  </li>
+  <li>Pros
+    <ul>
+      <li>Annotations allow to express fine-grained constraints that are not possible in <em>web.xml</em> because of the limited expression capabilities of <code>&lt;url-pattern&gt;</code></li>
+      <li>Allows to apply constraints at method-level using these annotations.</li>
+    </ul>
+  </li>
+  <li>Cons
+    <ul>
+      <li>Specify security related annotations within business logic code is a leakage of concern. To add or remove role constraints periodically, one has to recompile the whole application.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Path</span><span class="o">(</span><span class="s">&quot;/customers&quot;</span><span class="o">)</span>
+</span><span class="line"><span class="nd">@RolesAllowed</span><span class="o">({</span><span class="s">&quot;ADMIN&quot;</span><span class="o">,</span> <span class="s">&quot;CUSTOMER&quot;</span><span class="o">})</span>
+</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomerResource</span> <span class="o">{</span>
+</span><span class="line">  <span class="nd">@GET</span>
+</span><span class="line">  <span class="nd">@Path</span><span class="o">(</span><span class="s">&quot;{id}&quot;</span><span class="o">)</span>
+</span><span class="line">  <span class="nd">@Produces</span><span class="o">(</span><span class="s">&quot;application/xml&quot;</span><span class="o">)</span>
+</span><span class="line">  <span class="kd">public</span> <span class="n">Customer</span> <span class="nf">getCustomer</span><span class="o">(</span><span class="nd">@PathParam</span><span class="o">(</span><span class="s">&quot;id&quot;</span><span class="o">)</span> <span class="kt">int</span> <span class="n">id</span><span class="o">)</span> <span class="o">{...}</span>
+</span><span class="line">
+</span><span class="line">  <span class="nd">@RolesAllowed</span><span class="o">(</span><span class="s">&quot;ADMIN&quot;</span><span class="o">)</span>
+</span><span class="line">  <span class="nd">@POST</span>
+</span><span class="line">  <span class="nd">@Consumes</span><span class="o">(</span><span class="s">&quot;application/xml&quot;</span><span class="o">)</span>
+</span><span class="line">  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">createCustomer</span><span class="o">(</span><span class="n">Customer</span> <span class="n">cust</span><span class="o">)</span> <span class="o">{...}</span>
+</span><span class="line">
+</span><span class="line">  <span class="nd">@PermitAll</span>
+</span><span class="line">  <span class="nd">@GET</span>
+</span><span class="line">  <span class="nd">@Produces</span><span class="o">(</span><span class="s">&quot;application/xml&quot;</span><span class="o">)</span>
+</span><span class="line">  <span class="kd">public</span> <span class="n">Customer</span><span class="o">[]</span> <span class="nf">getCustomers</span><span class="o">()</span> <span class="o">{}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h1 id="versioning">Versioning</h1>
+
+<p><a href="http://blog.steveklabnik.com/posts/2011-07-03-nobody-understands-rest-or-http">Excellent article - Nobody Understands REST or HTTP</a></p>
+
+<ul>
+  <li>There is no established industry standard for expressing versioning information for REST service contracts. We need to select a convention that works best for our IT enterprise.</li>
+  <li>3 places where versioning can be applied in a REST API
+    <ul>
+      <li>Base URI
+        <ul>
+          <li>This is a clean sweep approach where a new version is introduced in the base URI for any major changes. </li>
+          <li>Many major API companies use this approach. E.g.? <code>http://company.com/api/v3.0/customers/1234</code></li>
+        </ul>
+      </li>
+      <li>Resource URI
+        <ul>
+          <li>e.g., <code>http://company.com/api/customers/v3.0/1234</code></li>
+          <li>Permalinks?</li>
+        </ul>
+      </li>
+      <li>Header (Accepts)</li>
+      <li>Resource/Hypermedia way</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="err">Accept: application/vnd.company.myapp-v3.0+json</span>
+</span><span class="line"><span class="err">Content-Type: application/vnd.company.myapp-v3.0+json </span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h1 id="other-rest-frameworks">Other REST Frameworks</h1>

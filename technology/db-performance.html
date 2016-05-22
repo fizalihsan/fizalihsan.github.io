@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="DB Performance Indexes How Indexes work? Limitations Index usage criteria Index Types When to use Clustered index? Index Covering Indexing Rules of &hellip;">
+<meta name="description" content="DB Performance Indexes How Indexes work? Limitations of Indexes Index usage criteria Index Types When to use Clustered index? Index Covering &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -118,7 +118,7 @@ messageStyle: "none",
   <ul id="markdown-toc">
   <li><a href="#indexes">Indexes</a>    <ul>
       <li><a href="#how-indexes-work">How Indexes work?</a></li>
-      <li><a href="#limitations">Limitations</a></li>
+      <li><a href="#limitations-of-indexes">Limitations of Indexes</a></li>
       <li><a href="#index-usage-criteria">Index usage criteria</a></li>
       <li><a href="#index-types">Index Types</a></li>
       <li><a href="#when-to-use-clustered-index">When to use Clustered index?</a></li>
@@ -152,13 +152,16 @@ messageStyle: "none",
 
 <h2 id="how-indexes-work">How Indexes work?</h2>
 
-<p>Each index entry contains a search-key value and a pointer to the row containing that value. If you specify the ALLOW REVERSE SCANS parameter in the CREATE INDEX statement, the values can be searched in both ascending and descending order. It is therefore possible to bracket the search, given the right predicate. An index can also be used to obtain rows in an ordered sequence, eliminating the need for the database manager to sort the rows after they are read from the table.</p>
+<ul>
+  <li>Each index entry contains a search-key value and a pointer to the row containing that value. If you specify the <code>ALLOW REVERSE SCANS</code> parameter while creating the index, the values can be searched in both ascending and descending order. It is therefore possible to bracket the search, given the right predicate. </li>
+  <li>An index can also be used to obtain rows in an ordered sequence, eliminating the need for the database manager to sort the rows after they are read from the table.</li>
+</ul>
 
 <p>Although the optimizer decides whether to use an index to access table data, except in the following case, you must decide which indexes might improve performance and create these indexes. Exceptions are the dimension block indexes and the composite block index that are created automatically for each dimension that you specify when you create a multi-dimensional clustering (MDC) table.</p>
 
 <p>In addition to the search-key value and row pointer, an index can contain include columns, which are non-indexed columns in the indexed row. Such columns might make it possible for the optimizer to get required information only from the index, without accessing the table itself.</p>
 
-<h2 id="limitations">Limitations</h2>
+<h2 id="limitations-of-indexes">Limitations of Indexes</h2>
 
 <p>Although indexes can reduce access time significantly, they can also have adverse effects on performance. Before you create indexes, consider the effects of multiple indexes on disk space and processing time:</p>
 
@@ -189,37 +192,38 @@ messageStyle: "none",
 
 <h2 id="index-types">Index Types</h2>
 
-<ol>
-  <li><strong>Clustered</strong> Any index structure having the data accessed in the same way the index is organized so that data with similar or the same key values is stored (or clustered) together. Clustering tends to greatly reduce input/output (I/O) time for queries and sorting.
+<ul>
+  <li><strong>Clustered</strong> Any index structure having the data accessed in the same way the index is organized so that data with similar or the same key values is stored (or clustered) together. Clustering tends to greatly reduce input/output (I/O) time for queries and sorting.</li>
+  <li><strong>Non-clustered</strong></li>
+  <li><strong>Unique index</strong></li>
+  <li><strong>Hashtable index</strong> - An index that maps primary key values to block data addresses in the database for otherwise un-ordered data. Not good for range searches</li>
+  <li><strong>Bitmapped index</strong>
     <ul>
-      <li><strong>Non-clustered</strong></li>
-      <li><strong>Unique index</strong></li>
-      <li><strong>Hashtable index</strong> - An index that maps primary key values to block data addresses in the database for otherwise un-ordered data. Not good for range searches</li>
-      <li><strong>Bitmapped index</strong>
-        <ul>
-          <li>A collection of bit vectors to form an index that can be used to quickly search secondary indexes or to search data warehouses. Each bit vector represents a different value of an attribute, and the length of each vector is the number of rows (rows) in the table.</li>
-          <li>Bitmap and Bitmap join indexes</li>
-        </ul>
-      </li>
-      <li><strong>Composite index</strong> - An index based on more than one attribute or key (i.e., a concatenated key).</li>
-      <li><strong>Covering Index</strong> - An index with enough information to satisfy certain queries by itself, in other words, the query can be satisfied merely by searching the index and not the database.</li>
-      <li><strong>B+ Tree</strong> 
-        <ul>
-          <li>Basic table index based on one or more attributes, often used to enforce uniqueness of primary keys.</li>
-          <li>These indexes are the standard index type. They are excellent for primary key and highly-selective indexes. Used as concatenated indexes, B-tree indexes can retrieve data sorted by the indexed columns. B-tree indexes have the following subtypes:</li>
-        </ul>
-      </li>
-      <li><strong>Index-organized tables</strong>: An index-organized table differs from a heap-organized because the data is itself the index. </li>
-      <li><strong>Reverse key indexes</strong>: In this type of index, the bytes of the index key are reversed, for example, 103 is stored as 301. The reversal of bytes spreads out inserts into the index over many blocks. </li>
-      <li><strong>Descending indexes</strong>: This type of index stores data on a particular column or columns in descending order. 
-B-tree cluster indexes</li>
-      <li><strong>Dense Vs Sparse Index</strong> - A dense index has a pointer to each row in the table; a sparse index has at most one pointer to each block or page in the table.</li>
-      <li><strong>Function-based indexes</strong></li>
-      <li><strong>Application Domain indexes</strong></li>
-      <li><strong>Bi-directional indexes</strong></li>
+      <li>A collection of bit vectors to form an index that can be used to quickly search secondary indexes or to search data warehouses. Each bit vector represents a different value of an attribute, and the length of each vector is the number of rows (rows) in the table.</li>
+      <li>Bitmap and Bitmap join indexes</li>
     </ul>
   </li>
-</ol>
+  <li><strong>Composite index</strong> - An index based on more than one attribute or key (i.e., a concatenated key).</li>
+  <li><strong>Covering Index</strong> - An index with enough information to satisfy certain queries by itself, in other words, the query can be satisfied merely by searching the index and not the database.</li>
+  <li><strong>B+ Tree</strong> 
+    <ul>
+      <li>Basic table index based on one or more attributes, often used to enforce uniqueness of primary keys.</li>
+      <li>These indexes are the standard index type. They are excellent for primary key and highly-selective indexes. Used as concatenated indexes, B-tree indexes can retrieve data sorted by the indexed columns. </li>
+      <li>B-tree indexes have the following subtypes:
+        <ul>
+          <li><strong>Index-organized tables</strong>: An index-organized table differs from a heap-organized because the data is itself the index. </li>
+          <li><strong>Reverse key indexes</strong>: In this type of index, the bytes of the index key are reversed, for example, 103 is stored as 301. The reversal of bytes spreads out inserts into the index over many blocks. </li>
+          <li><strong>Descending indexes</strong>: This type of index stores data on a particular column or columns in descending order. 
+B-tree cluster indexes</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Dense Vs Sparse Index</strong> - A dense index has a pointer to each row in the table; a sparse index has at most one pointer to each block or page in the table.</li>
+  <li><strong>Function-based indexes</strong></li>
+  <li><strong>Application Domain indexes</strong></li>
+  <li><strong>Bi-directional indexes</strong></li>
+</ul>
 
 <h2 id="when-to-use-clustered-index">When to use Clustered index?</h2>
 

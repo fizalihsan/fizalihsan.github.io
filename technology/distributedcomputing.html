@@ -131,6 +131,7 @@ messageStyle: "none",
   </li>
   <li><a href="#cap-theorem">CAP Theorem</a></li>
   <li><a href="#consistency-models">Consistency Models</a>    <ul>
+      <li><a href="#strong-consistency-models">Strong consistency models</a></li>
       <li><a href="#weak-consistency-models">Weak consistency models</a></li>
     </ul>
   </li>
@@ -301,7 +302,9 @@ For example,
 
 <h2 id="cap-theorem">CAP Theorem</h2>
 
-<p>The theorem states that only 2 of these 3 properties can be satisfied simultaneously:</p>
+<p>(<em>Proposed by Eric Brewer in 2000, proved by Seth Gilbert and Nancy Lynch of MIT in 2002</em>)</p>
+
+<p>The theorem states that in any distributed system, only 2 of these 3 properties can be satisfied simultaneously:</p>
 
 <ol>
   <li><strong>Consistency</strong>: all nodes see the same data at the same time.</li>
@@ -323,6 +326,8 @@ For example,
 <ol>
   <li><strong>CA (Consistency + Availability)</strong>
     <ul>
+      <li>All relational DBs are CA.</li>
+      <li>When a partition occurs, the system blocks.</li>
       <li>Examples include full strict quorum protocols, such as <em>two-phase commit</em>.</li>
       <li>Strong consistency model; <em>CANNOT</em> tolerate any node failures</li>
       <li>A CA system does not distinguish between node failures and network failures, and so the only safe thing is to stop accepting writes everywhere to avoid introducing <strong><em>divergence</em></strong> (or multiple copies).</li>
@@ -331,26 +336,33 @@ For example,
   </li>
   <li><strong>CP (Consistency + Partition Tolerance)</strong>
     <ul>
+      <li>Say you have three nodes and one node loses its link with the other two. You can create a rule that a result will be returned only when a majority of nodes agree. So, despite having a partition, the system will return a consistent result. However, since the separated node won’t be able to reach consensus it won’t be available even though it’s up.</li>
       <li>Examples include majority quorum protocols in which minority partitions are unavailable such as <em>Paxos</em>.</li>
       <li>Strong consistency model; <em>CAN</em> tolerate node failures</li>
-      <li>CP systems incorporate network partitions into their failure model and distinguish between a majority partition and a minority partition using an algorithm like Paxos, Raft or viewstamped replication</li>
+      <li>CP systems incorporate network partitions into their failure model and distinguish between a majority partition and a minority partition using an algorithm like <a href="http://harry.me/blog/2014/12/27/neat-algorithms-paxos/">Paxos</a>, <a href="https://ramcloud.stanford.edu/raft.pdf">Raft</a> or viewstamped replication. (<a href="http://harry.me/blog/2013/07/07/id-like-to-have-an-argument-a-primer-on-consensus/">A primer on consensus</a>)</li>
       <li>in a non-Byzantine failure model, a CP system can tolerate the failure of a minority <code>n</code> nodes as long as majority <code>n+1</code> stays up in a system with<code>2n+1</code> nodes. </li>
       <li>A CP system prevents divergence (e.g. maintains single-copy consistency) by forcing asymmetric behavior on the two sides of the partition. It only keeps the majority partition around, and requires the minority partition to become unavailable (e.g. stop accepting writes), which retains a degree of availability (the majority partition) and still ensures <em>single-copy consistency</em>.</li>
     </ul>
   </li>
   <li><strong>AP (Availability + Partition Tolerance)</strong>
     <ul>
+      <li>Say you have two nodes and the link between the two is severed. Since both nodes are up, you can design the system to accept requests on each of the nodes, which will make the system available despite the network being partitioned. However, each node will issue its own results, so by providing high availability and partition tolerance you’ll compromise consistency.</li>
+      <li>The system is still available under partitioning, but some returned data may be inaccurate, e.g., DNS, caches, Master/Slave replication.</li>
+      <li>Needs a conflict resolution strategy.</li>
       <li>Examples include protocols using conflict resolution, such as <em>Dynamo</em>.</li>
     </ul>
   </li>
 </ol>
 
-<p>In a distributed system, managing consistency(C), availability(A) and partition toleration(P) is important. 
-* Eric Brewer put forth the CAP theorem which states that in any distributed system we can choose only two of consistency, availability or partition tolerance. 
-* Consistency and availability are not really binary choices, unless you limit yourself to strong consistency. But strong consistency is just one consistency model: the one where you, by necessity, need to give up availability in order to prevent more than a single copy of the data from being active.
-* Many NoSQL databases try to provide options where the developer has choices where they can tune the database as per their needs. </p>
+<p>In a distributed system, managing consistency(C), availability(A) and partition toleration(P) is important. </p>
 
-<p>For example if you consider a distributed database. There are essentially three variables r, w, n where</p>
+<ul>
+  <li>Eric Brewer put forth the CAP theorem which states that in any distributed system we can choose only two of consistency, availability or partition tolerance. </li>
+  <li>Consistency and availability are not really binary choices, unless you limit yourself to strong consistency. But strong consistency is just one consistency model: the one where you, by necessity, need to give up availability in order to prevent more than a single copy of the data from being active.</li>
+  <li>Many NoSQL databases try to provide options where the developer has choices where they can tune the database as per their needs. </li>
+</ul>
+
+<p>For example if you consider a distributed database, there are essentially three variables r, w, n where</p>
 
 <ul>
   <li><code>r</code> = number of nodes that should respond to a read request before its considered successful.</li>
@@ -363,13 +375,6 @@ For example,
 <ul>
   <li>we can tweak the <code>r</code>, <code>w</code>, <code>n</code> values to make the system very consistent by setting <code>r=5</code> and <code>w=5</code> but now we have made the cluster susceptible to network partitions since any write will not be considered successful when any node is not responding. </li>
   <li>We can make the same cluster highly available for writes or reads by setting <code>r=1</code> and <code>w=1</code>  but now consistency can be compromised since some nodes may not have the latest copy of the data. </li>
-</ul>
-
-<p>The CAP theorem states that </p>
-
-<ul>
-  <li>if you get a network partition, you have to trade off <em>data availability versus data consistency</em>. </li>
-  <li>Durability can also be traded off against latency, particularly if you want to survive failures with replicated data</li>
 </ul>
 
 <h2 id="consistency-models">Consistency Models</h2>
@@ -391,9 +396,10 @@ For example,
 </ol>
 
 <blockquote>
-  <p>Below is not an exhaustive list
-### Strong consistency models </p>
+  <p>Below is not an exhaustive list</p>
 </blockquote>
+
+<h3 id="strong-consistency-models">Strong consistency models</h3>
 
 <p>(capable of maintaining a single copy)</p>
 

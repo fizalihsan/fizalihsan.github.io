@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="DB Design Physical Database Design Data Modelling Normalization What is? Types Patterns Bi-temporal milestoning Schema Patterns Anti-Patterns &hellip;">
+<meta name="description" content="DB Design Physical Database Design Data Modelling Normalization Normalization Types Patterns Bi-temporal milestoning Schema Patterns Anti-Patterns &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -119,8 +119,7 @@ messageStyle: "none",
   <li><a href="#physical-database-design">Physical Database Design</a>    <ul>
       <li><a href="#data-modelling">Data Modelling</a></li>
       <li><a href="#normalization">Normalization</a>        <ul>
-          <li><a href="#what-is">What is?</a></li>
-          <li><a href="#types">Types</a></li>
+          <li><a href="#normalization-types">Normalization Types</a></li>
         </ul>
       </li>
     </ul>
@@ -154,11 +153,10 @@ messageStyle: "none",
   <li>Data Striping (RAID)
     <ul>
       <li>What is RAID and what are different types of RAID configurations? </li>
-      <li>RAID stands for Redundant Array of Inexpensive Disks, used to provide fault tolerance to database servers. There are six RAID levels 0 through 5 offering different levels of performance, fault * tolerance.</li>
+      <li>RAID stands for Redundant Array of Inexpensive Disks, used to provide fault tolerance to database servers. There are six RAID levels 0 through 5 offering different levels of performance, fault-tolerance.</li>
     </ul>
   </li>
   <li>Mirroring</li>
-  <li>Denormalization</li>
   <li>Security
     <ul>
       <li>Permissioning - Users &amp; Groups</li>
@@ -168,39 +166,84 @@ messageStyle: "none",
 
 <h2 id="data-modelling">Data Modelling</h2>
 
+<p>???</p>
+
 <h2 id="normalization">Normalization</h2>
 
 <ul>
-  <li>http://dev.mysql.com/tech-resources/articles/intro-to-normalization.html </li>
-  <li>http://www.bkent.net/Doc/simple5.htm </li>
-  <li>http://publib.boulder.ibm.com/infocenter/dzichelp/v2r2/index.jsp?topic=%2Fcom.ibm.db2z10.doc.intro%2Fsrc%2Ftpc%2Fdb2z_denormalizationforperformance.htm</li>
+  <li><a href="http://dev.mysql.com/tech-resources/articles/intro-to-normalization.html">Intro to Normalization</a></li>
+  <li>
+    <p>http://www.bkent.net/Doc/simple5.htm </p>
+  </li>
+  <li><strong>What is Normalization?</strong>
+    <ul>
+      <li>process to eliminate data redundancy, and to remove potential update inconsistencies which arise from inserting, modifying, and deleting data. </li>
+      <li>The goal of normalization is to create a set of relational tables that are free of redundant data and that can be consistently and correctly modified. This means that all tables in a relational database should be in the third normal form (3NF). </li>
+    </ul>
+  </li>
 </ul>
 
-<h3 id="what-is">What is?</h3>
+<h3 id="normalization-types">Normalization Types</h3>
+
 <ul>
-  <li>process to eliminate data redundancy, and to remove potential update inconsistencies which arise from inserting, modifying, and deleting data. </li>
-  <li>The goal of normalization is to create a set of relational tables that are free of redundant data and that can be consistently and correctly modified. This means that all tables in a relational database should be in the third normal form (3NF). </li>
-  <li>A relational table is in 3NF if and only if all non-key columns are (a) mutually independent and (b) fully dependent upon the primary key. Mutual independence means that no non-key column is dependent upon any combination of the other columns. The first two normal forms are intermediate steps to achieve the goal of having all tables in 3NF. In order to better understand the 2NF and higher forms, it is necessary to understand the concepts of functional dependencies and lossless decomposition.</li>
+  <li><strong>1st Normal Form</strong> 
+    <ul>
+      <li><em>No multi-value columns</em></li>
+      <li>A relational table, by definition, is in first normal form. </li>
+      <li>1NF requires all values of the columns to be atomic. That is, they contain no repeating values like comma-separated names. </li>
+      <li>Table in 1NF contains redundancy of data. Redundancy causes what is called as <strong>Update anomalies</strong></li>
+    </ul>
+  </li>
 </ul>
 
-<h3 id="types">Types</h3>
+<p><img src="/technology/1NF.png" /></p>
 
 <ul>
-  <li>1st Normal Form- A relational table, by definition, is in first normal form. 1NF requires all values of the columns to be atomic. That is, they contain no repeating values. Table in 1NF contains redundancy of data. Redundancy causes what is called as ‘Update anomalies’</li>
-  <li>2nd Normal Form- The second normal form (or 2NF) any non-key columns must depend on the entire primary key. In the case of a composite primary key, this means that a non-key column cannot depend on only part of the composite key.</li>
-  <li>3rd Normal Form- Third Normal Form (3NF) requires that all columns depend directly on the primary key. Tables violate the 3NF when one column depends on another column, which in turn depends on the primary key (a transitive dependency). One way to identify transitive dependencies is to look at your table and see if any columns would require updating if another column in the table was updated. If such a column exists, it probably violates 3NF. </li>
-  <li>4th Normal Form-</li>
-  <li>5th Normal Form- </li>
-  <li>Update Anomalies-Problems that arise when information is inserted, updated or deleted</li>
+  <li><strong>2nd Normal Form</strong>
+    <ul>
+      <li><em>No partial dependencies</em></li>
+      <li>any non-key columns must depend on the entire primary key. In the case of a composite primary key, this means that a non-key column cannot depend on only part of the composite key.</li>
+    </ul>
+  </li>
 </ul>
+
+<p><img src="/technology/2NF.png" /></p>
+
+<ul>
+  <li><strong>3rd Normal Form</strong>
+    <ul>
+      <li><em>No transitive dependencies</em></li>
+      <li>3NF requires that every non-prime attribute must be dependent on primary key. </li>
+      <li>Tables violate the 3NF when one column depends on another column, which in turn depends on the primary key (<strong>a transitive dependency</strong>). One way to identify transitive dependencies is to look at your table and see if any columns would require updating if another column in the table was updated. If such a column exists, it probably violates 3NF. </li>
+      <li>A relational table is in 3NF if and only if all non-key columns are 
+        <ul>
+          <li>(a) mutually independent (means that no non-key column is dependent upon any combination of the other columns.)</li>
+          <li>(b) fully dependent upon the primary key.  </li>
+        </ul>
+      </li>
+      <li>The first two normal forms are intermediate steps to achieve the goal of having all tables in 3NF. In order to better understand the 2NF and higher forms, it is necessary to understand the concepts of functional dependencies and lossless decomposition.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/technology/3NF.png" /></p>
+
+<ul>
+  <li>Denormalization</li>
+</ul>
+
+<p><a href="http://www.ibm.com/support/knowledgecenter/SSEPEK_10.0.0/com.ibm.db2z10.doc.intro/src/tpc/db2z_denormalizationforperformance.htm">Denormalization for performance</a></p>
 
 <h1 id="patterns">Patterns</h1>
 
 <ul>
-  <li>How do you implement 1-to-1, 1-to-many and many-to-many relationships while designing tables? </li>
-  <li>1-to-1 relationship can be implemented as a single table and rarely as two tables with primary and foreign key relationships. </li>
-  <li>1-to-Many relationships are implemented by splitting the data into two tables with primary key and foreign key relationships. </li>
-  <li>Many-to-Many relationships are implemented using a junction table with the keys from both the tables forming the composite primary key of the junction table.</li>
+  <li>How do you implement 1-to-1, 1-to-many and many-to-many relationships while designing tables? 
+    <ul>
+      <li>1-to-1 relationship can be implemented as a single table and rarely as two tables with primary and foreign key relationships. </li>
+      <li>1-to-Many relationships are implemented by splitting the data into two tables with primary key and foreign key relationships. </li>
+      <li>Many-to-Many relationships are implemented using a junction table with the keys from both the tables forming the composite primary key of the junction table.</li>
+    </ul>
+  </li>
 </ul>
 
 <h2 id="bi-temporal-milestoning">Bi-temporal milestoning</h2>

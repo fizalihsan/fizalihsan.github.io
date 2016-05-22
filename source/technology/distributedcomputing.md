@@ -140,7 +140,9 @@ Nodes execute deterministic algorithms: the local computation, the local state a
 
 ## CAP Theorem
 
-The theorem states that only 2 of these 3 properties can be satisfied simultaneously:
+(*Proposed by Eric Brewer in 2000, proved by Seth Gilbert and Nancy Lynch of MIT in 2002*)
+
+The theorem states that in any distributed system, only 2 of these 3 properties can be satisfied simultaneously:
 
 1. **Consistency**: all nodes see the same data at the same time.
 2. **Availability**: node failures do not prevent survivors from continuing to operate.
@@ -151,25 +153,32 @@ The theorem states that only 2 of these 3 properties can be satisfied simultaneo
 We get 3 different system types:
 
 1. **CA (Consistency + Availability)**
-	* Examples include full strict quorum protocols, such as *two-phase commit*.
-	* Strong consistency model; *CANNOT* tolerate any node failures
-	* A CA system does not distinguish between node failures and network failures, and so the only safe thing is to stop accepting writes everywhere to avoid introducing ***divergence*** (or multiple copies).
-	* CA systems are not partition-aware, and often use the two-phase commit algorithm and are common in traditional distributed relational databases.
+  * All relational DBs are CA.
+  * When a partition occurs, the system blocks.
+  * Examples include full strict quorum protocols, such as *two-phase commit*.
+  * Strong consistency model; *CANNOT* tolerate any node failures
+  * A CA system does not distinguish between node failures and network failures, and so the only safe thing is to stop accepting writes everywhere to avoid introducing ***divergence*** (or multiple copies).
+  * CA systems are not partition-aware, and often use the two-phase commit algorithm and are common in traditional distributed relational databases.
 2. **CP (Consistency + Partition Tolerance)**
+  * Say you have three nodes and one node loses its link with the other two. You can create a rule that a result will be returned only when a majority of nodes agree. So, despite having a partition, the system will return a consistent result. However, since the separated node won’t be able to reach consensus it won’t be available even though it’s up.
   * Examples include majority quorum protocols in which minority partitions are unavailable such as *Paxos*.
   * Strong consistency model; *CAN* tolerate node failures
-  * CP systems incorporate network partitions into their failure model and distinguish between a majority partition and a minority partition using an algorithm like Paxos, Raft or viewstamped replication
+  * CP systems incorporate network partitions into their failure model and distinguish between a majority partition and a minority partition using an algorithm like [Paxos](http://harry.me/blog/2014/12/27/neat-algorithms-paxos/), [Raft](https://ramcloud.stanford.edu/raft.pdf) or viewstamped replication. ([A primer on consensus](http://harry.me/blog/2013/07/07/id-like-to-have-an-argument-a-primer-on-consensus/))
   * in a non-Byzantine failure model, a CP system can tolerate the failure of a minority `n` nodes as long as majority `n+1` stays up in a system with`2n+1` nodes. 
   * A CP system prevents divergence (e.g. maintains single-copy consistency) by forcing asymmetric behavior on the two sides of the partition. It only keeps the majority partition around, and requires the minority partition to become unavailable (e.g. stop accepting writes), which retains a degree of availability (the majority partition) and still ensures *single-copy consistency*.
 3. **AP (Availability + Partition Tolerance)**
+  * Say you have two nodes and the link between the two is severed. Since both nodes are up, you can design the system to accept requests on each of the nodes, which will make the system available despite the network being partitioned. However, each node will issue its own results, so by providing high availability and partition tolerance you’ll compromise consistency.
+  * The system is still available under partitioning, but some returned data may be inaccurate, e.g., DNS, caches, Master/Slave replication.
+  * Needs a conflict resolution strategy.
   * Examples include protocols using conflict resolution, such as *Dynamo*.
 
 In a distributed system, managing consistency(C), availability(A) and partition toleration(P) is important. 
+
 * Eric Brewer put forth the CAP theorem which states that in any distributed system we can choose only two of consistency, availability or partition tolerance. 
 * Consistency and availability are not really binary choices, unless you limit yourself to strong consistency. But strong consistency is just one consistency model: the one where you, by necessity, need to give up availability in order to prevent more than a single copy of the data from being active.
 * Many NoSQL databases try to provide options where the developer has choices where they can tune the database as per their needs. 
 
-For example if you consider a distributed database. There are essentially three variables r, w, n where
+For example if you consider a distributed database, there are essentially three variables r, w, n where
 
 * `r` = number of nodes that should respond to a read request before its considered successful.
 * `w` = number of nodes that should respond to a write request before its considered successful.
@@ -179,12 +188,6 @@ In a cluster with 5 nodes,
 
 * we can tweak the `r`, `w`, `n` values to make the system very consistent by setting `r=5` and `w=5` but now we have made the cluster susceptible to network partitions since any write will not be considered successful when any node is not responding. 
 * We can make the same cluster highly available for writes or reads by setting `r=1` and `w=1`  but now consistency can be compromised since some nodes may not have the latest copy of the data. 
-
-The CAP theorem states that 
-
-* if you get a network partition, you have to trade off *data availability versus data consistency*. 
-* Durability can also be traded off against latency, particularly if you want to survive failures with replicated data
-
 
 
 ## Consistency Models
@@ -199,6 +202,7 @@ There are 2 types of consistency models:
 2. **Weak consistency model**: do not make such guarantees
 
 > Below is not an exhaustive list
+
 ### Strong consistency models 
 
 (capable of maintaining a single copy)

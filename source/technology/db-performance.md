@@ -19,13 +19,14 @@ An index is an ordered set of pointers associated with a table, and is used for 
 
 ## How Indexes work?
 
-Each index entry contains a search-key value and a pointer to the row containing that value. If you specify the ALLOW REVERSE SCANS parameter in the CREATE INDEX statement, the values can be searched in both ascending and descending order. It is therefore possible to bracket the search, given the right predicate. An index can also be used to obtain rows in an ordered sequence, eliminating the need for the database manager to sort the rows after they are read from the table.
+* Each index entry contains a search-key value and a pointer to the row containing that value. If you specify the `ALLOW REVERSE SCANS` parameter while creating the index, the values can be searched in both ascending and descending order. It is therefore possible to bracket the search, given the right predicate. 
+* An index can also be used to obtain rows in an ordered sequence, eliminating the need for the database manager to sort the rows after they are read from the table.
 
 Although the optimizer decides whether to use an index to access table data, except in the following case, you must decide which indexes might improve performance and create these indexes. Exceptions are the dimension block indexes and the composite block index that are created automatically for each dimension that you specify when you create a multi-dimensional clustering (MDC) table.
 
 In addition to the search-key value and row pointer, an index can contain include columns, which are non-indexed columns in the indexed row. Such columns might make it possible for the optimizer to get required information only from the index, without accessing the table itself.
 
-## Limitations
+## Limitations of Indexes
 
 Although indexes can reduce access time significantly, they can also have adverse effects on performance. Before you create indexes, consider the effects of multiple indexes on disk space and processing time:
 
@@ -46,7 +47,7 @@ The query contains a column in a join clause that matches at least the first col
 
 ## Index Types
 
-1. **Clustered** Any index structure having the data accessed in the same way the index is organized so that data with similar or the same key values is stored (or clustered) together. Clustering tends to greatly reduce input/output (I/O) time for queries and sorting.
+* **Clustered** Any index structure having the data accessed in the same way the index is organized so that data with similar or the same key values is stored (or clustered) together. Clustering tends to greatly reduce input/output (I/O) time for queries and sorting.
 * **Non-clustered**
 * **Unique index**
 * **Hashtable index** - An index that maps primary key values to block data addresses in the database for otherwise un-ordered data. Not good for range searches
@@ -57,7 +58,8 @@ The query contains a column in a join clause that matches at least the first col
 * **Covering Index** - An index with enough information to satisfy certain queries by itself, in other words, the query can be satisfied merely by searching the index and not the database.
 * **B+ Tree** 
   * Basic table index based on one or more attributes, often used to enforce uniqueness of primary keys.
-  * These indexes are the standard index type. They are excellent for primary key and highly-selective indexes. Used as concatenated indexes, B-tree indexes can retrieve data sorted by the indexed columns. B-tree indexes have the following subtypes:
+  * These indexes are the standard index type. They are excellent for primary key and highly-selective indexes. Used as concatenated indexes, B-tree indexes can retrieve data sorted by the indexed columns. 
+  * B-tree indexes have the following subtypes:
     * **Index-organized tables**: An index-organized table differs from a heap-organized because the data is itself the index. 
     * **Reverse key indexes**: In this type of index, the bytes of the index key are reversed, for example, 103 is stored as 301. The reversal of bytes spreads out inserts into the index over many blocks. 
     * **Descending indexes**: This type of index stores data on a particular column or columns in descending order. 

@@ -146,8 +146,7 @@ The theorem states that only 2 of these 3 properties can be satisfied simultaneo
 2. **Availability**: node failures do not prevent survivors from continuing to operate.
 3. **Partition tolerance**: the system continues to operate despite message loss due to network and/or node failure
 
-![http://book.mixu.net/distsys/images/CAP.png](http://book.mixu.net/distsys/images/CAP.png)
-
+| {% img /technology/cap2.png %} | {% img /technology/cap_venn.png %} |
 
 We get 3 different system types:
 
@@ -165,7 +164,28 @@ We get 3 different system types:
 3. **AP (Availability + Partition Tolerance)**
   * Examples include protocols using conflict resolution, such as *Dynamo*.
 
-Consistency and availability are not really binary choices, unless you limit yourself to strong consistency. But strong consistency is just one consistency model: the one where you, by necessity, need to give up availability in order to prevent more than a single copy of the data from being active.
+In a distributed system, managing consistency(C), availability(A) and partition toleration(P) is important. 
+* Eric Brewer put forth the CAP theorem which states that in any distributed system we can choose only two of consistency, availability or partition tolerance. 
+* Consistency and availability are not really binary choices, unless you limit yourself to strong consistency. But strong consistency is just one consistency model: the one where you, by necessity, need to give up availability in order to prevent more than a single copy of the data from being active.
+* Many NoSQL databases try to provide options where the developer has choices where they can tune the database as per their needs. 
+
+For example if you consider a distributed database. There are essentially three variables r, w, n where
+
+* `r` = number of nodes that should respond to a read request before its considered successful.
+* `w` = number of nodes that should respond to a write request before its considered successful.
+* `n` = number of nodes where the data is replicated aka replication factor.
+
+In a cluster with 5 nodes, 
+
+* we can tweak the `r`, `w`, `n` values to make the system very consistent by setting `r=5` and `w=5` but now we have made the cluster susceptible to network partitions since any write will not be considered successful when any node is not responding. 
+* We can make the same cluster highly available for writes or reads by setting `r=1` and `w=1`  but now consistency can be compromised since some nodes may not have the latest copy of the data. 
+
+The CAP theorem states that 
+
+* if you get a network partition, you have to trade off *data availability versus data consistency*. 
+* Durability can also be traded off against latency, particularly if you want to survive failures with replicated data
+
+
 
 ## Consistency Models
 

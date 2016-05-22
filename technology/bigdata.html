@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Big Data Big Data Concepts CAP Theorem MapReduce (Programming Model) Big Data Ecology HDFS (Hadoop Distributed File System) Daemons MapReduce ( &hellip;">
+<meta name="description" content="Big Data Big Data Concepts MapReduce (Programming Model) Big Data Ecology HDFS (Hadoop Distributed File System) Daemons MapReduce (Hadoop &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -116,10 +116,7 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#big-data-concepts">Big Data Concepts</a>    <ul>
-      <li><a href="#cap-theorem">CAP Theorem</a></li>
-    </ul>
-  </li>
+  <li><a href="#big-data-concepts">Big Data Concepts</a></li>
   <li><a href="#mapreduce-programming-model">MapReduce (Programming Model)</a></li>
   <li><a href="#big-data-ecology">Big Data Ecology</a>    <ul>
       <li><a href="#hdfs-hadoop-distributed-file-system">HDFS (Hadoop Distributed File System)</a></li>
@@ -175,29 +172,12 @@ messageStyle: "none",
   <li>Adhoc query</li>
   <li>Sharding</li>
   <li>Replication</li>
-  <li>Fault tolerance</li>
+  <li>Fault tolerance
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Byzantine_fault_tolerance">Byzantine fault tolerance</a></li>
+    </ul>
+  </li>
 </ul>
-
-<h2 id="cap-theorem">CAP Theorem</h2>
-
-<p>In a distributed system, managing consistency(C), availability(A) and partition toleration(P) is important, Eric Brewer put forth the CAP theorem which states that in any distributed system we can choose only two of consistency, availability or partition tolerance. Many NoSQL databases try to provide options where the developer has choices where they can tune the database as per their needs. </p>
-
-<p>For example if you consider a distributed database. There are essentially three variables r, w, n where</p>
-
-<ul>
-  <li><code>r</code> = number of nodes that should respond to a read request before its considered successful.</li>
-  <li><code>w</code> = number of nodes that should respond to a write request before its considered successful.</li>
-  <li><code>n</code> = number of nodes where the data is replicated aka replication factor.</li>
-</ul>
-
-<p>In a cluster with 5 nodes, </p>
-
-<ul>
-  <li>we can tweak the r,w,n values to make the system very consistent by setting r=5 and w=5 but now we have made the cluster susceptible to network partitions since any write will not be considered successful when any node is not responding. </li>
-  <li>We can make the same cluster highly available for writes or reads by setting r=1 and w=1  but now consistency can be compromised since some nodes may not have the latest copy of the data. </li>
-</ul>
-
-<p>The CAP theorem states that if you get a network partition, you have to trade off availability of data versus consistency of data. Durability can also be traded off against latency, particularly if you want to survive failures with replicated data</p>
 
 <h1 id="mapreduce-programming-model">MapReduce (Programming Model)</h1>
 

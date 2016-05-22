@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Transaction Management Overview Transaction Properties ACID property BASE property ACID vs. BASE CAP Theorem Combination 1: CA Combination 2: CP &hellip;">
+<meta name="description" content="Transaction Management Overview Consistency Models ACID property BASE property CAP Theorem Transaction Models Local transactions Programmatic &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -117,16 +117,10 @@ messageStyle: "none",
   
   <ul id="markdown-toc">
   <li><a href="#overview">Overview</a></li>
-  <li><a href="#transaction-properties">Transaction Properties</a>    <ul>
+  <li><a href="#consistency-models">Consistency Models</a>    <ul>
       <li><a href="#acid-property">ACID property</a></li>
       <li><a href="#base-property">BASE property</a></li>
-      <li><a href="#acid-vs-base">ACID vs. BASE</a></li>
-      <li><a href="#cap-theorem">CAP Theorem</a>        <ul>
-          <li><a href="#combination-1-ca">Combination 1: CA</a></li>
-          <li><a href="#combination-2-cp">Combination 2: CP</a></li>
-          <li><a href="#combination-3-ap">Combination 3: AP</a></li>
-        </ul>
-      </li>
+      <li><a href="#cap-theorem">CAP Theorem</a></li>
     </ul>
   </li>
   <li><a href="#transaction-models">Transaction Models</a>    <ul>
@@ -138,18 +132,11 @@ messageStyle: "none",
       </li>
     </ul>
   </li>
-  <li><a href="#transaction-isolation-level">Transaction Isolation Level</a>    <ul>
-      <li><a href="#dirty-read--read-uncommitted">Dirty Read / Read Uncommitted</a></li>
-      <li><a href="#read-committed">Read Committed</a></li>
-      <li><a href="#repeatable-read">Repeatable Read</a></li>
-      <li><a href="#serializable">Serializable</a></li>
-    </ul>
-  </li>
+  <li><a href="#transaction-isolation-level">Transaction Isolation Level</a></li>
   <li><a href="#transaction-read-phenomena">Transaction Read Phenomena</a>    <ul>
-      <li><a href="#dirty-read--uncommitted-read">Dirty Read / Uncommitted Read</a></li>
-      <li><a href="#non-repeatable-read">Non-Repeatable Read</a></li>
-      <li><a href="#phantom-read">Phantom Read</a></li>
-      <li><a href="#serializable-vs-snapshot">Serializable Vs. Snapshot</a></li>
+      <li><a href="#dirty-read--uncommitted-read">1. Dirty Read / Uncommitted Read</a></li>
+      <li><a href="#non-repeatable-read">2. Non-Repeatable Read</a></li>
+      <li><a href="#phantom-read">3. Phantom Read</a></li>
     </ul>
   </li>
   <li><a href="#distributed-transaction-processing">Distributed Transaction Processing</a>    <ul>
@@ -178,10 +165,16 @@ messageStyle: "none",
 <h1 id="overview">Overview</h1>
 
 <ul>
-  <li>JTA &amp; JTS
+  <li>JTA (Java Transaction API)
     <ul>
-      <li>JTA is a high level, implementation-independent, protocol independent API that allows applications and application servers to access transactions. An API like JDBC implemented by vendors - typically by commercial servers or by open source txn managers such as JBoss Txn Service or JOTM.</li>
-      <li>JTS (Java Transaction Services) - JTS specifies the implementation of a Transaction Manager which supports JTA and implements the Java mapping of the OMG Object Transaction Service (OTS) 1.1 specification at the level below the API. JTS propagates transactions using the Internet Inter-ORB Protocol (IIOP).</li>
+      <li>is a high-level, implementation-independent, protocol-independent API that allows applications and application servers to access transactions. </li>
+      <li>is an API, just like JDBC, implemented by vendors - typically by commercial servers or by open source txn managers such as JBoss Txn Service or JOTM.</li>
+    </ul>
+  </li>
+  <li>JTS (Java Transaction Services)
+    <ul>
+      <li>specifies the implementation of a Transaction Manager which supports JTA and implements the Java mapping of the OMG Object Transaction Service (OTS) 1.1 specification at the level below the API. </li>
+      <li>JTS propagates transactions using the Internet Inter-ORB Protocol (IIOP).</li>
     </ul>
   </li>
   <li>JTA interfaces
@@ -194,30 +187,30 @@ messageStyle: "none",
   </li>
 </ul>
 
-<h1 id="transaction-properties">Transaction Properties</h1>
-
-<p><span style="color:red">TODO </span></p>
+<h1 id="consistency-models">Consistency Models</h1>
 
 <h2 id="acid-property">ACID property</h2>
 
 <ul>
   <li><strong>Atomicity</strong> - means a txn must either be a commit or rollback all updates as a single unit of work.</li>
-  <li><strong>Consistency</strong> - means during the course of the txn, the resource (db or EMS) will not be left in an inconsisten state.</li>
+  <li><strong>Consistency</strong> - means during the course of the txn, the resource (db or EMS) will not be left in an inconsistent state.</li>
   <li><strong>Isolation</strong> - During the course of the txn, intermittent status of various participants is not visible to the external world.</li>
   <li><strong>Durability</strong> - means when the txn is committed, then it is guaranteed that the txn is complete and the db or JMS updates are permanent.</li>
 </ul>
 
+<p>ACID mean that once a transaction is complete, its data is consistent (<em>tech lingo: write consistency</em>) and stable on disk, which may involve multiple distinct memory locations.</p>
+
+<p>Write consistency can be a wonderful thing for application developers, but it also requires sophisticated locking which is typically a heavyweight pattern for most use cases.</p>
+
 <h2 id="base-property">BASE property</h2>
 
 <ul>
-  <li>Basically Available</li>
-  <li>Soft state</li>
-  <li>Eventual Consistency</li>
+  <li><strong>Basic Availability</strong> - The database appears to work most of the time.</li>
+  <li><strong>Soft-state</strong> - Stores don’t have to be write-consistent, nor do different replicas have to be mutually consistent all the time.</li>
+  <li><strong>Eventual consistency</strong> - Stores exhibit consistency at some later point (e.g., lazily at read time).</li>
 </ul>
 
-<h2 id="acid-vs-base">ACID vs. BASE</h2>
-
-<p>???</p>
+<p>A BASE datastore values availability (since that’s important for scale), but it doesn’t offer guaranteed consistency of replicated data at write time. Overall, the BASE consistency model provides a less strict assurance than ACID: data will be consistent in the future, either at read time (e.g., Riak) or it will always be consistent, but only for certain processed past snapshots (e.g., Datomic).</p>
 
 <h2 id="cap-theorem">CAP Theorem</h2>
 
@@ -225,21 +218,21 @@ messageStyle: "none",
 
 <p>http://ivoroshilin.com/2012/12/13/brewers-cap-theorem-explained-base-versus-acid/</p>
 
-<h3 id="combination-1-ca">Combination 1: CA</h3>
+<p><strong>Combination 1: CA</strong></p>
 
 <ul>
   <li>What does it mean?</li>
   <li>When to use this?</li>
 </ul>
 
-<h3 id="combination-2-cp">Combination 2: CP</h3>
+<p><strong>Combination 2: CP</strong></p>
 
 <ul>
   <li>What does it mean?</li>
   <li>When to use this?</li>
 </ul>
 
-<h3 id="combination-3-ap">Combination 3: AP</h3>
+<p><strong>Combination 3: AP</strong></p>
 
 <ul>
   <li>What does it mean?</li>
@@ -255,7 +248,7 @@ messageStyle: "none",
   <li>Developer manages connection, not the txn.</li>
   <li><strong>Pros</strong>
     <ul>
-      <li>Simple code - All you have to do is to reset the auto commit on Connection to false</li>
+      <li>Code is simple code. All you have to do is to turn off auto commit on Connection, and commit/rollback when needed.</li>
       <li>Works well for simple applications</li>
     </ul>
   </li>
@@ -263,7 +256,7 @@ messageStyle: "none",
     <ul>
       <li>Error-prone. Plenty of room for developers to make mistakes which could be disastrous.</li>
       <li>Works only on a single resource. Cannot co-ordinate a txn across global resources like Db and EMS.</li>
-      <li>Say if the txn code is split between different DAOs, the connection needs to be explicitly passed (called as connection passing strategy) which is typically error-prone.</li>
+      <li>Say if the txn code is split between different DAOs, the connection needs to be explicitly passed (called as <strong><em>connection passing strategy</em></strong>) which is typically error-prone.</li>
     </ul>
   </li>
 </ul>
@@ -272,7 +265,7 @@ messageStyle: "none",
 
 <ul>
   <li>Leverages JTA API implementation</li>
-  <li>Developer manages txn rather than the connection, using javax.transaction.UserTransaction</li>
+  <li>Developer manages txn rather than the connection, using <code>javax.transaction.UserTransaction</code></li>
 </ul>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>EJB Example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
@@ -309,7 +302,13 @@ messageStyle: "none",
 <span class="line-number">10</span>
 <span class="line-number">11</span>
 <span class="line-number">12</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">transaction</span><span class="o">.</span><span class="na">support</span><span class="o">.</span><span class="na">TransactionTemplate</span> <span class="o">=</span> <span class="k">new</span> <span class="o">...</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kn">import</span> <span class="nn">org.springframework.transaction.support.*</span><span class="o">;</span>
+</span><span class="line">
+</span><span class="line"><span class="n">TransactionTemplate</span> <span class="n">transactionTemplate</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">TransactionTemplate</span><span class="o">();</span>
+</span><span class="line">
 </span><span class="line"><span class="n">transactionTemplate</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="k">new</span> <span class="nf">TransactionCallback</span><span class="o">(){</span>
 </span><span class="line">    <span class="kd">public</span> <span class="n">Object</span> <span class="nf">doInTransaction</span><span class="o">(</span><span class="n">TransactionStatus</span> <span class="n">status</span><span class="o">){</span>
 </span><span class="line">      <span class="k">try</span><span class="o">{</span>
@@ -330,9 +329,7 @@ messageStyle: "none",
 </ul>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">UserTransaction</span> <span class="n">txn</span> <span class="o">=</span> <span class="o">(</span><span class="n">UserTransaction</span><span class="o">)</span><span class="k">new</span> <span class="nf">InitialContext</span><span class="o">()</span>
-</span><span class="line">					<span class="o">.</span><span class="na">lookup</span><span class="o">(</span><span class="s">&quot;javax.transaction.UserTransaction&quot;</span><span class="o">);</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">UserTransaction</span> <span class="n">txn</span> <span class="o">=</span> <span class="o">(</span><span class="n">UserTransaction</span><span class="o">)</span><span class="k">new</span> <span class="nf">InitialContext</span><span class="o">().</span><span class="na">lookup</span><span class="o">(</span><span class="s">&quot;javax.transaction.UserTransaction&quot;</span><span class="o">);</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>However, the look up string name could be different for app servers. To run the code outside of a container like for unit test cases, TransactionManager interface is used as below.</p>
@@ -348,8 +345,8 @@ messageStyle: "none",
 </pre></td><td class="code"><pre><code class="java"><span class="line"><span class="c1">//Websphere EJB txn manager example</span>
 </span><span class="line"><span class="n">Class</span> <span class="n">txnClass</span> <span class="o">=</span> <span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">&quot;com.ibm.ejs.jts.jta.TransactionManagerFactory&quot;</span><span class="o">);</span>
 </span><span class="line">
-</span><span class="line"><span class="n">TransactionManager</span> <span class="n">mgr</span> <span class="o">=</span> <span class="o">(</span><span class="n">TransactionManager</span><span class="o">)</span><span class="n">txnClass</span>
-</span><span class="line">					<span class="o">.</span><span class="na">getMethod</span><span class="o">(</span><span class="s">&quot;getTransactionManager&quot;</span><span class="o">,</span> <span class="kc">null</span><span class="o">).</span><span class="na">invoke</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+</span><span class="line"><span class="n">TransactionManager</span> <span class="n">mgr</span> <span class="o">=</span> <span class="o">(</span><span class="n">TransactionManager</span><span class="o">)</span><span class="n">txnClass</span><span class="o">.</span><span class="na">getMethod</span><span class="o">(</span><span class="s">&quot;getTransactionManager&quot;</span><span class="o">,</span> <span class="kc">null</span><span class="o">)</span>
+</span><span class="line">          <span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
 </span><span class="line">
 </span><span class="line"><span class="c1">//Start the txn via txn manager</span>
 </span><span class="line"><span class="n">mgr</span><span class="o">.</span><span class="na">begin</span><span class="o">();</span>
@@ -410,8 +407,8 @@ messageStyle: "none",
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <ul>
-  <li>As in the above EJB example, developer invokes only the setRollbackOnly method. At class level, we specify that it uses declarative transaction through the annotation. </li>
-  <li>In Spring, developer need not call the method explicitly. Instead the rollback rules of when to rollback is specified in the TransactionAttributeSource interceptor. We specify that it uses declarative transaction through TransactionProxyFactoryBean proxy - the txn bean is wrapped with a proxy.</li>
+  <li>As in the above EJB example, developer invokes only the <code>setRollbackOnly()</code> method. At class level, we specify that it uses declarative transaction through the annotation. </li>
+  <li>In Spring, developer need not call the method explicitly. Instead the rollback rules of when to rollback is specified in the <code>TransactionAttributeSource</code> interceptor. We specify that it uses declarative transaction through <code>TransactionProxyFactoryBean</code> proxy - the txn bean is wrapped with a proxy.</li>
 </ul>
 
 <h3 id="transaction-attributes">Transaction Attributes</h3>
@@ -489,29 +486,37 @@ messageStyle: "none",
 
 <p>Transaction isolation is a function of db concurrency and db consistency. As we increase the level of txn isolation, we in effect lower the db concurrency but increase the db consistency. (Isolation­­­ &amp; Consistency are inversely proportional to concurrency )</p>
 
-<h2 id="dirty-read--read-uncommitted">Dirty Read / Read Uncommitted</h2>
-
 <ul>
-  <li>Allows transactions to read non-committed updates made by other transactions.</li>
-  <li>Lowest level of isolation supported by EJB &amp; Spring.</li>
-</ul>
-
-<h2 id="read-committed">Read Committed</h2>
-
-<ul>
-  <li>Allows multiple transactions to access the same data, hiding the non-committed updates from other transactions until they are committed.</li>
-  <li>This is the default isolation setting for most of the databases.</li>
-</ul>
-
-<h2 id="repeatable-read">Repeatable Read</h2>
-
-<p>Ensures that once a set of values are read from the db for a particular txn, that same set of values will be read every time the select statement is executed, unless the txn holding the read and write locks modifies the data.</p>
-
-<h2 id="serializable">Serializable</h2>
-
-<ul>
-  <li>Interleaving txns are stacked up so that only one txn is allowed access to data at a time.</li>
-  <li>Lowest level of isolation supported by Java.</li>
+  <li><strong>Data concurrency</strong> means that many users can access data at the same time.</li>
+  <li>
+    <p><strong>Data consistency</strong> means that each user sees a consistent view of the data, including visible changes made by the user’s own transactions and transactions of other users.</p>
+  </li>
+  <li><strong>1. Dirty Read / Read Uncommitted</strong>
+    <ul>
+      <li>Allows transactions to read non-committed updates made by other transactions.</li>
+      <li>Lowest level of isolation supported by EJB &amp; Spring.</li>
+    </ul>
+  </li>
+  <li><strong>2. Read Committed</strong>
+    <ul>
+      <li>Allows multiple transactions to access the same data, hiding the non-committed updates from other transactions until they are committed.</li>
+      <li>This is the default isolation setting for most of the databases.</li>
+    </ul>
+  </li>
+  <li><strong>3. Repeatable Read</strong>
+    <ul>
+      <li>Repeatable read is a higher isolation level, that in addition to the guarantees of the read committed level, it also guarantees that any data read cannot change, if the transaction reads the same data again, it will find the previously read data in place, unchanged, and available to read.</li>
+      <li>Ensures that once a set of values are read from the db for a particular txn, that same set of values will be read every time the select statement is executed, unless the txn holding the read and write locks modifies the data.</li>
+    </ul>
+  </li>
+  <li><strong>4. Serializable</strong>
+    <ul>
+      <li>serializable makes an even stronger guarantee: in addition to everything repeatable read guarantees, it also guarantees that no new data can be seen by a subsequent read</li>
+      <li>Interleaving txns are stacked up so that only one txn is allowed access to data at a time.</li>
+      <li>The serializable mode of transaction behavior tries to ensure that transactions run in such a way that they appear to be executed one at a time, or serially, rather than concurrently.</li>
+      <li>Lowest level of isolation supported by Java.</li>
+    </ul>
+  </li>
 </ul>
 
 <table>
@@ -533,27 +538,58 @@ messageStyle: "none",
   </tbody>
 </table>
 
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">BEGIN</span> <span class="n">TRANSACTION</span><span class="p">;</span>
+</span><span class="line"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">T</span><span class="p">;</span>
+</span><span class="line"><span class="n">WAITFOR</span> <span class="n">DELAY</span> <span class="s1">&#39;00:01:00&#39;</span>
+</span><span class="line"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">T</span><span class="p">;</span>
+</span><span class="line"><span class="k">COMMIT</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>That is a simple task that issue two reads from table T, with a delay of 1 minute between them.</p>
+
+<ul>
+  <li>under READ COMITTED, the second SELECT may return <strong><em>any data</em></strong>. A concurrent transaction may update the record, delete it, insert new records. The second select will always see the <strong><em>new data</em></strong>.</li>
+  <li>under REPEATABLE READ, the second SELECT is guaranteed to see the rows that has seen at first select <strong><em>unchanged</em></strong>. New rows may be added by a concurrent transaction in that one minute, but the existing rows cannot be deleted nor changed.</li>
+  <li>
+    <p>under SERIALIZABLE, the second select is guaranteed to see <strong><em>exactly</em></strong> the same rows as the first. No row can change, nor deleted, nor new rows could be inserted by a concurrent transaction.</p>
+  </li>
+  <li><strong>SNAPSHOT</strong>
+    <ul>
+      <li>And finally, there is also the SNAPSHOT isolation level. SNAPSHOT isolation level makes the same guarantees as serializable, but not by requiring that no concurrent transaction can modify the data, but by making every reader see it’s own version of the world (it’s own ‘snapshot’). This makes it very easy to program against, very scalable as it does not block concurrent updates, but of course it has a price, and the price is extra server resource consumption.</li>
+    </ul>
+  </li>
+</ul>
+
 <h1 id="transaction-read-phenomena">Transaction Read Phenomena</h1>
 
 <p>Transaction Read Phenomena</p>
 
 <p>http://docs.oracle.com/cd/B28359_01/server.111/b28318/consist.htm</p>
 
-<h2 id="dirty-read--uncommitted-read">Dirty Read / Uncommitted Read</h2>
+<p>The ANSI/ISO SQL standard (SQL92) defines 4 levels of transaction isolation with differing degrees of impact on transaction processing throughput. These isolation levels are defined in terms of 3 phenomena that must be prevented between concurrently executing transactions.</p>
+
+<p>The three preventable phenomena are:</p>
+
+<h2 id="dirty-read--uncommitted-read">1. Dirty Read / Uncommitted Read</h2>
 
 <ul>
   <li>One process (P1) modifies a row, and another process (P2) then reads that row before it is committed by P1. If P1 then rolls back the change, P2 will have read a row that was never committed and that may thus be considered to have never existed.</li>
   <li>Isolation Level: <code>READ UNCOMMITTED</code></li>
 </ul>
 
-<h2 id="non-repeatable-read">Non-Repeatable Read</h2>
+<h2 id="non-repeatable-read">2. Non-Repeatable Read</h2>
 
 <ul>
   <li>Process P1 reads a row. Process P2 then modifies or deletes that rows and commits the change. If P1 re-reads the row it receives the modified value or discovers the row has been deleted.</li>
   <li>Isolation Level: <code>READ COMMITTED</code></li>
 </ul>
 
-<h2 id="phantom-read">Phantom Read</h2>
+<h2 id="phantom-read">3. Phantom Read</h2>
 
 <ul>
   <li>Process P1 reads the set of rows N that satisfy some search condition. Process P2 then executes statements that generate one or more rows that satisfy the search condition. If P1 repeats the query it obtains a different collection of rows.</li>
@@ -566,9 +602,40 @@ messageStyle: "none",
   </li>
 </ul>
 
-<h2 id="serializable-vs-snapshot">Serializable Vs. Snapshot</h2>
-
-<p>???</p>
+<table>
+  <tbody>
+    <tr>
+      <td><strong>Isolation Level</strong></td>
+      <td><strong>Dirty Read</strong></td>
+      <td><strong>Nonrepeatable Read</strong></td>
+      <td><strong>Phantom Read</strong></td>
+    </tr>
+    <tr>
+      <td><strong>Read Uncommitted</strong></td>
+      <td>Possible</td>
+      <td>Possible</td>
+      <td>Possible</td>
+    </tr>
+    <tr>
+      <td><strong>Read Committed</strong></td>
+      <td>Not Possible</td>
+      <td>Possible</td>
+      <td>Possible</td>
+    </tr>
+    <tr>
+      <td><strong>Repeatable Read</strong></td>
+      <td>Not Possible</td>
+      <td>Not Possible</td>
+      <td>Possible</td>
+    </tr>
+    <tr>
+      <td><strong>Serializable</strong></td>
+      <td>Not Possible</td>
+      <td>Not Possible</td>
+      <td>Not Possible</td>
+    </tr>
+  </tbody>
+</table>
 
 <h1 id="distributed-transaction-processing">Distributed Transaction Processing</h1>
 
@@ -580,7 +647,7 @@ messageStyle: "none",
 
 <ul>
   <li>The X/Open XA Interface is a bi-directional system-level interface that forms the communication bridge between a transaction manager and 1 or more resource managers. </li>
-  <li>The Transaction Manager manages the lifecycle of a txn, and co-ordinates resources. In JTA, txn manager is abstracted through the javax.transaction.TransactionManager interface and implemented through the underlying transaction service.</li>
+  <li>The Transaction Manager manages the lifecycle of a txn, and co-ordinates resources. In JTA, txn manager is abstracted through the <code>javax.transaction.TransactionManager</code> interface and implemented through the underlying transaction service.</li>
   <li>The Resource Manager controls and manages the actual resource participating in the txn like db or JMS queue.</li>
   <li>
     <p>XA txn should only be used when a transaction needs to be coordinated between multiple resources, i.e., databases, queues or topics. </p>
@@ -594,7 +661,7 @@ messageStyle: "none",
 
 <ul>
   <li>Without XA, messages sent to a topic/queue are typically read by receivers immediately. With XA, the message in the queue would not be released until the txn is committed.</li>
-  <li>To perform a XA txn between multiple resources, each participating resource should be an XA resource. (Some vendors support a feature where 1 resource could be a non-XA resource.### )</li>
+  <li>To perform a XA txn between multiple resources, each participating resource should be an XA resource. (Some vendors support a feature where 1 resource could be a non-XA resource. )</li>
 </ul>
 
 <h2 id="phase-commit-protocol">2-phase commit protocol</h2>
@@ -644,9 +711,9 @@ messageStyle: "none",
 <p>The 3 JTA Heuristic exceptions in JTA are</p>
 
 <ul>
-  <li>HeuristicRollbackException - between phase 1 and 2, if <em>all the resource mgrs</em> decides to rollback the txn, then upon entering phase 2 of the commit request this exception is thrown back to the caller.</li>
-  <li>HeuristicMixedException - same as above, but this is thrown if <em>one of the resource mgrs</em> decides to rollback.</li>
-  <li>HeuristicCommitException</li>
+  <li><code>HeuristicRollbackException</code> - between phase 1 and 2, if <em>all the resource mgrs</em> decides to rollback the txn, then upon entering phase 2 of the commit request this exception is thrown back to the caller.</li>
+  <li><code>HeuristicMixedException</code> - same as above, but this is thrown if <em>one of the resource mgrs</em> decides to rollback.</li>
+  <li><code>HeuristicCommitException</code></li>
 </ul>
 
 <h1 id="transaction-strategies">Transaction Strategies</h1>
@@ -740,8 +807,8 @@ messageStyle: "none",
   </li>
   <li>Websites
     <ul>
-      <li>IBM - Txn Mgmt Series - Mark Richards - http://www.ibm.com/developerworks/views/java/libraryview.jsp?site_id=1&amp;contentarea_by=Java&amp;sort_by=Date&amp;sort_order=1&amp;start=1&amp;end=6&amp;topic_by=&amp;product_by=&amp;type_by=All%20Types&amp;show_abstract=true&amp;search_by=transaction%20strategies:&amp;industry_by=&amp;series_title_by=</li>
-      <li>Spring Txn Mgmt - http://static.springsource.org/spring/docs/3.0.x/reference/transaction.html</li>
+      <li><a href="http://www.ibm.com/developerworks/views/java/libraryview.jsp?site_id=1&amp;contentarea_by=Java&amp;sort_by=Date&amp;sort_order=1&amp;start=1&amp;end=6&amp;topic_by=&amp;product_by=&amp;type_by=All%20Types&amp;show_abstract=true&amp;search_by=transaction%20strategies:&amp;industry_by=&amp;series_title_by=">IBM - Txn Mgmt Series - Mark Richards</a></li>
+      <li><a href="http://static.springsource.org/spring/docs/3.0.x/reference/transaction.html">Spring Txn Mgmt</a></li>
       <li>http://www.jboss.org/jbosstm/resources/fundamentals.html</li>
       <li>http://www.pjug.org/jta-j2ee-pjug-2003-07-22.ppt</li>
       <li><a href="http://www.subbu.org/articles/transactions/NutsAndBoltsOfTP.html">Nuts And Bolts Of TP</a></li>

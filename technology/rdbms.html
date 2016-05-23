@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="RDBMS Concepts Concepts Keys Integrity Constraints Data Types LOB Cursors Triggers Joins Join Algorithms Nested Loop Join Merge Join / Sort-Merge &hellip;">
+<meta name="description" content="RDBMS Concepts Concepts Keys Integrity Constraints Data Types Table Types LOB Cursors Triggers Joins Join Algorithms Nested Loop Join Merge Join / &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -123,6 +123,7 @@ messageStyle: "none",
         </ul>
       </li>
       <li><a href="#data-types">Data Types</a></li>
+      <li><a href="#table-types">Table Types</a></li>
       <li><a href="#lob">LOB</a></li>
       <li><a href="#cursors">Cursors</a></li>
       <li><a href="#triggers">Triggers</a></li>
@@ -210,6 +211,56 @@ Both primary key and unique enforce uniqueness of the column on which they are d
 
 <h2 id="data-types">Data Types</h2>
 
+<h2 id="table-types">Table Types</h2>
+
+<ul>
+  <li><strong>Heap-organized table</strong> 
+    <ul>
+      <li>A heap-organized table is a table with rows stored in no particular order. This is a standard Oracle table; the term “heap” is used to differentiate it from an <em>index-organized table</em> or <em>external table</em>.</li>
+      <li>If a row is moved within a heap-organized table, the row’s ROWID will also change</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">t1</span> <span class="p">(</span><span class="n">c1</span> <span class="nb">NUMBER</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span> <span class="n">c2</span> <span class="n">VARCHAR2</span><span class="p">(</span><span class="mi">30</span><span class="p">))</span> <span class="n">ORGANIZATION</span> <span class="n">HEAP</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><strong>Index-organized Table (IOT)</strong>
+    <ul>
+      <li>An index-organized table (IOT) is a type of table that stores data in a <em>B-Tree</em> index structure.</li>
+      <li>IOTs store rows in a B-tree index structure that is logically sorted in primary key order. </li>
+      <li>Unlike normal primary key indexes, which store only the columns included in its definition, IOT indexes store all the columns of the table</li>
+      <li>Advantages
+        <ul>
+          <li>As an IOT has the structure of an index and stores all the columns of the row, accesses via primary key conditions are faster as they don’t need to access the table to get additional column values.</li>
+          <li>As an IOT has the structure of an index and is thus sorted in the order of the primary key, accesses of a range of primary key values are also faster.</li>
+          <li>As the index and the table are in the same segment, less storage space is needed.</li>
+          <li>In addition, as rows are stored in the primary key order, you can further reduce space with key compression.</li>
+          <li>As all indexes on an IOT uses logical rowids, they will not become unusable if the table is reorganized.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">my_iot</span> <span class="p">(</span><span class="n">id</span> <span class="nb">INTEGER</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span> <span class="n">value</span> <span class="n">VARCHAR2</span><span class="p">(</span><span class="mi">50</span><span class="p">))</span> <span class="n">ORGANIZATION</span> <span class="k">INDEX</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<ul>
+  <li><strong>External Table</strong>
+    <ul>
+      <li>An external table is a table that is NOT stored within the Oracle database. Data is loaded from a file via an access driver (normally ORACLE_LOADER) when the table is accessed. </li>
+      <li>One can think of an external table as a view that allows running SQL queries against files on a filesystem without the need to first loaded the data into the database.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="n">DIRECTORY</span> <span class="n">my_data_dir</span> <span class="k">as</span> <span class="s1">&#39;/my/data/dir/&#39;</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
 <h2 id="lob">LOB</h2>
 
 <h2 id="cursors">Cursors</h2>
@@ -276,22 +327,38 @@ Each time you fetch a row from the cursor,it results in a network round trip, wh
   <li>
     <p>http://publib.boulder.ibm.com/infocenter/iseries/v5r4/index.jsp?topic=%2Fsqlp%2Frbafyjoin.htm </p>
   </li>
-  <li><strong>Inner Join</strong> - Records in both table A and table B where the given condition matches. e.g, <code>SELECT * FROM TableA INNER JOIN TableB ON TableA.name = TableB.name</code></li>
-  <li><strong>Cross Join</strong>
+  <li><strong>Inner Join</strong> (<em>ANSI supported</em>)
+    <ul>
+      <li>Records in both table A and table B where the given condition matches. e.g, <code>SELECT * FROM TableA INNER JOIN TableB ON TableA.name = TableB.name</code></li>
+    </ul>
+  </li>
+  <li><strong>Cross Join</strong> (<em>ANSI supported</em>)
     <ul>
       <li>Every possible pair of rows from both the tables. Basically a cartesian product</li>
       <li>If no condition is provided in Inner join, then it becomes a cross join. e.g., <code>SELECT * FROM TableA CROSS JOIN TableB</code></li>
     </ul>
   </li>
-  <li><strong>Left Outer Join</strong>
+  <li><strong>Left Outer Join</strong> (<em>ANSI supported</em>)
     <ul>
       <li>produces a complete set of records from Table A, with the matching records (where available) in Table B. If there is no match, the right side will contain null.</li>
       <li>e.g., <code>SELECT * FROM TableA LEFT OUTER JOIN TableB ON TableA.name = TableB.name</code></li>
     </ul>
   </li>
-  <li><strong>Right Outer Join</strong> - e.g., <code>SELECT * FROM TableA RIGHT OUTER JOIN TableB ON TableA.name = TableB.name</code></li>
-  <li><strong>Full Outer Join</strong> = Left Outer + Right Outer. e.g., <code>SELECT * FROM TableA FULL OUTER JOIN TableB ON TableA.name = TableB.name</code></li>
-  <li><strong>Outer Join</strong> - Records NOT in table A and table B where the given condition matches. e.g, <code>SELECT * FROM TableA FULL OUTER JOIN TableB ON TableA.name = TableB.name WHERE TableA.id IS null OR TableB.id IS null </code></li>
+  <li><strong>Right Outer Join</strong> (<em>ANSI supported</em>)
+    <ul>
+      <li>e.g., <code>SELECT * FROM TableA RIGHT OUTER JOIN TableB ON TableA.name = TableB.name</code></li>
+    </ul>
+  </li>
+  <li><strong>Full Outer Join</strong>  (<em>ANSI supported</em>)
+    <ul>
+      <li>Full Outer Join = Left Outer + Right Outer. e.g., <code>SELECT * FROM TableA FULL OUTER JOIN TableB ON TableA.name = TableB.name</code></li>
+    </ul>
+  </li>
+  <li><strong>Outer Join</strong>
+    <ul>
+      <li>Records NOT in table A and table B where the given condition matches. e.g, <code>SELECT * FROM TableA FULL OUTER JOIN TableB ON TableA.name = TableB.name WHERE TableA.id IS null OR TableB.id IS null </code></li>
+    </ul>
+  </li>
   <li><strong>Exception join</strong> - A left exception join returns only the rows from the first table that do not have a match in the second table.</li>
   <li><strong>Equijoin</strong> - </li>
   <li><strong>Natural Join</strong>- is an equijoin with redundant columns removed. </li>
@@ -403,9 +470,18 @@ Each time you fetch a row from the cursor,it results in a network round trip, wh
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <ul>
-  <li>How to identify the performance order (Big-O notation) of a query?</li>
-  <li>How query execution order works when a SQL has sub-queries in it?</li>
-  <li>When we need to use USING clause in the sql? For example in this below: SELECT emp_name, department_name, city FROM employees e JOIN departments d USING (department_id) JOIN locations l USING (location_id) WHERE salary &gt; 10000;</li>
+  <li>When we need to use USING clause in the sql? For example in this below: </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">SELECT</span> <span class="n">emp_name</span><span class="p">,</span> <span class="n">department_name</span><span class="p">,</span> <span class="n">city</span> <span class="k">FROM</span> <span class="n">employees</span> <span class="n">e</span>
+</span><span class="line"><span class="k">JOIN</span> <span class="n">departments</span> <span class="n">d</span> <span class="k">USING</span> <span class="p">(</span><span class="n">department_id</span><span class="p">)</span>
+</span><span class="line"><span class="k">JOIN</span> <span class="n">locations</span> <span class="n">l</span> <span class="k">USING</span> <span class="p">(</span><span class="n">location_id</span><span class="p">)</span> <span class="k">WHERE</span> <span class="n">salary</span> <span class="o">&gt;</span> <span class="mi">10000</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
   <li>How to delete duplicate records in a table? </li>
 </ul>
 
@@ -414,12 +490,141 @@ Each time you fetch a row from the cursor,it results in a network round trip, wh
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <ul>
-  <li>What will be the o/p of this query? 
+  <li>What will be the output of this query? 
     <ul>
       <li><code>SELECT 1 FROM DUAL UNION SELECT 'A' FROM DUAL;</code> The query would throw an error. The two data types in the union set should be same. Out here it is a 1 and ‘A’, datatype mismatch and hence the error.</li>
     </ul>
   </li>
+  <li>What does <code>UNION</code> do? What is the difference between <code>UNION</code> and <code>UNION ALL</code>?
+    <ul>
+      <li><code>UNION</code> merges the contents of two structurally-compatible tables into a single combined table. </li>
+      <li>The difference between <code>UNION</code> and <code>UNION ALL</code> is that <code>UNION</code> will omit duplicate records whereas <code>UNION ALL</code> will include duplicate records.</li>
+      <li>Performance-wise <code>UNION ALL</code> is typically be better than <code>UNION</code>, since <code>UNION</code> requires the server to do the additional work of removing any duplicates.</li>
+    </ul>
+  </li>
+  <li>What will be the result of the query below? Explain your answer and provide a version that behaves correctly?</li>
 </ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">select</span> <span class="k">case</span> <span class="k">when</span> <span class="k">null</span> <span class="o">=</span> <span class="k">null</span> <span class="k">then</span> <span class="s1">&#39;Yup&#39;</span> <span class="k">else</span> <span class="s1">&#39;Nope&#39;</span> <span class="k">end</span> <span class="k">as</span> <span class="k">Result</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>This query will actually yield “Nope”, seeming to imply that <code>null</code> is not equal to itself! The reason for this is that the proper way to compare a value to <code>null</code> in SQL is with the <code>is</code> operator, not with <code>=</code>.</p>
+
+<ul>
+  <li>What will be the result of the query below?</li>
+</ul>
+
+<p><code>SELECT * FROM runners;</code></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>id</th>
+      <th>name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>John Doe</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Jane Doe</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Alice Jones</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Bobby Louis</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>Lisa Romero</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><code>SELECT * FROM races;</code></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>id</th>
+      <th>event</th>
+      <th>winner_id</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>100 meter dash</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>500 meter dash</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>cross-country</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>triathalon</td>
+      <td>NULL</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><code>SELECT * FROM runners WHERE id NOT IN (SELECT winner_id FROM races)</code></p>
+
+<p>Answer:
+Surprisingly, given the sample data provided, the result of this query will be an empty set. The reason for this is as follows: <em>If the set being evaluated by the SQL <code>NOT IN</code> condition contains any values that are <code>null</code>, then the outer query here will return an empty set, even if there are many runner ids that match winner_ids in the races table</em>.</p>
+
+<p>Knowing this, a query that avoids this issue would be as follows:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">runners</span> <span class="k">WHERE</span> <span class="n">id</span> <span class="k">NOT</span> <span class="k">IN</span> <span class="p">(</span><span class="k">SELECT</span> <span class="n">winner_id</span> <span class="k">FROM</span> <span class="n">races</span> <span class="k">WHERE</span> <span class="n">winner_id</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">null</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Given a table SALARIES, such as the one below, that has m = male and f = female values. Swap all f and m values (i.e., change all f values to m and vice versa) with a single update query and no intermediate temp table.</li>
+</ul>
+
+<p>Answer: </p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">UPDATE</span> <span class="n">SALARIES</span> <span class="k">SET</span> <span class="n">sex</span> <span class="o">=</span> <span class="k">CASE</span> <span class="n">sex</span> <span class="k">WHEN</span> <span class="s1">&#39;m&#39;</span> <span class="k">THEN</span> <span class="s1">&#39;f&#39;</span> <span class="k">ELSE</span> <span class="s1">&#39;m&#39;</span> <span class="k">END</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Write a SQL query using <code>UNION ALL</code> (not <code>UNION</code>) that uses the <code>WHERE</code> clause to eliminate duplicates. Why might you want to do this?</li>
+</ul>
+
+<p>Answer:
+You can avoid duplicates using <code>UNION ALL</code> and still run much faster than <code>UNION</code> by running a query like this:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">mytable</span> <span class="k">WHERE</span> <span class="n">a</span><span class="o">=</span><span class="n">X</span> <span class="k">UNION</span> <span class="k">ALL</span> <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">mytable</span> <span class="k">WHERE</span> <span class="n">b</span><span class="o">=</span><span class="n">Y</span> <span class="k">AND</span> <span class="n">a</span><span class="o">!=</span><span class="n">X</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>The key is the <code>AND a!=X</code> part. This gives you the benefits of the <code>UNION</code> command, while avoiding much of its performance hit.</p>
+
+<ul>
+  <li>What are the <code>NVL</code> and the <code>NVL2</code> functions in SQL? How do they differ?</li>
+</ul>
+
+<p>Both the <code>NVL(exp1, exp2)</code> and <code>NVL2(exp1, exp2, exp3)</code> functions check the value <code>exp1</code> to see if it is null.</p>
+
+<p>With the <code>NVL(exp1, exp2)</code> function, if <code>exp1</code> is not null, then the value of <code>exp1</code> is returned; otherwise, the value of <code>exp2</code> is returned, but case to the same data type as that of <code>exp1</code>.</p>
+
+<p>With the <code>NVL2(exp1, exp2, exp3)</code> function, if <code>exp1</code> is not null, then <code>exp2</code> is returned; otherwise, the value of <code>exp3</code> is returned.</p>
 
 <h1 id="bibliography">Bibliography</h1>
 

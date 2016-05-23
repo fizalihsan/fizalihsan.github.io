@@ -60,10 +60,10 @@ The query contains a column in a join clause that matches at least the first col
   * Basic table index based on one or more attributes, often used to enforce uniqueness of primary keys.
   * These indexes are the standard index type. They are excellent for primary key and highly-selective indexes. Used as concatenated indexes, B-tree indexes can retrieve data sorted by the indexed columns. 
   * B-tree indexes have the following subtypes:
-    * **Index-organized tables**: An index-organized table differs from a heap-organized because the data is itself the index. 
-    * **Reverse key indexes**: In this type of index, the bytes of the index key are reversed, for example, 103 is stored as 301. The reversal of bytes spreads out inserts into the index over many blocks. 
+    * **Index-organized tables**: [For more details](/technology/rdbms.html#table-types)
+    * **Reverse key indexes**: In this type of index, the bytes of the index key are reversed, for example, 103 is stored as 301. The reversal of bytes spreads out inserts into the index over many blocks. Reversing the key value is particularly useful for indexing data such as sequence numbers, where each new key value is greater than the prior value, i.e., values monotonically increase. Reverse key indexes have become particularly important in high volume transaction processing systems because they reduce contention for index blocks.
     * **Descending indexes**: This type of index stores data on a particular column or columns in descending order. 
-B-tree cluster indexes
+    * B-tree cluster indexes
 * **Dense Vs Sparse Index** - A dense index has a pointer to each row in the table; a sparse index has at most one pointer to each block or page in the table.
 * **Function-based indexes**
 * **Application Domain indexes**
@@ -74,8 +74,8 @@ B-tree cluster indexes
 * **Range searches** - Clustered indexes can improve performance for range retrievals because it can be used to set the bounds of a search, even if the query involves the large percentage of the rows in the table. Because the data is in sorted order, the db can use it to find the starting and ending points of the range, and scan only the data pages within the range. 
 * Without a clustered index, the rows could be randomly spread throughout the table, and the db would have to perform a table scan to find all rows within the range. 
 * Columns containing number of duplicates - Same concept holds true for indexes on columns with a large number of duplicates. With a clustered index, the duplicate values are grouped together. This minimizes the no. of pages that would have to be read to retrieve them. 
-* Columns often referenced in an ORDER BY. Most sorts require that the table be copied into a buffer pool(DB2) or work table in tempdb(Sybase). This incurs additional I/O overhead. However if you're performing an ORDER BY on clustered index columns on a table, you can avoid creating a work table even if a query contains no search arguments.
-* Columns other than primary key reference in join clauses - Clustered indexes can also be more efficient for joins that are non-clustered indexes, cos clustered indexes usually are much smaller in size; typically they are atleast on level less in the B-tree. 
+* **Columns often referenced in an ORDER BY**. Most sorts require that the table be copied into a buffer pool(DB2) or work table in tempdb(Sybase). This incurs additional I/O overhead. However if you're performing an ORDER BY on clustered index columns on a table, you can avoid creating a work table even if a query contains no search arguments.
+* **Columns other than primary key reference in join clauses** - Clustered indexes can also be more efficient for joins that are non-clustered indexes, because clustered indexes usually are much smaller in size; typically they are atleast one level less in the B-tree. 
 * **Single index table** - If you require only a single index on a table, it typically is advantageous to make it a clustered index, as the resulting overhead of maintaining clustered indexes during updates, inserts and deletes can be considerably less than the other one. 
 
 ## Index Covering 
@@ -115,16 +115,35 @@ B-tree cluster indexes
 ## Properties of an Index (Oracle feature)
 
 * **Usability**
-  * Indexes are usable (default) or unusable. An unusable index is not maintained by DML operations and is ignored by the optimizer. An unusable index can improve the performance of bulk loads. Instead of dropping an index and later re-creating it, you can make the index unusable and then rebuild it. Unusable indexes and index partitions do not consume space. When you make a usable index unusable, the database drops its index segment.
+  * Indexes are usable (default) or unusable. 
+  * An unusable index is not maintained by DML operations and is ignored by the optimizer.  
+  * An unusable index can improve the performance of bulk loads.  
+  * Instead of dropping an index and later re-creating it, you can make the index unusable and then rebuild it.  
+  * Unusable indexes and index partitions do not consume space.  
+  * When you make a usable index unusable, the database drops its index segment.
 * **Visibility**
-  * Indexes are visible (default) or invisible. An invisible index is maintained by DML operations and is not used by default by the optimizer. Making an index invisible is an alternative to making it unusable or dropping it. Invisible indexes are especially useful for testing the removal of an index before dropping it or using indexes temporarily without affecting the overall application.
+  * Indexes are visible (default) or invisible.  
+  * An invisible index is maintained by DML operations and is not used by default by the optimizer.  
+  * Making an index invisible is an alternative to making it unusable or dropping it.  
+  * Invisible indexes are especially useful for testing the removal of an index before dropping it or using indexes temporarily without affecting the overall application.
 * **Composite Indexes**
-  * A composite index, also called a concatenated index, is an index on multiple columns in a table. Columns in a composite index should appear in the order that makes the most sense for the queries that will retrieve data and need not be adjacent in the table.
-  * `CREATE INDEX employees_ix ON employees (last_name, job_id, salary);`
-  * Queries that access all three columns, only the last_name column, or only the last_name and job_id columns use this index. In this example, queries that do not access the last_name column do not use the index.
+  * A composite index, also called a *concatenated index*, is an index on multiple columns in a table. 
+  * Columns in a composite index should appear in the order that makes the most sense for the queries that will retrieve data and need not be adjacent in the table. In the below example, this index will be used
+    * by queries that access all three columns
+    * by queries that access only the `last_name` column
+    * by queries that access only the `last_name` and `job_id` columns use this index. In this example, queries that do not access the `last_name` column do not use the index.
+
+```sql
+CREATE INDEX employees_ix ON employees (last_name, job_id, salary);
+```
+
   * Multiple indexes can exist for the same table if the permutation of columns differs for each index. You can create multiple indexes using the same columns if you specify distinctly different permutations of the columns. For example, the following SQL statements specify valid permutations:
-  * `CREATE INDEX employee_idx1 ON employees (last_name, job_id);`
-  * `CREATE INDEX employee_idx2 ON employees (job_id, last_name);`
+
+```sql
+CREATE INDEX employee_idx1 ON employees (last_name, job_id);
+CREATE INDEX employee_idx2 ON employees (job_id, last_name);
+```
+
 * **Unique and Nonunique Indexes**
   * Indexes can be unique or nonunique. Unique indexes guarantee that no two rows of a table have duplicate values in the key column or column. For example, no two employees can have the same employee ID. Thus, in a unique index, one rowid exists for each data value. The data in the leaf blocks is sorted only by key.
   * Nonunique indexes permit duplicates values in the indexed column or columns. For example, the first_name column of the employees table may contain multiple Mike values. For a nonunique index, the rowid is included in the key in sorted order, so nonunique indexes are sorted by the index key and rowid (ascending).
@@ -156,7 +175,11 @@ How do you tune a SQL query? How do you use an access plan?
 
 ## Query Execution Plan
 
-* What is?
+
+An execution plan is basically a road map that graphically or textually shows the data retrieval methods chosen by the SQL server’s query optimizer for a stored procedure or ad hoc query. Execution plans are very useful for helping a developer understand and analyze the performance characteristics of a query or stored procedure, since the plan is used to execute the query or stored procedure.
+
+In many SQL systems, a textual execution plan can be obtained using a keyword such as `EXPLAIN`, and visual representations can often be obtained as well. In Microsoft SQL Server, the Query Analyzer has an option called *Show Execution Plan* (located on the Query drop down menu). If this option is turned on, it will display query execution plans in a separate window when a query is run.
+
 * How to read a query execution plan?
 
 Page Extent - Denotes the # of contiguous pages of data read from the hard disk at a time. SQL reads 8 pages(64K) at a time.

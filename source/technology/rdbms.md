@@ -55,6 +55,38 @@ ALTER TABLE table_name ADD CONSTRAINT constraint_name CHECK ( PRICE > 100 AND DA
 
 ## Data Types
 
+## Table Types
+
+* **Heap-organized table** 
+  * A heap-organized table is a table with rows stored in no particular order. This is a standard Oracle table; the term "heap" is used to differentiate it from an *index-organized table* or *external table*.
+  * If a row is moved within a heap-organized table, the row's ROWID will also change
+
+```sql
+CREATE TABLE t1 (c1 NUMBER PRIMARY KEY, c2 VARCHAR2(30)) ORGANIZATION HEAP;
+```
+
+* **Index-organized Table (IOT)**
+  * An index-organized table (IOT) is a type of table that stores data in a *B-Tree* index structure.
+  * IOTs store rows in a B-tree index structure that is logically sorted in primary key order. 
+  * Unlike normal primary key indexes, which store only the columns included in its definition, IOT indexes store all the columns of the table
+  * Advantages
+    * As an IOT has the structure of an index and stores all the columns of the row, accesses via primary key conditions are faster as they don't need to access the table to get additional column values.
+    * As an IOT has the structure of an index and is thus sorted in the order of the primary key, accesses of a range of primary key values are also faster.
+    * As the index and the table are in the same segment, less storage space is needed.
+    * In addition, as rows are stored in the primary key order, you can further reduce space with key compression.
+    * As all indexes on an IOT uses logical rowids, they will not become unusable if the table is reorganized.
+
+```sql
+CREATE TABLE my_iot (id INTEGER PRIMARY KEY, value VARCHAR2(50)) ORGANIZATION INDEX;
+```
+* **External Table**
+  * An external table is a table that is NOT stored within the Oracle database. Data is loaded from a file via an access driver (normally ORACLE_LOADER) when the table is accessed. 
+  * One can think of an external table as a view that allows running SQL queries against files on a filesystem without the need to first loaded the data into the database.
+
+```sql
+CREATE OR REPLACE DIRECTORY my_data_dir as '/my/data/dir/';
+```
+
 ## LOB
 
 ## Cursors
@@ -102,16 +134,20 @@ Triggers are special kind of stored procedures that get executed automatically w
 * [A Visual Explanation of SQL Joins - Coding Horror](http://www.codinghorror.com/blog/2007/10/a-visual-explanation-of-sql-joins.html)
 * http://publib.boulder.ibm.com/infocenter/iseries/v5r4/index.jsp?topic=%2Fsqlp%2Frbafyjoin.htm 
 
-* **Inner Join** - Records in both table A and table B where the given condition matches. e.g, `SELECT * FROM TableA INNER JOIN TableB ON TableA.name = TableB.name`
-* **Cross Join**
+* **Inner Join** (*ANSI supported*)
+  * Records in both table A and table B where the given condition matches. e.g, `SELECT * FROM TableA INNER JOIN TableB ON TableA.name = TableB.name`
+* **Cross Join** (*ANSI supported*)
   * Every possible pair of rows from both the tables. Basically a cartesian product
   * If no condition is provided in Inner join, then it becomes a cross join. e.g., `SELECT * FROM TableA CROSS JOIN TableB`
-* **Left Outer Join**
+* **Left Outer Join** (*ANSI supported*)
   * produces a complete set of records from Table A, with the matching records (where available) in Table B. If there is no match, the right side will contain null.
   * e.g., `SELECT * FROM TableA LEFT OUTER JOIN TableB ON TableA.name = TableB.name`
-* **Right Outer Join** - e.g., `SELECT * FROM TableA RIGHT OUTER JOIN TableB ON TableA.name = TableB.name`
-* **Full Outer Join** = Left Outer + Right Outer. e.g., `SELECT * FROM TableA FULL OUTER JOIN TableB ON TableA.name = TableB.name`
-* **Outer Join** - Records NOT in table A and table B where the given condition matches. e.g, `SELECT * FROM TableA FULL OUTER JOIN TableB ON TableA.name = TableB.name WHERE TableA.id IS null OR TableB.id IS null `
+* **Right Outer Join** (*ANSI supported*)
+  * e.g., `SELECT * FROM TableA RIGHT OUTER JOIN TableB ON TableA.name = TableB.name`
+* **Full Outer Join**  (*ANSI supported*)
+  * Full Outer Join = Left Outer + Right Outer. e.g., `SELECT * FROM TableA FULL OUTER JOIN TableB ON TableA.name = TableB.name`
+* **Outer Join**
+  * Records NOT in table A and table B where the given condition matches. e.g, `SELECT * FROM TableA FULL OUTER JOIN TableB ON TableA.name = TableB.name WHERE TableA.id IS null OR TableB.id IS null `
 * **Exception join** - A left exception join returns only the rows from the first table that do not have a match in the second table.
 * **Equijoin** - 
 * **Natural Join**- is an equijoin with redundant columns removed. 
@@ -193,18 +229,96 @@ select department_name, city from departments dept
 join locations loc on (d.location_id = l.id); -- specify different column name for the tables for the join.
 ```
 
+* When we need to use USING clause in the sql? For example in this below: 
 
-* How to identify the performance order (Big-O notation) of a query?
-* How query execution order works when a SQL has sub-queries in it?
-* When we need to use USING clause in the sql? For example in this below: SELECT emp_name, department_name, city FROM employees e JOIN departments d USING (department_id) JOIN locations l USING (location_id) WHERE salary > 10000;
+```sql
+SELECT emp_name, department_name, city FROM employees e 
+JOIN departments d USING (department_id) 
+JOIN locations l USING (location_id) WHERE salary > 10000;
+```
+
 * How to delete duplicate records in a table? 
 
 ``` sql
 DELETE FROM test t1 WHERE EXISTS ( SELECT * FROM test t2 WHERE t2.col1=t1.col1 AND t2.rowid <> t1.rowid);
 ```
 
-* What will be the o/p of this query? 
+* What will be the output of this query? 
   * `SELECT 1 FROM DUAL UNION SELECT 'A' FROM DUAL;` The query would throw an error. The two data types in the union set should be same. Out here it is a 1 and 'A', datatype mismatch and hence the error.
+
+* What does `UNION` do? What is the difference between `UNION` and `UNION ALL`?
+  * `UNION` merges the contents of two structurally-compatible tables into a single combined table. 
+  * The difference between `UNION` and `UNION ALL` is that `UNION` will omit duplicate records whereas `UNION ALL` will include duplicate records.
+  * Performance-wise `UNION ALL` is typically be better than `UNION`, since `UNION` requires the server to do the additional work of removing any duplicates.
+
+* What will be the result of the query below? Explain your answer and provide a version that behaves correctly?
+
+```sql
+select case when null = null then 'Yup' else 'Nope' end as Result;
+```
+
+This query will actually yield “Nope”, seeming to imply that `null` is not equal to itself! The reason for this is that the proper way to compare a value to `null` in SQL is with the `is` operator, not with `=`.
+
+* What will be the result of the query below?
+
+`SELECT * FROM runners;`
+
+| id | name         |
+|----|--------------|
+|  1 | John Doe     |
+|  2 | Jane Doe     |
+|  3 | Alice Jones  |
+|  4 | Bobby Louis  |
+|  5 | Lisa Romero  |
+   
+`SELECT * FROM races;`
+
+| id | event          | winner_id |
+|----|----------------|-----------|
+|  1 | 100 meter dash |  2        |
+|  2 | 500 meter dash |  3        |
+|  3 | cross-country  |  2        |
+|  4 | triathalon     |  NULL     |
+
+`SELECT * FROM runners WHERE id NOT IN (SELECT winner_id FROM races)`
+
+Answer:
+Surprisingly, given the sample data provided, the result of this query will be an empty set. The reason for this is as follows: *If the set being evaluated by the SQL `NOT IN` condition contains any values that are `null`, then the outer query here will return an empty set, even if there are many runner ids that match winner_ids in the races table*.
+
+Knowing this, a query that avoids this issue would be as follows:
+
+```sql
+SELECT * FROM runners WHERE id NOT IN (SELECT winner_id FROM races WHERE winner_id IS NOT null)
+```
+
+* Given a table SALARIES, such as the one below, that has m = male and f = female values. Swap all f and m values (i.e., change all f values to m and vice versa) with a single update query and no intermediate temp table.
+
+Answer: 
+
+```sql
+UPDATE SALARIES SET sex = CASE sex WHEN 'm' THEN 'f' ELSE 'm' END
+```
+
+* Write a SQL query using `UNION ALL` (not `UNION`) that uses the `WHERE` clause to eliminate duplicates. Why might you want to do this?
+
+Answer:
+You can avoid duplicates using `UNION ALL` and still run much faster than `UNION` by running a query like this:
+
+```sql
+SELECT * FROM mytable WHERE a=X UNION ALL SELECT * FROM mytable WHERE b=Y AND a!=X
+```
+
+The key is the `AND a!=X` part. This gives you the benefits of the `UNION` command, while avoiding much of its performance hit.
+
+
+* What are the `NVL` and the `NVL2` functions in SQL? How do they differ?
+
+Both the `NVL(exp1, exp2)` and `NVL2(exp1, exp2, exp3)` functions check the value `exp1` to see if it is null.
+
+With the `NVL(exp1, exp2)` function, if `exp1` is not null, then the value of `exp1` is returned; otherwise, the value of `exp2` is returned, but case to the same data type as that of `exp1`.
+
+With the `NVL2(exp1, exp2, exp3)` function, if `exp1` is not null, then `exp2` is returned; otherwise, the value of `exp3` is returned.
+
 
 # Bibliography
 

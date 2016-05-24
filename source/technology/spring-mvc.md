@@ -49,12 +49,118 @@ public class WebConfig {
 	* the configuration file or 
 	* the classes given via `getServletConfigClasses()` method in `AbstractAnnotationConfigDispatcherServletInitializer`
 
-**3 ways to configure `DispatcherServlet`**
+**4 ways to configure `DispatcherServlet`**
 
-1. via web.xml
-Example?????
-2. Implement `WebApplicationInitializer`. (From Spring 3.0, container automatically detects an implementation of this interface)
-3. Extend abstract class `AbstractAnnotationConfigDispatcherServletInitializer` (which implements `WebApplicationInitializer` and invoked by `SpringServletContainerInitializer`). It creates both a `DispatcherServlet` and a `ContextLoaderListener`. (*works only in containers supporting Servlet 3.0*)
+1) *Via `web.xml` with XML-based context files*
+
+```xml Setting up Spring MVC in web.xml
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	
+	<!-- location of the file that defines the root application context loaded by ContextLoaderListener -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/spring/root-context.xml</param-value>
+	</context-param>
+	
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	
+	<!-- DispatcherServlet loads its application context with beans defined in a file whose name is based on servlet name. E.g., if servlet name is 'blah', then an XML file /WEB-INF/blah-context.xml -->
+	<servlet>
+		<servlet-name>appServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>appServlet</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+</web-app>
+```
+
+If you’d rather specify the location of the `DispatcherServlet` configuration file,
+you can set a `contextConfigLocation` initialization parameter on the servlet as follows.
+
+```xml
+<servlet>
+	<servlet-name>appServlet</servlet-name>
+	<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+	<init-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>/WEB-INF/spring/appServlet/servlet-context.xml</param-value>
+	</init-param>
+	<load-on-startup>1</load-on-startup>
+</servlet>
+```
+
+2) *Via `web.xml` with Java-based context classes annotated with `@Configuration`*
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+
+	<context-param>
+		<param-name>contextClass</param-name>
+		<param-value>	org.springframework.web.context.support.AnnotationConfigWebApplicationContext</	param-value>
+	</context-param>
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>com.habuma.spitter.config.RootConfig</param-value>
+	</context-param>
+	
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<servlet>
+		<servlet-name>appServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextClass</param-name>
+			<param-value>.springframework.web.context.support.AnnotationConfigWebApplicationContext</param-value>
+		</init-param>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>com.habuma.spitter.config.WebConfigConfig</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>appServlet</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+</web-app>
+```
+
+3) *Implement `WebApplicationInitializer`* (From Spring 3.0, container automatically detects an implementation of this interface)
+
+```java Manually registering DispatcherServlet
+public class MyServletInitializer implements WebApplicationInitializer {
+	@Override
+	public void onStartup(ServletContext servletContext) throws ServletException {
+		Dynamic myServlet = servletContext.addServlet("myServlet", MyServlet.class);
+		myServlet.addMapping("/custom/**");
+
+		ServletRegistration.Dynamic dispatcher = servletContext.addServlet("dispatcher", new DispatcherServlet());
+		dispatcher.addMapping("/");
+		dispatcher.setLoadOnStartup(1);
+	}
+}
+```
+
+4) *Extend abstract class `AbstractAnnotationConfigDispatcherServletInitializer`* (which implements `WebApplicationInitializer` and invoked by `SpringServletContainerInitializer`). It creates both a `DispatcherServlet` and a `ContextLoaderListener`. (*works only in containers supporting Servlet 3.0*)
 
 ```java Example 1 - Sample WebAppInitializer
 package spittr.config;
@@ -101,7 +207,7 @@ public class HomeController {
 }
 ```
 
-* Request handler method in controller different types of input parameters
+* Various input types to request handler method in controller
 	* No input parameter
 	* `Model`
 	* `java.util.Map`
@@ -109,6 +215,21 @@ public class HomeController {
 	* Parameters annotated with `@PathVariable`
 	* POJO populated with form parameters
 	* `Errors` - used for form validation
+
+* Various output/return types from request handler method in controller
+  * `void`
+  * `String`
+	  * logical view name ("car") 
+	  * physical view name (`/WEB-INF/jsp/car.jsp`)
+	  * special view names (`redirect:/cars/7`)
+	  * ModelAndView
+  * `Model`
+  * `Map`
+  * `ModelMap`
+  * `View`
+  * `@ResponseBody`
+  * `@ModelAttribute`
+
 
 **2 ways to configure a `Controller`**
 
@@ -199,6 +320,12 @@ public String spittles(Model model) {
 * Presenting here some of the commonly used view resolvers
 * Default view resolver is `BeanNameViewResolver`
 
+```java
+public interface ViewResolver {
+	View resolveViewName(String viewName, Locale locale) throws Exception;
+}
+```
+
 ### `BeanNameViewResolver` 
 
 Resolves views as beans in the Spring application context whose ID is the same as the view name. The bean has to implement `View` interface.
@@ -223,7 +350,12 @@ public ViewResolver viewResolver() {
 * `redirect:` - e.g., `return "redirect:/spitter/" + spitter.getUsername();`
 * `forward:` - e.g., `return "forward:/spitter/" + spitter.getUsername();`
 
-# Open questions
+## View
 
-* what are the return types of a controller
-* what are the types of method input parameters passed to the controller
+```java
+public interface View {
+	String getContentType();
+	void render(Map<String, ?> model, HttpServletRequest request, HttpServletResponse response) throws Exception;
+}
+```
+

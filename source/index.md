@@ -9,6 +9,7 @@ footer: true
 ## Technical
   * Architecture
     * [Overview]({{ root_url }}/technology/architecture.html)
+    * [Cloud Computing]({{ root_url }}/technology/cloud-computing.html)
     * [Coding Principles]({{ root_url }}/technology/coding-principles.html)
     * [Concurrency & Parallelism]({{ root_url }}/technology/concurrency-parallelism.html)
     * [Design Principles]({{ root_url }}/technology/design-principles.html)

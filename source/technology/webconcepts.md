@@ -119,13 +119,6 @@ ETag: "3141271342554322343200"
 
 ---
 
-# Web Tools
-
-* [cUrl](http://curl.haxx.se/)
-* Web Log Analytics Tool - Splunk
-* [Simian Army](http://techblog.netflix.com/2011/07/netflix-simian-army.html)
-* [Chaos monkey](http://techblog.netflix.com/2012/07/chaos-monkey-released-into-wild.html)
-
 
 # Bibliography
 

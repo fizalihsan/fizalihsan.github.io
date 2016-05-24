@@ -141,9 +141,7 @@ public class HomeController {
 
 ## User input
 
-**3 ways to get user input**
-
-A client can pass data into a controller's handler method in following ways
+There are 3 ways to get user input into a controller's handler method: 
 
 1) ***Query parameters***
 

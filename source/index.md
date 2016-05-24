@@ -45,7 +45,6 @@ footer: true
     * [JMX]({{ root_url }}/technology/java-jmx.html)
     * [JNDI]({{ root_url }}/technology/java-jndi.html)
     * [Performance]({{ root_url }}/technology/java-performance.html)
-    * [Spring]({{ root_url }}/technology/spring.html)
     * [Testing]({{ root_url }}/technology/java-testing.html)
     * [Web]({{ root_url }}/technology/java-web.html)
     * [Java Specialist Newsletters]({{ root_url }}/technology/java-newsletters.html)
@@ -57,6 +56,10 @@ footer: true
     * [REST]({{ root_url }}/technology/rest-services.html)
     * [SOAP]({{ root_url }}/technology/soap-services.html)
     * [XML]({{ root_url }}/technology/xml.html)
+
+  * Spring
+    * [Core]({{ root_url }}/technology/spring.html)
+    * [MVC]({{ root_url }}/technology/spring-mvc.html)
 
   * Web Programming
     * [Concepts]({{ root_url }}/technology/webconcepts.html)

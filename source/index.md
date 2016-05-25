@@ -58,6 +58,7 @@ footer: true
     * [XML]({{ root_url }}/technology/xml.html)
 
   * Spring
+    * [Batch]({{ root_url }}/technology/spring-batch.html)
     * [Core]({{ root_url }}/technology/spring.html)
     * [MVC]({{ root_url }}/technology/spring-mvc.html)
 

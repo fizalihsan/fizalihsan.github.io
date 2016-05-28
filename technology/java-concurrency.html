@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Java Concurrency Basics Concepts Threading Models Pre-emptive multi-threading Co-operative multi-threading Thread Types Green thread Native thread &hellip;">
+<meta name="description" content="Java Concurrency Basics Concepts Threading Models Thread Types Atomicity Check-then-act Read-modify-write Visibility Synchronization Locks Intrinsic &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -109,16 +109,8 @@ messageStyle: "none",
   
   <ul id="markdown-toc">
   <li><a href="#basics-concepts">Basics Concepts</a>    <ul>
-      <li><a href="#threading-models">Threading Models</a>        <ul>
-          <li><a href="#pre-emptive-multi-threading">Pre-emptive multi-threading</a></li>
-          <li><a href="#co-operative-multi-threading">Co-operative multi-threading</a></li>
-        </ul>
-      </li>
-      <li><a href="#thread-types">Thread Types</a>        <ul>
-          <li><a href="#green-thread">Green thread</a></li>
-          <li><a href="#native-thread">Native thread</a></li>
-        </ul>
-      </li>
+      <li><a href="#threading-models">Threading Models</a></li>
+      <li><a href="#thread-types">Thread Types</a></li>
       <li><a href="#atomicity">Atomicity</a>        <ul>
           <li><a href="#check-then-act">Check-then-act</a></li>
           <li><a href="#read-modify-write">Read-modify-write</a></li>
@@ -236,38 +228,40 @@ messageStyle: "none",
 
 <h2 id="threading-models">Threading Models</h2>
 
-<h3 id="pre-emptive-multi-threading">Pre-emptive multi-threading</h3>
-
 <ul>
-  <li>OS determines when a context switch should occur</li>
-  <li>System may make context switch at an inappropriate time</li>
-  <li>This model is widely used nowadays</li>
-</ul>
-
-<h3 id="co-operative-multi-threading">Co-operative multi-threading</h3>
-
-<ul>
-  <li>The threads themselves determine relinquish control once they are at a stopping point.</li>
-  <li>Can create problems if a thread is waiting for a resource to become available.</li>
+  <li>Pre-emptive multi-threading 
+    <ul>
+      <li>OS determines when a context switch should occur</li>
+      <li>System may make context switch at an inappropriate time</li>
+      <li>This model is widely used nowadays</li>
+    </ul>
+  </li>
+  <li>Co-operative multi-threading
+    <ul>
+      <li>The threads themselves determine relinquish control once they are at a stopping point.</li>
+      <li>Can create problems if a thread is waiting for a resource to become available.</li>
+    </ul>
+  </li>
 </ul>
 
 <h2 id="thread-types">Thread Types</h2>
 
-<h3 id="green-thread">Green thread</h3>
-
 <ul>
-  <li>Green threads emulate multithreaded environments without relying on any native OS capabilities. They run code in user space that manages and schedules threads;</li>
-  <li>Scheduled by JVM rather underlying OS</li>
-  <li>Sun wrote green threads to enable Java to work in environments that do not have native thread support.</li>
-  <li>Uses cooperative multitasking - dangerous</li>
-</ul>
-
-<h3 id="native-thread">Native thread</h3>
-
-<ul>
-  <li>Uses underlying OS native threads</li>
-  <li>Can be scheduled across cores in multi-core or multiprocessor systems</li>
-  <li>Performs better than green threads even in single-core</li>
+  <li><strong>Green thread</strong>
+    <ul>
+      <li>Green threads emulate multithreaded environments without relying on any native OS capabilities. They run code in user space that manages and schedules threads;</li>
+      <li>Scheduled by JVM rather underlying OS</li>
+      <li>Sun wrote green threads to enable Java to work in environments that do not have native thread support.</li>
+      <li>Uses cooperative multitasking - dangerous</li>
+    </ul>
+  </li>
+  <li><strong>Native thread</strong>
+    <ul>
+      <li>Uses underlying OS native threads</li>
+      <li>Can be scheduled across cores in multi-core or multiprocessor systems</li>
+      <li>Performs better than green threads even in single-core</li>
+    </ul>
+  </li>
 </ul>
 
 <h2 id="atomicity">Atomicity</h2>

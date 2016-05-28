@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Data Structures Lists Queues Trees Binary Tree Binary search tree (BST) Balanced Search Trees 2-3 Search Tree Red-Black Tree Graphs Graph Types &hellip;">
+<meta name="description" content="Data Structures Lists Queues Trees Binary Tree Binary search tree (BST) Balanced tree Balanced Search Trees 2-3 Search Tree Red-Black Tree Graphs &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -113,6 +113,7 @@ messageStyle: "none",
   <li><a href="#trees">Trees</a>    <ul>
       <li><a href="#binary-tree">Binary Tree</a></li>
       <li><a href="#binary-search-tree-bst">Binary search tree (BST)</a></li>
+      <li><a href="#balanced-tree">Balanced tree</a></li>
       <li><a href="#balanced-search-trees">Balanced Search Trees</a>        <ul>
           <li><a href="#search-tree">2-3 Search Tree</a></li>
           <li><a href="#red-black-tree">Red-Black Tree</a></li>
@@ -121,7 +122,10 @@ messageStyle: "none",
     </ul>
   </li>
   <li><a href="#graphs">Graphs</a>    <ul>
-      <li><a href="#graph-types">Graph Types</a></li>
+      <li><a href="#undirected-graphs">Undirected Graphs</a></li>
+      <li><a href="#directed-graphs">Directed Graphs</a></li>
+      <li><a href="#minimum-spanning-trees">Minimum Spanning Trees</a></li>
+      <li><a href="#shortest-paths">Shortest Paths</a></li>
     </ul>
   </li>
   <li><a href="#algorithms">Algorithms</a>    <ul>
@@ -133,6 +137,7 @@ messageStyle: "none",
       <li><a href="#searching">Searching</a></li>
     </ul>
   </li>
+  <li><a href="#references">References</a></li>
 </ul>
 
 <h1 id="lists">Lists</h1>
@@ -206,15 +211,17 @@ messageStyle: "none",
   </li>
 </ul>
 
-<p><strong>Balanced tree</strong></p>
+<h2 id="balanced-tree">Balanced tree</h2>
 
 <ul>
-  <li>If a binary tree is balanced, then the height for a tree of <em>n</em> nodes is approximately <em>log n</em>. However, if the tree is completely unbalanced, then the height for a tree with <em>n</em> nodes can be as great as <em>n</em>.</li>
+  <li>If a binary tree is balanced, then the height for a tree of <code>n</code> nodes is approximately <code>log n</code>. However, if the tree is completely unbalanced, then the height for a tree with <code>n</code> nodes can be as great as <code>n</code>.</li>
   <li>a balanced BST will in the average case have operations costing <code>O(log n)</code>, while a badly unbalanced BST can have operations in the worst case costing <code>O(n)</code>.</li>
-  <li>While the BST is simple to implement and efficient when the tree is balanced, the possibility of its being unbalanced is a serious liability. There are techniques for organizing a BST to guarantee good performance: like AVL tree and the splay tree.</li>
+  <li>
+    <p>While the BST is simple to implement and efficient when the tree is balanced, the possibility of its being unbalanced is a serious liability. There are techniques for organizing a BST to guarantee good performance: like AVL tree and the splay tree.</p>
+  </li>
+  <li><strong>Height-balanced binary search tree (OR) AVL tree</strong> (after their Russian inventors  <em>Adelson-Velskii and Landis</em>)</li>
+  <li>Self-balanced tree</li>
 </ul>
-
-<p><strong>Height-balanced binary search tree (OR) AVL tree</strong> (after their Russian inventors  <em>Adelson-Velskii and Landis</em>)</p>
 
 <h2 id="balanced-search-trees">Balanced Search Trees</h2>
 
@@ -226,17 +233,76 @@ messageStyle: "none",
 
 <ul>
   <li>Ideally, we would like to keep our binary search trees <em>perfectly balanced</em>. In an <code>N</code>-node tree, we would like the height to be <code>~log N</code> so that we can guarantee that all searches can be completed in <code>~log N</code> compares, just as for binary search. But, maintaining perfect balance for dynamic insertions is too expensive. </li>
-  <li>2-3 search tree slightly relaxes the perfect balance requirement to provide guaranteed logarithmic performance not just for the insert and search operations in our symbol-table API but also for all of
+  <li>2-3 search tree slightly relaxes the perfect balance requirement to provide <em>guaranteed logarithmic</em> performance not just for the insert and search operations in our symbol-table API but also for all of
 the ordered operations (except range search).</li>
 </ul>
 
+<p><img class="right" src="/technology/2-3-search-tree.png" /></p>
+
+<p><strong>Definition</strong></p>
+
+<p>A <em>2-3 search tree</em> is a tree that is either empty or
+* A <em>2-node</em>, with one key (and associated value) and two links, 
+	* a left link to a 2-3 search tree with smaller keys, and 
+	* a right link to a 2-3 search tree with larger keys
+* A <em>3-node</em>, with two keys (and associated values) and three links, 
+	* a left link to a 2-3 search tree with smaller keys, 
+	* a middle link to a 2-3 search tree with keys between the node’s keys, and 
+	* a right link to a 2-3 search tree with larger keys</p>
+
+<ul>
+  <li>A <em>perfectly balanced 2-3 search tree</em> is one whose null links are all the same distance from the root. To be concise, we use the term 2-3 tree to refer to a perfectly balanced 2-3 search tree</li>
+</ul>
+
 <h3 id="red-black-tree">Red-Black Tree</h3>
+
+<p><img class="right" src="/technology/red-black-tree.png" /></p>
+
+<p><strong>Definition #1</strong></p>
+
+<ul>
+  <li>The basic idea behind red-black BSTs is to <em>encode 2-3 trees</em> by starting with standard BSTs (which are made up of 2-nodes) and adding extra information to encode 3-nodes. </li>
+  <li>We think of the links as being of two different types: 
+    <ul>
+      <li>red links, which bind together two 2-nodes to represent 3-nodes, and </li>
+      <li>black links, which bind together the 2-3 tree.</li>
+    </ul>
+  </li>
+  <li>Specifically, we represent 3-nodes as two 2-nodes connected by a single red link that leans left (one of the 2-nodes is the left child of the other). </li>
+</ul>
+
+<p><strong>Definition #2</strong></p>
+
+<p>Red-black BSTs as BSTs having red and black links and satisfying the following three restrictions:</p>
 
 <ul>
   <li>A red-black tree storing <code>n</code> values has height at most <code>2logn</code>.</li>
   <li>The <code>add(x)</code> and <code>remove(x)</code> operations on a red-black tree run in <code>O(logn)</code> worst-case time.</li>
   <li>The amortized number of rotations performed during an <code>add(x)</code> or <code>remove(x)</code> operation is constant.</li>
 </ul>
+
+<p><strong>1-1 Correspondence between Red-Black BST and 2-3 tree</strong></p>
+
+<ul>
+  <li>If we draw the red links horizontally in a red-black BST, all of the null links are the same distance from the root, and if we then collapse together the nodes connected by red links, the result is a 2-3 tree. </li>
+  <li>Conversely, if we draw 3-nodes in a 2-3 tree as two 2-nodes connected by a red link that leans left, then no node has two red links connected to it, and the tree has perfect black balance, since the black links correspond to the 2-3 tree links, which are perfectly balanced by definition.</li>
+  <li>Whichever way we choose to define them, <em>red-black BSTs are both BSTs and 2-3 trees</em>. </li>
+  <li>Thus, if we can implement the 2-3 tree insertion algorithm by maintaining the 1-1 correspondence, then we get the best of both worlds: 
+    <ul>
+      <li>the simple and efficient search method from standard BSTs and </li>
+      <li>the efficient insertion- balancing method from 2-3 trees.</li>
+    </ul>
+  </li>
+</ul>
+
+<table>
+  <tbody>
+    <tr>
+      <td><img src="/technology/red-black-tree2.png" /></td>
+      <td><img src="/technology/red-black-tree3.png" /></td>
+    </tr>
+  </tbody>
+</table>
 
 <p><strong>Uses</strong></p>
 
@@ -247,18 +313,20 @@ the ordered operations (except range search).</li>
     <p>Linux Kernel</p>
   </li>
   <li>B+ tree &amp; Balanced B+ tree - used in DB indexes</li>
-  <li>Self-balanced tree</li>
   <li>M-way trees</li>
   <li>B trees: Perfectly Height-balanced M-way search trees</li>
-  <li>2-3-4 trees</li>
   <li>Tries</li>
 </ul>
 
 <h1 id="graphs">Graphs</h1>
 
-<h2 id="graph-types">Graph Types</h2>
+<h2 id="undirected-graphs">Undirected Graphs</h2>
 
-<p>Directed, Undirected, Weighted</p>
+<h2 id="directed-graphs">Directed Graphs</h2>
+
+<h2 id="minimum-spanning-trees">Minimum Spanning Trees</h2>
+
+<h2 id="shortest-paths">Shortest Paths</h2>
 
 <h1 id="algorithms">Algorithms</h1>
 
@@ -355,6 +423,11 @@ the ordered operations (except range search).</li>
   <li><a href="http://www.cs.auckland.ac.nz/software/AlgAnim/ds_ToC.html">2</a></li>
 </ul>
 
+<h1 id="references">References</h1>
+
+<ul>
+  <li>Algorithms 4th Edition - Robert Sedgewick and Kevin Wayne</li>
+</ul>
 
   
     <footer>

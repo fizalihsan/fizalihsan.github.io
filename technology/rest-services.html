@@ -1102,7 +1102,7 @@ to maintain. It may even hurt performance.</p>
   <li>If the tags don’t match, the server will send back a <code>200, “OK,”</code> response with the new representation of the resource. If it hasn’t been changed, the server will respond with <code>304, “Not Modified,”</code> and return no representation. In both cases, the server should send an updated <code>Cache-Control</code> and <code>ETag</code> header if appropriate.</li>
   <li>A <em>strong ETag</em> should change whenever any bit of the resource’s representation changes. </li>
   <li>A <em>weak ETag</em> changes only on semantically significant events. Weak ETags are identified with a <em>W/</em>prefix. e.g., <code>ETag: W/"3141271342554322343200"</code></li>
-  <li><code>Last-Modified</code> and <code>ETag</code> can be used for concurrency control as well. In other words, when 2 clients are trying to update the same resource, these header values can be used to conditionally update only if the server value hasn’t changed since. </li>
+  <li><code>Last-Modified</code> and <code>ETag</code> can be used for concurrency control as well. In other words, when 2 clients are trying to update the same resource, these header values can be used to conditionally update only if the server value hasn’t changed since. (This is called <em>Optimistic Concurrency Control</em>)</li>
 </ul>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>

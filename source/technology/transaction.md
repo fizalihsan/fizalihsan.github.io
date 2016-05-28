@@ -48,7 +48,31 @@ A BASE datastore values availability (since that’s important for scale), but i
 
 If someone is reading from a DB at the same time as someone else is writing to it, it is possible that the reader will see a half-written or inconsistent piece of data. There are several ways of solving this problem, known as *concurrency control methods*. The simplest way is to make all readers wait until the writer is done, which is known as a *lock*.
 
-## Concurrency Control Methods
+## Categories
+
+### Pessimistic
+
+* Block an operation of a transaction (using locks), if it may cause violation of the rules, until the possibility of violation disappears. Blocking operations is typically involved with performance reduction.
+* Most non-optimistic mechanisms (with blocking) are prone to deadlocks which are resolved by an intentional abort of a stalled transaction (which releases the other transactions in that deadlock), and its immediate restart and re-execution.
+
+### Optimistic
+
+* Optimistic Concurrency Control (OCC) delay the checking of whether a transaction meets the isolation and other integrity rules (e.g., serializability and recoverability) until its end, without blocking any of its (read, write) operations ("...and be optimistic about the rules being met..."), and then abort a transaction to prevent the violation, if the desired rules are to be violated upon its commit. An aborted transaction is immediately restarted and re-executed, which incurs an obvious overhead (versus executing it to the end only once). If not too many transactions are aborted, then being optimistic is usually a good strategy.
+* OCC assumes that multiple transactions can frequently complete without interfering with each other. While running, transactions use data resources without acquiring locks on those resources. Before committing, each transaction verifies that no other transaction has modified the data it has read. If the check reveals conflicting modifications, the committing transaction rolls back and can be restarted.
+* OCC is generally used in environments with low data contention. When conflicts are rare, transactions can complete without the expense of managing locks and without having transactions wait for other transactions' locks to clear, leading to higher throughput than other concurrency control methods. However, if contention for data resources is frequent, the cost of repeatedly restarting transactions hurts performance significantly; it is commonly thought that other concurrency control methods have better performance under these conditions. However, locking-based ("pessimistic") methods also can deliver poor performance because locking can drastically limit effective concurrency even when deadlocks are avoided.
+
+**Usage**
+
+* HTTP does provide a form of built-in OCC: The GET method returns an ETag for a resource and subsequent PUTs use the ETag value in the If-Match headers; while the first PUT will succeed, the second will not, as the value in If-Match is based on the first version of the resource
+* MediaWiki's edit pages use OCC
+* Most implementations of software transactional memory use optimistic locking
+* Java Collections - *Compare-and-Swap(CAS)* based thread-safe collections like `ConcurrentLinkedQueue` and `ConcurrentSkipListMap`
+
+### Semi-optimistic
+
+Block operations in some situations, if they may cause violation of some rules, and do not block in other situations while delaying rules checking (if needed) to transaction's end, as done with optimistic.
+
+## Methods
 
 ### Locking
 

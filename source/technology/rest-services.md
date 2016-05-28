@@ -598,7 +598,7 @@ ETag: "3141271342554322343200"
   * If the tags don’t match, the server will send back a `200, “OK,”` response with the new representation of the resource. If it hasn’t been changed, the server will respond with `304, “Not Modified,”` and return no representation. In both cases, the server should send an updated `Cache-Control` and `ETag` header if appropriate.
   * A *strong ETag* should change whenever any bit of the resource’s representation changes. 
   * A *weak ETag* changes only on semantically significant events. Weak ETags are identified with a *W/*prefix. e.g., `ETag: W/"3141271342554322343200"`
-  * `Last-Modified` and `ETag` can be used for concurrency control as well. In other words, when 2 clients are trying to update the same resource, these header values can be used to conditionally update only if the server value hasn't changed since. 
+  * `Last-Modified` and `ETag` can be used for concurrency control as well. In other words, when 2 clients are trying to update the same resource, these header values can be used to conditionally update only if the server value hasn't changed since. (This is called *Optimistic Concurrency Control*)
 
 ```http
 GET /customers/123 HTTP/1.1

@@ -23,31 +23,25 @@ footer: true
 
 ## Threading Models
 
-### Pre-emptive multi-threading 
-
-* OS determines when a context switch should occur
-* System may make context switch at an inappropriate time
-* This model is widely used nowadays
- 
-### Co-operative multi-threading
-
-* The threads themselves determine relinquish control once they are at a stopping point.
-* Can create problems if a thread is waiting for a resource to become available.
+* Pre-emptive multi-threading 
+  * OS determines when a context switch should occur
+  * System may make context switch at an inappropriate time
+  * This model is widely used nowadays
+* Co-operative multi-threading
+  * The threads themselves determine relinquish control once they are at a stopping point.
+  * Can create problems if a thread is waiting for a resource to become available.
 
 ## Thread Types
 
-### Green thread
-
-* Green threads emulate multithreaded environments without relying on any native OS capabilities. They run code in user space that manages and schedules threads;
-* Scheduled by JVM rather underlying OS
-* Sun wrote green threads to enable Java to work in environments that do not have native thread support.
-* Uses cooperative multitasking - dangerous
-
-### Native thread
-
-* Uses underlying OS native threads
-* Can be scheduled across cores in multi-core or multiprocessor systems
-* Performs better than green threads even in single-core
+* **Green thread**
+  * Green threads emulate multithreaded environments without relying on any native OS capabilities. They run code in user space that manages and schedules threads;
+  * Scheduled by JVM rather underlying OS
+  * Sun wrote green threads to enable Java to work in environments that do not have native thread support.
+  * Uses cooperative multitasking - dangerous
+* **Native thread**
+  * Uses underlying OS native threads
+  * Can be scheduled across cores in multi-core or multiprocessor systems
+  * Performs better than green threads even in single-core
 
 ## Atomicity
 

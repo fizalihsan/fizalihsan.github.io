@@ -144,6 +144,8 @@ you can set a `contextConfigLocation` initialization parameter on the servlet as
 </web-app>
 ```
 
+{% img /technology/spring-mvc-initializer.png %}
+
 3) *Implement `WebApplicationInitializer`* (From Spring 3.0, container automatically detects an implementation of this interface)
 
 ```java Manually registering DispatcherServlet

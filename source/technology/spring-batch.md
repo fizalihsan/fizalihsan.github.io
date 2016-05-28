@@ -40,10 +40,29 @@ Spring Batch needs two infrastructure components:
 * *Job repository* — To store the state of jobs (finished / failed / currently running)
 * *Job launcher* — To create the state of a job before launching it
 
+# Configuration
+
+{% img /technology/spring-batch-configuration-hierarchy.png %}
+
+```xml Sample Job Configuration
+<batch:job id="importProductsJob">
+	(...)
+	<batch:step id="readWriteStep">
+		<batch:tasklet transaction-manager="transactionManager">
+			<batch:chunk
+				reader="productItemReader"
+				processor="productItemProcessor"
+				writer="productItemWriter"
+				commit-interval="100"/>
+		</batch:tasklet>
+	</batch:step>
+</batch:job>
+```
+
 ```xml Sample batch "infrastructure configuration"
 <?xml version="1.0" encoding="UTF-8"?>
 <beans  ...>
-	<bean id="dataSource">s	</bean>
+	<bean id="dataSource">...</bean>
 
 	<bean id="transactionManager"  class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
 		<property name="dataSource" ref="dataSource" />
@@ -65,7 +84,34 @@ Spring Batch needs two infrastructure components:
 
 > *SPLITTING INFRASTRUCTURE AND APPLICATION CONFIGURATION FILES* - Always split infrastructure and application configuration files, so that it allows to swap out the infrastructure for different environments (test, development, staging, production) and still reuse the application configuration files.
 
+## Job Attributes 
+
+* `id` - Identifies the job.
+* `restartable` 
+	* Specifies whether Spring Batch can restart the job. The default is `true`. 
+	* If `false`, Spring Batch can’t start the job more than once; if you try, Spring Batch throws the exception `JobRestartException`.
+* `incrementer` 
+	* Refers to an entity used to set job parameter values. This entity is required when trying to launch a batch job through the startNextInstance method of the `JobOperator` interface.
+	* The `incrementer` attribute provides a convenient way to create new job parameter values. Note that the JobLauncher doesn’t need this feature because you must provide all parameter values explicitly. When the startNextInstance method of the `JobOperator` class launches a job, though, the method needs to determine new parameter values and use an instance of the JobParametersIncrementer interface:
+
+```java
+public interface JobParametersIncrementer {
+	JobParameters getNext(JobParameters parameters);
+}
+```
+
+* `abstract`
+	* Specifies whether the job definition is abstract. If true, this job is a parent job configuration for other jobs. It doesn’t correspond to a concrete job configuration
+* parent
+	* Defines the parent of this job.
+* `job-repository`
+	* Specifies the job repository bean used for the job. Defaults to a `jobRepository`bean if none specified.
+
+
+
+
 # Components & Interfaces
+
 
 ## Job
 

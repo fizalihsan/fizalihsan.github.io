@@ -29,6 +29,8 @@ footer: true
 
 ### Binary Tree
 
+> **Definition**: A binary search tree (BST) is a binary tree where each node has a `Comparable` key (and an associated value) and satisfies the restriction that the key in any node is larger than the keys in all nodes in that node’s left subtree and smaller than the keys in all nodes in that node’s right subtree
+
 * [Binary Tree Problems](/technology/BinaryTrees.pdf)
 * [Tree-List Recursion Problems](/technology/TreeListRecursion.pdf)
 * **Full Binary Tree** - Each node in a *full binary tree* is either (1) an internal node with exactly two non-empty children or (2) a leaf
@@ -44,26 +46,38 @@ visits the node, and finally visits the right child (including its entire subtre
   * [Binary Tree Traversal - Java Code](https://gist.github.com/fizalihsan/cc21a12af3d751baf7ec8dac57ea8775)
 
 #### Binary search tree (BST)
-  * [Check if a given tree is a Binary Search Tree](https://gist.github.com/fizalihsan/73f5326f45b0f9f438496fc12634a1a0)
-  * A BST is a binary tree that conforms to the following condition, known as the **Binary Search Tree Property**.
-  	* All nodes stored in the left subtree of a node whose key value is `K` have key values less than `K`. 
-  	* All nodes stored in the right subtree of a node whose key value is `K` have key values greater than or equal to `K`.
-  * If the BST nodes are printed using an inorder traversal, the resulting enumeration will be in sorted order from lowest to highest.
+
+* [Check if a given tree is a Binary Search Tree](https://gist.github.com/fizalihsan/73f5326f45b0f9f438496fc12634a1a0)
+* A BST is a binary tree that conforms to the following condition, known as the **Binary Search Tree Property**.
+	* All nodes stored in the left subtree of a node whose key value is `K` have key values less than `K`. 
+	* All nodes stored in the right subtree of a node whose key value is `K` have key values greater than or equal to `K`.
+* If the BST nodes are printed using an inorder traversal, the resulting enumeration will be in sorted order from lowest to highest.
 
 **Balanced tree**
-	* If a binary tree is balanced, then the height for a tree of *n* nodes is approximately *log n*. However, if the tree is completely unbalanced, then the height for a tree with *n* nodes can be as great as *n*.
-	* a balanced BST will in the average case have operations costing `O(log n)`, while a badly unbalanced BST can have operations in the worst case costing `O(n)`.
-	* While the BST is simple to implement and efficient when the tree is balanced, the possibility of its being unbalanced is a serious liability. There are techniques for organizing a BST to guarantee good performance: like AVL tree and the splay tree.
+
+* If a binary tree is balanced, then the height for a tree of *n* nodes is approximately *log n*. However, if the tree is completely unbalanced, then the height for a tree with *n* nodes can be as great as *n*.
+* a balanced BST will in the average case have operations costing `O(log n)`, while a badly unbalanced BST can have operations in the worst case costing `O(n)`.
+* While the BST is simple to implement and efficient when the tree is balanced, the possibility of its being unbalanced is a serious liability. There are techniques for organizing a BST to guarantee good performance: like AVL tree and the splay tree.
 
 **Height-balanced binary search tree (OR) AVL tree** (after their Russian inventors  *Adelson-Velskii and Landis*)
+
+### Red-Black Tree
+
+* A red-black tree storing `n` values has height at most `2logn`.
+* The `add(x)` and `remove(x)` operations on a red-black tree run in `O(logn)` worst-case time.
+* The amortized number of rotations performed during an `add(x)` or `remove(x)` operation is constant.
+
+**Uses**
+
+* Used in `java.util.TreeMap`
+* C++ Standard Template Library
+* Linux Kernel
 
 * B+ tree & Balanced B+ tree - used in DB indexes
 * Self-balanced tree
 * M-way trees
 * B trees: Perfectly Height-balanced M-way search trees
 * 2-3-4 trees
-* Red-Black trees
-  * implemented in java.util.TreeMap
 * Tries
 
 ### Tree Algorithms

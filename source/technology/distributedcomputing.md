@@ -158,7 +158,7 @@ We get 3 different system types:
   * Examples include full strict quorum protocols, such as *two-phase commit*.
   * Strong consistency model; *CANNOT* tolerate any node failures
   * A CA system does not distinguish between node failures and network failures, and so the only safe thing is to stop accepting writes everywhere to avoid introducing ***divergence*** (or multiple copies).
-  * CA systems are not partition-aware, and often use the two-phase commit algorithm and are common in traditional distributed relational databases.
+  * CA systems are not partition-aware, and often use the two-phase commit algorithm and are common in traditional distributed relational DBs.
 2. **CP (Consistency + Partition Tolerance)**
   * Say you have three nodes and one node loses its link with the other two. You can create a rule that a result will be returned only when a majority of nodes agree. So, despite having a partition, the system will return a consistent result. However, since the separated node won’t be able to reach consensus it won’t be available even though it’s up.
   * Examples include majority quorum protocols in which minority partitions are unavailable such as *Paxos*.
@@ -176,9 +176,9 @@ In a distributed system, managing consistency(C), availability(A) and partition 
 
 * Eric Brewer put forth the CAP theorem which states that in any distributed system we can choose only two of consistency, availability or partition tolerance. 
 * Consistency and availability are not really binary choices, unless you limit yourself to strong consistency. But strong consistency is just one consistency model: the one where you, by necessity, need to give up availability in order to prevent more than a single copy of the data from being active.
-* Many NoSQL databases try to provide options where the developer has choices where they can tune the database as per their needs. 
+* Many NoSQL DBs try to provide options where the developer has choices where they can tune the DB as per their needs. 
 
-For example if you consider a distributed database, there are essentially three variables r, w, n where
+For example if you consider a distributed DB, there are essentially three variables r, w, n where
 
 * `r` = number of nodes that should respond to a read request before its considered successful.
 * `w` = number of nodes that should respond to a write request before its considered successful.
@@ -221,6 +221,7 @@ There are 2 types of consistency models:
     * how long is "eventually"? It would be useful to have a strict lower bound, or at least some idea of how long it typically takes for the system to converge to the same value.
     * how do the replicas agree on a value? A system that always returns "42" is eventually consistent: all replicas agree on the same value. It just doesn't converge to a useful value since it just keeps returning the same fixed value. Instead, we'd like to have a better idea of the method. For example, one way to decide is to have the value with the largest timestamp always win.
     * So when vendors say "eventual consistency", what they mean is some more precise term, such as "eventually last-writer-wins, and read-the-latest-observed-value in the meantime" consistency. The "how?" matters, because a bad method can lead to writes being lost - for example, if the clock on one node is set incorrectly and timestamps are used.
+
 
 ## References
   

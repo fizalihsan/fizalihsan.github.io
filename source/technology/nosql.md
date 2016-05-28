@@ -29,19 +29,14 @@ footer: true
 
 ### Architecture
 * Riak server architecture removes single points of failure (all nodes are peers) and allows you to grow or shrink the cluster at will. This is important when dealing with large-scale deployments, since it allows your database to remain available even if several nodes fail or are otherwise unresponsive.
-* Distributing data across several servers is saddled with an inherent problem. If you want your database to continue running when a network partition occurs (meaning, some messages were lost), it means you must make a tradeoff. Either you can remain available to server requests or you can refuse requests and ensure the consistency of your data. It is not possible to create a distributed database that is fully consistent, available, and partition tolerant. You can have only two (partition tolerant and consistent, partition tolerant and available, or consistent and available but not distributed). This is known as the **CAP theorem** (Consistency, Availability, Partition tolerance).
 * Riak takes advantage of this fact by allowing you to trade availability for consistency on a per-request basis.
 * **Riak Ring** - Riak divides its server configuration into partitions denoted by a 160-bit number (that’s 2^160). The Riak team likes to represent this massive integer as a circle, which they call the ring. When a key is hashed to a partition, the ring helps direct which Riak servers store the value.
 
-### MapReduce
-* Mapreduce runs in an inverse manner. Rather than grabbing data from the database and running it on a client (or app server), mapreduce is a pattern to pass an algorithm to all of the database nodes, which are then each responsible for returning a result.
-* It’s faster to send the algorithm to the data and then send the data to the algorithm.
-
 ### Clustering
 * Riak allows us to control reads and writes into the cluster by altering three values: 
-  * N is the number of nodes a write ultimately replicates to, in other words, the number of copies in the cluster. 
-  * W is the number of nodes that must be successfully written to before a successful response. If W is less than N, a write will be considered successful even while Riak is still copying the value in background. 
-  * R is the number of nodes required to read a value successfully. If R is greater than the number of copies available, the request will fail. If R=1, there is a potential chance to read stale values. If R=N, then if any of those N nodes become unavailable, read requests would fail. 
+  * `N` is the number of nodes a write ultimately replicates to, in other words, the number of copies in the cluster. 
+  * `W` is the number of nodes that must be successfully written to before a successful response. If `W` is less than `N`, a write will be considered successful even while Riak is still copying the value in background. 
+  * `R` is the number of nodes required to read a value successfully. If `R` is greater than the number of copies available, the request will fail. If `R=1`, there is a potential chance to read stale values. If `R=N`, then if any of those `N` nodes become unavailable, read requests would fail. 
 * **Conflict Resolution**
   * Riak uses vector clocks. A vector clock is a token that distributed systems like Riak use to keep the order of conflicting key-value updates intact. Timestamps cannot be used since the clocks across servers may not be synchronized.
 

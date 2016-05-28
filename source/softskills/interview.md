@@ -115,6 +115,7 @@ footer: true
 * *Technical Interview Questions*
 	* [algorithmist.com](http://www.algorithmist.com)
     * [codechef.com](http://www.codechef.com)
+    * [Gainlo.co](http://blog.gainlo.co/index.php/index/) - Mock interviews with employees from Google, Amazon, Twitter, etc.
     * [geeksforgeeks.org](http://www.geeksforgeeks.org)
     * [hackerrank.com](http://www.hackerrank.com)
     * [hiredintech.com](http://www.hiredintech.com)

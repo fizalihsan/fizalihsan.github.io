@@ -23,7 +23,7 @@ footer: true
   * `TransactionManager` Interface
   * primarily used within the Declarative Txn Model.
 
-# Consistency Models
+# ACID & BASE
 
 ## ACID property
 
@@ -44,26 +44,71 @@ Write consistency can be a wonderful thing for application developers, but it al
 
 A BASE datastore values availability (since that’s important for scale), but it doesn’t offer guaranteed consistency of replicated data at write time. Overall, the BASE consistency model provides a less strict assurance than ACID: data will be consistent in the future, either at read time (e.g., Riak) or it will always be consistent, but only for certain processed past snapshots (e.g., Datomic).
 
-## CAP Theorem
+# Concurrency Control
 
-distributed databases uses.
+If someone is reading from a DB at the same time as someone else is writing to it, it is possible that the reader will see a half-written or inconsistent piece of data. There are several ways of solving this problem, known as *concurrency control methods*. The simplest way is to make all readers wait until the writer is done, which is known as a *lock*.
 
-http://ivoroshilin.com/2012/12/13/brewers-cap-theorem-explained-base-versus-acid/
+## Concurrency Control Methods
 
-**Combination 1: CA**
+### Locking
 
-* What does it mean?
-* When to use this?
- 
-**Combination 2: CP**
+(e.g., Two-phase locking - 2PL) - Controlling access to data by locks assigned to the data. Access of a transaction to a data item (DB object) locked by another transaction may be blocked (depending on lock type and access operation type) until lock release.
 
-* What does it mean?
-* When to use this?
- 
-**Combination 3: AP**
+**Two-phase Locking (2PL)**
 
-* What does it mean?
-* When to use this?
+* In databases and transaction processing, two-phase locking (2PL) is a concurrency control method that guarantees serializability.
+* In 2PL protocol locks are applied and removed in two phases:
+  * *Expanding phase*: locks are acquired and no locks are released.
+  * *Shrinking phase*: locks are released and no locks are acquired.
+* Two types of locks are utilized by the basic protocol: *Shared* and *Exclusive* locks. Refinements of the basic protocol may utilize more lock types. 
+* Using locks that block processes, 2PL may be subject to deadlocks that result from the mutual blocking of two or more transactions.
+
+**Strong Strict Two-phase Locking (SS2PL)**
+
+* Also named *rigourousness*
+
+### MVCC
+
+* Locking mechanism is slow. So MVCC takes a different approacheach user connected to the DB sees a snapshot of the DB at a particular instant in time. Any changes made by a writer will not be seen by other users of the DB until the changes have been completed (or, in DB terms: until the transaction has been committed.)
+* When an MVCC DB needs to update an item of data, it will not overwrite the old data with new data, but instead mark the old data as obsolete and add the newer version elsewhere. Thus there are multiple versions stored, but only one is the latest. This allows readers to access the data that was there when they began reading, even if it was modified or deleted part way through by someone else. 
+* Requires (generally) the system to periodically sweep through and delete the old, obsolete data objects. 
+* For a document-oriented DB it also allows the system to optimize documents by writing entire documents onto contiguous sections of disk—when updated, the entire document can be re-written rather than bits and pieces cut out or maintained in a linked, non-contiguous DB structure.
+* MVCC provides point ***in time consistent views***. Read transactions under MVCC typically use a timestamp or transaction ID to determine what state of the DB to read, and read these versions of the data. Read and write transactions are thus isolated from each other without any need for locking. Writes create a newer version, while concurrent reads access the older version.
+* MVCC is a concurrency control method commonly used 
+  * by DB management systems to provide concurrent access to the DB,
+  * by source code version control systems like SVN, Git
+  * and in programming languages to implement transactional memory.[1]
+
+
+### Timestamp ordering (TO)
+
+* Assigning timestamps to transactions, and controlling or checking access to data by timestamp order.
+* a timestamp-based concurrency control algorithm is a non-lock concurrency control method. It is used in some databases to safely handle transactions, using timestamps.
+* Assumptions
+  * Every timestamp value is unique and accurately represents an instant in time.
+  * No two timestamps can be the same.
+  * A higher-valued timestamp occurs later in time than a lower-valued timestamp.
+* Issues
+  * Timestamp Resolution - If the resolution of the timestamp is too large (coarse), the possibility of two or more timestamps being equal is increased and thus enabling some transactions to commit out of correct order.
+  * This won't work in a distributed database where different servers could potentially have incorrect time settings
+
+### Serialization graph checking
+
+(also called Serializability, or Conflict, or Precedence graph checking) - Checking for cycles in the schedule's graph and breaking them by aborts.
+
+### Commit ordering (CO)
+
+* Controlling or checking transactions' chronological order of commit events to be compatible with their respective precedence order.
+* Commit ordering is a general serializability technique that achieves distributed serializability effectively on a large scale
+
+### Index concurrency control
+
+Synchronizing access operations to indexes, rather than to user data. Specialized methods provide substantial performance gains.
+
+### Private workspace model
+
+(Deferred update) - Each transaction maintains a private workspace for its accessed data, and its changed data become visible outside the transaction only upon its commit (e.g., Weikum and Vossen 2001). This model provides a different concurrency control behavior with benefits in many cases.
+
 
 # Transaction Models
 
@@ -78,6 +123,29 @@ http://ivoroshilin.com/2012/12/13/brewers-cap-theorem-explained-base-versus-acid
   * Error-prone. Plenty of room for developers to make mistakes which could be disastrous.
   * Works only on a single resource. Cannot co-ordinate a txn across global resources like Db and EMS.
   * Say if the txn code is split between different DAOs, the connection needs to be explicitly passed (called as ***connection passing strategy***) which is typically error-prone.
+
+## Global Transactions
+
+{% img right /technology/global-transaction.png %}
+
+* For any transaction that spans across multiple resources, an application relies on a dedicated component called *transaction manager*. This component implements a special protocol called **XA**.
+* In this case, a third-party component handles the transactions, so we call such transactions ***managed transactions***. 
+* In Java, to perform global transactions using the XA protocol, we need the following:
+  * ***A JTA transaction manager*** —It implements the Java Transaction API (JTA) specification,
+  which requires the implementation of the XA protocol. Such a transaction
+  manager is included in a Java EE application server or is available as a
+  standalone component.
+  ***XA-aware drivers***—The resources must provide XA-compliant drivers so the transaction
+  manager can communicate with the resources using the XA protocol. Practically
+  speaking, this implies the drivers provide implementations of interfaces like
+  javax.sql.XAConnection. Thanks to these interfaces, the JTA transaction manager
+  can enlist the resources in distributed transactions, as shown in figure 9.5
+* All Java EE application servers include a JTA transaction manager (Glassfish, JBoss,
+WebSphere, and so on). 
+* Standalone JTA transaction managers: Atomikos, Java Open Transaction Manager (JOTM), and the
+Bitronix Transaction Manager
+
+> Warning: Spring doesn’t provide a JTA transaction manager. The Spring `JtaTransactionManager` class is only a bridge between Spring’s transaction management support and a full-blown JTA transaction manager.
 
 ## Programmatic transactions
 
@@ -181,8 +249,6 @@ In declarative txn, we must tell the container when to begin a txn, which method
 * Spring interface `Synchronization` provides callback methods for the `afterBegin()`, `beforeCompletion()`, and `afterCompletion()` of a JTA transaction.
 
 
-
-
 | Attribute Value (For Spring prefix PROPAGATION_ ) | Txn is needed to execute the method?| What if a txn is already open?| What if no txn open?| When to use? | 
 | -- | -- | -- | -- | -- |
 | REQUIRED | Yes | Use it | Start a new one |    |
@@ -202,7 +268,7 @@ Transaction isolation is a function of db concurrency and db consistency. As we 
 * **Data consistency** means that each user sees a consistent view of the data, including visible changes made by the user's own transactions and transactions of other users.
 
 
-* **1. Dirty Read / Read Uncommitted**
+* **1. Read Uncommitted**
   * Allows transactions to read non-committed updates made by other transactions.
   * Lowest level of isolation supported by EJB & Spring.
 * **2. Read Committed**
@@ -376,6 +442,48 @@ Two golden rules apply to all of the transaction strategies :
 ## 4. High Performance Strategy
 
 ???
+
+# Transaction Patterns
+
+## 2 Phase Commit Protocol or Pattern
+
+Check above for explanation
+
+Global transactions are tricky. They are
+  
+  * difficult to configure
+  * some implementations of transaction managers and XA drivers remain bugy.
+  * XA is inherently slower than local transactions because the strong transactional guarantees it provides imply some overhead (the transaction manager and the resources need to maintain precise logs of what they’re doing, for instance)
+
+Depending on the context and resources involved, other techniques are viable alternatives to XA; they involve coding and usually perform better than XA.
+
+## Shared Resource Transaction Pattern
+
+{% img right /technology/shared-resource-pattern.png %}
+
+* This pattern works only when two databases are involved
+* Sometimes, the same physical resource backs multiple logical resources. For example, two JDBC `DataSource`s can point to the same database instance. Using Oracle terminology, we say that you refer to schema B from schema A by using the same connection. You also need to define synonyms in schema A for schema B’s tables. This enables real global transactions using the same mechanism as for local transactions. 
+* The overhead is a little more than for true local transactions but less than with XA.
+* Diagram here showsUse the shared resource transaction pattern when a common resource hosts the transactional resources. In this example, two Oracle database schemas exist in the same database instance. The first schema refers to the second schema’s tables using synonyms. This allows the application to use local transactions.
+* ***Spring Batch use-case*** - Here’s an example of the shared resource transaction pattern applied to Spring Batch. People are sometimes reluctant to host the batch execution metadata in the same database as the business data (they don’t want to mix infrastructure and business concerns, which makes sense). Therefore, Spring Batch must span transactions over two databases for the execution metadata and the business data to ensure proper counts of skipped items, retries, and so on. You can use the shared resource transaction pattern to host batch execution metadata and business data in different databases. The pattern keeps your batch metadata and business data separate and properly synchronized, and you can stick to local transactions.
+
+
+## Best Effort Pattern
+
+{% img right /technology/best-effort-pattern.png %}
+
+* This pattern works only when a 2 databases or a database and a JMS queue are involved
+* This pattern requires two resources—a JMS queue and a database—and must be transactional. What can go wrong? Let’s look at the two cases:
+  * *Losing the message* — The application receives a message, acknowledges it, but fails to process it. The message is no longer on the queue, and there’s been no processing in the database: the message is lost.
+  * *Receiving and processing the same message twice* —The application receives a message and processes it, but the acknowledgment fails. The JMS broker delivers the message again, and the application processes it again. We call this a *duplicate message*.
+* **Avoid losing messgae with Transcation Synchronization**
+  * To avoid losing messages, Spring synchronizes the local JMS transaction with the database transaction. Spring commits the JMS transaction immediately after the commit of the database transaction. We call this the *best effort pattern*.
+* **Avoid duplicate messages**
+  * To avoid duplicate messages, the application must programmatically check before processing a message from the JMS queue
+* **Handling duplicate messages with Idempotency**
+  * Idempotency is an interesting property for message processing. It means that we don’t care about duplicate messages! Always think about idempotency when designing a system: idempotent operations can make a system much simpler and more robust. (In Maths, n x 0 = 0)
+
+??? Check Spring in Action Chapter 9
 
 # Open Items
 

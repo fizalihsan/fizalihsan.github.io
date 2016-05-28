@@ -9,7 +9,10 @@ footer: true
 * list element with functor item
 {:toc}
 
-## Big-O Notation
+Grokking Algorithms - [http://adit.io/](http://adit.io/)
+
+
+# Big-O Notation
 
 * **O(1)/Constant Complexity**: 
 	* Constant.  Irrespective of the size of the data set the algorithm will always take a constant time. 
@@ -37,7 +40,7 @@ Now consider if I were to double the number of elements to 16: this would only r
 
 ![enter image description here](http://bigocheatsheet.com/img/big-o-complexity.png)
 
-### How to find Big-O in interviews?
+## How to find Big-O in interviews?
 
 Break down the loops and processing.
 

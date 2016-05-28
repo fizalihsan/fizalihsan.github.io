@@ -354,7 +354,7 @@ messageStyle: "none",
     <ul>
       <li>A 2nd group of thread-safe collections relies on compare-and-swap (CAS), a fundamental improvement on traditional synchronization. To see how it works, consider a computation in which the value of a single variable is used as input to a long-running calculation whose eventual result is used to update the variable. Traditional synchronization makes the whole computation atomic, excluding any other thread from concurrently accessing the variable. This reduces opportunities for parallel execution and hurts throughput. </li>
       <li>An algorithm based on CAS behaves differently: it makes a local copy of the variable and performs the calculation without getting exclusive access. Only when it is ready to update the variable does it call CAS, which in one atomic operation compares the variable’s value with its value at the start and, if they are the same, updates it with the new value. If they are not the same, the variable must have been modified by another thread; in this situation, the CAS thread can try the whole computation again using the new value, or give up, or—in some algorithms— continue, because the interference will have actually done its work for it! </li>
-      <li>This technique is caled <a href="http://localhost:4000/technology/transaction.html#optimistic"><em>Optimistic Concurrency Control</em></a> and is widely used in databases and HTTP protocol.</li>
+      <li>This technique is caled <a href="/technology/transaction.html#optimistic"><em>Optimistic Concurrency Control</em></a> and is widely used in databases and HTTP protocol.</li>
       <li>Collections using CAS include <code>ConcurrentLinkedQueue</code> and <code>ConcurrentSkipListMap</code>.</li>
     </ul>
   </li>

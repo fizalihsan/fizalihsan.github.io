@@ -9,7 +9,8 @@ footer: true
 * list element with functor item
 {:toc}
 
-## Scalability
+# Scalability
+
 1. **Size scalability**: adding more nodes should make the system linearly faster; growing the dataset should not increase latency
 2. **Geographic scalability**: it should be possible to use multiple data centers to reduce the time it takes to respond to user queries, while dealing with cross-data center latency in some sensible manner.
 3. **Administrative scalability**: adding more nodes should not increase the administrative costs of the system (e.g. the administrators-to-machines ratio).
@@ -37,7 +38,7 @@ Systems that have no redundancy can only be as available as their underlying com
 
 Availability is in some sense a much wider concept than uptime, since the availability of a service can also be affected by, say, a network outage or the company owning the service going out of business (which would be a factor which is not really relevant to fault tolerance but would still influence the availability of the system). But without knowing every single specific aspect of the system, the best we can do is design for fault tolerance.
 
-## Fault tolerance
+# Fault tolerance
 
 * ability of a system to behave in a well-defined manner once faults occur. 
 * define what faults you expect and then design a system or an algorithm that is tolerant of them.
@@ -58,13 +59,13 @@ Working within those constraints:
 
 Beyond these tendencies - which are a result of the physical constraints - is the world of system design options.
 
-## Design Techniques
+# Design Techniques
 
 There are two basic techniques in which a data set is distributed between multiple nodes: **partition** and **replication**. 
 
 ![Partition & Replication](http://book.mixu.net/distsys/images/part-repl.png)
       
-### Partitioning
+## Partitioning
 
 * Partitioning is dividing the dataset into smaller distinct independent sets; this is used to reduce the impact of dataset growth since each partition is a subset of the data.
 * improves performance by limiting the amount of data to be examined and by locating related data in the same partition
@@ -72,7 +73,7 @@ There are two basic techniques in which a data set is distributed between multip
 * is also very much application-specific, so it is hard to say much about it without knowing the specifics.
 * is mostly about defining your partitions based on what you think the primary access pattern will be, and dealing with the limitations that come from having independent partitions (e.g. inefficient access across partitions, different rate of growth etc.).
 
-### Replication
+## Replication
 
 * Replication is making copies of the same data on multiple machines; this allows more servers to take part in the computation.
 * It can also be copied or cached on different nodes to reduce the distance between the client and the server and for greater fault tolerance.
@@ -81,7 +82,7 @@ There are two basic techniques in which a data set is distributed between multip
 * is also the source of many of the problems, since there are now independent copies of the data that has to be kept in sync on multiple machines - this means ensuring that the replication follows a consistency model. 
 * ***Strong consistency*** allows you to program as-if the underlying data was not replicated. ***Weaker consistency*** models can provide lower latency and higher availability.
 
-## System Models
+# System Models
 
 In a distributed system :
 
@@ -109,7 +110,7 @@ There are 3 main factors/properties affecting the Distributed computing
  2. Communication Links (between nodes)
  3. Time & Order
 
-### Nodes
+## Nodes
 
 Nodes serve as hosts for computation and storage. They have:
 
@@ -119,7 +120,7 @@ Nodes serve as hosts for computation and storage. They have:
 
 Nodes execute deterministic algorithms: the local computation, the local state after the computation, and the messages sent are determined uniquely by the message received and local state when the message was received.
 
-### Communication Links
+## Communication Links
 
 * Communication links connect individual nodes to each other, and allow messages to be sent in either direction.
 * In general networks are considered to be unreliable and subject to message loss and delays. But some algorithms assume that the network is reliable (that messages are never lost and never delayed indefinitely). This may be a reasonable assumption for some real-world settings.
@@ -127,7 +128,7 @@ Nodes execute deterministic algorithms: the local computation, the local state a
 
 ![enter image description here](http://book.mixu.net/distsys/images/system-of-2.png)
 
-### Timing/Order
+## Timing/Order
 
 * If nodes are at different distances from each other, then any messages sent from one node to the others will arrive at a different time and potentially in a different order at the other nodes.
  
@@ -138,7 +139,7 @@ Nodes execute deterministic algorithms: the local computation, the local state a
 * ***Asynchronous System Model*** 
   * No timing assumptions - e.g. processes execute at independent rates; there is no bound on message transmission delay; useful clocks do not exist
 
-## CAP Theorem
+# CAP Theorem
 
 (*Proposed by Eric Brewer in 2000, proved by Seth Gilbert and Nancy Lynch of MIT in 2002*)
 
@@ -189,8 +190,7 @@ In a cluster with 5 nodes,
 * we can tweak the `r`, `w`, `n` values to make the system very consistent by setting `r=5` and `w=5` but now we have made the cluster susceptible to network partitions since any write will not be considered successful when any node is not responding. 
 * We can make the same cluster highly available for writes or reads by setting `r=1` and `w=1`  but now consistency can be compromised since some nodes may not have the latest copy of the data. 
 
-
-## Consistency Models
+# Consistency Models
 
 > Consistency Model is a contract between programmer and system, wherein the system guarantees that if the programmer follows some specific rules, the results of operations on the data store will be predictable
 
@@ -203,14 +203,14 @@ There are 2 types of consistency models:
 
 > Below is not an exhaustive list
 
-### Strong consistency models 
+## Strong consistency models 
 
 (capable of maintaining a single copy)
 
 * Linearizable consistency
 * Sequential consistency
 
-### Weak consistency models 
+## Weak consistency models 
 
 (not strong)
 
@@ -223,7 +223,7 @@ There are 2 types of consistency models:
     * So when vendors say "eventual consistency", what they mean is some more precise term, such as "eventually last-writer-wins, and read-the-latest-observed-value in the meantime" consistency. The "how?" matters, because a bad method can lead to writes being lost - for example, if the clock on one node is set incorrectly and timestamps are used.
 
 
-## References
+# References
   
 * [Distributed Systems for fun and profit](http://book.mixu.net/distsys/single-page.html)
 * [Notes on Distributed Systems for young bloods](https://www.somethingsimilar.com/2013/01/14/notes-on-distributed-systems-for-young-bloods/)

@@ -46,7 +46,7 @@ Spring Batch needs two infrastructure components:
 
 ```xml Sample Job Configuration
 <batch:job id="importProductsJob">
-	(...)
+	
 	<batch:step id="readWriteStep">
 		<batch:tasklet transaction-manager="transactionManager">
 			<batch:chunk

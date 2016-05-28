@@ -9,9 +9,7 @@ footer: true
 * list element with functor item
 {:toc}
 
-# Data Types
-
-## Lists
+# Lists
 
 * Array
 * LinkedList
@@ -19,15 +17,15 @@ footer: true
   * [Problems](/technology/LinkedListProblems.pdf)
 * Skiplist (invented by William Pugh - look paper on alternative to Binary Tree - learn the Java implementations - when to prefer this over Maps)
 
-## Queues
+# Queues
 
 * [Queue implementation using single and double stacks](https://gist.github.com/fizalihsan/26acf7f6be1c33c121a8471b2a47892b)
 
-## Trees 
+# Trees 
 
 [Trees Basics](http://webdocs.cs.ualberta.ca/~holte/T26/top.realTop.html)
 
-### Binary Tree
+## Binary Tree
 
 > **Definition**: A binary search tree (BST) is a binary tree where each node has a `Comparable` key (and an associated value) and satisfies the restriction that the key in any node is larger than the keys in all nodes in that node’s left subtree and smaller than the keys in all nodes in that node’s right subtree
 
@@ -40,18 +38,23 @@ footer: true
 
 * **Traversals**
   * Preorder traversal - *Parent node, left child, right child*. 
-  * Inorder traversal - *Left child, Parent node, right child* - An inorder traversal first visits the left child (including its entire subtree), then
-visits the node, and finally visits the right child (including its entire subtree).
+  * Inorder traversal - *Left child, Parent node, right child* - An inorder traversal first visits the left child (including its entire subtree), then visits the node, and finally visits the right child (including its entire subtree).
   * Postorder traversal - *Left child, right child, Parent node*
   * [Binary Tree Traversal - Java Code](https://gist.github.com/fizalihsan/cc21a12af3d751baf7ec8dac57ea8775)
 
-#### Binary search tree (BST)
+## Binary search tree (BST)
+
+{% img right /technology/bst-possibilities.png %}
 
 * [Check if a given tree is a Binary Search Tree](https://gist.github.com/fizalihsan/73f5326f45b0f9f438496fc12634a1a0)
 * A BST is a binary tree that conforms to the following condition, known as the **Binary Search Tree Property**.
 	* All nodes stored in the left subtree of a node whose key value is `K` have key values less than `K`. 
 	* All nodes stored in the right subtree of a node whose key value is `K` have key values greater than or equal to `K`.
 * If the BST nodes are printed using an inorder traversal, the resulting enumeration will be in sorted order from lowest to highest.
+* Analysis: The running times of algorithms on binary search trees depend on the shapes of the trees, which, in turn, depend on the order in which keys are inserted. 
+	* In the best case, a tree with `N` nodes could be perfectly balanced, with `~log N` nodes between the root and each null link. 
+	* In the worst case, there could be `N` nodes on the search path. 
+	* The balance in typical trees turns out to be much closer to the best case than the worst case.
 
 **Balanced tree**
 
@@ -60,6 +63,16 @@ visits the node, and finally visits the right child (including its entire subtre
 * While the BST is simple to implement and efficient when the tree is balanced, the possibility of its being unbalanced is a serious liability. There are techniques for organizing a BST to guarantee good performance: like AVL tree and the splay tree.
 
 **Height-balanced binary search tree (OR) AVL tree** (after their Russian inventors  *Adelson-Velskii and Landis*)
+
+## Balanced Search Trees
+
+* Binary tree and Binary search trees work well for a wide variety of applications, but they have poor worst-case performance. However, there are some types of binary search tree where costs are *guaranteed* to be logarithmic, no matter what sequence of keys is used to construct them.
+
+### 2-3 Search Tree
+
+* Ideally, we would like to keep our binary search trees *perfectly balanced*. In an `N`-node tree, we would like the height to be `~log N` so that we can guarantee that all searches can be completed in `~log N` compares, just as for binary search. But, maintaining perfect balance for dynamic insertions is too expensive. 
+* 2-3 search tree slightly relaxes the perfect balance requirement to provide guaranteed logarithmic performance not just for the insert and search operations in our symbol-table API but also for all of
+the ordered operations (except range search).
 
 ### Red-Black Tree
 
@@ -80,18 +93,11 @@ visits the node, and finally visits the right child (including its entire subtre
 * 2-3-4 trees
 * Tries
 
-### Tree Algorithms
+# Graphs
 
-* Insertion, Deletions
-* Tree Rotation
-
-## Graphs
-
-### Graph Types 
+## Graph Types 
 
 Directed, Undirected, Weighted
-
-### Graph Algorithms
 
 
 # Algorithms

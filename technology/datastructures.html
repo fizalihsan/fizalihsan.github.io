@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Data Structures Data Types Lists Queues Trees Binary Tree Binary search tree (BST) Tree Algorithms Graphs Graph Types Graph Algorithms Algorithms &hellip;">
+<meta name="description" content="Data Structures Lists Queues Trees Binary Tree Binary search tree (BST) Balanced Search Trees 2-3 Search Tree Red-Black Tree Graphs Graph Types &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -108,22 +108,20 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#data-types">Data Types</a>    <ul>
-      <li><a href="#lists">Lists</a></li>
-      <li><a href="#queues">Queues</a></li>
-      <li><a href="#trees">Trees</a>        <ul>
-          <li><a href="#binary-tree">Binary Tree</a>            <ul>
-              <li><a href="#binary-search-tree-bst">Binary search tree (BST)</a></li>
-            </ul>
-          </li>
-          <li><a href="#tree-algorithms">Tree Algorithms</a></li>
+  <li><a href="#lists">Lists</a></li>
+  <li><a href="#queues">Queues</a></li>
+  <li><a href="#trees">Trees</a>    <ul>
+      <li><a href="#binary-tree">Binary Tree</a></li>
+      <li><a href="#binary-search-tree-bst">Binary search tree (BST)</a></li>
+      <li><a href="#balanced-search-trees">Balanced Search Trees</a>        <ul>
+          <li><a href="#search-tree">2-3 Search Tree</a></li>
+          <li><a href="#red-black-tree">Red-Black Tree</a></li>
         </ul>
       </li>
-      <li><a href="#graphs">Graphs</a>        <ul>
-          <li><a href="#graph-types">Graph Types</a></li>
-          <li><a href="#graph-algorithms">Graph Algorithms</a></li>
-        </ul>
-      </li>
+    </ul>
+  </li>
+  <li><a href="#graphs">Graphs</a>    <ul>
+      <li><a href="#graph-types">Graph Types</a></li>
     </ul>
   </li>
   <li><a href="#algorithms">Algorithms</a>    <ul>
@@ -137,9 +135,7 @@ messageStyle: "none",
   </li>
 </ul>
 
-<h1 id="data-types">Data Types</h1>
-
-<h2 id="lists">Lists</h2>
+<h1 id="lists">Lists</h1>
 
 <ul>
   <li>Array</li>
@@ -152,17 +148,21 @@ messageStyle: "none",
   <li>Skiplist (invented by William Pugh - look paper on alternative to Binary Tree - learn the Java implementations - when to prefer this over Maps)</li>
 </ul>
 
-<h2 id="queues">Queues</h2>
+<h1 id="queues">Queues</h1>
 
 <ul>
   <li><a href="https://gist.github.com/fizalihsan/26acf7f6be1c33c121a8471b2a47892b">Queue implementation using single and double stacks</a></li>
 </ul>
 
-<h2 id="trees">Trees</h2>
+<h1 id="trees">Trees</h1>
 
 <p><a href="http://webdocs.cs.ualberta.ca/~holte/T26/top.realTop.html">Trees Basics</a></p>
 
-<h3 id="binary-tree">Binary Tree</h3>
+<h2 id="binary-tree">Binary Tree</h2>
+
+<blockquote>
+  <p><strong>Definition</strong>: A binary search tree (BST) is a binary tree where each node has a <code>Comparable</code> key (and an associated value) and satisfies the restriction that the key in any node is larger than the keys in all nodes in that node’s left subtree and smaller than the keys in all nodes in that node’s right subtree</p>
+</blockquote>
 
 <ul>
   <li><a href="/technology/BinaryTrees.pdf">Binary Tree Problems</a></li>
@@ -177,58 +177,88 @@ messageStyle: "none",
   <li><strong>Traversals</strong>
     <ul>
       <li>Preorder traversal - <em>Parent node, left child, right child</em>. </li>
-      <li>Inorder traversal - <em>Left child, Parent node, right child</em> - An inorder traversal first visits the left child (including its entire subtree), then
-visits the node, and finally visits the right child (including its entire subtree).</li>
+      <li>Inorder traversal - <em>Left child, Parent node, right child</em> - An inorder traversal first visits the left child (including its entire subtree), then visits the node, and finally visits the right child (including its entire subtree).</li>
       <li>Postorder traversal - <em>Left child, right child, Parent node</em></li>
       <li><a href="https://gist.github.com/fizalihsan/cc21a12af3d751baf7ec8dac57ea8775">Binary Tree Traversal - Java Code</a></li>
     </ul>
   </li>
 </ul>
 
-<h4 id="binary-search-tree-bst">Binary search tree (BST)</h4>
+<h2 id="binary-search-tree-bst">Binary search tree (BST)</h2>
+
+<p><img class="right" src="/technology/bst-possibilities.png" /></p>
+
 <ul>
   <li><a href="https://gist.github.com/fizalihsan/73f5326f45b0f9f438496fc12634a1a0">Check if a given tree is a Binary Search Tree</a></li>
   <li>A BST is a binary tree that conforms to the following condition, known as the <strong>Binary Search Tree Property</strong>.
-  	* All nodes stored in the left subtree of a node whose key value is <code>K</code> have key values less than <code>K</code>. 
-  	* All nodes stored in the right subtree of a node whose key value is <code>K</code> have key values greater than or equal to <code>K</code>.</li>
+    <ul>
+      <li>All nodes stored in the left subtree of a node whose key value is <code>K</code> have key values less than <code>K</code>. </li>
+      <li>All nodes stored in the right subtree of a node whose key value is <code>K</code> have key values greater than or equal to <code>K</code>.</li>
+    </ul>
+  </li>
   <li>If the BST nodes are printed using an inorder traversal, the resulting enumeration will be in sorted order from lowest to highest.</li>
+  <li>Analysis: The running times of algorithms on binary search trees depend on the shapes of the trees, which, in turn, depend on the order in which keys are inserted. 
+    <ul>
+      <li>In the best case, a tree with <code>N</code> nodes could be perfectly balanced, with <code>~log N</code> nodes between the root and each null link. </li>
+      <li>In the worst case, there could be <code>N</code> nodes on the search path. </li>
+      <li>The balance in typical trees turns out to be much closer to the best case than the worst case.</li>
+    </ul>
+  </li>
 </ul>
 
-<p><strong>Balanced tree</strong>
-	* If a binary tree is balanced, then the height for a tree of <em>n</em> nodes is approximately <em>log n</em>. However, if the tree is completely unbalanced, then the height for a tree with <em>n</em> nodes can be as great as <em>n</em>.
-	* a balanced BST will in the average case have operations costing <code>O(log n)</code>, while a badly unbalanced BST can have operations in the worst case costing <code>O(n)</code>.
-	* While the BST is simple to implement and efficient when the tree is balanced, the possibility of its being unbalanced is a serious liability. There are techniques for organizing a BST to guarantee good performance: like AVL tree and the splay tree.</p>
+<p><strong>Balanced tree</strong></p>
+
+<ul>
+  <li>If a binary tree is balanced, then the height for a tree of <em>n</em> nodes is approximately <em>log n</em>. However, if the tree is completely unbalanced, then the height for a tree with <em>n</em> nodes can be as great as <em>n</em>.</li>
+  <li>a balanced BST will in the average case have operations costing <code>O(log n)</code>, while a badly unbalanced BST can have operations in the worst case costing <code>O(n)</code>.</li>
+  <li>While the BST is simple to implement and efficient when the tree is balanced, the possibility of its being unbalanced is a serious liability. There are techniques for organizing a BST to guarantee good performance: like AVL tree and the splay tree.</li>
+</ul>
 
 <p><strong>Height-balanced binary search tree (OR) AVL tree</strong> (after their Russian inventors  <em>Adelson-Velskii and Landis</em>)</p>
 
+<h2 id="balanced-search-trees">Balanced Search Trees</h2>
+
 <ul>
+  <li>Binary tree and Binary search trees work well for a wide variety of applications, but they have poor worst-case performance. However, there are some types of binary search tree where costs are <em>guaranteed</em> to be logarithmic, no matter what sequence of keys is used to construct them.</li>
+</ul>
+
+<h3 id="search-tree">2-3 Search Tree</h3>
+
+<ul>
+  <li>Ideally, we would like to keep our binary search trees <em>perfectly balanced</em>. In an <code>N</code>-node tree, we would like the height to be <code>~log N</code> so that we can guarantee that all searches can be completed in <code>~log N</code> compares, just as for binary search. But, maintaining perfect balance for dynamic insertions is too expensive. </li>
+  <li>2-3 search tree slightly relaxes the perfect balance requirement to provide guaranteed logarithmic performance not just for the insert and search operations in our symbol-table API but also for all of
+the ordered operations (except range search).</li>
+</ul>
+
+<h3 id="red-black-tree">Red-Black Tree</h3>
+
+<ul>
+  <li>A red-black tree storing <code>n</code> values has height at most <code>2logn</code>.</li>
+  <li>The <code>add(x)</code> and <code>remove(x)</code> operations on a red-black tree run in <code>O(logn)</code> worst-case time.</li>
+  <li>The amortized number of rotations performed during an <code>add(x)</code> or <code>remove(x)</code> operation is constant.</li>
+</ul>
+
+<p><strong>Uses</strong></p>
+
+<ul>
+  <li>Used in <code>java.util.TreeMap</code></li>
+  <li>C++ Standard Template Library</li>
+  <li>
+    <p>Linux Kernel</p>
+  </li>
   <li>B+ tree &amp; Balanced B+ tree - used in DB indexes</li>
   <li>Self-balanced tree</li>
   <li>M-way trees</li>
   <li>B trees: Perfectly Height-balanced M-way search trees</li>
   <li>2-3-4 trees</li>
-  <li>Red-Black trees
-    <ul>
-      <li>implemented in java.util.TreeMap</li>
-    </ul>
-  </li>
   <li>Tries</li>
 </ul>
 
-<h3 id="tree-algorithms">Tree Algorithms</h3>
+<h1 id="graphs">Graphs</h1>
 
-<ul>
-  <li>Insertion, Deletions</li>
-  <li>Tree Rotation</li>
-</ul>
-
-<h2 id="graphs">Graphs</h2>
-
-<h3 id="graph-types">Graph Types</h3>
+<h2 id="graph-types">Graph Types</h2>
 
 <p>Directed, Undirected, Weighted</p>
-
-<h3 id="graph-algorithms">Graph Algorithms</h3>
 
 <h1 id="algorithms">Algorithms</h1>
 

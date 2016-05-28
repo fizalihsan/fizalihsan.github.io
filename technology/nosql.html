@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="NoSQL Key-Value Stores Riak Architecture MapReduce Clustering Downsides/Limitations/Trade-offs Redis Column-oriented Databases Overview HBase Why &hellip;">
+<meta name="description" content="NoSQL Key-Value Stores Riak Architecture Clustering Downsides/Limitations/Trade-offs Redis Column-oriented Databases Overview HBase Why use HBase? &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -111,7 +111,6 @@ messageStyle: "none",
   <li><a href="#key-value-stores">Key-Value Stores</a>    <ul>
       <li><a href="#riak">Riak</a>        <ul>
           <li><a href="#architecture">Architecture</a></li>
-          <li><a href="#mapreduce">MapReduce</a></li>
           <li><a href="#clustering">Clustering</a></li>
           <li><a href="#downsideslimitationstrade-offs">Downsides/Limitations/Trade-offs</a></li>
         </ul>
@@ -203,24 +202,17 @@ messageStyle: "none",
 <h3 id="architecture">Architecture</h3>
 <ul>
   <li>Riak server architecture removes single points of failure (all nodes are peers) and allows you to grow or shrink the cluster at will. This is important when dealing with large-scale deployments, since it allows your database to remain available even if several nodes fail or are otherwise unresponsive.</li>
-  <li>Distributing data across several servers is saddled with an inherent problem. If you want your database to continue running when a network partition occurs (meaning, some messages were lost), it means you must make a tradeoff. Either you can remain available to server requests or you can refuse requests and ensure the consistency of your data. It is not possible to create a distributed database that is fully consistent, available, and partition tolerant. You can have only two (partition tolerant and consistent, partition tolerant and available, or consistent and available but not distributed). This is known as the <strong>CAP theorem</strong> (Consistency, Availability, Partition tolerance).</li>
   <li>Riak takes advantage of this fact by allowing you to trade availability for consistency on a per-request basis.</li>
   <li><strong>Riak Ring</strong> - Riak divides its server configuration into partitions denoted by a 160-bit number (that’s 2^160). The Riak team likes to represent this massive integer as a circle, which they call the ring. When a key is hashed to a partition, the ring helps direct which Riak servers store the value.</li>
-</ul>
-
-<h3 id="mapreduce">MapReduce</h3>
-<ul>
-  <li>Mapreduce runs in an inverse manner. Rather than grabbing data from the database and running it on a client (or app server), mapreduce is a pattern to pass an algorithm to all of the database nodes, which are then each responsible for returning a result.</li>
-  <li>It’s faster to send the algorithm to the data and then send the data to the algorithm.</li>
 </ul>
 
 <h3 id="clustering">Clustering</h3>
 <ul>
   <li>Riak allows us to control reads and writes into the cluster by altering three values: 
     <ul>
-      <li>N is the number of nodes a write ultimately replicates to, in other words, the number of copies in the cluster. </li>
-      <li>W is the number of nodes that must be successfully written to before a successful response. If W is less than N, a write will be considered successful even while Riak is still copying the value in background. </li>
-      <li>R is the number of nodes required to read a value successfully. If R is greater than the number of copies available, the request will fail. If R=1, there is a potential chance to read stale values. If R=N, then if any of those N nodes become unavailable, read requests would fail. </li>
+      <li><code>N</code> is the number of nodes a write ultimately replicates to, in other words, the number of copies in the cluster. </li>
+      <li><code>W</code> is the number of nodes that must be successfully written to before a successful response. If <code>W</code> is less than <code>N</code>, a write will be considered successful even while Riak is still copying the value in background. </li>
+      <li><code>R</code> is the number of nodes required to read a value successfully. If <code>R</code> is greater than the number of copies available, the request will fail. If <code>R=1</code>, there is a potential chance to read stale values. If <code>R=N</code>, then if any of those <code>N</code> nodes become unavailable, read requests would fail. </li>
     </ul>
   </li>
   <li><strong>Conflict Resolution</strong>

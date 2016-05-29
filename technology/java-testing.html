@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Java Testing Unit Testing Unit Testing Concepts JUnit Method Level Annotations Class Level Annotations Parameterized Tests Mockito Examples Hamcrest &hellip;">
+<meta name="description" content="Java Testing Concepts JUnit Method Level Annotations Class Level Annotations Parameterized Tests Mockito Examples Hamcrest Spock Framework &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -108,18 +108,15 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#unit-testing">Unit Testing</a>    <ul>
-      <li><a href="#unit-testing-concepts">Unit Testing Concepts</a></li>
-      <li><a href="#junit">JUnit</a>        <ul>
-          <li><a href="#method-level-annotations">Method Level Annotations</a></li>
-          <li><a href="#class-level-annotations">Class Level Annotations</a></li>
-          <li><a href="#parameterized-tests">Parameterized Tests</a></li>
-        </ul>
-      </li>
-      <li><a href="#mockito">Mockito</a>        <ul>
-          <li><a href="#examples">Examples</a></li>
-        </ul>
-      </li>
+  <li><a href="#concepts">Concepts</a></li>
+  <li><a href="#junit">JUnit</a>    <ul>
+      <li><a href="#method-level-annotations">Method Level Annotations</a></li>
+      <li><a href="#class-level-annotations">Class Level Annotations</a></li>
+      <li><a href="#parameterized-tests">Parameterized Tests</a></li>
+    </ul>
+  </li>
+  <li><a href="#mockito">Mockito</a>    <ul>
+      <li><a href="#examples">Examples</a></li>
     </ul>
   </li>
   <li><a href="#hamcrest">Hamcrest</a></li>
@@ -127,18 +124,17 @@ messageStyle: "none",
   <li><a href="#bibliography">Bibliography</a></li>
 </ul>
 
-<h1 id="unit-testing">Unit Testing</h1>
-
-<h2 id="unit-testing-concepts">Unit Testing Concepts</h2>
+<h1 id="concepts">Concepts</h1>
 
 <ul>
-  <li>Characterization test - http://www.artima.com/weblogs/viewpost.jsp?thread=198296</li>
-  <li>Characterization Testing static methods using different techniques - http://martinfowler.com/articles/modernMockingTools.html</li>
+  <li><a href="http://www.artima.com/weblogs/viewpost.jsp?thread=198296">Characterization test</a></li>
+  <li><a href="http://martinfowler.com/articles/modernMockingTools.html">Characterization Testing static methods using different techniques</a></li>
+  <li><a href="http://martinfowler.com/articles/mocksArentStubs.html">Mocks aren’t Stubs</a></li>
 </ul>
 
-<h2 id="junit">JUnit</h2>
+<h1 id="junit">JUnit</h1>
 
-<h3 id="method-level-annotations">Method Level Annotations</h3>
+<h2 id="method-level-annotations">Method Level Annotations</h2>
 
 <ul>
   <li><code>@BeforeClass</code> - Marks the method to execute before the test case class begins</li>
@@ -151,7 +147,7 @@ messageStyle: "none",
   <li><code>@Ignore("Comment")</code> - Mark a method to ignore from testing</li>
 </ul>
 
-<h3 id="class-level-annotations">Class Level Annotations</h3>
+<h2 id="class-level-annotations">Class Level Annotations</h2>
 
 <ul>
   <li>Runner - is a class which runs tests. JUnit provides a bunch of runners out-of-the-box:
@@ -171,7 +167,7 @@ messageStyle: "none",
   </li>
 </ul>
 
-<h3 id="parameterized-tests">Parameterized Tests</h3>
+<h2 id="parameterized-tests">Parameterized Tests</h2>
 
 <ul>
   <li><code>Parameterized.class</code> is a Runner class provided by JUnit4</li>
@@ -241,7 +237,7 @@ Same test method is tested with different parameters returned by the method defi
 Signature of parmeters method should be@Parameters public static Collection. Collection elements should be arrays of same length
 Variables used in the test method should be defined as instance variables in the test class and there should be public constructor setting all these instance variables.</p>
 
-<h2 id="mockito">Mockito</h2>
+<h1 id="mockito">Mockito</h1>
 
 <ul>
   <li>On mock object, all methods that return value returns null by default</li>
@@ -254,7 +250,7 @@ Variables used in the test method should be defined as instance variables in the
   </li>
 </ul>
 
-<h3 id="examples">Examples</h3>
+<h2 id="examples">Examples</h2>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Example of Verify</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -675,7 +671,7 @@ Variables used in the test method should be defined as instance variables in the
 
 		<li>
 			<h3>Java</h3>
-			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/spring.html">Spring</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
 		</li>
 
 		<li>

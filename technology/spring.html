@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Spring Overview Scope Profiles Overview 3 wiring mechanisms Explicit configuration in XML Explicit configuration in Java Implicit bean discovery and &hellip;">
+<meta name="description" content="Spring Overview Scope Profiles JDBC Why Spring JDBC over plain Java JDBC? JdbcTemplate Querying results Overview 3 wiring mechanisms Explicit &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -111,6 +111,12 @@ messageStyle: "none",
   <li><a href="#overview">Overview</a>    <ul>
       <li><a href="#scope">Scope</a></li>
       <li><a href="#profiles">Profiles</a></li>
+    </ul>
+  </li>
+  <li><a href="#jdbc">JDBC</a>    <ul>
+      <li><a href="#why-spring-jdbc-over-plain-java-jdbc">Why Spring JDBC over plain Java JDBC?</a></li>
+      <li><a href="#jdbctemplate">JdbcTemplate</a></li>
+      <li><a href="#querying-results">Querying results</a></li>
     </ul>
   </li>
 </ul>
@@ -285,8 +291,95 @@ messageStyle: "none",
 
 <ul>
   <li>@EnableCaching - Enables support for bean methods with the @Cacheable annotation.</li>
-  <li>@EnableWebMvc - Enables support for the powerful and flexible annotation-driven controllers with request handling methods. This feature detects beans with the @Controller annotation and binds methods with the @RequestMapping annotations to URLs.</li>
 </ul>
+
+<h1 id="jdbc">JDBC</h1>
+
+<h2 id="why-spring-jdbc-over-plain-java-jdbc">Why Spring JDBC over plain Java JDBC?</h2>
+
+<ul>
+  <li>Java <code>SQLException</code> is a checked exception and doesn’t give much clarity on the error occurred. Spring has defined a wide variety of database-specific exceptions which are unchecked exceptions.</li>
+  <li>Spring JDBCTemplate removes most of boilerplate data access code - no exception handling, no need to close result set and connection</li>
+</ul>
+
+<h2 id="jdbctemplate">JdbcTemplate</h2>
+
+<ul>
+  <li><code>JdbcTemplate</code> — The most basic of Spring’s JDBC templates, this class provides simple access to a database through JDBC and indexed-parameter queries.</li>
+  <li><code>NamedParameterJdbcTemplate</code> — This JDBC template class enables you to perform queries where values are bound to named parameters in SQL, rather than indexed parameters.</li>
+  <li>Instances of the JdbcTemplate class are <em>thread-safe</em> once configured. This is important because it means that you can configure a single instance of a JdbcTemplate and then safely inject this shared reference into multiple DAOs (or repositories). </li>
+  <li>The JdbcTemplate is stateful, in that it maintains a reference to a DataSource, but this state is not conversational state.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Wiring JdbcTemplate</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Bean</span>
+</span><span class="line"><span class="kd">public</span> <span class="n">SpitterRepository</span> <span class="nf">spitterRepository</span><span class="o">(</span><span class="n">JdbcTemplate</span> <span class="n">jdbcTemplate</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">	<span class="k">return</span> <span class="k">new</span> <span class="nf">MyRepository</span><span class="o">(</span><span class="n">jdbcTemplate</span><span class="o">);</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Autowiring JdbcTemplate into JdbcOperations indirectly</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Repository</span>
+</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyRepository</span> <span class="kd">implements</span> <span class="n">MyRepo</span> <span class="o">{</span>
+</span><span class="line">	<span class="kd">private</span> <span class="n">JdbcOperations</span> <span class="n">jdbcOperations</span><span class="o">;</span>
+</span><span class="line">	
+</span><span class="line">	<span class="nd">@Inject</span>
+</span><span class="line">	<span class="kd">public</span> <span class="nf">JdbcSpitterRepository</span><span class="o">(</span><span class="n">JdbcOperations</span> <span class="n">jdbcOperations</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">		<span class="k">this</span><span class="o">.</span><span class="na">jdbcOperations</span> <span class="o">=</span> <span class="n">jdbcOperations</span><span class="o">;</span>
+</span><span class="line">	<span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Example of Batch Updating</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">batchUpdate</span><span class="o">(</span><span class="kd">final</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Actor</span><span class="o">&gt;</span> <span class="n">actors</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">    <span class="kt">int</span><span class="o">[]</span> <span class="n">updateCounts</span> <span class="o">=</span> <span class="n">jdbcTemplate</span><span class="o">.</span><span class="na">batchUpdate</span><span class="o">(</span><span class="s">&quot;update t_actor set first_name = ?, &quot;</span> <span class="o">+</span>
+</span><span class="line">            <span class="s">&quot;last_name = ? where id = ?&quot;</span><span class="o">,</span>
+</span><span class="line">        <span class="k">new</span> <span class="nf">BatchPreparedStatementSetter</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setValues</span><span class="o">(</span><span class="n">PreparedStatement</span> <span class="n">ps</span><span class="o">,</span> <span class="kt">int</span> <span class="n">i</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+</span><span class="line">                    <span class="n">ps</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">actors</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">).</span><span class="na">getFirstName</span><span class="o">());</span>
+</span><span class="line">                    <span class="n">ps</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="n">actors</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">).</span><span class="na">getLastName</span><span class="o">());</span>
+</span><span class="line">                    <span class="n">ps</span><span class="o">.</span><span class="na">setLong</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="n">actors</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">).</span><span class="na">getId</span><span class="o">().</span><span class="na">longValue</span><span class="o">());</span>
+</span><span class="line">                <span class="o">}</span>
+</span><span class="line">
+</span><span class="line">                <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getBatchSize</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">                    <span class="k">return</span> <span class="n">actors</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
+</span><span class="line">                <span class="o">}</span>
+</span><span class="line">            <span class="o">});</span>
+</span><span class="line">    <span class="k">return</span> <span class="n">updateCounts</span><span class="o">;</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="querying-results">Querying results</h2>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">interface</span> <span class="nc">RowMapper</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">{</span>
+</span><span class="line"><span class="kd">public</span> <span class="n">T</span> <span class="nf">mapRow</span><span class="o">(</span><span class="n">ResultSet</span> <span class="n">rs</span><span class="o">,</span> <span class="kt">int</span> <span class="n">rowNum</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SQLException</span><span class="o">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
   
     <footer>
@@ -337,7 +430,7 @@ messageStyle: "none",
 
 		<li>
 			<h3>Java</h3>
-			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/spring.html">Spring</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
 		</li>
 
 		<li>

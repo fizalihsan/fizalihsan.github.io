@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Algorithms Big-O Notation How to find Big-O in interviews? General Strings Linked List Brain Teasers Reference Grokking Algorithms - http://adit.io &hellip;">
+<meta name="description" content="Algorithms Big-O Notation How to find Big-O in interviews? General Strings Linked List Brain Teasers Sorting Searching Hashing Reference Grokking &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -115,15 +115,18 @@ messageStyle: "none",
   <li><a href="#general">General</a></li>
   <li><a href="#strings">Strings</a></li>
   <li><a href="#linked-list">Linked List</a></li>
-  <li><a href="#brain-teasers">Brain Teasers</a>    <ul>
-      <li><a href="#reference">Reference</a></li>
-    </ul>
-  </li>
+  <li><a href="#brain-teasers">Brain Teasers</a></li>
+  <li><a href="#sorting">Sorting</a></li>
+  <li><a href="#searching">Searching</a></li>
+  <li><a href="#hashing">Hashing</a></li>
+  <li><a href="#reference">Reference</a></li>
 </ul>
 
 <p>Grokking Algorithms - <a href="http://adit.io/">http://adit.io/</a></p>
 
 <h1 id="big-o-notation">Big-O Notation</h1>
+
+<p><img class="right" src="/technology/big-o-complexity.png" width="600" height="600" /></p>
 
 <ul>
   <li><strong>O(1)/Constant Complexity</strong>: 
@@ -146,14 +149,14 @@ messageStyle: "none",
   </li>
   <li><strong>O(n log n)</strong>: 
     <ul>
-      <li>A nice combination of the previous two.  Normally there’s 2 parts to the sort, the first loop is O(n), the second is O(log n), combining to form O(n log n) 1 item takes 2 seconds, 10 items takes 12 seconds, 100 items takes 103 seconds.</li>
-      <li>Example: MergeSort. To explain why this is <code>O(n log n)</code> is a bit more complex.  In the below example of 8 numbers, we have 3 levels of sorting:
+      <li>A nice combination of the previous two.  Normally there’s 2 parts to the sort, the first loop is O(n), the second is O(log n), combining to form O(n log n) 1 item takes 2 seconds, 10 items takes 12 seconds, 100 items takes 103 seconds.
+<img class="right" src="/technology/merge-sort-example.gif" /></li>
+      <li><em>Example</em>: MergeSort. To explain why this is <code>O(n log n)</code> is a bit more complex.  In the below example of 8 numbers, we have 3 levels of sorting:
         <ul>
           <li>4 list sorts when the list sizes are 2</li>
           <li>2 list sorts when the list sizes are 4</li>
           <li>1 list sort when the list size is 8
-Now consider if I were to double the number of elements to 16: this would only require one more level of sorting. This is a <code>log n</code> scale. However, on each level of sorting a total of <code>n</code> operations takes place (look at the red boxes in the diagram above).  this results in (n * log n) operations.
-<img src="http://www.corejavainterviewquestions.com/wp-content/uploads/2014/12/Merge-sort-example-300px.gif" alt="MergeSort Explained" /></li>
+Now consider if I were to double the number of elements to 16: this would only require one more level of sorting. This is a <code>log n</code> scale. However, on each level of sorting a total of <code>n</code> operations takes place (look at the red boxes in the diagram above).  this results in <code>(n * log n)</code> operations.</li>
         </ul>
       </li>
     </ul>
@@ -170,9 +173,8 @@ Now consider if I were to double the number of elements to 16: this would only r
       <li>Example: Take for example trying to find combinations; imagine a list of 150 people and to find every combination of groupings; everyone by themselves, all of the groups of 2 people, all of the groups of 3 people etc. Using a simple program which takes each person and loops through the combinations,  if I add one extra person then it’s going to increase the processing time exponentially. Every new element will double processing time.</li>
     </ul>
   </li>
+  <li><a href="http://www.perlmonks.org/?node_id=227909">Informal Introduction to BigO notation</a> </li>
 </ul>
-
-<p><img src="http://bigocheatsheet.com/img/big-o-complexity.png" alt="enter image description here" /></p>
 
 <h2 id="how-to-find-big-o-in-interviews">How to find Big-O in interviews?</h2>
 
@@ -261,10 +263,79 @@ Case B: If one of (1,2,3) or (4,5,6), then in step 2, out of the heavier group, 
   <li><em>**</em> - There are 2 cars at a railroad track 100 miles apart.  Each car is moving at 10mph towards each other and there is a flying bird that flies back and forth at 20mph and turns around whenever it hits a car. How far did the car travel before it hit both trains?</li>
 </ul>
 
-<h2 id="reference">Reference</h2>
+<h1 id="sorting">Sorting</h1>
+
+<ul>
+  <li>Heap sort visualization - http://www2.hawaii.edu/~copley/665/HSApplet.html</li>
+  <li>Sorting</li>
+</ul>
+
+<h1 id="searching">Searching</h1>
+
+<ul>
+  <li>Search types
+    <ul>
+      <li>exact search</li>
+      <li>range search</li>
+    </ul>
+  </li>
+  <li>Search algorithm types
+    <ul>
+      <li>Sequential</li>
+      <li>Direct access (hashing)</li>
+      <li>Tree indexing methods</li>
+    </ul>
+  </li>
+  <li>Binary Search</li>
+  <li>Dictionary/Interlpolation Search</li>
+  <li>Quadratic Binary Search</li>
+</ul>
+
+<h1 id="hashing">Hashing</h1>
+
+<ul>
+  <li>Hashing Functions
+    <ul>
+      <li>Perfect hashing</li>
+    </ul>
+  </li>
+  <li>Collision Resolution Policy
+    <ul>
+      <li>Open Hashing/Separate Chaining</li>
+      <li>Closed Hashing / Open Addressing
+        <ul>
+          <li>Bucket Hashing</li>
+          <li>Linear Probing</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Cons</strong></p>
+
+<ul>
+  <li>Not good for duplicate keys</li>
+  <li>Not good for Range searches</li>
+  <li>
+    <p>good only for in-memory and disk-based searching</p>
+  </li>
+  <li><a href="http://msdn.microsoft.com/en-US/library/ms379570(v=vs.80).aspx">Guide - An Extensive Examination of Data Structures Using C# 2.0</a></li>
+  <li><a href="http://www.mpi-inf.mpg.de/~mehlhorn/Toolbox.html">1</a></li>
+  <li><a href="http://www.cs.auckland.ac.nz/software/AlgAnim/ds_ToC.html">2</a></li>
+</ul>
+
+<h1 id="reference">Reference</h1>
 
 <ul>
   <li><a href="http://www.corejavainterviewquestions.com/idiots-guide-big-o/">Idiot’s guide to BigO</a></li>
+  <li>Books
+    <ul>
+      <li>Algorithms 4th Edition - Robert Sedgewick and Kevin Wayne</li>
+      <li>Algorithms in a Nutshell</li>
+      <li>ACE the programming interview</li>
+    </ul>
+  </li>
 </ul>
 
   
@@ -307,7 +378,7 @@ Case B: If one of (1,2,3) or (4,5,6), then in step 2, out of the heavier group, 
 
 		<li>
 			<h3>Java</h3>
-			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/spring.html">Spring</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
 		</li>
 
 		<li>

@@ -9,16 +9,16 @@ footer: true
 * list element with functor item
 {:toc}
 
-# Unit Testing
+# Concepts
 
-## Unit Testing Concepts
+* [Characterization test](http://www.artima.com/weblogs/viewpost.jsp?thread=198296)
+* [Characterization Testing static methods using different techniques](http://martinfowler.com/articles/modernMockingTools.html)
+* [Mocks aren't Stubs](http://martinfowler.com/articles/mocksArentStubs.html)
 
-* Characterization test - http://www.artima.com/weblogs/viewpost.jsp?thread=198296
-* Characterization Testing static methods using different techniques - http://martinfowler.com/articles/modernMockingTools.html
 
-## JUnit
+# JUnit
 
-### Method Level Annotations
+## Method Level Annotations
 
 * `@BeforeClass` - Marks the method to execute before the test case class begins
 * `@AfterClass` - Marks the method to execute after the test case class completes
@@ -29,7 +29,7 @@ footer: true
 * `@Test(timeout=1)` - Marks the maximum time in milliseconds the test case can take to run
 * `@Ignore("Comment")` - Mark a method to ignore from testing
 
-### Class Level Annotations
+## Class Level Annotations
 
 * Runner - is a class which runs tests. JUnit provides a bunch of runners out-of-the-box:
   * JUnit4 - starts the test case as a Junit4 test case
@@ -41,7 +41,7 @@ footer: true
   * When there are 2 test methods in a class, JUnit4 uses a Suite by default.
   * Runner invokes the Suite. Ordering or execution is up to the Suite implementation.
 
-### Parameterized Tests 
+## Parameterized Tests 
 
 * `Parameterized.class` is a Runner class provided by JUnit4
 * Same test method is tested with different parameters returned by the method defined by `@Parameters`.
@@ -83,7 +83,7 @@ Same test method is tested with different parameters returned by the method defi
 Signature of parmeters method should be@Parameters public static Collection. Collection elements should be arrays of same length
 Variables used in the test method should be defined as instance variables in the test class and there should be public constructor setting all these instance variables.
 
-## Mockito
+# Mockito
 
 * On mock object, all methods that return value returns null by default
 * Mockito follows `Arrange - Act - Assert` unlike other mock frameworks which follow `Expect-Run-Verify` pattern.
@@ -91,7 +91,7 @@ Variables used in the test method should be defined as instance variables in the
   * Testing static methods (check PowerMockito)
   * Mocking final classes
 
-### Examples
+## Examples
 
 ``` java Example of Verify
 import org.junit.Test;

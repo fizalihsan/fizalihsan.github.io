@@ -43,3 +43,10 @@ footer: true
 
 JPA specification - Apache open JPA
 
+# Connection Pooling
+
+Open-source softwares:
+
+* [Apache Commons DBCP](http://jakarta.apache.org/commons/dbcp)
+* [c3p0](http://sourceforge.net/projects/c3p0/)
+* [BoneCP](http://jolbox.com/)

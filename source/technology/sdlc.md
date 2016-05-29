@@ -174,5 +174,22 @@ http://en.wikipedia.org/wiki/List_of_software_development_philosophies
 
 ## Scrum
 
+* Product Backlogs
+* Spring Backlogs
+* 2 week sprints
+* Meetings
+	* Biweekly Sprint Planning
+	* Daily Scrum calls (max 15 mins)
+	* Sprint review meeting
+	* Retrospectives (at the end of the sprint)
+	* Backlog refinement (when needed)
+* Roles
+	* Product Owner
+	* Scrum Master
+	* Scrum Team
+* Charts
+	* Burndown chart @ sprint-level
+	* Burndown chart @ release and product-level
+
 
 ## KanBan

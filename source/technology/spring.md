@@ -114,4 +114,61 @@ public static class TestContextConfiguration {
 ```
 
 * @EnableCaching - Enables support for bean methods with the @Cacheable annotation.
-* @EnableWebMvc - Enables support for the powerful and flexible annotation-driven controllers with request handling methods. This feature detects beans with the @Controller annotation and binds methods with the @RequestMapping annotations to URLs.
+
+# JDBC
+
+## Why Spring JDBC over plain Java JDBC?
+
+* Java `SQLException` is a checked exception and doesn't give much clarity on the error occurred. Spring has defined a wide variety of database-specific exceptions which are unchecked exceptions.
+* Spring JDBCTemplate removes most of boilerplate data access code - no exception handling, no need to close result set and connection
+
+## JdbcTemplate
+
+* `JdbcTemplate` — The most basic of Spring’s JDBC templates, this class provides simple access to a database through JDBC and indexed-parameter queries.
+* `NamedParameterJdbcTemplate` — This JDBC template class enables you to perform queries where values are bound to named parameters in SQL, rather than indexed parameters.
+* Instances of the JdbcTemplate class are *thread-safe* once configured. This is important because it means that you can configure a single instance of a JdbcTemplate and then safely inject this shared reference into multiple DAOs (or repositories). 
+* The JdbcTemplate is stateful, in that it maintains a reference to a DataSource, but this state is not conversational state.
+
+```java Wiring JdbcTemplate
+@Bean
+public SpitterRepository spitterRepository(JdbcTemplate jdbcTemplate) {
+	return new MyRepository(jdbcTemplate);
+}
+```
+
+```java Autowiring JdbcTemplate into JdbcOperations indirectly
+@Repository
+public class MyRepository implements MyRepo {
+	private JdbcOperations jdbcOperations;
+	
+	@Inject
+	public JdbcSpitterRepository(JdbcOperations jdbcOperations) {
+		this.jdbcOperations = jdbcOperations;
+	}
+```
+
+```java Example of Batch Updating
+public int[] batchUpdate(final List<Actor> actors) {
+    int[] updateCounts = jdbcTemplate.batchUpdate("update t_actor set first_name = ?, " +
+            "last_name = ? where id = ?",
+        new BatchPreparedStatementSetter() {
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                    ps.setString(1, actors.get(i).getFirstName());
+                    ps.setString(2, actors.get(i).getLastName());
+                    ps.setLong(3, actors.get(i).getId().longValue());
+                }
+
+                public int getBatchSize() {
+                    return actors.size();
+                }
+            });
+    return updateCounts;
+}
+```
+
+## Querying results
+
+```java
+interface RowMapper<T> {
+public T mapRow(ResultSet rs, int rowNum) throws SQLException;
+```

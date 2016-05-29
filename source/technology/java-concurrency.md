@@ -490,7 +490,9 @@ Concurrency/Parallelism does not necessarily make a program run faster; it may e
 
 * **Overhead** is work that a sequential program does not need to do. Creating, initializing, and destroying threads adds overhead, and may result in a slower program. Using thread pools may reduce the overhead somewhat.
 * **Non-parallelizable computation**:  Some things can only be done sequentially.
-  * **Amdahl's law** states that if 1/S of a computation is inherently sequential, then the computation can be speeded up by at most a factor of S. For example, if 1/5 of a computation must be done sequentially and 4/5 can be done in parallel, then (assuming unlimited parallelism with zero additional overhead) the 4/5 can be done "instantaneously", the 1/5 is not speeded up at all, and the program can execute 5 times faster.
+  * **Amdahl's law** 
+    * states that *the speedup of a program using multiple processors in parallel computing is limited by the time needed for the sequential fraction of the program*
+    * in other words, it states that if 1/5 of a computation is inherently sequential, then the computation can be speeded up by at most a factor of S. For example, if 1/5 of a computation must be done sequentially and 4/5 can be done in parallel, then (assuming unlimited parallelism with zero additional overhead) the 4/5 can be done "instantaneously", the 1/5 is not speeded up at all, and the program can execute 5 times faster.
   * **Idle processors**: Unless all processors get exactly the same amount of work, some will be idle. Threads may need to wait for a lock, processes may need to wait for a message.
 * **Contention for resources**: Shared state requires synchronization, which is expensive.
 
@@ -625,7 +627,73 @@ An Exchanger lets a pair of threads exchange objects at a synchronization point.
 
 ## 7) ForkJoinPool (1.7)
 
-<span style="color:red">TODO</span>
+* `ForkJoinPool`: An instance of this class is used to run all your fork-join tasks in the whole program.
+* `RecursiveTask<V>`: You run a subclass of this in a pool and have it return a result
+* `RecursiveAction`: just like `RecursiveTask` except it does not return a result
+* `ForkJoinTask<V>`: superclass of `RecursiveTask<V>` and `RecursiveAction`. `fork` and `join` are methods defined in this class. You won't use this class directly, but it is the class with most of the useful javadoc documentation, in case you want to learn about additional methods.
+
+* **Example**
+
+* In the example below, given an array and a range of that array. The `compute` method sums the elements in that range. 
+* If the range has fewer than `SEQUENTIAL_THRESHOLD` elements, it uses a simple for-loop like you learned in introductory programming. 
+* Otherwise, it creates two `Sum` objects for problems of half the size. It uses fork to compute the left half in parallel with computing the right half, which this object does itself by calling `right.compute()`. To get the answer for the left, it calls `left.join()`.
+* Why do we have a `SEQUENTIAL_THRESHOLD`? If we create a `Sum` object for every number, then this creates a lot more `Sum` objects and calls to `fork`, so it will end up being much less efficient despite the same asymptotic complexity.
+* Why do we create more Sum objects than we are likely to have procesors? Because it is the framework's job to make a reasonable number of parallel tasks execute efficiently and to schedule them in a good way. By having lots of fairly small parallel tasks it can do a better job, especially if the number of processors available to your program changes during execution (e.g., because the operating system is also running other programs) or the tasks end up taking different amounts of time.
+
+```java Given an array and a range of that array, this program sums the elements in that range
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.RecursiveTask;
+
+class Sum extends RecursiveTask<Long> {
+    static final int SEQUENTIAL_THRESHOLD = 5000;
+
+    int low;
+    int high;
+    int[] array;
+
+    Sum(int[] arr, int lo, int hi) {
+        array = arr;
+        low   = lo;
+        high  = hi;
+    }
+
+    protected Long compute() {
+        if(high - low <= SEQUENTIAL_THRESHOLD) {
+            long sum = 0;
+            for(int i=low; i < high; ++i) 
+                sum += array[i];
+            return sum;
+         } else {
+            int mid = low + (high - low) / 2;
+            Sum left  = new Sum(array, low, mid);
+            Sum right = new Sum(array, mid, high);
+            left.fork();
+            long rightAns = right.compute();
+            long leftAns  = left.join();
+            return leftAns + rightAns;
+         }
+     }
+
+     static long sumArray(int[] array) {
+         return ForkJoinPool.commonPool().invoke(new Sum(array,0,array.length));
+     }
+}
+```
+
+### Work-Stealing Technique
+
+{% img right /technology/work-stealing.png %}
+
+* Fork-join is based on *Work-Stealing technique* for parallel exuection
+* One of the key challenges in parallelizing any type of workload is the partitioning step: ideally we want to partition the work such that every piece will take the exact same amount of time. In reality, we often have to guess at what the partition should be, which means that some parts of the problem will take longer, either because of the inefficient partitioning scheme, or due to some other, unanticipated reasons (e.g. external service, slow disk access, etc).
+* This is where *work-stealing* comes in. If some of the CPU cores finish their jobs early, then we want them to help to finish the problem. However, now we have to be careful: trying to "steal" work from another worker will require synchronization, which will slowdown the processing. Hence, we want work-stealing, but with minimal synchronization.
+
+* Fork-Join solves this problem in a clever way using: *recursive job partitioning* and a *double-ended queue* (deque) for holding the tasks.
+* Given a problem, we divide the problem into *N* large pieces, and hand each piece to one of the workers (2 in the diagram here). Each worker then recursively subdivides the first problem at the head of the deque and appends the split tasks to the head of the same deque. After a few iterations we will end up with some number of smaller tasks at the front of the deque, and a few larger and yet to be partitioned tasks on end. 
+* Imagine the second worker has finished all of its work, while the first worker is busy. To minimize synchronization the second worker grabs a job from the end of the deque (hence the reason for efficient head and tail access). By doing so, it will get the largest available block of work, allowing it to minimize the number of times it has to interact with the other worker (aka, minimize synchronization). Simple, but a very clever technique!
+
+* ***Map-Reduce and Fork-Join*** - "map-reduce" workflow is simply a special case of this pattern. Instead of recursively partitioning the problem, the map-reduce algorithm will subdivide the problem upfront. This, in turn, means that in the case of an unbalanced workload we are likely to steal finer-grained tasks, which will also lead to more need for synchronization - if you can partition the problem recursively, do so!
+
 
 ## 8) StampedLock (1.8)
 
@@ -640,7 +708,6 @@ An Exchanger lets a pair of threads exchange objects at a synchronization point.
 
 <span style="color:red">TODO</span>
 
-* ForkJoin model
 * Actor Model
 * STM model
 

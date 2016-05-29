@@ -192,10 +192,37 @@ http://msdn2.microsoft.com/en-us/library/ms171845(SQL.90).aspx
 * Phantom reading
 
 ## Locks
-* Locks http://www.dbazine.com/db2/db2-disarticles/gulutzan6 
-  * Shared Lock
-  * Update Lock 
-  * Exclusive Lock (http://www.dbazine.com/db2/db2-disarticles/gulutzan6) 
+
+http://www.dbazine.com/db2/db2-disarticles/gulutzan6 
+
+### Types
+
+**Shared Locks or Read Locks**
+
+Two or more transactions, each with a shared lock, can concurrently read the contents of a memory location without interfering with one another. As long as none of the transactions attempts to change the data at that location, all the transactions can proceed without delay. The lock manager portion of the DBMS can grant shared locks to all transactions that want to perform only read operations. Shared
+locks are sometimes called *read locks*.
+
+**Exclusive Locks or Write Locks**
+
+To perform a write operation on a memory location, a transaction must acquire an exclusive lock, which grants to its holder the exclusive right to access the resource being locked. If one transaction holds an exclusive lock on a resource, no competing transaction may acquire either a shared lock or exclusive lock on that resource until the first transaction releases its lock. Exclusive locks are sometimes
+called *write locks*.
+
+**Update Lock**
+
+???
+
+### Granularity
+
+The granularity of a lock determines the size of the resource being locked. Locks that are coarse-grained take rather large resources out of circulation. Fine-grained locks sequester relatively small resources. Course-grained locks deny access to big things, such as tables. Fine-grained locks protect smaller things, such as rows in a table.
+
+* **Database locks**: The database lock is the ultimate in coarse-grained locks. If a transaction puts an exclusive lock on a database, no other transaction can access the database at all until the lock is released. As you might imagine, database locks have a disastrous effect on overall productivity and should be avoided if at all possible. Sometimes, a database administrator must apply a database lock to prevent other transactions from corrupting the database while she is making alterations in the database structure.
+* **Table locks**: Table locks, by locking an entire database table, are not as restrictive as database locks but are still pretty coarse. Generally, you would impose a table lock only if you were altering  he structure of the table or if you were changing data in most or all of the rows in the table.
+* **Row locks**: Row locks are fine-grained in that they lock only a single row in a table. If you’re changing only a value in a single row, there is no point in locking any rows other than that one target row. The only transactions that are affected by a row lock are those that want to do something to the very same row of the very same table.
+* **Page locks**: A page lock — which has an intermediate granularity between a table lock and a row lock — locks an entire page in the page buffer. Because information gets transferred between the page  buffer and disk a page at a time, some DBMSs provide locks at the page level. As processing proceeds, requiring pages currently residing in the page buffer to be swapped out in favor of pages on disk that are currently needed, the DBMS will resist, if possible, the urge to swap out any page that is locked by an active transaction. Swapping it out and then swap
+
+
+## Concurrency Issues
+
 * Deadlock 
   * Deadlock is a situation when two processes, each having a lock on one piece of data, attempt to acquire a lock on the other's piece. Each process would wait indefinitely for the other to release the lock, unless one of the user processes is terminated. SQL Server detects deadlocks and terminates one user's process. 
   * How do you avoid deadlocks?

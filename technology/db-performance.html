@@ -125,13 +125,14 @@ messageStyle: "none",
     </ul>
   </li>
   <li><a href="#concurrency">Concurrency</a>    <ul>
+      <li><a href="#isolation-levels">Isolation levels</a></li>
       <li><a href="#locks">Locks</a>        <ul>
           <li><a href="#types">Types</a></li>
           <li><a href="#granularity">Granularity</a></li>
         </ul>
       </li>
+      <li><a href="#lock-escalation">Lock Escalation</a></li>
       <li><a href="#concurrency-issues">Concurrency Issues</a></li>
-      <li><a href="#isolation-levels">Isolation Levels</a></li>
     </ul>
   </li>
   <li><a href="#references">References</a></li>
@@ -385,9 +386,13 @@ messageStyle: "none",
 
 <p>http://msdn2.microsoft.com/en-us/library/ms171845(SQL.90).aspx </p>
 
+<h2 id="isolation-levels">Isolation levels</h2>
+
 <ul>
-  <li>Dirty reading</li>
-  <li>Phantom reading</li>
+  <li>Repeatable Read (RR)</li>
+  <li>Read Stability (RS)</li>
+  <li>Cursor Stability (CS)</li>
+  <li>Uncommitted Read (UR)</li>
 </ul>
 
 <h2 id="locks">Locks</h2>
@@ -421,6 +426,14 @@ called <em>write locks</em>.</p>
   <li><strong>Page locks</strong>: A page lock — which has an intermediate granularity between a table lock and a row lock — locks an entire page in the page buffer. Because information gets transferred between the page  buffer and disk a page at a time, some DBMSs provide locks at the page level. As processing proceeds, requiring pages currently residing in the page buffer to be swapped out in favor of pages on disk that are currently needed, the DBMS will resist, if possible, the urge to swap out any page that is locked by an active transaction. Swapping it out and then swap</li>
 </ul>
 
+<h2 id="lock-escalation">Lock Escalation</h2>
+
+<ul>
+  <li>A lock escalation occurs when the number of locks held on rows and tables in the db equals the percentage of the locklist specified by the ‘maxlocks’ db config param. To reduce the no. of locks, db manager begins converting many fine-grained locks (row/block level) to table locks for all active tables, starting from any locks on LOBs or VARCHARs. Then the table with the next highest no. of locks and so on, until the no. of locks held is decreased to about half of the value specified by ‘maxlocks’.</li>
+  <li><strong>Exclusive Lock Escalation</strong> - An exclusive lock escalation is a lock escalation in which the table lock acquired is an ‘exclusive lock’. </li>
+  <li>Lock escalations reduce concurrency. Conditions that might cause lock escalations should be avoided. </li>
+</ul>
+
 <h2 id="concurrency-issues">Concurrency Issues</h2>
 
 <ul>
@@ -437,21 +450,6 @@ called <em>write locks</em>.</p>
   </li>
   <li>Lock contention </li>
   <li>Lock escalation</li>
-</ul>
-
-<h2 id="isolation-levels">Isolation Levels</h2>
-<ul>
-  <li>Access to uncommitted data (only with UR)</li>
-  <li>Non-repeatable read (only with UR &amp; CS)</li>
-  <li>Phantom read phenomenon (only with UR, CS &amp; RS)</li>
-  <li>Isolation levels</li>
-  <li>Repeatable Read(RR)</li>
-  <li>Read Stability (RS)
-    <ul>
-      <li>Cursor Stability (CS)</li>
-      <li>Uncommitted Read (UR)</li>
-    </ul>
-  </li>
 </ul>
 
 <h1 id="references">References</h1>
@@ -501,7 +499,7 @@ called <em>write locks</em>.</p>
 
 		<li>
 			<h3>Database</h3>
-			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/rdbms-products.html">RDBMS Products</a>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/rdbms-products.html">RDBMS Products</a>  |  <a href="/technology/sql.html">SQL</a>
 		</li>
 
 		<li>
@@ -531,7 +529,7 @@ called <em>write locks</em>.</p>
 
 		<li>
 			<h3>General Concepts</h3>
-			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
 		</li>
 
 		<h2>Non-Techninal</h2>

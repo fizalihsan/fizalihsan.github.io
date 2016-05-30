@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>JavaScript Ecosystem - KnowledgeShop</title>
+  <title>Brain Teasers - KnowledgeShop</title>
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="JavaScript Ecosystem AngularJS AngularJS Angular compiles takes a ‘template’, loads, compiles, tranforms and renders to DOM called ‘view’. Templates &hellip;">
+<meta name="description" content="Brain Teasers Bacteria in a bottle - Bacteria multiples every minute. You place a bacteria into an empty cup at 12. By 1pm, it’s full. At what time &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://fizalihsan.github.io/technology/js-ecosystem.html">
+  <link rel="canonical" href="http://fizalihsan.github.io/softskills/brain-teasers.html">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <!-- Below custom CSS is for table border styling -->
@@ -103,62 +103,67 @@ messageStyle: "none",
 <article role="article">
   
   <header>
-    <h1 class="entry-title">JavaScript Ecosystem</h1>
+    <h1 class="entry-title">Brain Teasers</h1>
     
   </header>
   
-  <ul id="markdown-toc">
-  <li><a href="#angularjs">AngularJS</a></li>
+  
+<ul>
+  <li><strong>Bacteria in a bottle</strong> - Bacteria multiples every minute.  You place a bacteria into an empty cup at 12.  By 1pm, it’s full.  At what time was it half full?</li>
 </ul>
 
-<h1 id="angularjs">AngularJS</h1>
+<p><em>Solution</em> = 12:59pm</p>
 
 <ul>
-  <li>Angular compiles takes a ‘template’, loads, compiles, tranforms and renders to DOM called ‘view’.</li>
-  <li><strong>Templates</strong>
-    <ul>
-      <li>Templates once received from server are cacheable. Only the data changes from then on.</li>
-    </ul>
-  </li>
-  <li>2 types of markups
-    <ul>
-      <li>Directives - apply special behavior to attributes or elements in the HTML.</li>
-      <li>Double curly braces - &#8220; - An “expression” in a template is a JavaScript-like code snippet that allows to read and write variables.A filter formats the value of an expression for display to the user.</li>
-    </ul>
-  </li>
-  <li><strong>2-way data binding</strong> - Angular provides live bindings or “two-way data binding”: Whenever the input values change, the value of the expressions are automatically recalculated and the DOM is updated with their values. </li>
-  <li><strong>Controllers</strong> - The purpose of controllers is to expose variables and functionality to expressions and directives. </li>
-  <li><strong>Services</strong> - The purpose of services is to expose view-independent business logic.</li>
-  <li><strong>Factory</strong>
-  ???</li>
-  <li><strong>Modules</strong> - is where all the things need for Angular DI (Dependency Injection) is registered. When Angular starts, it will use the configuration of the module with the name defined by the ng-app directive, including the configuration of all modules that this module depends on.</li>
-  <li><strong>Common Directives</strong>
-    <ul>
-      <li><code>ng-app</code> - automatically initializes an application</li>
-      <li><code>ng-bind</code> is same as &#8220;</li>
-      <li><code>ng-model</code> - stores/updates the value of the input field into/from a variable.</li>
-      <li><code>ng-controller</code> - tells angular that an instance of a Controller is responsible for the element with the directive and all of the element’s children.</li>
-      <li><code>ng-repeat</code></li>
-      <li><code>ng-submit</code> - to group inputs in a form</li>
-      <li><code>ng-click</code></li>
-      <li><code>ng-dblclick</code></li>
-      <li><code>ng-show</code>/<code>ng-hide</code></li>
-    </ul>
-  </li>
+  <li><strong>Poison Bottle &amp; Rats</strong> - There are 8 bottles and 3 rats. One bottle is poisoned. Once poisoned each rat has 5 minutes to live. Within 5 min, how can you use all 3 rats to figure out which bottle was poisoned. </li>
+</ul>
+
+<p><em>Solution</em></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">Bottle 7 - 1 1 1 - R1, R2, R3 rats drank off of this bottle
+</span><span class="line">Bottle 6 - 1 1 0 - R1, R2 rats drank off of this bottle
+</span><span class="line">Bottle 5 - 1 0 1 - R1, R3 rats drank off of this bottle
+</span><span class="line">Bottle 4 - 1 0 0 - R1 rats drank off of this bottle 
+</span><span class="line">Bottle 3 - 0 1 1 - R2, R3 rats drank off of this bottle
+</span><span class="line">Bottle 2 - 0 1 0 - R2 rats drank off of this bottle
+</span><span class="line">Bottle 1 - 0 0 1 - R3 rat drank off of this bottle
+</span><span class="line">Bottle 0 - 0 0 0 - None drank off of this bottle</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Now if Bottles 1-7 contain poison, then the killing of rats combination will tell us the answer. And If no rat gets killed, Bottle 0 has the poison.</p>
+
+<ul>
+  <li><strong>Identify heavier ball out of 8</strong> - One ball is slightly heavier out of 8 balls.  How many times do you need to use a scale to determine which is heavier?</li>
+</ul>
+
+<p><em>Solution</em> - 2 steps max
+Break the balls into the following groups: (1,2,3),(4,5,6),(7,8)</p>
+
+<p>Step 1: Weigh (1,2,3) against (4,5,6)</p>
+
+<p>Case A: If both are equal, in step 2, compare 7 and 8
+Case B: If one of (1,2,3) or (4,5,6), then in step 2, out of the heavier group, take 2 out of 3 and weigh again.</p>
+
+<ul>
+  <li><strong>Light switch combination</strong> - There are 10 light switches.  How many different combinations can you have of on/off?</li>
+</ul>
+
+<p><em>Solution</em>: 2 states: on and off. So, 2^10 combinations</p>
+
+<ul>
+  <li><em>**</em> - There are 2 cars at a railroad track 100 miles apart.  Each car is moving at 10mph towards each other and there is a flying bird that flies back and forth at 20mph and turns around whenever it hits a car. How far did the car travel before it hit both trains?</li>
 </ul>
 
   
     <footer>
       
-      
-        <div class="sharing">
-  
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/js-ecosystem.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/js-ecosystem.html" >Tweet</a>
-  
-  
-  
-</div>
-
       
     </footer>
   

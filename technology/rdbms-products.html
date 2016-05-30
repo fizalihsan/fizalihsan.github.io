@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="RDBMS Products DB2 Basics Special tables Views Command Line Options Advanced Concepts Tablespaces Default Tablespaces Tablespace Types Buffer Pools &hellip;">
+<meta name="description" content="RDBMS Products Concurrency Performance DB Federation DB Partitioning Partitioning Types DB Replication Oracle Sybase Temporary Database: tempdb &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -108,35 +108,12 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#db2">DB2</a>    <ul>
-      <li><a href="#basics">Basics</a>        <ul>
-          <li><a href="#special-tables">Special tables</a></li>
-          <li><a href="#views">Views</a></li>
-        </ul>
-      </li>
-      <li><a href="#command-line-options">Command Line Options</a></li>
-      <li><a href="#advanced-concepts">Advanced Concepts</a>        <ul>
-          <li><a href="#tablespaces">Tablespaces</a>            <ul>
-              <li><a href="#default-tablespaces">Default Tablespaces</a></li>
-              <li><a href="#tablespace-types">Tablespace Types</a></li>
-            </ul>
-          </li>
-          <li><a href="#buffer-pools">Buffer Pools</a></li>
-          <li><a href="#concurrency">Concurrency</a>            <ul>
-              <li><a href="#issues">Issues</a></li>
-              <li><a href="#isolation-levels">Isolation levels</a></li>
-              <li><a href="#lock-escalation">Lock Escalation</a></li>
-            </ul>
-          </li>
-          <li><a href="#performance">Performance</a></li>
-          <li><a href="#db-federation">DB Federation</a>            <ul>
-              <li><a href="#db-partitioning">DB Partitioning</a></li>
-              <li><a href="#partitioning-types">Partitioning Types</a></li>
-              <li><a href="#db-replication">DB Replication</a></li>
-            </ul>
-          </li>
-        </ul>
-      </li>
+  <li><a href="#concurrency">Concurrency</a></li>
+  <li><a href="#performance">Performance</a></li>
+  <li><a href="#db-federation">DB Federation</a>    <ul>
+      <li><a href="#db-partitioning">DB Partitioning</a></li>
+      <li><a href="#partitioning-types">Partitioning Types</a></li>
+      <li><a href="#db-replication">DB Replication</a></li>
     </ul>
   </li>
   <li><a href="#oracle">Oracle</a></li>
@@ -151,170 +128,7 @@ messageStyle: "none",
   <li><a href="#bibliography">Bibliography</a></li>
 </ul>
 
-<h1 id="db2">DB2</h1>
-
-<h2 id="basics">Basics</h2>
-
-<h3 id="special-tables">Special tables</h3>
-
-<ul>
-  <li>Global temporary tables - with or without logging - http://www.ibm.com/developerworks/data/library/techarticle/dm-0912globaltemptable/</li>
-  <li>MDC Tables</li>
-</ul>
-
-<h3 id="views">Views</h3>
-
-<ul>
-  <li>A view is an alternate way of representing data that exists in one or more tables. </li>
-  <li>A view can include some or all of the columns from one or more tables. It can also be based on other views. </li>
-  <li>A view is the result of a query on one or more tables. A view looks like a real table, but is actually just a representation of the data from one or more tables. </li>
-  <li>A view is a logical or virtual table that does not exist in physical storage. </li>
-  <li>It is an efficient way of representing data without needing to maintain it. When the data shown in a view changes, those changes were a result of changes made to the data in the tables themselves. </li>
-  <li>Views are used to see different presentations of the same data. Views are a way to control access to sensitive data. Different users can have access to different columns and rows based on their needs. </li>
-  <li>When the column of a view is directly derived from the column of a base table, that view column inherits any constraints that apply to the base table column. For example, if a view includes a foreign key of its base table, insert and update operations using that view are subject to the same referential constraints as is the base table. </li>
-  <li>Also, if the base table of a view is a parent table, delete and update operations using that view are subject to the same rules as are delete and update operations on the base table. </li>
-  <li>A view can derive the data type of each column from the result table, or base the types on the attributes of a user-defined structured type. This is called a typed view. Similar to a typed table, a typed view can be part of a view hierarchy. </li>
-  <li>A subview inherits columns from its superview. The term subview applies to a typed view and to all typed views that are below it in the view hierarchy. A proper subview of a view V is a view below V in the typed view hierarchy. </li>
-  <li>A view can become inoperative (for example, if the base table is dropped); if this occurs, the view is no longer available for SQL operations.</li>
-  <li>Views CAN contain the following: Aggregate functions and groupings, Joins Other views, distinct clause </li>
-  <li>Views CANNOT contain the following: select into, compute clause, union, order by.</li>
-</ul>
-
-<p>Types of Views
-* Horizontal view - Slices the source table horizontally to create the view. All of the columns of the source table participate in the view, but only some of its rows are visible through the view. Horizontal views are appropriate when the source table contains data that relates to various organizations or users. They provide a “private table” for each user, composed only of the rows needed by that user. 
-* Vertical view - TODO
-* Indexed views - TODO </p>
-
-<h2 id="command-line-options">Command Line Options</h2>
-
-<ul>
-  <li>Enter command prompt by typing ‘db2’</li>
-  <li>To take input from a file and output to a file: <code>db2 -tvf db2input.txt &gt; db2output.txt &amp;</code></li>
-  <li>To connect to database: <code>CONNECT to NYCMRDI4 USER cmdrinfr USING s0mepassw0rd</code></li>
-  <li>Command to list the databases: <code>list db directory</code></li>
-  <li>Command to list the tables: <code>list db tables</code></li>
-  <li>Read input from file: <code>db2 -tvf filename</code></li>
-  <li>Db2advis - command to advice indexes on sql</li>
-  <li>How to find out if statistics on a table or schema is up-to-date?
-    <ul>
-      <li>If CARD is -1 or STATS_TIME is null or far in the past, then statistics needs to be updated. Non-negative number on CARD denotes the number of rows on the table.</li>
-    </ul>
-  </li>
-</ul>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">SELECT</span> <span class="n">CARD</span><span class="p">,</span> <span class="n">STATS_TIME</span> <span class="k">FROM</span> <span class="n">SYSCAT</span><span class="p">.</span><span class="n">TABLES</span> <span class="k">WHERE</span> <span class="n">TABNAME</span><span class="o">=</span><span class="s1">&#39;MARGININFO&#39;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<ul>
-  <li>If NLEAF, NLEVELS &amp; FULLKEYCARD is -1 or STATS_TIME is null or far in the past, then statistics needs to be updated on that index</li>
-</ul>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">SELECT</span> <span class="n">NLEAF</span><span class="p">,</span> <span class="n">NLEVELS</span><span class="p">,</span> <span class="n">FULLKEYCARD</span><span class="p">,</span> <span class="n">STATS_TIME</span><span class="p">,</span> <span class="n">i</span><span class="p">.</span><span class="o">*</span> <span class="k">FROM</span> <span class="n">SYSCAT</span><span class="p">.</span><span class="n">INDEXES</span> <span class="n">i</span> <span class="k">WHERE</span> <span class="n">TABSCHEMA</span><span class="o">=</span><span class="s1">&#39;CMDRPROD&#39;</span> <span class="k">and</span> <span class="n">TABNAME</span><span class="o">=</span><span class="s1">&#39;MARGININFO&#39;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<ul>
-  <li>Via DB2 Command - <code>reorgchk update statistics on SCHEMA CMDRPROD</code></li>
-  <li>Reorg - TODO</li>
-  <li>Runstats - Execute to collect statistics of the table and its indexes to help optimizer choose the best data-access plan</li>
-</ul>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="n">RUNSTATS</span> <span class="k">ON</span> <span class="k">TABLE</span> <span class="k">schema</span><span class="p">.</span><span class="k">table</span> <span class="k">WITH</span> <span class="n">DISTRIBUTION</span> <span class="k">AND</span> <span class="n">DETAILED</span> <span class="n">INDEXES</span> <span class="k">ALL</span><span class="p">;</span>
-</span><span class="line"><span class="n">RUNSTATS</span> <span class="k">ON</span> <span class="k">TABLE</span> <span class="k">schema</span><span class="p">.</span><span class="k">table</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>(If reorg is run, then execute runstats also)
-Execute Runstats : after creating an index, after hanging the prefetch size, after executing reorg. Also execute it at regular intervals to keep the statistics current.</p>
-
-<ul>
-  <li>Check transaction log usage : <code>call sp.xlogfull()</code></li>
-  <li>Row count on table without full table scan</li>
-</ul>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">SELECT</span> <span class="n">tabname</span> <span class="n">TableName</span><span class="p">,</span> <span class="n">card</span> <span class="n">RowCount</span> <span class="k">FROM</span> <span class="n">syscat</span><span class="p">.</span><span class="n">tables</span> <span class="k">WHERE</span> <span class="n">TABNAME</span><span class="o">=</span><span class="s1">&#39;tableName&#39;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<ul>
-  <li>Truncate a table without transaction logging</li>
-</ul>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">LOAD</span> <span class="k">FROM</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="k">null</span> <span class="k">of</span> <span class="n">del</span> <span class="k">REPLACE</span> <span class="k">INTO</span> <span class="n">YourTable</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>This operation is fully recoverable. Note that on Windows systems, you have to replace <code>/dev/null</code> by <code>NUL</code>.</p>
-
-<p>OR</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">YourTable</span> <span class="n">ACTIVATE</span> <span class="k">NOT</span> <span class="n">LOGGED</span> <span class="k">INITIALLY</span> <span class="k">WITH</span> <span class="n">EMPTY</span> <span class="k">TABLE</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>Causes all data currently in table to be removed. Once the data has been removed, it cannot be recovered except through use of the RESTORE facility. If the unit of work in which this alter statement was issued is rolled back, the table data will not be returned to its original state. 
-When this action is requested, no DELETE triggers defined on the affected table are fired. Any indexes that exist on the table are also deleted.</p>
-
-<ul>
-  <li>Dummy select</li>
-</ul>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">select</span> <span class="k">current</span> <span class="k">timestamp</span> <span class="k">from</span> <span class="n">sysibm</span><span class="p">.</span><span class="n">sysdummy1</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<h2 id="advanced-concepts">Advanced Concepts</h2>
-
-<h3 id="tablespaces">Tablespaces</h3>
-
-<p>Table spaces are logical objects used as a layer between logical tables and physical containers. Containers are where the data is physically stored in files, directories, or raw devices. When you create a table space, you can associate it to a specific buffer pool (database cache) and to specific containers.</p>
-
-<h4 id="default-tablespaces">Default Tablespaces</h4>
-
-<p>There are 3 table spaces created automatically when a database is created: </p>
-
-<ol>
-  <li><strong>Catalog (SYSCATSPACE)</strong>: The catalog and the system temporary space can be considered system structures, as they are needed for the normal operation of your database. The catalog contains metadata (data about your database objects) and must exist at all times. 
-    <ul>
-      <li><strong>System temporary space (TEMPSPACE1)</strong>: is the work area for the database manager to perform operations, like joins and overflowed sorts. There must be at least one system temporary table space in each database. </li>
-      <li><strong>Default user table space (USERSPACE1)</strong>: This is created by default, but you can delete it. 
-To create a table in a given table space, use the CREATE TABLE statement with the IN table_space_name clause. If a table space is not specified in this statement, the table will be created in the first user created table space. If you have not yet created a table space, the table will be created in the USERSPACE1 table space. </li>
-    </ul>
-  </li>
-</ol>
-
-<h4 id="tablespace-types">Tablespace Types</h4>
-
-<ol>
-  <li><strong>System-managed space (SMS)</strong>: This type of table space is managed by the operating system and requires minimal administration. This is the default table space type. </li>
-  <li><strong>Database-managed space (DMS)</strong>: This type of table space is managed by the DB2 database manager, and it requires some administration</li>
-</ol>
-
-<h3 id="buffer-pools">Buffer Pools</h3>
-
-<p>A buffer pool is an area in physical memory that caches the database information most recently used. Without buffer pools, every single piece of data has to be retrieved from disk, which is very slow. Buffer pools are associated to tables and indexes through a table space. A buffer pool is an area in memory where all index and data pages other than LOBs are processed.DB2 retrieves LOBs directly from disk. Buffer pools are one of the most important objects to tune for database performance. </p>
-
 <h3 id="concurrency">Concurrency</h3>
-
-<h4 id="issues">Issues</h4>
-<ul>
-  <li>Lost updates </li>
-  <li>Access to uncommitted data (only with UR) </li>
-  <li>Non-repeatable read (only with UR &amp; CS) </li>
-  <li>Phantom read phenomenon (only wit UR, CS &amp; RS) </li>
-</ul>
-
-<h4 id="isolation-levels">Isolation levels</h4>
-<ul>
-  <li>Repeatable Read(RR)</li>
-  <li>Read Stability (RS)</li>
-  <li>Cursor Stability (CS)</li>
-  <li>Uncommitted Read (UR)</li>
-</ul>
-
-<h4 id="lock-escalation">Lock Escalation</h4>
-<p>A lock escalation occurs when the number of locks held on rows and tables in the db equals the percentage of the locklist specified by the ‘maxlocks’ db config param. To reduce the no. of locks, db manager begins converting many small row/block level locks to table locks for all active tables, starting from any locks on LOBs or VARCHARs. Then the table with the next highest no. of locks and so on, until the no. of locks held is decreased to about half of the value specified by ‘maxlocks’ Exclusive Lock Escalation An exclusive lock escalation is a lock escalation in which the table lock acquired is an ‘exclusive lock’. Lock escalations reduce concurrency. Conditions that might cause lock escalations should be avoided. </p>
 
 <h3 id="performance">Performance</h3>
 
@@ -470,7 +284,7 @@ To create a table in a given table space, use the CREATE TABLE statement with th
 
 		<li>
 			<h3>Database</h3>
-			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/rdbms-products.html">RDBMS Products</a>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/rdbms-products.html">RDBMS Products</a>  |  <a href="/technology/sql.html">SQL</a>
 		</li>
 
 		<li>
@@ -500,7 +314,7 @@ To create a table in a given table space, use the CREATE TABLE statement with th
 
 		<li>
 			<h3>General Concepts</h3>
-			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
 		</li>
 
 		<h2>Non-Techninal</h2>

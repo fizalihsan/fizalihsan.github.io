@@ -261,12 +261,24 @@ Both primary key and unique enforce uniqueness of the column on which they are d
 
 <ul>
   <li>
-    <p><strong>Multi-Dimensional Clustering Tables</strong></p>
+    <p><strong>Materialized Query Tables (MQT)</strong></p>
+  </li>
+  <li>
+    <p><strong>Multi-Dimensional Clustering Tables (MDC)</strong></p>
+  </li>
+</ul>
+
+<p>???</p>
+
+<ul>
+  <li>
+    <p><strong>Heap Tables</strong> (Sybase)  Tables with no clustered index.</p>
   </li>
   <li>
     <p><strong>Temporary Tables</strong></p>
     <ul>
       <li><strong>Global temporary tables (DB2)</strong> - with or without logging - http://www.ibm.com/developerworks/data/library/techarticle/dm-0912globaltemptable/</li>
+      <li><strong>tempdb (Sybase)</strong> - The <code>tempdb</code> database is a special Sybase supplied database that comes in each server. Data in tempdb is not permanent. The tempdb database is cleared each time the server reboots. Any queries which do any sort of sort operation implicitly use tempdb. These queries include select statments with group by’s or order by’s. Be careful, if you select a large set of rows and use an order by or group by clause, you query may fail because tempdb isn’t big enough. The system administrator can extend the size of tempdb </li>
     </ul>
   </li>
 </ul>
@@ -517,20 +529,9 @@ To create a table in a given table space, use the CREATE TABLE statement with th
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 <ul>
   <li>Via DB2 Command - <code>reorgchk update statistics on SCHEMA CMDRPROD</code></li>
-  <li>Reorg - TODO</li>
-  <li>Runstats - Execute to collect statistics of the table and its indexes to help optimizer choose the best data-access plan</li>
-</ul>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="n">RUNSTATS</span> <span class="k">ON</span> <span class="k">TABLE</span> <span class="k">schema</span><span class="p">.</span><span class="k">table</span> <span class="k">WITH</span> <span class="n">DISTRIBUTION</span> <span class="k">AND</span> <span class="n">DETAILED</span> <span class="n">INDEXES</span> <span class="k">ALL</span><span class="p">;</span>
-</span><span class="line"><span class="n">RUNSTATS</span> <span class="k">ON</span> <span class="k">TABLE</span> <span class="k">schema</span><span class="p">.</span><span class="k">table</span><span class="p">;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>(If reorg is run, then execute runstats also)
-Execute Runstats : after creating an index, after hanging the prefetch size, after executing reorg. Also execute it at regular intervals to keep the statistics current.</p>
-
-<ul>
+  <li>
+    <p>Reorg - TODO</p>
+  </li>
   <li>Check transaction log usage : <code>call sp.xlogfull()</code></li>
   <li>Row count on table without full table scan</li>
 </ul>
@@ -614,7 +615,7 @@ When this action is requested, no DELETE triggers defined on the affected table 
 
 		<li>
 			<h3>Database</h3>
-			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/rdbms-products.html">RDBMS Products</a>  |  <a href="/technology/sql.html">SQL</a>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
 		</li>
 
 		<li>

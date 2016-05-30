@@ -120,10 +120,6 @@ messageStyle: "none",
       <li><a href="#properties-of-an-index-oracle-feature">Properties of an Index (Oracle feature)</a></li>
     </ul>
   </li>
-  <li><a href="#query-optimization">Query Optimization</a>    <ul>
-      <li><a href="#query-execution-plan">Query Execution Plan</a></li>
-    </ul>
-  </li>
   <li><a href="#concurrency">Concurrency</a>    <ul>
       <li><a href="#isolation-levels">Isolation levels</a></li>
       <li><a href="#locks">Locks</a>        <ul>
@@ -133,6 +129,18 @@ messageStyle: "none",
       </li>
       <li><a href="#lock-escalation">Lock Escalation</a></li>
       <li><a href="#concurrency-issues">Concurrency Issues</a></li>
+    </ul>
+  </li>
+  <li><a href="#performance">Performance</a>    <ul>
+      <li><a href="#query-optimization">Query Optimization</a></li>
+      <li><a href="#query-execution-plan">Query Execution Plan</a></li>
+      <li><a href="#data-dictionary">Data Dictionary</a></li>
+    </ul>
+  </li>
+  <li><a href="#db-federation">DB Federation</a>    <ul>
+      <li><a href="#db-partitioning">DB Partitioning</a></li>
+      <li><a href="#partitioning-types">Partitioning Types</a></li>
+      <li><a href="#db-replication">DB Replication</a></li>
     </ul>
   </li>
   <li><a href="#references">References</a></li>
@@ -332,56 +340,6 @@ messageStyle: "none",
   </li>
 </ul>
 
-<h1 id="query-optimization">Query Optimization</h1>
-
-<p>When db processes the query, it performs the following steps: </p>
-
-<ul>
-  <li>Parses and normalizes the query, validating syntax and object references </li>
-  <li>Optimizes the query and generates the query plan 
-    <ul>
-      <li>Phase 1 - Query Analysis 
-        <ul>
-          <li>Find the search arguments (SARG) </li>
-          <li>Find the ORs c. Find the joins </li>
-        </ul>
-      </li>
-      <li>Phase 2 - Index Selection 
-        <ul>
-          <li>Choose the best index for each SARG </li>
-          <li>Choose the best method for ORs </li>
-          <li>Choose the best indexes for any join clauses </li>
-          <li>Choose the best index to use for each table </li>
-        </ul>
-      </li>
-      <li>Phase 3 - Join Order Selection 
-        <ul>
-          <li>Evaluate the join orders </li>
-          <li>Compute the costs </li>
-          <li>Evaluate other server options for resolving joins </li>
-        </ul>
-      </li>
-      <li>Phase 4 - Plan Selection </li>
-    </ul>
-  </li>
-  <li>Compiles the query plan </li>
-  <li>Executes the query plan and returns the results to the user.</li>
-</ul>
-
-<p>How do you tune a SQL query? How do you use an access plan?</p>
-
-<h2 id="query-execution-plan">Query Execution Plan</h2>
-
-<p>An execution plan is basically a road map that graphically or textually shows the data retrieval methods chosen by the SQL server’s query optimizer for a stored procedure or ad hoc query. Execution plans are very useful for helping a developer understand and analyze the performance characteristics of a query or stored procedure, since the plan is used to execute the query or stored procedure.</p>
-
-<p>In many SQL systems, a textual execution plan can be obtained using a keyword such as <code>EXPLAIN</code>, and visual representations can often be obtained as well. In Microsoft SQL Server, the Query Analyzer has an option called <em>Show Execution Plan</em> (located on the Query drop down menu). If this option is turned on, it will display query execution plans in a separate window when a query is run.</p>
-
-<ul>
-  <li>How to read a query execution plan?</li>
-</ul>
-
-<p>Page Extent - Denotes the # of contiguous pages of data read from the hard disk at a time. SQL reads 8 pages(64K) at a time.</p>
-
 <h1 id="concurrency">Concurrency</h1>
 
 <p>http://msdn2.microsoft.com/en-us/library/ms171845(SQL.90).aspx </p>
@@ -452,12 +410,151 @@ called <em>write locks</em>.</p>
   <li>Lock escalation</li>
 </ul>
 
+<h1 id="performance">Performance</h1>
+
+<h2 id="query-optimization">Query Optimization</h2>
+
+<p>When db processes the query, it performs the following steps: </p>
+
+<ul>
+  <li>Parses and normalizes the query, validating syntax and object references </li>
+  <li>Optimizes the query and generates the query plan 
+    <ul>
+      <li>Phase 1 - Query Analysis 
+        <ul>
+          <li>Find the search arguments (SARG) </li>
+          <li>Find the ORs c. Find the joins </li>
+        </ul>
+      </li>
+      <li>Phase 2 - Index Selection 
+        <ul>
+          <li>Choose the best index for each SARG </li>
+          <li>Choose the best method for ORs </li>
+          <li>Choose the best indexes for any join clauses </li>
+          <li>Choose the best index to use for each table </li>
+        </ul>
+      </li>
+      <li>Phase 3 - Join Order Selection 
+        <ul>
+          <li>Evaluate the join orders </li>
+          <li>Compute the costs </li>
+          <li>Evaluate other server options for resolving joins </li>
+        </ul>
+      </li>
+      <li>Phase 4 - Plan Selection </li>
+    </ul>
+  </li>
+  <li>Compiles the query plan </li>
+  <li>Executes the query plan and returns the results to the user.</li>
+</ul>
+
+<p>How do you tune a SQL query? How do you use an access plan?</p>
+
+<h2 id="query-execution-plan">Query Execution Plan</h2>
+
+<p>An execution plan is basically a road map that graphically or textually shows the data retrieval methods chosen by the SQL server’s query optimizer for a stored procedure or ad hoc query. Execution plans are very useful for helping a developer understand and analyze the performance characteristics of a query or stored procedure, since the plan is used to execute the query or stored procedure.</p>
+
+<p>In many SQL systems, a textual execution plan can be obtained using a keyword such as <code>EXPLAIN</code>, and visual representations can often be obtained as well. In Microsoft SQL Server, the Query Analyzer has an option called <em>Show Execution Plan</em> (located on the Query drop down menu). If this option is turned on, it will display query execution plans in a separate window when a query is run.</p>
+
+<ul>
+  <li>How to read a query execution plan?</li>
+</ul>
+
+<p>Page Extent - Denotes the # of contiguous pages of data read from the hard disk at a time. SQL reads 8 pages(64K) at a time.</p>
+
+<h2 id="data-dictionary">Data Dictionary</h2>
+
+<p><strong>Data dictionary</strong>- stores statistics about columns, tables, clusters, indexes, and partitions for the CBO. DBMS_STATS statement is used to gather the statistics</p>
+
+<ul>
+  <li><strong>Cost-based Optimizers (CBO)</strong> - uses the statistics stored in the Data Dictionary. This approach optimizes for best throughput.</li>
+  <li>
+    <p><strong>Rule-based Optimizers (RBO)</strong> - This approach optimizes for best response time. </p>
+  </li>
+  <li>DB2
+    <ul>
+      <li>Execute <code>runstats</code> to collect statistics of the table and its indexes to help optimizer choose the best data-access plan</li>
+      <li>Execute this after creating an index, after hanging the prefetch size, after executing reorg. Also execute it at regular intervals to keep the statistics current. If reorg is run, then execute runstats also.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="n">db2</span> <span class="n">runstats</span> <span class="k">on</span> <span class="k">table</span> <span class="k">schema</span><span class="p">.</span><span class="k">table</span>
+</span><span class="line"><span class="n">db2</span> <span class="n">runstats</span> <span class="k">on</span> <span class="k">table</span> <span class="k">schema</span><span class="p">.</span><span class="k">table</span> <span class="k">with</span> <span class="n">distribution</span> <span class="k">and</span> <span class="n">detailed</span> <span class="n">indexes</span> <span class="k">all</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Stores statistics in SYSSTAT schema, SYSCAT tables</li>
+  <li><code>with distribution</code> - This tells DB2 to collect distribution statistics. Distribution statistics include two things:
+    <ul>
+      <li><em>Frequent value statistics</em> – DB2 notes the most frequent values. By default, the 10 most frequent values. Using the above syntax, this is collected for every column. You can change the number of most frequent values using the NUM_FREQVALUES database configuration parameter, or the NUM_FREQVALUES clause on the runstats command</li>
+      <li><em>Quantile statistics</em> – Divides the values into NUM_QUANTILES (default: 20) sections to describe the distribution of the data. The default means that the optimizer should be able to estimate the number of values that would meet any one-sided predicate within 2.5% of the actual value.</li>
+    </ul>
+  </li>
+  <li><code>and detailed indexes all</code> - Collecting index statistics helps DB2 decide which if any indexes to use to satisfy a particular query. Collecting detailed index statistics allows db2 to more accurately estimate the page fetches that will be required – allowing db2 to properly estimate the cost of accessing a table through an index. DB2 will use this data along with bufferpool information to determine how much (if any) synchronous page cleaning will have to occur.</li>
+  <li>Sybase - <code>update statistics</code></li>
+  <li>Oracle - <code>EXEC dbms_stats.gather_database_stats;</code></li>
+</ul>
+
+<p>http://download-west.oracle.com/docs/cd/A87860_01/doc/server.817/a76992/toc.htm </p>
+
+<ul>
+  <li><a href="https://www.ibm.com/developerworks/data/library/techarticle/dm-0606fechner/">Distribution statistics uses with the DB2 Optimizer</a></li>
+</ul>
+
+<h1 id="db-federation">DB Federation</h1>
+
+<p>Database federated support in DB2 allows tables from multiple databases to be presented as local tables to a DB2 server. The databases may be local or remote; they can also belong to different. </p>
+
+<p>DB2 uses NICKNAME, SERVER, WRAPPER, and USER MAPPING objects to implement federation. </p>
+
+<h2 id="db-partitioning">DB Partitioning</h2>
+
+<ul>
+  <li>DPF(DB partioning feature) lets you partition your database across multiple servers or within a large SMP server. This allows for scalability, since you can add new machines and spread your database across them. That means more CPUs, more memory, and more disks from each of the additional machines for your database! Partitioning is a concept that applies to the database, not the instance; you partition a database, not an instance.</li>
+  <li>In a partitioned environment SYSCATSPACE is not partitioned, but resides on one partition known as the catalog partition. The partition from which the CREATE DATABASE command is issued becomes the catalog partition for the new database. All access to system tables must go through this database partition.</li>
+  <li>Each buffer pool in a DPF environment holds data only from the database partition where the buffer pool is located. </li>
+</ul>
+
+<h2 id="partitioning-types">Partitioning Types</h2>
+
+<ul>
+  <li>Row-wide partitioning - TODO</li>
+  <li>Column-wide partitioning - TODO</li>
+</ul>
+
+<h2 id="db-replication">DB Replication</h2>
+
+<p>HADR - High Availability Database Replication (from version 9.7) </p>
+
+<p>TODO</p>
+
 <h1 id="references">References</h1>
 
 <ul>
-  <li>Sybase - Performance and Tuning Guide</li>
-  <li>Physical Database Design - Database Professional’s Guide to Exploiting Indexes, Views, Storage &amp; More</li>
-  <li>Dissecting SQL Server Execution Plans and SQL Tuning</li>
+  <li>Books
+    <ul>
+      <li>Sybase - Performance and Tuning Guide</li>
+      <li>Physical Database Design - Database Professional’s Guide to Exploiting Indexes, Views, Storage &amp; More</li>
+      <li>Dissecting SQL Server Execution Plans and SQL Tuning</li>
+    </ul>
+  </li>
+  <li>DB2
+    <ul>
+      <li>More details on : http://publib.boulder.ibm.com/infocenter/db2luw/v8/index.jsp?topic=/com.ibm.db2.udb.doc/core/r0010410.htm</li>
+      <li>Command line reference: ftp://ftp.software.ibm.com/ps/products/db2/info/vr8/pdf/letter/db2n0e80.pdf</li>
+      <li>DB2 System command: http://www3.software.ibm.com/ibmdl/pub/software/dw/dm/db2/dm-0406qi/systemCommands.pdf</li>
+    </ul>
+  </li>
+  <li>Sybase
+    <ul>
+      <li>http://www.faqs.org/faqs/databases/sybase-faq/part1/ </li>
+      <li>http://www.lcard.ru/~nail/sybase/perf/66.htm </li>
+      <li>http://www.benslade.com/tech/OldIntroToSybase/</li>
+    </ul>
+  </li>
 </ul>
 
   
@@ -499,7 +596,7 @@ called <em>write locks</em>.</p>
 
 		<li>
 			<h3>Database</h3>
-			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/rdbms-products.html">RDBMS Products</a>  |  <a href="/technology/sql.html">SQL</a>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
 		</li>
 
 		<li>

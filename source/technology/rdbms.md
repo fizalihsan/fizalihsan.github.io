@@ -9,9 +9,7 @@ footer: true
 * list element with functor item
 {:toc}
 
-# Concepts
-
-## Keys
+# Keys
 
 > Refer to SQL Tips and Techniques-2002
 
@@ -34,13 +32,14 @@ footer: true
 **Difference between a primary key and a unique key?**
 Both primary key and unique enforce uniqueness of the column on which they are defined. But by default primary key creates a clustered index on the column, whereas unique key creates a nonclustered index by default. Another major difference is that, primary key doesn't allow NULLs, but unique key allows one NULL only. Identity columns & default values
 
-## Integrity
+# Integrity
 
 * **Data integrity** - means, in part, that you can correctly and consistently navigate and manipulate the tables in the database. There are two basic rules to ensure data integrity; entity integrity and referential integrity. 
   * **Entity Integrity**- Entity integrity rule states that for every instance of an entity, the value of the primary key must exist, be unique, and cannot be null. 
   * **Referential Integrity**- rule states that every foreign key value must match a primary key value in an associated table. Referential integrity ensures that we can correctly navigate between related entities. FKs can have nulls.
 
-### Constraints
+## Constraints
+
 * Constraints enable the RDBMS enforce the integrity of the database automatically, without needing you to create triggers, rule or defaults.
 * **Types of constraints**: `NOT NULL`, `CHECK`, `UNIQUE`, `PRIMARY KEY`, `FOREIGN KEY` 
 * **Check Constraints**
@@ -53,9 +52,7 @@ ALTER TABLE table_name ADD CONSTRAINT constraint_name CHECK ( predicate );
 ALTER TABLE table_name ADD CONSTRAINT constraint_name CHECK ( PRICE > 100 AND DATE_INSERTED > CURRENT_DATE );
 ```
 
-## Data Types
-
-## Table Types
+# Table Types
 
 * **Heap-organized table** 
   * A heap-organized table is a table with rows stored in no particular order. This is a standard Oracle table; the term "heap" is used to differentiate it from an *index-organized table* or *external table*.
@@ -87,9 +84,33 @@ CREATE TABLE my_iot (id INTEGER PRIMARY KEY, value VARCHAR2(50)) ORGANIZATION IN
 CREATE OR REPLACE DIRECTORY my_data_dir as '/my/data/dir/';
 ```
 
-## LOB
+* **Multi-Dimensional Clustering Tables**
 
-## Cursors
+* **Temporary Tables**
+  * **Global temporary tables (DB2)** - with or without logging - http://www.ibm.com/developerworks/data/library/techarticle/dm-0912globaltemptable/
+
+# Views
+
+* A view is an alternate way of representing data that exists in one or more tables. 
+* A view can include some or all of the columns from one or more tables. It can also be based on other views. 
+* A view is the result of a query on one or more tables. A view looks like a real table, but is actually just a representation of the data from one or more tables. 
+* A view is a logical or virtual table that does not exist in physical storage. 
+* It is an efficient way of representing data without needing to maintain it. When the data shown in a view changes, those changes were a result of changes made to the data in the tables themselves. 
+* Views are used to see different presentations of the same data. Views are a way to control access to sensitive data. Different users can have access to different columns and rows based on their needs. 
+* When the column of a view is directly derived from the column of a base table, that view column inherits any constraints that apply to the base table column. For example, if a view includes a foreign key of its base table, insert and update operations using that view are subject to the same referential constraints as is the base table. 
+* Also, if the base table of a view is a parent table, delete and update operations using that view are subject to the same rules as are delete and update operations on the base table. 
+* A view can derive the data type of each column from the result table, or base the types on the attributes of a user-defined structured type. This is called a **typed view**. Similar to a typed table, a typed view can be part of a view hierarchy. 
+* A subview inherits columns from its superview. The term subview applies to a typed view and to all typed views that are below it in the view hierarchy. A proper subview of a view V is a view below V in the typed view hierarchy. 
+* A view can become inoperative (for example, if the base table is dropped); if this occurs, the view is no longer available for SQL operations.
+* Views CAN contain the following: Aggregate functions and groupings, Joins Other views, distinct clause 
+* Views CANNOT contain the following: select into, compute clause, union, order by.
+
+* View Types
+  * **Horizontal view** - Slices the source table horizontally to create the view. All of the columns of the source table participate in the view, but only some of its rows are visible through the view. Horizontal views are appropriate when the source table contains data that relates to various organizations or users. They provide a "private table" for each user, composed only of the rows needed by that user. 
+  * **Vertical view** - TODO
+  * **Indexed views** - TODO 
+
+# Cursors
 
 * **Static Cursor** - Specifies that cursor will use a temporary copy of the data instead of base tables. This cursor does not allow modifications and modifications made to base tables are not reflected in the data returned by fetches made to this cursor. (Kind of like [snapshot iterators](technology/java-collections.html#fail-safe-iterators) in Java)
 * **Dynamic Cursor**
@@ -120,14 +141,15 @@ BEGIN
   CLOSE cur;
 END;
 ```
-### Disadvantages of cursors 
+## Disadvantages of cursors 
+
 Each time you fetch a row from the cursor,it results in a network round trip, where as a normal SELECT query makes only one round trip, however large the resultset is. Further, there are restrictions on the SELECT statements that can be used with some types of cursors.
 
-## Triggers
+# Triggers
 
 Triggers are special kind of stored procedures that get executed automatically when an INSERT, UPDATE or DELETE operation takes place on a table. Triggers can't be invoked on demand. They get triggered only when an associated action (INSERT, UPDATE, DELETE) happens on the table on which they are defined.
 
-## Joins
+# Joins
 
 {% img right /technology/visual_sql_joins.jpg 500 500 %}
 
@@ -196,128 +218,95 @@ Triggers are special kind of stored procedures that get executed automatically w
 * [Join Methods and Strategies](http://pic.dhe.ibm.com/infocenter/db2luw/v9r7/index.jsp?topic=%2Fcom.ibm.db2.luw.admin.perf.doc%2Fdoc%2Fc0005311.html)
 * [Getting the Most from Hash Joins](http://www3.software.ibm.com/ibmdl/pub/software/dw/dm/db2/0208zubiri/0208zubiri.pdf)
 
-# FAQs
+# Administration Concepts
 
-* What's the difference between DELETE TABLE and TRUNCATE TABLE commands? 
-  * DELETE TABLE is a logged operation, so the deletion of each row gets logged in the transaction log, which makes it slow. 
-  * TRUNCATE TABLE also deletes all the rows in a table, but it won't log the deletion of each row, instead it logs the de-allocation of the data pages of the table, which makes it faster. Of course, TRUNCATE TABLE can be rolled back. 
-* Co-related subquery? Co-related query is a query in which subquery depends on execution of main query 
+## Tablespaces
 
-```sql
-Select DeptNo,Ename,Sal From Emp e1 Where Sal=(Select Max(Sal) From Emp e2 Where e1.DeptNo=e2.DeptNo)
-```
+Table spaces are logical objects used as a layer between logical tables and physical containers. Containers are where the data is physically stored in files, directories, or raw devices. When you create a table space, you can associate it to a specific buffer pool (database cache) and to specific containers.
 
-* [How to select first/last/max per group in SQL?](http://www.xaprb.com/blog/2006/12/07/how-to-select-the-firstleastmax-row-per-group-in-sql)
-* SQL query to get 4th or 5th maximum value from a table 
+### Default Tablespaces
 
-``` sql
-select max(id) from EMP A where N=(select count(id) From EMP B where B.ID>=A.ID) 
-OR 
-select * from (select rownum rn,id from (select distinct id From EMP order by id desc)) where rn between N-1 and N;
-```
+There are 3 table spaces created automatically when a database is created: 
 
-* Difference between `USING` & `ON` clause in joins?
-  * `USING` clause allows you to specify the join key by name.
-  * `ON` clause allows you to specify the column names for join keys in *both tables*.
-  * `ON` clause preserves the columns from each joined table separately, which the `USING` clause merges the columns from the joined tables into a single column. `USING` may not be a good idea when using outer joins where you would want to see unmatched rows from a table.
+1. **Catalog (SYSCATSPACE)**: The catalog and the system temporary space can be considered system structures, as they are needed for the normal operation of your database. The catalog contains metadata (data about your database objects) and must exist at all times. 
+* **System temporary space (TEMPSPACE1)**: is the work area for the database manager to perform operations, like joins and overflowed sorts. There must be at least one system temporary table space in each database. 
+* **Default user table space (USERSPACE1)**: This is created by default, but you can delete it. 
+To create a table in a given table space, use the CREATE TABLE statement with the IN table_space_name clause. If a table space is not specified in this statement, the table will be created in the first user created table space. If you have not yet created a table space, the table will be created in the USERSPACE1 table space. 
 
-```sql
-select department_name, city from departments
-JOIN locations USING (location_id); -- specify the same column name for both of the tables for the join
+**Types**
 
-select department_name, city from departments dept
-join locations loc on (d.location_id = l.id); -- specify different column name for the tables for the join.
-```
+1. **System-managed space (SMS)**: This type of table space is managed by the operating system and requires minimal administration. This is the default table space type. 
+2. **Database-managed space (DMS)**: This type of table space is managed by the DB2 database manager, and it requires some administration
 
-* When we need to use USING clause in the sql? For example in this below: 
 
-```sql
-SELECT emp_name, department_name, city FROM employees e 
-JOIN departments d USING (department_id) 
-JOIN locations l USING (location_id) WHERE salary > 10000;
-```
+## Buffer Pools 
 
-* How to delete duplicate records in a table? 
+A buffer pool is an area in physical memory that caches the database information most recently used. Without buffer pools, every single piece of data has to be retrieved from disk, which is very slow. Buffer pools are associated to tables and indexes through a table space. A buffer pool is an area in memory where all index and data pages other than LOBs are processed.DB2 retrieves LOBs directly from disk. Buffer pools are one of the most important objects to tune for database performance. 
+
+# Operational Commands
+
+## DB2
+
+* Enter command prompt by typing 'db2'
+* To take input from a file and output to a file: `db2 -tvf db2input.txt > db2output.txt &`
+* To connect to database: `CONNECT to NYCMRDI4 USER cmdrinfr USING s0mepassw0rd`
+* Command to list the databases: `list db directory`
+* Command to list the tables: `list db tables`
+* Read input from file: `db2 -tvf filename`
+* `Db2advis` - command to advice indexes on sql
+* How to find out if statistics on a table or schema is up-to-date?
+  * If CARD is -1 or STATS_TIME is null or far in the past, then statistics needs to be updated. Non-negative number on CARD denotes the number of rows on the table.
 
 ``` sql
-DELETE FROM test t1 WHERE EXISTS ( SELECT * FROM test t2 WHERE t2.col1=t1.col1 AND t2.rowid <> t1.rowid);
+SELECT CARD, STATS_TIME FROM SYSCAT.TABLES WHERE TABNAME='MARGININFO'
 ```
 
-* What will be the output of this query? 
-  * `SELECT 1 FROM DUAL UNION SELECT 'A' FROM DUAL;` The query would throw an error. The two data types in the union set should be same. Out here it is a 1 and 'A', datatype mismatch and hence the error.
+  * If NLEAF, NLEVELS & FULLKEYCARD is -1 or STATS_TIME is null or far in the past, then statistics needs to be updated on that index
 
-* What does `UNION` do? What is the difference between `UNION` and `UNION ALL`?
-  * `UNION` merges the contents of two structurally-compatible tables into a single combined table. 
-  * The difference between `UNION` and `UNION ALL` is that `UNION` will omit duplicate records whereas `UNION ALL` will include duplicate records.
-  * Performance-wise `UNION ALL` is typically be better than `UNION`, since `UNION` requires the server to do the additional work of removing any duplicates.
+``` sql
+SELECT NLEAF, NLEVELS, FULLKEYCARD, STATS_TIME, i.* FROM SYSCAT.INDEXES i WHERE TABSCHEMA='CMDRPROD' and TABNAME='MARGININFO'
+```
+  * Via DB2 Command - `reorgchk update statistics on SCHEMA CMDRPROD`
+* Reorg - TODO
+* Runstats - Execute to collect statistics of the table and its indexes to help optimizer choose the best data-access plan
 
-* What will be the result of the query below? Explain your answer and provide a version that behaves correctly?
-
-```sql
-select case when null = null then 'Yup' else 'Nope' end as Result;
+``` sql
+RUNSTATS ON TABLE schema.table WITH DISTRIBUTION AND DETAILED INDEXES ALL;
+RUNSTATS ON TABLE schema.table; 
 ```
 
-This query will actually yield “Nope”, seeming to imply that `null` is not equal to itself! The reason for this is that the proper way to compare a value to `null` in SQL is with the `is` operator, not with `=`.
+(If reorg is run, then execute runstats also)
+Execute Runstats : after creating an index, after hanging the prefetch size, after executing reorg. Also execute it at regular intervals to keep the statistics current.
 
-* What will be the result of the query below?
+* Check transaction log usage : `call sp.xlogfull()`
+* Row count on table without full table scan
 
-`SELECT * FROM runners;`
-
-| id | name         |
-|----|--------------|
-|  1 | John Doe     |
-|  2 | Jane Doe     |
-|  3 | Alice Jones  |
-|  4 | Bobby Louis  |
-|  5 | Lisa Romero  |
-   
-`SELECT * FROM races;`
-
-| id | event          | winner_id |
-|----|----------------|-----------|
-|  1 | 100 meter dash |  2        |
-|  2 | 500 meter dash |  3        |
-|  3 | cross-country  |  2        |
-|  4 | triathalon     |  NULL     |
-
-`SELECT * FROM runners WHERE id NOT IN (SELECT winner_id FROM races)`
-
-Answer:
-Surprisingly, given the sample data provided, the result of this query will be an empty set. The reason for this is as follows: *If the set being evaluated by the SQL `NOT IN` condition contains any values that are `null`, then the outer query here will return an empty set, even if there are many runner ids that match winner_ids in the races table*.
-
-Knowing this, a query that avoids this issue would be as follows:
-
-```sql
-SELECT * FROM runners WHERE id NOT IN (SELECT winner_id FROM races WHERE winner_id IS NOT null)
+``` sql
+SELECT tabname TableName, card RowCount FROM syscat.tables WHERE TABNAME='tableName'
 ```
 
-* Given a table SALARIES, such as the one below, that has m = male and f = female values. Swap all f and m values (i.e., change all f values to m and vice versa) with a single update query and no intermediate temp table.
+* Truncate a table without transaction logging
 
-Answer: 
-
-```sql
-UPDATE SALARIES SET sex = CASE sex WHEN 'm' THEN 'f' ELSE 'm' END
+``` sql
+LOAD FROM /dev/null of del REPLACE INTO YourTable
 ```
 
-* Write a SQL query using `UNION ALL` (not `UNION`) that uses the `WHERE` clause to eliminate duplicates. Why might you want to do this?
+This operation is fully recoverable. Note that on Windows systems, you have to replace `/dev/null` by `NUL`.
 
-Answer:
-You can avoid duplicates using `UNION ALL` and still run much faster than `UNION` by running a query like this:
+OR
 
-```sql
-SELECT * FROM mytable WHERE a=X UNION ALL SELECT * FROM mytable WHERE b=Y AND a!=X
+``` sql
+ALTER TABLE YourTable ACTIVATE NOT LOGGED INITIALLY WITH EMPTY TABLE
 ```
 
-The key is the `AND a!=X` part. This gives you the benefits of the `UNION` command, while avoiding much of its performance hit.
+Causes all data currently in table to be removed. Once the data has been removed, it cannot be recovered except through use of the RESTORE facility. If the unit of work in which this alter statement was issued is rolled back, the table data will not be returned to its original state. 
+When this action is requested, no DELETE triggers defined on the affected table are fired. Any indexes that exist on the table are also deleted.
 
+* Dummy select
 
-* What are the `NVL` and the `NVL2` functions in SQL? How do they differ?
-
-Both the `NVL(exp1, exp2)` and `NVL2(exp1, exp2, exp3)` functions check the value `exp1` to see if it is null.
-
-With the `NVL(exp1, exp2)` function, if `exp1` is not null, then the value of `exp1` is returned; otherwise, the value of `exp2` is returned, but case to the same data type as that of `exp1`.
-
-With the `NVL2(exp1, exp2, exp3)` function, if `exp1` is not null, then `exp2` is returned; otherwise, the value of `exp3` is returned.
+``` sql
+select current timestamp from sysibm.sysdummy1;
+```
 
 
 # Bibliography

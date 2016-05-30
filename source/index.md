@@ -30,6 +30,7 @@ footer: true
     * [Design]({{ root_url }}/technology/db-design.html)
     * [Performance]({{ root_url }}/technology/db-performance.html)
     * [RDBMS Products]({{ root_url }}/technology/rdbms-products.html)
+    * [SQL]({{ root_url }}/technology/sql.html)
 
   * Functional Programming
     * [Concepts]({{ root_url }}/technology/functionalprogramming.html)
@@ -68,6 +69,7 @@ footer: true
 
   * General Concepts
     * [Algorithms]({{ root_url }}/technology/algorithms.html)
+    * [Brain Teasers]({{ root_url }}/softskills/brain-teasers.html)
     * [Data Structures]({{ root_url }}/technology/datastructures.html)
     * [OOPS]({{ root_url }}/technology/oops.html)
     * [Operating Systems]({{ root_url }}/technology/os.html)

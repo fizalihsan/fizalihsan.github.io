@@ -188,8 +188,12 @@ Page Extent - Denotes the # of contiguous pages of data read from the hard disk 
 
 http://msdn2.microsoft.com/en-us/library/ms171845(SQL.90).aspx 
 
-* Dirty reading
-* Phantom reading
+## Isolation levels 
+
+* Repeatable Read (RR)
+* Read Stability (RS)
+* Cursor Stability (CS)
+* Uncommitted Read (UR)
 
 ## Locks
 
@@ -220,6 +224,12 @@ The granularity of a lock determines the size of the resource being locked. Lock
 * **Row locks**: Row locks are fine-grained in that they lock only a single row in a table. If you’re changing only a value in a single row, there is no point in locking any rows other than that one target row. The only transactions that are affected by a row lock are those that want to do something to the very same row of the very same table.
 * **Page locks**: A page lock — which has an intermediate granularity between a table lock and a row lock — locks an entire page in the page buffer. Because information gets transferred between the page  buffer and disk a page at a time, some DBMSs provide locks at the page level. As processing proceeds, requiring pages currently residing in the page buffer to be swapped out in favor of pages on disk that are currently needed, the DBMS will resist, if possible, the urge to swap out any page that is locked by an active transaction. Swapping it out and then swap
 
+## Lock Escalation 
+
+* A lock escalation occurs when the number of locks held on rows and tables in the db equals the percentage of the locklist specified by the 'maxlocks' db config param. To reduce the no. of locks, db manager begins converting many fine-grained locks (row/block level) to table locks for all active tables, starting from any locks on LOBs or VARCHARs. Then the table with the next highest no. of locks and so on, until the no. of locks held is decreased to about half of the value specified by 'maxlocks'.
+* **Exclusive Lock Escalation** - An exclusive lock escalation is a lock escalation in which the table lock acquired is an 'exclusive lock'. 
+* Lock escalations reduce concurrency. Conditions that might cause lock escalations should be avoided. 
+
 
 ## Concurrency Issues
 
@@ -230,16 +240,6 @@ The granularity of a lock determines the size of the resource being locked. Lock
   * A livelock is one, where a request for an exclusive lock is repeatedly denied because a series of overlapping shared locks keeps interfering. SQL Server detects the situation after four denials and refuses further shared locks. A livelock also occurs when read transactions monopolize a table or page, forcing a write transaction to wait indefinitely. 
 * Lock contention 
 * Lock escalation
-
-## Isolation Levels
-* Access to uncommitted data (only with UR)
-* Non-repeatable read (only with UR & CS)
-* Phantom read phenomenon (only with UR, CS & RS)
-* Isolation levels
-* Repeatable Read(RR)
-* Read Stability (RS)
-  * Cursor Stability (CS)
-  * Uncommitted Read (UR)
 
 # References
 

@@ -84,10 +84,18 @@ CREATE TABLE my_iot (id INTEGER PRIMARY KEY, value VARCHAR2(50)) ORGANIZATION IN
 CREATE OR REPLACE DIRECTORY my_data_dir as '/my/data/dir/';
 ```
 
-* **Multi-Dimensional Clustering Tables**
+* **Materialized Query Tables (MQT)**
+
+* **Multi-Dimensional Clustering Tables (MDC)**
+
+???
+
+* **Heap Tables** (Sybase)  Tables with no clustered index.
 
 * **Temporary Tables**
   * **Global temporary tables (DB2)** - with or without logging - http://www.ibm.com/developerworks/data/library/techarticle/dm-0912globaltemptable/
+  * **tempdb (Sybase)** - The `tempdb` database is a special Sybase supplied database that comes in each server. Data in tempdb is not permanent. The tempdb database is cleared each time the server reboots. Any queries which do any sort of sort operation implicitly use tempdb. These queries include select statments with group by's or order by's. Be careful, if you select a large set of rows and use an order by or group by clause, you query may fail because tempdb isn't big enough. The system administrator can extend the size of tempdb 
+
 
 # Views
 
@@ -268,15 +276,6 @@ SELECT NLEAF, NLEVELS, FULLKEYCARD, STATS_TIME, i.* FROM SYSCAT.INDEXES i WHERE 
 ```
   * Via DB2 Command - `reorgchk update statistics on SCHEMA CMDRPROD`
 * Reorg - TODO
-* Runstats - Execute to collect statistics of the table and its indexes to help optimizer choose the best data-access plan
-
-``` sql
-RUNSTATS ON TABLE schema.table WITH DISTRIBUTION AND DETAILED INDEXES ALL;
-RUNSTATS ON TABLE schema.table; 
-```
-
-(If reorg is run, then execute runstats also)
-Execute Runstats : after creating an index, after hanging the prefetch size, after executing reorg. Also execute it at regular intervals to keep the statistics current.
 
 * Check transaction log usage : `call sp.xlogfull()`
 * Row count on table without full table scan

@@ -9,6 +9,26 @@ footer: true
 * list element with functor item
 {:toc}
 
+# Variables
+
+* Sybase
+	* Local variables denoted as `@varname` 
+	* Global variables
+		* `@@rowcount` - Holds the number of rows returned by the last Transact-SQL statement. Be careful, almost any statement will set this. Even an "if" statement which checks it's value. For example:
+		* `@@error` - Holds status of last statement executed. Zero is success. Once again almost any statement sets this, so use it's value immediately (or save it in a local variable).
+		* `@@servername` - The name of the Sybase dataserver.
+		* `@@version` - What version of the Sybase server you are using
+
+```sql Example
+select * from pubs where ....
+if @@rowcount = 0 /* set to 1 after this */
+print "no rows returned"
+```
+
+
+
+# FAQs
+
 * What's the difference between DELETE TABLE and TRUNCATE TABLE commands? 
   * DELETE TABLE is a logged operation, so the deletion of each row gets logged in the transaction log, which makes it slow. 
   * TRUNCATE TABLE also deletes all the rows in a table, but it won't log the deletion of each row, instead it logs the de-allocation of the data pages of the table, which makes it faster. Of course, TRUNCATE TABLE can be rolled back. 

@@ -29,7 +29,6 @@ footer: true
     * [Concepts]({{ root_url }}/technology/rdbms.html)
     * [Design]({{ root_url }}/technology/db-design.html)
     * [Performance]({{ root_url }}/technology/db-performance.html)
-    * [RDBMS Products]({{ root_url }}/technology/rdbms-products.html)
     * [SQL]({{ root_url }}/technology/sql.html)
 
   * Functional Programming

@@ -149,41 +149,6 @@ CREATE INDEX employee_idx2 ON employees (job_id, last_name);
   * Nonunique indexes permit duplicates values in the indexed column or columns. For example, the first_name column of the employees table may contain multiple Mike values. For a nonunique index, the rowid is included in the key in sorted order, so nonunique indexes are sorted by the index key and rowid (ascending).
   * Oracle Database does not index table rows in which all key columns are null, except for bitmap indexes or when the cluster key column value is null.
 
-# Query Optimization
-
-When db processes the query, it performs the following steps: 
-
-* Parses and normalizes the query, validating syntax and object references 
-* Optimizes the query and generates the query plan 
-  * Phase 1 - Query Analysis 
-    * Find the search arguments (SARG) 
-    * Find the ORs c. Find the joins 
-  * Phase 2 - Index Selection 
-    * Choose the best index for each SARG 
-    * Choose the best method for ORs 
-    * Choose the best indexes for any join clauses 
-    * Choose the best index to use for each table 
-  * Phase 3 - Join Order Selection 
-    * Evaluate the join orders 
-    * Compute the costs 
-    * Evaluate other server options for resolving joins 
-  * Phase 4 - Plan Selection 
-* Compiles the query plan 
-* Executes the query plan and returns the results to the user.
-
-How do you tune a SQL query? How do you use an access plan?
-
-## Query Execution Plan
-
-
-An execution plan is basically a road map that graphically or textually shows the data retrieval methods chosen by the SQL server’s query optimizer for a stored procedure or ad hoc query. Execution plans are very useful for helping a developer understand and analyze the performance characteristics of a query or stored procedure, since the plan is used to execute the query or stored procedure.
-
-In many SQL systems, a textual execution plan can be obtained using a keyword such as `EXPLAIN`, and visual representations can often be obtained as well. In Microsoft SQL Server, the Query Analyzer has an option called *Show Execution Plan* (located on the Query drop down menu). If this option is turned on, it will display query execution plans in a separate window when a query is run.
-
-* How to read a query execution plan?
-
-Page Extent - Denotes the # of contiguous pages of data read from the hard disk at a time. SQL reads 8 pages(64K) at a time.
-
 # Concurrency 
 
 http://msdn2.microsoft.com/en-us/library/ms171845(SQL.90).aspx 
@@ -241,8 +206,106 @@ The granularity of a lock determines the size of the resource being locked. Lock
 * Lock contention 
 * Lock escalation
 
+# Performance
+
+## Query Optimization
+
+When db processes the query, it performs the following steps: 
+
+* Parses and normalizes the query, validating syntax and object references 
+* Optimizes the query and generates the query plan 
+  * Phase 1 - Query Analysis 
+    * Find the search arguments (SARG) 
+    * Find the ORs c. Find the joins 
+  * Phase 2 - Index Selection 
+    * Choose the best index for each SARG 
+    * Choose the best method for ORs 
+    * Choose the best indexes for any join clauses 
+    * Choose the best index to use for each table 
+  * Phase 3 - Join Order Selection 
+    * Evaluate the join orders 
+    * Compute the costs 
+    * Evaluate other server options for resolving joins 
+  * Phase 4 - Plan Selection 
+* Compiles the query plan 
+* Executes the query plan and returns the results to the user.
+
+How do you tune a SQL query? How do you use an access plan?
+
+## Query Execution Plan
+
+An execution plan is basically a road map that graphically or textually shows the data retrieval methods chosen by the SQL server’s query optimizer for a stored procedure or ad hoc query. Execution plans are very useful for helping a developer understand and analyze the performance characteristics of a query or stored procedure, since the plan is used to execute the query or stored procedure.
+
+In many SQL systems, a textual execution plan can be obtained using a keyword such as `EXPLAIN`, and visual representations can often be obtained as well. In Microsoft SQL Server, the Query Analyzer has an option called *Show Execution Plan* (located on the Query drop down menu). If this option is turned on, it will display query execution plans in a separate window when a query is run.
+
+* How to read a query execution plan?
+
+Page Extent - Denotes the # of contiguous pages of data read from the hard disk at a time. SQL reads 8 pages(64K) at a time.
+
+
+## Data Dictionary
+
+**Data dictionary**- stores statistics about columns, tables, clusters, indexes, and partitions for the CBO. DBMS_STATS statement is used to gather the statistics
+
+* **Cost-based Optimizers (CBO)** - uses the statistics stored in the Data Dictionary. This approach optimizes for best throughput.
+* **Rule-based Optimizers (RBO)** - This approach optimizes for best response time. 
+
+
+* DB2
+  * Execute `runstats` to collect statistics of the table and its indexes to help optimizer choose the best data-access plan
+  * Execute this after creating an index, after hanging the prefetch size, after executing reorg. Also execute it at regular intervals to keep the statistics current. If reorg is run, then execute runstats also.
+
+```sql
+db2 runstats on table schema.table
+db2 runstats on table schema.table with distribution and detailed indexes all
+```
+
+  * Stores statistics in SYSSTAT schema, SYSCAT tables
+  * `with distribution` - This tells DB2 to collect distribution statistics. Distribution statistics include two things:
+    * *Frequent value statistics* – DB2 notes the most frequent values. By default, the 10 most frequent values. Using the above syntax, this is collected for every column. You can change the number of most frequent values using the NUM_FREQVALUES database configuration parameter, or the NUM_FREQVALUES clause on the runstats command
+    * *Quantile statistics* – Divides the values into NUM_QUANTILES (default: 20) sections to describe the distribution of the data. The default means that the optimizer should be able to estimate the number of values that would meet any one-sided predicate within 2.5% of the actual value.
+  * `and detailed indexes all` - Collecting index statistics helps DB2 decide which if any indexes to use to satisfy a particular query. Collecting detailed index statistics allows db2 to more accurately estimate the page fetches that will be required – allowing db2 to properly estimate the cost of accessing a table through an index. DB2 will use this data along with bufferpool information to determine how much (if any) synchronous page cleaning will have to occur.
+* Sybase - `update statistics`
+* Oracle - `EXEC dbms_stats.gather_database_stats;`
+
+http://download-west.oracle.com/docs/cd/A87860_01/doc/server.817/a76992/toc.htm 
+
+* [Distribution statistics uses with the DB2 Optimizer](https://www.ibm.com/developerworks/data/library/techarticle/dm-0606fechner/)
+
+# DB Federation
+
+Database federated support in DB2 allows tables from multiple databases to be presented as local tables to a DB2 server. The databases may be local or remote; they can also belong to different. 
+
+DB2 uses NICKNAME, SERVER, WRAPPER, and USER MAPPING objects to implement federation. 
+
+## DB Partitioning
+
+* DPF(DB partioning feature) lets you partition your database across multiple servers or within a large SMP server. This allows for scalability, since you can add new machines and spread your database across them. That means more CPUs, more memory, and more disks from each of the additional machines for your database! Partitioning is a concept that applies to the database, not the instance; you partition a database, not an instance.
+* In a partitioned environment SYSCATSPACE is not partitioned, but resides on one partition known as the catalog partition. The partition from which the CREATE DATABASE command is issued becomes the catalog partition for the new database. All access to system tables must go through this database partition.
+* Each buffer pool in a DPF environment holds data only from the database partition where the buffer pool is located. 
+
+## Partitioning Types
+
+* Row-wide partitioning - TODO
+* Column-wide partitioning - TODO
+
+## DB Replication
+
+HADR - High Availability Database Replication (from version 9.7) 
+
+TODO
+
 # References
 
-* Sybase - Performance and Tuning Guide
-* Physical Database Design - Database Professional's Guide to Exploiting Indexes, Views, Storage & More
-* Dissecting SQL Server Execution Plans and SQL Tuning
+* Books
+  * Sybase - Performance and Tuning Guide
+  * Physical Database Design - Database Professional's Guide to Exploiting Indexes, Views, Storage & More
+  * Dissecting SQL Server Execution Plans and SQL Tuning
+* DB2
+  * More details on : http://publib.boulder.ibm.com/infocenter/db2luw/v8/index.jsp?topic=/com.ibm.db2.udb.doc/core/r0010410.htm
+  * Command line reference: ftp://ftp.software.ibm.com/ps/products/db2/info/vr8/pdf/letter/db2n0e80.pdf
+  * DB2 System command: http://www3.software.ibm.com/ibmdl/pub/software/dw/dm/db2/dm-0406qi/systemCommands.pdf
+* Sybase
+  * http://www.faqs.org/faqs/databases/sybase-faq/part1/ 
+  * http://www.lcard.ru/~nail/sybase/perf/66.htm 
+  * http://www.benslade.com/tech/OldIntroToSybase/

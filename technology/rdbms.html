@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="RDBMS Concepts Keys Integrity Constraints Table Types Views Cursors Triggers Joins Join Algorithms Nested Loop Join Merge Join / Sort-Merge Join &hellip;">
+<meta name="description" content="RDBMS Concepts Keys Integrity Constraints Table Types Views Cursors Disadvantages of cursors Triggers Joins Join Algorithms Nested Loop Join Merge &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -115,7 +115,10 @@ messageStyle: "none",
   </li>
   <li><a href="#table-types">Table Types</a></li>
   <li><a href="#views">Views</a></li>
-  <li><a href="#cursors">Cursors</a></li>
+  <li><a href="#cursors">Cursors</a>    <ul>
+      <li><a href="#disadvantages-of-cursors">Disadvantages of cursors</a></li>
+    </ul>
+  </li>
   <li><a href="#triggers">Triggers</a></li>
   <li><a href="#joins">Joins</a>    <ul>
       <li><a href="#join-algorithms">Join Algorithms</a>        <ul>
@@ -246,6 +249,7 @@ Both primary key and unique enforce uniqueness of the column on which they are d
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">my_iot</span> <span class="p">(</span><span class="n">id</span> <span class="nb">INTEGER</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span> <span class="n">value</span> <span class="n">VARCHAR2</span><span class="p">(</span><span class="mi">50</span><span class="p">))</span> <span class="n">ORGANIZATION</span> <span class="k">INDEX</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
+
 <ul>
   <li><strong>External Table</strong>
     <ul>
@@ -268,14 +272,37 @@ Both primary key and unique enforce uniqueness of the column on which they are d
   </li>
 </ul>
 
-<p>???</p>
+<p><img class="right" src="/technology/mdc.gif" width="200" height="200" /></p>
 
 <ul>
-  <li>
-    <p><strong>Heap Tables</strong> (Sybase)  Tables with no clustered index.</p>
-  </li>
-  <li>
-    <p><strong>Temporary Tables</strong></p>
+  <li>MDC tables can be used to improve performance in many cases.</li>
+  <li>With clustered index you can only cluster data in one dimension. With MDC you can cluster data in multiple dimensions.</li>
+  <li>The other difference between MDC and clustered index is that MDC does not require reorgs as the data is automatically clustered. </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">CAR</span><span class="p">(</span>
+</span><span class="line">  <span class="n">ID</span> <span class="nb">INT</span><span class="p">,</span>
+</span><span class="line">  <span class="n">MAKE</span> <span class="nb">CHAR</span><span class="p">(</span><span class="mi">30</span><span class="p">),</span>
+</span><span class="line">  <span class="n">MODEL</span> <span class="nb">CHAR</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+</span><span class="line"><span class="p">)</span>
+</span><span class="line"><span class="n">ORGANIZE</span> <span class="k">BY</span> <span class="p">(</span><span class="n">MAKE</span><span class="p">,</span><span class="n">MODEL</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><em>CELL</em>: Every unique combination of dimensions form a cell. A cell can have one or more blocks.</li>
+  <li><em>BLOCK</em>: It is a block of pages that contain a unique combination.Its size(blocking factor) is equal to the extent size defined.</li>
+</ul>
+
+<p>A cell for unique combination of FORD(make) FOCUS(model) will be like this</p>
+
+<ul>
+  <li><strong>Temporary Tables</strong>
     <ul>
       <li><strong>Global temporary tables (DB2)</strong> - with or without logging - http://www.ibm.com/developerworks/data/library/techarticle/dm-0912globaltemptable/</li>
       <li><strong>tempdb (Sybase)</strong> - The <code>tempdb</code> database is a special Sybase supplied database that comes in each server. Data in tempdb is not permanent. The tempdb database is cleared each time the server reboots. Any queries which do any sort of sort operation implicitly use tempdb. These queries include select statments with group by’s or order by’s. Be careful, if you select a large set of rows and use an order by or group by clause, you query may fail because tempdb isn’t big enough. The system administrator can extend the size of tempdb </li>
@@ -304,8 +331,31 @@ Both primary key and unique enforce uniqueness of the column on which they are d
   <li>View Types
     <ul>
       <li><strong>Horizontal view</strong> - Slices the source table horizontally to create the view. All of the columns of the source table participate in the view, but only some of its rows are visible through the view. Horizontal views are appropriate when the source table contains data that relates to various organizations or users. They provide a “private table” for each user, composed only of the rows needed by that user. </li>
-      <li><strong>Vertical view</strong> - TODO</li>
-      <li><strong>Indexed views</strong> - TODO </li>
+      <li><strong>Vertical view</strong>
+        <ul>
+          <li>A vertical view cuts the source tables vertically so that only selected columns participate in the view. Useful when certain columns like compensation should be hidden.</li>
+        </ul>
+      </li>
+      <li><strong>Indexed views</strong>
+        <ul>
+          <li>The down side to views is that when you query them, you’re still reading data from all of the underlying tables. This can result in large amounts of I/O, depending on the number and size of tables. However, you can create a unique clustered index on the view – referred to as an <em>indexed view</em> – to persist the data on disk. This index can then be used for reads, reducing the amount of I/O.</li>
+          <li><strong>Pros</strong>
+            <ul>
+              <li>The view definition can reference one or more tables in the same database.</li>
+              <li>Once the unique clustered index is created, additional nonclustered indexes can be created against the view.</li>
+              <li>You can update the data in the underlying tables – including inserts, updates, deletes, and even truncates.</li>
+            </ul>
+          </li>
+          <li><strong>Cons</strong>
+            <ul>
+              <li>The view definition can’t reference other views, or tables in other databases.</li>
+              <li>It can’t contain COUNT, MIN, MAX, TOP, outer joins, or a few other keywords or elements.</li>
+              <li>You can’t modify the underlying tables and columns. The view is created with the WITH SCHEMABINDING option.</li>
+              <li>You can’t always predict what the query optimizer will do.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
     </ul>
   </li>
 </ul>
@@ -358,7 +408,8 @@ Both primary key and unique enforce uniqueness of the column on which they are d
 </span><span class="line">  <span class="k">CLOSE</span> <span class="n">cur</span><span class="p">;</span>
 </span><span class="line"><span class="k">END</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>## Disadvantages of cursors </p>
+
+<h2 id="disadvantages-of-cursors">Disadvantages of cursors</h2>
 
 <p>Each time you fetch a row from the cursor,it results in a network round trip, where as a normal SELECT query makes only one round trip, however large the resultset is. Further, there are restrictions on the SELECT statements that can be used with some types of cursors.</p>
 
@@ -509,26 +560,6 @@ To create a table in a given table space, use the CREATE TABLE statement with th
   <li>Command to list the tables: <code>list db tables</code></li>
   <li>Read input from file: <code>db2 -tvf filename</code></li>
   <li><code>Db2advis</code> - command to advice indexes on sql</li>
-  <li>How to find out if statistics on a table or schema is up-to-date?
-    <ul>
-      <li>If CARD is -1 or STATS_TIME is null or far in the past, then statistics needs to be updated. Non-negative number on CARD denotes the number of rows on the table.</li>
-    </ul>
-  </li>
-</ul>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">SELECT</span> <span class="n">CARD</span><span class="p">,</span> <span class="n">STATS_TIME</span> <span class="k">FROM</span> <span class="n">SYSCAT</span><span class="p">.</span><span class="n">TABLES</span> <span class="k">WHERE</span> <span class="n">TABNAME</span><span class="o">=</span><span class="s1">&#39;MARGININFO&#39;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<ul>
-  <li>If NLEAF, NLEVELS &amp; FULLKEYCARD is -1 or STATS_TIME is null or far in the past, then statistics needs to be updated on that index</li>
-</ul>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">SELECT</span> <span class="n">NLEAF</span><span class="p">,</span> <span class="n">NLEVELS</span><span class="p">,</span> <span class="n">FULLKEYCARD</span><span class="p">,</span> <span class="n">STATS_TIME</span><span class="p">,</span> <span class="n">i</span><span class="p">.</span><span class="o">*</span> <span class="k">FROM</span> <span class="n">SYSCAT</span><span class="p">.</span><span class="n">INDEXES</span> <span class="n">i</span> <span class="k">WHERE</span> <span class="n">TABSCHEMA</span><span class="o">=</span><span class="s1">&#39;CMDRPROD&#39;</span> <span class="k">and</span> <span class="n">TABNAME</span><span class="o">=</span><span class="s1">&#39;MARGININFO&#39;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-<ul>
-  <li>Via DB2 Command - <code>reorgchk update statistics on SCHEMA CMDRPROD</code></li>
   <li>
     <p>Reorg - TODO</p>
   </li>

@@ -368,21 +368,21 @@ arrays</li>
 <h4 id="embedded-document-model">Embedded document model</h4>
 
 <ul>
-  <li>
-    <p><strong>Pros</strong></p>
+  <li><strong>Pros</strong>
+    <ul>
+      <li>Locality. Less disk seeks and hence faster.</li>
+      <li>Atomicity &amp; Isolation during mutant operations.</li>
+    </ul>
   </li>
-  <li>Locality. Less disk seeks and hence faster.</li>
-  <li>
-    <p>Atomicity &amp; Isolation during mutant operations.</p>
+  <li><strong>Cons</strong>
+    <ul>
+      <li>Querying for all sub-documents with a matching condition would return the sub-document along with parent as well. Major drawback of this approach is that we get back much more data than we actually need.</li>
+      <li>For example, in a document like below, querying for all the comments by John would return all the books where John has commented, not just the comments. Also it is not possible to sort or limit the comments returned.</li>
+    </ul>
   </li>
-  <li>
-    <p><strong>Cons</strong></p>
-  </li>
-  <li>Querying for all sub-documents with a matching condition would return the sub-document along with parent as well. Major drawback of this approach is that we get back much more data than we actually need.</li>
-  <li>For example, in a document like below, querying for all the comments by John would return all the books where John has commented, not just the comments. Also it is not possible to sort or limit the comments returned.</li>
 </ul>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
@@ -391,15 +391,16 @@ arrays</li>
 <span class="line-number">7</span>
 <span class="line-number">8</span>
 <span class="line-number">9</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">{
-</span><span class="line">  "book": "Head First Java",
-</span><span class="line">  "text": "This is a book",
-</span><span class="line">  "comments": [
-</span><span class="line">    {"author": "John", "text": "..."},
-</span><span class="line">    {"author": "Jack", "text": "..."},
-</span><span class="line">    {"author": "John", "text": "..."},
-</span><span class="line">  ]
-</span><span class="line">}</span></code></pre></td></tr></table></div></figure></notextile></div>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="p">{</span>
+</span><span class="line">  <span class="nt">&quot;book&quot;</span><span class="p">:</span> <span class="s2">&quot;Head First Java&quot;</span><span class="p">,</span>
+</span><span class="line">  <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;This is a book&quot;</span><span class="p">,</span>
+</span><span class="line">  <span class="nt">&quot;comments&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class="line">    <span class="p">{</span><span class="nt">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;John&quot;</span><span class="p">,</span> <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">},</span>
+</span><span class="line">    <span class="p">{</span><span class="nt">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Jack&quot;</span><span class="p">,</span> <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">},</span>
+</span><span class="line">    <span class="p">{</span><span class="nt">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;John&quot;</span><span class="p">,</span> <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">},</span>
+</span><span class="line">  <span class="p">]</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <ul>
   <li>Embedding carries significant penalties with it:
@@ -446,8 +447,8 @@ arrays</li>
   <li>Document-level atomicity in MongoDB ensures complete isolation as a document is updated</li>
   <li>Multi-document transaction
     <ul>
-      <li><code>findandmodify</code> command that allows a document to be updated atomically and returned in the same round trip. Will this work for multiple documents?</li>
-      <li>2 Phase Commit - http://docs.mongodb.org/manual/tutorial/perform-two-phase-commits/</li>
+      <li><code>findAndModify()</code> command that allows a document to be updated atomically and returned in the same round trip. Will this work for multiple documents?</li>
+      <li>For situations that require multi-document transactions, you can implement two-phase commit in your application to provide support for these kinds of multi-document updates. Using <a href="https://docs.mongodb.com/manual/tutorial/perform-two-phase-commits/">2 Phase Commit</a> ensures that data is consistent and, in case of an error, the state that preceded the transaction is recoverable. During the procedure, however, documents can represent pending data and states.</li>
     </ul>
   </li>
   <li>Maintaining Strong Consistency - By default, MongoDB directs all read operations to primary servers, ensuring strong consistency. Also, by default any reads from secondary servers within a MongoDB replica set will be eventually consistent – much like master / slave replication in relational databases.</li>

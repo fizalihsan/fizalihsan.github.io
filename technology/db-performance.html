@@ -493,7 +493,31 @@ called <em>write locks</em>.</p>
       <li><em>Quantile statistics</em> – Divides the values into NUM_QUANTILES (default: 20) sections to describe the distribution of the data. The default means that the optimizer should be able to estimate the number of values that would meet any one-sided predicate within 2.5% of the actual value.</li>
     </ul>
   </li>
-  <li><code>and detailed indexes all</code> - Collecting index statistics helps DB2 decide which if any indexes to use to satisfy a particular query. Collecting detailed index statistics allows db2 to more accurately estimate the page fetches that will be required – allowing db2 to properly estimate the cost of accessing a table through an index. DB2 will use this data along with bufferpool information to determine how much (if any) synchronous page cleaning will have to occur.</li>
+  <li>
+    <p><code>and detailed indexes all</code> - Collecting index statistics helps DB2 decide which if any indexes to use to satisfy a particular query. Collecting detailed index statistics allows db2 to more accurately estimate the page fetches that will be required – allowing db2 to properly estimate the cost of accessing a table through an index. DB2 will use this data along with bufferpool information to determine how much (if any) synchronous page cleaning will have to occur.</p>
+  </li>
+  <li>How to find out if statistics on a table or schema is up-to-date?
+    <ul>
+      <li>If <code>CARD</code> is -1 or <code>STATS_TIME</code> is null or far in the past, then statistics needs to be updated. Non-negative number on CARD denotes the number of rows on the table.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">SELECT</span> <span class="n">CARD</span><span class="p">,</span> <span class="n">STATS_TIME</span> <span class="k">FROM</span> <span class="n">SYSCAT</span><span class="p">.</span><span class="n">TABLES</span> <span class="k">WHERE</span> <span class="n">TABNAME</span><span class="o">=</span><span class="s1">&#39;MARGININFO&#39;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>If <code>NLEAF</code>, <code>NLEVELS</code> &amp; <code>FULLKEYCARD</code> is -1 or <code>STATS_TIME</code> is null or far in the past, then statistics needs to be updated on that index</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">SELECT</span> <span class="n">NLEAF</span><span class="p">,</span> <span class="n">NLEVELS</span><span class="p">,</span> <span class="n">FULLKEYCARD</span><span class="p">,</span> <span class="n">STATS_TIME</span><span class="p">,</span> <span class="n">i</span><span class="p">.</span><span class="o">*</span> <span class="k">FROM</span> <span class="n">SYSCAT</span><span class="p">.</span><span class="n">INDEXES</span> <span class="n">i</span> <span class="k">WHERE</span> <span class="n">TABSCHEMA</span><span class="o">=</span><span class="s1">&#39;CMDRPROD&#39;</span> <span class="k">and</span> <span class="n">TABNAME</span><span class="o">=</span><span class="s1">&#39;MARGININFO&#39;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<ul>
+  <li>
+    <p>Via DB2 Command - <code>reorgchk update statistics on SCHEMA CMDRPROD</code></p>
+  </li>
   <li>Sybase - <code>update statistics</code></li>
   <li>Oracle - <code>EXEC dbms_stats.gather_database_stats;</code></li>
 </ul>

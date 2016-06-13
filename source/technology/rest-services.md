@@ -747,6 +747,24 @@ Accept: application/vnd.company.myapp-v3.0+json
 Content-Type: application/vnd.company.myapp-v3.0+json 
 ```
 
+# Transactions
+
+How do I perform atomic operations using REST? If I would like to execute multiple operations, but have them all appear as an single, atomic transaction, REST seems inappropriate.
+
+REST faces the exact same problem as SOAP-based web services with regards to atomic transactions. There is no stateful connection, and every operation is immediately committed; performing a series of operations means other clients can see interim states.
+
+Unless, of course, you take care of this by design. First, ask yourself: do I have a standard set of atomic operations? This is commonly the case. For example, for a banking operation, removing a sum from one account and adding the same sum to a different account is often a required atomic operation. But rather than exporting just the primitive building blocks, the REST API should provide a single "transfer" operation, which encapsulates the entire process. This provides the desired atomicity, while also making client code much simpler. This appracoh is known as *low granularity services*, or *high-level batch operations*.
+
+If there is no simple, pre-defined set of desired atomic operation sequences, the problem is more severe. A common solution is the **batch command pattern**. Define one REST method to demarcate the beginning of a transaction, and another to demarcate its end (a 'commit' request). Anything sent between these sets of operations is queued by the server but not committed, until the commit request is sent.
+
+This pattern complicates the server significantly -- it must maintain a state per client. Normally, the first operation ('begin transaction') returns a transaction ID (TID), and all subsequent operations, up to and including the commit, must include this TID as a parameter.
+
+It is a good idea to enforce a timeout on transactions: if too much time has passed since the initial 'begin transaction' request, or since the last step, the server has the right to abort the transaction. This prevents a potential DoS attack that causes the server to waste resources by keeping too many transactions open. The client design must keep in mind that each operation must be checked for a timeout response.
+
+It is also a good idea to allow the client to abort a transaction, by providing a 'rollback' API.
+
+The usual care required in designing code that uses multiple concurrent transactions applies as usual in this complex design scenario. If at all possible, try to limit the use of transactions, and support high-level batch operations instead.
+
 
 # Other REST Frameworks
 

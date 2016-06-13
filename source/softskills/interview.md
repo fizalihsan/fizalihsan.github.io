@@ -56,6 +56,7 @@ footer: true
 * Demonstrate your leadership, teamwork, ability to overcome obstacles and challenges
 * What bothers you most about other people?
   * No response to emails. Lack of accountability
+  * Email communication - lack of punctuations
 * Tell me about a day when everything went wrong
 * Tell me about a colleague you really got along with and why you think you did
   * (Don't make it too formal. Keep it humorous)
@@ -77,7 +78,6 @@ footer: true
 *  What's the last awesome thing you learned?
 *  What did you not like about your last job?
 *  What is your biggest pet peeve?
-  * Email communication - lack of punctuations
 *  What is the best mistake that you have ever made?
 *  What did you want to be when you were a kid?  Why?
 *  What event in your life has taught you the most about yourself?
@@ -85,10 +85,6 @@ footer: true
 *  Describe a challenge you have faced and how you overcame that?
 *  In hindsight, what steps would you have taken to avoid that challenge?
 *  If given a new project that you were unfamiliar with, what would be your strategy to kick-start the project?
-* ​Questions to Interviewer​
-  * Key changes to industry
-  * What are the typical job responsibilities
-  * Training and development opportunities
 * About the company
   * What is the vision of the company
   * What do you know about the culture of our company

@@ -134,6 +134,36 @@ Synchronizing access operations to indexes, rather than to user data. Specialize
 (Deferred update) - Each transaction maintains a private workspace for its accessed data, and its changed data become visible outside the transaction only upon its commit (e.g., Weikum and Vossen 2001). This model provides a different concurrency control behavior with benefits in many cases.
 
 
+# Transaction Types
+
+## Flat Transactions
+
+A flat transaction is the simplest form of a transaction. It comprises a collection of operations that are bounded by a begin statement and an end statement. Either all of the operations in the bounded collection are executed (committed) or none are (aborted). A transaction may be aborted either by the program executing it or because of an external failure, such as a system crash.
+
+## Flat Transactions with Savepoints
+
+* There are cases in which flat transactions are too simple a model to be effective. Consider a travel agent attempting to book a complex itinerary. She may have booked airlines and hotels for several legs but then finds that a booking attempt for the next leg fails. She either must abort the entire transaction and try again or put in a compensating transaction to back out the failed operations. Neither is desirable. 
+* It would be much better if she could simply return the current transaction to some previous transaction state that is consistent. This is what savepoints are all about. A *save work* command saves the current state of the transaction. At any later time, the application can roll back the transaction to any of the transaction savepoints that have been established. 
+
+## Chained Transactions
+
+Chained transactions are a variant of savepoints. However, rather than simply marking a point of consistency to which the transaction can return, the *chain work* command actually commits the work so far. Therefore, there is no opportunity to roll back any of the previous work. However, the transaction itself survives. Any locks held by the transaction continue to be held as further work is done. Only when the full transaction is committed are its locks released.
+
+## Nested Transactions
+
+A nested transaction comprises a tree of transactions. The root transaction can spawn sub-transactions which themselves can spawn additional subtransactions. The leaves of the transaction tree are flat transactions. A parent transaction can pass its locks to a child subtransaction. A subtransaction can commit or abort at any time. In this case, any locks owned by the subtransaction are counter-inherited by the parent. Only when the root transaction commits are all locks released.
+
+## Distributed Transactions
+
+* Distributed transactions are those that must execute across a network of databases. They are similar to nested transactions. However, the transaction tree for a nested transaction is application-dependent, whereas the tree for a distributed transaction is data-dependent. 
+* Distributed transactions are basically flat transactions. However, if data held by a remote database must be updated, a subtransaction is started on that database. The scope of the sub-transaction is the set of operations on the database. At commit time, the parent transaction queries all of its subtransactions to ensure that all of them are prepared to commit before issuing a commit command. If one or more subtransactions cannot commit, the transaction is aborted.
+* Today’s distributed transaction standard for heterogeneous systems is XA from [The Open Group](http://www.opengroup.org/bookstore/catalog/c193.htm).
+
+## Long-Lived Transactions
+
+* Batch transactions are an example of long-lived transactions which can contain millions of updates and last for hours. This can be an intolerable situation.
+* One solution is to break the batch job into mini-batches operating on data with a common attribute, such as a range of keys. This is not a perfect solution since the atomicity of the entire transaction cannot be maintained.
+
 # Transaction Models
 
 ## Local transactions
@@ -332,10 +362,7 @@ That is a simple task that issue two reads from table T, with a delay of 1 minut
 
 # Transaction Read Phenomena
 
-Transaction Read Phenomena
-
-
-http://docs.oracle.com/cd/B28359_01/server.111/b28318/consist.htm
+[Oracle Guide - Data Concurrency and Consistency](http://docs.oracle.com/cd/B28359_01/server.111/b28318/consist.htm)
 
 The ANSI/ISO SQL standard (SQL92) defines 4 levels of transaction isolation with differing degrees of impact on transaction processing throughput. These isolation levels are defined in terms of 3 phenomena that must be prevented between concurrently executing transactions.
 

@@ -156,16 +156,14 @@ arrays
 #### Embedded document model
 
 * **Pros**
-
-* Locality. Less disk seeks and hence faster.
-* Atomicity & Isolation during mutant operations.
+  * Locality. Less disk seeks and hence faster.
+  * Atomicity & Isolation during mutant operations.
 
 * **Cons**
+  * Querying for all sub-documents with a matching condition would return the sub-document along with parent as well. Major drawback of this approach is that we get back much more data than we actually need.
+  * For example, in a document like below, querying for all the comments by John would return all the books where John has commented, not just the comments. Also it is not possible to sort or limit the comments returned.
 
-* Querying for all sub-documents with a matching condition would return the sub-document along with parent as well. Major drawback of this approach is that we get back much more data than we actually need.
-* For example, in a document like below, querying for all the comments by John would return all the books where John has commented, not just the comments. Also it is not possible to sort or limit the comments returned.
-
-```
+``` json
 {
   "book": "Head First Java",
   "text": "This is a book",
@@ -205,8 +203,8 @@ arrays
 * MongoDB write operations are atomic at the document level – including the ability to update embedded arrays and sub-documents atomically
 * Document-level atomicity in MongoDB ensures complete isolation as a document is updated
 * Multi-document transaction
-   * `findandmodify` command that allows a document to be updated atomically and returned in the same round trip. Will this work for multiple documents?
-   * 2 Phase Commit - http://docs.mongodb.org/manual/tutorial/perform-two-phase-commits/
+   * `findAndModify()` command that allows a document to be updated atomically and returned in the same round trip. Will this work for multiple documents?
+   * For situations that require multi-document transactions, you can implement two-phase commit in your application to provide support for these kinds of multi-document updates. Using [2 Phase Commit](https://docs.mongodb.com/manual/tutorial/perform-two-phase-commits/) ensures that data is consistent and, in case of an error, the state that preceded the transaction is recoverable. During the procedure, however, documents can represent pending data and states.
 * Maintaining Strong Consistency - By default, MongoDB directs all read operations to primary servers, ensuring strong consistency. Also, by default any reads from secondary servers within a MongoDB replica set will be eventually consistent – much like master / slave replication in relational databases.
 * Write concerns - The write concern is configured in the driver and is highly granular – it can be set per-operation, per-collection or for the entire database. 
 * Journals 

@@ -42,7 +42,7 @@ Spring Batch needs two infrastructure components:
 
 # Configuration
 
-{% img /technology/spring-batch-configuration-hierarchy.png %}
+{% img right /technology/spring-batch-configuration-hierarchy.png %}
 
 ```xml Sample Job Configuration
 <batch:job id="importProductsJob">

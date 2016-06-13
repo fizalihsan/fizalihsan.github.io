@@ -76,6 +76,7 @@ CREATE TABLE t1 (c1 NUMBER PRIMARY KEY, c2 VARCHAR2(30)) ORGANIZATION HEAP;
 ```sql
 CREATE TABLE my_iot (id INTEGER PRIMARY KEY, value VARCHAR2(50)) ORGANIZATION INDEX;
 ```
+
 * **External Table**
   * An external table is a table that is NOT stored within the Oracle database. Data is loaded from a file via an access driver (normally ORACLE_LOADER) when the table is accessed. 
   * One can think of an external table as a view that allows running SQL queries against files on a filesystem without the need to first loaded the data into the database.
@@ -88,9 +89,25 @@ CREATE OR REPLACE DIRECTORY my_data_dir as '/my/data/dir/';
 
 * **Multi-Dimensional Clustering Tables (MDC)**
 
-???
+{% img right /technology/mdc.gif 200 200 %}
 
-* **Heap Tables** (Sybase)  Tables with no clustered index.
+  * MDC tables can be used to improve performance in many cases.
+  * With clustered index you can only cluster data in one dimension. With MDC you can cluster data in multiple dimensions.
+  * The other difference between MDC and clustered index is that MDC does not require reorgs as the data is automatically clustered. 
+
+```sql 
+CREATE TABLE CAR(
+  ID INT,
+  MAKE CHAR(30),
+  MODEL CHAR(30)
+)
+ORGANIZE BY (MAKE,MODEL)
+```
+
+  * *CELL*: Every unique combination of dimensions form a cell. A cell can have one or more blocks.
+  * *BLOCK*: It is a block of pages that contain a unique combination.Its size(blocking factor) is equal to the extent size defined.
+
+A cell for unique combination of FORD(make) FOCUS(model) will be like this
 
 * **Temporary Tables**
   * **Global temporary tables (DB2)** - with or without logging - http://www.ibm.com/developerworks/data/library/techarticle/dm-0912globaltemptable/
@@ -115,8 +132,19 @@ CREATE OR REPLACE DIRECTORY my_data_dir as '/my/data/dir/';
 
 * View Types
   * **Horizontal view** - Slices the source table horizontally to create the view. All of the columns of the source table participate in the view, but only some of its rows are visible through the view. Horizontal views are appropriate when the source table contains data that relates to various organizations or users. They provide a "private table" for each user, composed only of the rows needed by that user. 
-  * **Vertical view** - TODO
-  * **Indexed views** - TODO 
+  * **Vertical view**
+    * A vertical view cuts the source tables vertically so that only selected columns participate in the view. Useful when certain columns like compensation should be hidden.
+  * **Indexed views**
+    * The down side to views is that when you query them, you’re still reading data from all of the underlying tables. This can result in large amounts of I/O, depending on the number and size of tables. However, you can create a unique clustered index on the view – referred to as an *indexed view* – to persist the data on disk. This index can then be used for reads, reducing the amount of I/O.
+    * **Pros**
+      * The view definition can reference one or more tables in the same database.
+      * Once the unique clustered index is created, additional nonclustered indexes can be created against the view.
+      * You can update the data in the underlying tables – including inserts, updates, deletes, and even truncates.
+    * **Cons**
+      * The view definition can’t reference other views, or tables in other databases.
+      * It can’t contain COUNT, MIN, MAX, TOP, outer joins, or a few other keywords or elements.
+      * You can’t modify the underlying tables and columns. The view is created with the WITH SCHEMABINDING option.
+      * You can’t always predict what the query optimizer will do.
 
 # Cursors
 
@@ -149,6 +177,7 @@ BEGIN
   CLOSE cur;
 END;
 ```
+
 ## Disadvantages of cursors 
 
 Each time you fetch a row from the cursor,it results in a network round trip, where as a normal SELECT query makes only one round trip, however large the resultset is. Further, there are restrictions on the SELECT statements that can be used with some types of cursors.
@@ -262,19 +291,6 @@ A buffer pool is an area in physical memory that caches the database information
 * Command to list the tables: `list db tables`
 * Read input from file: `db2 -tvf filename`
 * `Db2advis` - command to advice indexes on sql
-* How to find out if statistics on a table or schema is up-to-date?
-  * If CARD is -1 or STATS_TIME is null or far in the past, then statistics needs to be updated. Non-negative number on CARD denotes the number of rows on the table.
-
-``` sql
-SELECT CARD, STATS_TIME FROM SYSCAT.TABLES WHERE TABNAME='MARGININFO'
-```
-
-  * If NLEAF, NLEVELS & FULLKEYCARD is -1 or STATS_TIME is null or far in the past, then statistics needs to be updated on that index
-
-``` sql
-SELECT NLEAF, NLEVELS, FULLKEYCARD, STATS_TIME, i.* FROM SYSCAT.INDEXES i WHERE TABSCHEMA='CMDRPROD' and TABNAME='MARGININFO'
-```
-  * Via DB2 Command - `reorgchk update statistics on SCHEMA CMDRPROD`
 * Reorg - TODO
 
 * Check transaction log usage : `call sp.xlogfull()`

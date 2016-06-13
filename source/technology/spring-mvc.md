@@ -10,6 +10,9 @@ footer: true
 {:toc}
 
 
+
+{% img right /technology/mvc-model.png %}
+
 # Request Lifecycle
 
 1. HTTP Request reaches Spring's `DispatcherServlet`.
@@ -361,3 +364,278 @@ public interface View {
 }
 ```
 
+---
+
+# Web MVC Application Layer
+
+Layering leads to separation of concerns, easy testability, clean architecture.
+
+## User Interface (Presentation)
+
+* presents the application to the user rendering the response as requested by the client. e.g., HTML, XML, PDF, etc. 
+* In Spring it is represented by a generic interface 'View' and it has no dependencies on a particular view technology like JSP, Velocity, Tiles, etc.
+
+## Web (Presentation)
+* Thin layer; no business logic; 
+* In Spring it is represented by 'Controller' interface or classes with @Controller annotation.
+* Responsible for (1) page navigation logic via Spring Web Flow, etc. (2) integrating service layer and HTTP.
+* Converts HTTP request into service layer calls, and then transforms result from server into response for the user interface.
+* Contains cookies, HTTP headers, HTTP sessions; responsible to manage these consistently and transparently.
+* 2 types of web layer implementations:
+  * (a) request-repsonse frameworks. e.g., Struts and Spring MVC. They operate on ServletRequest and ServletResponse objects and is not hiddent from the users.
+  * (b) component-based frameworks. e.g., JSF, Tapestry. Hides the Servlet API from the user and offers a component-based programming model.
+
+## Service layer
+
+* only business logic (transactional boundary, security, etc.). 
+* No persistence or presentation logic. 
+* Coarse-API layer - funciton should represent a single unit of work that either succeeds of fails. User can user different clients (web, web service, desktop app, JMS) but the business logic is same.
+* Services should be stateless and a good practice to keep it Singleton.
+* Keeping the service layer clean also allows us to reuse the same services for different channels. For example, it enables us to add a web service or JMS-driven solution
+
+## Data Access
+
+Interface-based layer abstracts persistence framework (JDO, JDBC, JPA, etc.) No business logic.
+
+## Domain 
+
+(cuts across all layers) - Domain class names are nouns. Contains both state and behavior. In anemic domain model, it holds only state and no behavior.
+
+Communication should be top-to-bottom except Domain layer. Data access shouldn't access Service layer. Circular dependencies is a sign of bad design. A rule of thumb is that, if a layer has too many dependencies with other layers, we might want to introduce another layer that incorporates all the dependencies. On the other hand, if we see a single layer throughout different layers, we might want to reconsider this layer and make it an aspect of the application (Spring AOP). 
+
+# Definitions
+
+## ModelMap 
+
+## View 
+
+* Out-of-the-box - JSP, JSTL, Tiles, Velocity, FreeMaker, etc.
+* Special - redirect: and forward:
+
+## ModelAndView 
+
+An aggregator/container class which holds both a ModelMap and a View instance.
+
+## Controller
+
+* RequestMapping is defined both at class-level and method-level
+* Types of mapping requests
+  * by path - `@RequestMapping("/welcome")`
+  * by HTTP method - `@RequestMapping("/welcome", method=RequestMethod.GET)`
+  * by presence/value of query parameter - `@RequestMapping("find=ByMake", "form")`
+  * by presence/value of request header  - `@RequestMapping("/welcome", header="accept=text/*")`
+* Types of controller method return types (http://docs.spring.io/spring/docs/3.0.x/spring-framework-reference/html/mvc.html)
+  * void
+  * String 
+  * logical view name ("car") 
+  * physical view name (`/WEB-INF/jsp/car.jsp`)
+  * special view names (`redirect:/cars/7`)
+  * ModelAndView
+  * Model / Map / ModelMap
+  * View
+  * `@ResponseBody` / `@ModelAttribute`
+
+``` java Sample Controller 
+public class ItemController implements Controller {
+...
+}
+```
+
+``` java Sample Controller - Declarative Style
+@Controller
+ public class ItemController {
+
+     @RequestMapping(value="viewItem.htm", method=RequestMethod.GET)
+     public Item viewItem(@RequestParam Long id){
+         return itemservice.get(id);
+     }   
+}
+``` 
+
+* Additional annotations at controller level
+  * `@ModelAttribute`
+    * method parameter level - maps a model attribute to the specific method parameter
+    * method level - provides the reference data to the model
+  * `@SessionAttributes` - class level: list the names or types of model attributes which should be stroed in the session.
+  * `@RequestHeader` - method parameter level - maps request header parameters to method parameters
+  * `@CookieValue` - method parameter level - gets the JSESSIONID of the cookie
+  * `@RequestBody` / `@ResponseBody`
+
+### FormController
+
+* Override onSubmit() method to provide custom handling function
+* Override formBackingObject() method to provide default values when the form is first rendered.
+
+``` xml 
+<bean name="/foo.htm" class="com.FooFormController">
+    <property name="commandName" value="..."/>
+    <property name="commandClass" value="..."/>
+    <property name="validator" value="com.FooValidator"/>
+    <property name="successView" value="baz.html"/>
+</bean>
+```
+
+``` java Form Controller
+class FooFormController extends SimpleFormController{
+    void onSubmit(Object obj){
+        return new ModelAndView(new RedirectView(getSuccessView())));
+    }
+}
+
+class FooValidator implements Validator{
+}
+```
+
+### MultiActionController
+
+* allows multiple request types to be handled by the same class. For example, when mapped *Foo.htm to FooController which extends MultiActionController. 
+* Based on the request type, different methods on implementing class will be invoked; which method to invoke is decided by MethodNameResolver implementation which can be injected.
+* `InternalPathMethodNameResolver` - maps file name in url to method name. e.g, requesting addFoo.htm and deleteFoo.htm would invoke methods addFoo() and deleteFoo() respectively. 
+* `PropertiesMethodNameResolver` - maps url to method name based on a pre-configured map as follows.
+
+``` xml PropertiesMethodNameResolver 
+<bean class="org.springframework.web.servlet.mvc.multiaction.PropertiesMethodNameResolver">
+   <property name="mappings">
+      <value>
+         /multiaction/add.dev=add
+         /multiaction/remove.dev=remove
+         /multiaction/listAll.dev=listAll
+      </value>
+   </property>
+</bean>
+```
+
+* `ParameterNameMethodNameResolver` - maps a request parameter value to method name. e.g., `/Foo.html?action=add` invokes method add() after configuring 'action' as the parameter to look for.
+
+``` xml ParameterNameMethodNameResolver
+<bean class="org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver">
+   <property name="paramName" value="action" />
+</bean>
+```
+
+## HandlerMapping
+
+* Maps incoming request to a handler/controller
+* Default mapping classes
+  * `BeanNameUrlHandlerMapping` - maps url to bean name in app context xml.
+  * `DefaultAnnotationHandlerMapping` - maps url to classes with `@Controller` and `@RequestMapping` annotations.
+* `SimpleUrlHandlerMapping` - maps url to a bean name in the app context.
+
+## HandlerInterceptor
+
+* intercepting requests before handed over to handlers to implement special functions like security, monitoring, etc.
+* This interface defines three methods: 
+  * `preHandle()` is called before the actual handler is executed; 
+  * `postHandle()` - is called after the handler is executed; 
+  * `afterProcessing()` - is called after the complete request has finished. 
+
+## HandlerExecutionChain 
+???
+
+## HandlerAdapter
+
+is the glue between the dispatcher servlet and the handler. It removes the actual execution logic from the dispatcher servlet, which makes the dispatcher servlet infinitely extensible. It executes the Handler identified from the HandlerMapping. It takes a Handler as input and returns ModelAndView. If there is no view in the returned ModelAndView, RequestToViewNameTranslator is consulted to generate a view name based on the incoming request.
+
+## Resolvers
+
+### ViewResolver
+
+UrlBasedViewResolver - controller returns "cars", resolver resolves it to "/WEB-INF/jsp/cars.jsp"
+ 
+``` xml UrlBasedViewResolver
+<bean id="viewResolver" class="org.springframework....UrlBasedViewResolver">
+   <property name="viewClass" value="org.springframework...JstlView"/>
+   <property name="prefix" value="/WEB-INF/jsp"/>
+   <property name="suffix" value=".jsp"/>
+</bean>
+```
+
+### HandlerExceptionResolver
+
+
+# DispatcherServlet Bootstrapping
+
+4 ways to bootstrap a DispatcherServlet in a ServletContainer like Tomcat
+
+1. `web.xml`
+2. `web-fragment.xml` (since Servlet 3.0 spec)
+3. `javax.servlet.ServletContextInitializer` (since Servlet 3.0 spec)
+
+``` java ServletContainerInitializer 
+public class BookstoreServletContainerInitializer implements ServletContainerInitializer {
+   @Override
+   public void onStartup(Set<Class<?>> classes, ServletContext servletContext) throws ServletException {
+      ServletRegistration.Dynamic registration = servletContext.addServlet("dispatcher", DispatcherServlet.class);
+      registration.setLoadOnStartup(1);
+      registration.addMapping("/*");
+   }
+}
+```
+
+4. Spring's WebApplicationInitializer
+
+Spring has an in-built implementation of ServletContextInitializer which scans classpath for WebApplicationInitializer implementations and invokes `onStartup()` on them.
+
+``` java WebApplicationInitializer
+public class BookstoreWebApplicationInitializer implements WebApplicationInitializer {}
+   @Override
+   public void onStartup(ServletContext servletContext) throws ServletException {
+      ServletRegistration.Dynamic registration = servletContext.addServlet("dispatcher", DispatcherServlet.class);
+      registration.addMapping("/*");
+      registration.setLoadOnStartup(1);
+   }
+}
+```
+
+By default, the dispatcher servlet loads a file named [servletname]-servlet.xml from the WEB-INF directory.
+
+## How to configure DispatcherServlet and ContextLoaderListener in Java?
+
+In web, DispatcherServlet and ContextLoaderListener components bootstrap and configure an application context.
+
+* Steps to create `DispatcherServlet` in Java
+  * Spring 3.0 container automatically detects a FooWebAppInitializer class that extends WebApplicationInitializer.
+  * FooWebAppInitializer overrides onStartUp(ServletContext) method.
+  * Create new WebApplicationContext - new AnnotationConfigWebApplicationContext();
+  * Create new DispatcherServlet - new DispatcherServlet(webappContext);
+  * Add dispatcher servlet to ServletContext - servletContext.addServlet("dispatcher", dispatcherServlet);
+* Steps to create `ContextLoaderListener` in Java 
+  * Spring 3.0 container automatically detects a FooWebAppInitializer class that extends WebApplicationInitializer.
+  * FooWebAppInitializer overrides onStartUp(ServletContext) method.
+  * Create new WebApplicationContext - new AnnotationConfigWebApplicationContext();
+  * Create new ContextLoaderListener - new ContextLoaderListener(webappContext);
+  * Add listener to ServletContext - servletContext.addListener(contextLoaderListener);
+
+## DispatcherServlet Request Processing Flow
+
+{% img right /technology/springmvc-flow.png %}
+
+* DispatcherServlet receives request.
+* Before dispatching
+  * Determines and exposes java.util.Locale of the current request using LocaleResolver.
+  * Prepares and exposes current request in RequestContextHolder.
+  * Constructs FlashMap using FlashMapManager. Map contains attributes from previous request when a redirect is made.
+  * Request is checked if it is a multipart HTTP request. If so, request is wrapped in MultipartHttpServletRequest via MultipartResolver.
+* Dispatching
+  * DispatcherServlet consults 1 or more HandlerMapping implementations to determine the handler to handle the request. 
+  * Check HandlerMapping
+    * If found, HandlerMapping returns an HandlerExecutionChain which holds references to Handler and HandlerInterceptor[](optional). 
+    * If no handler found, http 404 response is sent.
+  * Check HandlerApapter
+    * Servlet tries to find a HandlerAdapter, 
+    * If not found, ServletException is thrown.
+    * If found and if 1 or more HandlerInterceptor are defined, preHandle and postHandle methods in the interceptor are executed before and after the Handler execution.
+    * If a view is selected, DispatcherServlet checks if the view reference is a String or View.
+      * If a String is found, ViewResolvers are consulted to resolve it to a View implementation.
+      * If not resolved, ServletException is thrown.
+  * Handling Exceptions
+    * If an exception is thrown during request handling, DispatcherServlet consults HandlerExceptionResolver to handle thrown exceptions. 
+    * It resolves an exception to a view to show to the user. 
+    * If an exception is unresolved, it is rethrown and handled by the servlet container which throws HTTP 500 error.
+* After dispatching
+  * DispatcherServlet uses the event mechanism in the Spring Framework to fire a RequestHandledEvent. ApplicationListener can be to receive and log these events.
+
+ # Bibliography
+
+* Pro Spring MVC with WebFlows
+* Spring in Action

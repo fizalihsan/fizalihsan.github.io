@@ -265,6 +265,22 @@ db2 runstats on table schema.table with distribution and detailed indexes all
     * *Frequent value statistics* – DB2 notes the most frequent values. By default, the 10 most frequent values. Using the above syntax, this is collected for every column. You can change the number of most frequent values using the NUM_FREQVALUES database configuration parameter, or the NUM_FREQVALUES clause on the runstats command
     * *Quantile statistics* – Divides the values into NUM_QUANTILES (default: 20) sections to describe the distribution of the data. The default means that the optimizer should be able to estimate the number of values that would meet any one-sided predicate within 2.5% of the actual value.
   * `and detailed indexes all` - Collecting index statistics helps DB2 decide which if any indexes to use to satisfy a particular query. Collecting detailed index statistics allows db2 to more accurately estimate the page fetches that will be required – allowing db2 to properly estimate the cost of accessing a table through an index. DB2 will use this data along with bufferpool information to determine how much (if any) synchronous page cleaning will have to occur.
+
+  * How to find out if statistics on a table or schema is up-to-date?
+    * If `CARD` is -1 or `STATS_TIME` is null or far in the past, then statistics needs to be updated. Non-negative number on CARD denotes the number of rows on the table.
+
+``` sql
+SELECT CARD, STATS_TIME FROM SYSCAT.TABLES WHERE TABNAME='MARGININFO'
+```
+
+  * If `NLEAF`, `NLEVELS` & `FULLKEYCARD` is -1 or `STATS_TIME` is null or far in the past, then statistics needs to be updated on that index
+
+``` sql
+SELECT NLEAF, NLEVELS, FULLKEYCARD, STATS_TIME, i.* FROM SYSCAT.INDEXES i WHERE TABSCHEMA='CMDRPROD' and TABNAME='MARGININFO'
+```
+  * Via DB2 Command - `reorgchk update statistics on SCHEMA CMDRPROD`
+
+
 * Sybase - `update statistics`
 * Oracle - `EXEC dbms_stats.gather_database_stats;`
 

@@ -21,8 +21,9 @@ footer: true
 
   * BigData
     * [Concepts]({{ root_url }}/technology/bigdata.html)
-    * [Concepts]({{ root_url }}/technology/distributedcomputing.html)
+    * [Distributed Computing]({{ root_url }}/technology/distributedcomputing.html)
     * [ElasticSearch]({{ root_url }}/technology/elasticsearch.html)
+    * [Frameworks]({{ root_url }}/technology/bigdata-frameworks.html)
     * [NoSQL]({{ root_url }}/technology/nosql.html)
 
   * Database

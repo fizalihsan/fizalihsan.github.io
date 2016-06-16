@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Productivity - KnowledgeShop</title>
+  <title>Distributed Processing Frameworks - KnowledgeShop</title>
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Productivity Excerpts from book: The Secret to Peak Productivity by Tamara Myles Maslow’s Pyramid Physiological Safety Love and Belonging Esteem &hellip;">
+<meta name="description" content="Distributed Processing Frameworks Apache Storm Apache Kafka Clusters Apache Storm Apache Kafka an open source, distributed, partitioned, and &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://fizalihsan.github.io/softskills/productivity.html">
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/bigdata-frameworks.html">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <!-- Below custom CSS is for table border styling -->
@@ -103,143 +103,85 @@ messageStyle: "none",
 <article role="article">
   
   <header>
-    <h1 class="entry-title">Productivity</h1>
+    <h1 class="entry-title">Distributed Processing Frameworks</h1>
     
   </header>
   
-  <h2 id="excerpts-from-book-the-secret-to-peak-productivity-by-tamara-myles">Excerpts from book: The Secret to Peak Productivity by Tamara Myles</h2>
-
-<ul>
-  <li>Maslow’s Pyramid
-    <ol>
-      <li>Physiological</li>
-      <li>Safety</li>
-      <li>Love and Belonging</li>
-      <li>Esteem</li>
-      <li>Self-actualization</li>
-    </ol>
-  </li>
-  <li>Peak Productivity Pyramid System
-    <ol>
-      <li>Physical Organization</li>
-      <li>Electronic Organization</li>
-      <li>Time Management</li>
-      <li>Activity-Goal Alignment</li>
-      <li>Possibility</li>
-    </ol>
-  </li>
-  <li>Peak productivity provides a framework, but it is an iterative process. One may need to revisit the previous steps to fine-tune according their current situation.</li>
-</ul>
-
-<h3 id="physical-organization">1) Physical Organization</h3>
-
-<ul>
-  <li>3 TOs of Sorting Documents
-    <ul>
-      <li>To Keep (e.g., bank statements, tax documents, etc.)</li>
-      <li>To Toss (e.g., spam mails) - Either recycle or shred </li>
-      <li>To Do (e.g., pay bills)</li>
-    </ul>
-  </li>
-  <li>Pick the right tools for organizing. e.g., files, folders, magazine holders, etc.</li>
-  <li>Separate personal and business documents</li>
-  <li>Sort the ‘To Keep’ documents categorically or chronologically. </li>
-  <li>Don’t use miscellaneous category in sorting.</li>
-  <li>Create a recurring event to sort and file documents</li>
-</ul>
-
-<h3 id="electronic-organization">2) Electronic Organization</h3>
-<ul>
-  <li>Email management
-    <ul>
-      <li>Check emails only at allotted times (3 or 4 times a day only)</li>
-      <li>Unless an email takes less than a minute to reply, reply them in bulk at allotted times.</li>
+  <ul id="markdown-toc">
+  <li><a href="#apache-storm">Apache Storm</a></li>
+  <li><a href="#apache-kafka">Apache Kafka</a>    <ul>
+      <li><a href="#clusters">Clusters</a></li>
     </ul>
   </li>
 </ul>
 
-<h3 id="time-management">3) Time Management</h3>
+<h1 id="apache-storm">Apache Storm</h1>
+
+<h1 id="apache-kafka">Apache Kafka</h1>
 
 <ul>
-  <li>3 Ps of time management
-    <ol>
-      <li>Plan
-        <ul>
-          <li>Plan the week ahead on Sunday evenings </li>
-          <li>Maintain a single calendar and a single TODO list</li>
-          <li>Prioritize
-            <ul>
-              <li>Prioritize tasks using Urgent/Important Matrix.</li>
-            </ul>
-          </li>
-          <li>Perform
-            <ul>
-              <li>Focus on doing the right thing instead of doing everything right</li>
-              <li>Follow the Pomodoro 25-minute rule.</li>
-              <li>Avoid multitasking and distractions.</li>
-              <li>Stop stealing time. e.g., checking emails during break.</li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-    </ol>
+  <li>an open source, distributed, partitioned, and <em>replicated commit-log-based</em> publish-subscribe messaging system, mainly designed with the following characteristics:</li>
+  <li><strong>Persistent messaging</strong>: To derive the real value from big data, any kind of information loss cannot be afforded. Apache Kafka is designed with <code>O(1)</code> disk structures that provide constant-time performance even with very large volumes of stored messages that are in the order of TBs. With Kafka, messages are persisted on disk as well as replicated within the cluster to prevent data loss.</li>
+  <li><strong>High throughput</strong>: Keeping big data in mind, Kafka is designed to work on commodity hardware and to handle hundreds of MBs of reads and writes per second from large number of clients. </li>
+  <li><strong>Distributed</strong>: Apache Kafka with its cluster-centric design explicitly supports message partitioning over Kafka servers and distributing consumption over a cluster of consumer machines while maintaining per-partition ordering semantics. Kafka cluster can grow elastically and transparently without any downtime.</li>
+  <li><strong>Multiple client support</strong>: The Apache Kafka system supports easy integration of clients from different platforms such as Java, .NET, PHP, Ruby, and Python. </li>
+  <li>
+    <p><strong>Real time</strong>: Messages produced by the producer threads should be immediately visible to consumer threads; this feature is critical to event-based systems such as <strong><em>Complex Event Processing (CEP)</em></strong> systems.</p>
   </li>
-</ul>
-
-<h3 id="activity-goal-alignment">4) Activity-Goal Alignment</h3>
-
-<ul>
-  <li>Define short term and long term goals</li>
-  <li>Measure the time spent towards the goal</li>
-  <li>Structure your weekly activities to work towards the goal</li>
-  <li>A vision without a plan is just a hallucination - Will Rogers</li>
-  <li>The indispensable first step to getting thing you want out of life is this: Decide what you want - Ben Stein</li>
-  <li>Define SMART Goals
-    <ol>
-      <li>Specific
-        <ul>
-          <li>Measurable</li>
-          <li>Attainable</li>
-          <li>Relevant</li>
-          <li>Timely</li>
-        </ul>
-      </li>
-    </ol>
-  </li>
-  <li>6 steps of goal setting
-Commit
-    <ol>
-      <li>Understand - why is it important
-        <ul>
-          <li>Create goals - Find partners to work with</li>
-          <li>Break down goals into small tasks</li>
-          <li>Schedule to work on the tasks</li>
-          <li>Assess and Re-assess periodically if the goals are still important</li>
-        </ul>
-      </li>
-    </ol>
-  </li>
-  <li>Discipline and Attitude
+  <li>Producers
     <ul>
-      <li>Discipline is the bridge between goals and accomplishments - Jim Rohn</li>
-      <li>Books on discipline
-        <ul>
-          <li>7 habits of highly effective people - Stephen Covey</li>
-          <li>Peak: How great companies get their mojo from Maslow</li>
-          <li>Mindset: The new psychology of success</li>
-        </ul>
-      </li>
-      <li>Books on attitude
-        <ul>
-          <li>Happiness at work</li>
-          <li>The Happiness project</li>
-          <li>Peak: How great companies get their mojo from Maslow</li>
-          <li>The art of possibility</li>
-        </ul>
-      </li>
+      <li>Web Application logs, page visits, clicks, social media activities, Web Analytics logs</li>
+    </ul>
+  </li>
+  <li>Consumers
+    <ul>
+      <li><em>Offline consumers</em>: that are consuming messages and storing them in Hadoop or traditional data warehouse for offline analysis</li>
+      <li><em>Near real-time consumers</em>:  that are consuming messages and storing them in any NoSQL datastore, such as HBase or Cassandra, for near real-time analytics</li>
+      <li><em>Real-time consumers</em>: such as Spark or Storm, that filter messages in-memory and trigger alert events for related groups</li>
+    </ul>
+  </li>
+  <li>
+    <p>Kafka can be compared with Scribe or Flume as it is useful for processing activity stream data; but from the architecture perspective, it is closer to traditional messaging systems such as ActiveMQ or RabitMQ.	</p>
+  </li>
+  <li>Use cases:
+    <ul>
+      <li><strong>Log Aggregation</strong>: the process of collecting physical log files from servers and putting them in a central place (a file server or HDFS) for processing.</li>
+      <li><strong>Stream processing</strong>: an example is raw data consumed from topics and enriched or transformed into new Kafka topics for further consumption. Hence, such processing is also called ‘stream processing’.</li>
+      <li><strong>Commit logs</strong>: Kafka can be used to represent external commit logs for any large scale distributed system. Replicated logs over Kafka cluster help failed nodes to recover their states.</li>
+      <li><strong>Click stream tracking</strong>: data such as page views, searches, etc. are published to central topics with one topic per activity type as the volume is very high. These topic are available for subscription by many consumers for a wide range of apps.</li>
+      <li><strong>Messaging</strong>: Message brokers are used for decoupling data processing from data producers. Kafka can replace many popular message brokers as it offers better throughput, built-in partitioning, replication, and fault-tolerance.</li>
     </ul>
   </li>
 </ul>
+
+<h2 id="clusters">Clusters</h2>
+
+<p><strong>Types</strong></p>
+
+<ul>
+  <li>A single node—single broker cluster</li>
+  <li>A single node—multiple broker clusters</li>
+  <li>Multiple nodes—multiple broker clusters</li>
+</ul>
+
+<p><strong>Cluster Components</strong></p>
+
+<p>A Kafka cluster primarily has five main components:</p>
+
+<ul>
+  <li><strong>1. Topic</strong>: A topic is a category or feed name to which messages are published by the message producers. In Kafka, topics are partitioned and each partition is represented by the ordered immutable sequence of messages. A Kafka cluster maintains the partitioned log for each topic. Each message in the partition is assigned a unique sequential ID called the offset.</li>
+  <li><strong>2. Broker</strong>: A Kafka cluster consists of one or more servers where each one may have one or more server processes running and is called the broker. Topics are created within the context of broker processes.</li>
+  <li><strong>3. Zookeeper</strong>: ZooKeeper serves as the coordination interface between the Kafka broker and consumers. ZooKeeper allows distributed processes to coordinate with each other through a shared hierarchical name space of data registers (we call these registers znodes), much like a file system.
+    <ul>
+      <li>The main differences between ZooKeeper and standard filesystems are that every znode can have data associated with it and znodes are limited to the amount of data that they can have. ZooKeeper was designed to store coordination data: status information, configuration, location information, and so on.</li>
+    </ul>
+  </li>
+  <li><strong>4. Producers</strong>: Producers publish data to the topics by choosing the appropriate partition within the topic. For load balancing, the allocation of messages to the topic partition can be done in a round-robin fashion or using a custom defined function.</li>
+  <li><strong>5. Consumer</strong>: Consumers are the applications or processes that subscribe to topics and
+process the feed of published messages.</li>
+</ul>
+
+<p>https://vimeo.com/63040812</p>
 
   
     <footer>
@@ -247,7 +189,7 @@ Commit
       
         <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/softskills/productivity.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/softskills/productivity.html" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/bigdata-frameworks.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/bigdata-frameworks.html" >Tweet</a>
   
   
   

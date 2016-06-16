@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Productivity - KnowledgeShop</title>
+  <title>Lambda Architecture - KnowledgeShop</title>
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Productivity Excerpts from book: The Secret to Peak Productivity by Tamara Myles Maslow’s Pyramid Physiological Safety Love and Belonging Esteem &hellip;">
+<meta name="description" content="Lambda Architecture Batch Layer Speed Layer Serving Layer Processing Models Batch Processing Event-Stream Processing Micro-Batching Data Ingestion &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://fizalihsan.github.io/softskills/productivity.html">
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/lambda-architecture.html">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <!-- Below custom CSS is for table border styling -->
@@ -103,143 +103,99 @@ messageStyle: "none",
 <article role="article">
   
   <header>
-    <h1 class="entry-title">Productivity</h1>
+    <h1 class="entry-title">Lambda Architecture</h1>
     
   </header>
   
-  <h2 id="excerpts-from-book-the-secret-to-peak-productivity-by-tamara-myles">Excerpts from book: The Secret to Peak Productivity by Tamara Myles</h2>
-
-<ul>
-  <li>Maslow’s Pyramid
-    <ol>
-      <li>Physiological</li>
-      <li>Safety</li>
-      <li>Love and Belonging</li>
-      <li>Esteem</li>
-      <li>Self-actualization</li>
-    </ol>
-  </li>
-  <li>Peak Productivity Pyramid System
-    <ol>
-      <li>Physical Organization</li>
-      <li>Electronic Organization</li>
-      <li>Time Management</li>
-      <li>Activity-Goal Alignment</li>
-      <li>Possibility</li>
-    </ol>
-  </li>
-  <li>Peak productivity provides a framework, but it is an iterative process. One may need to revisit the previous steps to fine-tune according their current situation.</li>
-</ul>
-
-<h3 id="physical-organization">1) Physical Organization</h3>
-
-<ul>
-  <li>3 TOs of Sorting Documents
-    <ul>
-      <li>To Keep (e.g., bank statements, tax documents, etc.)</li>
-      <li>To Toss (e.g., spam mails) - Either recycle or shred </li>
-      <li>To Do (e.g., pay bills)</li>
-    </ul>
-  </li>
-  <li>Pick the right tools for organizing. e.g., files, folders, magazine holders, etc.</li>
-  <li>Separate personal and business documents</li>
-  <li>Sort the ‘To Keep’ documents categorically or chronologically. </li>
-  <li>Don’t use miscellaneous category in sorting.</li>
-  <li>Create a recurring event to sort and file documents</li>
-</ul>
-
-<h3 id="electronic-organization">2) Electronic Organization</h3>
-<ul>
-  <li>Email management
-    <ul>
-      <li>Check emails only at allotted times (3 or 4 times a day only)</li>
-      <li>Unless an email takes less than a minute to reply, reply them in bulk at allotted times.</li>
+  <ul id="markdown-toc">
+  <li><a href="#batch-layer">Batch Layer</a></li>
+  <li><a href="#speed-layer">Speed Layer</a></li>
+  <li><a href="#serving-layer">Serving Layer</a></li>
+  <li><a href="#processing-models">Processing Models</a>    <ul>
+      <li><a href="#batch-processing">Batch Processing</a></li>
+      <li><a href="#event-stream-processing">Event-Stream Processing</a></li>
+      <li><a href="#micro-batching">Micro-Batching</a></li>
     </ul>
   </li>
 </ul>
 
-<h3 id="time-management">3) Time Management</h3>
-
 <ul>
-  <li>3 Ps of time management
-    <ol>
-      <li>Plan
-        <ul>
-          <li>Plan the week ahead on Sunday evenings </li>
-          <li>Maintain a single calendar and a single TODO list</li>
-          <li>Prioritize
-            <ul>
-              <li>Prioritize tasks using Urgent/Important Matrix.</li>
-            </ul>
-          </li>
-          <li>Perform
-            <ul>
-              <li>Focus on doing the right thing instead of doing everything right</li>
-              <li>Follow the Pomodoro 25-minute rule.</li>
-              <li>Avoid multitasking and distractions.</li>
-              <li>Stop stealing time. e.g., checking emails during break.</li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-    </ol>
-  </li>
-</ul>
-
-<h3 id="activity-goal-alignment">4) Activity-Goal Alignment</h3>
-
-<ul>
-  <li>Define short term and long term goals</li>
-  <li>Measure the time spent towards the goal</li>
-  <li>Structure your weekly activities to work towards the goal</li>
-  <li>A vision without a plan is just a hallucination - Will Rogers</li>
-  <li>The indispensable first step to getting thing you want out of life is this: Decide what you want - Ben Stein</li>
-  <li>Define SMART Goals
-    <ol>
-      <li>Specific
-        <ul>
-          <li>Measurable</li>
-          <li>Attainable</li>
-          <li>Relevant</li>
-          <li>Timely</li>
-        </ul>
-      </li>
-    </ol>
-  </li>
-  <li>6 steps of goal setting
-Commit
-    <ol>
-      <li>Understand - why is it important
-        <ul>
-          <li>Create goals - Find partners to work with</li>
-          <li>Break down goals into small tasks</li>
-          <li>Schedule to work on the tasks</li>
-          <li>Assess and Re-assess periodically if the goals are still important</li>
-        </ul>
-      </li>
-    </ol>
-  </li>
-  <li>Discipline and Attitude
+  <li>Data Ingestion
     <ul>
-      <li>Discipline is the bridge between goals and accomplishments - Jim Rohn</li>
-      <li>Books on discipline
+      <li>Kafka</li>
+      <li>Flume</li>
+      <li>Scribe</li>
+      <li>*MQ</li>
+    </ul>
+  </li>
+  <li>Serialization
+    <ul>
+      <li>Without schema
         <ul>
-          <li>7 habits of highly effective people - Stephen Covey</li>
-          <li>Peak: How great companies get their mojo from Maslow</li>
-          <li>Mindset: The new psychology of success</li>
+          <li>CSV</li>
         </ul>
       </li>
-      <li>Books on attitude
+      <li>With schema
         <ul>
-          <li>Happiness at work</li>
-          <li>The Happiness project</li>
-          <li>Peak: How great companies get their mojo from Maslow</li>
-          <li>The art of possibility</li>
+          <li>Thrift</li>
+          <li>Avro</li>
+          <li>Protobuffers</li>
         </ul>
       </li>
     </ul>
   </li>
 </ul>
+
+<h1 id="batch-layer">Batch Layer</h1>
+
+<ul>
+  <li>ElephantDB</li>
+  <li>Splout</li>
+  <li>Voldemort</li>
+  <li>Hadoop</li>
+</ul>
+
+<h1 id="speed-layer">Speed Layer</h1>
+
+<ul>
+  <li>Cassandra</li>
+  <li>Hbase</li>
+  <li>Redis</li>
+  <li>MySQL</li>
+  <li>ElasticSearch</li>
+</ul>
+
+<h1 id="serving-layer">Serving Layer</h1>
+
+<ul>
+  <li><a href="http://martinfowler.com/bliki/CQRS.html">CQRS - Command Query Responsibility Segregation</a></li>
+</ul>
+
+<h1 id="processing-models">Processing Models</h1>
+
+<p>Comparing Apache Storm and Apache Spark’s Streaming, turns out to be a bit challenging. One is a true stream processing engine that can do micro-batching, the other is a batch processing engine which micro-batches, but cannot perform streaming in the strictest sense. Furthermore, the comparison between streaming and batching isn’t exactly subtle, these are fundamentally different computing ideas.</p>
+
+<h2 id="batch-processing">Batch Processing</h2>
+
+<ul>
+  <li>Batch processing is the familiar concept of processing data en masse. The batch size could be small or very large. This is the processing model of the core Spark library.</li>
+  <li>Batch processing excels at processing large amounts of stable, existing data. However, it generally incurs a high-latency and is completely unsuitable for incoming data.</li>
+</ul>
+
+<h2 id="event-stream-processing">Event-Stream Processing</h2>
+
+<ul>
+  <li>Stream processing is a one-at-a-time processing model; a datum is processed as it arrives. The core Storm library follows this processing model.</li>
+  <li>Stream processing excels at computing transformations as data are ingested with sub-second latencies. However, with stream processing, it is incredibly difficult to process stable data efficiently.</li>
+</ul>
+
+<h2 id="micro-batching">Micro-Batching</h2>
+
+<ul>
+  <li>Micro-batching is a special case of batch processing where the batch size is orders smaller. Spark Streaming operates in this manner as does the Storm Trident API.</li>
+  <li>Micro-batching seems to be a nice mix between batching and streaming. However, micro-batching incurs a cost of latency. If sub-second latency is paramount, micro-batching will typically not suffice. On the other hand, micro-batching trivially gives stateful computation, making windowing an easy task.</li>
+</ul>
+
 
   
     <footer>
@@ -247,7 +203,7 @@ Commit
       
         <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/softskills/productivity.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/softskills/productivity.html" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/lambda-architecture.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/lambda-architecture.html" >Tweet</a>
   
   
   

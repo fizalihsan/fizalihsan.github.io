@@ -9,23 +9,199 @@ footer: true
 * list element with functor item
 {:toc}
 
+
+
+# Apache Hadoop
+
+* Hadoop is an open source platform that provides implementations of both the MapReduce and GFS (Google File System) technologies and allows the processing of very large data sets across clusters of low-cost commodity hardware.
+* The terms host or server refer to the physical hardware hosting Hadoop's various components. The term node will refer to the software component comprising a part of the cluster.
+* Where Hadoop is not a good fit?
+  * not well suited for low-latency queries like websites, real time systems, etc. (HBase on top of Hadoop serves low-latency queries)
+  * smaller data sets.
+* The term *Hadoop Streaming* refers to a mechanism allowing scripting languages to be used to write map and reduce tasks
+* Hadoop installation consists of four types of nodes—a NameNode, DataNodes, a JobTracker, and TaskTracker HDFS nodes (NameNode and DataNodes) provide a distributed filesystem where the JobTracker manages the jobs and TaskTrackers run tasks that perform parts of the job. Users submit MapReduce jobs to the JobTracker, which runs each of the Map and Reduce parts of the initial job in TaskTrackers, collects results, and finally emits the results.
+
+## HDFS (Hadoop Distributed File System)
+
+* is a distributed filesystem that can store very large data sets by scaling out across a cluster of hosts. It has specific design and performance characteristics; in particular, it is optimized for throughput instead of latency, and it achieves high availability through replication instead of redundancy.
+* similar to any other linux file system like ext3 - but cannot be mounted - and requires applications to be specially built for it.
+* Block size in old file systems are typically 4KB or 8KB of size. In HDFS, it is 64MB to 1GB.
+* Replicates each block to multiple machines (default 3) in the cluster. Should the number of copies of a block drop below the configured replication factor, the filesystem automatically makes a new copy from one of the remaining replicas. 
+* Due to replicated data, failures are easily tolerated.
+* not a POSIX-compliant filesystem.
+* HDFS is optimized for throughput over latency; it is very efficient at streaming read requests for large files but poor at seek requests for many small ones.
+
+{% img right /technology/hadoop-server-roles.png %}
+
+## Daemons
+
+* Namenode (NN)
+  * 1 per cluster
+  * Purpose: Stores filesystem metadata, stores file to block map, and provides a global picture of the filesystem
+* Secondary namenode (SNN)
+  * 1 per cluster (better not to share machine with NameNode)
+  * Purpose: Performs internal namenode transaction log checkpointing
+* DataNode 
+  * Many per cluster
+  * Purpose: Stores block data (file contents)
+* Each storage node runs a process called a DataNode that manages the blocks on that host, and these are coordinated by a master NameNode process running on a separate host.
+* Instead of handling disk failures by having physical redundancies in disk arrays or similar strategies, HDFS uses replication. Each of the blocks comprising a file is stored on multiple nodes within the cluster, and the HDFS NameNode constantly monitors reports sent by each DataNode to ensure that failures have not dropped any block below the desired replication factor. If this does happen, it schedules the addition of another copy within the cluster. (include archictecture diagram from internet)
+* The master (NameNode) monitors the health of the cluster and handle failures by moving data blocks around.
+* Processes on each server (DataNode) are responsible for performing work on the physical host, receiving instructions from the NameNode nd reporting health/progress status back to it.
+* NameNode Federation - Since NameNodes keep all the metadata in memory, there is inherent limitation up to which it can scale up. Scaling out with multiple namenodes is called namenode federation
+* HDFS interface
+  * HDFS shell
+  * Java API
+  * REST API - WebHDFS, HttpFS(standalone RESTful HDFS proxy service) 
+
+## MapReduce (Hadoop Implementation)
+
+* is a data processing paradigm that takes a specification of how the data will be input and output from its two stages (called map and reduce) and then applies this across arbitrarily large data sets. MapReduce integrates tightly with HDFS, ensuring that wherever possible, MapReduce tasks run directly on the HDFS nodes that hold the required data.
+* Concepts
+  * concepts of functions called map and reduce come straight from functional programming languages where they were applied to lists of input data.
+  * divide and conquer", where a single problem is broken into multiple individual subtasks. This approach becomes even more powerful when the subtasks are executed in parallel;
+* Unlike traditional relational databases that require structured data with well-defined schemas, MapReduce and Hadoop work best on semi-structured or unstructured data.
+* Instead of data conforming to rigid schemas, the requirement is instead that the data be provided to the map function as a series of key value pairs. The output of the map function is a set of other key value pairs, and the reduce function performs aggregation to collect the final set of results.
+* Hadoop provides a standard specification (that is, interface) for the map and reduce functions, and implementations of these are often referred to as mappers and reducers. A typical MapReduce job will comprise of a number of mappers and reducers, and it is not unusual for several of these to be extremely simple. The developer focuses on expressing the transformation between source and result data sets, and the Hadoop framework manages all aspects of job execution, parallelization, and coordination.
+* The master (JobTracker) monitors the health of the cluster and handle failures by rescheduling failed work.
+* Processes on each server (TaskTracker) are responsible for performing work on the physical host, receiving instructions from the JobTracker, and reporting health/progress status back to it.
+
+* * *
+
+# Apache HCatalog
+
+* provides one consistent data model for various Hadoop tools.
+* provides a shared schema.
+* allows users to see when shared data is available.
+* decouples tools like Pig and Hive from data location, data format, etc.
+* Based currently on Hive's metastore.
+
+* * *
+
+# Apache Hive
+
+* Hive is a data warehouse system layer build on Hadoop.
+* Allows you to define a structure for your unstructured Big Data.
+* Simplifies analysis and queries with an SQL-like scripting language called HiveQL for adhoc querying on HDFS data.
+* Hive is 
+  * not a relational database. It uses a database to store metadata, but the data that Hive processes is stored in HDFS.
+  * not designed for online transaction processing. not suited for real-time queries and row-level updates. 
+* Components
+  * CLI, Web interface (Beeswax?), Micrsoft HDInsight
+* When to use Hive? 
+  * for adhoc querying; for analysts with SQL familiarity
+* HiveQL - SQL-like syntax. based on SQL-92 specification.
+* Hive Table
+  * A Hive Table consists of (1) Data: typically a file or group of files in HDFS (2) Schema: in the form of metadata stored in a database
+  * Schema and data are separate
+  * A schema can be defined for existing data; Data can be added/removed independently; Before querying data in HDFS using Hive, a schema needs to be defined.
+
+* * *
+
+# Apache Pig
+
+3 components of Pig: 
+
+## 1. Pig Latin
+* High level scripting language to describe data flow - statements translate into a series of MapReduce jobs - can invoke Java, JRuby or Jython programs and vice versa - User defined functions (UDF) can be written in Java and uploaded as jar.
+* Sample Pig Latin script
+
+```
+ a = LOAD 'nyse_stocks' using org.apache.hcatalog.pig.HCatLoader();
+ b = filter a by stock_symbol == 'IBM';
+ c = group b all;
+ d = foreach c generate AVG(b.stock_volume);
+ dump d;
+```
+
+* Pig Latin script describes a DAG (directed acyclic graph) - http://vkalavri.com/tag/apachepig/
+* Pig script is not converted to a MapReduce job unless a DUMP/STORE command is invoked.
+
+```
+ runs = foreach batting generate $0 as playerID, $1 as year, $8 as runs;
+ (playerID,yearID,R)
+ (john,2008,10)
+ (john,2009,22)
+ (john,2010,0)
+ (adam,2008,58)
+ (adam,2009,105)
+ (adam,2010,106)
+ (adam,2011,118)
+
+ grp_data = group runs by (year);
+ (2008, [(john,2008,10), (adam,2008,58)])
+ (2009, [(john,2009,22), (adam,2009,105)])
+ (2010, [(john,2010,0),  (adam,2010,106)])
+ (2011, [(adam,2011,118)])
+```
+
+## 2) Grunt
+Interactive command-line shell
+
+## 3) Piggybank
+* A repository to store the UDFs
+* When to use Pig?
+  * for ETL purposes; for preparing data for easier analysis; when you have a long series of steps to perform.
+* Data Model difference b/w Pig and Hive
+  * In Pig, data objects exist and are operated on in the script. They are deleted after the script completes. They can be stored explicitly for later use.
+  * In Hive, data objects exist in Hadoop data store. After every line of execution, results are stored in Hadoop which can be useful for debugging.
+
+
+* * *
+
 # Apache Storm
+
+{% img right /technology/storm-overview.png %}
+
+* Storm is an open source, distributed, reliable, and fault-tolerant system for processing streams of large volumes of data in real-time. It supports many use cases, such as real-time analytics, online machine learning, continuous computation, and the Extract Transformation Load (ETL) paradigm.
+* Components:
+	* **Spout**: This is a continuous stream of log data.
+	* **Bolt**: The spout passes the data to a component called bolt. A bolt consumes any number of input streams, does some processing, and possibly emits new streams. For example, emitting a stream of trend analysis by processing a stream of tweets.
+
+## Difference between Storm & Spark
+
+| | **Storm** | **Spark** |
+| **Type**| Task parallel Continuous Computation Engine | Data Parallel Batch Processing Engine |
+| **Processing Model**| Microbatching is performed via Trident API, but cannot perform streaming in the strictest sense.| Stream processing engine that can do micro-batching. Continuous computation can be performed via Streaming API | 
+| **Workflow**| Workflows as DAGs | MapReduce style workflows |
+| **Cluster**| Zookeeper clustering, Master/minion | Has its own master/server processes; supports Hadoop, YARN, Mesos |
+| **File System**| Can read/write HDFS | Requires shared FS like HDFS, S3, NFS |
+| **Message Parsing** | Netty (default), ZeroMQ | Netty & Akka| 
+
+
+* * *
+
+# Apache Spark
+
+
+* * *
 
 # Apache Kafka
 
+* Apache Kafka is a publish/subscribe messaging system - often described as a *“distributed commit log”*. A filesystem or database commit log is designed to provide a durable record of all transactions so that they can be replayed to consistently build the state of a system. Similarly, data within Kafka is stored durably, in order, and can be read deterministically. In addition, the data can be distributed within the system to provide additional protections against failures, as well as significant opportunities for scaling performance.
+
+* Due to the overheads associated with JMS and its various implementations and limitations with the scaling architecture, LinkedIn decided to build Kafka to address its need for monitoring activity stream data and operational metrics such as CPU,
+I/O usage, and request timings.
 * an open source, distributed, partitioned, and *replicated commit-log-based* publish-subscribe messaging system, mainly designed with the following characteristics:
 * **Persistent messaging**: To derive the real value from big data, any kind of information loss cannot be afforded. Apache Kafka is designed with `O(1)` disk structures that provide constant-time performance even with very large volumes of stored messages that are in the order of TBs. With Kafka, messages are persisted on disk as well as replicated within the cluster to prevent data loss.
 * **High throughput**: Keeping big data in mind, Kafka is designed to work on commodity hardware and to handle hundreds of MBs of reads and writes per second from large number of clients. 
 * **Distributed**: Apache Kafka with its cluster-centric design explicitly supports message partitioning over Kafka servers and distributing consumption over a cluster of consumer machines while maintaining per-partition ordering semantics. Kafka cluster can grow elastically and transparently without any downtime.
 * **Multiple client support**: The Apache Kafka system supports easy integration of clients from different platforms such as Java, .NET, PHP, Ruby, and Python. 
 * **Real time**: Messages produced by the producer threads should be immediately visible to consumer threads; this feature is critical to event-based systems such as ***Complex Event Processing (CEP)*** systems.
+* Kafka brokers and consumers use Zookeeper to get the state information and to track message offsets, respectively
 
-* Producers
-	* Web Application logs, page visits, clicks, social media activities, Web Analytics logs
-* Consumers
-	* *Offline consumers*: that are consuming messages and storing them in Hadoop or traditional data warehouse for offline analysis
-	* *Near real-time consumers*:  that are consuming messages and storing them in any NoSQL datastore, such as HBase or Cassandra, for near real-time analytics
-	* *Real-time consumers*: such as Spark or Storm, that filter messages in-memory and trigger alert events for related groups
+* **Kafka design facts**
+	* The fundamental backbone of Kafka is message caching and storing on the fiesystem.
+	* In Kafka, data is immediately written to the OS kernel page. Caching and flushing of data to the disk are configurable.
+	* Kafka provides longer retention of messages even after consumption, allowing consumers to re-consume, if required.
+	* Kafka uses a message set to group messages to allow lesser network overhead.
+	* Unlike most messaging systems, where metadata of the consumed messages are kept at the server level, in Kafka the state of the consumed messages is maintained at the consumer level. This also addresses issues such as:
+		* Losing messages due to failure
+		* Multiple deliveries of the same message
+	* In Kafka, producers and consumers work on the traditional push-and-pull model, where producers push the message to a Kafka broker and consumers pull the message 	from the broker.
+	* Kafka does not have any concept of a master and treats all the brokers as peers. This approach facilitates addition and removal of a Kafka broker at any point, as the 	metadata of brokers are maintained in Zookeeper and shared with consumers.
+	* Producers also have an option to choose between asynchronous or synchronous mode
+	to send messages to a broker.
 
 * Kafka can be compared with Scribe or Flume as it is useful for processing activity stream data; but from the architecture perspective, it is closer to traditional messaging systems such as ActiveMQ or RabitMQ.	
 
@@ -37,6 +213,143 @@ footer: true
 	* **Messaging**: Message brokers are used for decoupling data processing from data producers. Kafka can replace many popular message brokers as it offers better throughput, built-in partitioning, replication, and fault-tolerance.
 
 
+## Messages
+
+* The unit of data within Kafka is called a message. 
+* A message is simply an array of bytes, as far as Kafka is concerned, so the data contained within it does not have a specific format or meaning to Kafka. 
+* **Message Key**: 
+	* Messages can have an optional bit of metadata which is referred to as a key. The key is also a byte array, and as with the message, has no specific meaning to Kafka. 
+	* Keys are used when messages are to be written to partitions in a more controlled manner. 
+	* The simplest such scheme is to treat partitions as a hash ring, and assure that messages with the same key are always written to the same partition. 
+* **Message Batches**
+	* For efficiency, messages are written into Kafka in batches. 
+	* A batch is just a collection of messages, all of which are being produced to the same topic and partition. 
+	* Batching, of course, presents a tradeoff between latency and throughput: the larger the batches, the more messages that can be handled per unit of time, but the longer it takes an individual message to propagate. 
+* **Message Compression**
+	* Batches can be compressed by producer using either *GZIP* or *Snappy* compression protocols, which provides for more efficient data transfer and storage at the cost of some processing power.
+* **Message Schema**
+	* While messages are opaque byte arrays to Kafka itself, it is recommended that additional structure (schema) to be imposed on the message content so that it can be easily understood.
+	* Many options available for message schema: JSON, XML. But Kafka users prefer Apache Avro since it provides a compact serialization format, schemas that are separate from the message payloads and that do not require generated code when they change, as well as strong data typing and schema evolution, with both backwards and forwards compatibility.
+
+
+## Topic & Partition
+
+| {% img /technology/kafka-topic.png %} | {% img /technology/kafka-partition.png %}|
+
+* A topic is a category or feed name to which messages are published by the message producers. In Kafka, topics are partitioned and each partition is represented by the ordered immutable sequence of messages. A Kafka cluster maintains the partitioned log for each topic. Each message in the partition is assigned a unique sequential ID called the **offset**.
+* The term *stream* is often used when discussing data within systems like Kafka. Most
+often, a stream is considered to be a single topic of data, regardless of the number of partitions. This represents a single stream of data moving from the producers to the consumers.
+* In Kafka topics, every partition is mapped to a logical log file that is represented as a set of segment files of equal sizes. Every partition is an ordered, immutable sequence of messages; each time a message is published to a partition, the broker appends the message to the last segment file. 
+* These segment files are flushed to disk after configurable numbers of messages have been published or after a certain amount of time has elapsed. Once the segment file is flushed, messages are made available to the consumers for consumption.
+
+* Partitions are also the way that Kafka provides redundancy and
+scalability. 
+* Each partition can be hosted on a different server, which means that a single topic can be scaled horizontally across multiple servers to provide for performance far beyond the ability of a single server.
+* All the message partitions are assigned a unique sequential number called the ***offset***, which is used to identify each message within the partition. Each partition is optionally replicated across a configurable number of servers for fault tolerance.
+* Each partition available on either of the servers acts as the leader and has zero or more servers acting as followers. Here the leader is responsible for handling all read and write requests for the partition while the followers asynchronously replicate data from the leader. Kafka dynamically maintains a set of ***in-sync replicas (ISR)*** that are caught-up to the leader and always persist the latest ISR set to ZooKeeper. 
+* If the leader fails, one of the followers (in-sync replicas) will automatically become the new leader. 
+* In a Kafka cluster, each server plays a dual role; it acts as a leader for some of its partitions and also a  follower for other partitions. This ensures the load balance within the Kafka cluster.
+
+## Broker & Cluster
+
+{% img right /technology/kafka-broker.png %}
+
+* A single Kafka server is called a broker. 
+* The broker receives messages from producers, assigns offsets to them, and commits the messages to storage on disk. It also services consumers, responding to fetch requests for partitions and responding with the messages that have been committed to disk. 
+* *Throughput*: Depending on the specific hardware and its performance characteristics, a single broker can easily handle thousands of partitions and millions of messages per second. Kafka brokers are designed to operate as part of a cluster. 
+* Within a cluster of brokers, one will also function as the ***cluster controller*** (elected automatically from the live members of the cluster). The controller is responsible for administrative operations, including assigning partitions to brokers and monitoring for broker failures. 
+* A partition is owned by a single broker in the cluster, and that broker is called the ***leader*** for the partition. A partition may be assigned to multiple brokers, which will result in the partition being replicated. This provides redundancy of messages in the partition, such that another broker can take over leadership if there is a broker failure. However, all consumers and producers operating on that partition must connect to the leader.
+
+* Brokers are by design *stateless*. It does not maintain a record of what is consumed by whom. The message state of any consumed message is maintained within the message consumer.
+
+**Message Retention**
+
+* A key feature of Apache Kafka is that of retention, or the durable storage of messages for some period of time.
+* Kafka brokers are configured with a default retention setting for topics
+	* time-based: retaining messages for some period of time (e.g. 7 days) or 
+	* size-based: until the topic reaches a certain size in bytes (e.g. 1 gigabyte). Once these limits are reached, messages are expired and deleted so that the retention configuration is a minimum amount of data available at any time. 
+	* log-compact-based: Topics may also be configured as ***log compacted***, which means that Kafka will retain only the last message produced with a specific key.
+	Log compaction ensures the following:
+		* Ordering of messages is always maintained
+		* The messages will have sequential offsets and the offset never changes
+		* Reads progressing from offset 0, or the consumer progressing from the start of the log, will see at least the final state of all records in the order they were written
+
+
+* Individual topics can also be configured with their own retention settings, so messages can be stored for only as long as they are useful. 
+* For example, a tracking topic may be retained for several days, while application metrics may be retained for only a few hours. 
+
+## Zookeeper
+
+{% img right /technology/kafka-zookeeper.png %}
+
+* Apache Kafka uses Zookeeper to store metadata information about the Kafka cluster,
+as well as consumer client details. 
+* ZooKeeper serves as the coordination interface between the Kafka broker and consumers. ZooKeeper allows distributed processes to coordinate with each other through a shared hierarchical name space of data registers (we call these registers znodes), much like a file system.
+* The main differences between ZooKeeper and standard filesystems are that every *znode* can have data associated with it and znodes are limited to the amount of data that they can have. 
+* ZooKeeper was designed to store coordination data: status information, configuration, location information, and so on.
+* While it is possible to run a Zookeeper server using scripts contained within the Kafka distribution, it is trivial to install a full version of Zookeeper from the distribution.
+
+## Producer
+
+* Producers publish data to the topics by choosing the appropriate partition within the topic. For load balancing, the allocation of messages to the topic partition can be done in a round-robin fashion or using a custom defined function.
+* Example of a producer: Web Application logs, page visits, clicks, social media activities, Web Analytics logs.
+* By default, the producer does not care what partition a specific message is written to and will balance messages over all partitions of a topic evenly. In some cases, the producer will direct messages to specific partitions. This is typically done using the message key and a partitioner that will generate a hash of the key and map it to a specific partition. This assures that all messages produced with a given key will get written to the same partition. The producer could also use a custom partitioner that follows other business rules for mapping messages to partitions
+
+**Message Delivery Semantics**
+
+There are multiple possible ways to deliver messages, such as:
+
+* Messages are never redelivered but may be lost
+* Messages may be redelivered but never lost
+* Messages are delivered once and only once
+
+* When publishing, a message is committed to the log. If a producer experiences a network error while publishing, it can never be sure if this error happened before or after the message was committed. 
+* Once committed, the message will not be lost as long as either of the brokers that replicate the partition to which this message was written remains available. For guaranteed message publishing, configurations such as getting acknowledgements and the waiting time for messages being committed are provided at the producer’s end.
+
+* The producer connects to any of the alive nodes and requests metadata about the leaders for the partitions of a topic. This allows the producer to put the message directly to the lead broker for the partition. 
+* The Kafka producer API exposes the interface for semantic partitioning by allowing the producer to specify a key to partition by and using this to hash to a partition. Thus, the producer can completely control which partition it publishes messages to
+
+## Consumer
+
+{% img right /technology/kafka-partition-consumer.png %}
+
+* The consumer subscribes to one or more topics and reads the messages in the order they were produced. The consumer keeps track of which messages it has already consumed by keeping track of the offset of messages. The offset is another bit of metadata, an integer value that continually increases, that Kafka adds to each message as it is produced. 
+* Each message within a given partition has a unique offset. By storing the offset of the last consumed message for each partition, either in Zookeeper or in Kafka itself, a consumer can stop and restart without losing its place. 
+* Consumers work as part of a **consumer group**. This is one or more consumers that work together to consume a topic. The group assures that each partition is only consumed by one member. 
+* In the figure here, there are three consumers in a single group consuming a topic. Two of the consumers are working from one partition each, while the third consumer is working from two partitions. The mapping of a consumer to a partition is often called *ownership* of the partition by the consumer.
+* In this way, consumers can horizontally scale to consume topics with a large number of messages. Additionally, if a single consumer fails, the remaining members of the group will rebalance the partitions being consumed to take over for the missing member.
+* A message within a topic is consumed by a single consumer within the consumer group and, if the requirement is such that a single message is to be consumed by multiple consumers, all these consumers need to be kept in different consumer groups. 
+
+* Consumers always consume messages from a particular partition sequentially and also acknowledge the message offset. This acknowledgement implies that the consumer has consumed all prior messages. Consumers issue an asynchronous pull request containing the offset of the message to be consumed to the broker and get the buffer of bytes.
+
+* **Stateful Consumer**
+	* The message state of any consumed message is maintained within the message consumer. 
+	* Consumers store the state in Zookeeper but Kafka also allows storing it within other storage systems used for OLTP applications as well. 
+	* If this is poorly implemented, the consumer ends up in reading the same message multiple times. 
+	* Message retention policy empowers consumers to deliberately rewind to an old offset and re-consume data although, as with traditional messaging systems, this is a violation of the queuing contract with consumers.
+
+* **Consumer Types**
+	* *Offline consumers*: that are consuming messages and storing them in Hadoop or traditional data warehouse for offline analysis
+	* *Near real-time consumers*:  that are consuming messages and storing them in any NoSQL datastore, such as HBase or Cassandra, for near real-time analytics
+	* *Real-time consumers*: such as Spark or Storm, that filter messages in-memory and trigger alert events for related groups
+
+* For consumers, Kafka guarantees that the message will be delivered at least once by reading the messages, processing the messages, and finally saving their position. If the consumer process crashes after processing messages but before saving their position, another consumer process takes over the topic partition and may receive the first few messages, which are already processed by crashed consumer.
+
+* While subscribing, the consumer connects to any of the live nodes and requests metadata about the leaders for the partitions of a topic. This allows the consumer to communicate directly with the lead broker receiving the messages. Kafka topics are divided into a set of ordered partitions and each partition is consumed by one consumer only. 
+* Once a partition is consumed, the consumer changes the message offset to the next partition to be consumed. This represents the states about what has been consumed and also provides the flexibility of deliberately rewinding back to an old offset and re-consuming the partition.
+
+* ***High-level Consumer API***
+	* is used when only data is needed and the handling of message offsets is not required. 
+	* This API hides broker details from the consumer and allows effortless communication with the Kafka cluster by providing an abstraction over the low-level implementation. 
+	* The high-level consumer stores the last offset (the position within the message partition where the consumer left off consuming the message), read from a specific partition in Zookeeper. 
+	* This offset is stored based on the consumer group name provided to Kafka at the beginning of the process.
+	* does not allow consumers to control interactions with brokers. Also known as *simple consumer API*.
+* ***Low-level Consumer API***
+	* is stateless and provides fine grained control over the communication between Kafka broker and the consumer.
+	* It allows consumers to set the message offset with every request raised to the broker and maintains the metadata at the consumer’s end. 
+	* This API can be used by both online as well as offline consumers such as Hadoop. 
+	* These types of consumers can also perform multiple reads for the same message or manage transactions to ensure the message is consumed only once.
+
 ## Clusters
 
 **Types**
@@ -45,16 +358,42 @@ footer: true
 * A single node—multiple broker clusters
 * Multiple nodes—multiple broker clusters
 
-**Cluster Components**
+| Single node - Singe Broker Cluster | Single node - Multiple Broker Cluster | Multiple node - Multiple Broker Cluster |
+| {% img /technology/kafka-1.png%} | {% img /technology/kafka-2.png%} | {% img /technology/kafka-3.png%} |
 
-A Kafka cluster primarily has five main components:
+**Multiple Clusters**
 
-* **1. Topic**: A topic is a category or feed name to which messages are published by the message producers. In Kafka, topics are partitioned and each partition is represented by the ordered immutable sequence of messages. A Kafka cluster maintains the partitioned log for each topic. Each message in the partition is assigned a unique sequential ID called the offset.
-* **2. Broker**: A Kafka cluster consists of one or more servers where each one may have one or more server processes running and is called the broker. Topics are created within the context of broker processes.
-* **3. Zookeeper**: ZooKeeper serves as the coordination interface between the Kafka broker and consumers. ZooKeeper allows distributed processes to coordinate with each other through a shared hierarchical name space of data registers (we call these registers znodes), much like a file system.
-	* The main differences between ZooKeeper and standard filesystems are that every znode can have data associated with it and znodes are limited to the amount of data that they can have. ZooKeeper was designed to store coordination data: status information, configuration, location information, and so on.
-* **4. Producers**: Producers publish data to the topics by choosing the appropriate partition within the topic. For load balancing, the allocation of messages to the topic partition can be done in a round-robin fashion or using a custom defined function.
-* **5. Consumer**: Consumers are the applications or processes that subscribe to topics and
-process the feed of published messages.
+{% img right /technology/kafka-multi-cluster.png %}
 
-https://vimeo.com/63040812
+* As Kafka deployments grow, it is often advantageous to have multiple clusters for the following reasons:
+	* Segregation of types of data
+	* Isolation for security requirements
+	* Multiple datacenters (disaster recovery)
+* *Mirror Maker* 
+	* The replication mechanisms within the Kafka clusters are designed only to work within a single cluster, not between multiple clusters. For cross-cluster replication, Kafka provides a tool called *Mirror Maker*.
+	* At it’s core, Mirror Maker is simply a Kafka consumer and producer, linked together with a queue. Messages are consumed from one Kafka cluster and produced to another.
+
+
+## Design
+
+### Message Compression
+
+* The lead broker is responsible for serving the messages for a partition by assigning unique logical offsets to every message before it is appended to the logs. In the case of compressed data, the lead broker has to decompress the message set in order to assign offsets to the messages inside the compressed message set. Once offsets are assigned, the leader again compresses the data and then appends it to the disk. The lead broker follows this process for every compressed message sets it receives, which causes CPU load on a Kafka broker.
+* Message compression techniques are very useful for mirroring data across datacenters using Kafka, where large amounts of data get transferred from active to passive datacenters in the compressed format.
+
+### Replication
+
+* In replication, each partition of a message has `n` replicas and can afford `n-1` failures to guarantee message delivery. Out of the n replicas, one replica acts as the lead replica for the rest of the replicas. Zookeeper keeps the information about the lead replica and the current follower **in-sync replicas (ISR)**. The lead replica maintains the list of all in-sync follower replicas
+* Both producers and consumers are replication-aware in Kafka.
+* **Replication Modes**
+	* Synchronous replication: In synchronous replication, a producer first identifies the lead replica from ZooKeeper and publishes the message. As soon as the message is published, it is written to the log of the lead replica and all the followers of the lead start pulling the message; by using a single channel, the order of messages is ensured. Each follower replica sends an acknowledgement to the lead replica once the message is written to its respective logs. Once replications are complete and all expected acknowledgements are received, the lead replica sends an acknowledgement to the producer. On the consumer’s side, all the pulling of messages is done from the lead replica.
+	* **Asynchronous replication**: The only difference in this mode is that, as soon as a lead replica writes the message to its local log, it sends the acknowledgement to the message client and does not wait for acknowledgements from follower replicas. But, as a downside, this mode does not ensure message delivery in case of a broker failure.
+* Replication in Kafka ensures stronger durability and higher availability. It guarantees that any successfully published message will not be lost and will be consumed, even in the case of broker failures.
+
+# Bibliography
+
+* Kafka
+	* Books
+		* Learning Apache Kafka (2nd Edition) - Nishant Garg
+		* Kafka - The Definitive Guide - O'Reilly
+

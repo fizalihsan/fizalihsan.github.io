@@ -11,7 +11,6 @@ footer: true
     * [Overview]({{ root_url }}/technology/architecture.html)
     * [Cloud Computing]({{ root_url }}/technology/cloud-computing.html)
     * [Coding Principles]({{ root_url }}/technology/coding-principles.html)
-    * [Concurrency & Parallelism]({{ root_url }}/technology/concurrency-parallelism.html)
     * [Design Principles]({{ root_url }}/technology/design-principles.html)
     * [Logging & Monitoring]({{ root_url }}/technology/logging-and-monitoring.html)
     * [Patterns]({{ root_url }}/technology/patterns.html)
@@ -25,6 +24,7 @@ footer: true
     * [ElasticSearch]({{ root_url }}/technology/elasticsearch.html)
     * [Frameworks]({{ root_url }}/technology/bigdata-frameworks.html)
     * [NoSQL]({{ root_url }}/technology/nosql.html)
+    * [Parallel Computing]({{ root_url }}/technology/concurrency-parallelism.html)
 
   * Database
     * [Concepts]({{ root_url }}/technology/rdbms.html)

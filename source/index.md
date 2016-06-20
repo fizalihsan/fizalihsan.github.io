@@ -15,6 +15,7 @@ footer: true
     * [Logging & Monitoring]({{ root_url }}/technology/logging-and-monitoring.html)
     * [Patterns]({{ root_url }}/technology/patterns.html)
     * [SDLC]({{ root_url }}/technology/sdlc.html)
+    * [Scalability]({{ root_url }}/technology/scalability.html)
     * [Security]({{ root_url }}/technology/security.html)
     * [Transactions]({{ root_url }}/technology/transaction.html)
 

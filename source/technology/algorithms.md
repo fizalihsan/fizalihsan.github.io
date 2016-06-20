@@ -92,6 +92,7 @@ Break down the loops and processing.
 
 * Hashing Functions
 	* Perfect hashing
+	* Consistent Hashing or Hash Ring (used for building distributed caches, data sharding. Many NoSQL databases uses this including Voldemort, Amazon Dynamo, Couchdb, etc)
 
 * Collision Resolution Policy
 	* Open Hashing/Separate Chaining

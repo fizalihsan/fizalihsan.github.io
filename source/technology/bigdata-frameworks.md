@@ -291,6 +291,8 @@ as well as consumer client details.
 
 ## Producer
 
+{% img right /technology/kafka-producer.png %}
+
 * Producers publish data to the topics by choosing the appropriate partition within the topic. For load balancing, the allocation of messages to the topic partition can be done in a round-robin fashion or using a custom defined function.
 * Example of a producer: Web Application logs, page visits, clicks, social media activities, Web Analytics logs.
 * By default, the producer does not care what partition a specific message is written to and will balance messages over all partitions of a topic evenly. In some cases, the producer will direct messages to specific partitions. This is typically done using the message key and a partitioner that will generate a hash of the key and map it to a specific partition. This assures that all messages produced with a given key will get written to the same partition. The producer could also use a custom partitioner that follows other business rules for mapping messages to partitions
@@ -308,6 +310,18 @@ There are multiple possible ways to deliver messages, such as:
 
 * The producer connects to any of the alive nodes and requests metadata about the leaders for the partitions of a topic. This allows the producer to put the message directly to the lead broker for the partition. 
 * The Kafka producer API exposes the interface for semantic partitioning by allowing the producer to specify a key to partition by and using this to hash to a partition. Thus, the producer can completely control which partition it publishes messages to
+
+**Steps to send a message**
+
+* Create a `ProducerRecord`, which must include 
+	* the **topic** to send the record to 
+	* and a **value/content** being sent
+	* optionally specify **a key** and / or **a partition**. 
+* After sending the `ProducerRecord`, the producer will **serialize** the *key* and *value* objects to `ByteArray`s, so they can be sent over the network. 
+* Next, the data is sent to a **partitioner**. If a partition is specified in the `ProducerRecord`, then it doesn't do anything and simply returns the partition specified. If not, the *partitioner* will choose a partition for us, usually based on the `ProducerRecord` key. 
+* Once a partition is selected, the producer knows which topic and partition the record will go to. It then adds the record to a batch of records that will also be sent to the same topic and partition. 
+* A separate thread is responsible for sending those batches of records to the appropriate Kafka brokers. When the broker receives the messages, it sends back a response. 
+* If the messages were successfully written to Kafka, it will return a `RecordMetadata` object with the topic, partition and the offset the record in the partition. If the broker failed to write the messages, it will return an error. When the producer receives an error, it may retry sending the message few more times before giving up and returning an error.
 
 ## Consumer
 
@@ -350,6 +364,17 @@ There are multiple possible ways to deliver messages, such as:
 	* This API can be used by both online as well as offline consumers such as Hadoop. 
 	* These types of consumers can also perform multiple reads for the same message or manage transactions to ensure the message is consumed only once.
 
+
+* **Number of Consumers and partitions**  - say `c` = # of consumers, `p` = # of partitions
+
+| c < p | c==p | c>p |
+|{% img /technology/kafka-consumer1.png %}|{% img /technology/kafka-consumer2.png %}|{% img /technology/kafka-consumer3.png %}|
+
+* As seen above, if a new consumer is added to the consumer group, Kafka automatically assigns it a partition to consume from. 
+* A consumer can read from multiple partitions. However, one partition is not consumed by more than one consumer.
+* In the example above, if we add a new consumer group `g2` with a single consumer, this consumer will get all the messages in topic `t1` independently of what `g1` is doing. 
+* If a consumer crashses or leaves the group, the partition it used to consume from is automatically reassigned to another consumer. Same thing happens when a new partition is added to the topic as well. The event in which partition ownership is moved from one consumer to another is called a ***rebalance***. This provides both high availability and scalability.
+
 ## Clusters
 
 **Types**
@@ -389,6 +414,12 @@ There are multiple possible ways to deliver messages, such as:
 	* Synchronous replication: In synchronous replication, a producer first identifies the lead replica from ZooKeeper and publishes the message. As soon as the message is published, it is written to the log of the lead replica and all the followers of the lead start pulling the message; by using a single channel, the order of messages is ensured. Each follower replica sends an acknowledgement to the lead replica once the message is written to its respective logs. Once replications are complete and all expected acknowledgements are received, the lead replica sends an acknowledgement to the producer. On the consumer’s side, all the pulling of messages is done from the lead replica.
 	* **Asynchronous replication**: The only difference in this mode is that, as soon as a lead replica writes the message to its local log, it sends the acknowledgement to the message client and does not wait for acknowledgements from follower replicas. But, as a downside, this mode does not ensure message delivery in case of a broker failure.
 * Replication in Kafka ensures stronger durability and higher availability. It guarantees that any successfully published message will not be lost and will be consumed, even in the case of broker failures.
+
+# Apache Zookeeper
+
+* A Zookeeper cluster is called an **“ensemble”**. Due to the *consensus protocol* used, it is recommended that ensembles contain an odd number of servers (e.g. 3, 5, etc.) as a majority of ensemble members (a quorum) must be working for Zookeeper to respond to requests. This means in a 3-node ensemble, you can run with one node missing. With a 5-node ensemble, you can run with two nodes missing.
+
+* Consider running Zookeeper in a 5-node ensemble. In order to make configuration changes to the ensemble, including swapping a node, you will need to reload nodes one at a time. If your ensemble cannot tolerate more than one node being down, doing maintenance work introduces additional risk. It is also not recommended to run a Zookeeper ensemble larger than 7 nodes, as performance can start to degrade due to the nature of the consensus protocol.
 
 # Bibliography
 

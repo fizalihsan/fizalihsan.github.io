@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "Big Data Scalability"
+title: "Scalability"
 comments: false
 sharing: false
 footer: true
@@ -38,11 +38,13 @@ footer: true
 
 # Sharding
 
-##Consistent hashing 
+##Consistent hashing or Hash Ring
 
 is a special kind of hashing such that when a hash table is resized and consistent hashing is used, only K/n keys need to be remapped on average, where K is the number of keys, and n is the number of slots. In contrast, in most traditional hash tables, a change in the number of array slots causes nearly all keys to be remapped.
 
 The advantage of Consistent Hashing with sharding is to reduce the number of rows affected (i.e., that need to be moved) as new physical shard servers are added or removed.
+
+[Consistent Hashing Explained](http://michaelnielsen.org/blog/consistent-hashing/)
 
 ## Black-Box Sharding
 
@@ -59,6 +61,22 @@ The sharding strategy for the relational approach also uses a hash function to p
 While it is true that relational sharding is easiest to implement with a relational DBMS engine, the advantages of this technique can be applied to other types of DBMS engines as well. It can even be used with an object database, through clever utilization of secondary indexes – particularly if the engine stores sharded data in range-based chunks.
 
 Allows easy join of related data unlike in black-box sharding.
+
+# Caching
+
+**Caching Solutions**
+
+* Ehcache
+* Distributed Caches
+	* Aerospike
+	* Coherence (Oracle)
+	* Gemfire
+	* Gigaspaces
+	* Hazelcast
+	* Memcached
+	* Redis
+	* Riak (key-value database)
+
 
 # References
 

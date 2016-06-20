@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Big Data Scalability - KnowledgeShop</title>
+  <title>Scalability - KnowledgeShop</title>
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Big Data Scalability Sharding Consistent hashing Black-Box Sharding Relational Sharding References Options for increasing the DB performance &hellip;">
+<meta name="description" content="Scalability Sharding Consistent hashing or Hash Ring Black-Box Sharding Relational Sharding Caching References Options for increasing the DB &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -103,17 +103,18 @@ messageStyle: "none",
 <article role="article">
   
   <header>
-    <h1 class="entry-title">Big Data Scalability</h1>
+    <h1 class="entry-title">Scalability</h1>
     
   </header>
   
   <ul id="markdown-toc">
   <li><a href="#sharding">Sharding</a>    <ul>
-      <li><a href="#consistent-hashing">Consistent hashing</a></li>
+      <li><a href="#consistent-hashing-or-hash-ring">Consistent hashing or Hash Ring</a></li>
       <li><a href="#black-box-sharding">Black-Box Sharding</a></li>
       <li><a href="#relational-sharding">Relational Sharding</a></li>
     </ul>
   </li>
+  <li><a href="#caching">Caching</a></li>
   <li><a href="#references">References</a></li>
 </ul>
 
@@ -166,11 +167,13 @@ messageStyle: "none",
 
 <h1 id="sharding">Sharding</h1>
 
-<h2 id="consistent-hashing">Consistent hashing</h2>
+<h2 id="consistent-hashing-or-hash-ring">Consistent hashing or Hash Ring</h2>
 
 <p>is a special kind of hashing such that when a hash table is resized and consistent hashing is used, only K/n keys need to be remapped on average, where K is the number of keys, and n is the number of slots. In contrast, in most traditional hash tables, a change in the number of array slots causes nearly all keys to be remapped.</p>
 
 <p>The advantage of Consistent Hashing with sharding is to reduce the number of rows affected (i.e., that need to be moved) as new physical shard servers are added or removed.</p>
+
+<p><a href="http://michaelnielsen.org/blog/consistent-hashing/">Consistent Hashing Explained</a></p>
 
 <h2 id="black-box-sharding">Black-Box Sharding</h2>
 
@@ -187,6 +190,26 @@ messageStyle: "none",
 <p>While it is true that relational sharding is easiest to implement with a relational DBMS engine, the advantages of this technique can be applied to other types of DBMS engines as well. It can even be used with an object database, through clever utilization of secondary indexes – particularly if the engine stores sharded data in range-based chunks.</p>
 
 <p>Allows easy join of related data unlike in black-box sharding.</p>
+
+<h1 id="caching">Caching</h1>
+
+<p><strong>Caching Solutions</strong></p>
+
+<ul>
+  <li>Ehcache</li>
+  <li>Distributed Caches
+    <ul>
+      <li>Aerospike</li>
+      <li>Coherence (Oracle)</li>
+      <li>Gemfire</li>
+      <li>Gigaspaces</li>
+      <li>Hazelcast</li>
+      <li>Memcached</li>
+      <li>Redis</li>
+      <li>Riak (key-value database)</li>
+    </ul>
+  </li>
+</ul>
 
 <h1 id="references">References</h1>
 
@@ -214,7 +237,7 @@ messageStyle: "none",
 
 		<li>
 			<h3>Architecture</h3>
-			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/cloud-computing.html">Cloud Computing</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/cloud-computing.html">Cloud Computing</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
 		</li>
 		
 		<li>

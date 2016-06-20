@@ -142,6 +142,7 @@ messageStyle: "none",
       </li>
     </ul>
   </li>
+  <li><a href="#apache-zookeeper">Apache Zookeeper</a></li>
   <li><a href="#bibliography">Bibliography</a></li>
 </ul>
 
@@ -575,6 +576,8 @@ as well as consumer client details. </li>
 
 <h2 id="producer">Producer</h2>
 
+<p><img class="right" src="/technology/kafka-producer.png" /></p>
+
 <ul>
   <li>Producers publish data to the topics by choosing the appropriate partition within the topic. For load balancing, the allocation of messages to the topic partition can be done in a round-robin fashion or using a custom defined function.</li>
   <li>Example of a producer: Web Application logs, page visits, clicks, social media activities, Web Analytics logs.</li>
@@ -597,6 +600,23 @@ as well as consumer client details. </li>
   </li>
   <li>The producer connects to any of the alive nodes and requests metadata about the leaders for the partitions of a topic. This allows the producer to put the message directly to the lead broker for the partition. </li>
   <li>The Kafka producer API exposes the interface for semantic partitioning by allowing the producer to specify a key to partition by and using this to hash to a partition. Thus, the producer can completely control which partition it publishes messages to</li>
+</ul>
+
+<p><strong>Steps to send a message</strong></p>
+
+<ul>
+  <li>Create a <code>ProducerRecord</code>, which must include 
+    <ul>
+      <li>the <strong>topic</strong> to send the record to </li>
+      <li>and a <strong>value/content</strong> being sent</li>
+      <li>optionally specify <strong>a key</strong> and / or <strong>a partition</strong>. </li>
+    </ul>
+  </li>
+  <li>After sending the <code>ProducerRecord</code>, the producer will <strong>serialize</strong> the <em>key</em> and <em>value</em> objects to <code>ByteArray</code>s, so they can be sent over the network. </li>
+  <li>Next, the data is sent to a <strong>partitioner</strong>. If a partition is specified in the <code>ProducerRecord</code>, then it doesn’t do anything and simply returns the partition specified. If not, the <em>partitioner</em> will choose a partition for us, usually based on the <code>ProducerRecord</code> key. </li>
+  <li>Once a partition is selected, the producer knows which topic and partition the record will go to. It then adds the record to a batch of records that will also be sent to the same topic and partition. </li>
+  <li>A separate thread is responsible for sending those batches of records to the appropriate Kafka brokers. When the broker receives the messages, it sends back a response. </li>
+  <li>If the messages were successfully written to Kafka, it will return a <code>RecordMetadata</code> object with the topic, partition and the offset the record in the partition. If the broker failed to write the messages, it will return an error. When the producer receives an error, it may retry sending the message few more times before giving up and returning an error.</li>
 </ul>
 
 <h2 id="consumer">Consumer</h2>
@@ -654,6 +674,29 @@ as well as consumer client details. </li>
       <li>These types of consumers can also perform multiple reads for the same message or manage transactions to ensure the message is consumed only once.</li>
     </ul>
   </li>
+  <li><strong>Number of Consumers and partitions</strong>  - say <code>c</code> = # of consumers, <code>p</code> = # of partitions</li>
+</ul>
+
+<table>
+  <tbody>
+    <tr>
+      <td>c &lt; p</td>
+      <td>c==p</td>
+      <td>c&gt;p</td>
+    </tr>
+    <tr>
+      <td><img src="/technology/kafka-consumer1.png" /></td>
+      <td><img src="/technology/kafka-consumer2.png" /></td>
+      <td><img src="/technology/kafka-consumer3.png" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>As seen above, if a new consumer is added to the consumer group, Kafka automatically assigns it a partition to consume from. </li>
+  <li>A consumer can read from multiple partitions. However, one partition is not consumed by more than one consumer.</li>
+  <li>In the example above, if we add a new consumer group <code>g2</code> with a single consumer, this consumer will get all the messages in topic <code>t1</code> independently of what <code>g1</code> is doing. </li>
+  <li>If a consumer crashses or leaves the group, the partition it used to consume from is automatically reassigned to another consumer. Same thing happens when a new partition is added to the topic as well. The event in which partition ownership is moved from one consumer to another is called a <strong><em>rebalance</em></strong>. This provides both high availability and scalability.</li>
 </ul>
 
 <h2 id="clusters">Clusters</h2>
@@ -724,6 +767,17 @@ as well as consumer client details. </li>
   <li>Replication in Kafka ensures stronger durability and higher availability. It guarantees that any successfully published message will not be lost and will be consumed, even in the case of broker failures.</li>
 </ul>
 
+<h1 id="apache-zookeeper">Apache Zookeeper</h1>
+
+<ul>
+  <li>
+    <p>A Zookeeper cluster is called an <strong>“ensemble”</strong>. Due to the <em>consensus protocol</em> used, it is recommended that ensembles contain an odd number of servers (e.g. 3, 5, etc.) as a majority of ensemble members (a quorum) must be working for Zookeeper to respond to requests. This means in a 3-node ensemble, you can run with one node missing. With a 5-node ensemble, you can run with two nodes missing.</p>
+  </li>
+  <li>
+    <p>Consider running Zookeeper in a 5-node ensemble. In order to make configuration changes to the ensemble, including swapping a node, you will need to reload nodes one at a time. If your ensemble cannot tolerate more than one node being down, doing maintenance work introduces additional risk. It is also not recommended to run a Zookeeper ensemble larger than 7 nodes, as performance can start to degrade due to the nature of the consensus protocol.</p>
+  </li>
+</ul>
+
 <h1 id="bibliography">Bibliography</h1>
 
 <ul>
@@ -769,7 +823,7 @@ as well as consumer client details. </li>
 
 		<li>
 			<h3>Architecture</h3>
-			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/cloud-computing.html">Cloud Computing</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/cloud-computing.html">Cloud Computing</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
 		</li>
 		
 		<li>

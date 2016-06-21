@@ -123,7 +123,14 @@ messageStyle: "none",
     </ul>
   </li>
   <li><a href="#apache-storm">Apache Storm</a>    <ul>
+      <li><a href="#components">Components:</a></li>
       <li><a href="#difference-between-storm--spark">Difference between Storm &amp; Spark</a></li>
+      <li><a href="#example-word-counter">Example: Word Counter</a>        <ul>
+          <li><a href="#main-program">Main Program</a></li>
+          <li><a href="#spout">Spout</a></li>
+          <li><a href="#bolt">Bolt</a></li>
+        </ul>
+      </li>
     </ul>
   </li>
   <li><a href="#apache-spark">Apache Spark</a></li>
@@ -355,16 +362,58 @@ messageStyle: "none",
 
 <h1 id="apache-storm">Apache Storm</h1>
 
-<p><img class="right" src="/technology/storm-overview.png" /></p>
+<p><img class="right" src="/technology/storm-overview.png" width="400" height="400" /></p>
 
 <ul>
   <li>Storm is an open source, distributed, reliable, and fault-tolerant system for processing streams of large volumes of data in real-time. It supports many use cases, such as real-time analytics, online machine learning, continuous computation, and the Extract Transformation Load (ETL) paradigm.</li>
-  <li>Components:
+  <li>Features
     <ul>
-      <li><strong>Spout</strong>: This is a continuous stream of log data.</li>
-      <li><strong>Bolt</strong>: The spout passes the data to a component called bolt. A bolt consumes any number of input streams, does some processing, and possibly emits new streams. For example, emitting a stream of trend analysis by processing a stream of tweets.</li>
+      <li>Easy to program</li>
+      <li>Supports multiple programming languages</li>
+      <li>Fault-tolerant - The Storm cluster takes care of workers going down,  reassigning tasks when necessary.</li>
+      <li>Scalable</li>
+      <li>Reliable - All messages are guaranteed to be processed at least once. If there are errors, messages might be processed more than once, but you’ll never lose any message.</li>
+      <li>Fast</li>
+      <li>Transactional - You can get exactly once messaging semantics for pretty much any computation.</li>
     </ul>
   </li>
+</ul>
+
+<h2 id="components">Components:</h2>
+
+<p><img class="right" src="/technology/storm-daemons.png" /></p>
+
+<ul>
+  <li><strong>Spout</strong>: 
+    <ul>
+      <li>The input stream of a Storm cluster is handled by a component called a spout. </li>
+      <li>This is a continuous stream of log data.</li>
+    </ul>
+  </li>
+  <li><strong>Bolt</strong>: 
+    <ul>
+      <li>The spout passes the data to a component called a bolt, which transforms it in some way. A bolt either persists the data in some sort of storage, or passes it to some other bolt. </li>
+      <li>You can imagine a Storm cluster as a chain of bolt components that each make some kind of transformation on the data exposed by the spout.</li>
+      <li>For example, emitting a stream of trend analysis by processing a stream of tweets.</li>
+    </ul>
+  </li>
+  <li><strong>Topology</strong>
+    <ul>
+      <li>The arrangement of all the components (spouts and bolts) and their connections is called a topology.</li>
+      <li>A topology in Storm runs across many worker nodes on different machines. </li>
+      <li>All topology nodes should be able to run independently with no shared data between processes (i.e., no global or class variables) since these processes may run on different machines.</li>
+    </ul>
+  </li>
+  <li><strong>Node</strong>
+    <ul>
+      <li>In a Storm cluster, nodes are organized into a master node that runs continuously. </li>
+      <li>There are two kind of nodes in a Storm cluster: <em>master node</em> and *worker nodes </li>
+      <li><strong>Nimbus</strong>: Master node run a daemon called <em>Nimbus</em>, which is responsible for distributing code around the cluster, assigning tasks to each worker node, and monitoring for failures.</li>
+      <li><strong>Supervisor</strong>: Worker nodes run a daemon called <em>Supervisor</em>, which executes a portion of a topology. </li>
+      <li>Since Storm keeps all cluster states either in Zookeeper or on local disk, the daemons are stateless and can fail or restart without affecting the health of the system</li>
+    </ul>
+  </li>
+  <li>Underneath, Storm makes use of zeromq, an advanced, embeddable networking library that provides wonderful features that make Storm possible</li>
 </ul>
 
 <h2 id="difference-between-storm--spark">Difference between Storm &amp; Spark</h2>
@@ -408,6 +457,345 @@ messageStyle: "none",
     </tr>
   </tbody>
 </table>
+
+<h2 id="example-word-counter">Example: Word Counter</h2>
+
+<p>A simple topology which reads a file and counts word occurrence.  </p>
+
+<p><img class="right" src="/technology/storm-example.png" /></p>
+
+<h3 id="main-program">Main Program</h3>
+
+<ul>
+  <li><code>TopologyBuilder</code> tells Storm how the nodes are arranged and how they exchange data</li>
+  <li>The spout and the bolts are connected using <code>shuffleGroupings</code>. This type of grouping tells Storm to send messages from the source node to target nodes in randomly distributed fashion.</li>
+  <li><code>Config</code> object containing the topology configuration, which is merged with the cluster configuration at run time and sent to all nodes with the <code>prepare</code> method.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Main Program</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">InterruptedException</span> <span class="o">{</span>
+</span><span class="line">	<span class="c1">//Topology definition</span>
+</span><span class="line">	<span class="n">TopologyBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">TopologyBuilder</span><span class="o">();</span>
+</span><span class="line">	<span class="n">builder</span><span class="o">.</span><span class="na">setSpout</span><span class="o">(</span><span class="s">&quot;word-reader&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="nf">WordReader</span><span class="o">());</span>
+</span><span class="line">	<span class="n">builder</span><span class="o">.</span><span class="na">setBolt</span><span class="o">(</span><span class="s">&quot;word-normalizer&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="nf">WordNormalizer</span><span class="o">())</span>
+</span><span class="line">		<span class="o">.</span><span class="na">shuffleGrouping</span><span class="o">(</span><span class="s">&quot;word-reader&quot;</span><span class="o">);</span> <span class="c1">//output of word-reader is fed into this bolt</span>
+</span><span class="line">	<span class="n">builder</span><span class="o">.</span><span class="na">setBolt</span><span class="o">(</span><span class="s">&quot;word-counter&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="nf">WordCounter</span><span class="o">(),</span><span class="mi">2</span><span class="o">)</span>
+</span><span class="line">		<span class="o">.</span><span class="na">fieldsGrouping</span><span class="o">(</span><span class="s">&quot;word-normalizer&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="nf">Fields</span><span class="o">(</span><span class="s">&quot;word&quot;</span><span class="o">));</span> <span class="c1">//output of word-normalizer is fed into this bolt</span>
+</span><span class="line">	
+</span><span class="line">	<span class="c1">//Configuration</span>
+</span><span class="line">	<span class="n">Config</span> <span class="n">conf</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Config</span><span class="o">();</span>
+</span><span class="line">	<span class="n">conf</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;wordsFile&quot;</span><span class="o">,</span> <span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span> <span class="c1">//input file to process</span>
+</span><span class="line">	<span class="n">conf</span><span class="o">.</span><span class="na">setDebug</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span> <span class="c1">// should print all messages exchanged between nodes?</span>
+</span><span class="line">	<span class="n">conf</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Config</span><span class="o">.</span><span class="na">TOPOLOGY_MAX_SPOUT_PENDING</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+</span><span class="line">	
+</span><span class="line">	<span class="c1">//Topology run</span>
+</span><span class="line">	<span class="n">LocalCluster</span> <span class="n">cluster</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">LocalCluster</span><span class="o">();</span> <span class="c1">// since we are running in local mode</span>
+</span><span class="line">	<span class="n">cluster</span><span class="o">.</span><span class="na">submitTopology</span><span class="o">(</span><span class="s">&quot;Getting-Started-Toplogie&quot;</span><span class="o">,</span> <span class="n">conf</span><span class="o">,</span> <span class="n">builder</span><span class="o">.</span><span class="na">createTopology</span><span class="o">());</span>
+</span><span class="line">	<span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">);</span>
+</span><span class="line">	<span class="n">cluster</span><span class="o">.</span><span class="na">shutdown</span><span class="o">();</span> <span class="c1">// in production environment, topology runs continuously</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="spout">Spout</h3>
+
+<ul>
+  <li><code>open</code> method is called first. In the example, it opens a file reader</li>
+  <li><code>nextTuple</code> method is called continuously forever. This method emits values to be processed by bolts. In the example, it emits a value per line from the file.</li>
+  <li>A spout emits a list of defined fields. This architecture allows to have different kinds of bolts reading the same spout stream, which can then define fields for other bolts to consume and so on.</li>
+  <li>A tuple is a named list of values, which can be of any type of Java object (serializable object). By default, Storm can serialize common types like strings, byte arrays, <code>ArrayList</code>, <code>HashMap</code>, and <code>HashSet</code>.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Spout that reads the text file</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+<span class="line-number">39</span>
+<span class="line-number">40</span>
+<span class="line-number">41</span>
+<span class="line-number">42</span>
+<span class="line-number">43</span>
+<span class="line-number">44</span>
+<span class="line-number">45</span>
+<span class="line-number">46</span>
+<span class="line-number">47</span>
+<span class="line-number">48</span>
+<span class="line-number">49</span>
+<span class="line-number">50</span>
+<span class="line-number">51</span>
+<span class="line-number">52</span>
+<span class="line-number">53</span>
+<span class="line-number">54</span>
+<span class="line-number">55</span>
+<span class="line-number">56</span>
+<span class="line-number">57</span>
+<span class="line-number">58</span>
+<span class="line-number">59</span>
+<span class="line-number">60</span>
+<span class="line-number">61</span>
+<span class="line-number">62</span>
+<span class="line-number">63</span>
+<span class="line-number">64</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">WordReader</span> <span class="kd">implements</span> <span class="n">IRichSpout</span> <span class="o">{</span>
+</span><span class="line">	<span class="kd">private</span> <span class="n">SpoutOutputCollector</span> <span class="n">collector</span><span class="o">;</span>
+</span><span class="line">	<span class="kd">private</span> <span class="n">FileReader</span> <span class="n">fileReader</span><span class="o">;</span>
+</span><span class="line">	<span class="kd">private</span> <span class="kt">boolean</span> <span class="n">completed</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+</span><span class="line">	<span class="kd">private</span> <span class="n">TopologyContext</span> <span class="n">context</span><span class="o">;</span>
+</span><span class="line">
+</span><span class="line">	<span class="c1">// We will create the file and get the collector object</span>
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">open</span><span class="o">(</span>
+</span><span class="line">			<span class="n">Map</span> <span class="n">conf</span><span class="o">,</span> <span class="c1">// conf object created during topology definition</span>
+</span><span class="line">			<span class="n">TopologyContext</span> <span class="n">context</span><span class="o">,</span> <span class="c1">// contains topology data</span>
+</span><span class="line">			<span class="n">SpoutOutputCollector</span> <span class="n">collector</span> <span class="c1">//enables to emit the data for bolts to process</span>
+</span><span class="line">		<span class="o">)</span> <span class="o">{</span>
+</span><span class="line">		<span class="k">try</span> <span class="o">{</span>
+</span><span class="line">			<span class="k">this</span><span class="o">.</span><span class="na">context</span> <span class="o">=</span> <span class="n">context</span><span class="o">;</span>
+</span><span class="line">			<span class="k">this</span><span class="o">.</span><span class="na">fileReader</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">FileReader</span><span class="o">(</span><span class="n">conf</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&quot;wordsFile&quot;</span><span class="o">).</span><span class="na">toString</span><span class="o">());</span>
+</span><span class="line">		<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">FileNotFoundException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">			<span class="k">throw</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">(</span><span class="s">&quot;Error reading file	[&quot;</span><span class="o">+</span><span class="n">conf</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&quot;wordFile&quot;</span><span class="o">)+</span><span class="s">&quot;]&quot;</span><span class="o">);</span>
+</span><span class="line">		<span class="o">}</span>
+</span><span class="line">		<span class="k">this</span><span class="o">.</span><span class="na">collector</span> <span class="o">=</span> <span class="n">collector</span><span class="o">;</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line">
+</span><span class="line">	<span class="c1">// this method emits a tuple for each line in file</span>
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">nextTuple</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">		<span class="c1">// The nextuple it is called forever, so if we have already completed reading the file ,we will wait and then return</span>
+</span><span class="line">		<span class="k">if</span><span class="o">(</span><span class="n">completed</span><span class="o">){</span>
+</span><span class="line">			<span class="k">try</span> <span class="o">{</span>
+</span><span class="line">				<span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">);</span>
+</span><span class="line">			<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">				<span class="c1">//Do nothing</span>
+</span><span class="line">			<span class="o">}</span>
+</span><span class="line">			<span class="k">return</span><span class="o">;</span>
+</span><span class="line">		<span class="o">}</span>
+</span><span class="line">
+</span><span class="line">		<span class="c1">//Open the reader</span>
+</span><span class="line">		<span class="n">String</span> <span class="n">str</span><span class="o">;</span>
+</span><span class="line">		<span class="n">BufferedReader</span> <span class="n">reader</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">BufferedReader</span><span class="o">(</span><span class="n">fileReader</span><span class="o">);</span>
+</span><span class="line">		<span class="k">try</span><span class="o">{</span>
+</span><span class="line">			<span class="c1">//Read all lines</span>
+</span><span class="line">			<span class="k">while</span><span class="o">((</span><span class="n">str</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="na">readLine</span><span class="o">())</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">){</span>
+</span><span class="line">				<span class="k">this</span><span class="o">.</span><span class="na">collector</span><span class="o">.</span><span class="na">emit</span><span class="o">(</span><span class="k">new</span> <span class="nf">Values</span><span class="o">(</span><span class="n">str</span><span class="o">),</span><span class="n">str</span><span class="o">);</span> <span class="c1">// emit each line from file</span>
+</span><span class="line">			<span class="o">}</span>
+</span><span class="line">		<span class="o">}</span><span class="k">catch</span><span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">){</span>
+</span><span class="line">			<span class="k">throw</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">(</span><span class="s">&quot;Error reading tuple&quot;</span><span class="o">,</span><span class="n">e</span><span class="o">);</span>
+</span><span class="line">		<span class="o">}</span><span class="k">finally</span><span class="o">{</span>
+</span><span class="line">			<span class="n">completed</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+</span><span class="line">		<span class="o">}</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line">
+</span><span class="line">	<span class="c1">// declare the output field </span>
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">declareOutputFields</span><span class="o">(</span><span class="n">OutputFieldsDeclarer</span> <span class="n">declarer</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">		<span class="n">declarer</span><span class="o">.</span><span class="na">declare</span><span class="o">(</span><span class="k">new</span> <span class="nf">Fields</span><span class="o">(</span><span class="s">&quot;line&quot;</span><span class="o">));</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line">
+</span><span class="line">	<span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isDistributed</span><span class="o">()</span> <span class="o">{</span><span class="k">return</span> <span class="kc">false</span><span class="o">;}</span>
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">close</span><span class="o">()</span> <span class="o">{}</span>
+</span><span class="line">	
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">ack</span><span class="o">(</span><span class="n">Object</span> <span class="n">msgId</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;OK:&quot;</span><span class="o">+</span><span class="n">msgId</span><span class="o">);</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line">
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">fail</span><span class="o">(</span><span class="n">Object</span> <span class="n">msgId</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;FAIL:&quot;</span><span class="o">+</span><span class="n">msgId</span><span class="o">);</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="bolt">Bolt</h3>
+
+<ul>
+  <li>We now have a spout that reads from a file and emits one tuple per line. We need to
+create two bolts to process these tuples</li>
+  <li><code>execute</code> method is called once per typle received. A bolt can emit 0, 1 or many tuples for each tuple received.</li>
+  <li>After each tuple is processed, the collector’s <code>ack()</code> method is called to indicate that processing has completed successfully. If the tuple could not be processed, the collector’s <code>fail()</code> method should be called.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Bolt that normalizes the line</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">WordNormalizer</span> <span class="kd">implements</span> <span class="n">IRichBolt</span> <span class="o">{</span>
+</span><span class="line">	<span class="kd">private</span> <span class="n">OutputCollector</span> <span class="n">collector</span><span class="o">;</span>
+</span><span class="line">
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">execute</span><span class="o">(</span><span class="n">Tuple</span> <span class="n">input</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">		<span class="n">String</span> <span class="n">sentence</span> <span class="o">=</span> <span class="n">input</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+</span><span class="line">		<span class="n">String</span><span class="o">[]</span> <span class="n">words</span> <span class="o">=</span> <span class="n">sentence</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">&quot; &quot;</span><span class="o">);</span>
+</span><span class="line">		<span class="k">for</span><span class="o">(</span><span class="n">String</span> <span class="n">word</span> <span class="o">:</span> <span class="n">words</span><span class="o">){</span>
+</span><span class="line">			<span class="n">word</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="na">trim</span><span class="o">();</span>
+</span><span class="line">			<span class="k">if</span><span class="o">(!</span><span class="n">word</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()){</span>
+</span><span class="line">				<span class="n">word</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="na">toLowerCase</span><span class="o">();</span>
+</span><span class="line">				<span class="n">collector</span><span class="o">.</span><span class="na">emit</span><span class="o">(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="n">input</span><span class="o">),</span><span class="k">new</span> <span class="nf">Values</span><span class="o">(</span><span class="n">word</span><span class="o">));</span>
+</span><span class="line">			<span class="o">}</span>
+</span><span class="line">		<span class="o">}</span>
+</span><span class="line">		<span class="n">collector</span><span class="o">.</span><span class="na">ack</span><span class="o">(</span><span class="n">input</span><span class="o">);</span> <span class="c1">// acknowledgement indicates the tuple is processed successfully</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line">
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">prepare</span><span class="o">(</span><span class="n">Map</span> <span class="n">stormConf</span><span class="o">,</span> <span class="n">TopologyContext</span> <span class="n">context</span><span class="o">,</span> <span class="n">OutputCollector</span> <span class="n">collector</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">		<span class="k">this</span><span class="o">.</span><span class="na">collector</span> <span class="o">=</span> <span class="n">collector</span><span class="o">;</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line">	
+</span><span class="line">	<span class="c1">// The bolt will only emit the field &quot;word&quot;</span>
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">declareOutputFields</span><span class="o">(</span><span class="n">OutputFieldsDeclarer</span> <span class="n">declarer</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">		<span class="n">declarer</span><span class="o">.</span><span class="na">declare</span><span class="o">(</span><span class="k">new</span> <span class="nf">Fields</span><span class="o">(</span><span class="s">&quot;word&quot;</span><span class="o">));</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line">
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">cleanup</span><span class="o">()</span> <span class="o">{}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>The <code>execute</code> method in the next bolt uses a map to collect and count the words. </li>
+  <li>When the topology terminates, the <code>cleanup()</code> method is called and prints out the map. (This is just an example, but normally you should use the <code>cleanup()</code> method to close active connections and other resources when the topology shuts down.)</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Bolt that counts the words</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">WordCounter</span> <span class="kd">implements</span> <span class="n">IRichBolt</span> <span class="o">{</span>
+</span><span class="line">	<span class="n">Integer</span> <span class="n">id</span><span class="o">;</span>
+</span><span class="line">	<span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+</span><span class="line">	<span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;</span> <span class="n">counters</span><span class="o">;</span>
+</span><span class="line">	<span class="kd">private</span> <span class="n">OutputCollector</span> <span class="n">collector</span><span class="o">;</span>
+</span><span class="line">
+</span><span class="line">	<span class="nd">@Override</span>
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">execute</span><span class="o">(</span><span class="n">Tuple</span> <span class="n">input</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">		<span class="n">String</span> <span class="n">str</span> <span class="o">=</span> <span class="n">input</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+</span><span class="line">		<span class="k">if</span><span class="o">(!</span><span class="n">counters</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">str</span><span class="o">)){</span>
+</span><span class="line">			<span class="n">counters</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">str</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+</span><span class="line">		<span class="o">}</span><span class="k">else</span><span class="o">{</span>
+</span><span class="line">			<span class="n">Integer</span> <span class="n">c</span> <span class="o">=</span> <span class="n">counters</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">str</span><span class="o">)</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+</span><span class="line">			<span class="n">counters</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">str</span><span class="o">,</span> <span class="n">c</span><span class="o">);</span>
+</span><span class="line">		<span class="o">}</span>
+</span><span class="line">		<span class="n">collector</span><span class="o">.</span><span class="na">ack</span><span class="o">(</span><span class="n">input</span><span class="o">);</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line">
+</span><span class="line">	<span class="nd">@Override</span>
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">cleanup</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;-- Word Counter [&quot;</span><span class="o">+</span><span class="n">name</span><span class="o">+</span><span class="s">&quot;-&quot;</span><span class="o">+</span><span class="n">id</span><span class="o">+</span><span class="s">&quot;] --&quot;</span><span class="o">);</span>
+</span><span class="line">		<span class="k">for</span><span class="o">(</span><span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;</span> <span class="n">entry</span> <span class="o">:</span> <span class="n">counters</span><span class="o">.</span><span class="na">entrySet</span><span class="o">()){</span>
+</span><span class="line">			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">entry</span><span class="o">.</span><span class="na">getKey</span><span class="o">()+</span><span class="s">&quot;: &quot;</span><span class="o">+</span><span class="n">entry</span><span class="o">.</span><span class="na">getValue</span><span class="o">());</span>
+</span><span class="line">		<span class="o">}</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line">
+</span><span class="line">	<span class="nd">@Override</span>
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">prepare</span><span class="o">(</span><span class="n">Map</span> <span class="n">stormConf</span><span class="o">,</span> <span class="n">TopologyContext</span> <span class="n">context</span><span class="o">,</span> <span class="n">OutputCollector</span> <span class="n">collector</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">		<span class="k">this</span><span class="o">.</span><span class="na">counters</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;();</span>
+</span><span class="line">		<span class="k">this</span><span class="o">.</span><span class="na">collector</span> <span class="o">=</span> <span class="n">collector</span><span class="o">;</span>
+</span><span class="line">		<span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getThisComponentId</span><span class="o">();</span>
+</span><span class="line">		<span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getThisTaskId</span><span class="o">();</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line">
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <hr />
 
@@ -848,7 +1236,7 @@ as well as consumer client details. </li>
 
 		<li>
 			<h3>SOA</h3>
-			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/messaging.html">Messaging</a>  |  <a href="/technology/webservices.html">Web Services</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a> |  <a href="/technology/xml.html">XML</a>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
 		</li>
 
 		<li>

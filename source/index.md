@@ -52,11 +52,12 @@ footer: true
     * [Java Specialist Newsletters]({{ root_url }}/technology/java-newsletters.html)
 
   * SOA
-    * [SOA]({{ root_url }}/technology/soa.html)
+    * [Concepts]({{ root_url }}/technology/soa.html)
+    * [Camel]({{ root_url }}/technology/camel.html)
     * [Messaging]({{ root_url }}/technology/messaging.html)
-    * [Web Services]({{ root_url }}/technology/webservices.html)
     * [REST]({{ root_url }}/technology/rest-services.html)
     * [SOAP]({{ root_url }}/technology/soap-services.html)
+    * [Web Services]({{ root_url }}/technology/webservices.html)
     * [XML]({{ root_url }}/technology/xml.html)
 
   * Spring

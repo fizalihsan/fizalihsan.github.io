@@ -151,12 +151,40 @@ Interactive command-line shell
 
 # Apache Storm
 
-{% img right /technology/storm-overview.png %}
+{% img right /technology/storm-overview.png 400 400 %}
 
 * Storm is an open source, distributed, reliable, and fault-tolerant system for processing streams of large volumes of data in real-time. It supports many use cases, such as real-time analytics, online machine learning, continuous computation, and the Extract Transformation Load (ETL) paradigm.
-* Components:
-	* **Spout**: This is a continuous stream of log data.
-	* **Bolt**: The spout passes the data to a component called bolt. A bolt consumes any number of input streams, does some processing, and possibly emits new streams. For example, emitting a stream of trend analysis by processing a stream of tweets.
+* Features
+	* Easy to program
+	* Supports multiple programming languages
+	* Fault-tolerant - The Storm cluster takes care of workers going down,  reassigning tasks when necessary.
+	* Scalable
+	* Reliable - All messages are guaranteed to be processed at least once. If there are errors, messages might be processed more than once, but you’ll never lose any message.
+	* Fast
+	* Transactional - You can get exactly once messaging semantics for pretty much any computation.
+
+## Components:
+
+{% img right /technology/storm-daemons.png %}
+
+* **Spout**: 
+	* The input stream of a Storm cluster is handled by a component called a spout. 
+	* This is a continuous stream of log data.
+* **Bolt**: 
+	* The spout passes the data to a component called a bolt, which transforms it in some way. A bolt either persists the data in some sort of storage, or passes it to some other bolt. 
+	* You can imagine a Storm cluster as a chain of bolt components that each make some kind of transformation on the data exposed by the spout.
+	* For example, emitting a stream of trend analysis by processing a stream of tweets.
+* **Topology**
+	* The arrangement of all the components (spouts and bolts) and their connections is called a topology.
+	* A topology in Storm runs across many worker nodes on different machines. 
+	* All topology nodes should be able to run independently with no shared data between processes (i.e., no global or class variables) since these processes may run on different machines.
+* **Node**
+	* In a Storm cluster, nodes are organized into a master node that runs continuously. 
+	* There are two kind of nodes in a Storm cluster: *master node* and *worker nodes 
+	* **Nimbus**: Master node run a daemon called *Nimbus*, which is responsible for distributing code around the cluster, assigning tasks to each worker node, and monitoring for failures.
+	* **Supervisor**: Worker nodes run a daemon called *Supervisor*, which executes a portion of a topology. 
+	* Since Storm keeps all cluster states either in Zookeeper or on local disk, the daemons are stateless and can fail or restart without affecting the health of the system
+* Underneath, Storm makes use of zeromq, an advanced, embeddable networking library that provides wonderful features that make Storm possible
 
 ## Difference between Storm & Spark
 
@@ -168,6 +196,194 @@ Interactive command-line shell
 | **File System**| Can read/write HDFS | Requires shared FS like HDFS, S3, NFS |
 | **Message Parsing** | Netty (default), ZeroMQ | Netty & Akka| 
 
+## Example: Word Counter
+
+A simple topology which reads a file and counts word occurrence.  
+
+{% img right /technology/storm-example.png %}
+
+### Main Program
+
+* `TopologyBuilder` tells Storm how the nodes are arranged and how they exchange data
+* The spout and the bolts are connected using `shuffleGroupings`. This type of grouping tells Storm to send messages from the source node to target nodes in randomly distributed fashion.
+* `Config` object containing the topology configuration, which is merged with the cluster configuration at run time and sent to all nodes with the `prepare` method.
+
+
+```java Main Program
+public static void main(String[] args) throws InterruptedException {
+	//Topology definition
+	TopologyBuilder builder = new TopologyBuilder();
+	builder.setSpout("word-reader", new WordReader());
+	builder.setBolt("word-normalizer", new WordNormalizer())
+		.shuffleGrouping("word-reader"); //output of word-reader is fed into this bolt
+	builder.setBolt("word-counter", new WordCounter(),2)
+		.fieldsGrouping("word-normalizer", new Fields("word")); //output of word-normalizer is fed into this bolt
+	
+	//Configuration
+	Config conf = new Config();
+	conf.put("wordsFile", args[0]); //input file to process
+	conf.setDebug(false); // should print all messages exchanged between nodes?
+	conf.put(Config.TOPOLOGY_MAX_SPOUT_PENDING, 1);
+	
+	//Topology run
+	LocalCluster cluster = new LocalCluster(); // since we are running in local mode
+	cluster.submitTopology("Getting-Started-Toplogie", conf, builder.createTopology());
+	Thread.sleep(1000);
+	cluster.shutdown(); // in production environment, topology runs continuously
+}
+```
+
+### Spout
+
+* `open` method is called first. In the example, it opens a file reader
+* `nextTuple` method is called continuously forever. This method emits values to be processed by bolts. In the example, it emits a value per line from the file.
+* A spout emits a list of defined fields. This architecture allows to have different kinds of bolts reading the same spout stream, which can then define fields for other bolts to consume and so on.
+* A tuple is a named list of values, which can be of any type of Java object (serializable object). By default, Storm can serialize common types like strings, byte arrays, `ArrayList`, `HashMap`, and `HashSet`.
+
+```java Spout that reads the text file
+public class WordReader implements IRichSpout {
+	private SpoutOutputCollector collector;
+	private FileReader fileReader;
+	private boolean completed = false;
+	private TopologyContext context;
+
+	// We will create the file and get the collector object
+	public void open(
+			Map conf, // conf object created during topology definition
+			TopologyContext context, // contains topology data
+			SpoutOutputCollector collector //enables to emit the data for bolts to process
+		) {
+		try {
+			this.context = context;
+			this.fileReader = new FileReader(conf.get("wordsFile").toString());
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException("Error reading file	["+conf.get("wordFile")+"]");
+		}
+		this.collector = collector;
+	}
+
+	// this method emits a tuple for each line in file
+	public void nextTuple() {
+		// The nextuple it is called forever, so if we have already completed reading the file ,we will wait and then return
+		if(completed){
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				//Do nothing
+			}
+			return;
+		}
+
+		//Open the reader
+		String str;
+		BufferedReader reader = new BufferedReader(fileReader);
+		try{
+			//Read all lines
+			while((str = reader.readLine()) != null){
+				this.collector.emit(new Values(str),str); // emit each line from file
+			}
+		}catch(Exception e){
+			throw new RuntimeException("Error reading tuple",e);
+		}finally{
+			completed = true;
+		}
+	}
+
+	// declare the output field 
+	public void declareOutputFields(OutputFieldsDeclarer declarer) {
+		declarer.declare(new Fields("line"));
+	}
+
+	public boolean isDistributed() {return false;}
+	public void close() {}
+	
+	public void ack(Object msgId) {
+		System.out.println("OK:"+msgId);
+	}
+
+	public void fail(Object msgId) {
+		System.out.println("FAIL:"+msgId);
+	}
+}
+```
+
+### Bolt
+
+* We now have a spout that reads from a file and emits one tuple per line. We need to
+create two bolts to process these tuples
+* `execute` method is called once per typle received. A bolt can emit 0, 1 or many tuples for each tuple received.
+* After each tuple is processed, the collector’s `ack()` method is called to indicate that processing has completed successfully. If the tuple could not be processed, the collector’s `fail()` method should be called.
+
+```java Bolt that normalizes the line
+public class WordNormalizer implements IRichBolt {
+	private OutputCollector collector;
+
+	public void execute(Tuple input) {
+		String sentence = input.getString(0);
+		String[] words = sentence.split(" ");
+		for(String word : words){
+			word = word.trim();
+			if(!word.isEmpty()){
+				word = word.toLowerCase();
+				collector.emit(Arrays.asList(input),new Values(word));
+			}
+		}
+		collector.ack(input); // acknowledgement indicates the tuple is processed successfully
+	}
+
+	public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
+		this.collector = collector;
+	}
+	
+	// The bolt will only emit the field "word"
+	public void declareOutputFields(OutputFieldsDeclarer declarer) {
+		declarer.declare(new Fields("word"));
+	}
+
+	public void cleanup() {}
+}
+```
+
+* The `execute` method in the next bolt uses a map to collect and count the words. 
+* When the topology terminates, the `cleanup()` method is called and prints out the map. (This is just an example, but normally you should use the `cleanup()` method to close active connections and other resources when the topology shuts down.)
+
+```java Bolt that counts the words
+public class WordCounter implements IRichBolt {
+	Integer id;
+	String name;
+	Map<String, Integer> counters;
+	private OutputCollector collector;
+
+	@Override
+	public void execute(Tuple input) {
+		String str = input.getString(0);
+		if(!counters.containsKey(str)){
+			counters.put(str, 1);
+		}else{
+			Integer c = counters.get(str) + 1;
+			counters.put(str, c);
+		}
+		collector.ack(input);
+	}
+
+	@Override
+	public void cleanup() {
+		System.out.println("-- Word Counter ["+name+"-"+id+"] --");
+		for(Map.Entry<String, Integer> entry : counters.entrySet()){
+			System.out.println(entry.getKey()+": "+entry.getValue());
+		}
+	}
+
+	@Override
+	public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
+		this.counters = new HashMap<String, Integer>();
+		this.collector = collector;
+		this.name = context.getThisComponentId();
+		this.id = context.getThisTaskId();
+	}
+
+}
+```
 
 * * *
 

@@ -20,7 +20,7 @@ footer: true
 
 ## Messages
 
-{% img right /technology/camel-message-structure.png %}
+{% img right /technology/camel-message-structure.PNG %}
 
 * Messages are the entities used by systems to communicate with each other when using messaging channels. 
 * Messages flow in one direction from a sender to a receiver
@@ -40,7 +40,7 @@ footer: true
 
 ## Exchanges
 
-{% img right /technology/camel-exchange-structure.png %}
+{% img right /technology/camel-exchange-structure.PNG %}
 
 * An exchange is the message’s container during routing. 
 * Message Exchange Patterns (MEPs)
@@ -64,7 +64,7 @@ footer: true
 
 # Components
 
-| {% img /technology/camel-architecture.png %} | {% img /technology/camel-components.png %} |
+| {% img /technology/camel-architecture.PNG %} | {% img /technology/camel-components.PNG %} |
 
 * Routing Engine
 	* is what actually moves messages under the hood
@@ -88,7 +88,7 @@ from("file:data/inbox")
 		* The context path tells the `FileComponent` that the starting folder is `data/inbox`. 
 		* The option, `delay=5000` indicates that files should be polled at a 5 second interval.
 
-| {% img /technology/camel-endpoint.png %} | {% img /technology/camel-endpoint-uri.png %} | 
+| {% img /technology/camel-endpoint.PNG %} | {% img /technology/camel-endpoint-uri.PNG %} | 
 
 * Processors
 	* used to transform and manipulate messages during routing and also to implement all the EIP patterns.
@@ -114,7 +114,7 @@ from("file:data/inbox")
 		* **Polling consumer**
 
 | **Event-driven consumer** | **Polling consumer** |
-|{% img /technology/camel-event-driven-consumer.png %}|{% img /technology/camel-polling-consumer.png %}|
+|{% img /technology/camel-event-driven-consumer.PNG %}|{% img /technology/camel-polling-consumer.PNG %}|
 
 
 # Bibliography

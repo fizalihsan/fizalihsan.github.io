@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "Distributed Processing Frameworks"
+title: "Big Data Frameworks"
 comments: true
 sharing: true
 footer: true
@@ -163,7 +163,7 @@ Interactive command-line shell
 	* Fast
 	* Transactional - You can get exactly once messaging semantics for pretty much any computation.
 
-## Components:
+## Components
 
 {% img right /technology/storm-daemons.png %}
 
@@ -639,8 +639,14 @@ There are multiple possible ways to deliver messages, such as:
 
 # Bibliography
 
+* Hadoop
+	* Books
+		* Hadoop Application Architectures
 * Kafka
 	* Books
 		* Learning Apache Kafka (2nd Edition) - Nishant Garg
 		* Kafka - The Definitive Guide - O'Reilly
+* Storm
+	* Books
+		* Getting Started with Storm - O'Reilly
 

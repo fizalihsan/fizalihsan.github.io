@@ -13,22 +13,17 @@ footer: true
 
 * Use Groovy for flexibility and readability. Use Java for performance
 * Runs on JVM - Groovy is nothing but a new way of creating Java classes - Java code can be called from Groovy and vice-versa
-* Is type in Groovy synonymous to class in Java ?
-* Every Groovy type is a subtype of java.lang.Object - Every Groovy object is an instance of a type in the normal way
+* Every Groovy type is a subtype of `java.lang.Object` - Every Groovy object is an instance of a type in the normal way
 * Groovy class IS A Java class
 * Groovy supports dynamic typing
 * To compile a Groovy script - `groovyc –d classes Foo.groovy`
 * To run a compiled Groovy class in Java - `java -cp $GROOVY_HOME/embeddable/groovy-all-1.0.jar:classes Foo`
 * To run a Groovy script - `groovy Foo.groovy`
 * Behind the scenes it compiles to a Java class and executes
-* Any Groovy code can be executed this way as long as it can be run; that is, it is either a script, a class with a main method, a Runnable, or a GroovyTestCase.
-* Groovy is purely object-oriented
-* everything is an object. E.g `2*3`, though they look like primitives, they are actually java.lang.Integer objects
-* every operator is a method call. E.g. `a+b` //logic for the + operator is implemented in method plus() on the object 
+* Any Groovy code can be executed this way as long as it can be run; that is, it is either a script, a class with a main method, a `Runnable`, or a `GroovyTestCase`.
 * Groovy automatically imports following packages: `groovy.lang.*, groovy.util.*, java.lang.*, java.util.*, java.net.*, and java.io.*` as well as the classes `java.math.BigInteger` and `BigDecimal`.
 * Say there is a Groovy class called Foo, we can use Foo objects without explicitly compiling the Book class as long as Foo.groovy is on the classpath.
 * A Groovy script can also have a class definition inside them.
-* **Scope**: Class and methods are public by default. Fields are private by default.
 
 # Fundamentals
 
@@ -49,20 +44,18 @@ if(list) println list //Groovy checks if list is not-null and not empty
 
 ### Operators
 
-#### Elvis operator / Safe-navigation operator (?.) 
+**Elvis operator / Safe-navigation operator (?.)** 
 
-* eliminates the mundane null check. If input is null, returns null instead of NPE.
-
-``` groovy
+``` groovy Elvis operator
 def foo(str) { if (str != null) { str.reverse() } } //Before
 def foo(str) { str?.reverse() } //After
 ```
 
-#### Spread-dot operator 
+**Spread-dot operator**
 
 Example: `collections*.size()` - returns the size of each element in the collection
 
-#### Spaceship 
+**Spaceship**
 
 `obj1 <=> obj2` compares obj1 and obj2 through `compareTo()` method
 
@@ -83,20 +76,23 @@ double value = rand() // alias name is used here to avoid confusion among static
 ## Exceptions
 
 * Not forced to catch exceptions we don't care. Any exception we don’t handle is automatically passed on to a higher level.
-* Catching all exceptions that may be thrown. (not Throwables or Errors) e.g., `try{...} catch(ex){...}`
+* Catching all exceptions that may be thrown. (not `Throwables` or `Errors`) e.g., `try{...} catch(ex){...}`
 
 ---
 
 ## OOPS
 
-* All methods and classes are public by default.
+* Groovy is purely object-oriented
+  * everything is an object. E.g `2*3`, though they look like primitives, they are actually java.lang.Integer objects
+  * every operator is a method call. E.g. `a+b` //logic for the + operator is implemented in method plus() on the object 
+* Scope
+  * All methods and classes are *public* scoped by default.
+  * Fields are *private* scoped by default.
 * Getters and setters are automatically created by Groovy. No setters created for final fields. To prevent non-final fields from modification, implement setter method manually and throw an error.
 * `"hello".class.name` instead of `"hello".getClass().getName()`. This class property has special meaning in Map and Builders so it won't work.
 * We can use 'this' within static methods to refer to the Class object.
 
-### Basics
-
-#### Optional Parameters
+### Optional Parameters
 
 * With Default value
 
@@ -115,7 +111,7 @@ task 'name2', 'blah..'
 task 'name3', 'blah..blah..'
 ```
 
-#### Named arguments in method calls
+### Named arguments in method calls
 
 * Class with no-argument constructor
 
@@ -129,7 +125,7 @@ println "$robot.type, $robot.height, $robot.width"
 
 ``` groovy
 class Robot { 
-  def access(location, weight, fragile) {
+  def access(Map location, weight, fragile) {
     println "Received fragile? $fragile, weight: $weight, loc: $location"
   }
 }
@@ -138,7 +134,7 @@ new Robot().access(x: 30, y: 20, z: 10, 50, true)
 new Robot().access(50, true, x: 30, y: 20, z: 10, a:5)
 ```
 
-#### Multiple Assignments
+### Multiple Assignments
 
 * Method returning an array is assigned to multiple variables 
 
@@ -156,7 +152,7 @@ def (first, last) = ["James", "Bond"]
 println "$first $last"
 ```
 
-#### Implementing Interface
+### Implementing Interface
 
 * Block of code morphed as the implementation of an interface
 
@@ -186,7 +182,7 @@ callMe(greetingsMap as Greeting)
 ```
 
 
-#### Operator Overloading
+### Operator Overloading
 
 * Each operator has a standard mapping to methods.
 
@@ -201,11 +197,11 @@ callMe(greetingsMap as Greeting)
 <=> compareTo
 ```
 
-* Example 1: `for (ch in 'a'..'c') { println ch }`
-* Example 2: `lst = ['hello']; lst << 'there'; println lst`
-* Example 3: Custom class and operator overriding
+* Example 1. `for (int ch = 'a'; ch < 'c'; ch++) { println ch }` --> `++` operator in `String` is overloaded by Groovy here mapping to `next()` method
+* Example 2. `for (ch in 'a'..'c') { println ch }` --> same as above
+* Example 3. `lst = ['hello']; lst << 'there'; println lst` --> `<<` is overloaded to `leftShift()` in `Collection`
 
-``` groovy
+``` groovy Custom operator overloading
 class Name{
   def name; 
   def plus(other){
@@ -233,7 +229,7 @@ println collection.size()
 
 ### Coercion
 
-* Implementing operators is straightforward when both operands are of the same type. Things get more complex with a mixture of types, say 1 + 1.0. One of the two arguments needs to be promoted to the more general type, and this is called coercion.
+* Implementing operators is straightforward when both operands are of the same type. Things get more complex with a mixture of types, say 1 + 1.0. One of the two arguments needs to be promoted to the more general type, and this is called **coercion**.
 * Closure Coersion - e.g. `Collections.sort(list, { ... } as Comparator)` 
   * closure here is coerced to implement interface Comparator
   * if the interface has more than one methods, then pass different closure implementations as map
@@ -446,23 +442,24 @@ class Complex{
 
 # Concurrency
 
+TODO
+
 # DSL
+
+TODO
 
 ## Questions
 
-1. What is the difference between a Groovy script and a Groovy class?
-* how closure is better than an anonymous inner class?
-* what is a spaceship operator? <=>
-* how to implement dynamic parameters and method?
+* What is the difference between a Groovy script and a Groovy class?
 * What is relaying and how dynamic typing enables to achieve it?
 * How to write new AST annotations?
 * Spring + Groovy
 * 'Liquid Heart' technique by Dierk Koenig, lead author of Groovy in Action [Manning, 2007]
 * Groovy iteration patterns
 * JMX 2
-
 * Closure delegation
 * Meta object protocol
+* Expando ??
 * How coercion works
 
 ```

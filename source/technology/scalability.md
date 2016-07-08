@@ -10,6 +10,17 @@ footer: true
 {:toc}
 
 
+* Scale Up
+  * When volume of data increases, add computing power to a single server or move to a bigger server.
+  * Pros: no change in architecture needed.
+  * Cons: there are limitation on how big a single host can be.
+* Scale Out
+  * Processing is handled by more than 1 server. When data volume increases, add more servers to the farm.
+  * Pros: Cheaper purchase costs than scale up, High availability
+  * Cons: complex data processing stratagies involved.
+  * Features: smart-software-dumb-hardware, move-processing-not-data.
+  * Challenges: Bottlenecks, increased risk of failure
+
 *Options for increasing the DB performance*
 	
 1. Performance improvements on the existing monolithic DB
@@ -67,16 +78,29 @@ Allows easy join of related data unlike in black-box sharding.
 **Caching Solutions**
 
 * Ehcache
+* Guava Caching library
+* JCache (specification?)
 * Distributed Caches
 	* Aerospike
 	* Coherence (Oracle)
 	* Gemfire
 	* Gigaspaces
 	* Hazelcast
+	* HBase with BlockCache
 	* Memcached
 	* Redis
 	* Riak (key-value database)
 
+
+For the remote cache layer, there are two possibilities:
+
+* A distributed memory caching solution, such as Memcached, to distribute the data across a cluster of nodes.
+* Setting up HBase so that all needed records can be found in the block cache. The block cache keeps data blocks in memory, where they can be quickly accessed.
+
+## Distributed memory caching
+
+* A distributed memory solution like Memcached or Redis simplifies the work of developing a caching layer. In terms of performance, though, it still requires a network call, which can add a small amount of latency to requests. Request times should be in the 1- to 4-millisecond range. The advantage of this solution over the partitioning solution is that we won’t have downtime when nodes fail, since we can set up the caching solution with multiple replicas of the data. 
+* The only downside of the distributed memory caching solution is you need enough memory to hold everything. If you can’t hold everything, you need an additional persistence store backed by disk, which means an additional call when data is not in memory. As we’ll see shortly, if we’re utilizing HBase, there is little reason why you need to also use a distributed caching solution.
 
 # References
 

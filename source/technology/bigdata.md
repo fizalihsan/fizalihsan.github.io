@@ -11,47 +11,40 @@ footer: true
 
 # Big Data Concepts
 
-* Large data processing in low latency
-* Process unstructured data
-* 3Vs of Big Data - Volume, Velocity and Variety
-* [7Vs of Big Data](http://fizalihsan.wordpress.com/2014/01/02/7vs-of-big-data-briefly/) - Volume, Velocity and Variety, Veracity, Variability, Visualization and Value
 * Why Big Data?
-  * Old data mining systems were expensive, not easily scalable
-* Scaling concepts
-  * Scale Up
-    * When volume of data increases, add computing power to a single server or move to a bigger server.
-    * Pros: no change in architecture needed.
-    * Cons: there are limitation on how big a single host can be.
-  * Scale Out
-    * Processing is handled by more than 1 server. When data volume increases, add more servers to the farm.
-    * Pros: Cheaper purchase costs than scale up, High availability
-    * Cons: complex data processing stratagies involved.
-    * Features: smart-software-dumb-hardware, move-processing-not-data.
-    * Challenges: Bottlenecks, increased risk of failure
-* Caching
-* Adhoc query
-* Sharding
-* Replication
-* Fault tolerance
-  * [Byzantine fault tolerance](https://en.wikipedia.org/wiki/Byzantine_fault_tolerance)
+  * Old data mining systems were expensive and not easily scalable
+  * Process large data with low latency
+  * Process unstructured data
+  * 3Vs of Big Data - Volume, Velocity and Variety
+  * [7Vs of Big Data](http://fizalihsan.wordpress.com/2014/01/02/7vs-of-big-data-briefly/) - Volume, Velocity and Variety, Veracity, Variability, Visualization and Value
 
 # Processing Models
 
 ## Batch Processing
 
-* Batch processing is the familiar concept of processing data en masse. The batch size could be small or very large. This is the processing model of the core Spark library.
+* Batch processing is the familiar concept of processing data en masse. The batch size could be small or very large. E.g., Hadoop, Apache Spark
 * Batch processing excels at processing large amounts of stable, existing data. However, it generally incurs a high-latency and is completely unsuitable for incoming data.
 
 ## Event-Stream Processing
 
-* Stream processing is a one-at-a-time processing model; a datum is processed as it arrives. The core Storm library follows this processing model.
+* Stream processing is a one-at-a-time processing model; a datum is processed as it arrives. E.g., Apache Storm.
 * Stream processing excels at computing transformations as data are ingested with sub-second latencies. However, with stream processing, it is incredibly difficult to process stable data efficiently.
 
 
 ## Micro-Batching
 
-* Micro-batching is a special case of batch processing where the batch size is orders smaller. Spark Streaming operates in this manner as does the Storm Trident API.
+* Micro-batching is a special case of batch processing where the batch size is orders smaller. 
+* E.g., Spark Streaming, Storm Trident API.
 * Micro-batching seems to be a nice mix between batching and streaming. However, micro-batching incurs a cost of latency. If sub-second latency is paramount, micro-batching will typically not suffice. On the other hand, micro-batching trivially gives stateful computation, making windowing an easy task.
+
+**Windowing**
+
+{% img right /technology/windowing-analysis.png %}
+
+* Windowing Analysis is looking at events over a finite timeframe (typically few seconds or minutes) or number of events.
+* Windowing can be used, for example, to detect stock price manipulation. At an atomic event level it is near impossible to identify whether these patterns are taking place, but if we are allowed to view the market in a windowing fashion, we see the events happening in order and with the context of all the events around the same time.
+
+
 
 # Programming Model
 

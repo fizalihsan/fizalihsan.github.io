@@ -43,6 +43,9 @@ Availability is in some sense a much wider concept than uptime, since the availa
 * ability of a system to behave in a well-defined manner once faults occur. 
 * define what faults you expect and then design a system or an algorithm that is tolerant of them.
 
+  * [Byzantine fault tolerance](https://en.wikipedia.org/wiki/Byzantine_fault_tolerance)
+
+
  **Constraints**
 
 Distributed systems are constrained by two physical factors:

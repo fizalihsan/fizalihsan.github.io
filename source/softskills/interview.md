@@ -9,6 +9,70 @@ footer: true
 * list element with functor item
 {:toc}
 
+
+# Topics to cover
+
+* Java
+    * GC - serial, parallel, CMS, G1
+    * Reference Types - soft, weak, phantom
+  * Collections
+    * Covariance, invariance, contravariance
+    * Latest concurrent collections uses techniques like: *copy-on-write, compare-and-swap, Lock interface*
+    * Iterators: *Fail-fast & Fail-safe (snapshot & weakly consistent)*
+    * Map: 
+      * general maps use equals(or hashCode)
+      * IdentityHashMap use identity
+      * SortedMap (TreeMap & ConcurrentSkipListMap) use Comparable or Comparator
+    * Comparable vs. Comparator
+  * Concurrency
+    * Atomicity (check-then-act, read-modify-write), 64-bit read/write is not atomic
+    * Visibility (synchronized & volatile force to cross memory barrier)
+    * Synchronization models (mutex, read-write locks, condition, semaphore)
+    * Monitor (No shared object, No Lock)
+    * Volatile (cross memory barrier, prevent reordering, guarantee atomic 64-bit read/writes, arrays)
+    * Problems (race condition, lock-ordering deadlock, thread starvation deadlock, starvation, livelocks)
+    * Future, Timer, TimerTask, ScheduledThreadPool
+    * Synchronizers (FutureTask, Semaphore, Latches, CyclicBarrier, Exchanger)
+    * Fork-Join pool (work-stealing)
+* Database
+  * PK, FK, PK & Unique key diff
+  * Cursors (implicit, explicit, forward, refcursor data type, static, dynamic)
+  * Joins (full outer join, exception join)
+  * Join Algos
+    * nested loop join - when one table is small and other is large with an index on joined columns
+    * merge join or sort-merge join - when both tables are large. Faster when data being joined is already sorted by an index
+    * hash join - when table is large but data needed is small.
+  * Normalization
+  * Indexes - types, properties (visibility, usability, unique/non-unique, composite)
+  * Views - horizontal, vertical, indexed
+  *   MDC table
+* Design Patterns - adapter, builder, chain of responsibility, command, decorator, facade, factory, mediator, observer, singleton, strategy, template, visitor
+* SOA
+  * Safe operations, Idempotent operations, post-once-exactly-pattern, request-response, request-acknowledge-poll, request-acknowledge-callback, routing expressions, reduce load by service interceptor or reverse proxies
+  * REST
+    * Principles - addressable resources, uniform & constrained interface, representation-oriented, stateless communication, hateoas
+    * async request - client-side api future & callback, server-side api AsyncResponse
+    * exception mappers, jaxb, security, versioning
+    * scalability - browser & proxy caches, http caching(expires, cache-control), revalidation(last-modified, etag)
+  * JMS - MEPs
+* Spring
+  * Core - Autowiring, profiles
+  * JDBC - JdbcTemplate, RowMapper, RowCallback
+  * MVC - lifecycle
+* Transaction - 
+  * acid, base, 
+  * txn models(local, programmatic, declarative)
+  * txn types (flat, with save point, chained, nested, distributed, long-lived)
+  * 4 isolation levels (read uncommitted, read committed, repeatable read, serializable, snapshot)
+  * read phenomena - dirty read, non-repeatable read, phantom read
+  * 2PC protocol, heuristic exceptions
+  * Concurrency control - 2-Phase Locking, MVCC, Optimistic Concurrency Control, 
+* Distributed computing - CAP, strong vs weak consistency 
+* Data Structures & Algorithms
+  * Arrays & Strings
+  * Tree - Traversals, BST, 2-3 tree, Red-Black Tree
+  * Queue - Queue using stack(s)
+
 # Data Structures & Algorithms
 
 * Algorithm basics and approach (Ref GIB03 ch03)

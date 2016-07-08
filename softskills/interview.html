@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Interview Preparation Data Structures &amp; Algorithms General Tech Questions Behavioral Questions Questions to the interviewer Useful links &hellip;">
+<meta name="description" content="Interview Preparation Topics to cover Data Structures &amp; Algorithms General Tech Questions Behavioral Questions Questions to the interviewer &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -108,6 +108,7 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
+  <li><a href="#topics-to-cover">Topics to cover</a></li>
   <li><a href="#data-structures--algorithms">Data Structures &amp; Algorithms</a></li>
   <li><a href="#general-tech-questions">General Tech Questions</a></li>
   <li><a href="#behavioral-questions">Behavioral Questions</a></li>
@@ -115,6 +116,104 @@ messageStyle: "none",
   <li><a href="#useful-links">Useful links</a></li>
   <li><a href="#recruiters">Recruiters</a></li>
   <li><a href="#references">References</a></li>
+</ul>
+
+<h1 id="topics-to-cover">Topics to cover</h1>
+
+<ul>
+  <li>Java
+    <ul>
+      <li>GC - serial, parallel, CMS, G1</li>
+      <li>Reference Types - soft, weak, phantom</li>
+      <li>Collections
+        <ul>
+          <li>Covariance, invariance, contravariance</li>
+          <li>Latest concurrent collections uses techniques like: <em>copy-on-write, compare-and-swap, Lock interface</em></li>
+          <li>Iterators: <em>Fail-fast &amp; Fail-safe (snapshot &amp; weakly consistent)</em></li>
+          <li>Map: 
+            <ul>
+              <li>general maps use equals(or hashCode)</li>
+              <li>IdentityHashMap use identity</li>
+              <li>SortedMap (TreeMap &amp; ConcurrentSkipListMap) use Comparable or Comparator</li>
+            </ul>
+          </li>
+          <li>Comparable vs. Comparator</li>
+        </ul>
+      </li>
+      <li>Concurrency
+        <ul>
+          <li>Atomicity (check-then-act, read-modify-write), 64-bit read/write is not atomic</li>
+          <li>Visibility (synchronized &amp; volatile force to cross memory barrier)</li>
+          <li>Synchronization models (mutex, read-write locks, condition, semaphore)</li>
+          <li>Monitor (No shared object, No Lock)</li>
+          <li>Volatile (cross memory barrier, prevent reordering, guarantee atomic 64-bit read/writes, arrays)</li>
+          <li>Problems (race condition, lock-ordering deadlock, thread starvation deadlock, starvation, livelocks)</li>
+          <li>Future, Timer, TimerTask, ScheduledThreadPool</li>
+          <li>Synchronizers (FutureTask, Semaphore, Latches, CyclicBarrier, Exchanger)</li>
+          <li>Fork-Join pool (work-stealing)</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Database
+    <ul>
+      <li>PK, FK, PK &amp; Unique key diff</li>
+      <li>Cursors (implicit, explicit, forward, refcursor data type, static, dynamic)</li>
+      <li>Joins (full outer join, exception join)</li>
+      <li>Join Algos
+        <ul>
+          <li>nested loop join - when one table is small and other is large with an index on joined columns</li>
+          <li>merge join or sort-merge join - when both tables are large. Faster when data being joined is already sorted by an index</li>
+          <li>hash join - when table is large but data needed is small.</li>
+        </ul>
+      </li>
+      <li>Normalization</li>
+      <li>Indexes - types, properties (visibility, usability, unique/non-unique, composite)</li>
+      <li>Views - horizontal, vertical, indexed</li>
+      <li>MDC table</li>
+    </ul>
+  </li>
+  <li>Design Patterns - adapter, builder, chain of responsibility, command, decorator, facade, factory, mediator, observer, singleton, strategy, template, visitor</li>
+  <li>SOA
+    <ul>
+      <li>Safe operations, Idempotent operations, post-once-exactly-pattern, request-response, request-acknowledge-poll, request-acknowledge-callback, routing expressions, reduce load by service interceptor or reverse proxies</li>
+      <li>REST
+        <ul>
+          <li>Principles - addressable resources, uniform &amp; constrained interface, representation-oriented, stateless communication, hateoas</li>
+          <li>async request - client-side api future &amp; callback, server-side api AsyncResponse</li>
+          <li>exception mappers, jaxb, security, versioning</li>
+          <li>scalability - browser &amp; proxy caches, http caching(expires, cache-control), revalidation(last-modified, etag)</li>
+        </ul>
+      </li>
+      <li>JMS - MEPs</li>
+    </ul>
+  </li>
+  <li>Spring
+    <ul>
+      <li>Core - Autowiring, profiles</li>
+      <li>JDBC - JdbcTemplate, RowMapper, RowCallback</li>
+      <li>MVC - lifecycle</li>
+    </ul>
+  </li>
+  <li>Transaction - 
+    <ul>
+      <li>acid, base, </li>
+      <li>txn models(local, programmatic, declarative)</li>
+      <li>txn types (flat, with save point, chained, nested, distributed, long-lived)</li>
+      <li>4 isolation levels (read uncommitted, read committed, repeatable read, serializable, snapshot)</li>
+      <li>read phenomena - dirty read, non-repeatable read, phantom read</li>
+      <li>2PC protocol, heuristic exceptions</li>
+      <li>Concurrency control - 2-Phase Locking, MVCC, Optimistic Concurrency Control, </li>
+    </ul>
+  </li>
+  <li>Distributed computing - CAP, strong vs weak consistency </li>
+  <li>Data Structures &amp; Algorithms
+    <ul>
+      <li>Arrays &amp; Strings</li>
+      <li>Tree - Traversals, BST, 2-3 tree, Red-Black Tree</li>
+      <li>Queue - Queue using stack(s)</li>
+    </ul>
+  </li>
 </ul>
 
 <h1 id="data-structures--algorithms">Data Structures &amp; Algorithms</h1>

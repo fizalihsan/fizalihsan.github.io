@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Scalability Sharding Consistent hashing or Hash Ring Black-Box Sharding Relational Sharding Caching References Options for increasing the DB &hellip;">
+<meta name="description" content="Scalability Sharding Consistent hashing or Hash Ring Black-Box Sharding Relational Sharding Caching Distributed memory caching References Scale Up &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -114,8 +114,30 @@ messageStyle: "none",
       <li><a href="#relational-sharding">Relational Sharding</a></li>
     </ul>
   </li>
-  <li><a href="#caching">Caching</a></li>
+  <li><a href="#caching">Caching</a>    <ul>
+      <li><a href="#distributed-memory-caching">Distributed memory caching</a></li>
+    </ul>
+  </li>
   <li><a href="#references">References</a></li>
+</ul>
+
+<ul>
+  <li>Scale Up
+    <ul>
+      <li>When volume of data increases, add computing power to a single server or move to a bigger server.</li>
+      <li>Pros: no change in architecture needed.</li>
+      <li>Cons: there are limitation on how big a single host can be.</li>
+    </ul>
+  </li>
+  <li>Scale Out
+    <ul>
+      <li>Processing is handled by more than 1 server. When data volume increases, add more servers to the farm.</li>
+      <li>Pros: Cheaper purchase costs than scale up, High availability</li>
+      <li>Cons: complex data processing stratagies involved.</li>
+      <li>Features: smart-software-dumb-hardware, move-processing-not-data.</li>
+      <li>Challenges: Bottlenecks, increased risk of failure</li>
+    </ul>
+  </li>
 </ul>
 
 <p><em>Options for increasing the DB performance</em></p>
@@ -197,6 +219,8 @@ messageStyle: "none",
 
 <ul>
   <li>Ehcache</li>
+  <li>Guava Caching library</li>
+  <li>JCache (specification?)</li>
   <li>Distributed Caches
     <ul>
       <li>Aerospike</li>
@@ -204,11 +228,26 @@ messageStyle: "none",
       <li>Gemfire</li>
       <li>Gigaspaces</li>
       <li>Hazelcast</li>
+      <li>HBase with BlockCache</li>
       <li>Memcached</li>
       <li>Redis</li>
       <li>Riak (key-value database)</li>
     </ul>
   </li>
+</ul>
+
+<p>For the remote cache layer, there are two possibilities:</p>
+
+<ul>
+  <li>A distributed memory caching solution, such as Memcached, to distribute the data across a cluster of nodes.</li>
+  <li>Setting up HBase so that all needed records can be found in the block cache. The block cache keeps data blocks in memory, where they can be quickly accessed.</li>
+</ul>
+
+<h2 id="distributed-memory-caching">Distributed memory caching</h2>
+
+<ul>
+  <li>A distributed memory solution like Memcached or Redis simplifies the work of developing a caching layer. In terms of performance, though, it still requires a network call, which can add a small amount of latency to requests. Request times should be in the 1- to 4-millisecond range. The advantage of this solution over the partitioning solution is that we won’t have downtime when nodes fail, since we can set up the caching solution with multiple replicas of the data. </li>
+  <li>The only downside of the distributed memory caching solution is you need enough memory to hold everything. If you can’t hold everything, you need an additional persistence store backed by disk, which means an additional call when data is not in memory. As we’ll see shortly, if we’re utilizing HBase, there is little reason why you need to also use a distributed caching solution.</li>
 </ul>
 
 <h1 id="references">References</h1>

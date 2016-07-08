@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Groovy Overview Fundamentals Control Structure Boolean Evaluation Operators Elvis operator / Safe-navigation operator (?.) Spread-dot operator &hellip;">
+<meta name="description" content="Groovy Overview Fundamentals Control Structure Boolean Evaluation Operators Looping methods Static imports Exceptions OOPS Optional Parameters Named &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -112,26 +112,18 @@ messageStyle: "none",
   <li><a href="#fundamentals">Fundamentals</a>    <ul>
       <li><a href="#control-structure">Control Structure</a>        <ul>
           <li><a href="#boolean-evaluation">Boolean Evaluation</a></li>
-          <li><a href="#operators">Operators</a>            <ul>
-              <li><a href="#elvis-operator--safe-navigation-operator-">Elvis operator / Safe-navigation operator (?.)</a></li>
-              <li><a href="#spread-dot-operator">Spread-dot operator</a></li>
-              <li><a href="#spaceship">Spaceship</a></li>
-            </ul>
-          </li>
+          <li><a href="#operators">Operators</a></li>
           <li><a href="#looping-methods">Looping methods</a></li>
           <li><a href="#static-imports">Static imports</a></li>
         </ul>
       </li>
       <li><a href="#exceptions">Exceptions</a></li>
       <li><a href="#oops">OOPS</a>        <ul>
-          <li><a href="#basics">Basics</a>            <ul>
-              <li><a href="#optional-parameters">Optional Parameters</a></li>
-              <li><a href="#named-arguments-in-method-calls">Named arguments in method calls</a></li>
-              <li><a href="#multiple-assignments">Multiple Assignments</a></li>
-              <li><a href="#implementing-interface">Implementing Interface</a></li>
-              <li><a href="#operator-overloading">Operator Overloading</a></li>
-            </ul>
-          </li>
+          <li><a href="#optional-parameters">Optional Parameters</a></li>
+          <li><a href="#named-arguments-in-method-calls">Named arguments in method calls</a></li>
+          <li><a href="#multiple-assignments">Multiple Assignments</a></li>
+          <li><a href="#implementing-interface">Implementing Interface</a></li>
+          <li><a href="#operator-overloading">Operator Overloading</a></li>
           <li><a href="#duck-typing">Duck typing</a></li>
           <li><a href="#coercion">Coercion</a></li>
           <li><a href="#strings">Strings</a></li>
@@ -161,22 +153,17 @@ messageStyle: "none",
 <ul>
   <li>Use Groovy for flexibility and readability. Use Java for performance</li>
   <li>Runs on JVM - Groovy is nothing but a new way of creating Java classes - Java code can be called from Groovy and vice-versa</li>
-  <li>Is type in Groovy synonymous to class in Java ?</li>
-  <li>Every Groovy type is a subtype of java.lang.Object - Every Groovy object is an instance of a type in the normal way</li>
+  <li>Every Groovy type is a subtype of <code>java.lang.Object</code> - Every Groovy object is an instance of a type in the normal way</li>
   <li>Groovy class IS A Java class</li>
   <li>Groovy supports dynamic typing</li>
   <li>To compile a Groovy script - <code>groovyc –d classes Foo.groovy</code></li>
   <li>To run a compiled Groovy class in Java - <code>java -cp $GROOVY_HOME/embeddable/groovy-all-1.0.jar:classes Foo</code></li>
   <li>To run a Groovy script - <code>groovy Foo.groovy</code></li>
   <li>Behind the scenes it compiles to a Java class and executes</li>
-  <li>Any Groovy code can be executed this way as long as it can be run; that is, it is either a script, a class with a main method, a Runnable, or a GroovyTestCase.</li>
-  <li>Groovy is purely object-oriented</li>
-  <li>everything is an object. E.g <code>2*3</code>, though they look like primitives, they are actually java.lang.Integer objects</li>
-  <li>every operator is a method call. E.g. <code>a+b</code> //logic for the + operator is implemented in method plus() on the object </li>
+  <li>Any Groovy code can be executed this way as long as it can be run; that is, it is either a script, a class with a main method, a <code>Runnable</code>, or a <code>GroovyTestCase</code>.</li>
   <li>Groovy automatically imports following packages: <code>groovy.lang.*, groovy.util.*, java.lang.*, java.util.*, java.net.*, and java.io.*</code> as well as the classes <code>java.math.BigInteger</code> and <code>BigDecimal</code>.</li>
   <li>Say there is a Groovy class called Foo, we can use Foo objects without explicitly compiling the Book class as long as Foo.groovy is on the classpath.</li>
   <li>A Groovy script can also have a class definition inside them.</li>
-  <li><strong>Scope</strong>: Class and methods are public by default. Fields are private by default.</li>
 </ul>
 
 <h1 id="fundamentals">Fundamentals</h1>
@@ -203,23 +190,19 @@ messageStyle: "none",
 
 <h3 id="operators">Operators</h3>
 
-<h4 id="elvis-operator--safe-navigation-operator-">Elvis operator / Safe-navigation operator (?.)</h4>
+<p><strong>Elvis operator / Safe-navigation operator (?.)</strong> </p>
 
-<ul>
-  <li>eliminates the mundane null check. If input is null, returns null instead of NPE.</li>
-</ul>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Elvis operator</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 </pre></td><td class="code"><pre><code class="groovy"><span class="line"><span class="kt">def</span> <span class="nf">foo</span><span class="o">(</span><span class="n">str</span><span class="o">)</span> <span class="o">{</span> <span class="k">if</span> <span class="o">(</span><span class="n">str</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span> <span class="n">str</span><span class="o">.</span><span class="na">reverse</span><span class="o">()</span> <span class="o">}</span> <span class="o">}</span> <span class="c1">//Before</span>
 </span><span class="line"><span class="kt">def</span> <span class="nf">foo</span><span class="o">(</span><span class="n">str</span><span class="o">)</span> <span class="o">{</span> <span class="n">str</span><span class="o">?.</span><span class="na">reverse</span><span class="o">()</span> <span class="o">}</span> <span class="c1">//After</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h4 id="spread-dot-operator">Spread-dot operator</h4>
+<p><strong>Spread-dot operator</strong></p>
 
 <p>Example: <code>collections*.size()</code> - returns the size of each element in the collection</p>
 
-<h4 id="spaceship">Spaceship</h4>
+<p><strong>Spaceship</strong></p>
 
 <p><code>obj1 &lt;=&gt; obj2</code> compares obj1 and obj2 through <code>compareTo()</code> method</p>
 
@@ -244,7 +227,7 @@ messageStyle: "none",
 
 <ul>
   <li>Not forced to catch exceptions we don’t care. Any exception we don’t handle is automatically passed on to a higher level.</li>
-  <li>Catching all exceptions that may be thrown. (not Throwables or Errors) e.g., <code>try{...} catch(ex){...}</code></li>
+  <li>Catching all exceptions that may be thrown. (not <code>Throwables</code> or <code>Errors</code>) e.g., <code>try{...} catch(ex){...}</code></li>
 </ul>
 
 <hr />
@@ -252,15 +235,24 @@ messageStyle: "none",
 <h2 id="oops">OOPS</h2>
 
 <ul>
-  <li>All methods and classes are public by default.</li>
+  <li>Groovy is purely object-oriented
+    <ul>
+      <li>everything is an object. E.g <code>2*3</code>, though they look like primitives, they are actually java.lang.Integer objects</li>
+      <li>every operator is a method call. E.g. <code>a+b</code> //logic for the + operator is implemented in method plus() on the object </li>
+    </ul>
+  </li>
+  <li>Scope
+    <ul>
+      <li>All methods and classes are <em>public</em> scoped by default.</li>
+      <li>Fields are <em>private</em> scoped by default.</li>
+    </ul>
+  </li>
   <li>Getters and setters are automatically created by Groovy. No setters created for final fields. To prevent non-final fields from modification, implement setter method manually and throw an error.</li>
   <li><code>"hello".class.name</code> instead of <code>"hello".getClass().getName()</code>. This class property has special meaning in Map and Builders so it won’t work.</li>
   <li>We can use ‘this’ within static methods to refer to the Class object.</li>
 </ul>
 
-<h3 id="basics">Basics</h3>
-
-<h4 id="optional-parameters">Optional Parameters</h4>
+<h3 id="optional-parameters">Optional Parameters</h3>
 
 <ul>
   <li>With Default value</li>
@@ -288,7 +280,7 @@ messageStyle: "none",
 </span><span class="line"><span class="n">task</span> <span class="s1">&#39;name3&#39;</span><span class="o">,</span> <span class="s1">&#39;blah..blah..&#39;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h4 id="named-arguments-in-method-calls">Named arguments in method calls</h4>
+<h3 id="named-arguments-in-method-calls">Named arguments in method calls</h3>
 
 <ul>
   <li>Class with no-argument constructor</li>
@@ -315,7 +307,7 @@ messageStyle: "none",
 <span class="line-number">7</span>
 <span class="line-number">8</span>
 </pre></td><td class="code"><pre><code class="groovy"><span class="line"><span class="kd">class</span> <span class="nc">Robot</span> <span class="o">{</span>
-</span><span class="line">  <span class="kt">def</span> <span class="nf">access</span><span class="o">(</span><span class="n">location</span><span class="o">,</span> <span class="n">weight</span><span class="o">,</span> <span class="n">fragile</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">  <span class="kt">def</span> <span class="nf">access</span><span class="o">(</span><span class="n">Map</span> <span class="n">location</span><span class="o">,</span> <span class="n">weight</span><span class="o">,</span> <span class="n">fragile</span><span class="o">)</span> <span class="o">{</span>
 </span><span class="line">    <span class="n">println</span> <span class="s2">&quot;Received fragile? $fragile, weight: $weight, loc: $location&quot;</span>
 </span><span class="line">  <span class="o">}</span>
 </span><span class="line"><span class="o">}</span>
@@ -324,7 +316,7 @@ messageStyle: "none",
 </span><span class="line"><span class="k">new</span> <span class="nf">Robot</span><span class="o">().</span><span class="na">access</span><span class="o">(</span><span class="mi">50</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="nl">x:</span> <span class="mi">30</span><span class="o">,</span> <span class="nl">y:</span> <span class="mi">20</span><span class="o">,</span> <span class="nl">z:</span> <span class="mi">10</span><span class="o">,</span> <span class="nl">a:</span><span class="mi">5</span><span class="o">)</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h4 id="multiple-assignments">Multiple Assignments</h4>
+<h3 id="multiple-assignments">Multiple Assignments</h3>
 
 <ul>
   <li>Method returning an array is assigned to multiple variables </li>
@@ -350,7 +342,7 @@ messageStyle: "none",
 </span><span class="line"><span class="n">println</span> <span class="s2">&quot;$first $last&quot;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h4 id="implementing-interface">Implementing Interface</h4>
+<h3 id="implementing-interface">Implementing Interface</h3>
 
 <ul>
   <li>Block of code morphed as the implementation of an interface</li>
@@ -397,7 +389,7 @@ messageStyle: "none",
 </span><span class="line"><span class="n">callMe</span><span class="o">(</span><span class="n">greetingsMap</span> <span class="k">as</span> <span class="n">Greeting</span><span class="o">)</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h4 id="operator-overloading">Operator Overloading</h4>
+<h3 id="operator-overloading">Operator Overloading</h3>
 
 <ul>
   <li>Each operator has a standard mapping to methods.</li>
@@ -422,12 +414,12 @@ messageStyle: "none",
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <ul>
-  <li>Example 1: <code>for (ch in 'a'..'c') { println ch }</code></li>
-  <li>Example 2: <code>lst = ['hello']; lst &lt;&lt; 'there'; println lst</code></li>
-  <li>Example 3: Custom class and operator overriding</li>
+  <li>Example 1. <code>for (int ch = 'a'; ch &lt; 'c'; ch++) { println ch }</code> –&gt; <code>++</code> operator in <code>String</code> is overloaded by Groovy here mapping to <code>next()</code> method</li>
+  <li>Example 2. <code>for (ch in 'a'..'c') { println ch }</code> –&gt; same as above</li>
+  <li>Example 3. <code>lst = ['hello']; lst &lt;&lt; 'there'; println lst</code> –&gt; <code>&lt;&lt;</code> is overloaded to <code>leftShift()</code> in <code>Collection</code></li>
 </ul>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Custom operator overloading</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
@@ -471,7 +463,7 @@ messageStyle: "none",
 <h3 id="coercion">Coercion</h3>
 
 <ul>
-  <li>Implementing operators is straightforward when both operands are of the same type. Things get more complex with a mixture of types, say 1 + 1.0. One of the two arguments needs to be promoted to the more general type, and this is called coercion.</li>
+  <li>Implementing operators is straightforward when both operands are of the same type. Things get more complex with a mixture of types, say 1 + 1.0. One of the two arguments needs to be promoted to the more general type, and this is called <strong>coercion</strong>.</li>
   <li>Closure Coersion - e.g. <code>Collections.sort(list, { ... } as Comparator)</code> 
     <ul>
       <li>closure here is coerced to implement interface Comparator</li>
@@ -807,29 +799,25 @@ messageStyle: "none",
 
 <h1 id="concurrency">Concurrency</h1>
 
+<p>TODO</p>
+
 <h1 id="dsl">DSL</h1>
+
+<p>TODO</p>
 
 <h2 id="questions">Questions</h2>
 
-<ol>
-  <li>What is the difference between a Groovy script and a Groovy class?
-    <ul>
-      <li>how closure is better than an anonymous inner class?</li>
-      <li>what is a spaceship operator? &lt;=&gt;</li>
-      <li>how to implement dynamic parameters and method?</li>
-      <li>What is relaying and how dynamic typing enables to achieve it?</li>
-      <li>How to write new AST annotations?</li>
-      <li>Spring + Groovy</li>
-      <li>‘Liquid Heart’ technique by Dierk Koenig, lead author of Groovy in Action [Manning, 2007]</li>
-      <li>Groovy iteration patterns</li>
-      <li>JMX 2</li>
-    </ul>
-  </li>
-</ol>
-
 <ul>
+  <li>What is the difference between a Groovy script and a Groovy class?</li>
+  <li>What is relaying and how dynamic typing enables to achieve it?</li>
+  <li>How to write new AST annotations?</li>
+  <li>Spring + Groovy</li>
+  <li>‘Liquid Heart’ technique by Dierk Koenig, lead author of Groovy in Action [Manning, 2007]</li>
+  <li>Groovy iteration patterns</li>
+  <li>JMX 2</li>
   <li>Closure delegation</li>
   <li>Meta object protocol</li>
+  <li>Expando ??</li>
   <li>How coercion works</li>
 </ul>
 

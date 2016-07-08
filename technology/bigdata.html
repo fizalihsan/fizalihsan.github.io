@@ -126,42 +126,13 @@ messageStyle: "none",
 <h1 id="big-data-concepts">Big Data Concepts</h1>
 
 <ul>
-  <li>Large data processing in low latency</li>
-  <li>Process unstructured data</li>
-  <li>3Vs of Big Data - Volume, Velocity and Variety</li>
-  <li><a href="http://fizalihsan.wordpress.com/2014/01/02/7vs-of-big-data-briefly/">7Vs of Big Data</a> - Volume, Velocity and Variety, Veracity, Variability, Visualization and Value</li>
   <li>Why Big Data?
     <ul>
-      <li>Old data mining systems were expensive, not easily scalable</li>
-    </ul>
-  </li>
-  <li>Scaling concepts
-    <ul>
-      <li>Scale Up
-        <ul>
-          <li>When volume of data increases, add computing power to a single server or move to a bigger server.</li>
-          <li>Pros: no change in architecture needed.</li>
-          <li>Cons: there are limitation on how big a single host can be.</li>
-        </ul>
-      </li>
-      <li>Scale Out
-        <ul>
-          <li>Processing is handled by more than 1 server. When data volume increases, add more servers to the farm.</li>
-          <li>Pros: Cheaper purchase costs than scale up, High availability</li>
-          <li>Cons: complex data processing stratagies involved.</li>
-          <li>Features: smart-software-dumb-hardware, move-processing-not-data.</li>
-          <li>Challenges: Bottlenecks, increased risk of failure</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li>Caching</li>
-  <li>Adhoc query</li>
-  <li>Sharding</li>
-  <li>Replication</li>
-  <li>Fault tolerance
-    <ul>
-      <li><a href="https://en.wikipedia.org/wiki/Byzantine_fault_tolerance">Byzantine fault tolerance</a></li>
+      <li>Old data mining systems were expensive and not easily scalable</li>
+      <li>Process large data with low latency</li>
+      <li>Process unstructured data</li>
+      <li>3Vs of Big Data - Volume, Velocity and Variety</li>
+      <li><a href="http://fizalihsan.wordpress.com/2014/01/02/7vs-of-big-data-briefly/">7Vs of Big Data</a> - Volume, Velocity and Variety, Veracity, Variability, Visualization and Value</li>
     </ul>
   </li>
 </ul>
@@ -171,22 +142,32 @@ messageStyle: "none",
 <h2 id="batch-processing">Batch Processing</h2>
 
 <ul>
-  <li>Batch processing is the familiar concept of processing data en masse. The batch size could be small or very large. This is the processing model of the core Spark library.</li>
+  <li>Batch processing is the familiar concept of processing data en masse. The batch size could be small or very large. E.g., Hadoop, Apache Spark</li>
   <li>Batch processing excels at processing large amounts of stable, existing data. However, it generally incurs a high-latency and is completely unsuitable for incoming data.</li>
 </ul>
 
 <h2 id="event-stream-processing">Event-Stream Processing</h2>
 
 <ul>
-  <li>Stream processing is a one-at-a-time processing model; a datum is processed as it arrives. The core Storm library follows this processing model.</li>
+  <li>Stream processing is a one-at-a-time processing model; a datum is processed as it arrives. E.g., Apache Storm.</li>
   <li>Stream processing excels at computing transformations as data are ingested with sub-second latencies. However, with stream processing, it is incredibly difficult to process stable data efficiently.</li>
 </ul>
 
 <h2 id="micro-batching">Micro-Batching</h2>
 
 <ul>
-  <li>Micro-batching is a special case of batch processing where the batch size is orders smaller. Spark Streaming operates in this manner as does the Storm Trident API.</li>
+  <li>Micro-batching is a special case of batch processing where the batch size is orders smaller. </li>
+  <li>E.g., Spark Streaming, Storm Trident API.</li>
   <li>Micro-batching seems to be a nice mix between batching and streaming. However, micro-batching incurs a cost of latency. If sub-second latency is paramount, micro-batching will typically not suffice. On the other hand, micro-batching trivially gives stateful computation, making windowing an easy task.</li>
+</ul>
+
+<p><strong>Windowing</strong></p>
+
+<p><img class="right" src="/technology/windowing-analysis.png" /></p>
+
+<ul>
+  <li>Windowing Analysis is looking at events over a finite timeframe (typically few seconds or minutes) or number of events.</li>
+  <li>Windowing can be used, for example, to detect stock price manipulation. At an atomic event level it is near impossible to identify whether these patterns are taking place, but if we are allowed to view the market in a windowing fashion, we see the events happening in order and with the context of all the events around the same time.</li>
 </ul>
 
 <h1 id="programming-model">Programming Model</h1>

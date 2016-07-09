@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="DB Design Physical Database Design Data Modelling Normalization Normalization Types Patterns Bi-temporal milestoning Schema Patterns Anti-Patterns &hellip;">
+<meta name="description" content="DB Design Physical Database Design Data Modelling Normalization Normalization Types Concept of Time in Database Temporal Data Types Kinds of Time &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -114,10 +114,16 @@ messageStyle: "none",
           <li><a href="#normalization-types">Normalization Types</a></li>
         </ul>
       </li>
+      <li><a href="#concept-of-time-in-database">Concept of Time in Database</a>        <ul>
+          <li><a href="#temporal-data-types">Temporal Data Types</a></li>
+          <li><a href="#kinds-of-time">Kinds of Time</a></li>
+          <li><a href="#temporal-table-types">Temporal Table Types</a></li>
+        </ul>
+      </li>
+      <li><a href="#time-series-databases">Time-Series Databases</a></li>
     </ul>
   </li>
   <li><a href="#patterns">Patterns</a>    <ul>
-      <li><a href="#bi-temporal-milestoning">Bi-temporal milestoning</a></li>
       <li><a href="#schema-patterns">Schema Patterns</a></li>
     </ul>
   </li>
@@ -226,6 +232,114 @@ messageStyle: "none",
 
 <p><a href="http://www.ibm.com/support/knowledgecenter/SSEPEK_10.0.0/com.ibm.db2z10.doc.intro/src/tpc/db2z_denormalizationforperformance.htm">Denormalization for performance</a></p>
 
+<h2 id="concept-of-time-in-database">Concept of Time in Database</h2>
+
+<h3 id="temporal-data-types">Temporal Data Types</h3>
+
+<ul>
+  <li>Instant: something happened at an instant of time. (e.g., now)</li>
+  <li>Interval
+    <ul>
+      <li>a length of time (e.g., three months)</li>
+      <li>The individual units (months, hours, microseconds, etc.) are termed <em>granules</em></li>
+      <li>An interval is relative; an instant is absolute</li>
+      <li>An interval can be added to an instant, yielding another instant</li>
+      <li>The distance between two instants is an interval</li>
+      <li>Unlike instants, intervals have direction. e.g., -7 days</li>
+      <li><strong><em>Year-Month Intervals</em></strong> - store only year, or only month or year-month. </li>
+      <li><strong><em>Day-Time Intervals</em></strong></li>
+      <li>SQL Data types
+        <ul>
+          <li>DATE</li>
+          <li>TIME</li>
+          <li>TIME WITH TIME ZONE</li>
+          <li>TIMESTAMP - date + time</li>
+          <li>TIMESTAMP WITH TIME ZONE - includes date, time and an explicit offset from UTC. e.g., <code>11:08:27.123456-07:00</code>, where <code>-07:00</code> indicates 7 hours behind UTC</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Period: an anchored duration of time (e.g., the fall semester, Aug 24 through
+Dec 18, 1998)</li>
+</ul>
+
+<blockquote>
+  <p>SQL-92 supports instance and intervals only</p>
+</blockquote>
+
+<h3 id="kinds-of-time">Kinds of Time</h3>
+
+<ul>
+  <li>(1) User-defined time: an uninterpreted time value</li>
+  <li>(2) Valid time: when a fact was true in the modeled reality (VALID_FROM, VALID_TO)</li>
+  <li>
+    <p>(3) Transaction time: when a fact was stored in the database (CREATION_TIME, UPDATE_TIME)</p>
+  </li>
+  <li>These kinds of time are orthogonal: a table can be associated with none, one, two,
+or even all three kinds of time. Understanding each kind of time and determining
+which is present in an application is absolutely critical.</li>
+</ul>
+
+<blockquote>
+  <p>SQL-92 supports only ‘user-defined time’</p>
+</blockquote>
+
+<ul>
+  <li>Temporal Statements
+    <ul>
+      <li>Current: now (<em>what is now?</em>)</li>
+      <li>Sequenced: at each instant of time (<em>what was, and when?</em>)</li>
+      <li>Nonsequenced: ignoring time (<em>what was, at any time?</em>)</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="temporal-table-types">Temporal Table Types</h3>
+
+<ul>
+  <li>Valid-Time State tables
+    <ul>
+      <li>Valid-time tables capture a history of validity</li>
+      <li>contains <code>FROM_DATE</code> &amp; <code>TO_DATE</code> </li>
+      <li>To indicate an active record <code>TO_DATE</code> is set to <code>null</code> or end-of-time <code>9999-12-31</code></li>
+      <li>The first consequence of adding valid-time support to a table is that the primary key of such tables needs to take the timestamp into consideration, so that the record is unique <em>at any point in time</em>.</li>
+    </ul>
+  </li>
+  <li>Transcation-Time State tables
+    <ul>
+      <li>Transaction-time tables capture a history of the changing state of a table.</li>
+      <li>contains information when a record was created and last updated.</li>
+      <li>one of these pairs is used
+        <ul>
+          <li><code>START_DATE</code> &amp; <code>END_DATE</code></li>
+          <li><code>IN_Z</code> &amp; <code>OUT_Z</code></li>
+          <li><code>CR_TIME</code> &amp; <code>UPD_TIME</code></li>
+        </ul>
+      </li>
+      <li><code>END_DATE = '9999-12-31'</code> indicates an active record</li>
+      <li>rows are <em>logically</em> deleted, because physically deleting old rows would prevent past states from being reconstructed. A table that can be reconstructed as of a previous date is termed a <strong>transaction-time state</strong> table, as it captures the transactions applied to the table.</li>
+    </ul>
+  </li>
+  <li>Bi-Temporal Tables
+    <ul>
+      <li>captures both validity and transaction time of a record</li>
+      <li>MarkLogic NoSQL database has a native support for bitemporal collections</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>Temporal Tables have also been called <em>historical tables</em> but this implies that they record information only about the past. However, ‘valid-time’ tables often store information about future.</p>
+</blockquote>
+
+<blockquote>
+  <p>The presence of a <code>DATE</code> column will not render the database as a temporal database; rather, the database must record the time-varying nature of the information managed by the enterprise.</p>
+</blockquote>
+
+<h2 id="time-series-databases">Time-Series Databases</h2>
+
+<p>TODO</p>
+
 <h1 id="patterns">Patterns</h1>
 
 <ul>
@@ -236,13 +350,6 @@ messageStyle: "none",
       <li>Many-to-Many relationships are implemented using a junction table with the keys from both the tables forming the composite primary key of the junction table.</li>
     </ul>
   </li>
-</ul>
-
-<h2 id="bi-temporal-milestoning">Bi-temporal milestoning</h2>
-
-<ul>
-  <li>Bi-temporal chaining – Database chaining mechanisms</li>
-  <li>spatial and temporal locality</li>
 </ul>
 
 <h2 id="schema-patterns">Schema Patterns</h2>
@@ -401,9 +508,14 @@ messageStyle: "none",
 <h1 id="references">References</h1>
 
 <ul>
-  <li>Refactoring Databases</li>
-  <li>SQL Anti-Patterns</li>
-  <li>Sybase Performance and Tuning Guide</li>
+  <li>Books
+    <ul>
+      <li>Refactoring Databases</li>
+      <li>SQL Anti-Patterns</li>
+      <li>Developing time-oriented database applications in SQL</li>
+      <li>Sybase Performance and Tuning Guide</li>
+    </ul>
+  </li>
 </ul>
 
   

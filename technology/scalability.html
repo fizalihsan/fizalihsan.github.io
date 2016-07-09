@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Scalability Sharding Consistent hashing or Hash Ring Black-Box Sharding Relational Sharding Caching Distributed memory caching References Scale Up &hellip;">
+<meta name="description" content="Scalability Sharding Consistent hashing or Hash Ring Black-Box Sharding Relational Sharding Caching Locality of References Distributed memory &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -115,6 +115,7 @@ messageStyle: "none",
     </ul>
   </li>
   <li><a href="#caching">Caching</a>    <ul>
+      <li><a href="#locality-of-references">Locality of References</a></li>
       <li><a href="#distributed-memory-caching">Distributed memory caching</a></li>
     </ul>
   </li>
@@ -214,6 +215,43 @@ messageStyle: "none",
 <p>Allows easy join of related data unlike in black-box sharding.</p>
 
 <h1 id="caching">Caching</h1>
+
+<h2 id="locality-of-references">Locality of References</h2>
+
+<ul>
+  <li>Principle of Locality - Programs tend to reuse data and instructions near those they have used recently, or that were recently referenced themselves</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Locality Example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+</span><span class="line">
+</span><span class="line"><span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">a</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
+</span><span class="line">	<span class="n">sum</span> <span class="o">+=</span> <span class="n">a</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+</span><span class="line"><span class="o">}</span>
+</span><span class="line">
+</span><span class="line"><span class="k">return</span> <span class="n">sum</span><span class="o">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Temporal Locality 
+    <ul>
+      <li>The concept that a resource that is referenced at one point in time will be  referenced again sometime in the near future.</li>
+      <li>In code above, referencing <code>sum</code> in each iteration is an example of temporal locality</li>
+    </ul>
+  </li>
+  <li>Spatial Locality 
+    <ul>
+      <li>The concept that likelihood of referencing a resource is higher if a resource near it was just referenced.</li>
+      <li>In code above, referencing array elements in succession is an example of spatial locality</li>
+    </ul>
+  </li>
+</ul>
 
 <p><strong>Caching Solutions</strong></p>
 

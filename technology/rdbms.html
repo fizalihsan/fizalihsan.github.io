@@ -228,18 +228,24 @@ Both primary key and unique enforce uniqueness of the column on which they are d
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <ul>
-  <li><strong>Index-organized Table (IOT)</strong>
+  <li><strong>Index-organized Table (IOT) or Index-Only Table</strong>
     <ul>
+      <li>If the rows in a table are not too long, it may be desirable to copy all the columns into an index to make SELECTs faster. If the index has all the data, then a table is not needed. </li>
       <li>An index-organized table (IOT) is a type of table that stores data in a <em>B-Tree</em> index structure.</li>
       <li>IOTs store rows in a B-tree index structure that is logically sorted in primary key order. </li>
       <li>Unlike normal primary key indexes, which store only the columns included in its definition, IOT indexes store all the columns of the table</li>
-      <li>Advantages
+      <li>Pros
         <ul>
           <li>As an IOT has the structure of an index and stores all the columns of the row, accesses via primary key conditions are faster as they don’t need to access the table to get additional column values.</li>
           <li>As an IOT has the structure of an index and is thus sorted in the order of the primary key, accesses of a range of primary key values are also faster.</li>
           <li>As the index and the table are in the same segment, less storage space is needed.</li>
           <li>In addition, as rows are stored in the primary key order, you can further reduce space with key compression.</li>
           <li>As all indexes on an IOT uses logical rowids, they will not become unusable if the table is reorganized.</li>
+        </ul>
+      </li>
+      <li>Cons
+        <ul>
+          <li>IOT tables don’t support distribution, replication and partitioning</li>
         </ul>
       </li>
     </ul>
@@ -269,15 +275,12 @@ Both primary key and unique enforce uniqueness of the column on which they are d
   </li>
   <li>
     <p><strong>Multi-Dimensional Clustering Tables (MDC)</strong></p>
+    <ul>
+      <li>MDC tables can be used to improve performance in many cases.</li>
+      <li>With clustered index you can only cluster data in one dimension. With MDC you can cluster data in multiple dimensions.</li>
+      <li>The other difference between MDC and clustered index is that MDC does not require reorgs as the data is automatically clustered. </li>
+    </ul>
   </li>
-</ul>
-
-<p><img class="right" src="/technology/mdc.gif" width="200" height="200" /></p>
-
-<ul>
-  <li>MDC tables can be used to improve performance in many cases.</li>
-  <li>With clustered index you can only cluster data in one dimension. With MDC you can cluster data in multiple dimensions.</li>
-  <li>The other difference between MDC and clustered index is that MDC does not require reorgs as the data is automatically clustered. </li>
 </ul>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
@@ -296,12 +299,9 @@ Both primary key and unique enforce uniqueness of the column on which they are d
 
 <ul>
   <li><em>CELL</em>: Every unique combination of dimensions form a cell. A cell can have one or more blocks.</li>
-  <li><em>BLOCK</em>: It is a block of pages that contain a unique combination.Its size(blocking factor) is equal to the extent size defined.</li>
-</ul>
-
-<p>A cell for unique combination of FORD(make) FOCUS(model) will be like this</p>
-
-<ul>
+  <li>
+    <p><em>BLOCK</em>: It is a block of pages that contain a unique combination.Its size(blocking factor) is equal to the extent size defined.</p>
+  </li>
   <li><strong>Temporary Tables</strong>
     <ul>
       <li><strong>Global temporary tables (DB2)</strong> - with or without logging - http://www.ibm.com/developerworks/data/library/techarticle/dm-0912globaltemptable/</li>

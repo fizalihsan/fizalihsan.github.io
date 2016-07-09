@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="DB Performance Indexes How Indexes work? Limitations of Indexes Index usage criteria Index Types When to use Clustered index? Index Covering &hellip;">
+<meta name="description" content="DB Performance Indexes How Indexes work? Limitations of Indexes Index usage criteria Index Types Clustered Non-clustered B+ Tree Hashtable index &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -112,7 +112,16 @@ messageStyle: "none",
       <li><a href="#how-indexes-work">How Indexes work?</a></li>
       <li><a href="#limitations-of-indexes">Limitations of Indexes</a></li>
       <li><a href="#index-usage-criteria">Index usage criteria</a></li>
-      <li><a href="#index-types">Index Types</a></li>
+      <li><a href="#index-types">Index Types</a>        <ul>
+          <li><a href="#clustered">Clustered</a></li>
+          <li><a href="#non-clustered">Non-clustered</a></li>
+          <li><a href="#b-tree">B+ Tree</a></li>
+          <li><a href="#hashtable-index">Hashtable index</a></li>
+          <li><a href="#bitmapped-index">Bitmapped index</a></li>
+          <li><a href="#covering-index">Covering Index</a></li>
+          <li><a href="#others">Others</a></li>
+        </ul>
+      </li>
       <li><a href="#when-to-use-clustered-index">When to use Clustered index?</a></li>
       <li><a href="#index-covering">Index Covering</a></li>
       <li><a href="#indexing-rules-of-thumb">Indexing Rules of Thumb</a></li>
@@ -132,6 +141,8 @@ messageStyle: "none",
     </ul>
   </li>
   <li><a href="#performance">Performance</a>    <ul>
+      <li><a href="#buffer-pools">Buffer pools</a></li>
+      <li><a href="#prefetch">Prefetch</a></li>
       <li><a href="#query-optimization">Query Optimization</a></li>
       <li><a href="#query-execution-plan">Query Execution Plan</a></li>
       <li><a href="#data-dictionary">Data Dictionary</a></li>
@@ -151,15 +162,17 @@ messageStyle: "none",
 <ul>
   <li>http://use-the-index-luke.com/sql/table-of-contents </li>
   <li>http://www.sqlskills.com/blogs/kimberly/guids-as-primary-keys-andor-the-clustering-key/</li>
-  <li>http://www.micmin.com/Session320/Session%20320%20-%20Role%20of%20Indexes.htm </li>
+  <li>
+    <p>http://www.micmin.com/Session320/Session%20320%20-%20Role%20of%20Indexes.htm </p>
+  </li>
+  <li>An index is an ordered set of pointers associated with a table, and is used for performance purposes. </li>
 </ul>
-
-<p>An index is an ordered set of pointers associated with a table, and is used for performance purposes. </p>
 
 <h2 id="how-indexes-work">How Indexes work?</h2>
 
 <ul>
-  <li>Each index entry contains a search-key value and a pointer to the row containing that value. If you specify the <code>ALLOW REVERSE SCANS</code> parameter while creating the index, the values can be searched in both ascending and descending order. It is therefore possible to bracket the search, given the right predicate. </li>
+  <li>Each index entry contains a search-key value and a pointer to the row containing that value. </li>
+  <li>If you specify the <code>ALLOW REVERSE SCANS</code> parameter while creating the index, the values can be searched in both ascending and descending order. It is therefore possible to bracket the search, given the right predicate. </li>
   <li>An index can also be used to obtain rows in an ordered sequence, eliminating the need for the database manager to sort the rows after they are read from the table.</li>
 </ul>
 
@@ -198,33 +211,80 @@ messageStyle: "none",
 
 <h2 id="index-types">Index Types</h2>
 
+<h3 id="clustered">Clustered</h3>
+
 <ul>
-  <li><strong>Clustered</strong> Any index structure having the data accessed in the same way the index is organized so that data with similar or the same key values is stored (or clustered) together. Clustering tends to greatly reduce input/output (I/O) time for queries and sorting.</li>
-  <li><strong>Non-clustered</strong></li>
+  <li>Any index structure having the data accessed in the same way the index is organized so that data with similar or the same key values is stored (or clustered) together. </li>
+  <li>Clustering tends to greatly reduce input/output (I/O) time for queries and sorting.</li>
+  <li>There can be only one clustered index per table.</li>
+</ul>
+
+<h3 id="non-clustered">Non-clustered</h3>
+
+<ul>
+  <li>There can be more than one non-clustered index per table.</li>
+</ul>
+
+<h3 id="b-tree">B+ Tree</h3>
+
+<ul>
+  <li>Basic table index based on one or more attributes, often used to enforce uniqueness of primary keys.</li>
+  <li>These indexes are the standard index type. They are excellent for primary key and highly-selective indexes. Used as concatenated indexes, B-tree indexes can retrieve data sorted by the indexed columns. </li>
+  <li>B-tree indexes have the following subtypes:
+    <ul>
+      <li><strong>Index-organized tables</strong>: <a href="/technology/rdbms.html#table-types">For more details</a></li>
+      <li><strong>Reverse key indexes</strong>: In this type of index, the bytes of the index key are reversed, for example, 103 is stored as 301. The reversal of bytes spreads out inserts into the index over many blocks. Reversing the key value is particularly useful for indexing data such as sequence numbers, where each new key value is greater than the prior value, i.e., values monotonically increase. Reverse key indexes have become particularly important in high volume transaction processing systems because they reduce contention for index blocks.</li>
+      <li><strong>Descending indexes</strong>: This type of index stores data on a particular column or columns in descending order. </li>
+      <li>B-tree cluster indexes</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="hashtable-index">Hashtable index</h3>
+
+<p>An index that maps primary key values to block data addresses in the database for otherwise un-ordered data. Not good for range searches</p>
+
+<h3 id="bitmapped-index">Bitmapped index</h3>
+
+<p><img class="right" src="/technology/bitmap-index.png" /></p>
+
+<ul>
+  <li>Bitmap indexes consist of a bitmap (bit vector) for each distinct column value. Each bitmap has one bit for every row in the table. The bit is on if the related row has the value represented by the bitmap.</li>
+  <li>Bitmap indexes are widely used in data warehousing environments that have large amounts of data and ad hoc queries, but a low level of concurrent DML transactions</li>
+  <li>Pros
+    <ul>
+      <li>Bitmap indexes make it feasible to perform queries with complex and unpredictable compound predicates against a large table. This is because ANDing and ORing bitmap indexes is very fast, even when there are hundreds of millions of table rows. The corresponding operation with B-tree indexes requires collecting a large number of pointers and sorting large pointer sets.</li>
+      <li>Bitmap indexes are best used for columns in which the ratio of the number of distinct values to the number of rows in the table is small. (We refer to this ratio as the <em>degree of cardinality</em>). A gender column, which has only two distinct values (male and female), is optimal for a bitmap index. </li>
+      <li>Reduced response time for large classes of ad hoc queries. ‘AND’ and ‘OR’ conditions in the WHERE clause of a query can be resolved quickly by performing the corresponding Boolean operations directly on the bitmaps before converting the resulting bitmap to rowids.</li>
+      <li>Reduce storage requirements compare to other indexing techniques</li>
+      <li>Dramatic performance gains even on hardware with a relatively small number of CPUs or a small amount of memory.</li>
+      <li>Efficient maintenance during parallel DML and loads.</li>
+    </ul>
+  </li>
+  <li>Cons
+    <ul>
+      <li>With a bitmap index, the table rows must be accessed unless the SELECT list contains only COUNTs. B-tree index eliminates table access.</li>
+    </ul>
+  </li>
+  <li>Use bitmap indexes when the following conditions are true
+    <ul>
+      <li>The number of possible predicate combinations is so large that designing adequate B-tree indexes is not feasible.</li>
+      <li>The simple predicates have a high filter factor, but the compound predicate (WHERE clause) has a low filter factor or the SELECT list contains COUNTs only.</li>
+      <li>The updates are batched (no lock contention).</li>
+    </ul>
+  </li>
+  <li>Bitmap and Bitmap join indexes</li>
+</ul>
+
+<h3 id="covering-index">Covering Index</h3>
+
+<p>An index with enough information to satisfy certain queries by itself, in other words, the query can be satisfied merely by searching the index and not the database.</p>
+
+<h3 id="others">Others</h3>
+
+<ul>
   <li><strong>Unique index</strong></li>
-  <li><strong>Hashtable index</strong> - An index that maps primary key values to block data addresses in the database for otherwise un-ordered data. Not good for range searches</li>
-  <li><strong>Bitmapped index</strong>
-    <ul>
-      <li>A collection of bit vectors to form an index that can be used to quickly search secondary indexes or to search data warehouses. Each bit vector represents a different value of an attribute, and the length of each vector is the number of rows (rows) in the table.</li>
-      <li>Bitmap and Bitmap join indexes</li>
-    </ul>
-  </li>
   <li><strong>Composite index</strong> - An index based on more than one attribute or key (i.e., a concatenated key).</li>
-  <li><strong>Covering Index</strong> - An index with enough information to satisfy certain queries by itself, in other words, the query can be satisfied merely by searching the index and not the database.</li>
-  <li><strong>B+ Tree</strong> 
-    <ul>
-      <li>Basic table index based on one or more attributes, often used to enforce uniqueness of primary keys.</li>
-      <li>These indexes are the standard index type. They are excellent for primary key and highly-selective indexes. Used as concatenated indexes, B-tree indexes can retrieve data sorted by the indexed columns. </li>
-      <li>B-tree indexes have the following subtypes:
-        <ul>
-          <li><strong>Index-organized tables</strong>: <a href="/technology/rdbms.html#table-types">For more details</a></li>
-          <li><strong>Reverse key indexes</strong>: In this type of index, the bytes of the index key are reversed, for example, 103 is stored as 301. The reversal of bytes spreads out inserts into the index over many blocks. Reversing the key value is particularly useful for indexing data such as sequence numbers, where each new key value is greater than the prior value, i.e., values monotonically increase. Reverse key indexes have become particularly important in high volume transaction processing systems because they reduce contention for index blocks.</li>
-          <li><strong>Descending indexes</strong>: This type of index stores data on a particular column or columns in descending order. </li>
-          <li>B-tree cluster indexes</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
   <li><strong>Dense Vs Sparse Index</strong> - A dense index has a pointer to each row in the table; a sparse index has at most one pointer to each block or page in the table.</li>
   <li><strong>Function-based indexes</strong></li>
   <li><strong>Application Domain indexes</strong></li>
@@ -412,6 +472,43 @@ called <em>write locks</em>.</p>
 
 <h1 id="performance">Performance</h1>
 
+<h2 id="buffer-pools">Buffer pools</h2>
+
+<ul>
+  <li>Each dbms may have several pools according to the type, table or index and the page size.</li>
+  <li>Each pool will be large enough to hold many pages, perhaps hundreds of thousands of them. </li>
+  <li>The buffer pool managers will attempt to ensure that frequently used data remains in the pool to avoid the necessity of additional reads from disk.</li>
+  <li>The ideal place for an index or table page to be when it is requested is in the database buffer pool. If it is not there, the next best place is in the disk server read cache. If it is in neither of these, a slow read from disk will be necessary.</li>
+</ul>
+
+<h2 id="prefetch">Prefetch</h2>
+
+<ul>
+  <li>reads can be performed before the pages are actually requested</li>
+  <li>Dynamic prefetch
+    <ul>
+      <li>The DBMS may notice that a SELECT statement is accessing the pages of an index or table sequentially, or almost sequentially, and starts to read several pages ahead. This is called <em>dynamic prefetch</em> (in DB2)</li>
+    </ul>
+  </li>
+  <li>List Prefetch
+    <ul>
+      <li>Even if the data resulting from a query is not sequentially organized in the disk, DBMS like DB2 is able to create skip-sequential access. To do this, it has to access all the qualifying index rows and sort the pointers into table page sequence before accessing the table rows.
+<img class="right" src="/technology/db-index-scan.png" /></li>
+    </ul>
+  </li>
+  <li>Data Block Prefetch
+    <ul>
+      <li>This feature is used by Oracle, again when the table rows being accessed are not in the same sequence as the index rows.</li>
+      <li>The pointers are collected from the index slice and multiple random I/Os are started to read the table rows in parallel. </li>
+    </ul>
+  </li>
+  <li>Disk Read Ahead
+    <ul>
+      <li>When the DBMS requests a page, the disk system may read the next few pages as well into a disk cache (anticipating that these may soon be requested); this could be the rest of the stripe, the rest of the track, or even several stripes (striping is described shortly). This is called <em>Disk Read Ahead</em></li>
+    </ul>
+  </li>
+</ul>
+
 <h2 id="query-optimization">Query Optimization</h2>
 
 <p>When db processes the query, it performs the following steps: </p>
@@ -560,9 +657,10 @@ called <em>write locks</em>.</p>
 <ul>
   <li>Books
     <ul>
-      <li>Sybase - Performance and Tuning Guide</li>
-      <li>Physical Database Design - Database Professional’s Guide to Exploiting Indexes, Views, Storage &amp; More</li>
       <li>Dissecting SQL Server Execution Plans and SQL Tuning</li>
+      <li>Physical Database Design - Database Professional’s Guide to Exploiting Indexes, Views, Storage &amp; More</li>
+      <li>Relational Database Index Design and the Optimizers</li>
+      <li>Sybase - Performance and Tuning Guide</li>
     </ul>
   </li>
   <li>DB2

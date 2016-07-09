@@ -75,6 +75,29 @@ Allows easy join of related data unlike in black-box sharding.
 
 # Caching
 
+## Locality of References
+
+* Principle of Locality - Programs tend to reuse data and instructions near those they have used recently, or that were recently referenced themselves
+
+```java Locality Example
+int sum = 0;
+
+for(int i=0; i < a.length; i++){
+	sum += a[i];
+}
+
+return sum;
+```
+
+* Temporal Locality 
+	* The concept that a resource that is referenced at one point in time will be  referenced again sometime in the near future.
+	* In code above, referencing `sum` in each iteration is an example of temporal locality
+* Spatial Locality 
+	* The concept that likelihood of referencing a resource is higher if a resource near it was just referenced.
+	* In code above, referencing array elements in succession is an example of spatial locality
+
+
+
 **Caching Solutions**
 
 * Ehcache

@@ -91,6 +91,7 @@ footer: true
 * General programs - (Ref GIB01)
 	* Base M to N conversion
 	* Replace blanks in a string - Ref GIB01 Pg45, 
+  * Write a generic program to take an nxn array and print
 
 # General Tech Questions
 

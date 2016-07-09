@@ -62,16 +62,19 @@ ALTER TABLE table_name ADD CONSTRAINT constraint_name CHECK ( PRICE > 100 AND DA
 CREATE TABLE t1 (c1 NUMBER PRIMARY KEY, c2 VARCHAR2(30)) ORGANIZATION HEAP;
 ```
 
-* **Index-organized Table (IOT)**
+* **Index-organized Table (IOT) or Index-Only Table**
+  * If the rows in a table are not too long, it may be desirable to copy all the columns into an index to make SELECTs faster. If the index has all the data, then a table is not needed. 
   * An index-organized table (IOT) is a type of table that stores data in a *B-Tree* index structure.
   * IOTs store rows in a B-tree index structure that is logically sorted in primary key order. 
   * Unlike normal primary key indexes, which store only the columns included in its definition, IOT indexes store all the columns of the table
-  * Advantages
+  * Pros
     * As an IOT has the structure of an index and stores all the columns of the row, accesses via primary key conditions are faster as they don't need to access the table to get additional column values.
     * As an IOT has the structure of an index and is thus sorted in the order of the primary key, accesses of a range of primary key values are also faster.
     * As the index and the table are in the same segment, less storage space is needed.
     * In addition, as rows are stored in the primary key order, you can further reduce space with key compression.
     * As all indexes on an IOT uses logical rowids, they will not become unusable if the table is reorganized.
+  * Cons
+    * IOT tables don't support distribution, replication and partitioning
 
 ```sql
 CREATE TABLE my_iot (id INTEGER PRIMARY KEY, value VARCHAR2(50)) ORGANIZATION INDEX;
@@ -88,9 +91,6 @@ CREATE OR REPLACE DIRECTORY my_data_dir as '/my/data/dir/';
 * **Materialized Query Tables (MQT)**
 
 * **Multi-Dimensional Clustering Tables (MDC)**
-
-{% img right /technology/mdc.gif 200 200 %}
-
   * MDC tables can be used to improve performance in many cases.
   * With clustered index you can only cluster data in one dimension. With MDC you can cluster data in multiple dimensions.
   * The other difference between MDC and clustered index is that MDC does not require reorgs as the data is automatically clustered. 
@@ -106,8 +106,6 @@ ORGANIZE BY (MAKE,MODEL)
 
   * *CELL*: Every unique combination of dimensions form a cell. A cell can have one or more blocks.
   * *BLOCK*: It is a block of pages that contain a unique combination.Its size(blocking factor) is equal to the extent size defined.
-
-A cell for unique combination of FORD(make) FOCUS(model) will be like this
 
 * **Temporary Tables**
   * **Global temporary tables (DB2)** - with or without logging - http://www.ibm.com/developerworks/data/library/techarticle/dm-0912globaltemptable/

@@ -15,11 +15,12 @@ footer: true
 * http://www.sqlskills.com/blogs/kimberly/guids-as-primary-keys-andor-the-clustering-key/
 * http://www.micmin.com/Session320/Session%20320%20-%20Role%20of%20Indexes.htm 
 
-An index is an ordered set of pointers associated with a table, and is used for performance purposes. 
+* An index is an ordered set of pointers associated with a table, and is used for performance purposes. 
 
 ## How Indexes work?
 
-* Each index entry contains a search-key value and a pointer to the row containing that value. If you specify the `ALLOW REVERSE SCANS` parameter while creating the index, the values can be searched in both ascending and descending order. It is therefore possible to bracket the search, given the right predicate. 
+* Each index entry contains a search-key value and a pointer to the row containing that value. 
+* If you specify the `ALLOW REVERSE SCANS` parameter while creating the index, the values can be searched in both ascending and descending order. It is therefore possible to bracket the search, given the right predicate. 
 * An index can also be used to obtain rows in an ordered sequence, eliminating the need for the database manager to sort the rows after they are read from the table.
 
 Although the optimizer decides whether to use an index to access table data, except in the following case, you must decide which indexes might improve performance and create these indexes. Exceptions are the dimension block indexes and the composite block index that are created automatically for each dimension that you specify when you create a multi-dimensional clustering (MDC) table.
@@ -47,23 +48,59 @@ The query contains a column in a join clause that matches at least the first col
 
 ## Index Types
 
-* **Clustered** Any index structure having the data accessed in the same way the index is organized so that data with similar or the same key values is stored (or clustered) together. Clustering tends to greatly reduce input/output (I/O) time for queries and sorting.
-* **Non-clustered**
-* **Unique index**
-* **Hashtable index** - An index that maps primary key values to block data addresses in the database for otherwise un-ordered data. Not good for range searches
-* **Bitmapped index**
-  * A collection of bit vectors to form an index that can be used to quickly search secondary indexes or to search data warehouses. Each bit vector represents a different value of an attribute, and the length of each vector is the number of rows (rows) in the table.
+### Clustered
+
+* Any index structure having the data accessed in the same way the index is organized so that data with similar or the same key values is stored (or clustered) together. 
+* Clustering tends to greatly reduce input/output (I/O) time for queries and sorting.
+* There can be only one clustered index per table.
+
+### Non-clustered
+
+* There can be more than one non-clustered index per table.
+
+### B+ Tree
+
+* Basic table index based on one or more attributes, often used to enforce uniqueness of primary keys.
+* These indexes are the standard index type. They are excellent for primary key and highly-selective indexes. Used as concatenated indexes, B-tree indexes can retrieve data sorted by the indexed columns. 
+* B-tree indexes have the following subtypes:
+  * **Index-organized tables**: [For more details](/technology/rdbms.html#table-types)
+  * **Reverse key indexes**: In this type of index, the bytes of the index key are reversed, for example, 103 is stored as 301. The reversal of bytes spreads out inserts into the index over many blocks. Reversing the key value is particularly useful for indexing data such as sequence numbers, where each new key value is greater than the prior value, i.e., values monotonically increase. Reverse key indexes have become particularly important in high volume transaction processing systems because they reduce contention for index blocks.
+  * **Descending indexes**: This type of index stores data on a particular column or columns in descending order. 
+  * B-tree cluster indexes
+
+### Hashtable index
+
+An index that maps primary key values to block data addresses in the database for otherwise un-ordered data. Not good for range searches
+
+### Bitmapped index
+
+  {% img right /technology/bitmap-index.png %}
+
+  * Bitmap indexes consist of a bitmap (bit vector) for each distinct column value. Each bitmap has one bit for every row in the table. The bit is on if the related row has the value represented by the bitmap.
+  * Bitmap indexes are widely used in data warehousing environments that have large amounts of data and ad hoc queries, but a low level of concurrent DML transactions
+  * Pros
+    * Bitmap indexes make it feasible to perform queries with complex and unpredictable compound predicates against a large table. This is because ANDing and ORing bitmap indexes is very fast, even when there are hundreds of millions of table rows. The corresponding operation with B-tree indexes requires collecting a large number of pointers and sorting large pointer sets.
+    * Bitmap indexes are best used for columns in which the ratio of the number of distinct values to the number of rows in the table is small. (We refer to this ratio as the *degree of cardinality*). A gender column, which has only two distinct values (male and female), is optimal for a bitmap index. 
+    * Reduced response time for large classes of ad hoc queries. 'AND' and 'OR' conditions in the WHERE clause of a query can be resolved quickly by performing the corresponding Boolean operations directly on the bitmaps before converting the resulting bitmap to rowids.
+    * Reduce storage requirements compare to other indexing techniques
+    * Dramatic performance gains even on hardware with a relatively small number of CPUs or a small amount of memory.
+    * Efficient maintenance during parallel DML and loads.
+  * Cons
+    * With a bitmap index, the table rows must be accessed unless the SELECT list contains only COUNTs. B-tree index eliminates table access.
+  * Use bitmap indexes when the following conditions are true
+    * The number of possible predicate combinations is so large that designing adequate B-tree indexes is not feasible.
+    * The simple predicates have a high filter factor, but the compound predicate (WHERE clause) has a low filter factor or the SELECT list contains COUNTs only.
+    * The updates are batched (no lock contention).
   * Bitmap and Bitmap join indexes
+
+### Covering Index
+
+An index with enough information to satisfy certain queries by itself, in other words, the query can be satisfied merely by searching the index and not the database.
+
+### Others
+
+* **Unique index**
 * **Composite index** - An index based on more than one attribute or key (i.e., a concatenated key).
-* **Covering Index** - An index with enough information to satisfy certain queries by itself, in other words, the query can be satisfied merely by searching the index and not the database.
-* **B+ Tree** 
-  * Basic table index based on one or more attributes, often used to enforce uniqueness of primary keys.
-  * These indexes are the standard index type. They are excellent for primary key and highly-selective indexes. Used as concatenated indexes, B-tree indexes can retrieve data sorted by the indexed columns. 
-  * B-tree indexes have the following subtypes:
-    * **Index-organized tables**: [For more details](/technology/rdbms.html#table-types)
-    * **Reverse key indexes**: In this type of index, the bytes of the index key are reversed, for example, 103 is stored as 301. The reversal of bytes spreads out inserts into the index over many blocks. Reversing the key value is particularly useful for indexing data such as sequence numbers, where each new key value is greater than the prior value, i.e., values monotonically increase. Reverse key indexes have become particularly important in high volume transaction processing systems because they reduce contention for index blocks.
-    * **Descending indexes**: This type of index stores data on a particular column or columns in descending order. 
-    * B-tree cluster indexes
 * **Dense Vs Sparse Index** - A dense index has a pointer to each row in the table; a sparse index has at most one pointer to each block or page in the table.
 * **Function-based indexes**
 * **Application Domain indexes**
@@ -208,6 +245,28 @@ The granularity of a lock determines the size of the resource being locked. Lock
 
 # Performance
 
+## Buffer pools
+
+* Each dbms may have several pools according to the type, table or index and the page size.
+* Each pool will be large enough to hold many pages, perhaps hundreds of thousands of them. 
+* The buffer pool managers will attempt to ensure that frequently used data remains in the pool to avoid the necessity of additional reads from disk.
+* The ideal place for an index or table page to be when it is requested is in the database buffer pool. If it is not there, the next best place is in the disk server read cache. If it is in neither of these, a slow read from disk will be necessary.
+
+## Prefetch 
+
+* reads can be performed before the pages are actually requested
+* Dynamic prefetch
+  * The DBMS may notice that a SELECT statement is accessing the pages of an index or table sequentially, or almost sequentially, and starts to read several pages ahead. This is called *dynamic prefetch* (in DB2)
+* List Prefetch
+  * Even if the data resulting from a query is not sequentially organized in the disk, DBMS like DB2 is able to create skip-sequential access. To do this, it has to access all the qualifying index rows and sort the pointers into table page sequence before accessing the table rows.
+  {% img right /technology/db-index-scan.png %}
+* Data Block Prefetch
+  * This feature is used by Oracle, again when the table rows being accessed are not in the same sequence as the index rows.
+  * The pointers are collected from the index slice and multiple random I/Os are started to read the table rows in parallel. 
+* Disk Read Ahead
+  * When the DBMS requests a page, the disk system may read the next few pages as well into a disk cache (anticipating that these may soon be requested); this could be the rest of the stripe, the rest of the track, or even several stripes (striping is described shortly). This is called *Disk Read Ahead*
+
+
 ## Query Optimization
 
 When db processes the query, it performs the following steps: 
@@ -314,9 +373,10 @@ TODO
 # References
 
 * Books
-  * Sybase - Performance and Tuning Guide
-  * Physical Database Design - Database Professional's Guide to Exploiting Indexes, Views, Storage & More
   * Dissecting SQL Server Execution Plans and SQL Tuning
+  * Physical Database Design - Database Professional's Guide to Exploiting Indexes, Views, Storage & More
+  * Relational Database Index Design and the Optimizers
+  * Sybase - Performance and Tuning Guide
 * DB2
   * More details on : http://publib.boulder.ibm.com/infocenter/db2luw/v8/index.jsp?topic=/com.ibm.db2.udb.doc/core/r0010410.htm
   * Command line reference: ftp://ftp.software.ibm.com/ps/products/db2/info/vr8/pdf/letter/db2n0e80.pdf

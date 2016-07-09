@@ -63,18 +63,83 @@ footer: true
 
 [Denormalization for performance](http://www.ibm.com/support/knowledgecenter/SSEPEK_10.0.0/com.ibm.db2z10.doc.intro/src/tpc/db2z_denormalizationforperformance.htm)
 
-# Patterns
+## Concept of Time in Database
 
+### Temporal Data Types
+
+* Instant: something happened at an instant of time. (e.g., now)
+* Interval
+	* a length of time (e.g., three months)
+	* The individual units (months, hours, microseconds, etc.) are termed *granules*
+	* An interval is relative; an instant is absolute
+	* An interval can be added to an instant, yielding another instant
+	* The distance between two instants is an interval
+	* Unlike instants, intervals have direction. e.g., -7 days
+	* ***Year-Month Intervals*** - store only year, or only month or year-month. 
+	* ***Day-Time Intervals***
+	* SQL Data types
+		* DATE
+		* TIME
+		* TIME WITH TIME ZONE
+		* TIMESTAMP - date + time
+		* TIMESTAMP WITH TIME ZONE - includes date, time and an explicit offset from UTC. e.g., `11:08:27.123456-07:00`, where `-07:00` indicates 7 hours behind UTC
+* Period: an anchored duration of time (e.g., the fall semester, Aug 24 through
+Dec 18, 1998)
+
+> SQL-92 supports instance and intervals only
+
+### Kinds of Time
+
+* (1) User-defined time: an uninterpreted time value
+* (2) Valid time: when a fact was true in the modeled reality (VALID_FROM, VALID_TO)
+* (3) Transaction time: when a fact was stored in the database (CREATION_TIME, UPDATE_TIME)
+
+* These kinds of time are orthogonal: a table can be associated with none, one, two,
+or even all three kinds of time. Understanding each kind of time and determining
+which is present in an application is absolutely critical.
+
+>  SQL-92 supports only 'user-defined time'
+
+* Temporal Statements
+	* Current: now (*what is now?*)
+	* Sequenced: at each instant of time (*what was, and when?*)
+	* Nonsequenced: ignoring time (*what was, at any time?*)
+
+### Temporal Table Types
+
+* Valid-Time State tables
+	* Valid-time tables capture a history of validity
+	* contains `FROM_DATE` & `TO_DATE` 
+	* To indicate an active record `TO_DATE` is set to `null` or end-of-time `9999-12-31`
+	* The first consequence of adding valid-time support to a table is that the primary key of such tables needs to take the timestamp into consideration, so that the record is unique *at any point in time*.
+
+* Transcation-Time State tables
+	* Transaction-time tables capture a history of the changing state of a table.
+	* contains information when a record was created and last updated.
+	* one of these pairs is used
+		* `START_DATE` & `END_DATE`
+		* `IN_Z` & `OUT_Z`
+		* `CR_TIME` & `UPD_TIME`
+	* `END_DATE = '9999-12-31'` indicates an active record
+	* rows are *logically* deleted, because physically deleting old rows would prevent past states from being reconstructed. A table that can be reconstructed as of a previous date is termed a **transaction-time state** table, as it captures the transactions applied to the table.
+* Bi-Temporal Tables
+	* captures both validity and transaction time of a record
+	* MarkLogic NoSQL database has a native support for bitemporal collections
+
+> Temporal Tables have also been called *historical tables* but this implies that they record information only about the past. However, 'valid-time' tables often store information about future.
+
+> The presence of a `DATE` column will not render the database as a temporal database; rather, the database must record the time-varying nature of the information managed by the enterprise.
+
+## Time-Series Databases
+
+TODO
+
+# Patterns
 
 * How do you implement 1-to-1, 1-to-many and many-to-many relationships while designing tables? 
 	* 1-to-1 relationship can be implemented as a single table and rarely as two tables with primary and foreign key relationships. 
 	* 1-to-Many relationships are implemented by splitting the data into two tables with primary key and foreign key relationships. 
 	* Many-to-Many relationships are implemented using a junction table with the keys from both the tables forming the composite primary key of the junction table.
-
-## Bi-temporal milestoning
-
-* Bi-temporal chaining – Database chaining mechanisms
-* spatial and temporal locality
 
 ## Schema Patterns
 
@@ -192,6 +257,8 @@ Requires additional table and hence increasing space consumption.
 
 # References
 
-* Refactoring Databases
-* SQL Anti-Patterns
-* Sybase Performance and Tuning Guide
+* Books
+	* Refactoring Databases
+	* SQL Anti-Patterns
+	* Developing time-oriented database applications in SQL
+	* Sybase Performance and Tuning Guide

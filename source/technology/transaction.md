@@ -48,18 +48,57 @@ A BASE datastore values availability (since that’s important for scale), but i
 
 If someone is reading from a DB at the same time as someone else is writing to it, it is possible that the reader will see a half-written or inconsistent piece of data. There are several ways of solving this problem, known as *concurrency control methods*. The simplest way is to make all readers wait until the writer is done, which is known as a *lock*.
 
-## Categories
+## Concurrency Issues
 
-### Pessimistic
+* **Lost Updates**
+
+A *lost update* occurs when the following events occur, in the order presented here:
+  1. A transaction in Session1 retrieves (queries) a row of data into local memory and displays it to an end user, User1.
+  2. Another transaction in Session2 retrieves that same row, but displays the data to a different end user, User2.
+  3. User1, using the application, modifies that row and has the application update the database and commit. Session1’s transaction is now complete.
+  4. User2 modifies that row also, and has the application update the database and commit. Session2’s transaction is now complete.
+
+* **Blocking**
+  * Blocking occurs when one session holds a lock on a resource that another session is requesting. As a result, the requesting session will be blocked—it will hang until the holding session gives up the locked resource.
+  * The five common DML statements that will block in the database are `INSERT`, `  UPDATE`, `DELETE`, `MERGE`, and `SELECT FOR UPDATE`
+  * **Blocked Selects**
+    * Can be awaited with `NOWAIT` - like `SELECT ... WHERE ... FOR UPDATE NOWAIT`
+  * **Blocked Inserts**
+    * Blocked inserts typically happen when 2 users try to insert same value into a table that contains a primary key/unique column. 
+    * It can be easily avoided by using a sequence or SYS_GUID() function
+    * If the above solution doesn't work, then a manual lock can be used. In Oracle, `DBMS_LOCK.REQUEST(id)` will request an explicit lock. If 2 users request the lock with the same id, latter request will fail.
+
+* **Deadlocks**
+
+
+## Lock Strategies
+
+### Pessimistic Locking
 
 * Block an operation of a transaction (using locks), if it may cause violation of the rules, until the possibility of violation disappears. Blocking operations is typically involved with performance reduction.
 * Most non-optimistic mechanisms (with blocking) are prone to deadlocks which are resolved by an intentional abort of a stalled transaction (which releases the other transactions in that deadlock), and its immediate restart and re-execution.
+* Using `FOR UPDATE WAIT` to *pessimistically* lock rows
 
-### Optimistic
+```sql
+select empno, ename, sal from emp where empno = 123
+for update nowait --pessimistically locks the rows selected
+```
+
+
+### Optimistic Locking
 
 * Optimistic Concurrency Control (OCC) delay the checking of whether a transaction meets the isolation and other integrity rules (e.g., serializability and recoverability) until its end, without blocking any of its (read, write) operations ("...and be optimistic about the rules being met..."), and then abort a transaction to prevent the violation, if the desired rules are to be violated upon its commit. An aborted transaction is immediately restarted and re-executed, which incurs an obvious overhead (versus executing it to the end only once). If not too many transactions are aborted, then being optimistic is usually a good strategy.
 * OCC assumes that multiple transactions can frequently complete without interfering with each other. While running, transactions use data resources without acquiring locks on those resources. Before committing, each transaction verifies that no other transaction has modified the data it has read. If the check reveals conflicting modifications, the committing transaction rolls back and can be restarted.
 * OCC is generally used in environments with low data contention. When conflicts are rare, transactions can complete without the expense of managing locks and without having transactions wait for other transactions' locks to clear, leading to higher throughput than other concurrency control methods. However, if contention for data resources is frequent, the cost of repeatedly restarting transactions hurts performance significantly; it is commonly thought that other concurrency control methods have better performance under these conditions. However, locking-based ("pessimistic") methods also can deliver poor performance because locking can drastically limit effective concurrency even when deadlocks are avoided.
+* OCC in Databases
+  * **Optimistic locking using a Version Column**
+    * Add column `version` of type `TIMESTAMP` in a table
+    * When inserting a new record, update `version` with current timestamp
+    * When updating an existing row, check the value `version` before and after. If they are different, then it means the row values have changed in between.
+  * **Optimistic locking using a Checksum**
+    * Add column `hash` of type `VARCHAR` in a table
+    * When inserting a new record, calculate the hash value of the entire row and update it in `hash` column
+    * When updating an existing row, check the value `hash` before and after. If they are different, then it means the row values have changed in between.
 
 **Usage**
 
@@ -68,7 +107,7 @@ If someone is reading from a DB at the same time as someone else is writing to i
 * Most implementations of software transactional memory use optimistic locking
 * Java Collections - *Compare-and-Swap(CAS)* based thread-safe collections like `ConcurrentLinkedQueue` and `ConcurrentSkipListMap`
 
-### Semi-optimistic
+### Semi-optimistic Locking
 
 Block operations in some situations, if they may cause violation of some rules, and do not block in other situations while delaying rules checking (if needed) to transaction's end, as done with optimistic.
 
@@ -535,11 +574,6 @@ Depending on the context and resources involved, other techniques are viable alt
   * Idempotency is an interesting property for message processing. It means that we don’t care about duplicate messages! Always think about idempotency when designing a system: idempotent operations can make a system much simpler and more robust. (In Maths, n x 0 = 0)
 
 ??? Check Spring in Action Chapter 9
-
-# Open Items
-
-* MVCC, Optimistic locking
-* Paxos consensus protocol
 
 # Bibliography
 

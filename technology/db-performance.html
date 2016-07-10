@@ -119,6 +119,8 @@ messageStyle: "none",
           <li><a href="#hashtable-index">Hashtable index</a></li>
           <li><a href="#bitmapped-index">Bitmapped index</a></li>
           <li><a href="#covering-index">Covering Index</a></li>
+          <li><a href="#composite-index">Composite Index</a></li>
+          <li><a href="#unique-index">Unique Index</a></li>
           <li><a href="#others">Others</a></li>
         </ul>
       </li>
@@ -126,7 +128,6 @@ messageStyle: "none",
       <li><a href="#index-covering">Index Covering</a></li>
       <li><a href="#indexing-rules-of-thumb">Indexing Rules of Thumb</a></li>
       <li><a href="#index-selection-decisions">Index Selection Decisions</a></li>
-      <li><a href="#properties-of-an-index-oracle-feature">Properties of an Index (Oracle feature)</a></li>
     </ul>
   </li>
   <li><a href="#concurrency">Concurrency</a>    <ul>
@@ -179,6 +180,27 @@ messageStyle: "none",
 <p>Although the optimizer decides whether to use an index to access table data, except in the following case, you must decide which indexes might improve performance and create these indexes. Exceptions are the dimension block indexes and the composite block index that are created automatically for each dimension that you specify when you create a multi-dimensional clustering (MDC) table.</p>
 
 <p>In addition to the search-key value and row pointer, an index can contain include columns, which are non-indexed columns in the indexed row. Such columns might make it possible for the optimizer to get required information only from the index, without accessing the table itself.</p>
+
+<ul>
+  <li><strong>Usability</strong>
+    <ul>
+      <li>Indexes are usable (default) or unusable. </li>
+      <li>An unusable index is not maintained by DML operations and is ignored by the optimizer.  </li>
+      <li>An unusable index can improve the performance of bulk loads.  </li>
+      <li>Instead of dropping an index and later re-creating it, you can make the index unusable and then rebuild it.  </li>
+      <li>Unusable indexes and index partitions do not consume space.  </li>
+      <li>When you make a usable index unusable, the database drops its index segment.</li>
+    </ul>
+  </li>
+  <li><strong>Visibility</strong>
+    <ul>
+      <li>Indexes are visible (default) or invisible.  </li>
+      <li>An invisible index is maintained by DML operations and is not used by default by the optimizer.  </li>
+      <li>Making an index invisible is an alternative to making it unusable or dropping it.  </li>
+      <li>Invisible indexes are especially useful for testing the removal of an index before dropping it or using indexes temporarily without affecting the overall application.</li>
+    </ul>
+  </li>
+</ul>
 
 <h2 id="limitations-of-indexes">Limitations of Indexes</h2>
 
@@ -233,7 +255,13 @@ messageStyle: "none",
   <li>B-tree indexes have the following subtypes:
     <ul>
       <li><strong>Index-organized tables</strong>: <a href="/technology/rdbms.html#table-types">For more details</a></li>
-      <li><strong>Reverse key indexes</strong>: In this type of index, the bytes of the index key are reversed, for example, 103 is stored as 301. The reversal of bytes spreads out inserts into the index over many blocks. Reversing the key value is particularly useful for indexing data such as sequence numbers, where each new key value is greater than the prior value, i.e., values monotonically increase. Reverse key indexes have become particularly important in high volume transaction processing systems because they reduce contention for index blocks.</li>
+      <li><strong>Reverse key indexes</strong>
+        <ul>
+          <li>In this type of index, the bytes of the index key are reversed, for example, 103 is stored as 301. The reversal of bytes spreads out inserts into the index over many blocks. Reversing the key value is particularly useful for indexing data such as sequence numbers, where each new key value is greater than the prior value, i.e., values monotonically increase. </li>
+          <li>Reverse key indexes have become particularly important in high volume transaction processing systems because they reduce contention for index blocks.</li>
+          <li>Reverse index is used to correct the imbalance caused by continually adding increasing values to a standard B-tree index</li>
+        </ul>
+      </li>
       <li><strong>Descending indexes</strong>: This type of index stores data on a particular column or columns in descending order. </li>
       <li>B-tree cluster indexes</li>
     </ul>
@@ -279,6 +307,41 @@ messageStyle: "none",
 <h3 id="covering-index">Covering Index</h3>
 
 <p>An index with enough information to satisfy certain queries by itself, in other words, the query can be satisfied merely by searching the index and not the database.</p>
+
+<h3 id="composite-index">Composite Index</h3>
+
+<ul>
+  <li>A composite index, also called a <em>concatenated index</em>, is an index on multiple columns in a table. </li>
+  <li>Columns in a composite index should appear in the order that makes the most sense for the queries that will retrieve data and need not be adjacent in the table. In the below example, this index will be used
+    <ul>
+      <li>by queries that access all three columns</li>
+      <li>by queries that access only the <code>last_name</code> column</li>
+      <li>by queries that access only the <code>last_name</code> and <code>job_id</code> columns use this index. In this example, queries that do not access the <code>last_name</code> column do not use the index.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">employees_ix</span> <span class="k">ON</span> <span class="n">employees</span> <span class="p">(</span><span class="n">last_name</span><span class="p">,</span> <span class="n">job_id</span><span class="p">,</span> <span class="n">salary</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Multiple indexes can exist for the same table if the permutation of columns differs for each index. You can create multiple indexes using the same columns if you specify distinctly different permutations of the columns. For example, the following SQL statements specify valid permutations:</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">employee_idx1</span> <span class="k">ON</span> <span class="n">employees</span> <span class="p">(</span><span class="n">last_name</span><span class="p">,</span> <span class="n">job_id</span><span class="p">);</span>
+</span><span class="line"><span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">employee_idx2</span> <span class="k">ON</span> <span class="n">employees</span> <span class="p">(</span><span class="n">job_id</span><span class="p">,</span> <span class="n">last_name</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="unique-index">Unique Index</h3>
+
+<ul>
+  <li>Indexes can be unique or non-unique. Unique indexes guarantee that no two rows of a table have duplicate values in the key column or column. For example, no two employees can have the same employee ID. Thus, in a unique index, one rowid exists for each data value. The data in the leaf blocks is sorted only by key.</li>
+  <li>Non-unique indexes permit duplicates values in the indexed column or columns. For example, the first_name column of the employees table may contain multiple ‘Mike’s. For a non-unique index, the rowid is included in the key in sorted order, so non-unique indexes are sorted by the index key and rowid (ascending).</li>
+  <li>Oracle Database does not index table rows in which all key columns are null, except for bitmap indexes or when the cluster key column value is null.</li>
+</ul>
 
 <h3 id="others">Others</h3>
 
@@ -339,65 +402,6 @@ messageStyle: "none",
   <li>Should I create a clustered index?</li>
   <li>Is an index still preferred when updates are taken into account? What are the tradeoffs between queries and updates for each index chosen?</li>
   <li>How do I know I made the right indexing choice?</li>
-</ul>
-
-<h2 id="properties-of-an-index-oracle-feature">Properties of an Index (Oracle feature)</h2>
-
-<ul>
-  <li><strong>Usability</strong>
-    <ul>
-      <li>Indexes are usable (default) or unusable. </li>
-      <li>An unusable index is not maintained by DML operations and is ignored by the optimizer.  </li>
-      <li>An unusable index can improve the performance of bulk loads.  </li>
-      <li>Instead of dropping an index and later re-creating it, you can make the index unusable and then rebuild it.  </li>
-      <li>Unusable indexes and index partitions do not consume space.  </li>
-      <li>When you make a usable index unusable, the database drops its index segment.</li>
-    </ul>
-  </li>
-  <li><strong>Visibility</strong>
-    <ul>
-      <li>Indexes are visible (default) or invisible.  </li>
-      <li>An invisible index is maintained by DML operations and is not used by default by the optimizer.  </li>
-      <li>Making an index invisible is an alternative to making it unusable or dropping it.  </li>
-      <li>Invisible indexes are especially useful for testing the removal of an index before dropping it or using indexes temporarily without affecting the overall application.</li>
-    </ul>
-  </li>
-  <li><strong>Composite Indexes</strong>
-    <ul>
-      <li>A composite index, also called a <em>concatenated index</em>, is an index on multiple columns in a table. </li>
-      <li>Columns in a composite index should appear in the order that makes the most sense for the queries that will retrieve data and need not be adjacent in the table. In the below example, this index will be used
-        <ul>
-          <li>by queries that access all three columns</li>
-          <li>by queries that access only the <code>last_name</code> column</li>
-          <li>by queries that access only the <code>last_name</code> and <code>job_id</code> columns use this index. In this example, queries that do not access the <code>last_name</code> column do not use the index.</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-</ul>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">employees_ix</span> <span class="k">ON</span> <span class="n">employees</span> <span class="p">(</span><span class="n">last_name</span><span class="p">,</span> <span class="n">job_id</span><span class="p">,</span> <span class="n">salary</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<ul>
-  <li>Multiple indexes can exist for the same table if the permutation of columns differs for each index. You can create multiple indexes using the same columns if you specify distinctly different permutations of the columns. For example, the following SQL statements specify valid permutations:</li>
-</ul>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">employee_idx1</span> <span class="k">ON</span> <span class="n">employees</span> <span class="p">(</span><span class="n">last_name</span><span class="p">,</span> <span class="n">job_id</span><span class="p">);</span>
-</span><span class="line"><span class="k">CREATE</span> <span class="k">INDEX</span> <span class="n">employee_idx2</span> <span class="k">ON</span> <span class="n">employees</span> <span class="p">(</span><span class="n">job_id</span><span class="p">,</span> <span class="n">last_name</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<ul>
-  <li><strong>Unique and Nonunique Indexes</strong>
-    <ul>
-      <li>Indexes can be unique or nonunique. Unique indexes guarantee that no two rows of a table have duplicate values in the key column or column. For example, no two employees can have the same employee ID. Thus, in a unique index, one rowid exists for each data value. The data in the leaf blocks is sorted only by key.</li>
-      <li>Nonunique indexes permit duplicates values in the indexed column or columns. For example, the first_name column of the employees table may contain multiple Mike values. For a nonunique index, the rowid is included in the key in sorted order, so nonunique indexes are sorted by the index key and rowid (ascending).</li>
-      <li>Oracle Database does not index table rows in which all key columns are null, except for bitmap indexes or when the cluster key column value is null.</li>
-    </ul>
-  </li>
 </ul>
 
 <h1 id="concurrency">Concurrency</h1>

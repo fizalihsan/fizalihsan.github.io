@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Transaction Management Overview ACID &amp; BASE ACID property BASE property Concurrency Control Categories Pessimistic Optimistic Semi-optimistic &hellip;">
+<meta name="description" content="Transaction Management Overview ACID &amp; BASE ACID property BASE property Concurrency Control Concurrency Issues Lock Strategies Pessimistic &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -115,10 +115,11 @@ messageStyle: "none",
     </ul>
   </li>
   <li><a href="#concurrency-control">Concurrency Control</a>    <ul>
-      <li><a href="#categories">Categories</a>        <ul>
-          <li><a href="#pessimistic">Pessimistic</a></li>
-          <li><a href="#optimistic">Optimistic</a></li>
-          <li><a href="#semi-optimistic">Semi-optimistic</a></li>
+      <li><a href="#concurrency-issues">Concurrency Issues</a></li>
+      <li><a href="#lock-strategies">Lock Strategies</a>        <ul>
+          <li><a href="#pessimistic-locking">Pessimistic Locking</a></li>
+          <li><a href="#optimistic-locking">Optimistic Locking</a></li>
+          <li><a href="#semi-optimistic-locking">Semi-optimistic Locking</a></li>
         </ul>
       </li>
       <li><a href="#methods">Methods</a>        <ul>
@@ -184,7 +185,6 @@ messageStyle: "none",
       <li><a href="#best-effort-pattern">Best Effort Pattern</a></li>
     </ul>
   </li>
-  <li><a href="#open-items">Open Items</a></li>
   <li><a href="#bibliography">Bibliography</a></li>
 </ul>
 
@@ -242,21 +242,80 @@ messageStyle: "none",
 
 <p>If someone is reading from a DB at the same time as someone else is writing to it, it is possible that the reader will see a half-written or inconsistent piece of data. There are several ways of solving this problem, known as <em>concurrency control methods</em>. The simplest way is to make all readers wait until the writer is done, which is known as a <em>lock</em>.</p>
 
-<h2 id="categories">Categories</h2>
+<h2 id="concurrency-issues">Concurrency Issues</h2>
 
-<h3 id="pessimistic">Pessimistic</h3>
+<ul>
+  <li><strong>Lost Updates</strong></li>
+</ul>
+
+<p>A <em>lost update</em> occurs when the following events occur, in the order presented here:
+  1. A transaction in Session1 retrieves (queries) a row of data into local memory and displays it to an end user, User1.
+  2. Another transaction in Session2 retrieves that same row, but displays the data to a different end user, User2.
+  3. User1, using the application, modifies that row and has the application update the database and commit. Session1’s transaction is now complete.
+  4. User2 modifies that row also, and has the application update the database and commit. Session2’s transaction is now complete.</p>
+
+<ul>
+  <li><strong>Blocking</strong>
+    <ul>
+      <li>Blocking occurs when one session holds a lock on a resource that another session is requesting. As a result, the requesting session will be blocked—it will hang until the holding session gives up the locked resource.</li>
+      <li>The five common DML statements that will block in the database are <code>INSERT</code>, `  UPDATE<code>, </code>DELETE<code>, </code>MERGE<code>, and </code>SELECT FOR UPDATE`</li>
+      <li><strong>Blocked Selects</strong>
+        <ul>
+          <li>Can be awaited with <code>NOWAIT</code> - like <code>SELECT ... WHERE ... FOR UPDATE NOWAIT</code></li>
+        </ul>
+      </li>
+      <li><strong>Blocked Inserts</strong>
+        <ul>
+          <li>Blocked inserts typically happen when 2 users try to insert same value into a table that contains a primary key/unique column. </li>
+          <li>It can be easily avoided by using a sequence or SYS_GUID() function</li>
+          <li>If the above solution doesn’t work, then a manual lock can be used. In Oracle, <code>DBMS_LOCK.REQUEST(id)</code> will request an explicit lock. If 2 users request the lock with the same id, latter request will fail.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Deadlocks</strong></li>
+</ul>
+
+<h2 id="lock-strategies">Lock Strategies</h2>
+
+<h3 id="pessimistic-locking">Pessimistic Locking</h3>
 
 <ul>
   <li>Block an operation of a transaction (using locks), if it may cause violation of the rules, until the possibility of violation disappears. Blocking operations is typically involved with performance reduction.</li>
   <li>Most non-optimistic mechanisms (with blocking) are prone to deadlocks which are resolved by an intentional abort of a stalled transaction (which releases the other transactions in that deadlock), and its immediate restart and re-execution.</li>
+  <li>Using <code>FOR UPDATE WAIT</code> to <em>pessimistically</em> lock rows</li>
 </ul>
 
-<h3 id="optimistic">Optimistic</h3>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">select</span> <span class="n">empno</span><span class="p">,</span> <span class="n">ename</span><span class="p">,</span> <span class="n">sal</span> <span class="k">from</span> <span class="n">emp</span> <span class="k">where</span> <span class="n">empno</span> <span class="o">=</span> <span class="mi">123</span>
+</span><span class="line"><span class="k">for</span> <span class="k">update</span> <span class="n">nowait</span> <span class="c1">--pessimistically locks the rows selected</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="optimistic-locking">Optimistic Locking</h3>
 
 <ul>
   <li>Optimistic Concurrency Control (OCC) delay the checking of whether a transaction meets the isolation and other integrity rules (e.g., serializability and recoverability) until its end, without blocking any of its (read, write) operations (“…and be optimistic about the rules being met…”), and then abort a transaction to prevent the violation, if the desired rules are to be violated upon its commit. An aborted transaction is immediately restarted and re-executed, which incurs an obvious overhead (versus executing it to the end only once). If not too many transactions are aborted, then being optimistic is usually a good strategy.</li>
   <li>OCC assumes that multiple transactions can frequently complete without interfering with each other. While running, transactions use data resources without acquiring locks on those resources. Before committing, each transaction verifies that no other transaction has modified the data it has read. If the check reveals conflicting modifications, the committing transaction rolls back and can be restarted.</li>
   <li>OCC is generally used in environments with low data contention. When conflicts are rare, transactions can complete without the expense of managing locks and without having transactions wait for other transactions’ locks to clear, leading to higher throughput than other concurrency control methods. However, if contention for data resources is frequent, the cost of repeatedly restarting transactions hurts performance significantly; it is commonly thought that other concurrency control methods have better performance under these conditions. However, locking-based (“pessimistic”) methods also can deliver poor performance because locking can drastically limit effective concurrency even when deadlocks are avoided.</li>
+  <li>OCC in Databases
+    <ul>
+      <li><strong>Optimistic locking using a Version Column</strong>
+        <ul>
+          <li>Add column <code>version</code> of type <code>TIMESTAMP</code> in a table</li>
+          <li>When inserting a new record, update <code>version</code> with current timestamp</li>
+          <li>When updating an existing row, check the value <code>version</code> before and after. If they are different, then it means the row values have changed in between.</li>
+        </ul>
+      </li>
+      <li><strong>Optimistic locking using a Checksum</strong>
+        <ul>
+          <li>Add column <code>hash</code> of type <code>VARCHAR</code> in a table</li>
+          <li>When inserting a new record, calculate the hash value of the entire row and update it in <code>hash</code> column</li>
+          <li>When updating an existing row, check the value <code>hash</code> before and after. If they are different, then it means the row values have changed in between.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
 </ul>
 
 <p><strong>Usage</strong></p>
@@ -268,7 +327,7 @@ messageStyle: "none",
   <li>Java Collections - <em>Compare-and-Swap(CAS)</em> based thread-safe collections like <code>ConcurrentLinkedQueue</code> and <code>ConcurrentSkipListMap</code></li>
 </ul>
 
-<h3 id="semi-optimistic">Semi-optimistic</h3>
+<h3 id="semi-optimistic-locking">Semi-optimistic Locking</h3>
 
 <p>Block operations in some situations, if they may cause violation of some rules, and do not block in other situations while delaying rules checking (if needed) to transaction’s end, as done with optimistic.</p>
 
@@ -1025,13 +1084,6 @@ Bitronix Transaction Manager</li>
 </ul>
 
 <p>??? Check Spring in Action Chapter 9</p>
-
-<h1 id="open-items">Open Items</h1>
-
-<ul>
-  <li>MVCC, Optimistic locking</li>
-  <li>Paxos consensus protocol</li>
-</ul>
 
 <h1 id="bibliography">Bibliography</h1>
 

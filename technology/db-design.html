@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="DB Design Physical Database Design Data Modelling Normalization Normalization Types Concept of Time in Database Temporal Data Types Kinds of Time &hellip;">
+<meta name="description" content="DB Design Physical Database Design Data Modelling Normalization Concept of Time in Database Temporal Data Types Kinds of Time Temporal Table Types &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -110,10 +110,7 @@ messageStyle: "none",
   <ul id="markdown-toc">
   <li><a href="#physical-database-design">Physical Database Design</a>    <ul>
       <li><a href="#data-modelling">Data Modelling</a></li>
-      <li><a href="#normalization">Normalization</a>        <ul>
-          <li><a href="#normalization-types">Normalization Types</a></li>
-        </ul>
-      </li>
+      <li><a href="#normalization">Normalization</a></li>
       <li><a href="#concept-of-time-in-database">Concept of Time in Database</a>        <ul>
           <li><a href="#temporal-data-types">Temporal Data Types</a></li>
           <li><a href="#kinds-of-time">Kinds of Time</a></li>
@@ -179,33 +176,26 @@ messageStyle: "none",
       <li>The goal of normalization is to create a set of relational tables that are free of redundant data and that can be consistently and correctly modified. This means that all tables in a relational database should be in the third normal form (3NF). </li>
     </ul>
   </li>
-</ul>
-
-<h3 id="normalization-types">Normalization Types</h3>
-
-<ul>
-  <li><strong>1st Normal Form</strong> 
-    <ul>
-      <li><em>No multi-value columns</em></li>
-      <li>A relational table, by definition, is in first normal form. </li>
-      <li>1NF requires all values of the columns to be atomic. That is, they contain no repeating values like comma-separated names. </li>
-      <li>Table in 1NF contains redundancy of data. Redundancy causes what is called as <strong>Update anomalies</strong></li>
-    </ul>
-  </li>
+  <li><strong>1st Normal Form</strong> </li>
 </ul>
 
 <p><img src="/technology/1NF.png" /></p>
 
+<pre><code>* *No multi-value columns*
+* A relational table, by definition, is in first normal form. 
+* 1NF requires all values of the columns to be atomic. That is, they contain no repeating values like comma-separated names. 
+* Table in 1NF contains redundancy of data. Redundancy causes what is called as **Update anomalies**
+</code></pre>
+
 <ul>
-  <li><strong>2nd Normal Form</strong>
-    <ul>
-      <li><em>No partial dependencies</em></li>
-      <li>any non-key columns must depend on the entire primary key. In the case of a composite primary key, this means that a non-key column cannot depend on only part of the composite key.</li>
-    </ul>
-  </li>
+  <li><strong>2nd Normal Form</strong></li>
 </ul>
 
 <p><img src="/technology/2NF.png" /></p>
+
+<pre><code>* *No partial dependencies*
+* any non-key columns must depend on the entire primary key. In the case of a composite primary key, this means that a non-key column cannot depend on only part of the composite key.
+</code></pre>
 
 <ul>
   <li><strong>3rd Normal Form</strong>
@@ -222,6 +212,10 @@ messageStyle: "none",
       <li>The first two normal forms are intermediate steps to achieve the goal of having all tables in 3NF. In order to better understand the 2NF and higher forms, it is necessary to understand the concepts of functional dependencies and lossless decomposition.</li>
     </ul>
   </li>
+  <li>
+    <p><strong>4th Normal Form</strong>: Every non-trivial multivalued dependency in the table is a dependency on a superkey.</p>
+  </li>
+  <li><strong>5th Normal Form</strong>: Every non-trivial join dependency in the table is implied by the superkeys of the table.</li>
 </ul>
 
 <p><img src="/technology/3NF.png" /></p>

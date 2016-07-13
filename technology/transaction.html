@@ -248,17 +248,33 @@ messageStyle: "none",
   <li><strong>Lost Updates</strong></li>
 </ul>
 
-<p>A <em>lost update</em> occurs when the following events occur, in the order presented here:
-  1. A transaction in Session1 retrieves (queries) a row of data into local memory and displays it to an end user, User1.
-  2. Another transaction in Session2 retrieves that same row, but displays the data to a different end user, User2.
-  3. User1, using the application, modifies that row and has the application update the database and commit. Session1’s transaction is now complete.
-  4. User2 modifies that row also, and has the application update the database and commit. Session2’s transaction is now complete.</p>
+<p>A <em>lost update</em> occurs when the following events occur, in the order presented here:</p>
 
 <ul>
+  <li>
+    <ol>
+      <li>A transaction in Session1 retrieves (queries) a row of data into local memory and displays it to an end user, User1.</li>
+    </ol>
+  </li>
+  <li>
+    <ol>
+      <li>Another transaction in Session2 retrieves that same row, but displays the data to a different end user, User2.</li>
+    </ol>
+  </li>
+  <li>
+    <ol>
+      <li>User1, using the application, modifies that row and has the application update the database and commit. Session1’s transaction is now complete.</li>
+    </ol>
+  </li>
+  <li>
+    <ol>
+      <li>User2 modifies that row also, and has the application update the database and commit. Session2’s transaction is now complete.</li>
+    </ol>
+  </li>
   <li><strong>Blocking</strong>
     <ul>
       <li>Blocking occurs when one session holds a lock on a resource that another session is requesting. As a result, the requesting session will be blocked—it will hang until the holding session gives up the locked resource.</li>
-      <li>The five common DML statements that will block in the database are <code>INSERT</code>, `  UPDATE<code>, </code>DELETE<code>, </code>MERGE<code>, and </code>SELECT FOR UPDATE`</li>
+      <li>The five common DML statements that will block in the database are <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>, <code>MERGE</code>, and <code>SELECT FOR UPDATE</code></li>
       <li><strong>Blocked Selects</strong>
         <ul>
           <li>Can be awaited with <code>NOWAIT</code> - like <code>SELECT ... WHERE ... FOR UPDATE NOWAIT</code></li>

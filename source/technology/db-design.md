@@ -32,21 +32,23 @@ footer: true
 	* process to eliminate data redundancy, and to remove potential update inconsistencies which arise from inserting, modifying, and deleting data. 
 	* The goal of normalization is to create a set of relational tables that are free of redundant data and that can be consistently and correctly modified. This means that all tables in a relational database should be in the third normal form (3NF). 
 
-### Normalization Types
-
 * **1st Normal Form** 
+
+{% img /technology/1NF.png%}
+
 	* *No multi-value columns*
 	* A relational table, by definition, is in first normal form. 
 	* 1NF requires all values of the columns to be atomic. That is, they contain no repeating values like comma-separated names. 
 	* Table in 1NF contains redundancy of data. Redundancy causes what is called as **Update anomalies**
 
-{% img /technology/1NF.png%}
 
 * **2nd Normal Form**
+
+{% img /technology/2NF.png%}
+
 	* *No partial dependencies*
 	* any non-key columns must depend on the entire primary key. In the case of a composite primary key, this means that a non-key column cannot depend on only part of the composite key.
 
-{% img /technology/2NF.png%}
 
 * **3rd Normal Form**
 	* *No transitive dependencies*
@@ -56,6 +58,10 @@ footer: true
 		* (a) mutually independent (means that no non-key column is dependent upon any combination of the other columns.)
 		* (b) fully dependent upon the primary key.  
 	* The first two normal forms are intermediate steps to achieve the goal of having all tables in 3NF. In order to better understand the 2NF and higher forms, it is necessary to understand the concepts of functional dependencies and lossless decomposition.
+
+* **4th Normal Form**: Every non-trivial multivalued dependency in the table is a dependency on a superkey.
+
+* **5th Normal Form**: Every non-trivial join dependency in the table is implied by the superkeys of the table.
 
 {% img /technology/3NF.png%}
 

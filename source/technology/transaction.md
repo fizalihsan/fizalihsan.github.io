@@ -53,14 +53,15 @@ If someone is reading from a DB at the same time as someone else is writing to i
 * **Lost Updates**
 
 A *lost update* occurs when the following events occur, in the order presented here:
-  1. A transaction in Session1 retrieves (queries) a row of data into local memory and displays it to an end user, User1.
-  2. Another transaction in Session2 retrieves that same row, but displays the data to a different end user, User2.
-  3. User1, using the application, modifies that row and has the application update the database and commit. Session1’s transaction is now complete.
-  4. User2 modifies that row also, and has the application update the database and commit. Session2’s transaction is now complete.
+
+* 1. A transaction in Session1 retrieves (queries) a row of data into local memory and displays it to an end user, User1.
+* 2. Another transaction in Session2 retrieves that same row, but displays the data to a different end user, User2.
+* 3. User1, using the application, modifies that row and has the application update the database and commit. Session1’s transaction is now complete.
+* 4. User2 modifies that row also, and has the application update the database and commit. Session2’s transaction is now complete.
 
 * **Blocking**
   * Blocking occurs when one session holds a lock on a resource that another session is requesting. As a result, the requesting session will be blocked—it will hang until the holding session gives up the locked resource.
-  * The five common DML statements that will block in the database are `INSERT`, `  UPDATE`, `DELETE`, `MERGE`, and `SELECT FOR UPDATE`
+  * The five common DML statements that will block in the database are `INSERT`, `UPDATE`, `DELETE`, `MERGE`, and `SELECT FOR UPDATE`
   * **Blocked Selects**
     * Can be awaited with `NOWAIT` - like `SELECT ... WHERE ... FOR UPDATE NOWAIT`
   * **Blocked Inserts**

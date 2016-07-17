@@ -74,6 +74,7 @@ footer: true
     * [Algorithms]({{ root_url }}/technology/algorithms.html)
     * [Brain Teasers]({{ root_url }}/softskills/brain-teasers.html)
     * [Data Structures]({{ root_url }}/technology/datastructures.html)
+    * [Design FAQs]({{ root_url }}/technology/design-faqs.html)
     * [OOPS]({{ root_url }}/technology/oops.html)
     * [Operating Systems]({{ root_url }}/technology/os.html)
     * [VCS]({{ root_url }}/technology/vcs.html)

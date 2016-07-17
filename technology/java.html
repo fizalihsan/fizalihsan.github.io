@@ -152,8 +152,25 @@ messageStyle: "none",
   <li>
     <p><code>float pi=3.14f;</code> &lt;– suffix ‘f’ is required, since in Java real constants are by default double.</p>
   </li>
-  <li>
-    <p>When to use and not use BigDecimal? <span style="color:red">TODO</span></p>
+  <li>When to use and not use BigDecimal? <span style="color:red">TODO</span></li>
+  <li>Default Values
+    <ul>
+      <li><strong>Instance Variables</strong>
+        <ul>
+          <li>Objects = null</li>
+          <li>numbers = 0</li>
+          <li>char = ‘’</li>
+          <li>boolean = false</li>
+          <li>Arrays = null</li>
+        </ul>
+      </li>
+      <li><strong>Local Variables</strong>
+        <ul>
+          <li>Local variables are not initialized with any value; not even null. Uninitialized usage throws compilation error</li>
+          <li>Arrays = null</li>
+        </ul>
+      </li>
+    </ul>
   </li>
   <li>Where primitives are stored?
     <ul>
@@ -173,8 +190,8 @@ messageStyle: "none",
   <li>Pitfalls of Cloning
     <ul>
       <li>Implementation can get really complex, but still leading to unsuccessful copying</li>
-      <li>Cloning does not call constructor to make a copy. As a result, it is your responsibility, as a writer of the clone method, to make sure all the members have been properly set. Here is an example of where things could go wrong. Consider a class keeping track of the total number of objects of that type, using a static int member. In the constructors you would increase the count. However, if you clone the object, since no constructor is called, the count will not truly reflect the number of objects!</li>
-      <li>Problem involving ‘final’ objects. In the below example, both the copies of ‘Dog’ will have all the 3 names, though it is not intended. The problem here is that, clone() is shallow copy, and the same List<string> is used for both objects</string></li>
+      <li><strong>Cloning does not call constructor to make a copy</strong>: As a result, it is your responsibility, as a writer of the clone method, to make sure all the members have been properly set. Here is an example of where things could go wrong. Consider a class keeping track of the total number of objects of that type, using a static int member. In the constructors you would increase the count. However, if you clone the object, since no constructor is called, the count will not truly reflect the number of objects!</li>
+      <li><strong>Problem involving <code>final</code> objects</strong>: In the below example, both the copies of ‘Dog’ will have all the 3 names, though it is not intended. The problem here is that, clone() is shallow copy, and the same List<string> is used for both objects</string></li>
     </ul>
   </li>
 </ul>
@@ -238,7 +255,11 @@ messageStyle: "none",
 <p>An immutable object is one whose externally visible state cannot change after it is instantiated.eg., String, Integer, BigDecimal, etc. For all immutable objects, it’s better to hide constructors and use factories.</p>
 
 <ul>
-  <li>Why Hashtable keys needs to be immutable objects?
+  <li>
+    <p>Things to do to make a class immutable. - <span style="color:red">TODO</span></p>
+  </li>
+  <li>
+    <p>Why Hashtable keys needs to be immutable objects?</p>
     <ul>
       <li>If you use mutable object as Hashtable key and if the object’s state changes, then the Hashtable implementation would get confused since the hashcode would have changed.</li>
     </ul>
@@ -545,7 +566,7 @@ class Outer{
 
 		<li>
 			<h3>Architecture</h3>
-			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/cloud-computing.html">Cloud Computing</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/cloud-computing.html">Cloud Computing</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
 		</li>
 		
 		<li>
@@ -585,7 +606,7 @@ class Outer{
 
 		<li>
 			<h3>General Concepts</h3>
-			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
 		</li>
 
 		<h2>Non-Techninal</h2>

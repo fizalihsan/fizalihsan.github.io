@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="RESTful Services Concepts Why REST? Basic definitions How REST works? Architectural Principles WADL JAX-RS API @Path Matrix Parameters JAX-RS &hellip;">
+<meta name="description" content="RESTful Services Why REST? Basic definitions How REST works? Architectural Principles WADL JAX-RS API @Path Matrix Parameters JAX-RS Injections HTTP &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -108,19 +108,14 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#concepts">Concepts</a>    <ul>
-      <li><a href="#why-rest">Why REST?</a></li>
-      <li><a href="#basic-definitions">Basic definitions</a></li>
-    </ul>
-  </li>
+  <li><a href="#why-rest">Why REST?</a></li>
+  <li><a href="#basic-definitions">Basic definitions</a></li>
   <li><a href="#how-rest-works">How REST works?</a></li>
   <li><a href="#architectural-principles">Architectural Principles</a></li>
   <li><a href="#wadl">WADL</a></li>
   <li><a href="#jax-rs-api">JAX-RS API</a>    <ul>
-      <li><a href="#path">@Path</a>        <ul>
-          <li><a href="#matrix-parameters">Matrix Parameters</a></li>
-        </ul>
-      </li>
+      <li><a href="#path">@Path</a></li>
+      <li><a href="#matrix-parameters">Matrix Parameters</a></li>
       <li><a href="#jax-rs-injections">JAX-RS Injections</a></li>
       <li><a href="#http-content-negotiation">HTTP Content Negotiation</a></li>
       <li><a href="#request--response-management">Request &amp; Response Management</a></li>
@@ -132,20 +127,34 @@ messageStyle: "none",
       </li>
       <li><a href="#exception-handling">Exception Handling</a></li>
       <li><a href="#conneg-content-negotiation">Conneg (Content Negotiation)</a></li>
-      <li><a href="#scalability">Scalability</a>        <ul>
-          <li><a href="#caching">Caching</a></li>
-          <li><a href="#http-caching">HTTP Caching</a></li>
-          <li><a href="#reverse-proxy">Reverse proxy</a></li>
-        </ul>
-      </li>
-      <li><a href="#security">Security</a>        <ul>
-          <li><a href="#authentication">Authentication</a></li>
-          <li><a href="#authorization">Authorization</a></li>
-        </ul>
-      </li>
     </ul>
   </li>
-  <li><a href="#versioning">Versioning</a></li>
+  <li><a href="#pagination">Pagination</a>    <ul>
+      <li><a href="#page-number-pagination">1. Page Number Pagination</a></li>
+      <li><a href="#limit-offset-pagination">2. Limit Offset Pagination</a></li>
+      <li><a href="#cursor-based-pagination">3. Cursor-based Pagination</a></li>
+      <li><a href="#time-base-pagination">4. Time-base Pagination</a></li>
+      <li><a href="#pagination-data">Pagination Data</a></li>
+    </ul>
+  </li>
+  <li><a href="#scalability">Scalability</a>    <ul>
+      <li><a href="#caching">Caching</a></li>
+      <li><a href="#http-caching">HTTP Caching</a></li>
+      <li><a href="#reverse-proxy">Reverse proxy</a></li>
+    </ul>
+  </li>
+  <li><a href="#security">Security</a>    <ul>
+      <li><a href="#authentication">Authentication</a></li>
+      <li><a href="#authorization">Authorization</a></li>
+    </ul>
+  </li>
+  <li><a href="#versioning">Versioning</a>    <ul>
+      <li><a href="#uri-versioning">URI versioning</a></li>
+      <li><a href="#uri-parameter-versioning">URI parameter versioning</a></li>
+      <li><a href="#accept-header-versioning">Accept header versioning</a></li>
+      <li><a href="#custom-header-versioning">Custom header versioning</a></li>
+    </ul>
+  </li>
   <li><a href="#transactions">Transactions</a></li>
   <li><a href="#other-rest-frameworks">Other REST Frameworks</a>    <ul>
       <li><a href="#servlet-based-web-services">Servlet based Web Services</a></li>
@@ -164,25 +173,19 @@ messageStyle: "none",
 
 <p><a href="https://developer.github.com/v3/">Must read on REST concepts</a></p>
 
-<h1 id="concepts">Concepts</h1>
-
-<ul>
-  <li>stands for REpresentational State Transfer</li>
-  <li>A resource in the RESTful sense is something that is accessible through HTTP because this thing has a name—URI (Uniform Resource Identifier). </li>
-  <li>Though REST usually means REST over HTTP, it is actually not protocol-specific. Despite the occurrence of Transport in its name, HTTP acts as an API in RESTful approach and not simply as a transport protocol. </li>
-</ul>
-
-<h2 id="why-rest">Why REST?</h2>
+<h1 id="why-rest">Why REST?</h1>
 
 <ul>
   <li><strong>Ability to leverage commodity caching technologies</strong>
 This API style leverages commodity caching technologies designed specifically with HTTP in mind. If, for example, a client requests a product that hasn’t changed within the past day, and information on that product can be found in a Reverse Proxy, then the cached representation will be returned and service execution can be bypassed. This reduces the load on the Origin Server, especially in cases where the service would have queried a database or performed a CPU- or memory-intensive computation</li>
 </ul>
 
-<h2 id="basic-definitions">Basic definitions</h2>
+<h1 id="basic-definitions">Basic definitions</h1>
 
 <ul>
-  <li><strong>What is a Resource?</strong> The technical term for the thing named by a URL is resource.</li>
+  <li><strong>What is REST?</strong> Representational State Transfer. The server sends a representation via GET operations describing the state of a resource. The client sends a representation via POST/PUT describing the state it would like the resource to have. That’s representational state transfer.</li>
+  <li>Though REST usually means REST over HTTP, it is actually not protocol-specific. Despite the occurrence of Transport in its name, HTTP acts as an API in RESTful approach and not simply as a transport protocol. </li>
+  <li><strong>What is a Resource?</strong> A resource in the RESTful sense is something that is accessible through HTTP because this thing has a name—URI (Uniform Resource Identifier). </li>
   <li><strong>What is a Representation?</strong> Whatever document the server sends back through the URL request, we call that document a representation of the resource. A representation can be any machine-readable document containing any information about a resource.</li>
   <li><strong>What is Addressability?</strong> The principle of addressability just says that every resource should have its own URL. If something is important to your application, it should have a unique name, a URL, so that you and your users can refer to it unambiguously.</li>
   <li><strong>What is Application State?</strong> Using a browser when you visit a site’s homepage, from there to “About Us” page and from there to “Contact Us” page, the state of the browser is changing. In REST terminology, this is called ‘Application State’ change.</li>
@@ -190,7 +193,6 @@ This API style leverages commodity caching technologies designed specifically wi
   <li><strong>What is Hypermedia?</strong> Hypermedia is the general term for things like HTML links and forms: the techniques a server uses to explain to a client what it can do next. Hypermedia is a way for the server to tell the client what HTTP requests the client might want to make in the future. It’s a menu, provided by the server, from which the client is free to choose.</li>
   <li><strong>What is a hypermedia control?</strong> HTML <code>&lt;a&gt;</code> tag, HTML <code>&lt;form&gt;</code>, HTML <code>&lt;img&gt;</code>, URI Template, etc.</li>
   <li><strong>What is HATEOAS?</strong> “Hypermedia as the engine of application state”. To say that hypermedia is the engine of application state is to say that we all navigate the Web by filling out forms and following links.</li>
-  <li><strong>What is REST?</strong> Representational State Transfer. The server sends a representation via GET operations describing the state of a resource. The client sends a representation via POST/PUT describing the state it would like the resource to have. That’s representational state transfer.</li>
   <li><strong>What is a safe method?</strong> GET &amp; HEAD are defined as safe HTTP methods. It’s just a request for information. Sending a GET request to the server should have the same effect on resource state as not sending a GET request—that is, no effect at all. Incidental side effects like logging and rate limiting are OK, but a client should never make a GET request hoping that it will change the resource state.</li>
   <li><strong>What is Idempotence?</strong> Sending a request twice has the same effect on resource state as sending it once. GET, DELETE and PUT are idempotent. This notion comes from math. Multiplying a number by zero or one is an idempotent operation. Once you multiply a number by zero, you can keep multiplying it by zero indefinitely and get the same result: zero. </li>
 </ul>
@@ -387,7 +389,7 @@ body. This means any other parameters must be annotated with one of the JAX-RS a
 </span><span class="line"><span class="o">}</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h3 id="matrix-parameters">Matrix Parameters</h3>
+<h2 id="matrix-parameters">Matrix Parameters</h2>
 
 <p>E.g., <code>http://example.cars.com/mercedes/e55;color=black/2006</code></p>
 
@@ -905,9 +907,122 @@ to maintain. It may even hurt performance.</p>
 
 <p><a href="/technology/webconcepts.html#http-content-negotiation-conneg">HTTP Conneg Basics</a></p>
 
-<h2 id="scalability">Scalability</h2>
+<h1 id="pagination">Pagination</h1>
 
-<h3 id="caching">Caching</h3>
+<ul>
+  <li>While designing a REST API capable of returning vast datasets, it is important to limit the amount of data returned for bandwidth and performance reasons. </li>
+  <li>The bandwidth concerns become more important in the case of mobile clients consuming the API. </li>
+  <li>Limiting the data can vastly improve the server’s ability to retrieve data faster from a datastore and the client’s ability to process the data and render the UI. By splitting the data into discrete pages or paging data, REST services allow clients to scroll through and access the entire dataset in manageable chunks.</li>
+</ul>
+
+<p>There are 4 different pagination styles.</p>
+
+<h2 id="page-number-pagination">1. Page Number Pagination</h2>
+
+<ul>
+  <li>The clients specify a page number containing the data they need. For example, a client wanting all the blog posts in page 3 of a blog service, can use the following <code>GET</code> method: <code>http://blog.example.com/posts?page=3</code></li>
+  <li>The REST service in this scenario would respond with a set of posts. The number of posts returned depends on the default page size set in the service. </li>
+  <li>It is possible for the client to override the default page size by passing in a page-size parameter: <code>http://blog.example.com/posts?page=3&amp;size=20</code></li>
+  <li>GitHub’s REST services use this pagination style. By default, the page size is set to 30 but can be overridden using the per page parameter: https://api.github.com/user/repos?page=2&amp;per_page=100</li>
+</ul>
+
+<h2 id="limit-offset-pagination">2. Limit Offset Pagination</h2>
+
+<ul>
+  <li>The clients uses two parameters to retrieve the data that they need. 
+    <ul>
+      <li>a <strong>limit</strong> - indicates the maximum number of elements to return</li>
+      <li>an <strong>offset</strong> indicates the starting point for the return data. 
+( For example, to retrieve 10 blog posts starting from the item number 31, a client can use the following request: <code>http://blog.example.com/posts?limit=10&amp;offset=30</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="cursor-based-pagination">3. Cursor-based Pagination</h2>
+
+<ul>
+  <li>The clients make use of a pointer or a cursor to navigate through the data set.</li>
+  <li>A cursor is a service-generated random character string that acts as a marker for an item in the data set.</li>
+  <li>Consider a client making the following request to get blog posts: <code>http://blog.example.com/posts</code>. On receiving the request, the service would send data similar to this:</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="p">{</span>
+</span><span class="line">  <span class="nt">&quot;data&quot;</span> <span class="p">:</span> <span class="p">[</span>
+</span><span class="line">  <span class="err">...</span> <span class="err">Blog</span> <span class="err">data</span>
+</span><span class="line">  <span class="p">],</span>
+</span><span class="line">  <span class="nt">&quot;cursors&quot;</span> <span class="p">:</span> <span class="p">{</span>
+</span><span class="line">    <span class="nt">&quot;prev&quot;</span> <span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+</span><span class="line">    <span class="nt">&quot;next&quot;</span> <span class="p">:</span> <span class="s2">&quot;123asdf456iamcur&quot;</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>This response contains a set of blogs representing a subset of the total dataset. </li>
+  <li>The cursors that are part of the response contains a <code>prev</code> &amp; <code>next</code> fields to get the previous and next subset of the data. E.g., <code>http://api.example.com/posts?cursor=123asdf456iamcur</code></li>
+  <li>This pagination style is used by applications such as Twitter and Facebook that deal with real-time datasets (tweets and posts) where data changes frequently. </li>
+  <li>The generated cursors typically don’t live forever and should be used for short-term pagination purposes only.</li>
+</ul>
+
+<h2 id="time-base-pagination">4. Time-base Pagination</h2>
+
+<ul>
+  <li>The client specifies a timeframe to retrieve the data in which they are interested.</li>
+  <li>Facebook supports this pagination style and requires time specified as a Unix timestamp. These are two Facebook example requests:
+    <ul>
+      <li><code>https://graph.facebook.com/me/feed?limit=25&amp;until=1364587774</code> - specifies the end of the time range</li>
+      <li><code>https://graph.facebook.com/me/feed?limit=25&amp;since=1364849754</code> - specifies the beginning of the time range</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="pagination-data">Pagination Data</h2>
+
+<ul>
+  <li>All the above pagination styles return only a subset of the data. So, in addition to supplying the requested data, it is also important for the service to communicate pagination-specific information such as total number of records or total number of pages or current page number and page size. </li>
+  <li>The following example shows a response body with pagination information:</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="p">{</span>
+</span><span class="line">  <span class="nt">&quot;data&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class="line">    <span class="err">...</span> <span class="err">Blog</span> <span class="err">Data</span>
+</span><span class="line">  <span class="p">],</span>
+</span><span class="line">  <span class="nt">&quot;totalPages&quot;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
+</span><span class="line">  <span class="nt">&quot;currentPageNumber&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span><span class="line">  <span class="nt">&quot;pageSize&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+</span><span class="line">  <span class="nt">&quot;totalRecords&quot;</span><span class="p">:</span> <span class="mi">90</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Clients can use the pagination information to assess the current state as well as construct URLs to obtain the next or previous datasets. </li>
+  <li>The other technique services employ is to include the pagination information
+in a special <code>Link</code> header. The Link header is defined as part of <a href="http://tools.ietf.org/html/rfc5988">RFC 5988</a>. It typically contains a set of ready-made links to scroll forward and backward.  GitHub uses this approach; here is an example of a Link header value:</li>
+</ul>
+
+<p><code>Link: &lt;https://api.github.com/user/repos?page=3&amp;per_page=100&gt;; rel="next", &lt;https://api.github.com/user/repos?page=50&amp;per_page=100&gt;; rel="last"</code></p>
+
+<h1 id="scalability">Scalability</h1>
+
+<h2 id="caching">Caching</h2>
 
 <ul>
   <li><strong>Browser Cache</strong> is one of the more important features of the Web. When you visit a website for the first time, your browser stores images and static text in memory and on disk. If you revisit the site within minutes, hours, days, or even months, your browser doesn’t have to reload the data over the network and can instead pick it up locally. This greatly speeds up the rendering of revisited web pages and makes the browsing experience much more fluid. Browser caching not only helps page viewing, it also cuts down on server load and reduced network traffic.</li>
@@ -917,7 +1032,7 @@ to maintain. It may even hurt performance.</p>
   <li>REST services can leverage the browser &amp; proxy cache, if the HTTP constrained interface is followed religiously. Because any service URI that can be reached with an HTTP GET is a candidate for caching, as they are read-only and idempotent. </li>
 </ul>
 
-<h3 id="http-caching">HTTP Caching</h3>
+<h2 id="http-caching">HTTP Caching</h2>
 
 <p>HTTP protocol gives fine-grained control over the caching behavior of both browser and proxy caches.</p>
 
@@ -1112,7 +1227,7 @@ to maintain. It may even hurt performance.</p>
 </span><span class="line"><span class="na">If-None-Match</span><span class="o">:</span> <span class="l">&quot;3141271342554322343200&quot;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h3 id="reverse-proxy">Reverse proxy</h3>
+<h2 id="reverse-proxy">Reverse proxy</h2>
 
 <ul>
   <li>One of the best way to cache your API is to put a gateway cache (or reverse proxy) in front of it. Some frameworks provide their own reverse proxies, but a very powerful, open-source one is <a href="https://www.varnish-cache.org/">Varnish</a>.</li>
@@ -1162,11 +1277,11 @@ to maintain. It may even hurt performance.</p>
 </span><span class="line">   - Store response in cache and return
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h2 id="security">Security</h2>
+<h1 id="security">Security</h1>
 
 <p><a href="/technology/security.html">Basics of Security</a></p>
 
-<h3 id="authentication">Authentication</h3>
+<h2 id="authentication">Authentication</h2>
 
 <ul>
   <li>To enable authentication, modify the <em>/WEB-INF/web.xml</em> file in the war file deployed.</li>
@@ -1238,7 +1353,7 @@ to maintain. It may even hurt performance.</p>
 </span><span class="line"><span class="nt">&lt;/security-constraint&gt;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h3 id="authorization">Authorization</h3>
+<h2 id="authorization">Authorization</h2>
 
 <ul>
   <li>The server and application know the permissions for each user and do not need to share this information over a communication protocol. This is why authorization is the domain of the server and application</li>
@@ -1317,24 +1432,73 @@ to maintain. It may even hurt performance.</p>
 
 <ul>
   <li>There is no established industry standard for expressing versioning information for REST service contracts. We need to select a convention that works best for our IT enterprise.</li>
-  <li>3 places where versioning can be applied in a REST API
+</ul>
+
+<p>4 popular approaches to versioning a REST API. </p>
+
+<h2 id="uri-versioning">URI versioning</h2>
+
+<ul>
+  <li>In this approach, version information becomes part of the <strong>Base URI</strong>. For example, http://api.example.org/v1/users and http://api.example.org/v2/users represent two different versions of an application API.</li>
+  <li>It is used by major public APIs such as Twitter, LinkedIn, Yahoo, etc. 
     <ul>
-      <li>Base URI
-        <ul>
-          <li>This is a clean sweep approach where a new version is introduced in the base URI for any major changes. </li>
-          <li>Many major API companies use this approach. E.g.? <code>http://company.com/api/v3.0/customers/1234</code></li>
-        </ul>
-      </li>
-      <li>Resource URI
-        <ul>
-          <li>e.g., <code>http://company.com/api/customers/v3.0/1234</code></li>
-          <li>Permalinks?</li>
-        </ul>
-      </li>
-      <li>Header (Accepts)</li>
-      <li>Resource/Hypermedia way</li>
+      <li>LinkedIn: https://api.linkedin.com/v1/people/~</li>
+      <li>Yahoo: https://social.yahooapis.com/v1/user/12345/profile</li>
+      <li>Twitter: https://api.twitter.com/1.1/statuses/user_timeline.json</li>
+      <li>SalesForce: http://na1.salesforce.com/services/data/v26.0</li>
+      <li>Twilio: https://api.twilio.com/2010-04-01/Accounts/{AccountSid}/Calls</li>
     </ul>
   </li>
+  <li>Version Type
+    <ul>
+      <li>Twitter and LinkedIn used <code>v</code> notation. </li>
+      <li>Salesforce uses major + minor version</li>
+      <li>Twilio uses datestamp to differentiate</li>
+    </ul>
+  </li>
+  <li>Pros
+    <ul>
+      <li>Clean sweep approach. Replicate the entire code base and maintain parallel code paths for each version.</li>
+      <li>Easy to implement</li>
+    </ul>
+  </li>
+  <li>Cons
+    <ul>
+      <li>If client stores the permalinks locally, then for every upgrade it needs to be updated</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="uri-parameter-versioning">URI parameter versioning</h2>
+
+<ul>
+  <li>Similar to the URI versioning except that the version information is specified as a URI request parameter. E.g., http://api.example.org/users?v=2 </li>
+  <li>The version parameter is typically optional and a default version of the API will continue working for requests without version parameter. Most often, the default version is the latest version of the API. </li>
+  <li>
+    <p>Although as not popular as other versioning strategies, a few major public APIs such as Netf lix have used this strategy. </p>
+  </li>
+  <li>Cons
+    <ul>
+      <li>The URI parameter versioning shares the same disadvantages of URI versioning. </li>
+      <li>Some proxies don’t cache resources with a URI parameter, resulting in additional network traffic. </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="accept-header-versioning">Accept header versioning</h2>
+
+<ul>
+  <li>This approach uses the <em>Accept</em> header to communicate version information. Because the header contains version information, there will be only one URI for multiple versions of API.</li>
+  <li>To pass additional version information, we need a custom media type. The following convention is popular when creating a custom media type: <code>vnd.product_name.version+suffix</code>
+    <ul>
+      <li>The <strong>vnd</strong> is the starting point of the custom media type and indicates vendor. </li>
+      <li>The <strong>product</strong> or producer name is the name of the product and distinguishes this media type from other custom product media types.</li>
+      <li>The <strong>version</strong> part is represented using strings such as v1 or v2 or v3. </li>
+      <li>Finally, the <strong>suffix</strong> is used to specify the structure of the media type. For example, the <code>+json</code> suffix indicates media type <code>application/json</code>. <a href="https://tools.ietf.org/html/rfc6839">RFC 6389</a> gives a full list of standardized prefixes such as <code>+xml</code>, <code>+json</code>, and <code>+zip</code>. </li>
+    </ul>
+  </li>
+  <li>Using this approach, a client, for example, can send an <code>application/vnd.quickpoll.v2+json</code> accept header to request the second version of the API.</li>
+  <li>GitHub is a popular public API that uses this <em>Accept</em> header strategy. For requests that don’t contain any Accept header, GitHub uses the latest version of the API to fulfill the request.</li>
 </ul>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
@@ -1342,6 +1506,34 @@ to maintain. It may even hurt performance.</p>
 </pre></td><td class="code"><pre><code class="http"><span class="line"><span class="err">Accept: application/vnd.company.myapp-v3.0+json</span>
 </span><span class="line"><span class="err">Content-Type: application/vnd.company.myapp-v3.0+json </span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Pros
+    <ul>
+      <li>Only one URI for multiple versions of API</li>
+      <li>The Accept header versioning approach is becoming more and more popular as it allows fine-grained versioning of individual resources without impacting the entire API. </li>
+    </ul>
+  </li>
+  <li>Cons
+    <ul>
+      <li>This approach can make browser testing harder as we have to carefully craft the Accept header.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="custom-header-versioning">Custom header versioning</h2>
+
+<ul>
+  <li>The custom header versioning approach is similar to the Accept header versioning approach except that, instead of the Accept header, a custom header is used. </li>
+  <li>Microsoft Azure takes this approach and uses the custom header <code>x-ms-version</code>. For example, to get the latest version of Azure (at the time of writing this),  your request needs to include a custom header:</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="err">x-ms-version: 2014-02-14</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>This approach shares the same pros and cons as that of the Accept header approach. Because the HTTP specification provides a standard way of accomplishing this via the Accept header, the custom header
+approach hasn’t been widely adopted.</p>
 
 <h1 id="transactions">Transactions</h1>
 
@@ -1456,6 +1648,7 @@ to maintain. It may even hurt performance.</p>
       <li>RESTful Java with JAX-RS -2010</li>
       <li>RESTful Java with JAX-RS 2.0 -2013</li>
       <li>RESTful Web APIs - O’Reilly 2013</li>
+      <li>Spring REST</li>
       <li>Web Services Testing with soapUI (2012)</li>
     </ul>
   </li>
@@ -1490,7 +1683,7 @@ to maintain. It may even hurt performance.</p>
 
 		<li>
 			<h3>Architecture</h3>
-			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/cloud-computing.html">Cloud Computing</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/cloud-computing.html">Cloud Computing</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
 		</li>
 		
 		<li>
@@ -1530,7 +1723,7 @@ to maintain. It may even hurt performance.</p>
 
 		<li>
 			<h3>General Concepts</h3>
-			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
 		</li>
 
 		<h2>Non-Techninal</h2>

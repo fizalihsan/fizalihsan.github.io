@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Algorithms Big-O Notation How to find Big-O in interviews? Data Structures Algorithms Bitwise Operations Searching Hashing Dynamic Programming &hellip;">
+<meta name="description" content="Algorithms Big-O Notation How to find Big-O in interviews? Data Structures Algorithms Bitwise Operations Sorting Searching Hashing Dynamic &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -115,6 +115,7 @@ messageStyle: "none",
   <li><a href="#data-structures">Data Structures</a></li>
   <li><a href="#algorithms">Algorithms</a></li>
   <li><a href="#bitwise-operations">Bitwise Operations</a></li>
+  <li><a href="#sorting">Sorting</a></li>
   <li><a href="#searching">Searching</a>    <ul>
       <li><a href="#hashing">Hashing</a></li>
     </ul>
@@ -149,7 +150,7 @@ messageStyle: "none",
       <li>Example: To find an element T which is the last item in the <code>LinkedList</code></li>
     </ul>
   </li>
-  <li><strong>O(n log n)</strong>: 
+  <li><strong>O(n log n)/Linearithmetic Complexity</strong>: 
     <ul>
       <li>A nice combination of the previous two.  Normally there’s 2 parts to the sort, the first loop is O(n), the second is O(log n), combining to form O(n log n) 1 item takes 2 seconds, 10 items takes 12 seconds, 100 items takes 103 seconds.
 <img class="right" src="/technology/merge-sort-example.gif" /></li>
@@ -226,6 +227,11 @@ Now consider if I were to double the number of elements to 16: this would only r
       <td> </td>
     </tr>
     <tr>
+      <td> </td>
+      <td><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/array/IntersectionOf2SortedArrays.java">Intersection of 2 sorted arrays</a></td>
+      <td> </td>
+    </tr>
+    <tr>
       <td>Numbers</td>
       <td><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/numbers/BaseConversion.java">Convert decimal to binary, octal or hexadecimal or vice-versa</a></td>
       <td> </td>
@@ -262,7 +268,7 @@ Now consider if I were to double the number of elements to 16: this would only r
     </tr>
     <tr>
       <td> </td>
-      <td><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/string/Permutations.java">Permutations</a></td>
+      <td><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/string/PermutationCombination.java">Permutation Combination</a></td>
       <td> </td>
     </tr>
     <tr>
@@ -306,9 +312,14 @@ Now consider if I were to double the number of elements to 16: this would only r
       <td> </td>
     </tr>
     <tr>
-      <td>Tree</td>
-      <td><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/binarytree/TreeTraversals.java">Post-order, In-order, Pre-order Traversals</a></td>
       <td> </td>
+      <td><a href="">Delete duplicate values in a sorted linked list</a></td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>Tree</td>
+      <td><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/binarytree/TreeTraversals.java">Tree Traversals</a></td>
+      <td>Depth-First Traversal: Post-order, In-order, Pre-order<br />Breadth-First Traversal: Level-order</td>
     </tr>
     <tr>
       <td> </td>
@@ -322,12 +333,7 @@ Now consider if I were to double the number of elements to 16: this would only r
     </tr>
     <tr>
       <td> </td>
-      <td>Breadth-first traversal</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td>Print tree level-by-level</td>
+      <td>[Convert a binary tree into a doubly-linked list - pg 174</td>
       <td> </td>
     </tr>
     <tr>
@@ -370,6 +376,11 @@ Now consider if I were to double the number of elements to 16: this would only r
       <td>Rectangle problem  - pg 81</td>
     </tr>
     <tr>
+      <td> </td>
+      <td> </td>
+      <td>Intersection of sorted array - pg 194</td>
+    </tr>
+    <tr>
       <td>Search</td>
       <td>Binary Search</td>
       <td><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/array/BinarySearch.java">Binary Search in an array</a></td>
@@ -387,7 +398,7 @@ Now consider if I were to double the number of elements to 16: this would only r
     <tr>
       <td> </td>
       <td> </td>
-      <td>Depth-first search</td>
+      <td>Minimum k numbers in an array - pg 191</td>
     </tr>
     <tr>
       <td>Sorting</td>
@@ -434,6 +445,11 @@ Now consider if I were to double the number of elements to 16: this would only r
       <td>Permutations</td>
       <td><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/string/Permutations.java">Simple recursive method</a> (Sedgewick)</td>
     </tr>
+    <tr>
+      <td> </td>
+      <td> </td>
+      <td>8 queens problems - pg 175</td>
+    </tr>
   </tbody>
 </table>
 
@@ -443,79 +459,60 @@ Now consider if I were to double the number of elements to 16: this would only r
 
 <h1 id="bitwise-operations">Bitwise Operations</h1>
 
-<table>
-  <tbody>
-    <tr>
-      <td>AND (&amp;)</td>
-      <td>0 &amp; 0 = 0</td>
-      <td>1 &amp; 0 = 0</td>
-      <td>0 &amp; 1 = 0</td>
-      <td>1 &amp; 1 = 1</td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>OR (</td>
-      <td>)</td>
-      <td>0</td>
-      <td>0 = 0</td>
-      <td>1</td>
-      <td>0 = 1</td>
-      <td>0</td>
-      <td>1 = 1</td>
-      <td>1</td>
-      <td>1 = 1</td>
-    </tr>
-    <tr>
-      <td>XOR(^)</td>
-      <td>0 ^ 0 = 0</td>
-      <td>1 ^ 0 = 1</td>
-      <td>0 ^ 1 = 1</td>
-      <td>1 ^ 1 = 0</td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>NOT (~)</td>
-      <td>~0 = 1</td>
-      <td>~0 = 0</td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-    </tr>
-  </tbody>
-</table>
-
 <ul>
-  <li>Left Shift («)
+  <li>AND (<code>&amp;</code>)
+    <ul>
+      <li><code>0 &amp; 0 = 0</code></li>
+      <li><code>1 &amp; 0 = 0</code></li>
+      <li><code>0 &amp; 1 = 0</code></li>
+      <li><code>1 &amp; 1 = 1</code></li>
+    </ul>
+  </li>
+  <li>OR (<code>|</code>)
+    <ul>
+      <li><code>0 | 0 = 0</code></li>
+      <li><code>1 | 0 = 1</code></li>
+      <li><code>0 | 1 = 1</code></li>
+      <li><code>1 | 1 = 1</code></li>
+    </ul>
+  </li>
+  <li>XOR(<code>^</code>)
+    <ul>
+      <li><code>0 ^ 0 = 0</code></li>
+      <li><code>1 ^ 0 = 1</code></li>
+      <li><code>0 ^ 1 = 1</code></li>
+      <li><code>1 ^ 1 = 0</code></li>
+    </ul>
+  </li>
+  <li>NOT (<code>~</code>)
+    <ul>
+      <li><code>~0 = 1</code></li>
+      <li><code>~0 = 0</code></li>
+    </ul>
+  </li>
+  <li>Left Shift (<code>&lt;&lt;</code>)
     <ul>
       <li><code>00001010 &lt;&lt; 2 = 00101000</code></li>
       <li><code>10001010 &lt;&lt; 3 = 01010000</code></li>
     </ul>
   </li>
-  <li>Right Shift (»)
+  <li>Right Shift (<code>&gt;&gt;</code>)
     <ul>
       <li><code>00001010 &gt;&gt; 2 = 00000010</code></li>
       <li><code>10001010 &gt;&gt; 3 = 11110001</code></li>
     </ul>
   </li>
-  <li>Unsigned Right Shift (»&gt;)
+  <li>Unsigned Right Shift (<code>&gt;&gt;&gt;</code>)
     <ul>
       <li><code>00001010 &gt;&gt;&gt; 2 = 00000010</code></li>
       <li><code>10001010 &gt;&gt;&gt; 3 = 00010001</code></li>
     </ul>
   </li>
 </ul>
+
+<h1 id="sorting">Sorting</h1>
+
+<p><img src="/technology/sorting-efficiency.png" /></p>
 
 <h1 id="searching">Searching</h1>
 
@@ -581,11 +578,13 @@ Now consider if I were to double the number of elements to 16: this would only r
 
 <ul>
   <li><a href="http://www.corejavainterviewquestions.com/idiots-guide-big-o/">Idiot’s guide to BigO</a></li>
+  <li><a href="http://bigocheatsheet.com/">bigocheatsheet.com</a></li>
   <li>Books
     <ul>
       <li>Algorithms 4th Edition - Robert Sedgewick and Kevin Wayne</li>
       <li>Algorithms in a Nutshell</li>
       <li>ACE the programming interview</li>
+      <li>Coding Interview - Harry He</li>
     </ul>
   </li>
 </ul>
@@ -610,7 +609,7 @@ Now consider if I were to double the number of elements to 16: this would only r
 
 		<li>
 			<h3>Architecture</h3>
-			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/cloud-computing.html">Cloud Computing</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/cloud-computing.html">Cloud Computing</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
 		</li>
 		
 		<li>
@@ -650,7 +649,7 @@ Now consider if I were to double the number of elements to 16: this would only r
 
 		<li>
 			<h3>General Concepts</h3>
-			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
 		</li>
 
 		<h2>Non-Techninal</h2>

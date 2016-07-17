@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Lambda Architecture - KnowledgeShop</title>
+  <title>Design FAQs - KnowledgeShop</title>
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Lambda Architecture Batch Layer Speed Layer Serving Layer Processing Models Batch Processing Event-Stream Processing Micro-Batching Data Ingestion &hellip;">
+<meta name="description" content="Design FAQs Design a URL shortening service Design a URL shortening service Store given url in a database assigning a unique interger id to it. &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://fizalihsan.github.io/technology/lambda-architecture.html">
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/design-faqs.html">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <!-- Below custom CSS is for table border styling -->
@@ -103,99 +103,42 @@ messageStyle: "none",
 <article role="article">
   
   <header>
-    <h1 class="entry-title">Lambda Architecture</h1>
+    <h1 class="entry-title">Design FAQs</h1>
     
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#batch-layer">Batch Layer</a></li>
-  <li><a href="#speed-layer">Speed Layer</a></li>
-  <li><a href="#serving-layer">Serving Layer</a></li>
-  <li><a href="#processing-models">Processing Models</a>    <ul>
-      <li><a href="#batch-processing">Batch Processing</a></li>
-      <li><a href="#event-stream-processing">Event-Stream Processing</a></li>
-      <li><a href="#micro-batching">Micro-Batching</a></li>
-    </ul>
-  </li>
+  <li><a href="#design-a-url-shortening-service">Design a URL shortening service</a></li>
 </ul>
 
+<h1 id="design-a-url-shortening-service">Design a URL shortening service</h1>
+
 <ul>
-  <li>Data Ingestion
+  <li>Store given url in a database assigning a unique interger id to it.</li>
+  <li>convert the integer to character string that is at most 6 characters long. This problem can basically seen as a base conversion problem where we have a 10 digit input number and we want to convert it into a 6 character long string.</li>
+  <li>
+    <p>The long url should also be uniquely identifiable from short url. So we need a <a href="http://en.wikipedia.org/wiki/Bijection">Bijective Function</a>. This is necessary so that you can find a inverse function <em>g(‘abc’) = 123</em> for your <em>f(123) = ‘abc’</em> function. This means:</p>
+
     <ul>
-      <li>Kafka</li>
-      <li>Flume</li>
-      <li>Scribe</li>
-      <li>*MQ</li>
-    </ul>
-  </li>
-  <li>Serialization
-    <ul>
-      <li>Without schema
-        <ul>
-          <li>CSV</li>
-        </ul>
-      </li>
-      <li>With schema
-        <ul>
-          <li>Thrift</li>
-          <li>Avro</li>
-          <li>Protobuffers</li>
-        </ul>
-      </li>
+      <li>There must be no <em>x1</em>, <em>x2</em> (with <em>x1 ≠ x2</em>) that will make <em>f(x1) = f(x2)</em>,</li>
+      <li>and for every <em>y</em> you must be able to find an <em>x</em> so that <em>f(x) = y</em>.</li>
     </ul>
   </li>
 </ul>
 
-<h1 id="batch-layer">Batch Layer</h1>
+<p><strong>How to convert an integer to a 6 character string</strong></p>
+
+<p>A URL character can be one of the following</p>
 
 <ul>
-  <li>ElephantDB</li>
-  <li>Splout</li>
-  <li>Voldemort</li>
-  <li>Hadoop</li>
+  <li>1) A lower case alphabet [‘a’ to ‘z’], total 26 characters</li>
+  <li>2) An upper case alphabet [‘A’ to ‘Z’], total 26 characters</li>
+  <li>3) A digit [‘0′ to ‘9’], total 10 characters</li>
 </ul>
 
-<h1 id="speed-layer">Speed Layer</h1>
+<p>There are total 26 + 26 + 10 = 62 possible characters.</p>
 
-<ul>
-  <li>Cassandra</li>
-  <li>Hbase</li>
-  <li>Redis</li>
-  <li>MySQL</li>
-  <li>ElasticSearch</li>
-</ul>
-
-<h1 id="serving-layer">Serving Layer</h1>
-
-<ul>
-  <li><a href="http://martinfowler.com/bliki/CQRS.html">CQRS - Command Query Responsibility Segregation</a></li>
-</ul>
-
-<h1 id="processing-models">Processing Models</h1>
-
-<p>Comparing Apache Storm and Apache Spark’s Streaming, turns out to be a bit challenging. One is a true stream processing engine that can do micro-batching, the other is a batch processing engine which micro-batches, but cannot perform streaming in the strictest sense. Furthermore, the comparison between streaming and batching isn’t exactly subtle, these are fundamentally different computing ideas.</p>
-
-<h2 id="batch-processing">Batch Processing</h2>
-
-<ul>
-  <li>Batch processing is the familiar concept of processing data en masse. The batch size could be small or very large. This is the processing model of the core Spark library.</li>
-  <li>Batch processing excels at processing large amounts of stable, existing data. However, it generally incurs a high-latency and is completely unsuitable for incoming data.</li>
-</ul>
-
-<h2 id="event-stream-processing">Event-Stream Processing</h2>
-
-<ul>
-  <li>Stream processing is a one-at-a-time processing model; a datum is processed as it arrives. The core Storm library follows this processing model.</li>
-  <li>Stream processing excels at computing transformations as data are ingested with sub-second latencies. However, with stream processing, it is incredibly difficult to process stable data efficiently.</li>
-</ul>
-
-<h2 id="micro-batching">Micro-Batching</h2>
-
-<ul>
-  <li>Micro-batching is a special case of batch processing where the batch size is orders smaller. Spark Streaming operates in this manner as does the Storm Trident API.</li>
-  <li>Micro-batching seems to be a nice mix between batching and streaming. However, micro-batching incurs a cost of latency. If sub-second latency is paramount, micro-batching will typically not suffice. On the other hand, micro-batching trivially gives stateful computation, making windowing an easy task.</li>
-</ul>
-
+<p>So the task is to convert a decimal number to base 62 number. <a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/numbers/BaseConversion.java">Check the base-62 conversion program in Github</a></p>
 
   
     <footer>
@@ -203,7 +146,7 @@ messageStyle: "none",
       
         <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/lambda-architecture.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/lambda-architecture.html" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/design-faqs.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/design-faqs.html" >Tweet</a>
   
   
   

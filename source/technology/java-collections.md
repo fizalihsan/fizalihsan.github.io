@@ -36,7 +36,7 @@ footer: true
 | # | Type | Sample | Description | Get & Put principle |
 | - | - | - | - | - |
 | 1 | Generic Type | `List<T>`  | Only type T is allowed  | Both get and put of type T allowed on this collection. |
-| 2 | Unbounded wildcard | `List<?>` | Any type | Only get is allowed. <br/><p>`List<?> nums = new ArrayList<Integer>(); <br/>nums.add(1); //not allowed <br/>nums.add(null); //exception: allowed `</p> |
+| 2 | Unbounded wildcard | `List<?>` | Any type | Only get is allowed. <br/><p>`List<?> nums = new ArrayList<Integer>(); nums.add(1); //not allowed nums.add(null); //exception: allowed `</p> |
 | 3 | Wildcard with lower bound | `List<? extends T>` | Any subtype of T | Only get of any subtype of T is allowed <br/><p><code>List<? extends Number> nums = new ArrayList<Integer>(); <br/>nums.add(1); //not allowed <br/>nums.add(null); //exception: allowed </code></p> |
 | 4 | Wildcard with lower bound | `List<? super T>` | Any supertype of T | <br/><p><code>List<? super Integer> ints = Arrays.asList(1,2,3,4); <br/>Integer i = ints.get(1); //not allowed <br/>Object o = ints.get(1); //allowed </code></p> |
 | 5 | Multiple bounds | `List<? extends T & Comparable<T>>` | Only types that subclass T and implement Comparable. <br/>The first (leftmost) bound is a class or an interface; <br/>all remaining bounds must be interfaces. | Only *get* of any subtype of T and comparable is allowed |

@@ -26,7 +26,7 @@ Grokking Algorithms - [http://adit.io/](http://adit.io/)
 * **O(n)/Linear Complexity**: 
 	* The larger the data set, the time taken grows proportionately.  1 item takes 1 second, 10 items takes 10 seconds, 100 items takes 100 seconds.
 	* Example: To find an element T which is the last item in the `LinkedList`
-* **O(n log n)**: 
+* **O(n log n)/Linearithmetic Complexity**: 
 	* A nice combination of the previous two.  Normally there’s 2 parts to the sort, the first loop is O(n), the second is O(log n), combining to form O(n log n) 1 item takes 2 seconds, 10 items takes 12 seconds, 100 items takes 103 seconds.
 {% img right /technology/merge-sort-example.gif %}
 	* *Example*: MergeSort. To explain why this is `O(n log n)` is a bit more complex.  In the below example of 8 numbers, we have 3 levels of sorting:
@@ -64,14 +64,15 @@ Break down the loops and processing.
 |                     | [Find second highest number in an array](https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/array/SecondHighestNumber.java)                     |                                                                                                                                                                  | 
 |                     | [Majorities in an array](https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/array/MajoritiesInArrays.java)                                      |                                                                                                                                                                  | 
 |                     | [Find the Turning number in an array](https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/array/TurningNumber.java)                              |                                                                                                                                                                  | 
+|                     | [Intersection of 2 sorted arrays](https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/array/IntersectionOf2SortedArrays.java)                    |                                                                                                                                                                  | 
 | Numbers             | [Convert decimal to binary, octal or hexadecimal or vice-versa](https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/numbers/BaseConversion.java) |                                                                                                                                                                  | 
 |                     | [Convert excel column name to column index](https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/numbers/BaseConversion.java)                     |                                                                                                                                                                  | 
-|                     | [Bitwise Operations](https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/numbers/BitwiseProblems.java)                                           | 
+|                     | [Bitwise Operations](https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/numbers/BitwiseProblems.java)                                           |                                                                                                                                                                  |
 | Strings             | Regex matching - pg 50                                                                                                                                                     |                                                                                                                                                                  | 
 |                     | Check if a string is a number or not - pg 51                                                                                                                               |                                                                                                                                                                  | 
 |                     | Replacing %20 with spaces in a string - pg 47 <br>                                                                                                                         | Left to right approach is `O(n^2)`. Right to left is `O(n)`                                                                                                      | 
 |                     | String compression                                                                                                                                                         | (Input: aaaabbccc, Expected output: a4b2c3)                                                                                                                      | 
-|                     | [Permutations](https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/string/Permutations.java)                                                     |                                                                                                                                                                  | 
+|                     | [Permutation Combination](https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/string/PermutationCombination.java)                                |                                                                                                                                                                  | 
 |                     | [Non repeated character detector](https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/string/NonRepeatedCharDetector.java)                       |                                                                                                                                                                  | 
 |                     | [Reverse order of the words in a sentence](https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/string/ReverseWordsOrder.java)                    |                                                                                                                                                                  | 
 |                     | [Remove given characters from the input string](https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/string/RemoveChars.java)                     |                                                                                                                                                                  | 
@@ -80,11 +81,11 @@ Break down the loops and processing.
 |                     | Check for loops - [Tortoise & Hare Method](https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/linkedlist/LoopCheckTortoiseAndHareMethod.java)   |                                                                                                                                                                  | 
 |                     | Check for loops - [IdentityHashMap Method](https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/linkedlist/LoopCheckIdentityHashMapMethod.java)   |                                                                                                                                                                  | 
 |                     | [Kth node from end](https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/linkedlist/KthNodeFromEndFinder.java)                                    |                                                                                                                                                                  | 
-| Tree                | [Post-order, In-order, Pre-order Traversals](https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/binarytree/TreeTraversals.java)                 |                                                                                                                                                                  | 
+|                     | [Delete duplicate values in a sorted linked list]()                                                                                                                        |                                                                                                                                                                  | 
+| Tree                | [Tree Traversals](https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/binarytree/TreeTraversals.java)                                            | Depth-First Traversal: Post-order, In-order, Pre-order<br>Breadth-First Traversal: Level-order                                                                   | 
 |                     | [Binary Search Tree - add, remove](https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/binarytree/BinarySearchTree.java)                         |                                                                                                                                                                  | 
 |                     | [Check if a given tree is a binary search tree](https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/binarytree/BinarySearchTreeChecker.java)     |                                                                                                                                                                  | 
-|                     | Breadth-first traversal                                                                                                                                                    |                                                                                                                                                                  | 
-|                     | Print tree level-by-level                                                                                                                                                  |                                                                                                                                                                  | 
+|                     | [Convert a binary tree into a doubly-linked list - pg 174                                                                                                                  |                                                                                                                                                                  | 
 | Stack               | [Build a stack using 2 queues](https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/stack/StackUsingQueues.java)                                  |                                                                                                                                                                  | 
 | Queue               | [Build a queue using 1 stack & 2 stacks](https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/queue/QueueUsingStacks.java)                        |                                                                                                                                                                  | 
 
@@ -96,10 +97,11 @@ Break down the loops and processing.
 | Number       | Fibonacci      | [Find nth fibonacci number](https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/numbers/Fibonacci.java) (with and without recursion) | 
 |              |                | Frog jumpting stairs  - pg 81                                                                                                                                  | 
 |              |                | Rectangle problem  - pg 81                                                                                                                                     | 
+|              |                | Intersection of sorted array - pg 194                                                                                                                          | 
 | Search       | Binary Search  | [Binary Search in an array](https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/array/BinarySearch.java)                             | 
 |              |                | Binary search matrix - pg 37                                                                                                                                   | 
 |              |                | Binary search in partially sorted array (HarryHe pg 89 - unable to follow)                                                                                     | 
-|              |                | Depth-first search                                                                                                                                             | 
+|              |                | Minimum k numbers in an array - pg 191                                                                                                                         | 
 | Sorting      | Array Sorting  | [Quick sort](https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/sort/QuickSort.java) - *from Sedgewick book*                        | 
 |              |                | [Selection sort](https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/sort/SelectionSort.java)                                        | 
 |              |                | Shell sort                                                                                                                                                     | 
@@ -109,27 +111,45 @@ Break down the loops and processing.
 |              | List sorting   | ??                                                                                                                                                             | 
 | Backtracking |                | String paths                                                                                                                                                   | 
 |              | Permutations   | [Simple recursive method](https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/string/Permutations.java) (Sedgewick)                  | 
+|              |                | 8 queens problems - pg 175                                                                                                                                     | 
 
 
 * Heap sort visualization - http://www2.hawaii.edu/~copley/665/HSApplet.html
 
 # Bitwise Operations
 
-| AND (&) | 0 & 0 = 0 | 1 & 0 = 0 | 0 & 1 = 0 | 1 & 1 = 1 |
-| OR (|)  | 0 | 0 = 0 | 1 | 0 = 1 | 0 | 1 = 1 | 1 | 1 = 1 |
-| XOR(^)  | 0 ^ 0 = 0 | 1 ^ 0 = 1 | 0 ^ 1 = 1 | 1 ^ 1 = 0 |
-| NOT (~) |    ~0 = 1 |    ~0 = 0 |           |           |
-
-* Left Shift (<<)
+* AND (`&`)
+	* `0 & 0 = 0`
+	* `1 & 0 = 0`
+	* `0 & 1 = 0`
+	* `1 & 1 = 1`
+* OR (`|`)
+	* `0 | 0 = 0`
+	* `1 | 0 = 1`
+	* `0 | 1 = 1`
+	* `1 | 1 = 1`
+* XOR(`^`)
+	* `0 ^ 0 = 0`
+	* `1 ^ 0 = 1`
+	* `0 ^ 1 = 1`
+	* `1 ^ 1 = 0`
+* NOT (`~`)
+	* `~0 = 1`
+	* `~0 = 0`
+* Left Shift (`<<`)
 	* `00001010 << 2 = 00101000`
 	* `10001010 << 3 = 01010000`
-* Right Shift (>>)
+* Right Shift (`>>`)
 	* `00001010 >> 2 = 00000010`
 	* `10001010 >> 3 = 11110001`
-* Unsigned Right Shift (>>>)
+* Unsigned Right Shift (`>>>`)
 	* `00001010 >>> 2 = 00000010`
 	* `10001010 >>> 3 = 00010001`
 
+
+# Sorting
+
+{% img /technology/sorting-efficiency.png %}
 
 # Searching
 
@@ -174,7 +194,9 @@ Break down the loops and processing.
 # Reference
 
 * [Idiot's guide to BigO](http://www.corejavainterviewquestions.com/idiots-guide-big-o/)
+* [bigocheatsheet.com](http://bigocheatsheet.com/)
 * Books
 	* Algorithms 4th Edition - Robert Sedgewick and Kevin Wayne
 	* Algorithms in a Nutshell
 	* ACE the programming interview
+	* Coding Interview - Harry He

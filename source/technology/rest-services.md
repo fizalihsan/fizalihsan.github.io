@@ -12,21 +12,16 @@ footer: true
 
 [Must read on REST concepts](https://developer.github.com/v3/)
 
-# Concepts
-
-* stands for REpresentational State Transfer
-* A resource in the RESTful sense is something that is accessible through HTTP because this thing has a name—URI (Uniform Resource Identifier). 
-* Though REST usually means REST over HTTP, it is actually not protocol-specific. Despite the occurrence of Transport in its name, HTTP acts as an API in RESTful approach and not simply as a transport protocol. 
-
-
-## Why REST?
+# Why REST?
 
 * **Ability to leverage commodity caching technologies**
 This API style leverages commodity caching technologies designed specifically with HTTP in mind. If, for example, a client requests a product that hasn’t changed within the past day, and information on that product can be found in a Reverse Proxy, then the cached representation will be returned and service execution can be bypassed. This reduces the load on the Origin Server, especially in cases where the service would have queried a database or performed a CPU- or memory-intensive computation
 
-## Basic definitions
+# Basic definitions
 
-* **What is a Resource?** The technical term for the thing named by a URL is resource.
+* **What is REST?** Representational State Transfer. The server sends a representation via GET operations describing the state of a resource. The client sends a representation via POST/PUT describing the state it would like the resource to have. That’s representational state transfer.
+* Though REST usually means REST over HTTP, it is actually not protocol-specific. Despite the occurrence of Transport in its name, HTTP acts as an API in RESTful approach and not simply as a transport protocol. 
+* **What is a Resource?** A resource in the RESTful sense is something that is accessible through HTTP because this thing has a name—URI (Uniform Resource Identifier). 
 * **What is a Representation?** Whatever document the server sends back through the URL request, we call that document a representation of the resource. A representation can be any machine-readable document containing any information about a resource.
 * **What is Addressability?** The principle of addressability just says that every resource should have its own URL. If something is important to your application, it should have a unique name, a URL, so that you and your users can refer to it unambiguously.
 * **What is Application State?** Using a browser when you visit a site's homepage, from there to "About Us" page and from there to "Contact Us" page, the state of the browser is changing. In REST terminology, this is called 'Application State' change.
@@ -34,7 +29,6 @@ This API style leverages commodity caching technologies designed specifically wi
 * **What is Hypermedia?** Hypermedia is the general term for things like HTML links and forms: the techniques a server uses to explain to a client what it can do next. Hypermedia is a way for the server to tell the client what HTTP requests the client might want to make in the future. It’s a menu, provided by the server, from which the client is free to choose.
 * **What is a hypermedia control?** HTML `<a>` tag, HTML `<form>`, HTML `<img>`, URI Template, etc.
 * **What is HATEOAS?** “Hypermedia as the engine of application state”. To say that hypermedia is the engine of application state is to say that we all navigate the Web by filling out forms and following links.
-* **What is REST?** Representational State Transfer. The server sends a representation via GET operations describing the state of a resource. The client sends a representation via POST/PUT describing the state it would like the resource to have. That’s representational state transfer.
 * **What is a safe method?** GET & HEAD are defined as safe HTTP methods. It’s just a request for information. Sending a GET request to the server should have the same effect on resource state as not sending a GET request—that is, no effect at all. Incidental side effects like logging and rate limiting are OK, but a client should never make a GET request hoping that it will change the resource state.
 * **What is Idempotence?** Sending a request twice has the same effect on resource state as sending it once. GET, DELETE and PUT are idempotent. This notion comes from math. Multiplying a number by zero or one is an idempotent operation. Once you multiply a number by zero, you can keep multiplying it by zero indefinitely and get the same result: zero. 
 
@@ -162,7 +156,7 @@ public String getCustomer(@PathParam("id") int id) {
 }
 ```
 
-### Matrix Parameters
+## Matrix Parameters
 
 E.g., `http://example.cars.com/mercedes/e55;color=black/2006`
 
@@ -482,16 +476,91 @@ public class EntityNotFoundMapper implements ExceptionMapper<EntityNotFoundExcep
 
 [HTTP Conneg Basics](/technology/webconcepts.html#http-content-negotiation-conneg)
 
-## Scalability
+# Pagination
 
-### Caching
+* While designing a REST API capable of returning vast datasets, it is important to limit the amount of data returned for bandwidth and performance reasons. 
+* The bandwidth concerns become more important in the case of mobile clients consuming the API. 
+* Limiting the data can vastly improve the server’s ability to retrieve data faster from a datastore and the client’s ability to process the data and render the UI. By splitting the data into discrete pages or paging data, REST services allow clients to scroll through and access the entire dataset in manageable chunks.
+
+There are 4 different pagination styles.
+
+## 1. Page Number Pagination
+
+* The clients specify a page number containing the data they need. For example, a client wanting all the blog posts in page 3 of a blog service, can use the following `GET` method: `http://blog.example.com/posts?page=3`
+* The REST service in this scenario would respond with a set of posts. The number of posts returned depends on the default page size set in the service. 
+* It is possible for the client to override the default page size by passing in a page-size parameter: `http://blog.example.com/posts?page=3&size=20`
+* GitHub’s REST services use this pagination style. By default, the page size is set to 30 but can be overridden using the per page parameter: https://api.github.com/user/repos?page=2&per_page=100
+
+## 2. Limit Offset Pagination
+
+* The clients uses two parameters to retrieve the data that they need. 
+  * a **limit** - indicates the maximum number of elements to return
+  * an **offset** indicates the starting point for the return data. 
+( For example, to retrieve 10 blog posts starting from the item number 31, a client can use the following request: `http://blog.example.com/posts?limit=10&offset=30`
+
+## 3. Cursor-based Pagination
+
+* The clients make use of a pointer or a cursor to navigate through the data set.
+* A cursor is a service-generated random character string that acts as a marker for an item in the data set.
+* Consider a client making the following request to get blog posts: `http://blog.example.com/posts`. On receiving the request, the service would send data similar to this:
+
+```json
+{
+  "data" : [
+  ... Blog data
+  ],
+  "cursors" : {
+    "prev" : null,
+    "next" : "123asdf456iamcur"
+  }
+}
+```
+
+* This response contains a set of blogs representing a subset of the total dataset. 
+* The cursors that are part of the response contains a `prev` & `next` fields to get the previous and next subset of the data. E.g., `http://api.example.com/posts?cursor=123asdf456iamcur`
+* This pagination style is used by applications such as Twitter and Facebook that deal with real-time datasets (tweets and posts) where data changes frequently. 
+* The generated cursors typically don’t live forever and should be used for short-term pagination purposes only.
+
+## 4. Time-base Pagination
+
+* The client specifies a timeframe to retrieve the data in which they are interested.
+* Facebook supports this pagination style and requires time specified as a Unix timestamp. These are two Facebook example requests:
+  * `https://graph.facebook.com/me/feed?limit=25&until=1364587774` - specifies the end of the time range
+  * `https://graph.facebook.com/me/feed?limit=25&since=1364849754` - specifies the beginning of the time range
+
+## Pagination Data
+
+* All the above pagination styles return only a subset of the data. So, in addition to supplying the requested data, it is also important for the service to communicate pagination-specific information such as total number of records or total number of pages or current page number and page size. 
+* The following example shows a response body with pagination information:
+
+```json
+{
+  "data": [
+    ... Blog Data
+  ],
+  "totalPages": 9,
+  "currentPageNumber": 2,
+  "pageSize": 10,
+  "totalRecords": 90
+}
+```
+
+* Clients can use the pagination information to assess the current state as well as construct URLs to obtain the next or previous datasets. 
+* The other technique services employ is to include the pagination information
+in a special `Link` header. The Link header is defined as part of [RFC 5988](http://tools.ietf.org/html/rfc5988). It typically contains a set of ready-made links to scroll forward and backward.  GitHub uses this approach; here is an example of a Link header value:
+
+`Link: <https://api.github.com/user/repos?page=3&per_page=100>; rel="next", <https://api.github.com/user/repos?page=50&per_page=100>; rel="last"`
+
+# Scalability
+
+## Caching
 
 * **Browser Cache** is one of the more important features of the Web. When you visit a website for the first time, your browser stores images and static text in memory and on disk. If you revisit the site within minutes, hours, days, or even months, your browser doesn’t have to reload the data over the network and can instead pick it up locally. This greatly speeds up the rendering of revisited web pages and makes the browsing experience much more fluid. Browser caching not only helps page viewing, it also cuts down on server load and reduced network traffic.
 * **Proxy caches** are pseudo–web servers that work as middlemen between browsers and websites. Their sole purpose is to ease the load on master servers by caching static content and serving it to clients directly, bypassing the main servers. Content delivery networks (CDNs) like Akamai have made multimillion-dollar businesses out of this concept. These CDNs provide you with a worldwide network of proxy caches that you can use to publish your website and scale to hundreds of thousand of users.
 
 * REST services can leverage the browser & proxy cache, if the HTTP constrained interface is followed religiously. Because any service URI that can be reached with an HTTP GET is a candidate for caching, as they are read-only and idempotent. 
 
-### HTTP Caching
+## HTTP Caching
 
 HTTP protocol gives fine-grained control over the caching behavior of both browser and proxy caches.
 
@@ -605,7 +674,7 @@ GET /customers/123 HTTP/1.1
 If-None-Match: "3141271342554322343200"
 ```
 
-### Reverse proxy
+## Reverse proxy
 
 * One of the best way to cache your API is to put a gateway cache (or reverse proxy) in front of it. Some frameworks provide their own reverse proxies, but a very powerful, open-source one is [Varnish](https://www.varnish-cache.org/).
 * When a safe method is used on a resource URL, the reverse proxy should cache the response from the API. It will then use this cached response to answer all subsequent requests for the same resource before they hit the API. When an unsafe method is used on a resource URL, the cache ignores it and passes it to the API. The API is responsible for making sure that the cached resource is invalidated.
@@ -635,11 +704,11 @@ GET /article/1234 HTTP/1.1
 ```
 
 
-## Security
+# Security
 
 [Basics of Security](/technology/security.html)
 
-### Authentication
+## Authentication
 
 * To enable authentication, modify the */WEB-INF/web.xml* file in the war file deployed.
 * Value of `<auth-method>` could be `BASIC`, 'DIGEST' or `CLIENT_CERT`
@@ -683,7 +752,7 @@ GET /article/1234 HTTP/1.1
 </security-constraint>
 ```
 
-### Authorization
+## Authorization
 
 * The server and application know the permissions for each user and do not need to share this information over a communication protocol. This is why authorization is the domain of the server and application
 * JAX-RS relies on the servlet and Java EE specifications to define how authorization works. Authorization is performed in Java EE by associating one or more roles with a given user and then assigning permissions based on that role.
@@ -729,23 +798,77 @@ public class CustomerResource {
 
 # Versioning
 
+
 [Excellent article - Nobody Understands REST or HTTP](http://blog.steveklabnik.com/posts/2011-07-03-nobody-understands-rest-or-http)
 
 * There is no established industry standard for expressing versioning information for REST service contracts. We need to select a convention that works best for our IT enterprise.
-* 3 places where versioning can be applied in a REST API
-  * Base URI
-    * This is a clean sweep approach where a new version is introduced in the base URI for any major changes. 
-    * Many major API companies use this approach. E.g.? `http://company.com/api/v3.0/customers/1234`
-  * Resource URI
-    * e.g., `http://company.com/api/customers/v3.0/1234`
-    * Permalinks?
-  * Header (Accepts)
-  * Resource/Hypermedia way
+
+4 popular approaches to versioning a REST API. 
+
+## URI versioning
+
+* In this approach, version information becomes part of the **Base URI**. For example, http://api.example.org/v1/users and http://api.example.org/v2/users represent two different versions of an application API.
+* It is used by major public APIs such as Twitter, LinkedIn, Yahoo, etc. 
+  * LinkedIn: https://api.linkedin.com/v1/people/~
+  * Yahoo: https://social.yahooapis.com/v1/user/12345/profile
+  * Twitter: https://api.twitter.com/1.1/statuses/user_timeline.json
+  * SalesForce: http://na1.salesforce.com/services/data/v26.0
+  * Twilio: https://api.twilio.com/2010-04-01/Accounts/{AccountSid}/Calls
+* Version Type
+  * Twitter and LinkedIn used `v` notation. 
+  * Salesforce uses major + minor version
+  * Twilio uses datestamp to differentiate
+
+* Pros
+  * Clean sweep approach. Replicate the entire code base and maintain parallel code paths for each version.
+  * Easy to implement
+* Cons
+  * If client stores the permalinks locally, then for every upgrade it needs to be updated
+
+## URI parameter versioning
+
+* Similar to the URI versioning except that the version information is specified as a URI request parameter. E.g., http://api.example.org/users?v=2 
+* The version parameter is typically optional and a default version of the API will continue working for requests without version parameter. Most often, the default version is the latest version of the API. 
+* Although as not popular as other versioning strategies, a few major public APIs such as Netf lix have used this strategy. 
+
+* Cons
+  * The URI parameter versioning shares the same disadvantages of URI versioning. 
+  * Some proxies don’t cache resources with a URI parameter, resulting in additional network traffic. 
+
+## Accept header versioning
+
+* This approach uses the *Accept* header to communicate version information. Because the header contains version information, there will be only one URI for multiple versions of API.
+* To pass additional version information, we need a custom media type. The following convention is popular when creating a custom media type: `vnd.product_name.version+suffix`
+  * The **vnd** is the starting point of the custom media type and indicates vendor. 
+  * The **product** or producer name is the name of the product and distinguishes this media type from other custom product media types.
+  * The **version** part is represented using strings such as v1 or v2 or v3. 
+  * Finally, the **suffix** is used to specify the structure of the media type. For example, the `+json` suffix indicates media type `application/json`. [RFC 6389](https://tools.ietf.org/html/rfc6839) gives a full list of standardized prefixes such as `+xml`, `+json`, and `+zip`. 
+* Using this approach, a client, for example, can send an `application/vnd.quickpoll.v2+json` accept header to request the second version of the API.
+* GitHub is a popular public API that uses this *Accept* header strategy. For requests that don’t contain any Accept header, GitHub uses the latest version of the API to fulfill the request.
 
 ```http
 Accept: application/vnd.company.myapp-v3.0+json
 Content-Type: application/vnd.company.myapp-v3.0+json 
 ```
+
+* Pros
+  * Only one URI for multiple versions of API
+  * The Accept header versioning approach is becoming more and more popular as it allows fine-grained versioning of individual resources without impacting the entire API. 
+* Cons
+  * This approach can make browser testing harder as we have to carefully craft the Accept header.
+
+## Custom header versioning
+
+* The custom header versioning approach is similar to the Accept header versioning approach except that, instead of the Accept header, a custom header is used. 
+* Microsoft Azure takes this approach and uses the custom header `x-ms-version`. For example, to get the latest version of Azure (at the time of writing this),  your request needs to include a custom header:
+
+```http
+x-ms-version: 2014-02-14
+```
+
+This approach shares the same pros and cons as that of the Accept header approach. Because the HTTP specification provides a standard way of accomplishing this via the Accept header, the custom header
+approach hasn’t been widely adopted.
+
 
 # Transactions
 
@@ -837,4 +960,5 @@ Following are the JAX-WS Implementations
   * RESTful Java with JAX-RS -2010
   * RESTful Java with JAX-RS 2.0 -2013
   * RESTful Web APIs - O'Reilly 2013
+  * Spring REST
   * Web Services Testing with soapUI (2012)

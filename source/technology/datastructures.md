@@ -9,6 +9,8 @@ footer: true
 * list element with functor item
 {:toc}
 
+{% img /technology/datastructure-efficiencies.png %}
+
 # Lists
 
 * Array

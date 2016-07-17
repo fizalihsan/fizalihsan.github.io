@@ -287,13 +287,13 @@ System.out.println("time " + (stop - start)/1000);
 
 ## HPROF
 
-Command-line tool for heap and CPU profiling
-Not the most convenient or usable tool
-Process to be profiled must be started with flags
-Interface is purely text-based
-A reasonable instructional tool
-Heap and CPU profiling
-Sample- and instrumentation-based approaches
+* Command-line tool for heap and CPU profiling
+* Not the most convenient or usable tool
+* Process to be profiled must be started with flags
+* Interface is purely text-based
+* A reasonable instructional tool
+* Heap and CPU profiling
+* Sample- and instrumentation-based approaches
 
 ```java HPROF (heap=sites)
 javac -J-agentlib:hprof=heap=sites Hello.java

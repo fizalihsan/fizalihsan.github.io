@@ -24,7 +24,16 @@ footer: true
 * `float pi=3.14f;` <-- suffix 'f' is required, since in Java real constants are by default double.
 
 * When to use and not use BigDecimal? <span style="color:red">TODO</span>
-
+* Default Values
+  * **Instance Variables**
+    * Objects = null
+    * numbers = 0
+    * char = ''
+    * boolean = false
+    * Arrays = null
+  * **Local Variables**
+    * Local variables are not initialized with any value; not even null. Uninitialized usage throws compilation error
+    * Arrays = null
 * Where primitives are stored?
   * Local variables -> stack. 
   * Instance and static variables -> heap. 
@@ -37,8 +46,8 @@ footer: true
 * Cloneable interface
 * Pitfalls of Cloning
   * Implementation can get really complex, but still leading to unsuccessful copying
-  * Cloning does not call constructor to make a copy. As a result, it is your responsibility, as a writer of the clone method, to make sure all the members have been properly set. Here is an example of where things could go wrong. Consider a class keeping track of the total number of objects of that type, using a static int member. In the constructors you would increase the count. However, if you clone the object, since no constructor is called, the count will not truly reflect the number of objects!
-  * Problem involving 'final' objects. In the below example, both the copies of 'Dog' will have all the 3 names, though it is not intended. The problem here is that, clone() is shallow copy, and the same List<String> is used for both objects
+  * **Cloning does not call constructor to make a copy**: As a result, it is your responsibility, as a writer of the clone method, to make sure all the members have been properly set. Here is an example of where things could go wrong. Consider a class keeping track of the total number of objects of that type, using a static int member. In the constructors you would increase the count. However, if you clone the object, since no constructor is called, the count will not truly reflect the number of objects!
+  * **Problem involving `final` objects**: In the below example, both the copies of 'Dog' will have all the 3 names, though it is not intended. The problem here is that, clone() is shallow copy, and the same List<String> is used for both objects
 
 ```java
 public class Dog implements Cloneable {
@@ -78,6 +87,8 @@ public class Dog implements Cloneable {
 
 ## Mutability
 An immutable object is one whose externally visible state cannot change after it is instantiated.eg., String, Integer, BigDecimal, etc. For all immutable objects, it’s better to hide constructors and use factories.
+
+* Things to do to make a class immutable. - <span style="color:red">TODO</span>
 
 * Why Hashtable keys needs to be immutable objects?
   * If you use mutable object as Hashtable key and if the object's state changes, then the Hashtable implementation would get confused since the hashcode would have changed.

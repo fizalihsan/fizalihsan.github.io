@@ -12,6 +12,7 @@ footer: true
     * [Cloud Computing]({{ root_url }}/technology/cloud-computing.html)
     * [Coding Principles]({{ root_url }}/technology/coding-principles.html)
     * [Design Principles]({{ root_url }}/technology/design-principles.html)
+    * [Lambda Architecture]({{ root_url }}/technology/lambda-architecture.html)
     * [Logging & Monitoring]({{ root_url }}/technology/logging-and-monitoring.html)
     * [Patterns]({{ root_url }}/technology/patterns.html)
     * [SDLC]({{ root_url }}/technology/sdlc.html)

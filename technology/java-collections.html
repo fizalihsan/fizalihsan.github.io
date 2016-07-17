@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Java Collections Generics Types Subtyping Principle Wildcard parameters Variance Type Erasure Collections Framework Concurrent Collections Iterators &hellip;">
+<meta name="description" content="Java Collections Generics Types The Get and Put Principle Subtyping Principle Variance Type Erasure Collections Framework Concurrent Collections &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -110,8 +110,8 @@ messageStyle: "none",
   <ul id="markdown-toc">
   <li><a href="#generics">Generics</a>    <ul>
       <li><a href="#types">Types</a></li>
+      <li><a href="#the-get-and-put-principle">The Get and Put Principle</a></li>
       <li><a href="#subtyping-principle">Subtyping Principle</a></li>
-      <li><a href="#wildcard-parameters">Wildcard parameters</a></li>
       <li><a href="#variance">Variance</a></li>
       <li><a href="#type-erasure">Type Erasure</a></li>
     </ul>
@@ -180,17 +180,89 @@ messageStyle: "none",
 <h1 id="generics">Generics</h1>
 
 <h2 id="types">Types</h2>
+
+<table>
+  <tbody>
+    <tr>
+      <td>Type Parameters</td>
+      <td>Description</td>
+    </tr>
+    <tr>
+      <td><t></t></td>
+      <td>Unbounded type; same as <t extends="" object=""></t></td>
+    </tr>
+    <tr>
+      <td>&lt;T,P&gt;</td>
+      <td>Unbounded types; <t extends="" object=""> and &lt;P extends Object&gt;</t></td>
+    </tr>
+    <tr>
+      <td><t extends="" p=""></t></td>
+      <td>Upper bounded type; a specific type T that is a subtype of type P</td>
+    </tr>
+    <tr>
+      <td>&lt;T extends P &amp; S&gt;</td>
+      <td>Upper bounded type; a specific type T that is a subtype of type P and that implements type S</td>
+    </tr>
+    <tr>
+      <td><t super="" p=""></t></td>
+      <td>Lower bounded type; a specific type T that is a supertype of type P</td>
+    </tr>
+    <tr>
+      <td>&lt;?&gt;</td>
+      <td>Unbounded wildcard; any object type, same as &lt;? extends Object&gt;</td>
+    </tr>
+    <tr>
+      <td>&lt;? extends P&gt;</td>
+      <td>Bounded wildcard; some unknown type that is a subtype of type P</td>
+    </tr>
+    <tr>
+      <td>&lt;? extends P &amp; S&gt;</td>
+      <td>Bounded wildcard; some unknown type that is a subtype of type P and that implements type S</td>
+    </tr>
+    <tr>
+      <td>&lt;? super P&gt;</td>
+      <td>Lower bounded wildcard; some unknown type that is a supertype of type P</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="the-get-and-put-principle">The Get and Put Principle</h2>
+
+<p>The <em>Get and Put Principle</em> details the best usage of <code>extends</code> and <code>super</code> wildcards.</p>
+
 <ul>
-  <li>Generic type - e.g., <code>List&lt;T&gt;</code>.</li>
-  <li>Specific type - <code>List&lt;String&gt;</code>.</li>
-  <li>Raw type - <code>List&lt;T&gt;</code> should be used along with an associated type like <code>List&lt;String&gt;</code>. If the associated type is not specified, then it is called raw type. e.g., <code>List list = new ArrayList();</code></li>
-  <li>Type parameter - In <code>List&lt;T&gt;</code>, T is the type parameter</li>
-  <li>Wildcard parameters - <code>List&lt;?&gt;</code>. Here &lt;?&gt; stands for unknown type.</li>
-  <li>
-    <p>Bounded Wildcard parameters - <code>List&lt;? extends X&gt;</code> and <code>List&lt;? super X&gt;</code></p>
-  </li>
-  <li>Reification</li>
+  <li>Use an <code>extends</code> wildcard when you <strong>get</strong> only values out of a structure.</li>
+  <li>Use a <code>super</code> wildcard when you <strong>put</strong> only values into a structure.</li>
+  <li>Do not use a wildcard when you place both <strong>get</strong> and <strong>put</strong> values into a structure.</li>
 </ul>
+
+<blockquote>
+  <p>Note: When wildcard is used, only get operation is allowed - no mutable operations like add/put.</p>
+</blockquote>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>#1 - Only get is allowed. </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">List</span><span class="o">&lt;?&gt;</span> <span class="n">nums</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;();</span>
+</span><span class="line"><span class="n">nums</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span> <span class="c1">//not allowed </span>
+</span><span class="line"><span class="n">nums</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span> <span class="c1">//allowed. This is an exceptional case</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>#2 - Only get of any subtype of T is allowed </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">List</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">Number</span><span class="o">&gt;</span> <span class="n">nums</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;();</span>
+</span><span class="line"><span class="n">nums</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span> <span class="c1">//not allowed</span>
+</span><span class="line"><span class="n">nums</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span> <span class="c1">//allowed. This is an exceptional case</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>#3 - </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">List</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">Integer</span><span class="o">&gt;</span> <span class="n">ints</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">,</span><span class="mi">4</span><span class="o">);</span>
+</span><span class="line"><span class="n">Integer</span> <span class="n">i</span> <span class="o">=</span> <span class="n">ints</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span> <span class="c1">//not allowed </span>
+</span><span class="line"><span class="n">Object</span> <span class="n">o</span> <span class="o">=</span> <span class="n">ints</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span> <span class="c1">//allowed</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h2 id="subtyping-principle">Subtyping Principle</h2>
 
@@ -200,61 +272,6 @@ messageStyle: "none",
   <li>List<e> is a subtype of Collection<e></e></e></li>
   <li>List<integer> is NOT a subtype of List<number></number></integer></li>
 </ul>
-
-<h2 id="wildcard-parameters">Wildcard parameters</h2>
-
-<blockquote>
-  <p>Note: When wildcard is used, only get operation is allowed - no mutable operations like add/put.</p>
-</blockquote>
-
-<table>
-  <thead>
-    <tr>
-      <th>#</th>
-      <th>Type</th>
-      <th>Sample</th>
-      <th>Description</th>
-      <th>Get &amp; Put principle</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>1</td>
-      <td>Generic Type</td>
-      <td><code>List&lt;T&gt;</code></td>
-      <td>Only type T is allowed</td>
-      <td>Both get and put of type T allowed on this collection.</td>
-    </tr>
-    <tr>
-      <td>2</td>
-      <td>Unbounded wildcard</td>
-      <td><code>List&lt;?&gt;</code></td>
-      <td>Any type</td>
-      <td>Only get is allowed. <br />&lt;p&gt;<code>List&lt;?&gt; nums = new ArrayList&lt;Integer&gt;(); nums.add(1); //not allowed nums.add(null); //exception: allowed </code>&lt;/p&gt;</td>
-    </tr>
-    <tr>
-      <td>3</td>
-      <td>Wildcard with lower bound</td>
-      <td><code>List&lt;? extends T&gt;</code></td>
-      <td>Any subtype of T</td>
-      <td>Only get of any subtype of T is allowed <br />&lt;p&gt;<code>List&lt;? extends Number&gt; nums = new ArrayList<integer>(); <br />nums.add(1); //not allowed <br />nums.add(null); //exception: allowed &lt;/code&gt;&lt;/p&gt;</integer></code></td>
-    </tr>
-    <tr>
-      <td>4</td>
-      <td>Wildcard with lower bound</td>
-      <td><code>List&lt;? super T&gt;</code></td>
-      <td>Any supertype of T</td>
-      <td><br />&lt;p&gt;<code>List&lt;? super Integer&gt; ints = Arrays.asList(1,2,3,4); <br />Integer i = ints.get(1); //not allowed <br />Object o = ints.get(1); //allowed </code>&lt;/p&gt;</td>
-    </tr>
-    <tr>
-      <td>5</td>
-      <td>Multiple bounds</td>
-      <td><code>List&lt;? extends T &amp; Comparable&lt;T&gt;&gt;</code></td>
-      <td>Only types that subclass T and implement Comparable. <br />The first (leftmost) bound is a class or an interface; <br />all remaining bounds must be interfaces.</td>
-      <td>Only <em>get</em> of any subtype of T and comparable is allowed</td>
-    </tr>
-  </tbody>
-</table>
 
 <h2 id="variance">Variance</h2>
 
@@ -266,7 +283,7 @@ messageStyle: "none",
       <li><strong>Invariant</strong>: an <code>Animal[]</code> is not a <code>Cat[]</code> and a <code>Cat[]</code> is not an <code>Animal[]</code>?. Java generics are invariant.</li>
     </ul>
   </li>
-  <li><strong>Covariant</strong> - Java arrays are covariant, meaning that type S[] is considered to be a subtype of T[] whenever S is a subtype of T. Due to this nature, the following code throws exception at runtime. When an array is allocated (as on the first line), it is tagged with its reified type (a run-time representation of its component type, in this case, Integer), and every time an array is assigned into (as on the third line), an array store exception is raised if the reified type is not compatible with the assigned value (in this case, a double cannot be stored into an array of Integer).</li>
+  <li><strong>Covariant</strong> - Java arrays are covariant, meaning that type <code>S[]</code> is considered to be a subtype of <code>T[]</code> whenever <code>S</code> is a subtype of <code>T</code>. Due to this nature, the following code throws exception at runtime. When an array is allocated (as on the first line), it is tagged with its reified type (a run-time representation of its component type, in this case, Integer), and every time an array is assigned into (as on the third line), an <code>ArrayStoreException</code> is raised if the reified type is not compatible with the assigned value (in this case, a double cannot be stored into an array of Integer).</li>
 </ul>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
@@ -274,11 +291,11 @@ messageStyle: "none",
 <span class="line-number">3</span>
 </pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">Integer</span><span class="o">[]</span> <span class="n">ints</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Integer</span><span class="o">[]</span> <span class="o">{</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">};</span>
 </span><span class="line"><span class="n">Number</span><span class="o">[]</span> <span class="n">nums</span> <span class="o">=</span> <span class="n">ints</span><span class="o">;</span>
-</span><span class="line"><span class="n">nums</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="o">=</span> <span class="mf">3.14</span><span class="o">;</span> <span class="c1">//array store exception at runtime</span>
+</span><span class="line"><span class="n">nums</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="o">=</span> <span class="mf">3.14</span><span class="o">;</span> <span class="c1">//ArrayStoreException at runtime since double is being assigned to an int</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <ul>
-  <li><strong>Invariant</strong> - Java Generics are invariant, meaning that type <code>List&lt;S&gt;</code> is not considered to be a subtype of <code>List&lt;T&gt;</code>, except in the trivial case where S and T are identical.</li>
+  <li><strong>Invariant</strong> - Java Generics are invariant, meaning that type <code>List&lt;S&gt;</code> is not considered to be a subtype of <code>List&lt;T&gt;</code>, except in the trivial case where <code>S</code> and <code>T</code> are identical.</li>
 </ul>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
@@ -290,7 +307,7 @@ messageStyle: "none",
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <ul>
-  <li><strong>Contravariant</strong> - Wildcards also introduce contravariant subtyping for generics, in that type <code>List&lt;S&gt;</code> is considered to be a subtype of <code>List&lt;? super T&gt;</code> when S is a supertype of T (as opposed to a subtype). Arrays do not support contravariant subtyping.</li>
+  <li><strong>Contravariant</strong> - Wildcards also introduce contravariant subtyping for generics, in that type <code>List&lt;S&gt;</code> is considered to be a subtype of <code>List&lt;? super T&gt;</code> when <code>S</code> is a supertype of <code>T</code> (as opposed to a subtype). Arrays do not support contravariant subtyping.</li>
 </ul>
 
 <p><strong>Points to remember</strong></p>
@@ -304,8 +321,10 @@ messageStyle: "none",
 <h2 id="type-erasure">Type Erasure</h2>
 
 <ul>
-  <li>Example 1 is implemented using generics and #2 is not. However, the bytecode for both the programs are exactly the same. Java internally converts the generic representation into #2 model, by erasing the type details and adding casts. This is called ‘type erasure’.</li>
+  <li>Example 1 is implemented using generics and #2 is not. However, the bytecode for both the programs are exactly the same. Java internally converts the generic representation into a code that looks like Example #2, by erasing the type details and adding casts. This is called <strong><em>type erasure</em></strong>.</li>
   <li>The reason behind such implementation is for backward compatibilty.</li>
+  <li>Java has <em>typed erased generics</em> which loses type information at runtime. JetBrains’ Kotlin language has <em>reified generics</em> which retains the type information at runtime.</li>
+  <li><strong>Reification</strong> means <em>preserving type information at runtime</em>. Java Generics are <strong>non-reifed.</strong></li>
 </ul>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Example 1</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
@@ -332,10 +351,6 @@ messageStyle: "none",
 </span><span class="line"><span class="k">assert</span> <span class="n">s</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="s">&quot;Hello world!&quot;</span><span class="o">);</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<ul>
-  <li>Java has <em>typed erased generics</em> which loses type information at runtime. JetBrains’’ Kotlin language has <em>reified generics</em> which retains the type information at runtime.</li>
-</ul>
-
 <h1 id="collections-framework">Collections Framework</h1>
 
 <h2 id="concurrent-collections">Concurrent Collections</h2>
@@ -347,7 +362,7 @@ messageStyle: "none",
     <ul>
       <li>Classes that use copy-on-write store their values in an internal array, which is effectively immutable; any change to the value of the collection results in a new array being created to represent the new values.</li>
       <li>Synchronization is used by these classes, though only briefly, during the creation of a new array; because read operations do not need to be synchronized, copy-on-write collections perform well in the situations for which they are designed—those in which reads greatly predominate over writes.</li>
-      <li><em>Copy-on-write</em> is used by the collection classes <code>CopyOnWriteArrayList</code> and <code>CopyOnWriteArraySet</code>.</li>
+      <li>Used by : <code>CopyOnWriteArrayList</code>, <code>CopyOnWriteArraySet</code>.</li>
     </ul>
   </li>
   <li><strong>2. Compare-and-Swap (CAS)</strong>
@@ -355,7 +370,7 @@ messageStyle: "none",
       <li>A 2nd group of thread-safe collections relies on compare-and-swap (CAS), a fundamental improvement on traditional synchronization. To see how it works, consider a computation in which the value of a single variable is used as input to a long-running calculation whose eventual result is used to update the variable. Traditional synchronization makes the whole computation atomic, excluding any other thread from concurrently accessing the variable. This reduces opportunities for parallel execution and hurts throughput. </li>
       <li>An algorithm based on CAS behaves differently: it makes a local copy of the variable and performs the calculation without getting exclusive access. Only when it is ready to update the variable does it call CAS, which in one atomic operation compares the variable’s value with its value at the start and, if they are the same, updates it with the new value. If they are not the same, the variable must have been modified by another thread; in this situation, the CAS thread can try the whole computation again using the new value, or give up, or—in some algorithms— continue, because the interference will have actually done its work for it! </li>
       <li>This technique is caled <a href="/technology/transaction.html#optimistic"><em>Optimistic Concurrency Control</em></a> and is widely used in databases and HTTP protocol.</li>
-      <li>Collections using CAS include <code>ConcurrentLinkedQueue</code> and <code>ConcurrentSkipListMap</code>.</li>
+      <li>Used by: <code>ConcurrentLinkedQueue</code>, <code>ConcurrentSkipListMap</code>.</li>
     </ul>
   </li>
   <li><strong>3. Lock interface</strong>: 
@@ -394,7 +409,7 @@ messageStyle: "none",
     <ul>
       <li>Collections which rely on CAS have weakly consistent iterators, which reflect some but not necessarily all of the changes that have been made to their backing collection since they were created. For example, if elements in the collection have been modified or removed before the iterator reaches them, it definitely will reflect these changes, but no such guarantee is made for insertions. Weakly consistent iterators also do not throw <code>ConcurrentModificationException</code>. </li>
       <li>can tolerate concurrent modiﬁcation, traverses elements as they existed when the iterator was constructed, and may (but is not guaranteed to) reﬂect modiﬁcations to the collection after the construction of the iterator. <code>ConcurrentHashMap</code> and other concurrent collections create such iterators. </li>
-      <li>Collections implemented using <code>Lock</code> interface also have weakly consistent iterators. In Java 6 this includes <code>DelayQueue</code> and <code>PriorityBlockingQueue</code>, which in Java 5 had fail-fast iterators. This means that you cannot iterate over the Java 5 version of these queues unless they are quiescent, at a time when no elements are being added or inserted; at other times you have to copy their elements into an array using toArray and iterate over that instead.</li>
+      <li>Collections implemented using <code>Lock</code> interface also have weakly consistent iterators. In Java 6 this includes <code>DelayQueue</code> and <code>PriorityBlockingQueue</code>, which in Java 5 had fail-fast iterators. This means that you cannot iterate over the Java 5 version of these queues unless they are quiescent, at a time when no elements are being added or inserted; at other times you have to copy their elements into an array using <code>toArray()</code> and iterate over that instead.</li>
     </ul>
   </li>
 </ul>
@@ -420,7 +435,7 @@ messageStyle: "none",
 
 <ul>
   <li>Backed up array and an integer pointing to the next empty slot</li>
-  <li>By default, an arraylist is created with initial capacity as 10. The capacity grows as and when needed (as per Sun’s implementation it grows by the order of <code>int newCapacity = (oldCapacity * 3)/2 + 1;</code> . </li>
+  <li>By default, an arraylist is created with initial capacity as 10. The capacity grows as and when needed (as per Sun’s implementation it grows by the order of <code>int newCapacity = (oldCapacity * 3)/2 + 1;</code> ). </li>
   <li>An application can call <code>ArrayList.trimToSize()</code> method to trim the capacity of the ArrayList instance to be the list’s current size to minimize the storage of an ArrayList instance.</li>
   <li>BigO cost
     <ul>
@@ -448,9 +463,9 @@ messageStyle: "none",
 <h3 id="copyonwritearraylist">CopyOnWriteArrayList</h3>
 
 <ul>
-  <li>List implementation -  A thread-safe variant of ArrayList in which all mutative operations (add, set, and so on) are implemented by making a fresh copy of the underlying array. </li>
+  <li>A thread-safe variant of <code>ArrayList</code> in which all mutative operations (<code>add</code>, <code>set</code>, and so on) are implemented by making a fresh copy of the underlying array. </li>
   <li>Copying is an expensive operation, so this class should be used only when traversals seriously outnumber updates. The usual use case for this collection is listeners/observers collection.</li>
-  <li>Element-changing operations on iterators themselves (remove, set, and add) are not supported. These methods throw UnsupportedOperationException.</li>
+  <li>Element-changing operations on iterators themselves (<code>remove</code>, <code>set</code>, and <code>add</code>) are not supported. These methods throw <code>UnsupportedOperationException</code>.</li>
   <li>Returns snapshot-style fail-safe iterator</li>
 </ul>
 
@@ -817,6 +832,8 @@ messageStyle: "none",
 
 <h3 id="concurrentskiplistmap">ConcurrentSkipListMap</h3>
 
+<p><img class="right" src="/technology/lock-contention.png" width="300" height="300" /></p>
+
 <ul>
   <li>based on skip lists; this could serve as a thread-safe replacement for TreeMap.</li>
   <li>Only thread-safe sorted Map using their natural ordering or by a Comparator provided</li>
@@ -831,8 +848,6 @@ messageStyle: "none",
     </ul>
   </li>
 </ul>
-
-<p><img src="/technology/lock-contention.png" /></p>
 
 <h3 id="maps-summary">Maps Summary</h3>
 

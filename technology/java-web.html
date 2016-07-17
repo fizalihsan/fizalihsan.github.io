@@ -416,11 +416,17 @@ messageStyle: "none",
 <h3 id="include-action">Include Action</h3>
 
 <ul>
-  <li>The jsp:include action element is like a function call. At runtime, the included file will be ‘executed’ and the result content will be included with the soure JSP page. When the included JSP page is called, both the request and response objects are passed as parameters. If there is a need to pass additional parameters, then jsp:param element can be used. If the resource is static, its content is inserted into the calling JSP file, since there is no processing needed.</li>
+  <li>The <code>jsp:include</code> action element is like a function call. At runtime, the included file will be ‘executed’ and the result content will be included with the soure JSP page. When the included JSP page is called, both the request and response objects are passed as parameters. If there is a need to pass additional parameters, then jsp:param element can be used. If the resource is static, its content is inserted into the calling JSP file, since there is no processing needed.</li>
   <li>Each included page is executed as a separate servlet at run time. </li>
   <li>Pages can conditionally be included at run time. This is often useful for templating frameworks that build pages out of includes. The parent page can determine which page, if any, to include according to some run-time condition. </li>
   <li>The values of scriptlet variables need to be explicitly passed to the include page.</li>
-  <li>The included page must be able to be run on its own. Request.getSession() request.getSession(true) only creates a session if one does not exist. request.getSession(false) retrieves a session only if it already exists. </li>
+  <li>The included page must be able to be run on its own. </li>
+  <li><code>Request.getSession()</code>
+    <ul>
+      <li><code>request.getSession(true)</code> - only creates a session if one does not exist. </li>
+      <li><code>request.getSession(false)</code> retrieves a session only if it already exists. </li>
+    </ul>
+  </li>
 </ul>
 
 <h2 id="custom-tag-libs">Custom tag libs</h2>

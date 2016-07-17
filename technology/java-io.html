@@ -128,7 +128,6 @@ messageStyle: "none",
       <li><a href="#customize-default-serialization-protocol">Customize default serialization protocol</a></li>
       <li><a href="#customize-your-own-protocol">Customize your own protocol</a></li>
       <li><a href="#caching-objects-in-the-stream">Caching objects in the stream</a></li>
-      <li><a href="#difference-bw-serialiazable-and-externalizable-interfaces">Difference b/w Serialiazable and Externalizable interfaces?</a></li>
     </ul>
   </li>
   <li><a href="#java-nio">Java NIO</a>    <ul>
@@ -152,9 +151,14 @@ messageStyle: "none",
 <h1 id="basics">Basics</h1>
 
 <ul>
-  <li>I/O in Java is divided into two types: byte- and number-oriented I/O, which is handled by input and output streams; and character and text I/O, which is handled by readers and writers.</li>
-  <li>Java Communications API (javax.comm),which provides the ability to do low-level I/O through a computer’s serial and parallel ports.</li>
-  <li>Streams classes read and write bytes. Reader classes read characters and writers write characters.</li>
+  <li>I/O in Java is divided into two types: 
+    <ul>
+      <li><strong>byte- and number-oriented I/O</strong>, which is handled by input and output streams; and </li>
+      <li><strong>character and text I/O</strong>, which is handled by readers and writers.</li>
+    </ul>
+  </li>
+  <li>Java Communications API (<code>javax.comm</code>),which provides the ability to do low-level I/O through a computer’s serial and parallel ports.</li>
+  <li>Streams classes read and write bytes. <code>Reader</code> classes read characters and <code>Writer</code> classes write characters.</li>
   <li>Numeric data
     <ul>
       <li><code>int</code> - Fundamental integer data type in Java is ‘int’, a 4-byte, big endian, two’s complement integers</li>
@@ -181,19 +185,21 @@ messageStyle: "none",
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h1 id="stream-classes">Stream Classes</h1>
+
 <ul>
   <li>A stream is an ordered sequence of bytes of undetermined length.</li>
-  <li>The two main classes are java.io.InputStream and java.io.OutputStream . </li>
-  <li>The java.util.zip package contains four input stream classes that read data in a compressed format and return it in uncompressed format and four output stream classes that read data in uncompressed format and write in compressed format.</li>
-  <li>The java.util.jar package includes two stream classes for reading files from JAR archives.</li>
-  <li>The java.security package includes a couple of stream classes used for calculating message digests.</li>
+  <li>The two main classes are <code>java.io.InputStream</code> and <code>java.io.OutputStream</code>. </li>
+  <li>The <code>java.util.zip</code> package contains four input stream classes that read data in a compressed format and return it in uncompressed format and four output stream classes that read data in uncompressed format and write in compressed format.</li>
+  <li>The <code>java.util.jar</code> package includes two stream classes for reading files from JAR archives.</li>
+  <li>The <code>java.security</code> package includes a couple of stream classes used for calculating message digests.</li>
   <li>The Java Cryptography Extension (JCE) adds two classes for encryption and decryption.</li>
 </ul>
 
 <h2 id="input-stream">Input Stream</h2>
+
 <p><code>public abstract int read() throws IOException</code></p>
 
-<p>Though read() returns stream of bytes, it is declared as int. This int is not a Java byte with a value between -128 and 127 but a more general unsigned byte with a value between 0 and 255. Hence, -1 can easily be distinguished from valid data values read from the stream.</p>
+<p>Though <code>read()</code> returns stream of bytes, it is declared as <code>int</code>. This <code>int</code> is not a Java byte with a value between -128 and 127 but a more general unsigned byte with a value between 0 and 255. Hence, <code>-1</code> can easily be distinguished from valid data values read from the stream.</p>
 
 <h1 id="outputstream">OutputStream</h1>
 
@@ -204,8 +210,8 @@ messageStyle: "none",
 <h1 id="character-classes">Character classes</h1>
 
 <ul>
-  <li>Character Data type - In Java, a char is a two-byte, unsigned integer, the only unsigned type in Java. </li>
-  <li>The java.io.Reader and java.io.Writer classes are abstract superclasses for classes that read and write character-based data. The subclasses are notable for handling the conversion between different character sets.</li>
+  <li>Character Data type - In Java, a <code>char</code> is a two-byte, unsigned integer, the only unsigned type in Java. </li>
+  <li>The <code>java.io.Reader</code> and <code>java.io.Writer</code> classes are abstract superclasses for classes that read and write character-based data. The subclasses are notable for handling the conversion between different character sets.</li>
   <li>For the most part, these classes have methods that are extremely similar to the equivalent stream classes. Often the only difference is that a byte in the signature of a stream method is replaced by a char in the signature of the matching reader or writer method.</li>
 </ul>
 
@@ -213,7 +219,7 @@ messageStyle: "none",
 
 <h2 id="byte-streams">Byte Streams</h2>
 
-<p>Byte streams for reading and writing are called input streams and output streams, respectively (represented by the abstract classes InputStream and OutputStream). </p>
+<p>Byte streams for reading and writing are called input streams and output streams, respectively (represented by the abstract classes <code>InputStream</code> and <code>OutputStream</code>). </p>
 
 <p>Programs use byte streams to perform input and output of 8-bit bytes. It should only be used for the most primitive I/O.</p>
 
@@ -239,30 +245,26 @@ messageStyle: "none",
 <span class="line-number">20</span>
 <span class="line-number">21</span>
 <span class="line-number">22</span>
-<span class="line-number">23</span>
-<span class="line-number">24</span>
 </pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">private</span> <span class="kt">void</span> <span class="nf">byteStreams</span><span class="o">(){</span>
 </span><span class="line">   <span class="kt">byte</span><span class="o">[]</span> <span class="n">magicalJavaClassSignature</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">byte</span><span class="o">[]{(</span><span class="kt">byte</span><span class="o">)</span><span class="mh">0xCA</span><span class="o">,</span> <span class="o">(</span><span class="kt">byte</span><span class="o">)</span><span class="mh">0xFE</span><span class="o">,</span> <span class="o">(</span><span class="kt">byte</span><span class="o">)</span><span class="mh">0xBA</span><span class="o">,</span> <span class="o">(</span><span class="kt">byte</span><span class="o">)</span><span class="mh">0xBE</span><span class="o">,</span> <span class="o">};</span>
 </span><span class="line">   <span class="n">String</span> <span class="n">filename</span> <span class="o">=</span> <span class="s">&quot;C:/temp/bytestream.data&quot;</span><span class="o">;</span>
 </span><span class="line">
-</span><span class="line">
 </span><span class="line">   <span class="k">try</span><span class="o">(</span><span class="n">FileOutputStream</span> <span class="n">fos</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">FileOutputStream</span><span class="o">(</span><span class="n">filename</span><span class="o">)){</span>
-</span><span class="line">  <span class="n">fos</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">magicalJavaClassSignature</span><span class="o">);</span>
+</span><span class="line">      <span class="n">fos</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">magicalJavaClassSignature</span><span class="o">);</span>
 </span><span class="line">   <span class="o">}</span><span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">){</span>
-</span><span class="line">  <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+</span><span class="line">      <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
 </span><span class="line">   <span class="o">}</span>
 </span><span class="line">
-</span><span class="line">
 </span><span class="line">   <span class="k">try</span><span class="o">(</span><span class="n">FileInputStream</span> <span class="n">fis</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">FileInputStream</span><span class="o">(</span><span class="n">filename</span><span class="o">)){</span>
-</span><span class="line">  <span class="kt">byte</span><span class="o">[]</span> <span class="n">bytes</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">byte</span><span class="o">[</span><span class="mi">4</span><span class="o">];</span>
-</span><span class="line">  <span class="n">fis</span><span class="o">.</span><span class="na">read</span><span class="o">(</span><span class="n">bytes</span><span class="o">);</span>
-</span><span class="line">  <span class="k">if</span><span class="o">(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">magicalJavaClassSignature</span><span class="o">,</span> <span class="n">bytes</span><span class="o">)){</span>
-</span><span class="line">     <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Matching...&quot;</span><span class="o">);</span>
-</span><span class="line">  <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-</span><span class="line">     <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Not matching...&quot;</span><span class="o">);</span>
-</span><span class="line">  <span class="o">}</span>
+</span><span class="line">      <span class="kt">byte</span><span class="o">[]</span> <span class="n">bytes</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">byte</span><span class="o">[</span><span class="mi">4</span><span class="o">];</span>
+</span><span class="line">      <span class="n">fis</span><span class="o">.</span><span class="na">read</span><span class="o">(</span><span class="n">bytes</span><span class="o">);</span>
+</span><span class="line">      <span class="k">if</span><span class="o">(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">magicalJavaClassSignature</span><span class="o">,</span> <span class="n">bytes</span><span class="o">)){</span>
+</span><span class="line">         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Matching...&quot;</span><span class="o">);</span>
+</span><span class="line">      <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span><span class="line">         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Not matching...&quot;</span><span class="o">);</span>
+</span><span class="line">      <span class="o">}</span>
 </span><span class="line">   <span class="o">}</span><span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">){</span>
-</span><span class="line">  <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+</span><span class="line">      <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
 </span><span class="line">   <span class="o">}</span>
 </span><span class="line"><span class="o">}</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
@@ -270,7 +272,7 @@ messageStyle: "none",
 <h2 id="data-streams">Data Streams</h2>
 
 <ul>
-  <li>Data streams support binary I/O of primitive data type values (boolean, char, byte, short, int, long, float, and double) as well as String values. </li>
+  <li>Data streams support binary I/O of primitive data type values (`boolean, char, byte, short, int, long, float, and double) as well as String values. </li>
   <li>All data streams implement either the DataInput interface or the DataOutput interface. </li>
   <li>Also notice that each specialized write in DataStreams is exactly matched by the corresponding specialized read. It is up to the programmer to make sure that output types and input types are matched in this way: The input stream consists of simple binary data, with nothing to indicate the type of individual values, or where they begin in the stream.</li>
 </ul>
@@ -385,11 +387,11 @@ messageStyle: "none",
 
 <ul>
   <li>are often “wrappers” for byte streams. Byte stream is used to perform the physical I/O, while the character stream handles translation between characters and bytes.</li>
-  <li>represented by the abstract classes Reader and Writer</li>
+  <li>represented by the abstract classes <code>Reader</code> and <code>Writer</code></li>
   <li>The Java platform stores character values using Unicode conventions. Character stream I/O automatically translates this internal format to and from the local character set. In Western locales, the local character set is usually an 8-bit superset of ASCII.</li>
   <li>For most applications, I/O with character streams is no more complicated than I/O with byte streams. Input and output done with stream classes automatically translates to and from the local character set. A program that uses character streams in place of byte streams automatically adapts to the local character set and is ready for internationalization — all without extra effort by the programmer.</li>
   <li>If internationalization isn’t a priority, you can simply use the character stream classes without paying much attention to character set issues. Later, if internationalization becomes a priority, your program can be adapted without extensive recoding.</li>
-  <li>There are two general-purpose byte-to-character “bridge” streams: InputStreamReader and OutputStreamWriter. Use them to create character streams when there are no prepackaged character stream classes that meet your needs.</li>
+  <li>There are two general-purpose byte-to-character “bridge” streams: <code>InputStreamReader</code> and <code>OutputStreamWriter</code>. Use them to create character streams when there are no prepackaged character stream classes that meet your needs.</li>
 </ul>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
@@ -438,7 +440,7 @@ messageStyle: "none",
   <li>This means each read or write request is handled directly by the underlying OS. This can make a program much less efficient, since each such request often triggers disk access, network activity, or some other operation that is relatively expensive.</li>
   <li>To reduce this kind of overhead, the Java platform implements buffered I/O streams. Buffered input streams read data from a memory area known as a buffer; the native input API is called only when the buffer is empty. Similarly, buffered output streams write data to a buffer, and the native output API is called only when the buffer is full.</li>
   <li>Invoking readLine returns a line of text with the line. CopyLines outputs each line using println, which appends the line terminator for the current operating system. This might not be the same line terminator that was used in the input file.</li>
-  <li>There are four buffered stream classes used to wrap unbuffered streams: BufferedInputStream and BufferedOutputStream create buffered byte streams, while BufferedReader and BufferedWriter create buffered character streams.</li>
+  <li>There are four buffered stream classes used to wrap unbuffered streams: <code>BufferedInputStream</code> and <code>BufferedOutputStream</code> create buffered byte streams, while <code>BufferedReader</code> and <code>BufferedWriter</code> create buffered character streams.</li>
 </ul>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Buffered Byte Streams</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
@@ -517,7 +519,7 @@ messageStyle: "none",
 
 <h1 id="scanner">Scanner</h1>
 
-<p>Objects of type Scanner are useful for breaking down formatted input into tokens and translating individual tokens according to their data type.</p>
+<p>Objects of type <code>Scanner</code> are useful for breaking down formatted input into tokens and translating individual tokens according to their data type.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -539,7 +541,7 @@ messageStyle: "none",
 
 <h2 id="customize-default-serialization-protocol">Customize default serialization protocol</h2>
 
-<p>Implement following methods to custom read/write objects. Notice that both methods are (and must be) declared private, proving that neither method is inherited and overridden or overloaded. The trick here is that the virtual machine will automatically check to see if either method is declared during the corresponding method call. If your super class implements Serializable and if you don’t want your class to be serialized, then implement these 2 methods to throw NotSerializableException. </p>
+<p>Implement following methods to custom read/write objects. Notice that both methods are (and must be) declared <code>private</code>, proving that neither method is inherited and overridden or overloaded. The trick here is that the virtual machine will automatically check to see if either method is declared during the corresponding method call. If your super class implements <code>Serializable</code> and if you don’t want your class to be serialized, then implement these 2 methods to throw <code>NotSerializableException</code>. </p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -549,7 +551,7 @@ messageStyle: "none",
 
 <h2 id="customize-your-own-protocol">Customize your own protocol</h2>
 
-<p>If you dont want to use the default java serialization technique, you can define your own technique by implementing ‘Externalizable’ instead of ‘Serializable’. Following 2 methods needs to be implemented by your class which would contain the algorithm to persist your object. </p>
+<p>If you dont want to use the default java serialization technique, you can define your own technique by implementing <code>Externalizable</code> instead of <code>Serializable</code>. Following 2 methods needs to be implemented by your class which would contain the algorithm to persist your object. </p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -558,7 +560,8 @@ messageStyle: "none",
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h2 id="caching-objects-in-the-stream">Caching objects in the stream</h2>
-<p>By default, an ObjectOutputStream will maintain a reference to an object written to it. That means that if the state of the written object is written and then written again, the new state will not be saved! </p>
+
+<p>By default, an <code>ObjectOutputStream</code> will maintain a reference to an object written to it. That means that if the state of the written object is written and then written again, the new state will not be saved! </p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -575,26 +578,23 @@ messageStyle: "none",
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>To avoid the situation, do either one of the below : 
-1. Close and open the stream again, or 
-2. call stream.reset() </p>
+* 1. Close and open the stream again, or 
+* 2. call stream.reset() </p>
 
 <p>Changes to a class that can hurt de-serialization : 
-1. deleting an instance variable 
-2. change</p>
-
-<h2 id="difference-bw-serialiazable-and-externalizable-interfaces">Difference b/w Serialiazable and Externalizable interfaces?</h2>
-<p>???</p>
+* 1. deleting an instance variable 
+* 2. change</p>
 
 <h1 id="java-nio">Java NIO</h1>
 
 <h2 id="why-nio">Why NIO?</h2>
 
 <ul>
-  <li>The File class lacked the significant functionality required to implement even commonly used functionality. For instance, it lacked a copy method to copy a file/directory.</li>
-  <li>The File class defined many methods that returned a Boolean value. Thus, in case of an error, false was returned, rather than throwing an exception, so the developer had no way of knowing why that call failed.</li>
-  <li>The File class did not provide good support for handling symbolic links.</li>
-  <li>The File class handled directories and paths in an inefficient way (it did not scale well).</li>
-  <li>The File class provided access to a very limited set of file attributes, which was insufficient in many situations.</li>
+  <li>The <code>File</code> class lacked the significant functionality required to implement even commonly used functionality. For instance, it lacked a <code>copy()</code> method to copy a file/directory.</li>
+  <li>The <code>File</code> class defined many methods that returned a <code>Boolean</code> value. Thus, in case of an error, false was returned, rather than throwing an exception, so the developer had no way of knowing why that call failed.</li>
+  <li>The <code>File</code> class did not provide good support for handling symbolic links.</li>
+  <li>The <code>File</code> class handled directories and paths in an inefficient way (it did not scale well).</li>
+  <li>The <code>File</code> class provided access to a very limited set of file attributes, which was insufficient in many situations.</li>
 </ul>
 
 <h2 id="buffers-channels-selectors">Buffers, Channels, Selectors</h2>
@@ -618,19 +618,19 @@ messageStyle: "none",
 <span class="line-number">13</span>
 <span class="line-number">14</span>
 </pre></td><td class="code"><pre><code class="java"><span class="line"> <span class="kd">private</span> <span class="kt">void</span> <span class="nf">fileWatcherService</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span><span class="o">{</span>
-</span><span class="line">        <span class="n">Path</span> <span class="n">path</span> <span class="o">=</span> <span class="n">Paths</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&quot;C:/temp&quot;</span><span class="o">);</span>
-</span><span class="line">        <span class="n">WatchService</span> <span class="n">watchService</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="na">getFileSystem</span><span class="o">().</span><span class="na">newWatchService</span><span class="o">();</span>
-</span><span class="line">        <span class="n">path</span><span class="o">.</span><span class="na">register</span><span class="o">(</span><span class="n">watchService</span><span class="o">,</span> <span class="n">StandardWatchEventKinds</span><span class="o">.</span><span class="na">ENTRY_MODIFY</span><span class="o">);</span> <span class="c1">//only event can be registered per watch service</span>
+</span><span class="line">   <span class="n">Path</span> <span class="n">path</span> <span class="o">=</span> <span class="n">Paths</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&quot;C:/temp&quot;</span><span class="o">);</span>
+</span><span class="line">   <span class="n">WatchService</span> <span class="n">watchService</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="na">getFileSystem</span><span class="o">().</span><span class="na">newWatchService</span><span class="o">();</span>
+</span><span class="line">   <span class="n">path</span><span class="o">.</span><span class="na">register</span><span class="o">(</span><span class="n">watchService</span><span class="o">,</span> <span class="n">StandardWatchEventKinds</span><span class="o">.</span><span class="na">ENTRY_MODIFY</span><span class="o">);</span> <span class="c1">//only event can be registered per watch service</span>
 </span><span class="line">
-</span><span class="line">        <span class="k">for</span><span class="o">(;;){</span>
-</span><span class="line">            <span class="kd">final</span> <span class="n">WatchKey</span> <span class="n">watchKey</span> <span class="o">=</span> <span class="n">watchService</span><span class="o">.</span><span class="na">take</span><span class="o">();</span>
-</span><span class="line">            <span class="k">for</span> <span class="o">(</span><span class="n">WatchEvent</span><span class="o">&lt;?&gt;</span> <span class="n">watchEvent</span> <span class="o">:</span> <span class="n">watchKey</span><span class="o">.</span><span class="na">pollEvents</span><span class="o">())</span> <span class="o">{</span>
-</span><span class="line">                <span class="kd">final</span> <span class="n">Path</span> <span class="n">context</span> <span class="o">=</span> <span class="o">(</span><span class="n">Path</span><span class="o">)</span> <span class="n">watchEvent</span><span class="o">.</span><span class="na">context</span><span class="o">();</span>
-</span><span class="line">                <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Event kind: &quot;</span> <span class="o">+</span> <span class="n">watchEvent</span><span class="o">.</span><span class="na">kind</span><span class="o">().</span><span class="na">name</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot; - &quot;</span> <span class="o">+</span> <span class="n">context</span><span class="o">.</span><span class="na">getFileName</span><span class="o">());</span>
-</span><span class="line">            <span class="o">}</span>
-</span><span class="line">            <span class="n">watchKey</span><span class="o">.</span><span class="na">reset</span><span class="o">();</span> <span class="c1">//resetting the key is important to receive subsequent notifications</span>
-</span><span class="line">        <span class="o">}</span>
+</span><span class="line">   <span class="k">for</span><span class="o">(;;){</span>
+</span><span class="line">      <span class="kd">final</span> <span class="n">WatchKey</span> <span class="n">watchKey</span> <span class="o">=</span> <span class="n">watchService</span><span class="o">.</span><span class="na">take</span><span class="o">();</span>
+</span><span class="line">      <span class="k">for</span> <span class="o">(</span><span class="n">WatchEvent</span><span class="o">&lt;?&gt;</span> <span class="n">watchEvent</span> <span class="o">:</span> <span class="n">watchKey</span><span class="o">.</span><span class="na">pollEvents</span><span class="o">())</span> <span class="o">{</span>
+</span><span class="line">         <span class="kd">final</span> <span class="n">Path</span> <span class="n">context</span> <span class="o">=</span> <span class="o">(</span><span class="n">Path</span><span class="o">)</span> <span class="n">watchEvent</span><span class="o">.</span><span class="na">context</span><span class="o">();</span>
+</span><span class="line">         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Event kind: &quot;</span> <span class="o">+</span> <span class="n">watchEvent</span><span class="o">.</span><span class="na">kind</span><span class="o">().</span><span class="na">name</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot; - &quot;</span> <span class="o">+</span> <span class="n">context</span><span class="o">.</span><span class="na">getFileName</span><span class="o">());</span>
+</span><span class="line">      <span class="o">}</span>
+</span><span class="line">      <span class="n">watchKey</span><span class="o">.</span><span class="na">reset</span><span class="o">();</span> <span class="c1">//resetting the key is important to receive subsequent notifications</span>
 </span><span class="line">    <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h1 id="character-sets">Character Sets</h1>
@@ -651,13 +651,14 @@ messageStyle: "none",
 
 <ul>
   <li>Unicode is a 2-byte, 16-bit character set with 216 or 65,536 different possible characters. (Only about 40,000 are used in practice, the rest being reserved for future expansion.) Unicode can handle most of the world’s living languages and a number of dead ones as well.</li>
-  <li>Java streams do not do a good job of reading Unicode text. (This is why readers and writers were added in Java 1.1.) Streams generally read a byte at a time, but each Unicode character occupies two bytes. Thus, to read a Unicode character, you multiply the first byte read by 256, add it to the second byte read, and cast the result to a char. For example:
-<code>java
+  <li>Java streams do not do a good job of reading Unicode text. (This is why readers and writers were added in Java 1.1.) Streams generally read a byte at a time, but each Unicode character occupies two bytes. Thus, to read a Unicode character, you multiply the first byte read by 256, add it to the second byte read, and cast the result to a char. For example:</li>
+</ul>
+
+<p><code>java
  int b1 = in.read();
  int b2 = in.read();
  char c = (char) (b1*256 + b2);
-</code></li>
-</ul>
+</code></p>
 
 <h2 id="utf-8">UTF-8</h2>
 
@@ -668,6 +669,7 @@ messageStyle: "none",
 </ul>
 
 <h2 id="character-set-in-java">Character set in Java</h2>
+
 <p>Java understands several dozen different character sets for a variety of languages, ranging from ASCII to the Shift Japanese Input System (SJIS) to Unicode. Internally, Java uses the Unicode character set. Unicode is a two-byte extension of the one-byte ISO Latin-1 character set, which in turn is an eight-bit superset of the seven-bit ASCII character set.</p>
 
 <h1 id="miscellaneous">Miscellaneous</h1>

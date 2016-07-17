@@ -266,9 +266,10 @@ stack.pop()
 
 # Bibliography
 
-* xUnit Patterns
-* BDD () - Behavior Driven Development - http://jdave.org/
-* Functional Testing tool - Apache JMeter - http://jmeter.apache.org/
+* Books
+  * xUnit Patterns
+* [BDD](http://jdave.org/)
+* [Apache JMeter - Load Testing tool](http://jmeter.apache.org/)
 * http://tedyoung.me/2011/01/23/junit-runtime-tests-custom-runners/
 * http://stackoverflow.com/questions/13489388/how-junit-rule-works
 * http://www.mkyong.com/unittest/junit-4-tutorial-6-parameterized-test/

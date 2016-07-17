@@ -120,4 +120,4 @@ from("file:data/inbox")
 # Bibliography
 
 * Books
-	* Camel in Action by Claus Ibsen, Jonathan Anstey
+	* Camel in Action by Claus Ibsen, Jonathan  - TODO complete this book

@@ -13,14 +13,45 @@ footer: true
 # Generics
 
 ## Types
-* Generic type - e.g., `List<T>`.
-* Specific type - `List<String>`.
-* Raw type - `List<T>` should be used along with an associated type like `List<String>`. If the associated type is not specified, then it is called raw type. e.g., `List list = new ArrayList();`
-* Type parameter - In `List<T>`, T is the type parameter
-* Wildcard parameters - `List<?>`. Here <?> stands for unknown type.
-* Bounded Wildcard parameters - `List<? extends X>` and `List<? super X>`
 
-* Reification
+| Type Parameters   | Description                                                                                  | 
+| <T>               | Unbounded type; same as <T extends Object>                                                   | 
+| <T,P>             | Unbounded types; <T extends Object> and <P extends Object>                                   | 
+| <T extends P>     | Upper bounded type; a specific type T that is a subtype of type P                            | 
+| <T extends P & S> | Upper bounded type; a specific type T that is a subtype of type P and that implements type S | 
+| <T super P >      | Lower bounded type; a specific type T that is a supertype of type P                          | 
+| <?>               | Unbounded wildcard; any object type, same as <? extends Object>                              | 
+| <? extends P>     | Bounded wildcard; some unknown type that is a subtype of type P                              | 
+| <? extends P & S> | Bounded wildcard; some unknown type that is a subtype of type P and that implements type S   | 
+| <? super P>       | Lower bounded wildcard; some unknown type that is a supertype of type P                      | 
+
+## The Get and Put Principle
+
+The *Get and Put Principle* details the best usage of `extends` and `super` wildcards.
+
+* Use an `extends` wildcard when you **get** only values out of a structure.
+* Use a `super` wildcard when you **put** only values into a structure.
+* Do not use a wildcard when you place both **get** and **put** values into a structure.
+
+> Note: When wildcard is used, only get operation is allowed - no mutable operations like add/put.
+
+```java #1 - Only get is allowed. 
+List<?> nums = new ArrayList<Integer>(); 
+nums.add(1); //not allowed 
+nums.add(null); //allowed. This is an exceptional case
+```
+
+```java #2 - Only get of any subtype of T is allowed 
+List<? extends Number> nums = new ArrayList<Integer>();
+nums.add(1); //not allowed
+nums.add(null); //allowed. This is an exceptional case
+```
+
+```java #3 - 
+List<? super Integer> ints = Arrays.asList(1,2,3,4); 
+Integer i = ints.get(1); //not allowed 
+Object o = ints.get(1); //allowed
+```
 
 ## Subtyping Principle
 
@@ -29,18 +60,6 @@ footer: true
 * List<E> is a subtype of Collection<E>
 * List<Integer> is NOT a subtype of List<Number>
 
-## Wildcard parameters
-
-> Note: When wildcard is used, only get operation is allowed - no mutable operations like add/put.
-
-| # | Type | Sample | Description | Get & Put principle |
-| - | - | - | - | - |
-| 1 | Generic Type | `List<T>`  | Only type T is allowed  | Both get and put of type T allowed on this collection. |
-| 2 | Unbounded wildcard | `List<?>` | Any type | Only get is allowed. <br/><p>`List<?> nums = new ArrayList<Integer>(); nums.add(1); //not allowed nums.add(null); //exception: allowed `</p> |
-| 3 | Wildcard with lower bound | `List<? extends T>` | Any subtype of T | Only get of any subtype of T is allowed <br/><p><code>List<? extends Number> nums = new ArrayList<Integer>(); <br/>nums.add(1); //not allowed <br/>nums.add(null); //exception: allowed </code></p> |
-| 4 | Wildcard with lower bound | `List<? super T>` | Any supertype of T | <br/><p><code>List<? super Integer> ints = Arrays.asList(1,2,3,4); <br/>Integer i = ints.get(1); //not allowed <br/>Object o = ints.get(1); //allowed </code></p> |
-| 5 | Multiple bounds | `List<? extends T & Comparable<T>>` | Only types that subclass T and implement Comparable. <br/>The first (leftmost) bound is a class or an interface; <br/>all remaining bounds must be interfaces. | Only *get* of any subtype of T and comparable is allowed |
-
 ## Variance
 
 * Types
@@ -48,15 +67,15 @@ footer: true
   * **Contravariant**: an `Animal[]` is a `Cat[]`
   * **Invariant**: an `Animal[]` is not a `Cat[]` and a `Cat[]` is not an `Animal[]`?. Java generics are invariant.
 
-* **Covariant** - Java arrays are covariant, meaning that type S[] is considered to be a subtype of T[] whenever S is a subtype of T. Due to this nature, the following code throws exception at runtime. When an array is allocated (as on the first line), it is tagged with its reified type (a run-time representation of its component type, in this case, Integer), and every time an array is assigned into (as on the third line), an array store exception is raised if the reified type is not compatible with the assigned value (in this case, a double cannot be stored into an array of Integer).
+* **Covariant** - Java arrays are covariant, meaning that type `S[]` is considered to be a subtype of `T[]` whenever `S` is a subtype of `T`. Due to this nature, the following code throws exception at runtime. When an array is allocated (as on the first line), it is tagged with its reified type (a run-time representation of its component type, in this case, Integer), and every time an array is assigned into (as on the third line), an `ArrayStoreException` is raised if the reified type is not compatible with the assigned value (in this case, a double cannot be stored into an array of Integer).
 
 ```java
 Integer[] ints = new Integer[] {1,2,3};
 Number[] nums = ints;
-nums[2] = 3.14; //array store exception at runtime
+nums[2] = 3.14; //ArrayStoreException at runtime since double is being assigned to an int
 ```
 
-* **Invariant** - Java Generics are invariant, meaning that type `List<S>` is not considered to be a subtype of `List<T>`, except in the trivial case where S and T are identical.
+* **Invariant** - Java Generics are invariant, meaning that type `List<S>` is not considered to be a subtype of `List<T>`, except in the trivial case where `S` and `T` are identical.
 
 ```java
 List<Integer> ints = Arrays.asList(1,2,3);
@@ -64,7 +83,7 @@ List<Number> nums = ints; // compile-time error
 nums.set(2, 3.14);
 ```
 
-* **Contravariant** - Wildcards also introduce contravariant subtyping for generics, in that type `List<S>` is considered to be a subtype of `List<? super T>` when S is a supertype of T (as opposed to a subtype). Arrays do not support contravariant subtyping.
+* **Contravariant** - Wildcards also introduce contravariant subtyping for generics, in that type `List<S>` is considered to be a subtype of `List<? super T>` when `S` is a supertype of `T` (as opposed to a subtype). Arrays do not support contravariant subtyping.
 
 **Points to remember**
 
@@ -74,8 +93,11 @@ nums.set(2, 3.14);
 
 ## Type Erasure
 
-* Example 1 is implemented using generics and #2 is not. However, the bytecode for both the programs are exactly the same. Java internally converts the generic representation into #2 model, by erasing the type details and adding casts. This is called 'type erasure'.
+* Example 1 is implemented using generics and #2 is not. However, the bytecode for both the programs are exactly the same. Java internally converts the generic representation into a code that looks like Example #2, by erasing the type details and adding casts. This is called ***type erasure***.
 * The reason behind such implementation is for backward compatibilty.
+* Java has *typed erased generics* which loses type information at runtime. JetBrains' Kotlin language has *reified generics* which retains the type information at runtime.
+* **Reification** means *preserving type information at runtime*. Java Generics are **non-reifed.**
+
 
 ```java Example 1
 List<String> words = new ArrayList<String>();
@@ -93,7 +115,6 @@ String s = ((String)words.get(0))+((String)words.get(1));
 assert s.equals("Hello world!");
 ```
 
-* Java has *typed erased generics* which loses type information at runtime. JetBrains'' Kotlin language has *reified generics* which retains the type information at runtime.
 
 # Collections Framework
 
@@ -104,12 +125,12 @@ The latest concurrent collections achieve thread-safety by different mechanisms.
 * **1. Copy-On-Write** 
   * Classes that use copy-on-write store their values in an internal array, which is effectively immutable; any change to the value of the collection results in a new array being created to represent the new values.
   * Synchronization is used by these classes, though only briefly, during the creation of a new array; because read operations do not need to be synchronized, copy-on-write collections perform well in the situations for which they are designed—those in which reads greatly predominate over writes.
-  * *Copy-on-write* is used by the collection classes `CopyOnWriteArrayList` and `CopyOnWriteArraySet`.
+  * Used by : `CopyOnWriteArrayList`, `CopyOnWriteArraySet`.
 * **2. Compare-and-Swap (CAS)**
   * A 2nd group of thread-safe collections relies on compare-and-swap (CAS), a fundamental improvement on traditional synchronization. To see how it works, consider a computation in which the value of a single variable is used as input to a long-running calculation whose eventual result is used to update the variable. Traditional synchronization makes the whole computation atomic, excluding any other thread from concurrently accessing the variable. This reduces opportunities for parallel execution and hurts throughput. 
   * An algorithm based on CAS behaves differently: it makes a local copy of the variable and performs the calculation without getting exclusive access. Only when it is ready to update the variable does it call CAS, which in one atomic operation compares the variable’s value with its value at the start and, if they are the same, updates it with the new value. If they are not the same, the variable must have been modified by another thread; in this situation, the CAS thread can try the whole computation again using the new value, or give up, or—in some algorithms— continue, because the interference will have actually done its work for it! 
   * This technique is caled [*Optimistic Concurrency Control*]({{ root_url }}/technology/transaction.html#optimistic) and is widely used in databases and HTTP protocol.
-  * Collections using CAS include `ConcurrentLinkedQueue` and `ConcurrentSkipListMap`.
+  * Used by: `ConcurrentLinkedQueue`, `ConcurrentSkipListMap`.
 * **3. Lock interface**: 
   * The 3rd group uses implementations of `java.util.concurrent.locks.Lock` interface. Some of the collection classes in this group make use of these facilities to divide the collection into parts that can be separately locked, giving improved concurrency. 
   * For example, `LinkedBlockingQueue` has separate locks for the head and tail ends of the queue, so that elements can be added and removed in parallel. 
@@ -133,7 +154,7 @@ The latest concurrent collections achieve thread-safety by different mechanisms.
 * **Weakly consistent iterators**
   * Collections which rely on CAS have weakly consistent iterators, which reflect some but not necessarily all of the changes that have been made to their backing collection since they were created. For example, if elements in the collection have been modified or removed before the iterator reaches them, it definitely will reflect these changes, but no such guarantee is made for insertions. Weakly consistent iterators also do not throw `ConcurrentModificationException`. 
   * can tolerate concurrent modiﬁcation, traverses elements as they existed when the iterator was constructed, and may (but is not guaranteed to) reﬂect modiﬁcations to the collection after the construction of the iterator. `ConcurrentHashMap` and other concurrent collections create such iterators. 
-  * Collections implemented using `Lock` interface also have weakly consistent iterators. In Java 6 this includes `DelayQueue` and `PriorityBlockingQueue`, which in Java 5 had fail-fast iterators. This means that you cannot iterate over the Java 5 version of these queues unless they are quiescent, at a time when no elements are being added or inserted; at other times you have to copy their elements into an array using toArray and iterate over that instead.
+  * Collections implemented using `Lock` interface also have weakly consistent iterators. In Java 6 this includes `DelayQueue` and `PriorityBlockingQueue`, which in Java 5 had fail-fast iterators. This means that you cannot iterate over the Java 5 version of these queues unless they are quiescent, at a time when no elements are being added or inserted; at other times you have to copy their elements into an array using `toArray()` and iterate over that instead.
 
 ### ListIterator 
 
@@ -151,7 +172,7 @@ The latest concurrent collections achieve thread-safety by different mechanisms.
 ### ArrayList
 
 * Backed up array and an integer pointing to the next empty slot
-* By default, an arraylist is created with initial capacity as 10. The capacity grows as and when needed (as per Sun's implementation it grows by the order of `int newCapacity = (oldCapacity * 3)/2 + 1;` . 
+* By default, an arraylist is created with initial capacity as 10. The capacity grows as and when needed (as per Sun's implementation it grows by the order of `int newCapacity = (oldCapacity * 3)/2 + 1;` ). 
 * An application can call `ArrayList.trimToSize()` method to trim the capacity of the ArrayList instance to be the list's current size to minimize the storage of an ArrayList instance.
 * BigO cost
   * Access elements has constant time
@@ -169,9 +190,9 @@ The latest concurrent collections achieve thread-safety by different mechanisms.
 
 ### CopyOnWriteArrayList
 
-* List implementation -  A thread-safe variant of ArrayList in which all mutative operations (add, set, and so on) are implemented by making a fresh copy of the underlying array. 
+* A thread-safe variant of `ArrayList` in which all mutative operations (`add`, `set`, and so on) are implemented by making a fresh copy of the underlying array. 
 * Copying is an expensive operation, so this class should be used only when traversals seriously outnumber updates. The usual use case for this collection is listeners/observers collection.
-* Element-changing operations on iterators themselves (remove, set, and add) are not supported. These methods throw UnsupportedOperationException.
+* Element-changing operations on iterators themselves (`remove`, `set`, and `add`) are not supported. These methods throw `UnsupportedOperationException`.
 * Returns snapshot-style fail-safe iterator
 
 ## Queues and Deques
@@ -421,6 +442,8 @@ backed up a `CopyOnWriteArrayList` and shares its properties
 
 ### ConcurrentSkipListMap 
 
+{% img right /technology/lock-contention.png 300 300 %}
+
 * based on skip lists; this could serve as a thread-safe replacement for TreeMap.
 * Only thread-safe sorted Map using their natural ordering or by a Comparator provided
 * Insertion, removal, update, and access operations safely execute concurrently by multiple threads.
@@ -431,7 +454,6 @@ backed up a `CopyOnWriteArrayList` and shares its properties
   * size() is not a constant time operation
   * bulk operations aren't atomic
 
-{% img /technology/lock-contention.png %}
 
 ### Maps Summary
 

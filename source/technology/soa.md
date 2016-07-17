@@ -64,10 +64,10 @@ footer: true
 * MEPs can composed to support the creation of large, more complex patterns.
 
 ### Primitive MEPs
-1. Request-response
+* 1. Request-response
   * this could be synchronous or asynchronous
   * typically a "correlation" is used to associate a response with the request 
-2. Fire-and-forget
+* 2. Fire-and-forget
   * This simple asynchronous pattern is based on a *unidirectional* transmission of messages from a source to one or more destinations. 
   * There are few variations in this MEP.
     * *single-destination* pattern - a source sends a message to one destination only
@@ -104,16 +104,16 @@ footer: true
 
 ### Service Roles
 
-* Service Provider - who creates a service description and deploys it. (server side)
-* Service Requestor / Service Consumer - who consumes the service
+* __Service Provider__ - who creates a service description and deploys it. (server side)
+* __Service Requestor / Service Consumer__ - who consumes the service
   * service provider entity - the organization providing the WS.
   * service provider agent - the web service itself.
-* Service Registry - who publishes the service description. match maker between provider and requestor.
-* Intermediary service (routing service)
-  1. Passive Intermediary service - It is typically responsible for routing messages to a subsequent location. It may use information in the SOAP message header to determine the routing path, or it may employ native routing logic to achieve some level of load balancing. Either way, what makes this type of intermediary passive is that it does not modify the message.
-  2. Active intermediaries - also route messages to a forwarding destination. Prior to transmitting a message, however, these services actively process and alter the message contents. Typically, active intermediaries will look for particular SOAP header blocks and perform some action in response to the information they find there. They almost always alter data in header blocks and may insert or even delete header blocks entirely. 
-* Initial sender and ultimate receiver - Initial senders are simply service requestors that initiate the transmission of a message. Therefore, the initial sender is always the first Web service in a message path. The counterpart to this role is the ultimate receiver. This label identifies service providers that exist as the last Web service along a message's path
-* Service Composition / Service Assemblies - A service can invoke one or more other services to complete a task. Each service participating in such composition is called as 'service composition member'. Service composition is frequently governed by WS-* composition extensions, such as WS-BPEL and WS-CDL, which introduce the related concepts of orchestration and choreography.
+* __Service Registry__ - who publishes the service description. match maker between provider and requestor.
+* __Intermediary service (routing service)__
+  1. __Passive Intermediary service__ - It is typically responsible for routing messages to a subsequent location. It may use information in the SOAP message header to determine the routing path, or it may employ native routing logic to achieve some level of load balancing. Either way, what makes this type of intermediary passive is that it does not modify the message.
+  2. __Active intermediaries__ - also route messages to a forwarding destination. Prior to transmitting a message, however, these services actively process and alter the message contents. Typically, active intermediaries will look for particular SOAP header blocks and perform some action in response to the information they find there. They almost always alter data in header blocks and may insert or even delete header blocks entirely. 
+* __Initial sender and ultimate receiver__ - Initial senders are simply service requestors that initiate the transmission of a message. Therefore, the initial sender is always the first Web service in a message path. The counterpart to this role is the ultimate receiver. This label identifies service providers that exist as the last Web service along a message's path
+* __Service Composition / Service Assemblies__ - A service can invoke one or more other services to complete a task. Each service participating in such composition is called as 'service composition member'. Service composition is frequently governed by WS-* composition extensions, such as WS-BPEL and WS-CDL, which introduce the related concepts of orchestration and choreography.
 
 ### Service Models
 
@@ -125,7 +125,7 @@ footer: true
 
 * Service Endpoint - A WSDL describes the point of contact for a service provider, also known as the service endpoint or just endpoint. It provides a formal definition of the endpoint interface and also establishes the physical location (address) of the service.
 * 2 categories of WSDL Description
-  1. Abstract description
+  * 1. Abstract description
     * Describes the interface characteristics of the Web service without any reference to the technology used to host.
     * It contains `portType` (or `interface` from WSDL 2.0), `operation` and `message`
 
@@ -137,7 +137,7 @@ footer: true
 </portType >
 ```
 
-  2. Concrete description - contains
+  * 2. Concrete description - contains
     * Describes the concrete technology used for physical transport.
     * It contains
       * binding -  represents the transport technology the service can use to communicate. Typically it is SOAP. A binding can apply to a particular operation or all operations.

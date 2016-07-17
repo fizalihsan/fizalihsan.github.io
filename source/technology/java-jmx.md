@@ -12,7 +12,7 @@ footer: true
 
 JMX Spec implementors
 
-* Sun's reference implementation - lib/jmxri.jar (JMX reference implementation Java class package) and lib/jmxtools.jar (JMX toolkit) 
+* Sun's reference implementation - `lib/jmxri.jar` (JMX reference implementation Java class package) and `lib/jmxtools.jar` (JMX toolkit) 
 * Sun's Java Dynamic Management Kit
 * IBM Tivoli's JMX implementation
 * AdventNet Agent Toolkit
@@ -29,12 +29,12 @@ Technology that enables to monitor and manage applications running in a JVM loca
 
 ## JMX Components
 
-* Managemement Application - JConsole
-* JMX API - The java.lang.mangement package provides the interface for monitoring and managing the VM.
-* Managed Resource - your application to be instrumented
-* MBean Interface - Interface to which mgmt. app connects to.
-* MBean or Managed Bean - Implementation of the MBean interface. This object interacts with your app to get/set attributes or invoke methods. 
-* MBean Server - container where MBeans are registered using a unique name.
+* **Managemement Application** - JConsole
+* **JMX API** - The `java.lang.mangement` package provides the interface for monitoring and managing the VM.
+* **Managed Resource** - your application to be instrumented
+* **MBean Interface** - Interface to which management app connects to.
+* **MBean or Managed Bean** - Implementation of the `MBean` interface. This object interacts with your app to get/set attributes or invoke methods. 
+* **MBean Server** - container where MBeans are registered using a unique name.
 
 ## MBean
 
@@ -42,7 +42,7 @@ Technology that enables to monitor and manage applications running in a JVM loca
   * Named and typed attributes that can be read and written.
   * Named and typed operations that can be invoked.
   * Typed notifications that can be emitted by the MBean.
-* Platform MBean - is an MBean for monitoring and managing the Java VM and other components of the Java Runtime Environment (JRE). Each MXBean encapsulates a part of VM functionality such as the class loading system, just-in-time (JIT) compilation system, garbage collector, and so on.
+* **Platform MBean** - is an MBean for monitoring and managing the Java VM and other components of the Java Runtime Environment (JRE). Each MXBean encapsulates a part of VM functionality such as the class loading system, just-in-time (JIT) compilation system, garbage collector, and so on.
 * Types of MBean
   * Standard
   * Dynamic
@@ -50,11 +50,11 @@ Technology that enables to monitor and manage applications running in a JVM loca
   * Model
   * MXBean
 
-## Standard MBean
+### Standard MBean
 
 Standard MBeans are the simplest MBeans. Here are what you need to do to manage a Java object using a standard MBean.
 
-1. Create an interface named after your Java class plus the suffix MBean. For example, if the Java class whose objects you want to manage is called Car, the interface must be called CarMBean.
+* Create an interface named after your Java class plus the suffix `MBean`. For example, if the Java class whose objects you want to manage is called `Car`, the interface must be called `CarMBean`.
 * Modify your Java class so that it implements the interface you’ve created.
 * Create an agent. The agent class must contain an MBean server.
 * Create an ObjectName for your MBean.
@@ -63,15 +63,14 @@ Standard MBeans are the simplest MBeans. Here are what you need to do to manage 
 
 Standard MBeans are easy to write, but they require that your classes be modified. While this is okay in some projects, in others (especially when there are many classes involved) this is not acceptable. Fortunately, other types of MBeans allow you to manage objects without modifying classes.
 
-## MXBean
+### MXBean
 
-The name of this interface must end with MXBean (as opposed to MBean with standard MBeans), however the prefix does not have to match the name of the manageable class. This is to say your manageable class may be called Car and your MXBean interface may be named CarImpl.
+The name of this interface must end with `MXBean` (as opposed to `MBean` with standard MBeans), however the prefix does not have to match the name of the manageable class. This is to say your manageable class may be called `Car` and your `MXBean` interface may be named `CarMXBean`.
 
-Alternatively, if you don’t want to follow the naming convention for MXBeans, i.e. you don’t want your interface name to end with MXBean, you can simply apply the @MXBean annotation to your interface definition.
+Alternatively, if you don’t want to follow the naming convention for MXBeans, i.e. you don’t want your interface name to end with `MXBean`, you can simply apply the `@MXBean` annotation to your interface definition.[JavaDoc](http://docs.oracle.com/javase/6/docs/api/javax/management/MXBean.html)
 
-http://docs.oracle.com/javase/6/docs/api/javax/management/MXBean.html
-
-Why MXBean? MXBean is a new type of MBean that provides a simple way to code an MBean that only references a predefined set of types. In this way, you can be sure that your MBean will be usable by any client, including remote clients, without any requirement that the client have access to model-specific classes representing the types of your MBeans. The platform MBeans introduced below are all MXBeans.
+**Why MXBean?**
+* provides a simple way to code an MBean that only references a predefined set of types. In this way, you can be sure that your MBean will be usable by any client, including remote clients, without any requirement that the client have access to model-specific classes representing the types of your MBeans. The platform MBeans introduced below are all MXBeans.
 
 # MBean Server or JMX Agent
 
@@ -105,7 +104,7 @@ To enable a JVM for remote monitoring, pass in `-Dcom.sun.management.jmxremote.p
 
 What if a VM is not enabled for monitoring? Attach API comes to rescue. It is an extension that provides a mechanism to attach to a VM and load its tool agent into that virtual machine. For example, a management console might have a management agent which it uses to obtain management information from instrumented objects in a virtual machine. If the management console is required to manage an application that is running in a virtual machine that does not include the management agent, then this API can be used to attach to the target virtual machine and load the agent.
 
-http://docs.oracle.com/javase/6/docs/jdk/api/attach/spec/index.html - com.sun.tools.attach.
+http://docs.oracle.com/javase/6/docs/jdk/api/attach/spec/index.html - `com.sun.tools.attach`.
 
 # Management Tools
 
@@ -124,7 +123,7 @@ http://docs.oracle.com/javase/6/docs/jdk/api/attach/spec/index.html - com.sun.to
 
 # Groovy & JMX
 
-http://marxsoftware.blogspot.com/2013/03/monitoring-key-jvm-characteristics-groovy-jmx.html
+http://marxsoftware.blogspot.com/2013/03/monitoring-key-jvm-characteristics-groovy-jmx.html - TODO
 
 
 

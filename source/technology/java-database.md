@@ -27,15 +27,15 @@ footer: true
 * Define ORM
 * Why ORM is required? 
 * What other ORM tools are available? How is Hibernate better?
-* http://blog.8thlight.com/uncle-bob/2013/10/01/Dance-You-Imps.html
-* http://java.dzone.com/articles/martin-fowler-orm-hate
+* [Dance You Imps!](http://blog.8thlight.com/uncle-bob/2013/10/01/Dance-You-Imps.html)
+* [Vietname of Computer Science](http://blogs.tedneward.com/post/the-vietnam-of-computer-science)
+* [Martin Fowler on ORM Hate](http://java.dzone.com/articles/martin-fowler-orm-hate)
 
 <span style="color:red">TODO</span>
 
 ## Hibernate
 
 * Challenges in migrating Hibernat 2 to 3? 
-* Impedence mismatch http://t.co/4KWqBeJkOs
 * http://www.deepakgaikwad.net/index.php/2009/03/14/complete-hibernate-tutorial-with-example.html?goback=%2Egde_43888_member_255672872
 * http://www.hibernate-alternative.com/
 

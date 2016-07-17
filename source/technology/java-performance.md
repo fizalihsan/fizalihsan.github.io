@@ -14,12 +14,75 @@ Any Java object occupies at least 16 bytes, 12 out of which are occupied by a Ja
 
 Each Object reference occupies 4 bytes if the Java heap is under 32G and `XX:+UseCompressedOops` is turned on (it is turned on by default in the recent Oracle JVM versions). Otherwise, Object references occupy 8 bytes.
 
-* http://java-performance.info/memory-introspection-using-sun-misc-unsafe-and-reflection/
-* http://java-performance.info/overview-of-memory-saving-techniques-java/
-* [Top Java Memory Problems - Part 1](http://apmblog.compuware.com/2011/04/20/the-top-java-memory-problems-part-1/)
+* [Memory introspection using sun.misc.Unsafe and reflection](http://java-performance.info/memory-introspection-using-sun-misc-unsafe-and-reflection)
+* [Overview of memory saving techniques](http://java-performance.info/overview-of-memory-saving-techniques-java/)
 * [Garbage Collection](http://docs.oracle.com/javase/6/docs/technotes/guides/management/jconsole.html#gddzt)
 
 Understand the implications of moving b/w 32-bit and 64-bit JVMs especially in terms of memory usage and allocation.
+
+## How Memory Leaks Happen?
+
+> Source: [Top Java Memory Problems - Part 1](http://apmblog.compuware.com/2011/04/20/the-top-java-memory-problems-part-1/)
+
+**Mutable static fields and collections**
+
+The most common reason for a memory leak is the wrong usage of statics. A static variable is held by its class and subsequently by its classloader. While a class can be garbage collected it will seldom happen during an applications lifetime. Very often statics are used to hold cache information or share state across threads. If this is not done diligently it is very easy to get a memory leak. Especially static mutable collections should be avoided at all costs for just that reason. A good architectural rule is not to use mutable static objects at all, most of the time there is a better alternative.
+
+
+**Thread Local Variables**
+
+{% img right /technology/threadlocal.png %}
+
+ThreadLocals are used to bind a variable or a state to a thread. Each thread has its own instance of the variable. They are very useful but also very dangerous. They are often used to track a state, like the current transaction id, but sometimes they hold a little more information. A thread local variable is referenced by its thread and as such its lifecycle is bound to it. In most application servers threads are reused via thread pools and thus are never garbage collected. If the application code is not carefully clearing the thread local variable you get a nasty memory leak.
+These kind of memory leaks can easily be discovered with a heap dump. Just take a look at the ThreadLocalMap in the heap dump and follow the references.
+
+__Thread Local + Static + Class Loader Leaks__
+
+> Source: [A day in the life of a memory leak hunter](http://www.szegedi.org/articles/memleak.html)
+
+A common use of ThreadLocal can introduce a very nasty classloader leak.
+
+If you have a static ThreadLocal (e.g. using it to implement the flyweight pattern for non-threadsafe expensive objects), and the contents has a reference to the ClassLoader containing the static, the classloader will never be GC’ed.
+
+```java 
+static ThreadLocal myWrapper = new ThreadLocal() {
+  NotThreadSafeObject initialValue() {
+    return new NotThreadSafeObject();
+  }
+}
+
+. . . . 
+myWrapper.get().someMethod()
+```
+
+**Circular and complex bi-directional references**
+
+This is my favorite memory leak. It is best explained by example:
+
+```java
+org.w3c.dom.Document doc = readXmlDocument();
+org.w3c.dom.Node child = doc.getDocumentElement().getFirstChild();
+doc.removeNode(child);
+doc = null;
+```
+
+At the end of the code snippet we would think that the DOM Document will be garbage collected. That is however not the case. A DOM Node object always belongs to a Document. Even when removed from the Document the Node Object still  has a reference to its owning document. As long as we keep the child object the document and all other nodes it contains will not be garbage collected.
+
+**JNI memory leaks**
+
+This is a particularly nasty form or memory leak. It is not easily found, unless you have the right tool and it is also not known to a lot of people. JNI is used to call native code from java. This native code can handle, call and also create java objects. Every java object created in a native method begins its life as a so called local reference. That means that the object is referenced until the native method returns. We could say the native method references the java object. So you don’t have a problem unless the native method runs forever. In some cases you want to keep the created object even after the native call has ended. To achieve this you can either ensure that it is referenced by some other java object or you can change the *local reference* into a *global reference*. A global reference is a GC root and will never be garbage collected until explicitly deleted by the native code. The only way to discover such a memory leak is to use a heap dump tool that explicitly shows global native references. If you have to use JNI you should rather make sure that you reference these objects normally and forgo global references altogether.
+You can find this sort of leak when your heap dump analysis tool explicitly marks the GC Root as a native reference, otherwise you will have a hard time.
+
+__Wrong implementation of equals/hashcode__
+
+It might not be obvious on the first glance, but if your `equals`/`hashcode` methods violate the equals contract it will lead to memory leaks when used as a key in a map. A `HashMap` uses the `hashcode` to lookup an object and verify that it found it by using the `equals` method. If two objects are `equal` they must have the same `hashcode`, but not the other way around. If you do not explicitly implement `hashcode` yourself this is not the case. The default `hashcode` is based on object identity. Thus using an object without a valid hashcode implementation as a key in a map, you will be able to add things but you will not find them anymore. Even worse if you re-add it, it will not overwrite the old item but really add a new one. And just like that you have memory leak. You will find it easily enough as it is growing, but the root cause will be hard to determine unless you remember this one.
+The easiest way to avoid this is to use unit testcases and one of the available frameworks that tests the equals contract of your classes (e.g. http://code.google.com/p/equalsverifier/).
+
+__Classloader Leaks__
+
+When thinking about memory leaks we think mostly about normal java objects. Especially in application servers and OSGi containers there is another form of memory leak, the class loader leak. Classes are referenced by their classloader and normally they will not get garbage collected until the classloader itself is collected. That however only happens when the application gets unloaded by the application server or OSGi container. There are two forms of Classloader Leaks that I can describe off the top of my head.
+* In the first an object whose class belongs to the class loader is still referenced by a cache, a thread local or some other means. In that case the whole class loader, meaning the whole application cannot be garbage collected. This is something that happens quite a lot in OSGi containers nowadays and used to happen in JEE Application Servers frequently as well. As it is only happens when the application gets unloaded or redeployed it does not happen very often.
+* The second form is nastier and was introduced by bytecode manipulation frameworks like BCEL and ASM. These frameworks allow the dynamic creation of new classes. If you follow that thought you will realize that now classes, just like objects, can be forgotten by the developer. The responsible code might create new classes for the same purpose multiple times. As the class is referenced in the current class loader you get a memory leak that will lead to an out of memory in the permanent generation. The real bad news is that most heap analyzer tools do not point out this problem either, we have to analyze it manually, the hard way. This form or memory leak became famous due to an [issue in an older version of hibernate](http://opensource.atlassian.com/projects/hibernate/browse/HHH-2481) and its usage of CGLIB.
 
 ## JVM Architecture
 
@@ -78,11 +141,11 @@ Mechanism to hold all kinds of data items such as instructions, object data, loc
   * all new objects are allocated and aged. 
   * causes a minor GC when this fills up.
   * relatively quicker to collect than other generations
-  * Stop the World event: All minor GCs are "Stop the World" events which means all the app threads are stopped until the GC completes.
+  * All _minor GCs_ are __Stop the World__ events which means all the app threads are stopped until the GC completes.
 * Old Generation
   * stores long surviving objects. 
   * a threshold is set for young generation objects and when the age is met, the objects gets moved to old generation.
-  * causes a major GC when this fills up. Also, a "Stop the World" event.
+  * causes a _major GC_ when this fills up. Also, a __Stop the World__ event.
 * Permanent Generation
   * stores metadata required by the JVM to describe the classes and methods used in the app. Java SE library classes and method may be stored here.
   * class may get collected/unloaded if they are no longer needed. Causes a Full GC
@@ -116,16 +179,16 @@ Mechanism to hold all kinds of data items such as instructions, object data, loc
   * Uses a mark-compact collection method.
   * Option: `-XX:+UserSerialGC`.
   * **Usages**: 
-    * For longer apps with no low pause time requirements
-    * For apps which run on machine that hosts more JVMs than available processors.In such environment, GC of one app shouldn't affect all other JVMs.
+    * For longer running apps with no low pause time requirements
+    * For apps which run on machine that hosts more JVMs than available processors. In such environment, GC of one app shouldn't affect all other JVMs.
 * The Parallel GC
   * uses multiple threads  to perform the young generation GC.
-  * By default, on a host with 'N' CPUs, the parallel GC uses N GC threads in the collection. The number of GC threads can be controlled: `-XX:ParallelGCThreads=<num>`
+  * By default, on a host with `n` CPUs, the parallel GC uses `n` GC threads in the collection. The number of GC threads can be controlled: `-XX:ParallelGCThreads=<num>`
   * Parallel GC is also called a throughput collector.
   * **Usages**: apps where high throughput is required and long pauses are accepted.
   * 2 flavors of Parallel GC
-  * Option: `-XX:+UseParallelGC` - does multi-threaded young generation GC, single-threaded old generation collection and compaction.
-  * Option: `-XX:+UseParallelOldGC` - does multi-threaded young, multi-thread old generation collection and compaction. (HotSpot does compaction only in the old generation)
+    * Option: `-XX:+UseParallelGC` - does multi-threaded young generation GC, single-threaded old generation collection and compaction.
+    * Option: `-XX:+UseParallelOldGC` - does multi-threaded young, multi-thread old generation collection and compaction. (HotSpot does compaction only in the old generation)
 * The Concurrent Mark Sweep (CMS) Collector
   * Also called Concurrent Low Pause Collector.
   * For younger generation, uses the same algorithm as Parallel GC
@@ -138,6 +201,10 @@ Mechanism to hold all kinds of data items such as instructions, object data, loc
   * G1 is a parallel, concurrent, and incrementally compacting low-pause collector that has a different layout from other collectors above.
   * More details [here](http://www.oracle.com/technetwork/tutorials/tutorials-1876574.html)
   * Option: `-XX:+UserG1GC`
+
+__How G1 collector works__
+
+TODO
 
 ## Reference Types
 
@@ -257,9 +324,9 @@ Unlike soft and weak references, phantom references are not automatically cleare
 
 # Benchmarking
 
-* https://code.google.com/p/caliper/wiki/JavaMicrobenchmarks
+* [Java Microbenchmarks](https://code.google.com/p/caliper/wiki/JavaMicrobenchmarks)
 * http://www.ibm.com/developerworks/java/library/j-benchmark1/index.html
-* https://code.google.com/p/javamelody/ - To capture SQL calls
+* [Java Melody](https://code.google.com/p/javamelody/) - To capture SQL calls
 * [CodeHale](https://github.com/dropwizard/metrics) <span style="color:red">TODO</span>
 
 * Benchmarking issues
@@ -389,7 +456,7 @@ rank self accum count trace method
   * Extend arbitrary classes or implement arbitrary interfaces
   * Have outer, inner, nested, or local classes
 
-Apache JMeter - http://jmeter.apache.org/
+[Apache JMeter](http://jmeter.apache.org)
 
 
 ## Tools shipped with Java
@@ -412,7 +479,7 @@ Apache JMeter - http://jmeter.apache.org/
   * Prints stack traces of executing threads for a given process, core file, or remote debug server
   * Usage: `jstack [-l] <pid>`
   * The [-l] option (Java 6+) includes information on java.util.concurrent locks in addition to monitors
-  * TIP: on *nix systems, prefer kill –QUIT (or kill –3)
+  * TIP: on *nix systems, prefer `kill –QUIT` (or `kill –3`)
   * Safer than jstack
   * Multiple calls will quickly provide insight into execution
 * jstat
@@ -449,5 +516,5 @@ Apache JMeter - http://jmeter.apache.org/
 * http://hype-free.blogspot.com/2010/01/choosing-java-profiler.html
 * http://psy-lob-saw.blogspot.com/2013/04/writing-java-micro-benchmarks-with-jmh.html
 * [The Value and Perils of Performance Benchmarks in the Wake of TechEmpower’s Web Framework Benchmark](http://theholyjava.wordpress.com/2013/04/01/the-value-and-perils-of-performance-benchmarks-in-the-wake-of-techempowers-web-framework-benchmark/)
-* Programmers Need To Learn Statistics Or I Will Kill Them All
+* [Programmers Need To Learn Statistics Or I Will Kill Them All](https://zedshaw.com/archive/programmers-need-to-learn-statistics-or-i-will-kill-them-all/)
 * 5 things you didn't know about Java Performance - [Part 1](http://www.ibm.com/developerworks/java/library/j-5things7/index.html), [Part 2](http://www.ibm.com/developerworks/java/library/j-5things8/index.html)

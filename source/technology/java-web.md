@@ -197,19 +197,22 @@ Difference between include directive and include custom tag?
 
 ### Include Action
 
-* The jsp:include action element is like a function call. At runtime, the included file will be ‘executed’ and the result content will be included with the soure JSP page. When the included JSP page is called, both the request and response objects are passed as parameters. If there is a need to pass additional parameters, then jsp:param element can be used. If the resource is static, its content is inserted into the calling JSP file, since there is no processing needed.
+* The `jsp:include` action element is like a function call. At runtime, the included file will be ‘executed’ and the result content will be included with the soure JSP page. When the included JSP page is called, both the request and response objects are passed as parameters. If there is a need to pass additional parameters, then jsp:param element can be used. If the resource is static, its content is inserted into the calling JSP file, since there is no processing needed.
 * Each included page is executed as a separate servlet at run time. 
 * Pages can conditionally be included at run time. This is often useful for templating frameworks that build pages out of includes. The parent page can determine which page, if any, to include according to some run-time condition. 
 * The values of scriptlet variables need to be explicitly passed to the include page.
-* The included page must be able to be run on its own. Request.getSession() request.getSession(true) only creates a session if one does not exist. request.getSession(false) retrieves a session only if it already exists. 
+* The included page must be able to be run on its own. 
+* `Request.getSession()`
+  * `request.getSession(true)` - only creates a session if one does not exist. 
+  * `request.getSession(false)` retrieves a session only if it already exists. 
 
 ## Custom tag libs
 
 * Your tag class should implement `Tag` interface or extend from `TagSupport` or `BodyTagSupport` class.
-* Implement `doStartTag()` method - If your tag does not have a body, then this method should return SKIP_BODY constant. Otherwise return EVAL_BODY_INCLUDE which in turn would call 'doEndTag()' method.
-* To make use of what's inside the body of the tag, implement `doEndTag()`. After processing the body content, if you want to continue processing the rest of the page, return EVAL_PAGE, else SKIP_PAGE.
+* Implement `doStartTag()` method - If your tag does not have a body, then this method should return SKIP\_BODY constant. Otherwise return EVAL\_BODY_INCLUDE which in turn would call 'doEndTag()' method.
+* To make use of what's inside the body of the tag, implement `doEndTag()`. After processing the body content, if you want to continue processing the rest of the page, return EVAL\_PAGE, else SKIP\_PAGE.
 * If your tag has an attribute 'attr1', then add the method `setAttr1()` to your tag class.
-* To evaluate the contents of the body, your class should extend from `BodyTagSupport` class, and override 'doAfterBody()' method. This method normally returns SKIP_BODY meaning that no further body processing should be performed, else it returns EVAL_BODY_TAG to evaluate and handle the body again.
+* To evaluate the contents of the body, your class should extend from `BodyTagSupport` class, and override 'doAfterBody()' method. This method normally returns SKIP\_BODY meaning that no further body processing should be performed, else it returns EVAL\_BODY\_TAG to evaluate and handle the body again.
 
 ## Filters
 

@@ -279,8 +279,8 @@ class Outer{
 
 ## Enums
 
-* A constructor in an enum class can only be specified as private.
-* are implicitly declared public, static, and final, which means you cannot extend them.
+* A constructor in an enum class can only be specified as `private`.
+* are implicitly declared `public`, `static`, and `final`, which means you cannot extend them.
 * An enum implicitly inherits from java.lang.Enum and get converted internally to classes. Further, enum constants are instances of the enumeration class for which the constant is declared as a member.
 * cannot use the new operator on enum data types, even inside the enum class.
 * Enumeration constants cannot be cloned.
@@ -288,6 +288,6 @@ class Outer{
 ## Interfaces
 
 * cannot declare static methods.
-* All fields are implicitly considered to be declared as public, static & final.
-* only public methods and variables are allowed in an interface. No protected or private.
-* All methods declared in an interface are implicitly considered to be abstract. You can also explicitly use the abstract qualifier for the method.
+* All fields are implicitly considered to be declared as `public`, `static` & `final`.
+* only public methods and variables are allowed in an interface. No `protected` or `private`.
+* All methods declared in an interface are implicitly considered to be `abstract`. You can also explicitly use the `abstract` qualifier for the method.

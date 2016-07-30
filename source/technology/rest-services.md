@@ -805,6 +805,11 @@ public class CustomerResource {
 
 4 popular approaches to versioning a REST API. 
 
+1. URI versioning
+2. URI parameter versioning
+3. Accept header versioning
+4. Custom header versioning
+
 ## URI versioning
 
 * In this approach, version information becomes part of the **Base URI**. For example, http://api.example.org/v1/users and http://api.example.org/v2/users represent two different versions of an application API.
@@ -874,9 +879,13 @@ approach hasn’t been widely adopted.
 
 How do I perform atomic operations using REST? If I would like to execute multiple operations, but have them all appear as an single, atomic transaction, REST seems inappropriate.
 
+__Low Granularity Services Approach__
+
 REST faces the exact same problem as SOAP-based web services with regards to atomic transactions. There is no stateful connection, and every operation is immediately committed; performing a series of operations means other clients can see interim states.
 
-Unless, of course, you take care of this by design. First, ask yourself: do I have a standard set of atomic operations? This is commonly the case. For example, for a banking operation, removing a sum from one account and adding the same sum to a different account is often a required atomic operation. But rather than exporting just the primitive building blocks, the REST API should provide a single "transfer" operation, which encapsulates the entire process. This provides the desired atomicity, while also making client code much simpler. This appracoh is known as *low granularity services*, or *high-level batch operations*.
+Unless, of course, you take care of this by design. First, ask yourself: do I have a standard set of atomic operations? This is commonly the case. For example, for a banking operation, removing a sum from one account and adding the same sum to a different account is often a required atomic operation. But rather than exporting just the primitive building blocks, the REST API should provide a single "transfer" operation, which encapsulates the entire process. This provides the desired atomicity, while also making client code much simpler. This approach is known as *low granularity services*, or *high-level batch operations*.
+
+__Batch Command Pattern__
 
 If there is no simple, pre-defined set of desired atomic operation sequences, the problem is more severe. A common solution is the **batch command pattern**. Define one REST method to demarcate the beginning of a transaction, and another to demarcate its end (a 'commit' request). Anything sent between these sets of operations is queued by the server but not committed, until the commit request is sent.
 
@@ -950,7 +959,7 @@ Following are the JAX-WS Implementations
 		* how to time out a client
 		* how to restrict number of clients accessing the service
 		* how to implement pagination - Linking Services
-
+* What is missing in REST that SOAP has? TODO
 
 # References
 

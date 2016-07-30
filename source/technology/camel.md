@@ -25,7 +25,7 @@ footer: true
 * Messages are the entities used by systems to communicate with each other when using messaging channels. 
 * Messages flow in one direction from a sender to a receiver
 * Messages have a body (a payload), headers, and optional attachments
-* Messages are uniquely identified with an identifier of type `java.lang.String`. The  dentifier’s uniqueness is enforced and guaranteed by the message creator, it’s protocol dependent, and it doesn’t have a guaranteed format. For protocols that don’t define a unique message identification scheme, Camel uses its own UID generator.
+* Messages are uniquely identified with an identifier of type `java.lang.String`. The identifier’s uniqueness is enforced and guaranteed by the message creator, it’s protocol dependent, and it doesn’t have a guaranteed format. For protocols that don’t define a unique message identification scheme, Camel uses its own UID generator.
 * During routing, messages are contained in an exchange.
 
 * Headers and Attachments

@@ -150,7 +150,7 @@ synchronized(lock){...}
 
 ### Lock Interface
 
-* implementations provide more extensive locking operations than can be obtained using synchronized methods and statements.
+* implementations provide more extensive locking operations than cannot be obtained using `synchronized` methods and statements.
 * Commonly, a lock provides exclusive access to a shared resource: only one thread at a time can acquire the lock and all access to the shared resource requires that the lock be acquired first. However, some locks may allow concurrent access to a shared resource, such as the read lock of a ReadWriteLock.
 * offers more flexible lock acquiring and releasing. For example, some algorithms for traversing concurrently accessed data structures require the use of "hand-over-hand" or "chain locking": you acquire the lock of node A, then node B, then release A and acquire C, then release B and acquire D and so on. Implementations of the Lock interface enable the use of such techniques by allowing a lock to be acquired and released in different scopes, and allowing multiple locks to be acquired and released in any order.
 * Lock implementations provide additional functionality over the use of synchronized methods and statements by providing a non-blocking attempt to acquire a lock (`tryLock()`), an attempt to acquire the lock that can be interrupted (`lockInterruptibly()`, and an attempt to acquire the lock that can timeout (`tryLock(long, TimeUnit)`).
@@ -230,7 +230,7 @@ Non-atomic 64-bit operations - JMM requires the read and write operations to be 
 
 {% img right /technology/memory-cache.png %}
 
-   In modern processors a lot goes on to try and optimise memory and throughput such as *caching*. This is where regularly accessed variables are kept in a small amount of memory close to a specific processor to increase processing speed; it reduces the time the processor has to go to disk to get information (which can be very slow). However, in a multithreaded environment this can be very dangerous as it means that two threads could see a different version of a variable if it has been updated in cache and not written back to memory; *processor A* may think `int i=2` whereas *processor B* thinks `int i=4`. This is where **volatile**  comes in. It tells Java that this variable could be accessed by multiple threads and therefore should not be cached, this guaranteeing the value is correct when accessing. It also stops the compiler from trying to optimise the code by reordering it.
+   In modern processors a lot goes on to try and optimise memory and throughput such as *caching*. This is where regularly accessed variables are kept in a small amount of memory close to a specific processor to increase processing speed; it reduces the time the processor has to go to disk to get information (which can be very slow). However, in a multithreaded environment this can be very dangerous as it means that two threads could see a different version of a variable if it has been updated in cache and not written back to memory; *processor A* may think `int i=2` whereas *processor B* thinks `int i=4`. This is where **volatile**  comes in. It tells Java that this variable could be accessed by multiple threads and therefore should not be cached, this guarantees the value is correct when accessing. It also stops the compiler from trying to optimise the code by reordering it.
 
 In Java, volatile keyword does 3 things:
 
@@ -735,6 +735,9 @@ class Sum extends RecursiveTask<Long> {
   * call `Thread.run()` - Wonʼt start Thread! Still in caller Thread. 
   * use ThreadGroups - Use a ThreadPoolExecutor instead.
 * [How to analyze Java Thread dumps](https://dzone.com/articles/how-analyze-java-thread-dumps)
+* Tools to detect deadlocks? TODO
+* What is `CompletableFuture`? TODO
+* How to unit test concurrent programs? TODO
 
 # Bibliography
 

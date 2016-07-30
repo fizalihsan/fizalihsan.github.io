@@ -86,7 +86,6 @@ footer: true
 * Bit Manipulation - (Ref GIB02, GIB01 ch04, GIB03 ch13,)
 * Graphical and Spatial puzzles  - (Ref GIB03)
 * Counting, Measuring and Ordering puzzles  - (Ref GIB03)
-* Permutations and Combinations - (Ref GIB04)
 * System Design and Memory Limits - (Ref GIB02)
 * General programs - (Ref GIB01)
 	* Base M to N conversion

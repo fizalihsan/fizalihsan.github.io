@@ -19,7 +19,12 @@ footer: true
   * not well suited for low-latency queries like websites, real time systems, etc. (HBase on top of Hadoop serves low-latency queries)
   * smaller data sets.
 * The term *Hadoop Streaming* refers to a mechanism allowing scripting languages to be used to write map and reduce tasks
-* Hadoop installation consists of four types of nodes—a NameNode, DataNodes, a JobTracker, and TaskTracker HDFS nodes (NameNode and DataNodes) provide a distributed filesystem where the JobTracker manages the jobs and TaskTrackers run tasks that perform parts of the job. Users submit MapReduce jobs to the JobTracker, which runs each of the Map and Reduce parts of the initial job in TaskTrackers, collects results, and finally emits the results.
+* Hadoop installation consists of four types of nodes
+	* a NameNode
+	* DataNodes
+	* a JobTracker, and 
+	* TaskTracker
+*HDFS nodes (NameNode and DataNodes) provide a distributed filesystem where the JobTracker manages the jobs and TaskTrackers run tasks that perform parts of the job. Users submit MapReduce jobs to the JobTracker, which runs each of the Map and Reduce parts of the initial job in TaskTrackers, collects results, and finally emits the results.
 
 ## HDFS (Hadoop Distributed File System)
 
@@ -180,7 +185,7 @@ Interactive command-line shell
 	* All topology nodes should be able to run independently with no shared data between processes (i.e., no global or class variables) since these processes may run on different machines.
 * **Node**
 	* In a Storm cluster, nodes are organized into a master node that runs continuously. 
-	* There are two kind of nodes in a Storm cluster: *master node* and *worker nodes 
+	* There are two kind of nodes in a Storm cluster: *master node* and *worker nodes* 
 	* **Nimbus**: Master node run a daemon called *Nimbus*, which is responsible for distributing code around the cluster, assigning tasks to each worker node, and monitoring for failures.
 	* **Supervisor**: Worker nodes run a daemon called *Supervisor*, which executes a portion of a topology. 
 	* Since Storm keeps all cluster states either in Zookeeper or on local disk, the daemons are stateless and can fail or restart without affecting the health of the system
@@ -482,9 +487,9 @@ scalability.
 
 * A key feature of Apache Kafka is that of retention, or the durable storage of messages for some period of time.
 * Kafka brokers are configured with a default retention setting for topics
-	* time-based: retaining messages for some period of time (e.g. 7 days) or 
-	* size-based: until the topic reaches a certain size in bytes (e.g. 1 gigabyte). Once these limits are reached, messages are expired and deleted so that the retention configuration is a minimum amount of data available at any time. 
-	* log-compact-based: Topics may also be configured as ***log compacted***, which means that Kafka will retain only the last message produced with a specific key.
+	* **time-based**: retaining messages for some period of time (e.g. 7 days) or 
+	* **size-based**: until the topic reaches a certain size in bytes (e.g. 1 gigabyte). Once these limits are reached, messages are expired and deleted so that the retention configuration is a minimum amount of data available at any time. 
+	* **log-compact-based**: Topics may also be configured as ***log compacted***, which means that Kafka will retain only the last message produced with a specific key.
 	Log compaction ensures the following:
 		* Ordering of messages is always maintained
 		* The messages will have sequential offsets and the offset never changes

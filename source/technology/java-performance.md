@@ -80,7 +80,10 @@ The easiest way to avoid this is to use unit testcases and one of the available 
 
 __Classloader Leaks__
 
-When thinking about memory leaks we think mostly about normal java objects. Especially in application servers and OSGi containers there is another form of memory leak, the class loader leak. Classes are referenced by their classloader and normally they will not get garbage collected until the classloader itself is collected. That however only happens when the application gets unloaded by the application server or OSGi container. There are two forms of Classloader Leaks that I can describe off the top of my head.
+When thinking about memory leaks we think mostly about normal java objects. Especially in application servers and OSGi containers there is another form of memory leak, the class loader leak. Classes are referenced by their classloader and normally they will not get garbage collected until the classloader itself is collected. That however only happens when the application gets unloaded by the application server or OSGi container. 
+
+There are two forms of Classloader Leaks that I can describe off the top of my head.
+
 * In the first an object whose class belongs to the class loader is still referenced by a cache, a thread local or some other means. In that case the whole class loader, meaning the whole application cannot be garbage collected. This is something that happens quite a lot in OSGi containers nowadays and used to happen in JEE Application Servers frequently as well. As it is only happens when the application gets unloaded or redeployed it does not happen very often.
 * The second form is nastier and was introduced by bytecode manipulation frameworks like BCEL and ASM. These frameworks allow the dynamic creation of new classes. If you follow that thought you will realize that now classes, just like objects, can be forgotten by the developer. The responsible code might create new classes for the same purpose multiple times. As the class is referenced in the current class loader you get a memory leak that will lead to an out of memory in the permanent generation. The real bad news is that most heap analyzer tools do not point out this problem either, we have to analyze it manually, the hard way. This form or memory leak became famous due to an [issue in an older version of hibernate](http://opensource.atlassian.com/projects/hibernate/browse/HHH-2481) and its usage of CGLIB.
 
@@ -118,6 +121,15 @@ Mechanism to hold all kinds of data items such as instructions, object data, loc
 * **Native method stack**: holds the state of each native method call in an implementation dependent way.
 
 ## Garbage Collection
+
+TODO read and document from below links
+
+* [1. Becoming a Java GC Expert - Understanding Java Garbage Collection](http://www.cubrid.org/blog/dev-platform/understanding-java-garbage-collection/)
+* [2. Becoming a Java GC Expert - How to monitor Java GC](http://www.cubrid.org/blog/dev-platform/how-to-monitor-java-garbage-collection/)
+* [3. Becoming a Java GC Expert - How to tune Java GC](http://www.cubrid.org/blog/dev-platform/how-to-tune-java-garbage-collection/)
+* [4. Becoming a Java GC Expert - MaxClients in Apache and its effect on Tomcat during Full GC](http://www.cubrid.org/blog/dev-platform/maxclients-in-apache-and-its-effect-on-tomcat-during-full-gc/)
+* [5. Becoming a Java GC Expert - The Principles of Java Application Performance Tuning](http://www.cubrid.org/blog/dev-platform/the-principles-of-java-application-performance-tuning/)
+* [How Statement Pooling in JDBC affects the Garbage Collection](http://www.cubrid.org/blog/dev-platform/how-statement-pooling-in-jdbc-affects-garbage-collection/)
 
 {% img /technology/java-gc1.png %}
 {% img right /technology/java-gc2.png %}
@@ -457,7 +469,8 @@ rank self accum count trace method
   * Have outer, inner, nested, or local classes
 
 [Apache JMeter](http://jmeter.apache.org)
-
+HP JMeter
+HP JTune
 
 ## Tools shipped with Java
 
@@ -498,10 +511,9 @@ rank self accum count trace method
   * Prints system properties and JVM startup options for the given process, core, or remote debug server
   * Usage: `jinfo <pid>`
 
-## HP JTune
+# FAQs
 
-
-## HP JMeter
+* How do you analyze and fix memory leaks? TODO
 
 # Bibliography
 

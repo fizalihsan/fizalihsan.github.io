@@ -35,10 +35,10 @@ footer: true
 	* Finally, lazy evaluation is useful for deferring expensive operations until needed or never executing them at all.
 	* Defer expensive calculation as much later as possible
 	* Allows to create infinite collections, which keep delivering elements as long as they keep receiving requests.
-* Referential Transparency
+* __Referential Transparency__
 	* A function is considered referentially transparent, if it has the same effect and output on the same input. If not, it is called *referentially opaque*.
 	* If a function can also throw an exception, it isn’t a safe substitute for a value.
-* Currying
+* __Currying__
 	* Both currying and partial application give you the ability to manipulate the number of arguments to functions or methods, typically by supplying one or more default values for some arguments (known as *fixing arguments*)
 	* Currying describes the conversion of a multiargument function into a chain of single-argument functions. It describes the transformation process, not the invocation of the converted function. The caller can decide how many arguments to apply, thereby creating a derived function with that smaller number of arguments.
 	* Use currying to construct specific functions from general ones.
@@ -194,18 +194,23 @@ List<String> collected = Stream.of("a", "b", "hello") .map(string -> string.toUp
 * Data parallelism is a way to split up work to be done on many cores at the same time. In streams framework, we can utilize data parallelism by calling the parallel or parallelStream methods.
 * Going by horses-pulling-carts analogy, it would be like taking half of the goods inside our cart and putting them into another cart for another horse to pull, with both horses taking an identical route to the destination.
 * Data parallelism works really well when you want to perform the same operation on a lot of data. The problem needs be decomposed in a way that will work on subsections of the data, and then the answers from each subsection can be composed at the end.
-* Data parallelism is often contrasted with task parallelism, in which each individual thread of execution can be doing a totally different task. Probably the most commonly encountered task parallelism is a Java EE application container.
-* The five main factors influencing performance are the data size, the source data structure, whether the values are packed, the number of available cores, and how much processing time is spent on each element.
+* _Data parallelism_ is often contrasted with _task parallelism_, in which each individual thread of execution can be doing a totally different task. Probably the most commonly encountered task parallelism is a Java EE application container.
+* The five main factors influencing performance are 
+	* the data size, 
+	* the source data structure, 
+	* whether the values are packed, 
+	* the number of available cores, 
+	* and how much processing time is spent on each element.
 
-Libraries
+__Libraries__
 
 * Java 8 introduces default methods and static methods on interfaces. This change means that methods on interfaces can now have bodies and contain code.
 * As a consequence of these performance overheads, the streams library differentiates between the primitive and boxed versions of some library functions. The mapToLong higher-order function and ToLongFunction, shown in Figure 4-1, are examples of this effort. Only the int, long, and double types have been chosen as the focus of the primitive specialization implementation in Java 8 because the impact is most noticeable in numerical algorithms.
 
 ## Lambdas and Patterns
 
-* Loan Pattern -
-* Execute Around Method - A synchronized block of code, such as synchronized { ... }, is a realization of the execute around method pattern.
+* Loan Pattern - TODO
+* Execute Around Method - A synchronized block of code, such as synchronized { ... }, is a realization of the _execute around method_ pattern.
 * Referential transparency
 * Tail-Call Optimization
 	* The biggest hurdle to using recursion is the risk of stack overflow for problems with large inputs. The brilliant TCO technique can remove that concern. A tail call is a recursive call in which the last operation performed is a call to itself. Java does not directly support TCO at the compiler level, but we can use lambda expressions to implement it in a few lines of code. This is called 'trampoline calls' and lets enjoy the power of recursion without the concern of blowing up the stack.

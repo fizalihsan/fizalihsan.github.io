@@ -51,6 +51,9 @@ footer: true
 
 
 * **3rd Normal Form**
+
+{% img /technology/3NF.png%}
+
 	* *No transitive dependencies*
 	* 3NF requires that every non-prime attribute must be dependent on primary key. 
 	* Tables violate the 3NF when one column depends on another column, which in turn depends on the primary key (**a transitive dependency**). One way to identify transitive dependencies is to look at your table and see if any columns would require updating if another column in the table was updated. If such a column exists, it probably violates 3NF. 
@@ -63,7 +66,6 @@ footer: true
 
 * **5th Normal Form**: Every non-trivial join dependency in the table is implied by the superkeys of the table.
 
-{% img /technology/3NF.png%}
 
 * Denormalization
 
@@ -192,7 +194,7 @@ CREATE TABLE Comment (
 * Copying the entire hierarchy from database to application for tree creation is highly inefficient.
 * Inserting a node in a sub-tree is easy, however deleting a node or an entire sub-tree is difficult. ON DELETE CASCADE modifier can be used.
 * If the non-leaf node should be deleted without deleting the children, then all the parent_id needs to be modified.
-* Some databases support WITH keyword to recursively query hierarchical data.
+* Some databases support `WITH` keyword to recursively query hierarchical data.
 
 *Alternatives*
 
@@ -209,7 +211,7 @@ CREATE TABLE Comment (
 ```
 **Pros**
 
-* Querying ancestors and children is easy. E.g., SELECT * FROM Comment c WHERE c.path like '1/4/'
+* Querying ancestors and children is easy. E.g., `SELECT * FROM Comment c WHERE c.path like '1/4/'`
 
 **Cons**
 

@@ -92,7 +92,7 @@ footer: true
   * Any objects created/instantiated within M
   * O's direct component objects
   * A global variable, accessible by O, in the scope of M
-* Don't do this `objectA.getObjectB().getObjectC().doSomething();`
+* Don't do this `objectA.getObjectB().getObjectC().doSomething();` except on data structure methods.
 
 # 6 principles of package design
 

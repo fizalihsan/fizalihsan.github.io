@@ -13,6 +13,8 @@ footer: true
 
 # Chunk Processing
 
+[Excellent article - Horizontal and Vertical Scaling Strategies for Batch Applications](http://www.ontheserverside.com/blog/2014/07/23/horizontal-and-vertical-scaling-strategies-for-batch-applications)
+
 * Spring Batch includes a batch-oriented algorithm to handle the execution flow called
 *chunk processing*.
 * Spring Batch processes items in chunks. A job reads and writes items in small chunks. Chunk processing allows streaming data instead of loading all the data in memory. By default, chunk processing is single threaded and usually performs well, but has an option to distribute processing on multiple threads or physical nodes as well.
@@ -42,7 +44,7 @@ Spring Batch needs two infrastructure components:
 
 # Configuration
 
-{% img right /technology/spring-batch-configuration-hierarchy.png %}
+{% img /technology/spring-batch-configuration-hierarchy.png %}
 
 ```xml Sample Job Configuration
 <batch:job id="importProductsJob">
@@ -216,3 +218,9 @@ public interface ItemWriter<T> {
 # Transaction Management
 
 # Testing
+
+# References
+
+* Books
+	* Spring Batch in Action
+	* Pro Spring Batch

@@ -31,6 +31,9 @@ footer: true
 
 > **Definition**: A binary search tree (BST) is a binary tree where each node has a `Comparable` key (and an associated value) and satisfies the restriction that the key in any node is larger than the keys in all nodes in that node’s left subtree and smaller than the keys in all nodes in that node’s right subtree
 
+​
+A property of a binary tree that is sometimes important is that the depth of an average binary tree is considerably smaller than `N`. An analysis shows that the average depth is `√O(N)`, and that for a special type of binary tree, namely the binary search tree, the average value of the depth is `O(log N)`. Unfortunately, the depth can be as large as `N − 1`
+
 * [Binary Tree Problems](/technology/BinaryTrees.pdf)
 * [Tree-List Recursion Problems](/technology/TreeListRecursion.pdf)
 * **Full Binary Tree** - Each node in a *full binary tree* is either (1) an internal node with exactly two non-empty children or (2) a leaf
@@ -64,8 +67,32 @@ footer: true
 * a balanced BST will in the average case have operations costing `O(log n)`, while a badly unbalanced BST can have operations in the worst case costing `O(n)`.
 * While the BST is simple to implement and efficient when the tree is balanced, the possibility of its being unbalanced is a serious liability. There are techniques for organizing a BST to guarantee good performance: like AVL tree and the splay tree.
 
-* **Height-balanced binary search tree (OR) AVL tree** (after their Russian inventors  *Adelson-Velskii and Landis*)
-* Self-balanced tree
+## Height-balanced binary search tree (OR) AVL tree
+
+> Source: Data Structures and Algorithm Analysis in Java, 3rd Edition by Mark Allen Weiss
+
+| **Fig #1: Bad Binary Tree** <br>{% img /technology/bad-binary-tree.png %} | **Fig #2: Binary Tree, not AVL Tree** <br>{% img /technology/binary-tree-not-avl.png %} |
+| **Fig #3: AVL tree** <br>{% img /technology/avl-tree.png %} | **Fig #4: Smallest AVL tree of height 9** <br>{% img /technology/smallest-avl-tree-height-9.png %}|
+
+* An AVL (Adelson-Velskii and Landis) tree is a binary search tree with a balance condition. 
+* The balance condition must be easy to maintain, and it ensures that the depth of the tree is `O(logN)`. 
+* The simplest idea is to require that the left and right subtrees have the same height. As the above picture shows, this idea does not force the tree to be shallow.
+* Another balance condition would insist that every node must have left and right subtrees of the same height. If the height of an empty subtree is defined to be `−1` (as is usual), then only perfectly balanced trees of `2k − 1` nodes would satisfy this criterion. Thus, although this guarantees trees of small depth, the balance condition is too rigid to be useful and needs to be relaxed.
+* **An AVL tree is identical to a binary search tree, except that for every node in the tree, the height of the left and right subtrees can differ by at most `1`**. (The height of an empty tree is defined to be `−1`.) In above pictures, height information is kept for each node (in the node structure). It can be shown that the height of an AVL tree is at most roughly `1.44 log(N + 2) − 1.328`, but in practice it is only slightly more than `logN`. 
+* As an example, the AVL tree of height 9 with the fewest nodes (143) is shown in Fig 4. This tree has as a left subtree an AVL tree of height 7 of minimum size. The right subtree is an AVL tree of height 8 of minimum size. This tells us that the minimum number of nodes, `S(h)`, in an AVL tree of height `h` is given by `S(h) = S(h−1) + S(h−2) + 1`. 
+	* For `h = 0, S(h) = 1`. 
+	* For `h = 1, S(h) = 2`. 
+	* The function `S(h)` is closely related to the Fibonacci numbers, from which the bound claimed above on the height of an AVL tree follows.
+
+## Self-balanced tree
+
+TODO
+
+## Splay Trees
+
+TODO
+
+> Source: Data Structures and Algorithm Analysis in Java, 3rd Edition by Mark Allen Weiss
 
 ## Balanced Search Trees
 

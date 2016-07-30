@@ -184,7 +184,7 @@ ActiveMQ is in the middle ground. Like Zmq, it can be deployed with both broker 
 
 ## Kafka
 
-TBD
+[Check Kafka page here](/technology/bigdata-frameworks.html#apache-kafka)
 
 # Bibliography
 

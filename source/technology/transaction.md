@@ -54,10 +54,10 @@ If someone is reading from a DB at the same time as someone else is writing to i
 
 A *lost update* occurs when the following events occur, in the order presented here:
 
-* 1. A transaction in Session1 retrieves (queries) a row of data into local memory and displays it to an end user, User1.
-* 2. Another transaction in Session2 retrieves that same row, but displays the data to a different end user, User2.
-* 3. User1, using the application, modifies that row and has the application update the database and commit. Session1’s transaction is now complete.
-* 4. User2 modifies that row also, and has the application update the database and commit. Session2’s transaction is now complete.
+1. A transaction in Session1 retrieves (queries) a row of data into local memory and displays it to an end user, User1.
+2. Another transaction in Session2 retrieves that same row, but displays the data to a different end user, User2.
+3. User1, using the application, modifies that row and has the application update the database and commit. Session1’s transaction is now complete.
+4. User2 modifies that row also, and has the application update the database and commit. Session2’s transaction is now complete.
 
 * **Blocking**
   * Blocking occurs when one session holds a lock on a resource that another session is requesting. As a result, the requesting session will be blocked—it will hang until the holding session gives up the locked resource.
@@ -133,7 +133,7 @@ Block operations in some situations, if they may cause violation of some rules, 
 
 ### MVCC
 
-* Locking mechanism is slow. So MVCC takes a different approacheach user connected to the DB sees a snapshot of the DB at a particular instant in time. Any changes made by a writer will not be seen by other users of the DB until the changes have been completed (or, in DB terms: until the transaction has been committed.)
+* Locking mechanism is slow. So MVCC takes a different approach each user connected to the DB sees a snapshot of the DB at a particular instant in time. Any changes made by a writer will not be seen by other users of the DB until the changes have been completed (or, in DB terms: until the transaction has been committed.)
 * When an MVCC DB needs to update an item of data, it will not overwrite the old data with new data, but instead mark the old data as obsolete and add the newer version elsewhere. Thus there are multiple versions stored, but only one is the latest. This allows readers to access the data that was there when they began reading, even if it was modified or deleted part way through by someone else. 
 * Requires (generally) the system to periodically sweep through and delete the old, obsolete data objects. 
 * For a document-oriented DB it also allows the system to optimize documents by writing entire documents onto contiguous sections of disk—when updated, the entire document can be re-written rather than bits and pieces cut out or maintained in a linked, non-contiguous DB structure.
@@ -148,6 +148,7 @@ Block operations in some situations, if they may cause violation of some rules, 
 
 * Assigning timestamps to transactions, and controlling or checking access to data by timestamp order.
 * a timestamp-based concurrency control algorithm is a non-lock concurrency control method. It is used in some databases to safely handle transactions, using timestamps.
+* HBase does this type of implementation
 * Assumptions
   * Every timestamp value is unique and accurately represents an instant in time.
   * No two timestamps can be the same.

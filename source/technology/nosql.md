@@ -118,18 +118,18 @@ arrays
 
 #### Index Types
 
-* Unique indexes 
-* Array indexes - For fields that contain an array, each array value is stored as a separate index entry. There is no special syntax for array indexes though.
-* Sparse Indexes - Sparse indexes only contain entries for documents that contain the specified field. Because MongoDB’s allows the data model to vary from one document to another, it is common for some fields to be present only in a subset of all documents. Sparse indexes allow for smaller, more efficient indexes when fields are not present in all documents.
-* Hash Indexes - Hash indexes compute a hash of the value of a field and index the hashed value. The primary use of this index is to enable hash-based sharding, a simple and uniform distribution of documents across shards
-* Capped collection - max size of the collection is defined at the time of creation and cannot be altered; an existing regular collection can be converted to capped collection, but not vice versa. It behaves like a circular queue and maintains the insertion order; cannot be sharded.
-* Tailable cursors - like `tail -f` command, tailable cursors can be defined on capped collections.
-* TTL indexes - Time-to-Live indexes are customizable capped collections where time-out for each document is defined by the user. A common use is in applications that maintain a rolling window of history (e.g., most recent 100 days) for user actions such as clickstreams.
-* Full-text indexes - give you the ability to search text quickly, as well as provide built-in support for multi-language stemming and stop words; only index string data; allows searching multiple fields with custom weightage specified (from default 1 to 1 billion); You can create a full-text index on all string fields in a document by creating an index on `$**` 
-* Geo-spatial indexes
-  * Types of Geospatial queries : intersection, within, and nearness; Geospatial queries using "intersection" and "within" functions do not require an index, whereas "near" function does.
-  * 2dsphere index - for surface-of-the-earth-type maps; allows you to specify points, lines, and polygons in GeoJSON format. A point is given by a two-element array, representing [longitude, latitude]; A line by an array of Points; A polygon in the same way as lines but with different 'type'; Sample queries: restaurants in given coordinates, restaurants near given coordinates.
-  * 2d index - for flat maps, video game maps and time series data; "2d" indexes assume a perfectly flat surface, instead of a sphere; can only store points; 
+* **Unique indexes**
+* **Array indexes** - For fields that contain an array, each array value is stored as a separate index entry. There is no special syntax for array indexes though.
+* **Sparse Indexes** - Sparse indexes only contain entries for documents that contain the specified field. Because MongoDB’s allows the data model to vary from one document to another, it is common for some fields to be present only in a subset of all documents. Sparse indexes allow for smaller, more efficient indexes when fields are not present in all documents.
+* **Hash Indexes** - Hash indexes compute a hash of the value of a field and index the hashed value. The primary use of this index is to enable hash-based sharding, a simple and uniform distribution of documents across shards
+* **Capped collection** - max size of the collection is defined at the time of creation and cannot be altered; an existing regular collection can be converted to capped collection, but not vice versa. It behaves like a circular queue and maintains the insertion order; cannot be sharded.
+* **Tailable cursors** - like `tail -f` command, tailable cursors can be defined on capped collections.
+* **TTL indexes** - Time-to-Live indexes are customizable capped collections where time-out for each document is defined by the user. A common use is in applications that maintain a rolling window of history (e.g., most recent 100 days) for user actions such as clickstreams.
+* **Full-text indexes** - give you the ability to search text quickly, as well as provide built-in support for multi-language stemming and stop words; only index string data; allows searching multiple fields with custom weightage specified (from default 1 to 1 billion); You can create a full-text index on all string fields in a document by creating an index on `$**` 
+* **Geo-spatial indexes**
+  * Types of Geospatial queries : *intersection*, *within*, and *nearness*; Geospatial queries using *intersection* and *within* functions do not require an index, whereas *near* function does.
+  * ***2dsphere index*** - for surface-of-the-earth-type maps; allows you to specify points, lines, and polygons in GeoJSON format. A point is given by a two-element array, representing [longitude, latitude]; A line by an array of Points; A polygon in the same way as lines but with different 'type'; Sample queries: restaurants in given coordinates, restaurants near given coordinates.
+  * ***2d index*** - for flat maps, video game maps and time series data; "2d" indexes assume a perfectly flat surface, instead of a sphere; can only store points; 
 
 #### Rules of Index Design
 
@@ -214,7 +214,6 @@ arrays
 
 * MongoDB was designed from the ground up to be easy to scale to multiple distributed servers. Two of the biggest problems in distributed database design are distributed join operations and distributed transactions.
 * Both of these operations are complex to implement, and can yield poor performance or even downtime in the event that a server becomes unreachable. By “punting” on these problems and not supporting
-* joins or multidocument transactions at all, MongoDB has been able to implement an automatic sharding solution with much better scaling and performance characteristics than you’d normally be stuck with if you had to take relational joins and transactions into account.
 
 #### Write concern
 
@@ -260,12 +259,12 @@ To acknowledge that the data has replicated to two members of the replica set be
    * You also cannot change the value of a shard key (with, for example, a $set). The only way to give a document a new shard key is to remove the document, change the shard key’s value on the client side, and reinsert it.
    * A document belongs in a chunk if and only if its shard key value is in that chunk’s range. 
 * mongos
-   * `mongos` is a special routing process that sits in front of your cluster and looks like an ordinary mongod server to anything that connects to it. It forwards requests to the correct server or servers in the cluster, then assembles their responses and sends them back to the client. This makes it so that, in general, a client does not need to know that they’re talking to a cluster rather than a single server.
-   * Targeted Query - While querying, if the query has the shard key, mongos determines which shard/shards contains the data and hits those directly. This is called a targeted query. 
-   * Spewed Query - If the shard key is absent in the query, mongos must send the query to all of the shards. This can be less efficient than targeted queries, but not necessarily. A “spewed” query that accesses a few indexed documents in RAM will perform much better than a targeted query that has to access data from disk across many shards (a targeted query could hit every shard, too)
+   * `mongos` is a special routing process that sits in front of your cluster and looks like an ordinary `mongod` server to anything that connects to it. It forwards requests to the correct server or servers in the cluster, then assembles their responses and sends them back to the client. This makes it so that, in general, a client does not need to know that they’re talking to a cluster rather than a single server.
+   * *Targeted Query* - While querying, if the query has the shard key, mongos determines which shard/shards contains the data and hits those directly. This is called a targeted query. 
+   * *Spewed Query* - If the shard key is absent in the query, mongos must send the query to all of the shards. This can be less efficient than targeted queries, but not necessarily. A “spewed” query that accesses a few indexed documents in RAM will perform much better than a targeted query that has to access data from disk across many shards (a targeted query could hit every shard, too)
 * Anatomy of a cluster
    * A MongoDB cluster basically consists of three types of processes: 
-      # the shards for actually storing data, 
+      * the shards for actually storing data, 
       * the mongos processes for routing requests to the correct data, and
       * the config servers, for keeping track of the cluster’s state
 * Replica Sets

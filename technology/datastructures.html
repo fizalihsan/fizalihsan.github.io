@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Data Structures Lists Queues Trees Binary Tree Binary search tree (BST) Balanced tree Balanced Search Trees 2-3 Search Tree Red-Black Tree Graphs &hellip;">
+<meta name="description" content="Data Structures Lists Queues Trees Binary Tree Binary search tree (BST) Balanced tree Height-balanced binary search tree (OR) AVL tree Self-balanced &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -114,6 +114,9 @@ messageStyle: "none",
       <li><a href="#binary-tree">Binary Tree</a></li>
       <li><a href="#binary-search-tree-bst">Binary search tree (BST)</a></li>
       <li><a href="#balanced-tree">Balanced tree</a></li>
+      <li><a href="#height-balanced-binary-search-tree-or-avl-tree">Height-balanced binary search tree (OR) AVL tree</a></li>
+      <li><a href="#self-balanced-tree">Self-balanced tree</a></li>
+      <li><a href="#splay-trees">Splay Trees</a></li>
       <li><a href="#balanced-search-trees">Balanced Search Trees</a>        <ul>
           <li><a href="#search-tree">2-3 Search Tree</a></li>
           <li><a href="#red-black-tree">Red-Black Tree</a></li>
@@ -160,6 +163,9 @@ messageStyle: "none",
 <blockquote>
   <p><strong>Definition</strong>: A binary search tree (BST) is a binary tree where each node has a <code>Comparable</code> key (and an associated value) and satisfies the restriction that the key in any node is larger than the keys in all nodes in that node’s left subtree and smaller than the keys in all nodes in that node’s right subtree</p>
 </blockquote>
+
+<p>​
+A property of a binary tree that is sometimes important is that the depth of an average binary tree is considerably smaller than <code>N</code>. An analysis shows that the average depth is <code>√O(N)</code>, and that for a special type of binary tree, namely the binary search tree, the average value of the depth is <code>O(log N)</code>. Unfortunately, the depth can be as large as <code>N − 1</code></p>
 
 <ul>
   <li><a href="/technology/BinaryTrees.pdf">Binary Tree Problems</a></li>
@@ -208,12 +214,54 @@ messageStyle: "none",
 <ul>
   <li>If a binary tree is balanced, then the height for a tree of <code>n</code> nodes is approximately <code>log n</code>. However, if the tree is completely unbalanced, then the height for a tree with <code>n</code> nodes can be as great as <code>n</code>.</li>
   <li>a balanced BST will in the average case have operations costing <code>O(log n)</code>, while a badly unbalanced BST can have operations in the worst case costing <code>O(n)</code>.</li>
-  <li>
-    <p>While the BST is simple to implement and efficient when the tree is balanced, the possibility of its being unbalanced is a serious liability. There are techniques for organizing a BST to guarantee good performance: like AVL tree and the splay tree.</p>
-  </li>
-  <li><strong>Height-balanced binary search tree (OR) AVL tree</strong> (after their Russian inventors  <em>Adelson-Velskii and Landis</em>)</li>
-  <li>Self-balanced tree</li>
+  <li>While the BST is simple to implement and efficient when the tree is balanced, the possibility of its being unbalanced is a serious liability. There are techniques for organizing a BST to guarantee good performance: like AVL tree and the splay tree.</li>
 </ul>
+
+<h2 id="height-balanced-binary-search-tree-or-avl-tree">Height-balanced binary search tree (OR) AVL tree</h2>
+
+<blockquote>
+  <p>Source: Data Structures and Algorithm Analysis in Java, 3rd Edition by Mark Allen Weiss</p>
+</blockquote>
+
+<table>
+  <tbody>
+    <tr>
+      <td><strong>Fig #1: Bad Binary Tree</strong> <br /><img src="/technology/bad-binary-tree.png" /></td>
+      <td><strong>Fig #2: Binary Tree, not AVL Tree</strong> <br /><img src="/technology/binary-tree-not-avl.png" /></td>
+    </tr>
+    <tr>
+      <td><strong>Fig #3: AVL tree</strong> <br /><img src="/technology/avl-tree.png" /></td>
+      <td><strong>Fig #4: Smallest AVL tree of height 9</strong> <br /><img src="/technology/smallest-avl-tree-height-9.png" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>An AVL (Adelson-Velskii and Landis) tree is a binary search tree with a balance condition. </li>
+  <li>The balance condition must be easy to maintain, and it ensures that the depth of the tree is <code>O(logN)</code>. </li>
+  <li>The simplest idea is to require that the left and right subtrees have the same height. As the above picture shows, this idea does not force the tree to be shallow.</li>
+  <li>Another balance condition would insist that every node must have left and right subtrees of the same height. If the height of an empty subtree is defined to be <code>−1</code> (as is usual), then only perfectly balanced trees of <code>2k − 1</code> nodes would satisfy this criterion. Thus, although this guarantees trees of small depth, the balance condition is too rigid to be useful and needs to be relaxed.</li>
+  <li><strong>An AVL tree is identical to a binary search tree, except that for every node in the tree, the height of the left and right subtrees can differ by at most <code>1</code></strong>. (The height of an empty tree is defined to be <code>−1</code>.) In above pictures, height information is kept for each node (in the node structure). It can be shown that the height of an AVL tree is at most roughly <code>1.44 log(N + 2) − 1.328</code>, but in practice it is only slightly more than <code>logN</code>. </li>
+  <li>As an example, the AVL tree of height 9 with the fewest nodes (143) is shown in Fig 4. This tree has as a left subtree an AVL tree of height 7 of minimum size. The right subtree is an AVL tree of height 8 of minimum size. This tells us that the minimum number of nodes, <code>S(h)</code>, in an AVL tree of height <code>h</code> is given by <code>S(h) = S(h−1) + S(h−2) + 1</code>. 
+    <ul>
+      <li>For <code>h = 0, S(h) = 1</code>. </li>
+      <li>For <code>h = 1, S(h) = 2</code>. </li>
+      <li>The function <code>S(h)</code> is closely related to the Fibonacci numbers, from which the bound claimed above on the height of an AVL tree follows.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="self-balanced-tree">Self-balanced tree</h2>
+
+<p>TODO</p>
+
+<h2 id="splay-trees">Splay Trees</h2>
+
+<p>TODO</p>
+
+<blockquote>
+  <p>Source: Data Structures and Algorithm Analysis in Java, 3rd Edition by Mark Allen Weiss</p>
+</blockquote>
 
 <h2 id="balanced-search-trees">Balanced Search Trees</h2>
 
@@ -311,6 +359,8 @@ the ordered operations (except range search).</li>
 </ul>
 
 <h1 id="graphs">Graphs</h1>
+
+<p>TODO</p>
 
 <h2 id="undirected-graphs">Undirected Graphs</h2>
 

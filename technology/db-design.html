@@ -198,30 +198,30 @@ messageStyle: "none",
 </code></pre>
 
 <ul>
-  <li><strong>3rd Normal Form</strong>
-    <ul>
-      <li><em>No transitive dependencies</em></li>
-      <li>3NF requires that every non-prime attribute must be dependent on primary key. </li>
-      <li>Tables violate the 3NF when one column depends on another column, which in turn depends on the primary key (<strong>a transitive dependency</strong>). One way to identify transitive dependencies is to look at your table and see if any columns would require updating if another column in the table was updated. If such a column exists, it probably violates 3NF. </li>
-      <li>A relational table is in 3NF if and only if all non-key columns are 
-        <ul>
-          <li>(a) mutually independent (means that no non-key column is dependent upon any combination of the other columns.)</li>
-          <li>(b) fully dependent upon the primary key.  </li>
-        </ul>
-      </li>
-      <li>The first two normal forms are intermediate steps to achieve the goal of having all tables in 3NF. In order to better understand the 2NF and higher forms, it is necessary to understand the concepts of functional dependencies and lossless decomposition.</li>
-    </ul>
-  </li>
-  <li>
-    <p><strong>4th Normal Form</strong>: Every non-trivial multivalued dependency in the table is a dependency on a superkey.</p>
-  </li>
-  <li><strong>5th Normal Form</strong>: Every non-trivial join dependency in the table is implied by the superkeys of the table.</li>
+  <li><strong>3rd Normal Form</strong></li>
 </ul>
 
 <p><img src="/technology/3NF.png" /></p>
 
+<pre><code>* *No transitive dependencies*
+* 3NF requires that every non-prime attribute must be dependent on primary key. 
+* Tables violate the 3NF when one column depends on another column, which in turn depends on the primary key (**a transitive dependency**). One way to identify transitive dependencies is to look at your table and see if any columns would require updating if another column in the table was updated. If such a column exists, it probably violates 3NF. 
+* A relational table is in 3NF if and only if all non-key columns are 
+	* (a) mutually independent (means that no non-key column is dependent upon any combination of the other columns.)
+	* (b) fully dependent upon the primary key.  
+* The first two normal forms are intermediate steps to achieve the goal of having all tables in 3NF. In order to better understand the 2NF and higher forms, it is necessary to understand the concepts of functional dependencies and lossless decomposition.
+</code></pre>
+
 <ul>
-  <li>Denormalization</li>
+  <li>
+    <p><strong>4th Normal Form</strong>: Every non-trivial multivalued dependency in the table is a dependency on a superkey.</p>
+  </li>
+  <li>
+    <p><strong>5th Normal Form</strong>: Every non-trivial join dependency in the table is implied by the superkeys of the table.</p>
+  </li>
+  <li>
+    <p>Denormalization</p>
+  </li>
 </ul>
 
 <p><a href="http://www.ibm.com/support/knowledgecenter/SSEPEK_10.0.0/com.ibm.db2z10.doc.intro/src/tpc/db2z_denormalizationforperformance.htm">Denormalization for performance</a></p>
@@ -406,7 +406,7 @@ which is present in an application is absolutely critical.</li>
   <li>Copying the entire hierarchy from database to application for tree creation is highly inefficient.</li>
   <li>Inserting a node in a sub-tree is easy, however deleting a node or an entire sub-tree is difficult. ON DELETE CASCADE modifier can be used.</li>
   <li>If the non-leaf node should be deleted without deleting the children, then all the parent_id needs to be modified.</li>
-  <li>Some databases support WITH keyword to recursively query hierarchical data.</li>
+  <li>Some databases support <code>WITH</code> keyword to recursively query hierarchical data.</li>
 </ul>
 
 <p><em>Alternatives</em></p>
@@ -435,7 +435,7 @@ which is present in an application is absolutely critical.</li>
 <p><strong>Pros</strong></p>
 
 <ul>
-  <li>Querying ancestors and children is easy. E.g., SELECT * FROM Comment c WHERE c.path like ‘1/4/’</li>
+  <li>Querying ancestors and children is easy. E.g., <code>SELECT * FROM Comment c WHERE c.path like '1/4/'</code></li>
 </ul>
 
 <p><strong>Cons</strong></p>

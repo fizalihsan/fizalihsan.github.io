@@ -145,10 +145,9 @@ messageStyle: "none",
       <li><a href="#mat">MAT</a></li>
       <li><a href="#btrace">BTrace</a></li>
       <li><a href="#tools-shipped-with-java">Tools shipped with Java</a></li>
-      <li><a href="#hp-jtune">HP JTune</a></li>
-      <li><a href="#hp-jmeter">HP JMeter</a></li>
     </ul>
   </li>
+  <li><a href="#faqs">FAQs</a></li>
   <li><a href="#bibliography">Bibliography</a></li>
 </ul>
 
@@ -239,9 +238,14 @@ The easiest way to avoid this is to use unit testcases and one of the available 
 
 <p><strong>Classloader Leaks</strong></p>
 
-<p>When thinking about memory leaks we think mostly about normal java objects. Especially in application servers and OSGi containers there is another form of memory leak, the class loader leak. Classes are referenced by their classloader and normally they will not get garbage collected until the classloader itself is collected. That however only happens when the application gets unloaded by the application server or OSGi container. There are two forms of Classloader Leaks that I can describe off the top of my head.
-* In the first an object whose class belongs to the class loader is still referenced by a cache, a thread local or some other means. In that case the whole class loader, meaning the whole application cannot be garbage collected. This is something that happens quite a lot in OSGi containers nowadays and used to happen in JEE Application Servers frequently as well. As it is only happens when the application gets unloaded or redeployed it does not happen very often.
-* The second form is nastier and was introduced by bytecode manipulation frameworks like BCEL and ASM. These frameworks allow the dynamic creation of new classes. If you follow that thought you will realize that now classes, just like objects, can be forgotten by the developer. The responsible code might create new classes for the same purpose multiple times. As the class is referenced in the current class loader you get a memory leak that will lead to an out of memory in the permanent generation. The real bad news is that most heap analyzer tools do not point out this problem either, we have to analyze it manually, the hard way. This form or memory leak became famous due to an <a href="http://opensource.atlassian.com/projects/hibernate/browse/HHH-2481">issue in an older version of hibernate</a> and its usage of CGLIB.</p>
+<p>When thinking about memory leaks we think mostly about normal java objects. Especially in application servers and OSGi containers there is another form of memory leak, the class loader leak. Classes are referenced by their classloader and normally they will not get garbage collected until the classloader itself is collected. That however only happens when the application gets unloaded by the application server or OSGi container. </p>
+
+<p>There are two forms of Classloader Leaks that I can describe off the top of my head.</p>
+
+<ul>
+  <li>In the first an object whose class belongs to the class loader is still referenced by a cache, a thread local or some other means. In that case the whole class loader, meaning the whole application cannot be garbage collected. This is something that happens quite a lot in OSGi containers nowadays and used to happen in JEE Application Servers frequently as well. As it is only happens when the application gets unloaded or redeployed it does not happen very often.</li>
+  <li>The second form is nastier and was introduced by bytecode manipulation frameworks like BCEL and ASM. These frameworks allow the dynamic creation of new classes. If you follow that thought you will realize that now classes, just like objects, can be forgotten by the developer. The responsible code might create new classes for the same purpose multiple times. As the class is referenced in the current class loader you get a memory leak that will lead to an out of memory in the permanent generation. The real bad news is that most heap analyzer tools do not point out this problem either, we have to analyze it manually, the hard way. This form or memory leak became famous due to an <a href="http://opensource.atlassian.com/projects/hibernate/browse/HHH-2481">issue in an older version of hibernate</a> and its usage of CGLIB.</li>
+</ul>
 
 <h2 id="jvm-architecture">JVM Architecture</h2>
 
@@ -281,6 +285,17 @@ The easiest way to avoid this is to use unit testcases and one of the available 
 </ul>
 
 <h2 id="garbage-collection">Garbage Collection</h2>
+
+<p>TODO read and document from below links</p>
+
+<ul>
+  <li><a href="http://www.cubrid.org/blog/dev-platform/understanding-java-garbage-collection/">1. Becoming a Java GC Expert - Understanding Java Garbage Collection</a></li>
+  <li><a href="http://www.cubrid.org/blog/dev-platform/how-to-monitor-java-garbage-collection/">2. Becoming a Java GC Expert - How to monitor Java GC</a></li>
+  <li><a href="http://www.cubrid.org/blog/dev-platform/how-to-tune-java-garbage-collection/">3. Becoming a Java GC Expert - How to tune Java GC</a></li>
+  <li><a href="http://www.cubrid.org/blog/dev-platform/maxclients-in-apache-and-its-effect-on-tomcat-during-full-gc/">4. Becoming a Java GC Expert - MaxClients in Apache and its effect on Tomcat during Full GC</a></li>
+  <li><a href="http://www.cubrid.org/blog/dev-platform/the-principles-of-java-application-performance-tuning/">5. Becoming a Java GC Expert - The Principles of Java Application Performance Tuning</a></li>
+  <li><a href="http://www.cubrid.org/blog/dev-platform/how-statement-pooling-in-jdbc-affects-garbage-collection/">How Statement Pooling in JDBC affects the Garbage Collection</a></li>
+</ul>
 
 <p><img src="/technology/java-gc1.png" />
 <img class="right" src="/technology/java-gc2.png" />
@@ -818,7 +833,9 @@ The easiest way to avoid this is to use unit testcases and one of the available 
   </li>
 </ul>
 
-<p><a href="http://jmeter.apache.org">Apache JMeter</a></p>
+<p><a href="http://jmeter.apache.org">Apache JMeter</a>
+HP JMeter
+HP JTune</p>
 
 <h2 id="tools-shipped-with-java">Tools shipped with Java</h2>
 
@@ -879,9 +896,11 @@ The easiest way to avoid this is to use unit testcases and one of the available 
   </li>
 </ul>
 
-<h2 id="hp-jtune">HP JTune</h2>
+<h1 id="faqs">FAQs</h1>
 
-<h2 id="hp-jmeter">HP JMeter</h2>
+<ul>
+  <li>How do you analyze and fix memory leaks? TODO</li>
+</ul>
 
 <h1 id="bibliography">Bibliography</h1>
 

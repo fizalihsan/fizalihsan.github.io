@@ -123,11 +123,11 @@ messageStyle: "none",
 
 <h2 id="naming">Naming</h2>
 <ul>
-  <li>Don’t reveal implementation detail in variables. e.g., declare accounts instead accountList</li>
+  <li>Don’t reveal implementation detail in variables. e.g., declare <code>accounts</code> instead <code>accountList</code></li>
   <li>Use single letter variables only as a local variable</li>
-  <li>No need for prefix on variables and class names. e.g., ICustomer interface</li>
-  <li>Class name should NOT be a verb. Avoid words like Manager, Processor, Data or Info</li>
-  <li>Use a common word per concept across method names and class names. e.g., fetch(), get(), retrieve(). Stick to one.</li>
+  <li>No need for prefix on variables and class names. e.g., <code>ICustomer</code> interface</li>
+  <li>Class name should NOT be a verb. Avoid words like <code>Manager</code>, <code>Processor</code>, <code>Data</code> or <code>Info</code></li>
+  <li>Use a common word per concept across method names and class names. e.g., <code>fetch(), get(), retrieve()</code>. Stick to one.</li>
 </ul>
 
 <h2 id="function">Function</h2>
@@ -144,9 +144,9 @@ messageStyle: "none",
           <li>Polyadic (multiple) - Needs good justification</li>
         </ul>
       </li>
-      <li>Avoid functions with output arguments. e.g., public boolean foo(String input, String output);</li>
-      <li>Passing flags as arguments is ugly. Based on the flag value, the function might perform one or more things. .e.g., render(boolean isSuite). Split the logic into renderForSuite() and renderForSingleTest() to make it explicit.</li>
-      <li>Ambiguity issue with dyadic or polyadic functions with same type of arguments. e.g, assertEquals(int expected, int actual). Make function explicit as assertExpectedEqualsActual(int, int).</li>
+      <li>Avoid functions with output arguments. e.g., <code>public boolean foo(String input, String output);</code></li>
+      <li>Passing flags as arguments is ugly. Based on the flag value, the function might perform one or more things. .e.g., <code>render(boolean isSuite)</code>. Split the logic into <code>renderForSuite()</code> and <code>renderForSingleTest()</code> to make it explicit.</li>
+      <li>Ambiguity issue with dyadic or polyadic functions with same type of arguments. e.g, <code>assertEquals(int expected, int actual)</code>. Make function explicit as <code>assertExpectedEqualsActual(int, int)</code>.</li>
       <li>Fix for polyadic functions
         <ul>
           <li>Club the different arguments into an object and pass that object as input argument</li>
@@ -157,47 +157,50 @@ messageStyle: "none",
   </li>
   <li><strong>Side effects</strong>
     <ul>
-      <li>A function promises to do one thing, but it also does other hidden things. e.g., checkPassword(String user, String password) method which authenticates and initializes a user session. Session initialization part is hidden from user.</li>
-      <li>Side effects create temporal couplings and order dependencies. Temporal couplings mean that the function can only be invoked at certain times. In the above example, if it is called out of order the current session data might be destroyed.</li>
+      <li>A function promises to do one thing, but it also does other hidden things. e.g., <code>checkPassword(String user, String password)</code> method which authenticates and initializes a user session. Session initialization part is hidden from user.</li>
+      <li>Side effects create temporal couplings and order dependencies. <em>Temporal couplings</em> mean that the function can only be invoked at certain times. In the above example, if it is called out of order the current session data might be destroyed.</li>
     </ul>
   </li>
-  <li><strong>Double take</strong> - Any line of code within function forces you to look at the function signature, then it is called “double take”.</li>
+  <li><strong>Double take</strong> - Any line of code within function that forces you to look at the function signature, then it is called “double take”.</li>
   <li><strong>Prefer exceptions to return error codes</strong> - Function should do one thing. Error handling is another thing. Extract try..catch in a separate function.</li>
 </ul>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
 <span class="line-number">5</span>
-</pre></td><td class="code"><pre><code class=""><span class="line"> if (delete(page) == OK){
-</span><span class="line">       ....
-</span><span class="line"> } else {
-</span><span class="line">       Error out
-</span><span class="line"> }</span></code></pre></td></tr></table></div></figure></notextile></div>
+</pre></td><td class="code"><pre><code class="java"><span class="line"> <span class="k">if</span> <span class="o">(</span><span class="n">delete</span><span class="o">(</span><span class="n">page</span><span class="o">)</span> <span class="o">==</span> <span class="n">OK</span><span class="o">){</span>
+</span><span class="line">       <span class="o">....</span>
+</span><span class="line"> <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span><span class="line">       <span class="n">Error</span> <span class="n">out</span>
+</span><span class="line"> <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
 <span class="line-number">5</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">try{
-</span><span class="line">   ...
-</span><span class="line"> } catch (...){
-</span><span class="line">    //Error processing is separated from the happy path
-</span><span class="line"> } </span></code></pre></td></tr></table></div></figure></notextile></div>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="k">try</span><span class="o">{</span>
+</span><span class="line">   <span class="o">...</span>
+</span><span class="line"> <span class="o">}</span> <span class="k">catch</span> <span class="o">(...){</span>
+</span><span class="line">    <span class="c1">//Error processing is separated from the happy path</span>
+</span><span class="line"> <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 <ul>
   <li><strong>Command Query Separation</strong>: Functions should either do something or return something, but not both.
     <ul>
-      <li>http://martinfowler.com/bliki/CommandQuerySeparation.html</li>
+      <li>http://martinfowler.com/bliki/CommandQuerySeparation.html
+TODO</li>
     </ul>
   </li>
 </ul>
 
 <h2 id="formatting">Formatting</h2>
 <ul>
-  <li><strong>Vertical Openness</strong> - Each group of lines should represent a thought. e.g., given, when &amp; then blocks in unit testing</li>
-  <li>Vertical density implies close association of those lines</li>
+  <li><strong>Vertical Openness</strong> - Each group of lines should represent a thought. e.g., <code>given</code>, <code>when</code> &amp; <code>then</code> blocks in unit testing</li>
+  <li><strong>Vertical density</strong> implies close association of those lines</li>
   <li><strong>Vertical distance</strong> - concepts that are closely related should be kept close to each other. e.g., 
     <ul>
       <li>local variable declarations should right before its usage. </li>

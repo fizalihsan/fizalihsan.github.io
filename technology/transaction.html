@@ -250,27 +250,14 @@ messageStyle: "none",
 
 <p>A <em>lost update</em> occurs when the following events occur, in the order presented here:</p>
 
+<ol>
+  <li>A transaction in Session1 retrieves (queries) a row of data into local memory and displays it to an end user, User1.</li>
+  <li>Another transaction in Session2 retrieves that same row, but displays the data to a different end user, User2.</li>
+  <li>User1, using the application, modifies that row and has the application update the database and commit. Session1’s transaction is now complete.</li>
+  <li>User2 modifies that row also, and has the application update the database and commit. Session2’s transaction is now complete.</li>
+</ol>
+
 <ul>
-  <li>
-    <ol>
-      <li>A transaction in Session1 retrieves (queries) a row of data into local memory and displays it to an end user, User1.</li>
-    </ol>
-  </li>
-  <li>
-    <ol>
-      <li>Another transaction in Session2 retrieves that same row, but displays the data to a different end user, User2.</li>
-    </ol>
-  </li>
-  <li>
-    <ol>
-      <li>User1, using the application, modifies that row and has the application update the database and commit. Session1’s transaction is now complete.</li>
-    </ol>
-  </li>
-  <li>
-    <ol>
-      <li>User2 modifies that row also, and has the application update the database and commit. Session2’s transaction is now complete.</li>
-    </ol>
-  </li>
   <li><strong>Blocking</strong>
     <ul>
       <li>Blocking occurs when one session holds a lock on a resource that another session is requesting. As a result, the requesting session will be blocked—it will hang until the holding session gives up the locked resource.</li>
@@ -376,7 +363,7 @@ messageStyle: "none",
 <h3 id="mvcc">MVCC</h3>
 
 <ul>
-  <li>Locking mechanism is slow. So MVCC takes a different approacheach user connected to the DB sees a snapshot of the DB at a particular instant in time. Any changes made by a writer will not be seen by other users of the DB until the changes have been completed (or, in DB terms: until the transaction has been committed.)</li>
+  <li>Locking mechanism is slow. So MVCC takes a different approach each user connected to the DB sees a snapshot of the DB at a particular instant in time. Any changes made by a writer will not be seen by other users of the DB until the changes have been completed (or, in DB terms: until the transaction has been committed.)</li>
   <li>When an MVCC DB needs to update an item of data, it will not overwrite the old data with new data, but instead mark the old data as obsolete and add the newer version elsewhere. Thus there are multiple versions stored, but only one is the latest. This allows readers to access the data that was there when they began reading, even if it was modified or deleted part way through by someone else. </li>
   <li>Requires (generally) the system to periodically sweep through and delete the old, obsolete data objects. </li>
   <li>For a document-oriented DB it also allows the system to optimize documents by writing entire documents onto contiguous sections of disk—when updated, the entire document can be re-written rather than bits and pieces cut out or maintained in a linked, non-contiguous DB structure.</li>
@@ -395,6 +382,7 @@ messageStyle: "none",
 <ul>
   <li>Assigning timestamps to transactions, and controlling or checking access to data by timestamp order.</li>
   <li>a timestamp-based concurrency control algorithm is a non-lock concurrency control method. It is used in some databases to safely handle transactions, using timestamps.</li>
+  <li>HBase does this type of implementation</li>
   <li>Assumptions
     <ul>
       <li>Every timestamp value is unique and accurately represents an instant in time.</li>

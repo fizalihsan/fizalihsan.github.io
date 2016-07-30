@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Algorithms Big-O Notation How to find Big-O in interviews? Data Structures Algorithms Bitwise Operations Sorting Searching Hashing Dynamic &hellip;">
+<meta name="description" content="Algorithms Concepts Big-O Notation How to find Big-O in interviews? Data Structures Arrays Strings Linked Lists Trees Stacks Queues Algorithms &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -108,15 +108,30 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#big-o-notation">Big-O Notation</a>    <ul>
-      <li><a href="#how-to-find-big-o-in-interviews">How to find Big-O in interviews?</a></li>
+  <li><a href="#concepts">Concepts</a>    <ul>
+      <li><a href="#big-o-notation">Big-O Notation</a>        <ul>
+          <li><a href="#how-to-find-big-o-in-interviews">How to find Big-O in interviews?</a></li>
+        </ul>
+      </li>
     </ul>
   </li>
-  <li><a href="#data-structures">Data Structures</a></li>
-  <li><a href="#algorithms">Algorithms</a></li>
+  <li><a href="#data-structures">Data Structures</a>    <ul>
+      <li><a href="#arrays">Arrays</a></li>
+      <li><a href="#strings">Strings</a></li>
+      <li><a href="#linked-lists">Linked Lists</a></li>
+      <li><a href="#trees">Trees</a></li>
+      <li><a href="#stacks">Stacks</a></li>
+      <li><a href="#queues">Queues</a></li>
+    </ul>
+  </li>
+  <li><a href="#algorithms">Algorithms</a>    <ul>
+      <li><a href="#searching">Searching</a></li>
+      <li><a href="#sorting">Sorting</a></li>
+      <li><a href="#backtracking">Backtracking</a></li>
+    </ul>
+  </li>
   <li><a href="#bitwise-operations">Bitwise Operations</a></li>
-  <li><a href="#sorting">Sorting</a></li>
-  <li><a href="#searching">Searching</a>    <ul>
+  <li><a href="#searching-1">Searching</a>    <ul>
       <li><a href="#hashing">Hashing</a></li>
     </ul>
   </li>
@@ -127,7 +142,9 @@ messageStyle: "none",
 
 <p>Grokking Algorithms - <a href="http://adit.io/">http://adit.io/</a></p>
 
-<h1 id="big-o-notation">Big-O Notation</h1>
+<h1 id="concepts">Concepts</h1>
+
+<h2 id="big-o-notation">Big-O Notation</h2>
 
 <p><img class="right" src="/technology/big-o-complexity.png" width="600" height="600" /></p>
 
@@ -179,7 +196,7 @@ Now consider if I were to double the number of elements to 16: this would only r
   <li><a href="http://www.perlmonks.org/?node_id=227909">Informal Introduction to BigO notation</a> </li>
 </ul>
 
-<h2 id="how-to-find-big-o-in-interviews">How to find Big-O in interviews?</h2>
+<h3 id="how-to-find-big-o-in-interviews">How to find Big-O in interviews?</h3>
 
 <p>Break down the loops and processing.</p>
 
@@ -190,271 +207,153 @@ Now consider if I were to double the number of elements to 16: this would only r
   <li>Is access time constant irrelevant of the size of the dataset?? <code>O(1)</code></li>
 </ul>
 
+<p>​
+## Proof by induction and contradiction</p>
+
+<p>TODO </p>
+
+<p>​An online algorithm that requires only constant space and runs in linear time is just about as good as possible.</p>
+
 <h1 id="data-structures">Data Structures</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>DataStructure</th>
-      <th>Problem</th>
-      <th>Notes</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Array</td>
-      <td>Duplication in array - pg 34</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td>Arbitrary kth number</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/array/SecondHighestNumber.java">Find second highest number in an array</a></td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/array/MajoritiesInArrays.java">Majorities in an array</a></td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/array/TurningNumber.java">Find the Turning number in an array</a></td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/array/IntersectionOf2SortedArrays.java">Intersection of 2 sorted arrays</a></td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>Numbers</td>
-      <td><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/numbers/BaseConversion.java">Convert decimal to binary, octal or hexadecimal or vice-versa</a></td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/numbers/BaseConversion.java">Convert excel column name to column index</a></td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/numbers/BitwiseProblems.java">Bitwise Operations</a></td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>Strings</td>
-      <td>Regex matching - pg 50</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td>Check if a string is a number or not - pg 51</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td>Replacing %20 with spaces in a string - pg 47 <br /></td>
-      <td>Left to right approach is <code>O(n^2)</code>. Right to left is <code>O(n)</code></td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td>String compression</td>
-      <td>(Input: aaaabbccc, Expected output: a4b2c3)</td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/string/PermutationCombination.java">Permutation Combination</a></td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/string/NonRepeatedCharDetector.java">Non repeated character detector</a></td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/string/ReverseWordsOrder.java">Reverse order of the words in a sentence</a></td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/string/RemoveChars.java">Remove given characters from the input string</a></td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>Linked List</td>
-      <td><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/linkedlist/PrintFromTailToEnd.java">Print list from tail to head</a> - pg 54</td>
-      <td>* Reverse the list and print. <em>Cons</em>: structure is modified<br />* Add elements to stack and print. <em>Cons</em>: additional data structure is needed<br />* Use recursion</td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/linkedlist/ReverseSinglyLinkedList.java">Reverse a singly linked list</a></td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td>Check for loops - <a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/linkedlist/LoopCheckTortoiseAndHareMethod.java">Tortoise &amp; Hare Method</a></td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td>Check for loops - <a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/linkedlist/LoopCheckIdentityHashMapMethod.java">IdentityHashMap Method</a></td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/linkedlist/KthNodeFromEndFinder.java">Kth node from end</a></td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td><a href="">Delete duplicate values in a sorted linked list</a></td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>Tree</td>
-      <td><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/binarytree/TreeTraversals.java">Tree Traversals</a></td>
-      <td>Depth-First Traversal: Post-order, In-order, Pre-order<br />Breadth-First Traversal: Level-order</td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/binarytree/BinarySearchTree.java">Binary Search Tree - add, remove</a></td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/binarytree/BinarySearchTreeChecker.java">Check if a given tree is a binary search tree</a></td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td>[Convert a binary tree into a doubly-linked list - pg 174</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>Stack</td>
-      <td><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/stack/StackUsingQueues.java">Build a stack using 2 queues</a></td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>Queue</td>
-      <td><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/queue/QueueUsingStacks.java">Build a queue using 1 stack &amp; 2 stacks</a></td>
-      <td> </td>
-    </tr>
-  </tbody>
-</table>
+<h2 id="arrays">Arrays</h2>
+
+<ul>
+  <li>Duplication in array - pg 34</li>
+  <li>Arbitrary kth number</li>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/array/SecondHighestNumber.java">Find second highest number in an array</a></li>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/array/MajoritiesInArrays.java">Majorities in an array</a></li>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/array/TurningNumber.java">Find the Turning number in an array</a></li>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/array/IntersectionOf2SortedArrays.java">Intersection of 2 sorted arrays</a></li>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/numbers/BaseConversion.java">Convert decimal to binary, octal or hexadecimal or vice-versa</a></li>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/numbers/BaseConversion.java">Convert excel column name to column index</a></li>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/numbers/BitwiseProblems.java">Bitwise Operations</a></li>
+  <li><a href="">Max sub sum algorithm</a></li>
+  <li>Fibonacci
+    <ul>
+      <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/numbers/Fibonacci.java">Find nth fibonacci number</a> (with and without recursion)</li>
+      <li>Frog jumpting stairs  - pg 81</li>
+      <li>Rectangle problem  - pg 81</li>
+      <li>Intersection of sorted array - pg 194</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="strings">Strings</h2>
+
+<ul>
+  <li>Regex matching - pg 50</li>
+  <li>Check if a string is a number or not - pg 51</li>
+  <li>Replacing %20 with spaces in a string - pg 47 - Left to right approach is <code>O(n^2)</code>. Right to left is <code>O(n)</code></li>
+  <li>String compression (Input: aaaabbccc, Expected output: a4b2c3) <em>Asked in KPMG interview</em></li>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/string/PermutationCombination.java">Permutation Combination</a></li>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/string/NonRepeatedCharDetector.java">Non repeated character detector</a></li>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/string/ReverseWordsOrder.java">Reverse order of the words in a sentence</a></li>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/string/RemoveChars.java">Remove given characters from the input string</a></li>
+</ul>
+
+<h2 id="linked-lists">Linked Lists</h2>
+
+<ul>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/linkedlist/PrintFromTailToEnd.java">Print list from tail to head</a> - pg 54
+    <ul>
+      <li>Reverse the list and print. However, the structure is modified</li>
+      <li>Add elements to stack and print. However, additional data structure is needed</li>
+      <li>Use recursion</li>
+    </ul>
+  </li>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/linkedlist/ReverseSinglyLinkedList.java">Reverse a singly linked list</a></li>
+  <li>Check for loops
+    <ul>
+      <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/linkedlist/LoopCheckTortoiseAndHareMethod.java">Tortoise &amp; Hare Method</a></li>
+      <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/linkedlist/LoopCheckIdentityHashMapMethod.java">IdentityHashMap Method</a></li>
+    </ul>
+  </li>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/linkedlist/KthNodeFromEndFinder.java">Kth node from end</a></li>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/linkedlist/DeleteDuplicatesFromSortedList.java">Delete duplicate values in a sorted linked list</a></li>
+</ul>
+
+<h2 id="trees">Trees</h2>
+
+<ul>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/binarytree/TreeTraversals.java">Tree Traversals</a>
+    <ul>
+      <li>Depth-First Traversal: Post-order, In-order, Pre-order</li>
+      <li>Breadth-First Traversal: Level-order</li>
+    </ul>
+  </li>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/binarytree/BinarySearchTree.java">Binary Search Tree - add, remove</a></li>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/binarytree/BinarySearchTreeChecker.java">Check if a given tree is a binary search tree</a></li>
+  <li>[Convert a binary tree into a doubly-linked list - pg 174</li>
+</ul>
+
+<h2 id="stacks">Stacks</h2>
+
+<ul>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/stack/StackUsingQueues.java">Build a stack using 2 queues</a></li>
+</ul>
+
+<h2 id="queues">Queues</h2>
+
+<ul>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/queue/QueueUsingStacks.java">Build a queue using 1 stack &amp; 2 stacks</a></li>
+</ul>
 
 <h1 id="algorithms">Algorithms</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>Type</th>
-      <th>Sub-type</th>
-      <th>Problem</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Number</td>
-      <td>Fibonacci</td>
-      <td><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/numbers/Fibonacci.java">Find nth fibonacci number</a> (with and without recursion)</td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td> </td>
-      <td>Frog jumpting stairs  - pg 81</td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td> </td>
-      <td>Rectangle problem  - pg 81</td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td> </td>
-      <td>Intersection of sorted array - pg 194</td>
-    </tr>
-    <tr>
-      <td>Search</td>
-      <td>Binary Search</td>
-      <td><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/array/BinarySearch.java">Binary Search in an array</a></td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td> </td>
-      <td>Binary search matrix - pg 37</td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td> </td>
-      <td>Binary search in partially sorted array (HarryHe pg 89 - unable to follow)</td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td> </td>
-      <td>Minimum k numbers in an array - pg 191</td>
-    </tr>
-    <tr>
-      <td>Sorting</td>
-      <td>Array Sorting</td>
-      <td><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/sort/QuickSort.java">Quick sort</a> - <em>from Sedgewick book</em></td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td> </td>
-      <td><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/sort/SelectionSort.java">Selection sort</a></td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td> </td>
-      <td>Shell sort</td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td> </td>
-      <td>Insertion sort</td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td> </td>
-      <td>Merge sort</td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td>String sorting</td>
-      <td>Counting sort or key-index counting (Sedgewick pg 703)</td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td>List sorting</td>
-      <td>??</td>
-    </tr>
-    <tr>
-      <td>Backtracking</td>
-      <td> </td>
-      <td>String paths</td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td>Permutations</td>
-      <td><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/string/Permutations.java">Simple recursive method</a> (Sedgewick)</td>
-    </tr>
-    <tr>
-      <td> </td>
-      <td> </td>
-      <td>8 queens problems - pg 175</td>
-    </tr>
-  </tbody>
-</table>
+<h2 id="searching">Searching</h2>
 
 <ul>
-  <li>Heap sort visualization - http://www2.hawaii.edu/~copley/665/HSApplet.html</li>
+  <li>Binary Search<br />
+    <ul>
+      <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/array/BinarySearch.java">Binary Search in an array</a></li>
+      <li>Binary search matrix - pg 37</li>
+      <li>Binary search in partially sorted array (HarryHe pg 89 - unable to follow)</li>
+      <li>Minimum k numbers in an array - pg 191</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="sorting">Sorting</h2>
+
+<p><img class="right" src="/technology/sorting-efficiency.png" /></p>
+
+<ul>
+  <li>Array Sorting<br />
+    <ul>
+      <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/sort/QuickSort.java">Quick sort</a> - <em>from Sedgewick book</em></li>
+      <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/sort/SelectionSort.java">Selection sort</a></li>
+      <li>Shell sort </li>
+      <li>Insertion sort </li>
+      <li>Merge sort </li>
+    </ul>
+  </li>
+  <li>String sorting
+    <ul>
+      <li>Counting sort or key-index counting (Sedgewick pg 703)</li>
+    </ul>
+  </li>
+  <li>List sorting
+    <ul>
+      <li>TODO</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>Heap sort visualization - http://www2.hawaii.edu/~copley/665/HSApplet.html</p>
+</blockquote>
+
+<h2 id="backtracking">Backtracking</h2>
+
+<ul>
+  <li>String paths - TODO</li>
+  <li>Permutations
+    <ul>
+      <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/string/Permutations.java">Simple recursive method</a> (Sedgewick)</li>
+    </ul>
+  </li>
+  <li>8 queens problems - pg 175</li>
 </ul>
 
 <h1 id="bitwise-operations">Bitwise Operations</h1>
@@ -510,11 +409,7 @@ Now consider if I were to double the number of elements to 16: this would only r
   </li>
 </ul>
 
-<h1 id="sorting">Sorting</h1>
-
-<p><img src="/technology/sorting-efficiency.png" /></p>
-
-<h1 id="searching">Searching</h1>
+<h1 id="searching-1">Searching</h1>
 
 <ul>
   <li>Search types
@@ -585,6 +480,7 @@ Now consider if I were to double the number of elements to 16: this would only r
       <li>Algorithms in a Nutshell</li>
       <li>ACE the programming interview</li>
       <li>Coding Interview - Harry He</li>
+      <li>​Data structures and algorithm analysis in Java</li>
     </ul>
   </li>
 </ul>

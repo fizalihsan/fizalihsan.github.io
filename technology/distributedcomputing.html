@@ -327,7 +327,7 @@ For example,
     <ul>
       <li>All relational DBs are CA.</li>
       <li>When a partition occurs, the system blocks.</li>
-      <li>Examples include full strict quorum protocols, such as <em>two-phase commit</em>.</li>
+      <li>Examples include <em>full strict quorum protocols</em>, such as <em>two-phase commit</em>. (TODO - what other type of protocols are out there?)</li>
       <li>Strong consistency model; <em>CANNOT</em> tolerate any node failures</li>
       <li>A CA system does not distinguish between node failures and network failures, and so the only safe thing is to stop accepting writes everywhere to avoid introducing <strong><em>divergence</em></strong> (or multiple copies).</li>
       <li>CA systems are not partition-aware, and often use the two-phase commit algorithm and are common in traditional distributed relational DBs.</li>
@@ -338,7 +338,7 @@ For example,
       <li>Say you have three nodes and one node loses its link with the other two. You can create a rule that a result will be returned only when a majority of nodes agree. So, despite having a partition, the system will return a consistent result. However, since the separated node won’t be able to reach consensus it won’t be available even though it’s up.</li>
       <li>Examples include majority quorum protocols in which minority partitions are unavailable such as <em>Paxos</em>.</li>
       <li>Strong consistency model; <em>CAN</em> tolerate node failures</li>
-      <li>CP systems incorporate network partitions into their failure model and distinguish between a majority partition and a minority partition using an algorithm like <a href="http://harry.me/blog/2014/12/27/neat-algorithms-paxos/">Paxos</a>, <a href="https://ramcloud.stanford.edu/raft.pdf">Raft</a> or viewstamped replication. (<a href="http://harry.me/blog/2013/07/07/id-like-to-have-an-argument-a-primer-on-consensus/">A primer on consensus</a>)</li>
+      <li>CP systems incorporate network partitions into their failure model and distinguish between a majority partition and a minority partition using an algorithm like <a href="http://harry.me/blog/2014/12/27/neat-algorithms-paxos/">Paxos</a>, <a href="https://ramcloud.stanford.edu/raft.pdf">Raft</a> or viewstamped replication. ( <a href="http://harry.me/blog/2013/07/07/id-like-to-have-an-argument-a-primer-on-consensus/">A primer on consensus</a> TODO read)</li>
       <li>in a non-Byzantine failure model, a CP system can tolerate the failure of a minority <code>n</code> nodes as long as majority <code>n+1</code> stays up in a system with<code>2n+1</code> nodes. </li>
       <li>A CP system prevents divergence (e.g. maintains single-copy consistency) by forcing asymmetric behavior on the two sides of the partition. It only keeps the majority partition around, and requires the minority partition to become unavailable (e.g. stop accepting writes), which retains a degree of availability (the majority partition) and still ensures <em>single-copy consistency</em>.</li>
     </ul>

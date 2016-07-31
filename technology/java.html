@@ -152,7 +152,6 @@ messageStyle: "none",
   <li>
     <p><code>float pi=3.14f;</code> &lt;– suffix ‘f’ is required, since in Java real constants are by default double.</p>
   </li>
-  <li>When to use and not use BigDecimal? <span style="color:red">TODO</span></li>
   <li>Default Values
     <ul>
       <li><strong>Instance Variables</strong>
@@ -241,11 +240,10 @@ messageStyle: "none",
 <ul>
   <li>Java date – timezone – database timezone support?</li>
   <li>http://www.date4j.net/</li>
-  <li>jodatime <span style="color:red">TODO</span></li>
-  <li>TimeZone uncertainity - http://martinfowler.com/bliki/TimeZoneUncertainty.html <span style="color:red">TODO</span></li>
+  <li><a href="http://martinfowler.com/bliki/TimeZoneUncertainty.html">TimeZone uncertainity</a></li>
   <li>http://c2.com/cgi/wiki/wiki?JavaUtilDate</li>
   <li>Date &amp; Time - GregorianCalendar, TimeZone</li>
-  <li>Issues with Java Date API <span style="color:red">TODO</span></li>
+  <li>Issues with Java Date API</li>
 </ul>
 
 <h2 id="finalization">Finalization</h2>
@@ -255,19 +253,16 @@ messageStyle: "none",
 <p>An immutable object is one whose externally visible state cannot change after it is instantiated.eg., String, Integer, BigDecimal, etc. For all immutable objects, it’s better to hide constructors and use factories.</p>
 
 <ul>
-  <li>
-    <p>Things to do to make a class immutable. - <span style="color:red">TODO</span></p>
-  </li>
-  <li>
-    <p>Why Hashtable keys needs to be immutable objects?</p>
+  <li>Why Hashtable keys needs to be immutable objects?
     <ul>
-      <li>If you use mutable object as Hashtable key and if the object’s state changes, then the Hashtable implementation would get confused since the hashcode would have changed.</li>
+      <li>If you use mutable object as Hashtable key and if the object’s state changes, then the Hashtable implementation wouldn’t be able return the object it contains since the hashcode is different now. This would lead to memory leak.</li>
     </ul>
   </li>
 </ul>
 
 <h2 id="uuid">UUID</h2>
-<p><span style="color:red">TODO</span></p>
+
+<p>…</p>
 
 <h1 id="oops-concepts">OOPS Concepts</h1>
 
@@ -362,7 +357,6 @@ messageStyle: "none",
 
 <ul>
   <li><code>@Override</code> - In order to overcome the subtle problems of overloading, Java 5 introduced @Override annotation. This explicitly expresses to the Java compiler the intention of the programmer to use method overriding. In case the compiler is not satisfied with your overridden method, it will issue a complaint. Also, the annotation makes you understand that you are overriding a method.</li>
-  <li>abstract method inside an interface - what does that mean? <span style="color:red">TODO</span></li>
 </ul>
 
 <h2 id="final-keyword">final keyword</h2>

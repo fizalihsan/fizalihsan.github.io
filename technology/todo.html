@@ -5,12 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Coding Principles - KnowledgeShop</title>
+  <title>TODO - Topics to Learn In-depth - KnowledgeShop</title>
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Coding Principles Clean Code Naming Function Formatting Object and Data Structures Clean Code
-A Handbook of Agile Software Craftmanship - Bob Martin &hellip;">
+<meta name="description" content="TODO - Topics to Learn In-depth Algorithms List sorting algorithms String paths - backtracking algorithms Camel Complete this book - Camel in Action &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +18,7 @@ A Handbook of Agile Software Craftmanship - Bob Martin &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://fizalihsan.github.io/technology/coding-principles.html">
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/todo.html">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <!-- Below custom CSS is for table border styling -->
@@ -104,131 +103,179 @@ messageStyle: "none",
 <article role="article">
   
   <header>
-    <h1 class="entry-title">Coding Principles</h1>
+    <h1 class="entry-title">TODO - Topics to Learn In-depth</h1>
     
   </header>
   
-  <ul id="markdown-toc">
-  <li><a href="#clean-code">Clean Code</a>    <ul>
-      <li><a href="#naming">Naming</a></li>
-      <li><a href="#function">Function</a></li>
-      <li><a href="#formatting">Formatting</a></li>
-      <li><a href="#object-and-data-structures">Object and Data Structures</a></li>
-    </ul>
-  </li>
-</ul>
-
-<h1 id="clean-code">Clean Code</h1>
-<p><strong><em>A Handbook of Agile Software Craftmanship - Bob Martin</em></strong></p>
-
-<h2 id="naming">Naming</h2>
+  
 <ul>
-  <li>Don’t reveal implementation detail in variables. e.g., declare <code>accounts</code> instead <code>accountList</code></li>
-  <li>Use single letter variables only as a local variable</li>
-  <li>No need for prefix on variables and class names. e.g., <code>ICustomer</code> interface</li>
-  <li>Class name should NOT be a verb. Avoid words like <code>Manager</code>, <code>Processor</code>, <code>Data</code> or <code>Info</code></li>
-  <li>Use a common word per concept across method names and class names. e.g., <code>fetch(), get(), retrieve()</code>. Stick to one.</li>
-</ul>
-
-<h2 id="function">Function</h2>
-<ul>
-  <li>Function should do one thing only. One level of abstraction per function.</li>
-  <li>Switch statement - tolerated if it appears only once at very low level. Hide it with ‘AbstractFactory’ and polymorphism.</li>
-  <li>Function arguments
+  <li>Algorithms
     <ul>
-      <li>Number of arguments
-        <ul>
-          <li>Niladic (zero args) - Best</li>
-          <li>Monadic (1) - Better</li>
-          <li>Dyadic (2) - Good</li>
-          <li>Polyadic (multiple) - Needs good justification</li>
-        </ul>
-      </li>
-      <li>Avoid functions with output arguments. e.g., <code>public boolean foo(String input, String output);</code></li>
-      <li>Passing flags as arguments is ugly. Based on the flag value, the function might perform one or more things. .e.g., <code>render(boolean isSuite)</code>. Split the logic into <code>renderForSuite()</code> and <code>renderForSingleTest()</code> to make it explicit.</li>
-      <li>Ambiguity issue with dyadic or polyadic functions with same type of arguments. e.g, <code>assertEquals(int expected, int actual)</code>. Make function explicit as <code>assertExpectedEqualsActual(int, int)</code>.</li>
-      <li>Fix for polyadic functions
-        <ul>
-          <li>Club the different arguments into an object and pass that object as input argument</li>
-          <li>Or, make those arguments are field variables. (only for private functions)</li>
-        </ul>
-      </li>
+      <li>List sorting algorithms</li>
+      <li>String paths - backtracking algorithms</li>
     </ul>
   </li>
-  <li><strong>Side effects</strong>
+  <li>Camel
     <ul>
-      <li>A function promises to do one thing, but it also does other hidden things. e.g., <code>checkPassword(String user, String password)</code> method which authenticates and initializes a user session. Session initialization part is hidden from user.</li>
-      <li>Side effects create temporal couplings and order dependencies. <em>Temporal couplings</em> mean that the function can only be invoked at certain times. In the above example, if it is called out of order the current session data might be destroyed.</li>
+      <li>Complete this book - Camel in Action by Claus Ibsen, Jonathan</li>
     </ul>
   </li>
-  <li><strong>Double take</strong> - Any line of code within function that forces you to look at the function signature, then it is called “double take”.</li>
-  <li><strong>Prefer exceptions to return error codes</strong> - Function should do one thing. Error handling is another thing. Extract try..catch in a separate function.</li>
+  <li>Cloud computing
+    <ul>
+      <li>What are the things to do to migrate an application to cloud? or How do you design an application to be cloud-native?</li>
+    </ul>
+  </li>
+  <li>Coding principles
+    <ul>
+      <li>Command Query Separation</li>
+    </ul>
+  </li>
+  <li>Datastructures.md
+    <ul>
+      <li>Skiplist</li>
+      <li>Self-balanced tree</li>
+      <li>Splay tree</li>
+      <li>Graphs</li>
+    </ul>
+  </li>
+  <li>Db Design
+    <ul>
+      <li>Time-series database</li>
+    </ul>
+  </li>
+  <li>Db performance
+    <ul>
+      <li>Lock type - update lock</li>
+      <li>Row-wide partitioning</li>
+      <li>Column-wide partitioning</li>
+      <li>DB Replication (HADR)</li>
+    </ul>
+  </li>
+  <li>Distributedcomputing
+    <ul>
+      <li>Types of protocols like <em>full strict quorum protocols</em></li>
+      <li>Read about <a href="http://harry.me/blog/2014/12/27/neat-algorithms-paxos/">Paxos</a>, <a href="https://ramcloud.stanford.edu/raft.pdf">Raft</a> or viewstamped replication. ( <a href="http://harry.me/blog/2013/07/07/id-like-to-have-an-argument-a-primer-on-consensus/">A primer on consensus</a>)</li>
+    </ul>
+  </li>
+  <li>Elasticsearch
+    <ul>
+      <li>learn this in-depth</li>
+    </ul>
+  </li>
+  <li>Functional programming
+    <ul>
+      <li>Persistent Data structures (STM)</li>
+      <li>Loan Pattern</li>
+    </ul>
+  </li>
+  <li>Groovy
+    <ul>
+      <li>Concurrency</li>
+      <li>DSL</li>
+      <li>Double dispatch</li>
+      <li>Expando</li>
+      <li>How coercion works</li>
+    </ul>
+  </li>
 </ul>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
 <span class="line-number">5</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"> <span class="k">if</span> <span class="o">(</span><span class="n">delete</span><span class="o">(</span><span class="n">page</span><span class="o">)</span> <span class="o">==</span> <span class="n">OK</span><span class="o">){</span>
-</span><span class="line">       <span class="o">....</span>
-</span><span class="line"> <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-</span><span class="line">       <span class="n">Error</span> <span class="n">out</span>
-</span><span class="line"> <span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+</pre></td><td class="code"><pre><code class=""><span class="line">Point p = [1,2]
+</span><span class="line">println p
+</span><span class="line">
+</span><span class="line">Point p2 = [x:1, y:2]
+</span><span class="line">println p2</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="k">try</span><span class="o">{</span>
-</span><span class="line">   <span class="o">...</span>
-</span><span class="line"> <span class="o">}</span> <span class="k">catch</span> <span class="o">(...){</span>
-</span><span class="line">    <span class="c1">//Error processing is separated from the happy path</span>
-</span><span class="line"> <span class="o">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
 <ul>
-  <li><strong>Command Query Separation</strong>: Functions should either do something or return something, but not both.
+  <li>Java concurrency
     <ul>
-      <li>http://martinfowler.com/bliki/CommandQuerySeparation.html</li>
+      <li>Exchanger</li>
+      <li>Phaser</li>
+      <li>StampedLock</li>
+      <li>CompletableFuture</li>
+      <li>Java Memory Model</li>
+      <li>Actor, STM</li>
+      <li>LMAX Disruptor</li>
+      <li>How to unit test concurrent programs</li>
+    </ul>
+  </li>
+  <li>Java database
+    <ul>
+      <li>JPA</li>
+      <li><code>javax.sql.rowset.WebRowSet</code></li>
+      <li>Connection.isHoldability?</li>
+    </ul>
+  </li>
+  <li>Java IO
+    <ul>
+      <li>Buffers, Channels, Selectors</li>
+    </ul>
+  </li>
+  <li>Java JMX
+    <ul>
+      <li><a href="http://marxsoftware.blogspot.com/2013/03/monitoring-key-jvm-characteristics-groovy-jmx.html">Monitoring key JVM characteristics</a></li>
+    </ul>
+  </li>
+  <li>Java Performance
+    <ul>
+      <li>GC in-depth
+        <ul>
+          <li><a href="http://www.cubrid.org/blog/dev-platform/understanding-java-garbage-collection/">1. Becoming a Java GC Expert - Understanding Java Garbage Collection</a></li>
+          <li><a href="http://www.cubrid.org/blog/dev-platform/how-to-monitor-java-garbage-collection/">2. Becoming a Java GC Expert - How to monitor Java GC</a></li>
+          <li><a href="http://www.cubrid.org/blog/dev-platform/how-to-tune-java-garbage-collection/">3. Becoming a Java GC Expert - How to tune Java GC</a></li>
+          <li><a href="http://www.cubrid.org/blog/dev-platform/maxclients-in-apache-and-its-effect-on-tomcat-during-full-gc/">4. Becoming a Java GC Expert - MaxClients in Apache and its effect on Tomcat during Full GC</a></li>
+          <li><a href="http://www.cubrid.org/blog/dev-platform/the-principles-of-java-application-performance-tuning/">5. Becoming a Java GC Expert - The Principles of Java Application Performance Tuning</a></li>
+          <li><a href="http://www.cubrid.org/blog/dev-platform/how-statement-pooling-in-jdbc-affects-garbage-collection/">How Statement Pooling in JDBC affects the Garbage Collection</a></li>
+        </ul>
+      </li>
+      <li>How G1 collector works</li>
+      <li><a href="https://github.com/dropwizard/metrics">CodeHale</a></li>
+    </ul>
+  </li>
+  <li>Java
+    <ul>
+      <li>Dates
+        <ul>
+          <li><a href="http://martinfowler.com/bliki/TimeZoneUncertainty.html">TimeZone uncertainity</a></li>
+          <li>Java 8 Date API in detail</li>
+        </ul>
+      </li>
+      <li>UUID concepts in general</li>
+      <li>Java 8 Default Methods</li>
+    </ul>
+  </li>
+  <li>Logging and monitoring
+    <ul>
+      <li>What is write-ahead logging? Used in HBase.</li>
+    </ul>
+  </li>
+  <li>RDBMS
+    <ul>
+      <li>Reorg </li>
+    </ul>
+  </li>
+  <li>REST services
+    <ul>
+      <li>What SOAP has that REST doesn’t?</li>
+      <li>REST fault messages</li>
+    </ul>
+  </li>
+  <li>Scalability
+    <ul>
+      <li><a href="http://www.ontheserverside.com/blog/2014/07/23/horizontal-and-vertical-scaling-strategies-for-batch-applications">Horizontal and Vertical Scaling Strategies for Batch applications</a></li>
+    </ul>
+  </li>
+  <li>Security
+    <ul>
+      <li>OAuth</li>
     </ul>
   </li>
 </ul>
 
-<h2 id="formatting">Formatting</h2>
-<ul>
-  <li><strong>Vertical Openness</strong> - Each group of lines should represent a thought. e.g., <code>given</code>, <code>when</code> &amp; <code>then</code> blocks in unit testing</li>
-  <li><strong>Vertical density</strong> implies close association of those lines</li>
-  <li><strong>Vertical distance</strong> - concepts that are closely related should be kept close to each other. e.g., 
-    <ul>
-      <li>local variable declarations should right before its usage. </li>
-      <li>Instance variables should be at the top of the file, not bottom.</li>
-      <li>Dependent functions should be closer to each other.</li>
-    </ul>
-  </li>
-</ul>
-
-<h2 id="object-and-data-structures">Object and Data Structures</h2>
-<ul>
-  <li>Getters &amp; Setters - Think before adding them. Blindly adding on every variable beats the purpose of abstraction.</li>
-  <li><strong>Law of Demeter</strong> - method chaining on data structure method is ok.</li>
-</ul>
-
-  
-    <footer>
-      
-      
-        <div class="sharing">
-  
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/coding-principles.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/coding-principles.html" >Tweet</a>
-  
-  
-  
-</div>
-
-      
-    </footer>
   
 </article>
 

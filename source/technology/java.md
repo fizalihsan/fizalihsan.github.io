@@ -23,7 +23,6 @@ footer: true
 * Not A Number(NaN) is produced if a floating point operation has some input parameters that cause the operation to produce some undefined result. Example, `0.0 / 0.0`, `Math.sqrt(-2.0)`
 * `float pi=3.14f;` <-- suffix 'f' is required, since in Java real constants are by default double.
 
-* When to use and not use BigDecimal? <span style="color:red">TODO</span>
 * Default Values
   * **Instance Variables**
     * Objects = null
@@ -75,11 +74,10 @@ public class Dog implements Cloneable {
 
 * Java date – timezone – database timezone support?
 * http://www.date4j.net/
-* jodatime <span style="color:red">TODO</span>
-* TimeZone uncertainity - http://martinfowler.com/bliki/TimeZoneUncertainty.html <span style="color:red">TODO</span>
+* [TimeZone uncertainity](http://martinfowler.com/bliki/TimeZoneUncertainty.html)
 * http://c2.com/cgi/wiki/wiki?JavaUtilDate
 * Date & Time - GregorianCalendar, TimeZone
-* Issues with Java Date API <span style="color:red">TODO</span>
+* Issues with Java Date API
 
 
 ## Finalization
@@ -88,13 +86,12 @@ public class Dog implements Cloneable {
 ## Mutability
 An immutable object is one whose externally visible state cannot change after it is instantiated.eg., String, Integer, BigDecimal, etc. For all immutable objects, it’s better to hide constructors and use factories.
 
-* Things to do to make a class immutable. - <span style="color:red">TODO</span>
-
 * Why Hashtable keys needs to be immutable objects?
-  * If you use mutable object as Hashtable key and if the object's state changes, then the Hashtable implementation would get confused since the hashcode would have changed.
+  * If you use mutable object as Hashtable key and if the object's state changes, then the Hashtable implementation wouldn't be able return the object it contains since the hashcode is different now. This would lead to memory leak.
 
 ## UUID
-  <span style="color:red">TODO</span>
+  
+...
 
 # OOPS Concepts
 
@@ -151,7 +148,6 @@ class Circle extends Shape {
 ```
 
 * `@Override` - In order to overcome the subtle problems of overloading, Java 5 introduced @Override annotation. This explicitly expresses to the Java compiler the intention of the programmer to use method overriding. In case the compiler is not satisfied with your overridden method, it will issue a complaint. Also, the annotation makes you understand that you are overriding a method.
-* abstract method inside an interface - what does that mean? <span style="color:red">TODO</span>
 
 ## final keyword
 

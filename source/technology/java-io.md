@@ -303,7 +303,7 @@ Changes to a class that can hurt de-serialization :
 
 ## Buffers, Channels, Selectors
 
-<span style="color:red">TODO </span>
+...
 
 ## File Watcher Service
 

@@ -114,7 +114,7 @@ Hypervisors and VMs are just one approach to virtual workload deployment. Contai
 	* Whereas, elasticity is being one of the characteristic provide the concept of commissioning and decommissioning of large amount of resource capacity dynamically. It is measured by the speed by which the resources are coming on demand and the usage of the resources. Elasticity is reversible scability
 * Cloudbursting
 	* A hybrid approach where many compute resources are kept private internally but when additional demand is needed, a public cloud is called upon to provide those temporary resources. This is called “Cloudbursting”
-* What are the things to do to migrate an application to cloud? or How do you design an application to be cloud-native? TODO
+* What are the things to do to migrate an application to cloud? or How do you design an application to be cloud-native?
 
 # Tools
 

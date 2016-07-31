@@ -18,8 +18,6 @@ footer: true
 * Rowsets http://java.sun.com/developer/Books/JDBCTutorial/chapter5.html 
 * Is it good? conn.getHoldability()?  the holdability, one of ResultSet.HOLD_CURSORS_OVER_COMMIT or ResultSet.CLOSE_CURSORS_AT_COMMIT 
 
-<span style="color:red">TODO</span>
-
 `javax.sql.rowset.WebRowSet`
 
 # ORM
@@ -30,8 +28,6 @@ footer: true
 * [Dance You Imps!](http://blog.8thlight.com/uncle-bob/2013/10/01/Dance-You-Imps.html)
 * [Vietname of Computer Science](http://blogs.tedneward.com/post/the-vietnam-of-computer-science)
 * [Martin Fowler on ORM Hate](http://java.dzone.com/articles/martin-fowler-orm-hate)
-
-<span style="color:red">TODO</span>
 
 ## Hibernate
 

@@ -122,8 +122,6 @@ Mechanism to hold all kinds of data items such as instructions, object data, loc
 
 ## Garbage Collection
 
-TODO read and document from below links
-
 * [1. Becoming a Java GC Expert - Understanding Java Garbage Collection](http://www.cubrid.org/blog/dev-platform/understanding-java-garbage-collection/)
 * [2. Becoming a Java GC Expert - How to monitor Java GC](http://www.cubrid.org/blog/dev-platform/how-to-monitor-java-garbage-collection/)
 * [3. Becoming a Java GC Expert - How to tune Java GC](http://www.cubrid.org/blog/dev-platform/how-to-tune-java-garbage-collection/)
@@ -216,7 +214,7 @@ TODO read and document from below links
 
 __How G1 collector works__
 
-TODO
+...
 
 ## Reference Types
 
@@ -339,7 +337,7 @@ Unlike soft and weak references, phantom references are not automatically cleare
 * [Java Microbenchmarks](https://code.google.com/p/caliper/wiki/JavaMicrobenchmarks)
 * http://www.ibm.com/developerworks/java/library/j-benchmark1/index.html
 * [Java Melody](https://code.google.com/p/javamelody/) - To capture SQL calls
-* [CodeHale](https://github.com/dropwizard/metrics) <span style="color:red">TODO</span>
+* [CodeHale](https://github.com/dropwizard/metrics)
 
 * Benchmarking issues
   * What are you trying to test?
@@ -510,10 +508,6 @@ HP JTune
 * jinfo
   * Prints system properties and JVM startup options for the given process, core, or remote debug server
   * Usage: `jinfo <pid>`
-
-# FAQs
-
-* How do you analyze and fix memory leaks? TODO
 
 # Bibliography
 

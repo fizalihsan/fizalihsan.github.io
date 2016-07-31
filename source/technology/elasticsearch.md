@@ -9,8 +9,6 @@ footer: true
 * list element with functor item
 {:toc}
 
-TODO learn this in-depth
-
 # Commands
 
 * To check status: `curl "http://localhost:9200/?pretty"`

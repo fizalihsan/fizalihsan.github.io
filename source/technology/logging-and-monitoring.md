@@ -9,7 +9,7 @@ footer: true
 * list element with functor item
 {:toc}
 
-* What is write-ahead logging? Used in HBase. TODO
+* What is write-ahead logging? Used in HBase.
 * Metric identity name: k-tuple
 * Metrics values
   * counters, gauges, percentiles, nominal, ordinal, interval, ratio, derived

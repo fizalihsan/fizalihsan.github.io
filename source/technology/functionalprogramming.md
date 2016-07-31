@@ -88,7 +88,7 @@ footer: true
 * Combinators (Filter, map and fold) are modular, composable & reusable.
 	* filter and map, return a new List, while fold can return anything we want.
 	* Recursion can be avoided by using combinators.
-	* Persistent Data Structures - ??? Software Transactional Memory
+	* Persistent Data Structures (Software Transactional Memory)
 		
 # Concurrency Principles
 
@@ -209,7 +209,7 @@ __Libraries__
 
 ## Lambdas and Patterns
 
-* Loan Pattern - TODO
+* Loan Pattern
 * Execute Around Method - A synchronized block of code, such as synchronized { ... }, is a realization of the _execute around method_ pattern.
 * Referential transparency
 * Tail-Call Optimization

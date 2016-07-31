@@ -615,15 +615,11 @@ Synchronizer is any object that keeps the shared mutable data consistent. We don
 
 An Exchanger lets a pair of threads exchange objects at a synchronization point.
 
-<span style="color:red">TODO</span>
-
 ## 6) Phaser (1.7)
 
 * A flexible synchronizer to do latch and barrier semantics
 * with less code and better interrupt management
 * only synchronizer in Java that is compatible with fork/join framework
-
-<span style="color:red">TODO</span>
 
 ## 7) ForkJoinPool (1.7)
 
@@ -697,23 +693,18 @@ class Sum extends RecursiveTask<Long> {
 
 ## 8) StampedLock (1.8)
 
-<span style="color:red">TODO</span>
 [Phaser and StampedLock Concurrency Synchronizers (Heinz Kabutz) ](http://vimeo.com/74553130)
 
 # Java Memory Model
 
-<span style="color:red">TODO</span>
+....
 
 # Concurrency Programming Models
-
-<span style="color:red">TODO</span>
 
 * Actor Model
 * STM model
 
 # Concurrency Frameworks
-
-<span style="color:red">TODO</span>
 
 [LMAX Disruptor](http://lmax-exchange.github.io/disruptor/) - High Performance Inter-Thread Messaging Library. Excellent blog on this topic : http://mechanitis.blogspot.com/2011_07_01_archive.html
 
@@ -735,9 +726,7 @@ class Sum extends RecursiveTask<Long> {
   * call `Thread.run()` - Wonʼt start Thread! Still in caller Thread. 
   * use ThreadGroups - Use a ThreadPoolExecutor instead.
 * [How to analyze Java Thread dumps](https://dzone.com/articles/how-analyze-java-thread-dumps)
-* Tools to detect deadlocks? TODO
-* What is `CompletableFuture`? TODO
-* How to unit test concurrent programs? TODO
+* Tools to detect deadlocks?
 
 # Bibliography
 

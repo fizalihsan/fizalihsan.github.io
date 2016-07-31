@@ -11,6 +11,35 @@ footer: true
 
 {% img /technology/datastructure-efficiencies.png %}
 
+
+# Overview
+
+[List of Data Structures (Wikipedia)](https://en.wikipedia.org/wiki/List_of_data_structures)
+
+* Abstract Data Types
+	* List
+	* Set
+	* Map
+	* Stack
+	* Queue (Single-ended queue, Double-ended queue, Priority queue)
+	* Tree
+	* Graph
+* Linear Data Structures
+	* Arrays
+	* Lists
+* Trees
+	* Binary Trees
+	* B-Trees
+	* Heaps
+	* Trees
+	* Multiway Trees
+	* Space-partitioning Trees
+* Hashes
+	* Hash table
+	* Bloom filter
+	* Distributed Hash table
+* Graphs
+
 # Lists
 
 * Array
@@ -18,10 +47,6 @@ footer: true
   * [Basics](/technology/LinkedListBasics.pdf)
   * [Problems](/technology/LinkedListProblems.pdf)
 * Skiplist (invented by William Pugh - look paper on alternative to Binary Tree - learn the Java implementations - when to prefer this over Maps)
-
-# Queues
-
-* [Queue implementation using single and double stacks](https://gist.github.com/fizalihsan/26acf7f6be1c33c121a8471b2a47892b)
 
 # Trees 
 
@@ -86,11 +111,8 @@ A property of a binary tree that is sometimes important is that the depth of an 
 
 ## Self-balanced tree
 
-TODO
-
 ## Splay Trees
 
-TODO
 
 > Source: Data Structures and Algorithm Analysis in Java, 3rd Edition by Mark Allen Weiss
 
@@ -161,9 +183,13 @@ Red-black BSTs as BSTs having red and black links and satisfying the following t
 * B trees: Perfectly Height-balanced M-way search trees
 * Tries
 
-# Graphs
+# Hashes
 
-TODO
+## Bloom Filter
+
+[http://www.michaelnielsen.org/ddi/why-bloom-filters-work-the-way-they-do/](Why Bloom filters work the way they do - Mathematical analysis)
+
+# Graphs
 
 ## Undirected Graphs 
 

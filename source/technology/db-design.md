@@ -19,9 +19,6 @@ footer: true
 * Security
   * Permissioning - Users & Groups
 
-## Data Modelling
-
-???
 
 ## Normalization
 
@@ -140,7 +137,7 @@ which is present in an application is absolutely critical.
 
 ## Time-Series Databases
 
-TODO
+...
 
 # Patterns
 

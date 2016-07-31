@@ -149,7 +149,7 @@ Managing of the certificates is painful. The server must create a unique certifi
 
 ## OpenAuth (OpenID)
 
-<span style="color:red">TODO</span>
+...
 
 # 2. Authorization
 

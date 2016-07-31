@@ -123,7 +123,7 @@ http://docs.oracle.com/javase/6/docs/jdk/api/attach/spec/index.html - `com.sun.t
 
 # Groovy & JMX
 
-http://marxsoftware.blogspot.com/2013/03/monitoring-key-jvm-characteristics-groovy-jmx.html - TODO
+http://marxsoftware.blogspot.com/2013/03/monitoring-key-jvm-characteristics-groovy-jmx.html
 
 
 

@@ -58,7 +58,7 @@ try{
 ```
 * **Command Query Separation**: Functions should either do something or return something, but not both.
   * http://martinfowler.com/bliki/CommandQuerySeparation.html
-  TODO
+
 
 ## Formatting
 * **Vertical Openness** - Each group of lines should represent a thought. e.g., `given`, `when` & `then` blocks in unit testing

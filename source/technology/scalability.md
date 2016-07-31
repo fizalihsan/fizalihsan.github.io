@@ -21,6 +21,8 @@ footer: true
   * Features: smart-software-dumb-hardware, move-processing-not-data.
   * Challenges: Bottlenecks, increased risk of failure
 
+[Horizontal and Vertical Scaling Strategies for Batch applications](http://www.ontheserverside.com/blog/2014/07/23/horizontal-and-vertical-scaling-strategies-for-batch-applications)
+
 *Options for increasing the DB performance*
 	
 1. Performance improvements on the existing monolithic DB

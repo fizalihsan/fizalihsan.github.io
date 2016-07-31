@@ -9,7 +9,7 @@ footer: true
 * list element with functor item
 {:toc}
 
-
+[Horizontal and Vertical Scaling Strategies for Batch applications](http://www.ontheserverside.com/blog/2014/07/23/horizontal-and-vertical-scaling-strategies-for-batch-applications)
 
 # Chunk Processing
 

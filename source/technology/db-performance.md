@@ -219,7 +219,7 @@ called *write locks*.
 
 **Update Lock**
 
-???
+...
 
 ### Granularity
 
@@ -365,14 +365,12 @@ DB2 uses NICKNAME, SERVER, WRAPPER, and USER MAPPING objects to implement federa
 
 ## Partitioning Types
 
-* Row-wide partitioning - TODO
-* Column-wide partitioning - TODO
+* Row-wide partitioning
+* Column-wide partitioning
 
 ## DB Replication
 
 HADR - High Availability Database Replication (from version 9.7) 
-
-TODO
 
 # References
 

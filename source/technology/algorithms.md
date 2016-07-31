@@ -53,12 +53,10 @@ Break down the loops and processing.
 * Does it have to go through the entire list? There will be an `n` in there somewhere.
 * Does the algorithms processing time increase at a slower rate than the size of the data set? Then there’s probably a `log n` in there.
 * Are there nested loops? You’re probably looking at `n^2` or `n^3`.
-* Is access time constant irrelevant of the size of the dataset?? `O(1)`
+* Is access time constant irrelevant of the size of the dataset? Then, `O(1)`
 
 ​
 ## Proof by induction and contradiction
-
-TODO 
 
 ​An online algorithm that requires only constant space and runs in linear time is just about as good as possible.
 
@@ -146,13 +144,13 @@ TODO
 * String sorting
 	* Counting sort or key-index counting (Sedgewick pg 703)
 * List sorting
-	* TODO
+	* ....
 
 > Heap sort visualization - http://www2.hawaii.edu/~copley/665/HSApplet.html
 
 ## Backtracking
 
-* String paths - TODO
+* String paths
 * Permutations
 	* [Simple recursive method](https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/string/Permutations.java) (Sedgewick)
 * 8 queens problems - pg 175

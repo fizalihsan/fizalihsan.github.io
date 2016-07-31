@@ -289,7 +289,7 @@ A buffer pool is an area in physical memory that caches the database information
 * Command to list the tables: `list db tables`
 * Read input from file: `db2 -tvf filename`
 * `Db2advis` - command to advice indexes on sql
-* Reorg - TODO
+* Reorg
 
 * Check transaction log usage : `call sp.xlogfull()`
 * Row count on table without full table scan

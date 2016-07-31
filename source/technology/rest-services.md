@@ -953,13 +953,10 @@ Following are the JAX-WS Implementations
 	* WADL & XJC
 	* Handling Breaking changes - xsd or wsdl changes
 	* Authentication - WS-Policy, WS-Security
-	* Distribution transaction in REST?
-	* REST fault messages?
 	* Things to try using JAX-RS
 		* how to time out a client
 		* how to restrict number of clients accessing the service
 		* how to implement pagination - Linking Services
-* What is missing in REST that SOAP has? TODO
 
 # References
 

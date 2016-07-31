@@ -234,7 +234,7 @@ println collection.size()
   * closure here is coerced to implement interface Comparator
   * if the interface has more than one methods, then pass different closure implementations as map
 
-* <span style="color:red">Double dispatch???? - Need better description & example ????</span>
+* Double dispatch
 
 * Examples
 
@@ -442,11 +442,11 @@ class Complex{
 
 # Concurrency
 
-TODO
+...
 
 # DSL
 
-TODO
+...
 
 ## Questions
 
@@ -459,14 +459,4 @@ TODO
 * JMX 2
 * Closure delegation
 * Meta object protocol
-* Expando ??
-* How coercion works
-
-```
-    Point p = [1,2]
-    println p
-
-    Point p2 = [x:1, y:2]
-    println p2
-```
 

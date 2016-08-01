@@ -478,7 +478,7 @@ Both primary key and unique enforce uniqueness of the column on which they are d
   <li>If the search exploits an index, it is called an <strong>index nested loops join</strong>. </li>
   <li>If the index is built as part of the query plan (and destroyed upon completion of the query), it is called a <strong>temporary index nested loops join</strong>. (All these variants are considered by the query optimizer.)</li>
   <li><strong>When is it effective?</strong> A nested loops join is particularly effective if the outer input is small and the inner input is preindexed and large. In many small transactions, such as those affecting only a small set of rows, index nested loops joins are superior to both merge joins and hash joins. In large queries, however, nested loops joins are often not the optimal choice.</li>
-  <li>Block nested loop join???</li>
+  <li>Block nested loop join…</li>
 </ul>
 
 <h3 id="merge-join--sort-merge-join">Merge Join / Sort-Merge Join</h3>

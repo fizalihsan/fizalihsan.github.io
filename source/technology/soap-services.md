@@ -90,10 +90,6 @@ The general steps in the JAXB data binding process are:
 Created by Google
 
 
-## Jettison
-
-??? 
-
 ## JSON
 
 * http://json-schema.org/

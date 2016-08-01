@@ -446,11 +446,6 @@ Distributed txn is a txn that spans over 1 or more resources. It could be betwee
 * The Resource Manager controls and manages the actual resource participating in the txn like db or JMS queue.
 * XA txn should only be used when a transaction needs to be coordinated between multiple resources, i.e., databases, queues or topics. 
 
-* What is the relation between XA and JTA?
-
-???
-
-
 ### XA Resource
 
 * Without XA, messages sent to a topic/queue are typically read by receivers immediately. With XA, the message in the queue would not be released until the txn is committed.
@@ -529,11 +524,11 @@ Two golden rules apply to all of the transaction strategies :
 
 ## 3. High Concurrency Strategy
 
-???
+...
 
 ## 4. High Performance Strategy
 
-???
+...
 
 # Transaction Patterns
 
@@ -575,7 +570,7 @@ Depending on the context and resources involved, other techniques are viable alt
 * **Handling duplicate messages with Idempotency**
   * Idempotency is an interesting property for message processing. It means that we don’t care about duplicate messages! Always think about idempotency when designing a system: idempotent operations can make a system much simpler and more robust. (In Maths, n x 0 = 0)
 
-??? Check Spring in Action Chapter 9
+
 
 # Bibliography
 

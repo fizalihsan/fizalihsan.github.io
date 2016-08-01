@@ -249,11 +249,11 @@ This class supports an optional fairness policy for ordering waiting producer an
 
 * optionally bounded (could be created with specified maximal capacity or without it) queue/deque based on the linked list. 
 * It uses ReentrantLocks for empty/full conditions.
-* BigO cost - Linked queues typically have higher throughput than array-based queues but less predictable performance in most concurrent applications. ????
+* BigO cost - Linked queues typically have higher throughput than array-based queues but less predictable performance in most concurrent applications.
 
 ### LinkedTransferQueue
 
-* an unbounded queue based on the linked list. Besides ordinary queue operations, it has a group of transfer methods, which allow a producer to send a message straight to the waiting consumer, thus removing the need to store an element into a queue. This is a lock-free collection based on CAS operations ???.
+* an unbounded queue based on the linked list. Besides ordinary queue operations, it has a group of transfer methods, which allow a producer to send a message straight to the waiting consumer, thus removing the need to store an element into a queue. This is a lock-free collection based on CAS(compare-and-swap) operations.
 * BigO cost
   * size is NOT a constant time operation
   * bulk operations are not atomic
@@ -282,7 +282,7 @@ an unbounded blocking queue version of PriorityQueue.
   * Blocking methods - put(e), take()
   * Time methods - offer(e, time, unit), poll(time, unit)
   * All queuing methods achieve their effects atomically using internal locks or other forms of concurrency control. However, the bulk Collection operations addAll, containsAll, retainAll and removeAll are not necessarily performed atomically unless specified otherwise in an implementation. So it is possible, for example, for addAll(c) to fail (throwing an exception) after adding only some of the elements in c.
-  * Memory consistency effects: As with other concurrent collections, actions in a thread prior to placing an object into a BlockingQueue [happen-before](http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/package-summary.html#MemoryVisibility) actions subsequent to the access or removal of that element from the BlockingQueue in another thread. happen-before??? 
+  * Memory consistency effects: As with other concurrent collections, actions in a thread prior to placing an object into a BlockingQueue [happen-before](http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/package-summary.html#MemoryVisibility) actions subsequent to the access or removal of that element from the BlockingQueue in another thread. happen-before
 * TransferQueue
   * A BlockingQueue in which producers may wait for consumers to receive elements. A TransferQueue may be useful for example in message passing applications in which producers sometimes (using method transfer(E)) await receipt of elements by consumers invoking take or poll, while at other times enqueue elements (via method put) without waiting for receipt. Non-blocking and time-out versions of tryTransfer are also available. A TransferQueue may also be queried, via hasWaitingConsumer(), whether there are any threads waiting for items, which is a converse analogy to a peek operation.
 
@@ -297,7 +297,7 @@ an unbounded blocking queue version of PriorityQueue.
 * a set implementation based on a HashMap with dummy values (same Object is used for every value). Has the same properties as a HashMap. Due to such implementation, consumes more memory than actually required for this data structure.
 * BigO cost
   * constant time for add, remove, contains and size operations
-  * For better iteration performance, never set initial capacity too high and load factor too low ???
+  * For better iteration performance, never set initial capacity too high and load factor too low
 
 ### BitSet
 
@@ -373,7 +373,6 @@ backed up a `CopyOnWriteArrayList` and shares its properties
   * O(1) - get and put; assuming the hash function disperses the elements properly among the buckets
   * Iteration: Iteration over collection views requires time proportional to the "capacity" of the HashMap instance (the number of buckets) plus its size (the number of key-value mappings). Thus, it's very important not to set the initial capacity too high (or the load factor too low) if iteration performance is important.
   * Iteration using entrySet is better in performance
-  * Significance of 'initial capacity' and 'load factor' in performance ??? 
   * The capacity is the number of buckets in the hash table, and the initial capacity is simply the capacity at the time the hash table is created. 
   * The load factor is a measure of how full the hash table is allowed to get before its capacity is automatically increased. When the number of entries in the hash table exceeds the product of the load factor and the current capacity, the hash table is rehashed (that is, internal data structures are rebuilt) so that the hash table has approximately twice the number of buckets.
 

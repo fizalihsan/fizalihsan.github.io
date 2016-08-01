@@ -21,7 +21,7 @@ footer: true
 * **Controllers** - The purpose of controllers is to expose variables and functionality to expressions and directives. 
 * **Services** - The purpose of services is to expose view-independent business logic.
 * **Factory**
-    ???
+    ...
 * **Modules** - is where all the things need for Angular DI (Dependency Injection) is registered. When Angular starts, it will use the configuration of the module with the name defined by the ng-app directive, including the configuration of all modules that this module depends on.
 * **Common Directives**
   * `ng-app` - automatically initializes an application

@@ -102,7 +102,7 @@ body. This means any other parameters must be annotated with one of the JAX-RS a
 ( In JAX-RS, you are also allowed to define a Java interface that contains all your JAX-RS annotation metadata instead of applying all your annotations to your implementation class. This approach isolates the business logic from all the JAX-RS annotations. 
 * The JAX-RS specification also allows you to define class and interface hierarchies if you so desire.
 
-* Implementations include Jersey (RI), JBoss RESTEasy, Apache Wink and Apache CXF, Apache Axis2???
+* Implementations include Jersey (RI), JBoss RESTEasy, Apache Wink and Apache CXF, Apache Axis2
 * relies upon Java annotations to advertise the RESTful role that a class and its encapsulated methods play.
 * JAX-RS has APIs for programming RESTful services and clients against such services; the two APIs can be used independently.
 * JAX-RS uses Java annotations heavily but there are no annotations to express hyperlinks
@@ -946,9 +946,7 @@ Following are the JAX-WS Implementations
 # Open Questions
 
 * There are no annotations in JAX-RS to express hyperlinks. You have to design those yourself. what does that mean?
-* JAX-RS defines: transitional links which describe optional next actions and structural links which provide optional detailed information. Transitional links tell a client where to proceed next, while structural links help to shorten representations in order to avoid aggregate data. Details are replaced by links. Transitional links have some support in JAX-RS 2.0, but structural links are not supported due to their level of complexity.????
 * URL opacity - http://www.zapthink.com/2012/10/08/the-power-of-opacity-in-rest/ 
-* Routing idiom JAX-RS API implements mimic from Rails???
 * REST service - Proxy XJC
 	* WADL & XJC
 	* Handling Breaking changes - xsd or wsdl changes

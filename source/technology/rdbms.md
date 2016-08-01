@@ -223,7 +223,7 @@ Triggers are special kind of stored procedures that get executed automatically w
 * If the search exploits an index, it is called an **index nested loops join**. 
 * If the index is built as part of the query plan (and destroyed upon completion of the query), it is called a **temporary index nested loops join**. (All these variants are considered by the query optimizer.)
 * **When is it effective?** A nested loops join is particularly effective if the outer input is small and the inner input is preindexed and large. In many small transactions, such as those affecting only a small set of rows, index nested loops joins are superior to both merge joins and hash joins. In large queries, however, nested loops joins are often not the optimal choice.
-* Block nested loop join???
+* Block nested loop join...
 
 ### Merge Join / Sort-Merge Join
 

@@ -65,7 +65,6 @@ footer: true
 * Bisect command - what does it do?
 * Revision or version numbers
 * Unlike SVN which creates .svn directories in every single folder, Git only creates a single .git folder.
-* Stashing - ???
 * Sparse checkouts.
 * Git tracks content rather than file - renaming a file, moving it to a different location
 * Command line, TortoiseGit, 

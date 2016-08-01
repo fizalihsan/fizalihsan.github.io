@@ -478,11 +478,11 @@ is a form of liveness failure in which a thread, while not blocked, still cannot
 
 ## 5) Missed Signals
 
-???
+...
 
 ## 6) Fairness
 
-??? 
+... 
 
 # Concurrency Limitations
 

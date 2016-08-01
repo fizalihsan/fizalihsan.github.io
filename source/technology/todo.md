@@ -23,6 +23,7 @@ footer: false
 	* Self-balanced tree
 	* Splay tree
 	* Graphs
+	* Bloom filter
 * Db Design
 	* Time-series database
 * Db performance
@@ -62,6 +63,8 @@ println p2
 	* Actor, STM
 	* LMAX Disruptor
 	* How to unit test concurrent programs
+	* Collections [happen-before](http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/package-summary.html#MemoryVisibility)
+	* Concurrency issues - missed signal and fairness
 * Java database
 	* JPA
 	* `javax.sql.rowset.WebRowSet`
@@ -86,14 +89,23 @@ println p2
 		* Java 8 Date API in detail
 	* UUID concepts in general
 	* Java 8 Default Methods
+	* HashMap - Significance of 'initial capacity' and 'load factor' in performance
 * Logging and monitoring
 	* What is write-ahead logging? Used in HBase.
 * RDBMS
 	* Reorg 
+	* Block nested loop join
 * REST services
 	* What SOAP has that REST doesn't?
 	* REST fault messages
+	* Routing idiom JAX-RS API implements mimic from Rails
+	* JAX-RS defines: transitional links which describe optional next actions and structural links which provide optional detailed information. Transitional links tell a client where to proceed next, while structural links help to shorten representations in order to avoid aggregate data. Details are replaced by links. Transitional links have some support in JAX-RS 2.0, but structural links are not supported due to their level of complexity.
 * Scalability
 	* [Horizontal and Vertical Scaling Strategies for Batch applications](http://www.ontheserverside.com/blog/2014/07/23/horizontal-and-vertical-scaling-strategies-for-batch-applications)
 * Security
 	* OAuth
+* Transaction
+	* Check Spring in Action Chapter 9
+* VCS
+	* Git Stashing
+	* Git flow

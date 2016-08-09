@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Big Data Frameworks Apache Hadoop HDFS (Hadoop Distributed File System) Daemons MapReduce (Hadoop Implementation) Apache HCatalog Apache Hive Apache &hellip;">
+<meta name="description" content="Big Data Frameworks Apache HCatalog Apache Hive Apache Pig 1. Pig Latin 2) Grunt 3) Piggybank Apache Storm Components Difference between Storm &amp &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -108,12 +108,6 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#apache-hadoop">Apache Hadoop</a>    <ul>
-      <li><a href="#hdfs-hadoop-distributed-file-system">HDFS (Hadoop Distributed File System)</a></li>
-      <li><a href="#daemons">Daemons</a></li>
-      <li><a href="#mapreduce-hadoop-implementation">MapReduce (Hadoop Implementation)</a></li>
-    </ul>
-  </li>
   <li><a href="#apache-hcatalog">Apache HCatalog</a></li>
   <li><a href="#apache-hive">Apache Hive</a></li>
   <li><a href="#apache-pig">Apache Pig</a>    <ul>
@@ -152,97 +146,6 @@ messageStyle: "none",
   <li><a href="#apache-zookeeper">Apache Zookeeper</a></li>
   <li><a href="#bibliography">Bibliography</a></li>
 </ul>
-
-<h1 id="apache-hadoop">Apache Hadoop</h1>
-
-<ul>
-  <li>Hadoop is an open source platform that provides implementations of both the MapReduce and GFS (Google File System) technologies and allows the processing of very large data sets across clusters of low-cost commodity hardware.</li>
-  <li>The terms host or server refer to the physical hardware hosting Hadoop’s various components. The term node will refer to the software component comprising a part of the cluster.</li>
-  <li>Where Hadoop is not a good fit?
-    <ul>
-      <li>not well suited for low-latency queries like websites, real time systems, etc. (HBase on top of Hadoop serves low-latency queries)</li>
-      <li>smaller data sets.</li>
-    </ul>
-  </li>
-  <li>The term <em>Hadoop Streaming</em> refers to a mechanism allowing scripting languages to be used to write map and reduce tasks</li>
-  <li>Hadoop installation consists of four types of nodes
-    <ul>
-      <li>a NameNode</li>
-      <li>DataNodes</li>
-      <li>a JobTracker, and </li>
-      <li>TaskTracker
-*HDFS nodes (NameNode and DataNodes) provide a distributed filesystem where the JobTracker manages the jobs and TaskTrackers run tasks that perform parts of the job. Users submit MapReduce jobs to the JobTracker, which runs each of the Map and Reduce parts of the initial job in TaskTrackers, collects results, and finally emits the results.</li>
-    </ul>
-  </li>
-</ul>
-
-<h2 id="hdfs-hadoop-distributed-file-system">HDFS (Hadoop Distributed File System)</h2>
-
-<ul>
-  <li>is a distributed filesystem that can store very large data sets by scaling out across a cluster of hosts. It has specific design and performance characteristics; in particular, it is optimized for throughput instead of latency, and it achieves high availability through replication instead of redundancy.</li>
-  <li>similar to any other linux file system like ext3 - but cannot be mounted - and requires applications to be specially built for it.</li>
-  <li>Block size in old file systems are typically 4KB or 8KB of size. In HDFS, it is 64MB to 1GB.</li>
-  <li>Replicates each block to multiple machines (default 3) in the cluster. Should the number of copies of a block drop below the configured replication factor, the filesystem automatically makes a new copy from one of the remaining replicas. </li>
-  <li>Due to replicated data, failures are easily tolerated.</li>
-  <li>not a POSIX-compliant filesystem.</li>
-  <li>HDFS is optimized for throughput over latency; it is very efficient at streaming read requests for large files but poor at seek requests for many small ones.</li>
-</ul>
-
-<p><img class="right" src="/technology/hadoop-server-roles.png" /></p>
-
-<h2 id="daemons">Daemons</h2>
-
-<ul>
-  <li>Namenode (NN)
-    <ul>
-      <li>1 per cluster</li>
-      <li>Purpose: Stores filesystem metadata, stores file to block map, and provides a global picture of the filesystem</li>
-    </ul>
-  </li>
-  <li>Secondary namenode (SNN)
-    <ul>
-      <li>1 per cluster (better not to share machine with NameNode)</li>
-      <li>Purpose: Performs internal namenode transaction log checkpointing</li>
-    </ul>
-  </li>
-  <li>DataNode 
-    <ul>
-      <li>Many per cluster</li>
-      <li>Purpose: Stores block data (file contents)</li>
-    </ul>
-  </li>
-  <li>Each storage node runs a process called a DataNode that manages the blocks on that host, and these are coordinated by a master NameNode process running on a separate host.</li>
-  <li>Instead of handling disk failures by having physical redundancies in disk arrays or similar strategies, HDFS uses replication. Each of the blocks comprising a file is stored on multiple nodes within the cluster, and the HDFS NameNode constantly monitors reports sent by each DataNode to ensure that failures have not dropped any block below the desired replication factor. If this does happen, it schedules the addition of another copy within the cluster. (include archictecture diagram from internet)</li>
-  <li>The master (NameNode) monitors the health of the cluster and handle failures by moving data blocks around.</li>
-  <li>Processes on each server (DataNode) are responsible for performing work on the physical host, receiving instructions from the NameNode nd reporting health/progress status back to it.</li>
-  <li>NameNode Federation - Since NameNodes keep all the metadata in memory, there is inherent limitation up to which it can scale up. Scaling out with multiple namenodes is called namenode federation</li>
-  <li>HDFS interface
-    <ul>
-      <li>HDFS shell</li>
-      <li>Java API</li>
-      <li>REST API - WebHDFS, HttpFS(standalone RESTful HDFS proxy service) </li>
-    </ul>
-  </li>
-</ul>
-
-<h2 id="mapreduce-hadoop-implementation">MapReduce (Hadoop Implementation)</h2>
-
-<ul>
-  <li>is a data processing paradigm that takes a specification of how the data will be input and output from its two stages (called map and reduce) and then applies this across arbitrarily large data sets. MapReduce integrates tightly with HDFS, ensuring that wherever possible, MapReduce tasks run directly on the HDFS nodes that hold the required data.</li>
-  <li>Concepts
-    <ul>
-      <li>concepts of functions called map and reduce come straight from functional programming languages where they were applied to lists of input data.</li>
-      <li>divide and conquer”, where a single problem is broken into multiple individual subtasks. This approach becomes even more powerful when the subtasks are executed in parallel;</li>
-    </ul>
-  </li>
-  <li>Unlike traditional relational databases that require structured data with well-defined schemas, MapReduce and Hadoop work best on semi-structured or unstructured data.</li>
-  <li>Instead of data conforming to rigid schemas, the requirement is instead that the data be provided to the map function as a series of key value pairs. The output of the map function is a set of other key value pairs, and the reduce function performs aggregation to collect the final set of results.</li>
-  <li>Hadoop provides a standard specification (that is, interface) for the map and reduce functions, and implementations of these are often referred to as mappers and reducers. A typical MapReduce job will comprise of a number of mappers and reducers, and it is not unusual for several of these to be extremely simple. The developer focuses on expressing the transformation between source and result data sets, and the Hadoop framework manages all aspects of job execution, parallelization, and coordination.</li>
-  <li>The master (JobTracker) monitors the health of the cluster and handle failures by rescheduling failed work.</li>
-  <li>Processes on each server (TaskTracker) are responsible for performing work on the physical host, receiving instructions from the JobTracker, and reporting health/progress status back to it.</li>
-</ul>
-
-<hr />
 
 <h1 id="apache-hcatalog">Apache HCatalog</h1>
 
@@ -1177,15 +1080,6 @@ as well as consumer client details. </li>
 <h1 id="bibliography">Bibliography</h1>
 
 <ul>
-  <li>Hadoop
-    <ul>
-      <li>Books
-        <ul>
-          <li>Hadoop Application Architectures</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
   <li>Kafka
     <ul>
       <li>Books
@@ -1242,7 +1136,7 @@ as well as consumer client details. </li>
 		
 		<li>
 			<h3>BigData</h3>
-			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
 		</li>
 
 		<li>

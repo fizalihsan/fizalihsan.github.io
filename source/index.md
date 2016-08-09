@@ -25,6 +25,7 @@ footer: true
     * [Distributed Computing]({{ root_url }}/technology/distributedcomputing.html)
     * [ElasticSearch]({{ root_url }}/technology/elasticsearch.html)
     * [Frameworks]({{ root_url }}/technology/bigdata-frameworks.html)
+    * [Hadoop Ecosystem]({{ root_url }}/technology/hadoop-ecosystem.html)
     * [NoSQL]({{ root_url }}/technology/nosql.html)
     * [Parallel Computing]({{ root_url }}/technology/concurrency-parallelism.html)
 

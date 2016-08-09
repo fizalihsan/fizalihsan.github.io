@@ -12,6 +12,9 @@ footer: false
 * Algorithms
 	* List sorting algorithms
 	* String paths - backtracking algorithms
+* Architecture
+	* Shared nothing architecture
+	* SEDA
 * Camel
 	* Complete this book - Camel in Action by Claus Ibsen, Jonathan
 * Cloud computing

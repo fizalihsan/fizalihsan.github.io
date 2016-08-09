@@ -11,67 +11,6 @@ footer: true
 
 
 
-# Apache Hadoop
-
-* Hadoop is an open source platform that provides implementations of both the MapReduce and GFS (Google File System) technologies and allows the processing of very large data sets across clusters of low-cost commodity hardware.
-* The terms host or server refer to the physical hardware hosting Hadoop's various components. The term node will refer to the software component comprising a part of the cluster.
-* Where Hadoop is not a good fit?
-  * not well suited for low-latency queries like websites, real time systems, etc. (HBase on top of Hadoop serves low-latency queries)
-  * smaller data sets.
-* The term *Hadoop Streaming* refers to a mechanism allowing scripting languages to be used to write map and reduce tasks
-* Hadoop installation consists of four types of nodes
-	* a NameNode
-	* DataNodes
-	* a JobTracker, and 
-	* TaskTracker
-*HDFS nodes (NameNode and DataNodes) provide a distributed filesystem where the JobTracker manages the jobs and TaskTrackers run tasks that perform parts of the job. Users submit MapReduce jobs to the JobTracker, which runs each of the Map and Reduce parts of the initial job in TaskTrackers, collects results, and finally emits the results.
-
-## HDFS (Hadoop Distributed File System)
-
-* is a distributed filesystem that can store very large data sets by scaling out across a cluster of hosts. It has specific design and performance characteristics; in particular, it is optimized for throughput instead of latency, and it achieves high availability through replication instead of redundancy.
-* similar to any other linux file system like ext3 - but cannot be mounted - and requires applications to be specially built for it.
-* Block size in old file systems are typically 4KB or 8KB of size. In HDFS, it is 64MB to 1GB.
-* Replicates each block to multiple machines (default 3) in the cluster. Should the number of copies of a block drop below the configured replication factor, the filesystem automatically makes a new copy from one of the remaining replicas. 
-* Due to replicated data, failures are easily tolerated.
-* not a POSIX-compliant filesystem.
-* HDFS is optimized for throughput over latency; it is very efficient at streaming read requests for large files but poor at seek requests for many small ones.
-
-{% img right /technology/hadoop-server-roles.png %}
-
-## Daemons
-
-* Namenode (NN)
-  * 1 per cluster
-  * Purpose: Stores filesystem metadata, stores file to block map, and provides a global picture of the filesystem
-* Secondary namenode (SNN)
-  * 1 per cluster (better not to share machine with NameNode)
-  * Purpose: Performs internal namenode transaction log checkpointing
-* DataNode 
-  * Many per cluster
-  * Purpose: Stores block data (file contents)
-* Each storage node runs a process called a DataNode that manages the blocks on that host, and these are coordinated by a master NameNode process running on a separate host.
-* Instead of handling disk failures by having physical redundancies in disk arrays or similar strategies, HDFS uses replication. Each of the blocks comprising a file is stored on multiple nodes within the cluster, and the HDFS NameNode constantly monitors reports sent by each DataNode to ensure that failures have not dropped any block below the desired replication factor. If this does happen, it schedules the addition of another copy within the cluster. (include archictecture diagram from internet)
-* The master (NameNode) monitors the health of the cluster and handle failures by moving data blocks around.
-* Processes on each server (DataNode) are responsible for performing work on the physical host, receiving instructions from the NameNode nd reporting health/progress status back to it.
-* NameNode Federation - Since NameNodes keep all the metadata in memory, there is inherent limitation up to which it can scale up. Scaling out with multiple namenodes is called namenode federation
-* HDFS interface
-  * HDFS shell
-  * Java API
-  * REST API - WebHDFS, HttpFS(standalone RESTful HDFS proxy service) 
-
-## MapReduce (Hadoop Implementation)
-
-* is a data processing paradigm that takes a specification of how the data will be input and output from its two stages (called map and reduce) and then applies this across arbitrarily large data sets. MapReduce integrates tightly with HDFS, ensuring that wherever possible, MapReduce tasks run directly on the HDFS nodes that hold the required data.
-* Concepts
-  * concepts of functions called map and reduce come straight from functional programming languages where they were applied to lists of input data.
-  * divide and conquer", where a single problem is broken into multiple individual subtasks. This approach becomes even more powerful when the subtasks are executed in parallel;
-* Unlike traditional relational databases that require structured data with well-defined schemas, MapReduce and Hadoop work best on semi-structured or unstructured data.
-* Instead of data conforming to rigid schemas, the requirement is instead that the data be provided to the map function as a series of key value pairs. The output of the map function is a set of other key value pairs, and the reduce function performs aggregation to collect the final set of results.
-* Hadoop provides a standard specification (that is, interface) for the map and reduce functions, and implementations of these are often referred to as mappers and reducers. A typical MapReduce job will comprise of a number of mappers and reducers, and it is not unusual for several of these to be extremely simple. The developer focuses on expressing the transformation between source and result data sets, and the Hadoop framework manages all aspects of job execution, parallelization, and coordination.
-* The master (JobTracker) monitors the health of the cluster and handle failures by rescheduling failed work.
-* Processes on each server (TaskTracker) are responsible for performing work on the physical host, receiving instructions from the JobTracker, and reporting health/progress status back to it.
-
-* * *
 
 # Apache HCatalog
 
@@ -644,9 +583,6 @@ There are multiple possible ways to deliver messages, such as:
 
 # Bibliography
 
-* Hadoop
-	* Books
-		* Hadoop Application Architectures
 * Kafka
 	* Books
 		* Learning Apache Kafka (2nd Edition) - Nishant Garg

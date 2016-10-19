@@ -107,6 +107,7 @@ println p2
 	* [Horizontal and Vertical Scaling Strategies for Batch applications](http://www.ontheserverside.com/blog/2014/07/23/horizontal-and-vertical-scaling-strategies-for-batch-applications)
 * Security
 	* OAuth
+	* JSON Web Tokens
 * Transaction
 	* Check Spring in Action Chapter 9
 * VCS

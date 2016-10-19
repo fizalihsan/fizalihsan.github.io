@@ -61,7 +61,6 @@ GET /customers/333 HTTP/1.1
 Authorization: Basic YmJ1cmtlOmdlaGVpbQ==
 ``` 
 
-
 **Downside**: The problem with this approach is that if this request is intercepted by a hostile entity on the network, the hacker can easily obtain the username and password and use it to invoke its own requests. Using an encrypted HTTP connection, HTTPS, solves this problem. With an encrypted connection, a rogue programmer on the network will be unable to decode the transmission and get at the Authorization header. Still, security-paranoid network administrators are very squeamish about sending passwords over the network, even if they are encrypted within SSL packets.
 
 ## Digest Authentication
@@ -72,7 +71,6 @@ Digest authentication was invented so that clients would not have to send clear 
  GET /dir/index.html HTTP/1.0
  Host: localhost
 ```
-
 
 ```http Response to an unauthorized request
  HTTP/1.1 401 Unauthorized
@@ -159,6 +157,10 @@ Authorization is essentially access control - controlling what your users can ac
 
 * Roles/Users assigned with access to certain features. Users are assigned to roles. This model is not flexible since roles cannot be added dynamically
 * Permissions are defined for features. Users are assigned permissions. This model allows dynamic addition of users.
+
+## JSON Web Tokens
+
+
 
 # 3. Cryptography
 

@@ -11,7 +11,7 @@ footer: true
 
 # Overview
 
-* Difference between VCS and DVCS. 
+* Difference between VCS and DVCS.
 * What is the advantage of having a distributed VCS?
   * no single point of failure in the event of a crash or corruption
 * Principles and best practices when it comes to branching
@@ -30,7 +30,7 @@ footer: true
 
 ## Workflow models
 
-* **SVN-style centralized workflow** 
+* **SVN-style centralized workflow**
   * A very common Git workflow, especially from people transitioning from a centralized system, is a centralized workflow. Git will not allow you to push if someone has pushed since the last time you fetched, so a centralized model where all developers push to the same server works just fine.
 * **Integration Workflow**
   * a single person who commits to the 'blessed' repository, and then a number of developers who clone from that repository, push to their own independent repositories and ask the integrator to pull in their changes. This is the type of development model you often see with open source or GitHub repositories.
@@ -44,8 +44,8 @@ footer: true
 
 ## Advantages
 
-* Distributed, not centralized: 
-  * With Git, you have a local copy/clone of the entire repository which could be used offline. Due to this, there is no single point of failure in case of a crash or corruption. Every developer has his own copy of the repository. 
+* Distributed, not centralized:
+  * With Git, you have a local copy/clone of the entire repository which could be used offline. Due to this, there is no single point of failure in case of a crash or corruption. Every developer has his own copy of the repository.
 * Smaller & Faster - To save space and transfer time, the data is stored after applying compression.
 * Branching and merging is easier
 * Atomic transactions: Like SVN, transactions are atomic - ensures that the version control database is not left in a partially changed or corrupted state while an update or commit of number of unrelated changes is happening.
@@ -59,7 +59,7 @@ footer: true
   * In SVN, each file & folder can come from a different revision or branch. This leads to confusion in case of a failure.
 * Workflows
   * Unlike other VCS systems, Git does not impose any particular workflow.
-  * Well-suited for open source community development. 
+  * Well-suited for open source community development.
   * Git-SVN Bridge - The central repository is a Subversion repo, but developers locally work with Git and the bridge then pushes their changes to SVN.
 * Clean command - what does it do?
 * Bisect command - what does it do?
@@ -67,11 +67,98 @@ footer: true
 * Unlike SVN which creates .svn directories in every single folder, Git only creates a single .git folder.
 * Sparse checkouts.
 * Git tracks content rather than file - renaming a file, moving it to a different location
-* Command line, TortoiseGit, 
+* Command line, TortoiseGit,
 * version control outside of source code
 
 
 https://git.wiki.kernel.org/index.php/GitSvnComparsion
+
+## Branching
+
+When we merge branches and there are no conflicts, such as above, only the branch pathway is changed and the HEAD of the branch is updated. This is called the **fast forward type** of merge.
+
+```
+git checkout master
+git merge new_feature
+```
+
+The alternate way of merging branches is the no fast forward merge, by postfixing `--no-ff` to the merge command. In this way, a new commit is created on the base branch with the changes from the other branch.
+
+```
+git merge --no-ff new_feature
+```
+
+## Git Command Reference
+
+* `gitk` - build-in git GUI
+* `git add <filename>`
+* `git branch`
+  * `git branch` - lists only local branch names
+  * `git branch -a` - lists all branch names, both local and remote
+  * `git branch -r` - lists only remote branch names
+  * `git branch <branch_name>` - Creates a branch off of latest commit, but doesn't switch the local to it
+  * `git branch -b <branch_name>` - Creates a branch off of latest commit and switches to it
+  * `git branch -b <branch_name> <commit_id>` - Creates a branch off of given commit id
+  * `git branch -m <branch_name>` - Rename current branch
+  * `git branch -D <branch_name>` - deletes the branch without warning of any uncommited files
+  * `git branch -d <branch_name>` - deletes the branch with warning of any uncommited
+* `git checkout`
+  * `git checkout -b <branch_name>` - create a new branch named  and switch to it
+  * `git checkout -b <branch_name> upstream/<branch_name>` - create a new branch \<branch_name\> and associates it with `upstream/branch_name`.
+  * `git checkout <branch_name>`` - switch to a given branch
+  * `git checkout -` - takes back to the previous branch (like `cd -`)
+  * `git checkout -- <filename>` - replace changes in your working tree with the latest content in HEAD
+  * `git checkout <filename>` -
+* `git config`
+  * `git config --list --show-origin` - lists configurations and their origin files
+* `git describe`
+  * `git describe --tags --abbrev=0`
+  * `git describe --tags --abbrev=0 --match="beta2_ddl_*"`
+* `git diff`
+  * `git diff <source_branch> <target_branch>`
+* `git fetch`
+  * `git fetch`
+  * `git fetch <origin/upstream>`
+  * `git fetch upstream refs/pull/<pull#>head:pull_<pull#>` - https://coderwall.com/p/z5rkga/github-checkout-a-pull-request-as-a-branch
+* `git log`
+  * `git log`
+  * `git log --one-line` - displays the logs as one liner
+  * `git log --tags --simplify-by-decoration --pretty="format:%ci %d" -n5` - displays the last 5 tags created
+* `git merge`
+  * `git merge upstream/develop` - to merge another branch into your active branch (e.g. master)
+* `git push`
+  * `git push origin <branch>` - a branch is not available to others unless you push the branch to your remote repository
+  * `git push -f origin develop` - forcefully pushes. Typically you need this after changes like squash
+* `git pull`
+  * `git pull` - to update your local repository to the newest commit. execute in your working directory to 'fetch' and 'merge' remote changes
+  * `git pull --rebase upstream develop`
+* `git rebase`
+  * `git rebase -i` - lists down all the local commits and gives you the option to `pick/reword/edit/squash/fixup/exec/drop` a commit
+* `git reflog`
+* `git remote`
+  * `git remote -v` - List the current configured remote repository for your fork.
+  * `git remote add upstream`
+    * https://help.github.com/articles/configuring-a-remote-for-a-fork/
+    * http://www.eqqon.com/index.php/Collaborative_Github_Workflow
+    * http://blog.scottlowe.org/2015/01/27/using-fork-branch-git-workflow/
+* `git reset`
+  * `git reset --hard upstream/develop` - Throws away local changes and makes the working tree and index same as the remote version
+* `git rev-parse HEAD`
+* `git show`
+  * `git show <commitId>` - shows information about a commit
+  * `git show 'git describe' --pretty=fuller`
+* `git stash`
+* `git status`
+* `git tag`
+  * `git tag <tag>`
+  * `git tag 1.0.0 1b2e1d63ff` - the 1b2e1d63ff stands for the first 10 characters of the commit id you want to reference with your tag
+
+To drop all your local changes and commits, fetch the latest history from the server and point your local master branch at it like this
+
+```
+git fetch origin
+git reset --hard <branch>
+```
 
 ## Advanced Concepts
 
@@ -89,8 +176,8 @@ The main points I like about DVCS are those :
 
 You can commit broken things. It doesn't matter because other peoples won't see them until you publish. Publish time is different of commit time.
 Because of this you can commit more often.
-You can merge complete functionnality. This functionnality will have its own branch. All commits of this branch will be related to this functionnality. You can do it with a CVCS however with DVCS its the default.
+You can merge complete functionality. This functionality will have its own branch. All commits of this branch will be related to this functionality. You can do it with a CVCS however with DVCS its the default.
 You can search your history (find when a function changed )
 You can undo a pull if someone screw up the main repository, you don't need to fix the errors. Just clear the merge.
-When you need a source control in any directory do : git init . and you can commit, undoing changes, etc...
+When you need a source control in any directory do : `git init` . and you can commit, undoing changes, etc...
 It's fast (even on Windows )

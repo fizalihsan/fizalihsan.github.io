@@ -33,7 +33,7 @@ footer: true
 
 ## Micro-Batching
 
-* Micro-batching is a special case of batch processing where the batch size is orders smaller. 
+* Micro-batching is a special case of batch processing where the batch size is orders smaller.
 * E.g., Spark Streaming, Storm Trident API.
 * Micro-batching seems to be a nice mix between batching and streaming. However, micro-batching incurs a cost of latency. If sub-second latency is paramount, micro-batching will typically not suffice. On the other hand, micro-batching trivially gives stateful computation, making windowing an easy task.
 

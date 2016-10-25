@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="VCS Overview Git How Git works? Workflow models Advantages Basic concepts Advanced Concepts Content-Addressable Names Pack files Overview Difference &hellip;">
+<meta name="description" content="VCS Overview Git How Git works? Workflow models Advantages Basic concepts Branching Git Command Reference Advanced Concepts Content-Addressable &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -114,6 +114,8 @@ messageStyle: "none",
       <li><a href="#workflow-models">Workflow models</a></li>
       <li><a href="#advantages">Advantages</a></li>
       <li><a href="#basic-concepts">Basic concepts</a></li>
+      <li><a href="#branching">Branching</a></li>
+      <li><a href="#git-command-reference">Git Command Reference</a></li>
       <li><a href="#advanced-concepts">Advanced Concepts</a>        <ul>
           <li><a href="#content-addressable-names">Content-Addressable Names</a></li>
           <li><a href="#pack-files">Pack files</a></li>
@@ -225,6 +227,142 @@ messageStyle: "none",
 </ul>
 
 <p>https://git.wiki.kernel.org/index.php/GitSvnComparsion</p>
+
+<h2 id="branching">Branching</h2>
+
+<p>When we merge branches and there are no conflicts, such as above, only the branch pathway is changed and the HEAD of the branch is updated. This is called the <strong>fast forward type</strong> of merge.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">git checkout master
+</span><span class="line">git merge new_feature</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>The alternate way of merging branches is the no fast forward merge, by postfixing <code>--no-ff</code> to the merge command. In this way, a new commit is created on the base branch with the changes from the other branch.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">git merge --no-ff new_feature</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="git-command-reference">Git Command Reference</h2>
+
+<ul>
+  <li><code>gitk</code> - build-in git GUI</li>
+  <li><code>git add &lt;filename&gt;</code></li>
+  <li><code>git branch</code>
+    <ul>
+      <li><code>git branch</code> - lists only local branch names</li>
+      <li><code>git branch -a</code> - lists all branch names, both local and remote</li>
+      <li><code>git branch -r</code> - lists only remote branch names</li>
+      <li><code>git branch &lt;branch_name&gt;</code> - Creates a branch off of latest commit, but doesn’t switch the local to it</li>
+      <li><code>git branch -b &lt;branch_name&gt;</code> - Creates a branch off of latest commit and switches to it</li>
+      <li><code>git branch -b &lt;branch_name&gt; &lt;commit_id&gt;</code> - Creates a branch off of given commit id</li>
+      <li><code>git branch -m &lt;branch_name&gt;</code> - Rename current branch</li>
+      <li><code>git branch -D &lt;branch_name&gt;</code> - deletes the branch without warning of any uncommited files</li>
+      <li><code>git branch -d &lt;branch_name&gt;</code> - deletes the branch with warning of any uncommited</li>
+    </ul>
+  </li>
+  <li><code>git checkout</code>
+    <ul>
+      <li><code>git checkout -b &lt;branch_name&gt;</code> - create a new branch named  and switch to it</li>
+      <li><code>git checkout -b &lt;branch_name&gt; upstream/&lt;branch_name&gt;</code> - create a new branch &lt;branch_name&gt; and associates it with <code>upstream/branch_name</code>.</li>
+      <li><code>git checkout &lt;branch_name&gt;</code>` - switch to a given branch</li>
+      <li><code>git checkout -</code> - takes back to the previous branch (like <code>cd -</code>)</li>
+      <li><code>git checkout -- &lt;filename&gt;</code> - replace changes in your working tree with the latest content in HEAD</li>
+      <li><code>git checkout &lt;filename&gt;</code> -</li>
+    </ul>
+  </li>
+  <li><code>git config</code>
+    <ul>
+      <li><code>git config --list --show-origin</code> - lists configurations and their origin files</li>
+    </ul>
+  </li>
+  <li><code>git describe</code>
+    <ul>
+      <li><code>git describe --tags --abbrev=0</code></li>
+      <li><code>git describe --tags --abbrev=0 --match="beta2_ddl_*"</code></li>
+    </ul>
+  </li>
+  <li><code>git diff</code>
+    <ul>
+      <li><code>git diff &lt;source_branch&gt; &lt;target_branch&gt;</code></li>
+    </ul>
+  </li>
+  <li><code>git fetch</code>
+    <ul>
+      <li><code>git fetch</code></li>
+      <li><code>git fetch &lt;origin/upstream&gt;</code></li>
+      <li><code>git fetch upstream refs/pull/&lt;pull#&gt;head:pull_&lt;pull#&gt;</code> - https://coderwall.com/p/z5rkga/github-checkout-a-pull-request-as-a-branch</li>
+    </ul>
+  </li>
+  <li><code>git log</code>
+    <ul>
+      <li><code>git log</code></li>
+      <li><code>git log --one-line</code> - displays the logs as one liner</li>
+      <li><code>git log --tags --simplify-by-decoration --pretty="format:%ci %d" -n5</code> - displays the last 5 tags created</li>
+    </ul>
+  </li>
+  <li><code>git merge</code>
+    <ul>
+      <li><code>git merge upstream/develop</code> - to merge another branch into your active branch (e.g. master)</li>
+    </ul>
+  </li>
+  <li><code>git push</code>
+    <ul>
+      <li><code>git push origin &lt;branch&gt;</code> - a branch is not available to others unless you push the branch to your remote repository</li>
+      <li><code>git push -f origin develop</code> - forcefully pushes. Typically you need this after changes like squash</li>
+    </ul>
+  </li>
+  <li><code>git pull</code>
+    <ul>
+      <li><code>git pull</code> - to update your local repository to the newest commit. execute in your working directory to ‘fetch’ and ‘merge’ remote changes</li>
+      <li><code>git pull --rebase upstream develop</code></li>
+    </ul>
+  </li>
+  <li><code>git rebase</code>
+    <ul>
+      <li><code>git rebase -i</code> - lists down all the local commits and gives you the option to <code>pick/reword/edit/squash/fixup/exec/drop</code> a commit</li>
+    </ul>
+  </li>
+  <li><code>git reflog</code></li>
+  <li><code>git remote</code>
+    <ul>
+      <li><code>git remote -v</code> - List the current configured remote repository for your fork.</li>
+      <li><code>git remote add upstream</code>
+        <ul>
+          <li>https://help.github.com/articles/configuring-a-remote-for-a-fork/</li>
+          <li>http://www.eqqon.com/index.php/Collaborative_Github_Workflow</li>
+          <li>http://blog.scottlowe.org/2015/01/27/using-fork-branch-git-workflow/</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code>git reset</code>
+    <ul>
+      <li><code>git reset --hard upstream/develop</code> - Throws away local changes and makes the working tree and index same as the remote version</li>
+    </ul>
+  </li>
+  <li><code>git rev-parse HEAD</code></li>
+  <li><code>git show</code>
+    <ul>
+      <li><code>git show &lt;commitId&gt;</code> - shows information about a commit</li>
+      <li><code>git show 'git describe' --pretty=fuller</code></li>
+    </ul>
+  </li>
+  <li><code>git stash</code></li>
+  <li><code>git status</code></li>
+  <li><code>git tag</code>
+    <ul>
+      <li><code>git tag &lt;tag&gt;</code></li>
+      <li><code>git tag 1.0.0 1b2e1d63ff</code> - the 1b2e1d63ff stands for the first 10 characters of the commit id you want to reference with your tag</li>
+    </ul>
+  </li>
+</ul>
+
+<p>To drop all your local changes and commits, fetch the latest history from the server and point your local master branch at it like this</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">git fetch origin
+</span><span class="line">git reset --hard &lt;branch&gt;</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h2 id="advanced-concepts">Advanced Concepts</h2>
 

@@ -332,10 +332,7 @@ When Git merges the two branches, it looks at the changes in each branch since t
       <li><code>git push -f origin &lt;branch_name&gt;</code> - forcefully pushes. Typically you need this after changes like squash</li>
     </ul>
   </li>
-  <li>
-    <p><code>git pull</code>
-&lt;% img right /technology/git-rebase.jpeg %&gt;</p>
-
+  <li><code>git pull</code>
     <ul>
       <li><code>git pull</code> = <code>git fetch + git merge</code>. Downloads the code from the <em>master</em> branch of the <em>origin</em> remote branch and then merges the code with the current active branch. Pulls are fast-forwarding by default.</li>
       <li><code>git pull &lt;remote_name&gt; &lt;branch_name&gt;</code> -</li>
@@ -441,12 +438,14 @@ To revert back local changes and go back to the state during the last commit.</p
 
 <p>To merge branch <code>another_feature</code> with branch <code>new_feature</code></p>
 
-<p><img src="/technology/git-merge-3.jpeg" /></p>
-
 <div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 </pre></td><td class="code"><pre><code class=""><span class="line">git checkout new_feature
 </span><span class="line">git merge another_feature</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><img src="/technology/git-merge-3.jpeg" title="&#34;Merging &#34;" alt="&#34;Merging &#34;" /></p>
+
+<p><img class="right" src="/technology/git-rebase.jpeg" title="&#34;Rebase&#34;" alt="&#34;Rebase&#34;" /></p>
 
 <p><strong>Hard fetch</strong></p>
 

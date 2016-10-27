@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="VCS Overview Git How Git works? Workflow models Advantages Basic concepts Branching Git Command Reference Advanced Concepts Content-Addressable &hellip;">
+<meta name="description" content="VCS Overview Git How Git works? Workflow models Advantages Basic concepts Concepts Git Command Reference Frequent actions Advanced Concepts Content- &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -114,8 +114,9 @@ messageStyle: "none",
       <li><a href="#workflow-models">Workflow models</a></li>
       <li><a href="#advantages">Advantages</a></li>
       <li><a href="#basic-concepts">Basic concepts</a></li>
-      <li><a href="#branching">Branching</a></li>
+      <li><a href="#concepts">Concepts</a></li>
       <li><a href="#git-command-reference">Git Command Reference</a></li>
+      <li><a href="#frequent-actions">Frequent actions</a></li>
       <li><a href="#advanced-concepts">Advanced Concepts</a>        <ul>
           <li><a href="#content-addressable-names">Content-Addressable Names</a></li>
           <li><a href="#pack-files">Pack files</a></li>
@@ -139,13 +140,6 @@ messageStyle: "none",
 
 <h1 id="git">Git</h1>
 
-<ul>
-  <li>Distributed VCS developed by Linus Torvalds</li>
-  <li><span style="color:red">Why Git?</span></li>
-  <li>What is the advantage of having a staging area in Git?</li>
-  <li>Git Vs SVN</li>
-</ul>
-
 <h2 id="how-git-works">How Git works?</h2>
 
 <p><img src="/technology/git-local-remote.png" /></p>
@@ -155,10 +149,10 @@ messageStyle: "none",
 <ul>
   <li><strong>SVN-style centralized workflow</strong>
     <ul>
-      <li>A very common Git workflow, especially from people transitioning from a centralized system, is a centralized workflow. Git will not allow you to push if someone has pushed since the last time you fetched, so a centralized model where all developers push to the same server works just fine.</li>
+      <li>A very common Git workflow, especially from people transitioning from a centralized system. Git will not allow you to push if someone has pushed since the last time you fetched, so a centralized model where all developers push to the same server works just fine.</li>
     </ul>
   </li>
-  <li><strong>Integration Workflow</strong>
+  <li><strong>Integration Workflow / The open-source Workflow / Fork &amp; Pull Requests</strong>
     <ul>
       <li>a single person who commits to the ‘blessed’ repository, and then a number of developers who clone from that repository, push to their own independent repositories and ask the integrator to pull in their changes. This is the type of development model you often see with open source or GitHub repositories.</li>
     </ul>
@@ -216,19 +210,26 @@ messageStyle: "none",
       <li>Git-SVN Bridge - The central repository is a Subversion repo, but developers locally work with Git and the bridge then pushes their changes to SVN.</li>
     </ul>
   </li>
-  <li>Clean command - what does it do?</li>
-  <li>Bisect command - what does it do?</li>
-  <li>Revision or version numbers</li>
   <li>Unlike SVN which creates .svn directories in every single folder, Git only creates a single .git folder.</li>
   <li>Sparse checkouts.</li>
   <li>Git tracks content rather than file - renaming a file, moving it to a different location</li>
-  <li>Command line, TortoiseGit,</li>
   <li>version control outside of source code</li>
 </ul>
 
 <p>https://git.wiki.kernel.org/index.php/GitSvnComparsion</p>
 
-<h2 id="branching">Branching</h2>
+<h2 id="concepts">Concepts</h2>
+
+<p><strong>HEAD</strong>
+In Git,the HEAD points to the latest commit in a branch</p>
+
+<p><strong>Base Commit</strong>
+In Git, the last common commit between two branches is called ‘base commit’</p>
+
+<p><strong>Conflicts</strong>
+When Git merges the two branches, it looks at the changes in each branch since the base commit. When there are unambiguous differences—like changes to different files, and sometimes different parts of the same file—the changes are applied. However, if there are changes to the same parts of the same file, and Git can’t determine which changes to keep, it raises a conflict.</p>
+
+<p><strong>Branching</strong></p>
 
 <p>When we merge branches and there are no conflicts, such as above, only the branch pathway is changed and the HEAD of the branch is updated. This is called the <strong>fast forward type</strong> of merge.</p>
 
@@ -246,7 +247,12 @@ messageStyle: "none",
 
 <ul>
   <li><code>gitk</code> - build-in git GUI</li>
-  <li><code>git add &lt;filename&gt;</code></li>
+  <li><code>git add</code>
+    <ul>
+      <li><code>git add &lt;file_name&gt;</code> - tells Git start tracking a new file or it could mean to stage the changes in an existing file</li>
+      <li><code>git add .</code> - tells Git to start tracking current directory and sub-directories</li>
+    </ul>
+  </li>
   <li><code>git branch</code>
     <ul>
       <li><code>git branch</code> - lists only local branch names</li>
@@ -262,12 +268,18 @@ messageStyle: "none",
   </li>
   <li><code>git checkout</code>
     <ul>
+      <li><code>git checkout</code> - change the status of files to a different branch</li>
+      <li><code>git checkout &lt;filename&gt;</code> - revert the given file to the state during the last commit.</li>
       <li><code>git checkout -b &lt;branch_name&gt;</code> - create a new branch named  and switch to it</li>
       <li><code>git checkout -b &lt;branch_name&gt; upstream/&lt;branch_name&gt;</code> - create a new branch &lt;branch_name&gt; and associates it with <code>upstream/branch_name</code>.</li>
-      <li><code>git checkout &lt;branch_name&gt;</code>` - switch to a given branch</li>
+      <li><code>git checkout &lt;branch_name&gt;</code> - switch to a given branch</li>
       <li><code>git checkout -</code> - takes back to the previous branch (like <code>cd -</code>)</li>
       <li><code>git checkout -- &lt;filename&gt;</code> - replace changes in your working tree with the latest content in HEAD</li>
-      <li><code>git checkout &lt;filename&gt;</code> -</li>
+    </ul>
+  </li>
+  <li><code>git clone</code>
+    <ul>
+      <li>If you clone a repository, the source from which you cloned from is designated as the <code>origin</code> remote by default. You may modify the remote using the <em>git remote</em> command.</li>
     </ul>
   </li>
   <li><code>git config</code>
@@ -288,8 +300,8 @@ messageStyle: "none",
   </li>
   <li><code>git fetch</code>
     <ul>
-      <li><code>git fetch</code></li>
-      <li><code>git fetch &lt;origin/upstream&gt;</code></li>
+      <li><code>git fetch</code> - updates the branches of the local repository from the remote <em>origin</em>. Fast-forwarding by default</li>
+      <li><code>git fetch &lt;remote_name&gt;</code> - updates the branches of the local repository from remote.  (Following a fetch, to update your local branch you need to merge it with appropriate branch from the remote. E.g., <code>git merge &lt;remote_name&gt;/&lt;branch_name&gt;</code>)</li>
       <li><code>git fetch upstream refs/pull/&lt;pull#&gt;head:pull_&lt;pull#&gt;</code> - https://coderwall.com/p/z5rkga/github-checkout-a-pull-request-as-a-branch</li>
     </ul>
   </li>
@@ -302,19 +314,32 @@ messageStyle: "none",
   </li>
   <li><code>git merge</code>
     <ul>
-      <li><code>git merge upstream/develop</code> - to merge another branch into your active branch (e.g. master)</li>
+      <li><code>git merge &lt;remote_name&gt;/&lt;branch_name&gt;</code> - Following a fetch, to update your local branch you need to merge it with appropriate branch from the remote. This is basically merging the branch &lt;remote_name&gt;/&lt;branch_name&gt; with your current active branch.</li>
+      <li><code>git merge --abort</code> - after initiating a merge that’s resulted in conflicts, if you’re overwhelmed and want to go back to the pre-merge state</li>
     </ul>
   </li>
   <li><code>git push</code>
     <ul>
-      <li><code>git push origin &lt;branch&gt;</code> - a branch is not available to others unless you push the branch to your remote repository</li>
-      <li><code>git push -f origin develop</code> - forcefully pushes. Typically you need this after changes like squash</li>
+      <li><code>git push</code>
+        <ul>
+          <li>pushes the code in the current branch to the <code>origin</code> remote branch of the same name.</li>
+          <li>A branch is created if the branch with the same name as the current local branch doesn’t exist on the origin.</li>
+          <li>Push is rejected with an error <em>it is non-fast-forward</em> if the remote branch has been updated since your last synchronization.</li>
+        </ul>
+      </li>
+      <li><code>git push &lt;remote_branch&gt;</code> - pushes the code in the current branch to the <em>remote_branch</em>. A branch is created if the branch with the same name as the current local branch doesn’t exist on the remote.</li>
+      <li><code>git push &lt;remote_name&gt; &lt;branch_name&gt;</code> - <em>remote_name</em> is origin/upstream</li>
+      <li><code>git push -f origin &lt;branch_name&gt;</code> - forcefully pushes. Typically you need this after changes like squash</li>
     </ul>
   </li>
-  <li><code>git pull</code>
+  <li>
+    <p><code>git pull</code>
+&lt;% img right /technology/git-rebase.jpeg %&gt;</p>
+
     <ul>
-      <li><code>git pull</code> - to update your local repository to the newest commit. execute in your working directory to ‘fetch’ and ‘merge’ remote changes</li>
-      <li><code>git pull --rebase upstream develop</code></li>
+      <li><code>git pull</code> = <code>git fetch + git merge</code>. Downloads the code from the <em>master</em> branch of the <em>origin</em> remote branch and then merges the code with the current active branch. Pulls are fast-forwarding by default.</li>
+      <li><code>git pull &lt;remote_name&gt; &lt;branch_name&gt;</code> -</li>
+      <li><code>git pull --rebase &lt;remote_name&gt; &lt;branch_name&gt;</code></li>
     </ul>
   </li>
   <li><code>git rebase</code>
@@ -337,13 +362,21 @@ messageStyle: "none",
   </li>
   <li><code>git reset</code>
     <ul>
-      <li><code>git reset --hard upstream/develop</code> - Throws away local changes and makes the working tree and index same as the remote version</li>
+      <li><code>git reset HEAD &lt;file_name&gt;</code> - unstage changes and reset a file to the state where the HEAD points to</li>
+      <li><code>git reset --soft HEAD~1</code> - to rollback a commit</li>
+      <li><code>git reset --hard &lt;remote_name&gt;/&lt;branch_name&gt;</code> - Throws away local changes and makes the working tree and index same as the remote version</li>
     </ul>
   </li>
   <li><code>git rev-parse HEAD</code></li>
+  <li><code>git rm</code>
+    <ul>
+      <li><code>git rm --cached &lt;file_name&gt;</code> - untracks a file without deleting from local file system</li>
+      <li><code>git rm --cached -f &lt;file_name&gt;</code> - untracks a file and forcefully deletes from local file system</li>
+    </ul>
+  </li>
   <li><code>git show</code>
     <ul>
-      <li><code>git show &lt;commitId&gt;</code> - shows information about a commit</li>
+      <li><code>git show &lt;commit_id&gt;</code> - shows information about a commit. Even partial commit ids are accepted</li>
       <li><code>git show 'git describe' --pretty=fuller</code></li>
     </ul>
   </li>
@@ -356,6 +389,66 @@ messageStyle: "none",
     </ul>
   </li>
 </ul>
+
+<h2 id="frequent-actions">Frequent actions</h2>
+
+<p><strong>Undo tracking operation</strong></p>
+
+<p>Below command asks Git to untrack the file, but let it remain in the file system. Same command can be used to remove a file from the repository, but a commit is needed after this to take effect.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">git rm --cached &lt;file_name&gt;</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Undo stage operation</strong></p>
+
+<p>You make changes to a tracked file and then run <code>git add</code> to stage it for commit. To unstage the changes, run below command to reset a file to the state where the HEAD or the last commit points to.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">git reset HEAD &lt;file_name&gt;</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Revert back to an older commit</strong>
+To revert back local changes and go back to the state during the last commit.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">git checkout &lt;file_name&gt;</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Undo commit operation</strong></p>
+
+<p>To rollback a commit</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">git reset --soft HEAD~1</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Undo push operation</strong></p>
+
+<p><strong>Merging Branches</strong></p>
+
+<p>To merge branch <code>new_feature</code> with branch <code>master</code></p>
+
+<table>
+  <tbody>
+    <tr>
+      <td><img src="/technology/git-merge-1.jpeg" /></td>
+      <td><img src="/technology/git-merge-2.jpeg" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">git checkout master
+</span><span class="line">git merge new_feature</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>To merge branch <code>another_feature</code> with branch <code>new_feature</code></p>
+
+<p><img src="/technology/git-merge-3.jpeg" /></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">git checkout new_feature
+</span><span class="line">git merge another_feature</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Hard fetch</strong></p>
 
 <p>To drop all your local changes and commits, fetch the latest history from the server and point your local master branch at it like this</p>
 

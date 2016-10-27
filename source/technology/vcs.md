@@ -19,11 +19,6 @@ footer: true
 
 # Git
 
-* Distributed VCS developed by Linus Torvalds
-* <span style="color:red">Why Git?</span>
-* What is the advantage of having a staging area in Git?
-* Git Vs SVN
-
 ## How Git works?
 
 {% img /technology/git-local-remote.png %}
@@ -31,8 +26,8 @@ footer: true
 ## Workflow models
 
 * **SVN-style centralized workflow**
-  * A very common Git workflow, especially from people transitioning from a centralized system, is a centralized workflow. Git will not allow you to push if someone has pushed since the last time you fetched, so a centralized model where all developers push to the same server works just fine.
-* **Integration Workflow**
+  * A very common Git workflow, especially from people transitioning from a centralized system. Git will not allow you to push if someone has pushed since the last time you fetched, so a centralized model where all developers push to the same server works just fine.
+* **Integration Workflow / The open-source Workflow / Fork & Pull Requests**
   * a single person who commits to the 'blessed' repository, and then a number of developers who clone from that repository, push to their own independent repositories and ask the integrator to pull in their changes. This is the type of development model you often see with open source or GitHub repositories.
 * **Dictator and Lieutenants Workflow**
   * For more massive projects, you can setup your developers similar to the way the Linux kernel is run, where people are in charge of a specific subsystem of the project ('lieutenants') and merge in all changes that have to do with that subsystem. Then another integrator (the 'dictator') can pull changes from only his/her lieutenants and push those to the 'blessed' repository that everyone then clones from again.
@@ -61,19 +56,26 @@ footer: true
   * Unlike other VCS systems, Git does not impose any particular workflow.
   * Well-suited for open source community development.
   * Git-SVN Bridge - The central repository is a Subversion repo, but developers locally work with Git and the bridge then pushes their changes to SVN.
-* Clean command - what does it do?
-* Bisect command - what does it do?
-* Revision or version numbers
 * Unlike SVN which creates .svn directories in every single folder, Git only creates a single .git folder.
 * Sparse checkouts.
 * Git tracks content rather than file - renaming a file, moving it to a different location
-* Command line, TortoiseGit,
 * version control outside of source code
 
 
 https://git.wiki.kernel.org/index.php/GitSvnComparsion
 
-## Branching
+## Concepts
+
+**HEAD**
+In Git,the HEAD points to the latest commit in a branch
+
+**Base Commit**
+In Git, the last common commit between two branches is called 'base commit'
+
+**Conflicts**
+When Git merges the two branches, it looks at the changes in each branch since the base commit. When there are unambiguous differences—like changes to different files, and sometimes different parts of the same file—the changes are applied. However, if there are changes to the same parts of the same file, and Git can’t determine which changes to keep, it raises a conflict.
+
+**Branching**
 
 When we merge branches and there are no conflicts, such as above, only the branch pathway is changed and the HEAD of the branch is updated. This is called the **fast forward type** of merge.
 
@@ -91,7 +93,9 @@ git merge --no-ff new_feature
 ## Git Command Reference
 
 * `gitk` - build-in git GUI
-* `git add <filename>`
+* `git add`
+  * `git add <file_name>` - tells Git start tracking a new file or it could mean to stage the changes in an existing file
+  * `git add .` - tells Git to start tracking current directory and sub-directories
 * `git branch`
   * `git branch` - lists only local branch names
   * `git branch -a` - lists all branch names, both local and remote
@@ -103,12 +107,15 @@ git merge --no-ff new_feature
   * `git branch -D <branch_name>` - deletes the branch without warning of any uncommited files
   * `git branch -d <branch_name>` - deletes the branch with warning of any uncommited
 * `git checkout`
+  * `git checkout` - change the status of files to a different branch
+  * `git checkout <filename>` - revert the given file to the state during the last commit.
   * `git checkout -b <branch_name>` - create a new branch named  and switch to it
   * `git checkout -b <branch_name> upstream/<branch_name>` - create a new branch \<branch_name\> and associates it with `upstream/branch_name`.
-  * `git checkout <branch_name>`` - switch to a given branch
+  * `git checkout <branch_name>` - switch to a given branch
   * `git checkout -` - takes back to the previous branch (like `cd -`)
   * `git checkout -- <filename>` - replace changes in your working tree with the latest content in HEAD
-  * `git checkout <filename>` -
+* `git clone`
+  * If you clone a repository, the source from which you cloned from is designated as the `origin` remote by default. You may modify the remote using the *git remote* command.
 * `git config`
   * `git config --list --show-origin` - lists configurations and their origin files
 * `git describe`
@@ -117,21 +124,31 @@ git merge --no-ff new_feature
 * `git diff`
   * `git diff <source_branch> <target_branch>`
 * `git fetch`
-  * `git fetch`
-  * `git fetch <origin/upstream>`
+  * `git fetch` - updates the branches of the local repository from the remote *origin*. Fast-forwarding by default
+  * `git fetch <remote_name>` - updates the branches of the local repository from remote.  (Following a fetch, to update your local branch you need to merge it with appropriate branch from the remote. E.g., `git merge <remote_name>/<branch_name>`)
   * `git fetch upstream refs/pull/<pull#>head:pull_<pull#>` - https://coderwall.com/p/z5rkga/github-checkout-a-pull-request-as-a-branch
 * `git log`
   * `git log`
   * `git log --one-line` - displays the logs as one liner
   * `git log --tags --simplify-by-decoration --pretty="format:%ci %d" -n5` - displays the last 5 tags created
 * `git merge`
-  * `git merge upstream/develop` - to merge another branch into your active branch (e.g. master)
+  * `git merge <remote_name>/<branch_name>` - Following a fetch, to update your local branch you need to merge it with appropriate branch from the remote. This is basically merging the branch \<remote_name\>/\<branch_name\> with your current active branch.
+  * `git merge --abort` - after initiating a merge that's resulted in conflicts, if you're overwhelmed and want to go back to the pre-merge state
 * `git push`
-  * `git push origin <branch>` - a branch is not available to others unless you push the branch to your remote repository
-  * `git push -f origin develop` - forcefully pushes. Typically you need this after changes like squash
+  * `git push`
+    * pushes the code in the current branch to the `origin` remote branch of the same name.
+    * A branch is created if the branch with the same name as the current local branch doesn’t exist on the origin.
+    * Push is rejected with an error *it is non-fast-forward* if the remote branch has been updated since your last synchronization.
+  * `git push <remote_branch>` - pushes the code in the current branch to the *remote_branch*. A branch is created if the branch with the same name as the current local branch doesn't exist on the remote.
+  * `git push <remote_name> <branch_name>` - *remote_name* is origin/upstream
+  * `git push -f origin <branch_name>` - forcefully pushes. Typically you need this after changes like squash
 * `git pull`
-  * `git pull` - to update your local repository to the newest commit. execute in your working directory to 'fetch' and 'merge' remote changes
-  * `git pull --rebase upstream develop`
+<% img right /technology/git-rebase.jpeg %>
+
+  * `git pull` = `git fetch + git merge`. Downloads the code from the *master* branch of the *origin* remote branch and then merges the code with the current active branch. Pulls are fast-forwarding by default.
+  * `git pull <remote_name> <branch_name>` -
+  * `git pull --rebase <remote_name> <branch_name>`
+
 * `git rebase`
   * `git rebase -i` - lists down all the local commits and gives you the option to `pick/reword/edit/squash/fixup/exec/drop` a commit
 * `git reflog`
@@ -142,10 +159,15 @@ git merge --no-ff new_feature
     * http://www.eqqon.com/index.php/Collaborative_Github_Workflow
     * http://blog.scottlowe.org/2015/01/27/using-fork-branch-git-workflow/
 * `git reset`
-  * `git reset --hard upstream/develop` - Throws away local changes and makes the working tree and index same as the remote version
+  * `git reset HEAD <file_name>` - unstage changes and reset a file to the state where the HEAD points to
+  * `git reset --soft HEAD~1` - to rollback a commit
+  * `git reset --hard <remote_name>/<branch_name>` - Throws away local changes and makes the working tree and index same as the remote version
 * `git rev-parse HEAD`
+* `git rm`
+  * `git rm --cached <file_name>` - untracks a file without deleting from local file system
+  * `git rm --cached -f <file_name>` - untracks a file and forcefully deletes from local file system
 * `git show`
-  * `git show <commitId>` - shows information about a commit
+  * `git show <commit_id>` - shows information about a commit. Even partial commit ids are accepted
   * `git show 'git describe' --pretty=fuller`
 * `git stash`
 * `git status`
@@ -153,12 +175,70 @@ git merge --no-ff new_feature
   * `git tag <tag>`
   * `git tag 1.0.0 1b2e1d63ff` - the 1b2e1d63ff stands for the first 10 characters of the commit id you want to reference with your tag
 
+## Frequent actions
+
+**Undo tracking operation**
+
+Below command asks Git to untrack the file, but let it remain in the file system. Same command can be used to remove a file from the repository, but a commit is needed after this to take effect.
+
+```
+git rm --cached <file_name>
+```
+
+**Undo stage operation**
+
+You make changes to a tracked file and then run `git add` to stage it for commit. To unstage the changes, run below command to reset a file to the state where the HEAD or the last commit points to.
+
+```
+git reset HEAD <file_name>
+```
+
+**Revert back to an older commit**
+To revert back local changes and go back to the state during the last commit.
+
+```
+git checkout <file_name>
+```
+
+**Undo commit operation**
+
+To rollback a commit
+
+```
+git reset --soft HEAD~1
+```
+
+**Undo push operation**
+
+**Merging Branches**
+
+To merge branch `new_feature` with branch `master`
+
+| {%img /technology/git-merge-1.jpeg %} | {%img /technology/git-merge-2.jpeg %} |
+
+```
+git checkout master
+git merge new_feature
+```
+
+To merge branch `another_feature` with branch `new_feature`
+
+```
+git checkout new_feature
+git merge another_feature
+```
+
+{%img /technology/git-merge-3.jpeg %}
+
+**Hard fetch**
+
 To drop all your local changes and commits, fetch the latest history from the server and point your local master branch at it like this
 
 ```
 git fetch origin
 git reset --hard <branch>
 ```
+
 
 ## Advanced Concepts
 

@@ -143,8 +143,6 @@ git merge --no-ff new_feature
   * `git push <remote_name> <branch_name>` - *remote_name* is origin/upstream
   * `git push -f origin <branch_name>` - forcefully pushes. Typically you need this after changes like squash
 * `git pull`
-<% img right /technology/git-rebase.jpeg %>
-
   * `git pull` = `git fetch + git merge`. Downloads the code from the *master* branch of the *origin* remote branch and then merges the code with the current active branch. Pulls are fast-forwarding by default.
   * `git pull <remote_name> <branch_name>` -
   * `git pull --rebase <remote_name> <branch_name>`
@@ -228,7 +226,9 @@ git checkout new_feature
 git merge another_feature
 ```
 
-{%img /technology/git-merge-3.jpeg %}
+{%img /technology/git-merge-3.jpeg "Merging" %}
+
+{% img right /technology/git-rebase.jpeg "Rebase" %}
 
 **Hard fetch**
 

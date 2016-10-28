@@ -253,6 +253,8 @@ When Git merges the two branches, it looks at the changes in each branch since t
       <li><code>git add .</code> - tells Git to start tracking current directory and sub-directories</li>
     </ul>
   </li>
+  <li><code>git bisect</code></li>
+  <li><code>git blame &lt;file_name&gt;</code> - gives detailed information about each line in the file.</li>
   <li><code>git branch</code>
     <ul>
       <li><code>git branch</code> - lists only local branch names</li>
@@ -280,6 +282,11 @@ When Git merges the two branches, it looks at the changes in each branch since t
   <li><code>git clone</code>
     <ul>
       <li>If you clone a repository, the source from which you cloned from is designated as the <code>origin</code> remote by default. You may modify the remote using the <em>git remote</em> command.</li>
+    </ul>
+  </li>
+  <li><code>git commit</code>
+    <ul>
+      <li><code>git commit --amend -m 'new message'</code> - change the commit message of the last commit</li>
     </ul>
   </li>
   <li><code>git config</code>
@@ -411,12 +418,39 @@ To revert back local changes and go back to the state during the last commit.</p
 
 <p><strong>Undo commit operation</strong></p>
 
-<p>To rollback a commit</p>
+<p>To rollback a commit. The <code>--soft</code> option undoes a commit, but lets the changes you made in that commit remain staged for you to review. The <code>HEAD~1</code> means that you want to go back one commit from where your current <code>HEAD</code> points.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class=""><span class="line">git reset --soft HEAD~1</span></code></pre></td></tr></table></div></figure></notextile></div>
 
+<p>The process of committing involves three steps:
+  * making changes in a file,
+  * staging it for a commit, and
+  * performing a commit operation.</p>
+
+<ul>
+  <li>The <code>--soft</code> option takes us back to just before the commit, when the changes are staged.</li>
+  <li>The <code>--mixed</code> option takes us back to just before the staging of the files, where the files have just been changed.</li>
+  <li>The <code>--hard</code> option takes us to a state even before you changed the files.</li>
+</ul>
+
+<p>The <code>reset</code> command changes the history of the project, but <code>revert</code> undoes the changes made by the faulty commit by creating a new commit that reverses the changes.</p>
+
 <p><strong>Undo push operation</strong></p>
+
+<p>To revert the changes pushed to the central repository</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">git revert HEAD~1
+</span><span class="line">git push origin master</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>However, if you also want the other commit(s) to vanish from the remote repository, you first need to go for a <code>reset</code> command—deleting the unwanted commit—and then push the changes to the remote. If you perform a normal <code>git push</code>, the push will be rejected—because the origin HEAD is at a more advanced position than your local branch. Therefore, you need to force the change with a postfix, <code>-f</code>, which forces the push on the remote origin:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">git reset --hard HEAD~2
+</span><span class="line">git push -f origin master</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p><strong>Merging Branches</strong></p>
 
@@ -443,9 +477,18 @@ To revert back local changes and go back to the state during the last commit.</p
 </pre></td><td class="code"><pre><code class=""><span class="line">git checkout new_feature
 </span><span class="line">git merge another_feature</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p><img src="/technology/git-merge-3.jpeg" title="&#34;Merging &#34;" alt="&#34;Merging &#34;" /></p>
-
-<p><img class="right" src="/technology/git-rebase.jpeg" title="&#34;Rebase&#34;" alt="&#34;Rebase&#34;" /></p>
+<table>
+  <tbody>
+    <tr>
+      <td>Merge</td>
+      <td>Rebase</td>
+    </tr>
+    <tr>
+      <td><img src="/technology/git-merge-3.jpeg" title="" /></td>
+      <td><img class="right" src="/technology/git-rebase.jpeg" /></td>
+    </tr>
+  </tbody>
+</table>
 
 <p><strong>Hard fetch</strong></p>
 

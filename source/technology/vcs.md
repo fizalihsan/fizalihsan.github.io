@@ -96,6 +96,8 @@ git merge --no-ff new_feature
 * `git add`
   * `git add <file_name>` - tells Git start tracking a new file or it could mean to stage the changes in an existing file
   * `git add .` - tells Git to start tracking current directory and sub-directories
+* `git bisect`
+* `git blame <file_name>` - gives detailed information about each line in the file.
 * `git branch`
   * `git branch` - lists only local branch names
   * `git branch -a` - lists all branch names, both local and remote
@@ -116,6 +118,8 @@ git merge --no-ff new_feature
   * `git checkout -- <filename>` - replace changes in your working tree with the latest content in HEAD
 * `git clone`
   * If you clone a repository, the source from which you cloned from is designated as the `origin` remote by default. You may modify the remote using the *git remote* command.
+* `git commit`
+  * `git commit --amend -m 'new message'` - change the commit message of the last commit
 * `git config`
   * `git config --list --show-origin` - lists configurations and their origin files
 * `git describe`
@@ -200,13 +204,38 @@ git checkout <file_name>
 
 **Undo commit operation**
 
-To rollback a commit
+To rollback a commit. The `--soft` option undoes a commit, but lets the changes you made in that commit remain staged for you to review. The `HEAD~1` means that you want to go back one commit from where your current `HEAD` points.
 
 ```
 git reset --soft HEAD~1
 ```
 
+The process of committing involves three steps:
+  * making changes in a file,
+  * staging it for a commit, and
+  * performing a commit operation.
+
+* The `--soft` option takes us back to just before the commit, when the changes are staged.
+* The `--mixed` option takes us back to just before the staging of the files, where the files have just been changed.
+* The `--hard` option takes us to a state even before you changed the files.
+
+ The `reset` command changes the history of the project, but `revert` undoes the changes made by the faulty commit by creating a new commit that reverses the changes.
+
 **Undo push operation**
+
+To revert the changes pushed to the central repository
+
+```
+git revert HEAD~1
+git push origin master
+```
+
+However, if you also want the other commit(s) to vanish from the remote repository, you first need to go for a `reset` command—deleting the unwanted commit—and then push the changes to the remote. If you perform a normal `git push`, the push will be rejected—because the origin HEAD is at a more advanced position than your local branch. Therefore, you need to force the change with a postfix, `-f`, which forces the push on the remote origin:
+
+```
+git reset --hard HEAD~2
+git push -f origin master
+```
 
 **Merging Branches**
 
@@ -226,9 +255,8 @@ git checkout new_feature
 git merge another_feature
 ```
 
-{%img /technology/git-merge-3.jpeg "Merging" %}
-
-{% img right /technology/git-rebase.jpeg "Rebase" %}
+| Merge  | Rebase |
+| {%img /technology/git-merge-3.jpeg  %} | {% img right /technology/git-rebase.jpeg %} |
 
 **Hard fetch**
 

@@ -96,7 +96,7 @@ git merge --no-ff new_feature
 * `git add`
   * `git add <file_name>` - tells Git start tracking a new file or it could mean to stage the changes in an existing file
   * `git add .` - tells Git to start tracking current directory and sub-directories
-* `git bisect`
+* `git bisect` - performs a binary search through commits
 * `git blame <file_name>` - gives detailed information about each line in the file.
 * `git branch`
   * `git branch` - lists only local branch names
@@ -116,6 +116,7 @@ git merge --no-ff new_feature
   * `git checkout <branch_name>` - switch to a given branch
   * `git checkout -` - takes back to the previous branch (like `cd -`)
   * `git checkout -- <filename>` - replace changes in your working tree with the latest content in HEAD
+  * `git checkout -b <branch_name> <tag_name>` - create a branch locally and checkout to a given tag
 * `git clone`
   * If you clone a repository, the source from which you cloned from is designated as the `origin` remote by default. You may modify the remote using the *git remote* command.
 * `git commit`
@@ -131,13 +132,23 @@ git merge --no-ff new_feature
   * `git fetch` - updates the branches of the local repository from the remote *origin*. Fast-forwarding by default
   * `git fetch <remote_name>` - updates the branches of the local repository from remote.  (Following a fetch, to update your local branch you need to merge it with appropriate branch from the remote. E.g., `git merge <remote_name>/<branch_name>`)
   * `git fetch upstream refs/pull/<pull#>head:pull_<pull#>` - https://coderwall.com/p/z5rkga/github-checkout-a-pull-request-as-a-branch
+* `git fsck`
+  * `git fsck --lost-found` - search for commits that aren't part of any branch
 * `git log`
   * `git log`
-  * `git log --one-line` - displays the logs as one liner
+  * `git log -n 2` or `git log -2` - view last 2 commits only
+  * `git log --all` - view commits in all branches
+  * `git log --all --decorate --oneline` - decorate and one liner logs
+  * `git log --all --decorate --oneline --graph` - graphical view
   * `git log --tags --simplify-by-decoration --pretty="format:%ci %d" -n5` - displays the last 5 tags created
+  * `git log --after='2015-3-1' --before='2015-5-1'`
+  * `git log --follow <file_name>` - trace changes in a single file.  `blame` enables you to check only the current contents of a file. The `log --follow` command, on the other hand, lists the changes the file has gone through since Git started tracking the file.
+  * `git log --author='fizal'`
+  * `git log --grep='search_text'` - search commit messages
 * `git merge`
   * `git merge <remote_name>/<branch_name>` - Following a fetch, to update your local branch you need to merge it with appropriate branch from the remote. This is basically merging the branch \<remote_name\>/\<branch_name\> with your current active branch.
   * `git merge --abort` - after initiating a merge that's resulted in conflicts, if you're overwhelmed and want to go back to the pre-merge state
+  * `git merge --rebase master`
 * `git push`
   * `git push`
     * pushes the code in the current branch to the `origin` remote branch of the same name.
@@ -146,14 +157,22 @@ git merge --no-ff new_feature
   * `git push <remote_branch>` - pushes the code in the current branch to the *remote_branch*. A branch is created if the branch with the same name as the current local branch doesn't exist on the remote.
   * `git push <remote_name> <branch_name>` - *remote_name* is origin/upstream
   * `git push -f origin <branch_name>` - forcefully pushes. Typically you need this after changes like squash
+  * `git push <remote_name> --tags` - push by default doesn't push the tags to the remote. Adding `--tags` does that.
+  * `git push <remote_name> <tag_name>` - to specifically push a tag to a remote
 * `git pull`
   * `git pull` = `git fetch + git merge`. Downloads the code from the *master* branch of the *origin* remote branch and then merges the code with the current active branch. Pulls are fast-forwarding by default.
   * `git pull <remote_name> <branch_name>` -
   * `git pull --rebase <remote_name> <branch_name>`
-
-* `git rebase`
-  * `git rebase -i` - lists down all the local commits and gives you the option to `pick/reword/edit/squash/fixup/exec/drop` a commit
-* `git reflog`
+* `git rebase` - merging mechanism that avoids loops in the project history.
+  * `git rebase -i` - lists down all the local commits and gives you the option to *pick/reword/edit/squash/fixup/exec/drop* a commit
+  * `git rebase master` - If you’re rebasing a *master* into *new_feature*, the new commits in *master* are put before the new commits in *new_feature* that are not common to *master*. Run this command from *new_feature* branch.
+  * `git rebase --abort`
+* `git reflog` - log of refs
+  * A **ref**, short for a reference, is a way of referencing a commit. In other words, the hash is a name, whereas a ref is a pointer.
+  * Special refs - `HEAD`, `ORIG_HEAD`, `MERGE_HEAD`, `FETCH_HEAD`
+  * The *reflog* command stores the records for each action you perform in your repository. When you push the changes, this data isn’t synced with the server. Using the *reflog* command is necessary if you want to review changes to your local repository. It could also be used to recover lost commits.
+  * If you make a hard reset and lose a commit or two, you can safely go back to any commit you made earlier. For instance, you can run the *reflog* command, which would have a record corresponding to the time when the commit was created, mentioning the commit hash. When you know the hash, you can start a new branch based on that commit to go back to the state of that commit.
+  * `git reflog expire --expire=never` - The reflog command only tracks back changes for a certain amount of time. Git is responsible for cleaning up the reflog data periodically, which by default is 90 days. This command sets the reflog to never expire.
 * `git remote`
   * `git remote -v` - List the current configured remote repository for your fork.
   * `git remote add upstream`
@@ -168,13 +187,20 @@ git merge --no-ff new_feature
 * `git rm`
   * `git rm --cached <file_name>` - untracks a file without deleting from local file system
   * `git rm --cached -f <file_name>` - untracks a file and forcefully deletes from local file system
+* `git shortlog` - shows the authors who have contributed to the repository and their commits
 * `git show`
   * `git show <commit_id>` - shows information about a commit. Even partial commit ids are accepted
   * `git show 'git describe' --pretty=fuller`
 * `git stash`
+  * `git stash` - to stash uncommitted changes
+  * `git stash list` - list out the stashes in the local repository
+  * `git stash apply` - to apply the changes that were stored in the last stash
+  * `git stash apply stash@{1}` - to restore an old stash
 * `git status`
 * `git tag`
-  * `git tag <tag>`
+  * `git tag` - lists all the tags. There are two types of tags—*lightweight* and *annotated*. *Lightweight tags* contain only the tag name and point to a commit. *Annotated tags* contain the tag name, information about the tagger, and a message associated with the tag.
+  * `git tag <tag_name>` - create lightweight tag associated with the latest commit
+  * `git tag -a <tag_name> -m <commit_message>` - create annotated tag
   * `git tag 1.0.0 1b2e1d63ff` - the 1b2e1d63ff stands for the first 10 characters of the commit id you want to reference with your tag
 
 ## Frequent actions
@@ -267,6 +293,21 @@ git fetch origin
 git reset --hard <branch>
 ```
 
+**Rebase**
+
+`git rebase master` - If you’re rebasing a *master* into *new_feature*, the new commits in *master* are put before the new commits in *new_feature* that are not common to master. To do so, run the following command from the *new_feature* branch
+
+`git merge --rebase master` - If you’re working in a team, you should first checkout to *master*, pull from the upstream branch to update your *master* with the latest commits, and then switch back to *new_feature* before running the above command.
+
+{% img /technology/git-rebase2.jpeg %}
+
+{% img /technology/git-merge-vs-rebase.jpeg %}
+
+`git pull --rebase origin master` - When you’re pulling changes, you can use rebase too. It essentially puts the new commits in the master of the remote in your history, and then superimposes your commits on them.
+
+`git rebase -i` or `git rebase --interactive`
+
+A squash operation changes the history of your branch. If you need to push your changes after a squash operation, you need to use the -f option, or your push will be rejected.
 
 ## Advanced Concepts
 

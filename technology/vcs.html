@@ -253,7 +253,7 @@ When Git merges the two branches, it looks at the changes in each branch since t
       <li><code>git add .</code> - tells Git to start tracking current directory and sub-directories</li>
     </ul>
   </li>
-  <li><code>git bisect</code></li>
+  <li><code>git bisect</code> - performs a binary search through commits</li>
   <li><code>git blame &lt;file_name&gt;</code> - gives detailed information about each line in the file.</li>
   <li><code>git branch</code>
     <ul>
@@ -277,6 +277,7 @@ When Git merges the two branches, it looks at the changes in each branch since t
       <li><code>git checkout &lt;branch_name&gt;</code> - switch to a given branch</li>
       <li><code>git checkout -</code> - takes back to the previous branch (like <code>cd -</code>)</li>
       <li><code>git checkout -- &lt;filename&gt;</code> - replace changes in your working tree with the latest content in HEAD</li>
+      <li><code>git checkout -b &lt;branch_name&gt; &lt;tag_name&gt;</code> - create a branch locally and checkout to a given tag</li>
     </ul>
   </li>
   <li><code>git clone</code>
@@ -312,17 +313,30 @@ When Git merges the two branches, it looks at the changes in each branch since t
       <li><code>git fetch upstream refs/pull/&lt;pull#&gt;head:pull_&lt;pull#&gt;</code> - https://coderwall.com/p/z5rkga/github-checkout-a-pull-request-as-a-branch</li>
     </ul>
   </li>
+  <li><code>git fsck</code>
+    <ul>
+      <li><code>git fsck --lost-found</code> - search for commits that aren’t part of any branch</li>
+    </ul>
+  </li>
   <li><code>git log</code>
     <ul>
       <li><code>git log</code></li>
-      <li><code>git log --one-line</code> - displays the logs as one liner</li>
+      <li><code>git log -n 2</code> or <code>git log -2</code> - view last 2 commits only</li>
+      <li><code>git log --all</code> - view commits in all branches</li>
+      <li><code>git log --all --decorate --oneline</code> - decorate and one liner logs</li>
+      <li><code>git log --all --decorate --oneline --graph</code> - graphical view</li>
       <li><code>git log --tags --simplify-by-decoration --pretty="format:%ci %d" -n5</code> - displays the last 5 tags created</li>
+      <li><code>git log --after='2015-3-1' --before='2015-5-1'</code></li>
+      <li><code>git log --follow &lt;file_name&gt;</code> - trace changes in a single file.  <code>blame</code> enables you to check only the current contents of a file. The <code>log --follow</code> command, on the other hand, lists the changes the file has gone through since Git started tracking the file.</li>
+      <li><code>git log --author='fizal'</code></li>
+      <li><code>git log --grep='search_text'</code> - search commit messages</li>
     </ul>
   </li>
   <li><code>git merge</code>
     <ul>
       <li><code>git merge &lt;remote_name&gt;/&lt;branch_name&gt;</code> - Following a fetch, to update your local branch you need to merge it with appropriate branch from the remote. This is basically merging the branch &lt;remote_name&gt;/&lt;branch_name&gt; with your current active branch.</li>
       <li><code>git merge --abort</code> - after initiating a merge that’s resulted in conflicts, if you’re overwhelmed and want to go back to the pre-merge state</li>
+      <li><code>git merge --rebase master</code></li>
     </ul>
   </li>
   <li><code>git push</code>
@@ -337,6 +351,8 @@ When Git merges the two branches, it looks at the changes in each branch since t
       <li><code>git push &lt;remote_branch&gt;</code> - pushes the code in the current branch to the <em>remote_branch</em>. A branch is created if the branch with the same name as the current local branch doesn’t exist on the remote.</li>
       <li><code>git push &lt;remote_name&gt; &lt;branch_name&gt;</code> - <em>remote_name</em> is origin/upstream</li>
       <li><code>git push -f origin &lt;branch_name&gt;</code> - forcefully pushes. Typically you need this after changes like squash</li>
+      <li><code>git push &lt;remote_name&gt; --tags</code> - push by default doesn’t push the tags to the remote. Adding <code>--tags</code> does that.</li>
+      <li><code>git push &lt;remote_name&gt; &lt;tag_name&gt;</code> - to specifically push a tag to a remote</li>
     </ul>
   </li>
   <li><code>git pull</code>
@@ -346,12 +362,22 @@ When Git merges the two branches, it looks at the changes in each branch since t
       <li><code>git pull --rebase &lt;remote_name&gt; &lt;branch_name&gt;</code></li>
     </ul>
   </li>
-  <li><code>git rebase</code>
+  <li><code>git rebase</code> - merging mechanism that avoids loops in the project history.
     <ul>
-      <li><code>git rebase -i</code> - lists down all the local commits and gives you the option to <code>pick/reword/edit/squash/fixup/exec/drop</code> a commit</li>
+      <li><code>git rebase -i</code> - lists down all the local commits and gives you the option to <em>pick/reword/edit/squash/fixup/exec/drop</em> a commit</li>
+      <li><code>git rebase master</code> - If you’re rebasing a <em>master</em> into <em>new_feature</em>, the new commits in <em>master</em> are put before the new commits in <em>new_feature</em> that are not common to <em>master</em>. Run this command from <em>new_feature</em> branch.</li>
+      <li><code>git rebase --abort</code></li>
     </ul>
   </li>
-  <li><code>git reflog</code></li>
+  <li><code>git reflog</code> - log of refs
+    <ul>
+      <li>A <strong>ref</strong>, short for a reference, is a way of referencing a commit. In other words, the hash is a name, whereas a ref is a pointer.</li>
+      <li>Special refs - <code>HEAD</code>, <code>ORIG_HEAD</code>, <code>MERGE_HEAD</code>, <code>FETCH_HEAD</code></li>
+      <li>The <em>reflog</em> command stores the records for each action you perform in your repository. When you push the changes, this data isn’t synced with the server. Using the <em>reflog</em> command is necessary if you want to review changes to your local repository. It could also be used to recover lost commits.</li>
+      <li>If you make a hard reset and lose a commit or two, you can safely go back to any commit you made earlier. For instance, you can run the <em>reflog</em> command, which would have a record corresponding to the time when the commit was created, mentioning the commit hash. When you know the hash, you can start a new branch based on that commit to go back to the state of that commit.</li>
+      <li><code>git reflog expire --expire=never</code> - The reflog command only tracks back changes for a certain amount of time. Git is responsible for cleaning up the reflog data periodically, which by default is 90 days. This command sets the reflog to never expire.</li>
+    </ul>
+  </li>
   <li><code>git remote</code>
     <ul>
       <li><code>git remote -v</code> - List the current configured remote repository for your fork.</li>
@@ -378,17 +404,27 @@ When Git merges the two branches, it looks at the changes in each branch since t
       <li><code>git rm --cached -f &lt;file_name&gt;</code> - untracks a file and forcefully deletes from local file system</li>
     </ul>
   </li>
+  <li><code>git shortlog</code> - shows the authors who have contributed to the repository and their commits</li>
   <li><code>git show</code>
     <ul>
       <li><code>git show &lt;commit_id&gt;</code> - shows information about a commit. Even partial commit ids are accepted</li>
       <li><code>git show 'git describe' --pretty=fuller</code></li>
     </ul>
   </li>
-  <li><code>git stash</code></li>
+  <li><code>git stash</code>
+    <ul>
+      <li><code>git stash</code> - to stash uncommitted changes</li>
+      <li><code>git stash list</code> - list out the stashes in the local repository</li>
+      <li><code>git stash apply</code> - to apply the changes that were stored in the last stash</li>
+      <li><code>git stash apply stash@{1}</code> - to restore an old stash</li>
+    </ul>
+  </li>
   <li><code>git status</code></li>
   <li><code>git tag</code>
     <ul>
-      <li><code>git tag &lt;tag&gt;</code></li>
+      <li><code>git tag</code> - lists all the tags. There are two types of tags—<em>lightweight</em> and <em>annotated</em>. <em>Lightweight tags</em> contain only the tag name and point to a commit. <em>Annotated tags</em> contain the tag name, information about the tagger, and a message associated with the tag.</li>
+      <li><code>git tag &lt;tag_name&gt;</code> - create lightweight tag associated with the latest commit</li>
+      <li><code>git tag -a &lt;tag_name&gt; -m &lt;commit_message&gt;</code> - create annotated tag</li>
       <li><code>git tag 1.0.0 1b2e1d63ff</code> - the 1b2e1d63ff stands for the first 10 characters of the commit id you want to reference with your tag</li>
     </ul>
   </li>
@@ -498,6 +534,22 @@ To revert back local changes and go back to the state during the last commit.</p
 <span class="line-number">2</span>
 </pre></td><td class="code"><pre><code class=""><span class="line">git fetch origin
 </span><span class="line">git reset --hard &lt;branch&gt;</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Rebase</strong></p>
+
+<p><code>git rebase master</code> - If you’re rebasing a <em>master</em> into <em>new_feature</em>, the new commits in <em>master</em> are put before the new commits in <em>new_feature</em> that are not common to master. To do so, run the following command from the <em>new_feature</em> branch</p>
+
+<p><code>git merge --rebase master</code> - If you’re working in a team, you should first checkout to <em>master</em>, pull from the upstream branch to update your <em>master</em> with the latest commits, and then switch back to <em>new_feature</em> before running the above command.</p>
+
+<p><img src="/technology/git-rebase2.jpeg" /></p>
+
+<p><img src="/technology/git-merge-vs-rebase.jpeg" /></p>
+
+<p><code>git pull --rebase origin master</code> - When you’re pulling changes, you can use rebase too. It essentially puts the new commits in the master of the remote in your history, and then superimposes your commits on them.</p>
+
+<p><code>git rebase -i</code> or <code>git rebase --interactive</code></p>
+
+<p>A squash operation changes the history of your branch. If you need to push your changes after a squash operation, you need to use the -f option, or your push will be rejected.</p>
 
 <h2 id="advanced-concepts">Advanced Concepts</h2>
 

@@ -309,6 +309,41 @@ git reset --hard <branch>
 
 A squash operation changes the history of your branch. If you need to push your changes after a squash operation, you need to use the -f option, or your push will be rejected.
 
+When you have multiple commits in your PR, run rebase so that the change is merged as a single commit.
+
+Here are the steps to do it:
+
+```
+git commit -m "commmit 1"
+git commit -m "commmit 2"
+git commit -m "commmit 3"
+git push origin develop
+git fetch upstream develop # fetch the latest changes from upstream
+# in editor, mark 1st commit as 'pick' and rest as 'squash'. This squashes all the above commits into a single commit
+git rebase -i upstream/develop
+git push origin develop -f
+```
+
+To cancel a rebase in progress before pushing: `git rebase abort`
+
+**Cherry picking**
+
+create a branch based off of a commit
+
+```
+git fetch upstream
+git log
+git checkout -b <new_branch_name> <remote_branch_name>
+git cherry-pick <commit_id>
+Go to mmohamed17/kyccore -> Compare & Pull request
+```
+
+**Diff**
+
+* Show unpushed commits: `git log origin/develop..HEAD`
+* To list the files modified between 'origin/develop' and my current branch: `git log --stat origin/develop..HEAD`
+* To list the files modified between 2 branches: `git log --stat origin/develop..origin/feature/JIRA-123`
+
 ## Advanced Concepts
 
 ### Content-Addressable Names

@@ -551,6 +551,52 @@ To revert back local changes and go back to the state during the last commit.</p
 
 <p>A squash operation changes the history of your branch. If you need to push your changes after a squash operation, you need to use the -f option, or your push will be rejected.</p>
 
+<p>When you have multiple commits in your PR, run rebase so that the change is merged as a single commit.</p>
+
+<p>Here are the steps to do it:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">git commit -m "commmit 1"
+</span><span class="line">git commit -m "commmit 2"
+</span><span class="line">git commit -m "commmit 3"
+</span><span class="line">git push origin develop
+</span><span class="line">git fetch upstream develop # fetch the latest changes from upstream
+</span><span class="line"># in editor, mark 1st commit as 'pick' and rest as 'squash'. This squashes all the above commits into a single commit
+</span><span class="line">git rebase -i upstream/develop
+</span><span class="line">git push origin develop -f</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>To cancel a rebase in progress before pushing: <code>git rebase abort</code></p>
+
+<p><strong>Cherry picking</strong></p>
+
+<p>create a branch based off of a commit</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">git fetch upstream
+</span><span class="line">git log
+</span><span class="line">git checkout -b &lt;new_branch_name&gt; &lt;remote_branch_name&gt;
+</span><span class="line">git cherry-pick &lt;commit_id&gt;
+</span><span class="line">Go to mmohamed17/kyccore -&gt; Compare &amp; Pull request</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Diff</strong></p>
+
+<ul>
+  <li>Show unpushed commits: <code>git log origin/develop..HEAD</code></li>
+  <li>To list the files modified between ‘origin/develop’ and my current branch: <code>git log --stat origin/develop..HEAD</code></li>
+  <li>To list the files modified between 2 branches: <code>git log --stat origin/develop..origin/feature/JIRA-123</code></li>
+</ul>
+
 <h2 id="advanced-concepts">Advanced Concepts</h2>
 
 <h3 id="content-addressable-names">Content-Addressable Names</h3>

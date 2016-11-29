@@ -98,6 +98,40 @@ The problem is that the stride syntax often causes unexpected behavior that can 
 
 ## collections
 
+# Object-oriented Programming
+
+* Each Python class definition has an implicit superclass: `object`
+* The rules for the visibility of Python names are as follows:
+	* Most names are public.
+	* Names that start with `_` are somewhat less public. Use them for implementation details that are truly subject to change.
+	* Names that begin and end with `__` are internal to Python.
+
+## Naming Notations
+
+* **Notations**
+	* **Postfix notation** (object-oriented): `object.method()` or `object.attribute`.
+	* **Prefix notation** (procedural programming): `function(object)`. The prefix notation `str(x)` is implemented as `x.__str__()` under the hood.
+	* **Infix notation**: `object+other`. A construct such as `a+b` may be implemented as `a.__add__(b)` or `b.__radd__(a)` depending on the type of compatibility rules that were built into the class definitions for objects `a` and `b`.
+
+## Categories
+
+* **Attribute Access**: E.g., `object.attribute = value` or `del object.attribute`.
+* **Callables**: This special method implements what we see as a function that is applied to arguments, much like the built-in `len()` function.
+* **Collections**: These special methods implement the numerous features of collections. This involves methods such as `sequence[index]`, `mapping[key]`, and `set1|set2`.
+* **Numbers**: These special methods provide arithmetic operators and comparison operators. We can use these methods to expand the domain of numbers that Python works with.
+* **Contexts**: There are two special methods we'll use to implement a context manager that works with the `with` statement.
+* **Iterators**: There are special methods that define an iterator. This isn't essential since generator functions handle this feature so elegantly.
+
+## Special methods
+
+* `__str__()` - The `print()` function will use `str()` to prepare an object for printing.
+* `__repr__()`- The `format()` method of a string can also access these methods. When we use `%r` or `%s` formatting, we're requesting `__repr__()` or `__str__()`, respectively.
+* `__hash__()` -
+* `__bool__()` -
+* `__bytes__()` -
+* `__lt__()`, `__le__()`, `__eq__()`, `__ne__()`, `__gt__()`, and `__ge__()` -
+* `__new__()` -
+* `__del__()` -
 
 # Others
 
@@ -108,4 +142,17 @@ The problem is that the stride syntax often causes unexpected behavior that can 
 * How to read and understand Python docs
 * How to print a tuple or list like this print("List = ", list)
 
-* Performance: Python vs Java
+# Notes
+
+* Docstring. RST (ReStructured Text) markup.
+
+
+
+
+
+# References
+
+* Books
+	* Learning Python the hard way
+	* Think Python
+	* Mastering object-oriented Python

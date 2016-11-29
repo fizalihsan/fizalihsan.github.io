@@ -137,7 +137,15 @@ messageStyle: "none",
       <li><a href="#collections">collections</a></li>
     </ul>
   </li>
+  <li><a href="#object-oriented-programming">Object-oriented Programming</a>    <ul>
+      <li><a href="#naming-notations">Naming Notations</a></li>
+      <li><a href="#categories">Categories</a></li>
+      <li><a href="#special-methods">Special methods</a></li>
+    </ul>
+  </li>
   <li><a href="#others">Others</a></li>
+  <li><a href="#notes">Notes</a></li>
+  <li><a href="#references">References</a></li>
 </ul>
 
 <h1 id="basics">Basics</h1>
@@ -258,6 +266,55 @@ messageStyle: "none",
 
 <h2 id="collections">collections</h2>
 
+<h1 id="object-oriented-programming">Object-oriented Programming</h1>
+
+<ul>
+  <li>Each Python class definition has an implicit superclass: <code>object</code></li>
+  <li>The rules for the visibility of Python names are as follows:
+    <ul>
+      <li>Most names are public.</li>
+      <li>Names that start with <code>_</code> are somewhat less public. Use them for implementation details that are truly subject to change.</li>
+      <li>Names that begin and end with <code>__</code> are internal to Python.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="naming-notations">Naming Notations</h2>
+
+<ul>
+  <li><strong>Notations</strong>
+    <ul>
+      <li><strong>Postfix notation</strong> (object-oriented): <code>object.method()</code> or <code>object.attribute</code>.</li>
+      <li><strong>Prefix notation</strong> (procedural programming): <code>function(object)</code>. The prefix notation <code>str(x)</code> is implemented as <code>x.__str__()</code> under the hood.</li>
+      <li><strong>Infix notation</strong>: <code>object+other</code>. A construct such as <code>a+b</code> may be implemented as <code>a.__add__(b)</code> or <code>b.__radd__(a)</code> depending on the type of compatibility rules that were built into the class definitions for objects <code>a</code> and <code>b</code>.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="categories">Categories</h2>
+
+<ul>
+  <li><strong>Attribute Access</strong>: E.g., <code>object.attribute = value</code> or <code>del object.attribute</code>.</li>
+  <li><strong>Callables</strong>: This special method implements what we see as a function that is applied to arguments, much like the built-in <code>len()</code> function.</li>
+  <li><strong>Collections</strong>: These special methods implement the numerous features of collections. This involves methods such as <code>sequence[index]</code>, <code>mapping[key]</code>, and <code>set1|set2</code>.</li>
+  <li><strong>Numbers</strong>: These special methods provide arithmetic operators and comparison operators. We can use these methods to expand the domain of numbers that Python works with.</li>
+  <li><strong>Contexts</strong>: There are two special methods we’ll use to implement a context manager that works with the <code>with</code> statement.</li>
+  <li><strong>Iterators</strong>: There are special methods that define an iterator. This isn’t essential since generator functions handle this feature so elegantly.</li>
+</ul>
+
+<h2 id="special-methods">Special methods</h2>
+
+<ul>
+  <li><code>__str__()</code> - The <code>print()</code> function will use <code>str()</code> to prepare an object for printing.</li>
+  <li><code>__repr__()</code>- The <code>format()</code> method of a string can also access these methods. When we use <code>%r</code> or <code>%s</code> formatting, we’re requesting <code>__repr__()</code> or <code>__str__()</code>, respectively.</li>
+  <li><code>__hash__()</code> -</li>
+  <li><code>__bool__()</code> -</li>
+  <li><code>__bytes__()</code> -</li>
+  <li><code>__lt__()</code>, <code>__le__()</code>, <code>__eq__()</code>, <code>__ne__()</code>, <code>__gt__()</code>, and <code>__ge__()</code> -</li>
+  <li><code>__new__()</code> -</li>
+  <li><code>__del__()</code> -</li>
+</ul>
+
 <h1 id="others">Others</h1>
 
 <ul>
@@ -268,10 +325,25 @@ messageStyle: "none",
     </ul>
   </li>
   <li>How to read and understand Python docs</li>
-  <li>
-    <p>How to print a tuple or list like this print(“List = “, list)</p>
+  <li>How to print a tuple or list like this print(“List = “, list)</li>
+</ul>
+
+<h1 id="notes">Notes</h1>
+
+<ul>
+  <li>Docstring. RST (ReStructured Text) markup.</li>
+</ul>
+
+<h1 id="references">References</h1>
+
+<ul>
+  <li>Books
+    <ul>
+      <li>Learning Python the hard way</li>
+      <li>Think Python</li>
+      <li>Mastering object-oriented Python</li>
+    </ul>
   </li>
-  <li>Performance: Python vs Java</li>
 </ul>
 
   
@@ -289,9 +361,9 @@ messageStyle: "none",
 
 		<li>
 			<h3>Architecture</h3>
-			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/cloud-computing.html">Cloud Computing</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/cloud-computing.html">Cloud Computing</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
 		</li>
-		
+
 		<li>
 			<h3>BigData</h3>
 			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>

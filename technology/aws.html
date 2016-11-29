@@ -5,12 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Operating Systems - KnowledgeShop</title>
+  <title>Amazon AWS - KnowledgeShop</title>
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Operating Systems UNIX Frequently used commands VI Tips Ubuntu UNIX Frequently used commands Find and copy files created today
-find /home/clstest - &hellip;">
+<meta name="description" content="Amazon AWS Overview S3 (Simple Storage Service) Terminology References Overview Data size and solution Small - RDBMS Medium - NoSQL Large/Huge - &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -19,7 +18,7 @@ find /home/clstest - &hellip;">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://fizalihsan.github.io/technology/os.html">
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/aws.html">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <!-- Below custom CSS is for table border styling -->
@@ -104,123 +103,111 @@ messageStyle: "none",
 <article role="article">
   
   <header>
-    <h1 class="entry-title">Operating Systems</h1>
+    <h1 class="entry-title">Amazon AWS</h1>
     
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#unix">UNIX</a>    <ul>
-      <li><a href="#frequently-used-commands">Frequently used commands</a></li>
-      <li><a href="#vi-tips">VI Tips</a></li>
+  <li><a href="#overview">Overview</a></li>
+  <li><a href="#s3-simple-storage-service">S3 (Simple Storage Service)</a></li>
+  <li><a href="#terminology">Terminology</a></li>
+  <li><a href="#references">References</a></li>
+</ul>
+
+<h1 id="overview">Overview</h1>
+
+<ul>
+  <li>Data size and solution
+    <ul>
+      <li>Small - RDBMS</li>
+      <li>Medium - NoSQL</li>
+      <li>Large/Huge - Hadoop ecosystem</li>
+      <li>Complex - NewSQL</li>
     </ul>
   </li>
-  <li><a href="#ubuntu">Ubuntu</a></li>
-</ul>
-
-<h1 id="unix">UNIX</h1>
-
-<h2 id="frequently-used-commands">Frequently used commands</h2>
-
-<ul>
-  <li>
-    <p>Find and copy files created today
-<code>find /home/clstest -ctime -1 -exec cp {} /home/mohammo/CSW \;</code></p>
-  </li>
-  <li>
-    <p>Suppress error message from ‘find’ command
-<code>find . -name "*" -print 2&gt;/dev/null</code></p>
-  </li>
-  <li>
-    <p>Tar &amp; untar directories with permissions intact</p>
-  </li>
-</ul>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">tar -cvpf test.tar /home/mohammo/test
-</span><span class="line">tar -xvpf test.tar /home/mohammo/test</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<ul>
-  <li>Exclude certain files in ‘find’ command</li>
-</ul>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">find . -name "*" -not -name "*.jar" -print
-</span><span class="line">find . -name "*" -not \( -name "*.jar" -o -name "*.tar" \) -print</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<ul>
-  <li>Search and replace with no hassle of escaping characters</li>
-</ul>
-
-<p><code>echo "/home/mohammo" | sed -e "s#/home/mohammo#/home/test#/g"</code></p>
-
-<ul>
-  <li>Search for text but only display their file names</li>
-</ul>
-
-<p><code>find . -name "*" -type f -exec grep -l "searchtext" {} \; -print</code></p>
-
-<ul>
-  <li>Set operations - Complement (A-B)- below command prints all entries in file1 that are not in file2</li>
-</ul>
-
-<p><code>comm -23 file1 file2</code></p>
-
-<ul>
-  <li>Sorting files</li>
-</ul>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-</pre></td><td class="code"><pre><code class=""><span class="line"> sort file1 file2 | uniq  //Union of unsorted files 
-</span><span class="line"> sort file1 file2 | uniq -d  //Intersection of unsorted files 
-</span><span class="line"> sort file1 file1 file2 | uniq -u //Difference of unsorted files 
-</span><span class="line"> sort file1 file2 | uniq -u  //Symmetric Difference of unsorted files </span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<ul>
-  <li>When a JVM process is running in Unix/Windows, how do I check how much memory is being currently used by that JVM?</li>
-</ul>
-
-<h2 id="vi-tips">VI Tips</h2>
-
-<blockquote>
-  <p>Note: Anything between [ and ] denotes a command executed from within vi.</p>
-</blockquote>
-
-<ul>
-  <li><code>[ !wc % ]</code> - opens a command shell and runs ‘wc’ on the current file open in vi. <code>%</code> means current file &amp; <code>!</code> is called ‘Bang’. Bang works best with non-interactive commands</li>
-  <li><code>[ qa ]</code> close all files open</li>
-  <li><code>[ ga ]</code> Show character info </li>
-  <li><code>[ ls ]</code> List buffers</li>
-  <li><code>[ % ]</code> Bracket matching</li>
-</ul>
-
-<h1 id="ubuntu">Ubuntu</h1>
-
-<p>​## Tips &amp; Tricks</p>
-
-<ul>
-  <li>How to create application shortcuts​ on desktop​
+  <li>Data storage Types
     <ul>
-      <li>Install required packages: <code>sudo apt-get install --no-install-recommends gnome-panel</code></li>
-      <li>For each shortcut run this command:  <code>gnome-desktop-item-edit --create-new ~/Desktop</code></li>
+      <li>Warm storage
+        <ul>
+          <li>S3</li>
+        </ul>
+      </li>
+      <li>Cold storage
+        <ul>
+          <li>Glacier</li>
+        </ul>
+      </li>
+      <li>EC2 storage
+        <ul>
+          <li>Single - EBS (Elastic Block Storage)</li>
+          <li>Multiple - EFS (Elastic File Storage)</li>
+        </ul>
+      </li>
     </ul>
   </li>
-  <li>How to list all installed packages: <code>dpkg --list | grep -i 'pkgname'</code></li>
-  <li>How to uninstall a package: <code>sudo apt-get --purge remove pkgname</code> OR install a GUI called <em>Synaptic</em>: <code>sudo apt-get install synaptic</code></li>
-  <li>Windows Task Manager equivalent: <em>System Monitor</em>  OR <code>top</code></li>
-  <li>How to get the current OS version details: <code>lsb_release -a</code></li>
-  <li>How to search for previously entered commands in command line:  <code>ctrl+r</code></li>
-  <li>Share folders between Windows host and Ubuntu guest
+  <li>CDN - Amazon CloudFront</li>
+  <li>Regions &amp; Availability Zones
     <ul>
-      <li>Install <strong>VMware tools</strong> via VMWare menu </li>
-      <li>Add folders to share : <code>Virutal Machine -&gt; Settings -&gt; Options -&gt; Shared Folders -&gt; select 'Always Enabled' -&gt; Add folder in host to share</code></li>
-      <li>Install <strong>open-vmware-tools</strong> in Ubuntu:  <code>sudo apt-get install open-vm-tools</code></li>
-      <li>Mount shared folder from host onto guest:  <code>sudo mount -t vmhgfs .host:/ /mnt/hgfs/</code></li>
-      <li>After the previous step, shared folder from windows should be seen under <code>/mnt/hgfs</code></li>
+      <li>Geographic proximity to your users</li>
+      <li>Regional affinity</li>
+      <li>www.cloudping.info - to estimate the latency from your browser to each AWS region</li>
+      <li>Availability zones are like data centers. Each AWS region has at least 2 availability zones. e.g.,</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="s3-simple-storage-service">S3 (Simple Storage Service)</h1>
+
+<ul>
+  <li>File storage using buckets (like drives) and folders</li>
+  <li>Scalable storage in the cloud</li>
+  <li>Cheap and easy to use</li>
+  <li><strong>Buckets</strong>
+    <ul>
+      <li>Bucket-level permissioning - existing permissioning policies can be copied or generated using ‘Bucket policy generator’</li>
+      <li><strong>ARNs (Amazon Resource Name)</strong> uniquely identify AWS resources. (http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">  	&lt;!-- Object in an Amazon S3 bucket --&gt;
+</span><span class="line">		arn:aws:s3:::my_corporate_bucket/exampleobject.png</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>General formats
+    <ul>
+      <li><code>arn:partition:service:region:account-id:resource</code></li>
+      <li><code>arn:partition:service:region:account-id:resourcetype/resource</code></li>
+      <li><code>arn:partition:service:region:account-id:resourcetype:resource</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="terminology">Terminology</h1>
+
+<ul>
+  <li>Fault tolerance, High availability</li>
+  <li>Data at Rest - EBS, S3, RDS</li>
+  <li>Data at Transit - (in reference to encryption and security)</li>
+  <li>Network perimeter - a boundary between two or more portions of a network. It can refer to the boundary between your VPC and your network, it could refer to the boundary between what you manage versus what AWS manages.</li>
+  <li>WAF (Web Application Firewall)</li>
+  <li>NAT (Network Address Translation)</li>
+</ul>
+
+<h1 id="references">References</h1>
+
+<ul>
+  <li>CloudAcademy.com
+    <ul>
+      <li><a href="https://cloudacademy.com/amazon-web-services/aws-technical-fundamentals-aws-110-course">AWS Technical Foundation 110</a></li>
+      <li>AWS Technical Foundation 120</li>
+      <li>AWS Technical Foundation 140</li>
+      <li>AWS Technical Foundation 160</li>
+      <li>AWS Technical Foundation 180</li>
+      <li>AWS Technical Foundation 190</li>
+      <li><a href="https://cloudacademy.com/amazon-web-services/foundations-for-solutions-architect-associate-on-aws-course/">Foundations for Solutions Architect Associate on AWS course</a></li>
     </ul>
   </li>
 </ul>
@@ -228,6 +215,15 @@ messageStyle: "none",
   
     <footer>
       
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/aws.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/aws.html" >Tweet</a>
+  
+  
+  
+</div>
+
       
     </footer>
   

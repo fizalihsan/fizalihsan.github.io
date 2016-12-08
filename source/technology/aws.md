@@ -42,6 +42,8 @@ footer: true
 	* via CLI
 	* via SDK
 
+{% img /technology/aws-services.png %}
+
 ## Compute and Network Services
 
 * **Amazon EC2** - provides resizeable compute capacity in the cloud

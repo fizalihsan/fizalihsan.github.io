@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Amazon AWS Overview S3 (Simple Storage Service) Terminology References Overview Data size and solution Small - RDBMS Medium - NoSQL Large/Huge - &hellip;">
+<meta name="description" content="Amazon AWS Overview AWS Fundamentals Compute and Network Services Storage and Content Delivery Services Database service Management Tools Security &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -109,6 +109,21 @@ messageStyle: "none",
   
   <ul id="markdown-toc">
   <li><a href="#overview">Overview</a></li>
+  <li><a href="#aws-fundamentals">AWS Fundamentals</a>    <ul>
+      <li><a href="#compute-and-network-services">Compute and Network Services</a></li>
+      <li><a href="#storage-and-content-delivery-services">Storage and Content Delivery Services</a></li>
+      <li><a href="#database-service">Database service</a></li>
+      <li><a href="#management-tools">Management Tools</a></li>
+      <li><a href="#security-and-identity">Security and Identity</a></li>
+      <li><a href="#application-services">Application Services</a></li>
+    </ul>
+  </li>
+  <li><a href="#ec2-elastic-compute-cloud">EC2 (Elastic Compute Cloud)</a>    <ul>
+      <li><a href="#elb-elastic-load-balancer">ELB (Elastic Load Balancer)</a></li>
+      <li><a href="#elastic-beanstalk">Elastic Beanstalk</a></li>
+      <li><a href="#auto-scaling-groups">Auto Scaling Groups</a></li>
+    </ul>
+  </li>
   <li><a href="#s3-simple-storage-service">S3 (Simple Storage Service)</a></li>
   <li><a href="#terminology">Terminology</a></li>
   <li><a href="#references">References</a></li>
@@ -156,6 +171,106 @@ messageStyle: "none",
   </li>
 </ul>
 
+<h1 id="aws-fundamentals">AWS Fundamentals</h1>
+
+<ul>
+  <li><strong>Cloud Computing - Deployment Models</strong>
+    <ul>
+      <li><em>All-in cloud-based application</em> is fully deployed in the cloud, with all components of the app running in the cloud</li>
+      <li><em>Hybrid deployment</em> is a common approach taken by many enterprises that connects infrastructure and apps between cloud-based resources and existing resources, typically in an existing data center.</li>
+    </ul>
+  </li>
+  <li><strong>Global Infrastructure</strong></li>
+  <li><strong>Accessing the platform</strong>
+    <ul>
+      <li>via Amazon console</li>
+      <li>via CLI</li>
+      <li>via SDK</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="compute-and-network-services">Compute and Network Services</h2>
+
+<ul>
+  <li><strong>Amazon EC2</strong> - provides resizeable compute capacity in the cloud</li>
+  <li><strong>AWS Lambda</strong> - a zero-administration compute platform for back-end web developers that runs your code for you on the AWS cloud (for high availability)</li>
+  <li><strong>Auto Scaling</strong> - allows to scale EC2 capacity up or down automatically according to conditions defined for the particular workload (for scaling in and out)</li>
+  <li><strong>Elastic Load Balancing (ELB)</strong> automatically distributes incoming application traffic across multiple EC2 instances. (for fault-tolerance)</li>
+  <li><strong>AWS Elastic Beanstalk</strong> - Developers can simply upload their application code, and the service automatically handles all the details, such as resource provisioning, load balancing, Auto scaling, and monitoring.</li>
+  <li><strong>AWS Virtual Private Cloud (VPC)</strong> provides a logically isolated section of the AWS cloud to launch resources in a virtual n/w. Organizations have complete control over the virtual env including the selection of the IP address range, creation of subnets, configuration of route tables, n/w gateways, etc. Orgs can extend their corporate data center n/w to AWS by using h/w or s/w VPN connections or dedicated circuits by using AWS Direct Connect.</li>
+  <li><strong>AWS Direct Connect</strong> allows organizations to establish a dedicated n/w connection from their data center to AWS.</li>
+  <li><strong>Amazon Route 53</strong> is a highly available and scalable DNS web service. Also serves as domain registrar, allowing you to purchase and manage domains directly from AWS</li>
+</ul>
+
+<h2 id="storage-and-content-delivery-services">Storage and Content Delivery Services</h2>
+
+<ul>
+  <li><strong>Simple Storage Service (S3)</strong> provides highly durable and scalable object storage that handles virtually unlimited amounts of data. Use cases: backup and recovery, nearline archive, big data analytics, disaster recovery, cloud apps, content distribution</li>
+  <li><strong>Amazon Glacier</strong> - extremely low-cost storage service for data archiving and long-term backup. Optimized for infrequently accessed data where a retrieval time of several hours is suitable.</li>
+  <li><strong>Amazon Elastic Block Store (EBS)</strong> - persistent block-level storage volumes for use with EC2 instances. Each EBS volume is automatically replicated within its Availability Zone to protect from component failure, offering HA and durability.</li>
+  <li><strong>AWS Storage Gateway</strong> is a service connecting an on-premise s/w with cloud-based storage to provide seamless and secure integration. It provides low-latency performance by maintaining a cache of frequently accessed data on-premises while securely storing all of your data encrypted in S3 or Glacier.</li>
+  <li><strong>Amazon CloudFront</strong> is a content delivery web service - an easy way to distribute content with low-latency, high data transfer speeds - can be used to deliver websites including dynamic, static, streaming and interactive content, using a global network of edge locations. Request for content are automatically routed to the nearest edge location for best performance.</li>
+</ul>
+
+<h2 id="database-service">Database service</h2>
+
+<ul>
+  <li><strong>Amazon DynamoDB</strong> - document and key/value NoSQL DB service - single-digit millisecond latency at any scale</li>
+  <li><strong>Amazon Redshift</strong> - columnar DB - petabyte-scale data warehouse service to analyze structured data - by leveraging columnar storage technology it can run parallelized queries across multiple nodes</li>
+  <li><strong>Amazon ElasticCache</strong> - a web service that simplifies scaling of an in-memory cache in the cloud - supports Memcached and Redis cache engines</li>
+</ul>
+
+<h2 id="management-tools">Management Tools</h2>
+
+<ul>
+  <li><strong>Amazon CloudWatch</strong> - monitoring service for AWS cloud resources and the applications running on AWS</li>
+  <li><strong>AWS CloudFormation</strong> - defines a JSON-based templating language that can be used to describe all the AWS resources needed for a workload. When templates are submitted to the AWS CloudFormation, it will take care of provisioning and configuring those resources in appropriate order</li>
+  <li><strong>AWS CloudTrail</strong> - a web service that records AWS API calls for an account and delivers log files for audit and review.</li>
+  <li><strong>AWS Config</strong> - With this, one can export an inventory of their AWS resources with all configuration details, and determine how a resource was configured at any point in time - enables compliance auditing, security analysis, resource change tracking, and troubleshooting.</li>
+</ul>
+
+<h2 id="security-and-identity">Security and Identity</h2>
+
+<ul>
+  <li><strong>AWS Identity and Access Manager (IAM)</strong> - enables organizations to create and manage AWS users and groups and use permissions to allow and deny their access to AWS resources.</li>
+  <li><strong>AWS Key Management Service (KMS)</strong> - enables organizations to create and control the encryption keys used to encrypt their data and uses Hardware Security Modules (HSM) to protect the security of the keys.</li>
+  <li><strong>AWS Directory Service</strong> - allows organizations to set up and run Microsoft Active Directory on the AWS cloud or connect their AWS resources with an existing on-premises Microsoft Active Directory.</li>
+  <li><strong>AWS Certificate Manager</strong> is a service that lets organizations easily provision, manage and deploy SSL/TLS certificates for use with AWS cloud services. It removes the time-consuming manual process of purchasing, uploading and renewing certificates - enables to quickly request a certificate, deploy it on AWS and let AWS Certificate Manager handle certificate renewals</li>
+  <li><strong>AWS Web Application Firewall (WAF)</strong> helps protect web apps from common attacks</li>
+</ul>
+
+<h2 id="application-services">Application Services</h2>
+
+<ul>
+  <li><strong>Amazon API Gateway</strong> - a fully managed service that makes it easy to create, publish, maintain, monitor and secure APIs at any scale - handles all the tasks involved in accepting and processing up to hundreds of thousands of concurrent API calls, including traffic management, monitoring, authorization and access control, API version management.</li>
+  <li><strong>Amazon Elastic Transcoder</strong> - media transcoder that converts media files from their source formats into versions that will play back on specific devices</li>
+  <li><strong>Amazon Simple Notification Service (SNS)</strong> is a web service that coordinates and manages the delivery of messages to recipients.</li>
+  <li><strong>Amazon Simple Email Service (SES)</strong></li>
+  <li><strong>Amazon Simple Workflow Service (SWF)</strong> - helps build, run and scale background jobs that have parallel or sequential steps - has fully managed state tracker and task coordinator on the cloud - provides ability to recover or retry if a task fails.</li>
+  <li><strong>Amazon Simple Queue Service (SQS)</strong> - managed message queueing service</li>
+</ul>
+
+<h1 id="ec2-elastic-compute-cloud">EC2 (Elastic Compute Cloud)</h1>
+
+<h2 id="elb-elastic-load-balancer">ELB (Elastic Load Balancer)</h2>
+
+<ul>
+  <li>A software load balance that is an integral part of building a fault tolerant, highly available system</li>
+</ul>
+
+<h2 id="elastic-beanstalk">Elastic Beanstalk</h2>
+
+<ul>
+  <li>Allows you to quickly deploy and manage applications without having to worry about the underlying infrastructure</li>
+</ul>
+
+<h2 id="auto-scaling-groups">Auto Scaling Groups</h2>
+
+<ul>
+  <li>Enables you to scale your instances based on load, time of day or a pre-defined schedule</li>
+</ul>
+
 <h1 id="s3-simple-storage-service">S3 (Simple Storage Service)</h1>
 
 <ul>
@@ -165,22 +280,18 @@ messageStyle: "none",
   <li><strong>Buckets</strong>
     <ul>
       <li>Bucket-level permissioning - existing permissioning policies can be copied or generated using ‘Bucket policy generator’</li>
-      <li><strong>ARNs (Amazon Resource Name)</strong> uniquely identify AWS resources. (http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)</li>
-    </ul>
-  </li>
-</ul>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">  	&lt;!-- Object in an Amazon S3 bucket --&gt;
-</span><span class="line">		arn:aws:s3:::my_corporate_bucket/exampleobject.png</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<ul>
-  <li>General formats
-    <ul>
-      <li><code>arn:partition:service:region:account-id:resource</code></li>
-      <li><code>arn:partition:service:region:account-id:resourcetype/resource</code></li>
-      <li><code>arn:partition:service:region:account-id:resourcetype:resource</code></li>
+      <li><strong>ARNs (Amazon Resource Name)</strong> uniquely identify AWS resources. (http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
+        <ul>
+          <li>Object in an Amazon S3 bucket <code>arn:aws:s3:::my_corporate_bucket/exampleobject.png</code></li>
+          <li>General formats
+            <ul>
+              <li><code>arn:partition:service:region:account-id:resource</code></li>
+              <li><code>arn:partition:service:region:account-id:resourcetype/resource</code></li>
+              <li><code>arn:partition:service:region:account-id:resourcetype:resource</code></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
     </ul>
   </li>
 </ul>

@@ -250,6 +250,8 @@ footer: true
 
 # References
 
+* Books
+	* AWS Certified Solution Architect - Study Guide
 * CloudAcademy.com
   * [AWS Technical Foundation 110](https://cloudacademy.com/amazon-web-services/aws-technical-fundamentals-aws-110-course)
   * AWS Technical Foundation 120

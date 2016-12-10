@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Amazon AWS Overview AWS Fundamentals Storage and Content Delivery Service Storage Basics S3 (Simple Storage Service) Amazon Glacier Amazon Elastic &hellip;">
+<meta name="description" content="Amazon AWS AWS Fundamentals Storage and Content Delivery Service Storage Basics S3 (Simple Storage Service) Amazon Glacier Amazon Elastic Block &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -108,7 +108,6 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#overview">Overview</a></li>
   <li><a href="#aws-fundamentals">AWS Fundamentals</a></li>
   <li><a href="#storage-and-content-delivery-service">Storage and Content Delivery Service</a>    <ul>
       <li><a href="#storage-basics">Storage Basics</a></li>
@@ -166,48 +165,6 @@ messageStyle: "none",
 
 <p><img src="/technology/aws-services.png" /></p>
 
-<h1 id="overview">Overview</h1>
-
-<ul>
-  <li>Data size and solution
-    <ul>
-      <li>Small - RDBMS</li>
-      <li>Medium - NoSQL</li>
-      <li>Large/Huge - Hadoop ecosystem</li>
-      <li>Complex - NewSQL</li>
-    </ul>
-  </li>
-  <li>Data storage Types
-    <ul>
-      <li>Warm storage
-        <ul>
-          <li>S3</li>
-        </ul>
-      </li>
-      <li>Cold storage
-        <ul>
-          <li>Glacier</li>
-        </ul>
-      </li>
-      <li>EC2 storage
-        <ul>
-          <li>Single - EBS (Elastic Block Storage)</li>
-          <li>Multiple - EFS (Elastic File Storage)</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li>CDN - Amazon CloudFront</li>
-  <li>Regions &amp; Availability Zones
-    <ul>
-      <li>Geographic proximity to your users</li>
-      <li>Regional affinity</li>
-      <li>www.cloudping.info - to estimate the latency from your browser to each AWS region</li>
-      <li>Availability zones are like data centers. Each AWS region has at least 2 availability zones. e.g.,</li>
-    </ul>
-  </li>
-</ul>
-
 <h1 id="aws-fundamentals">AWS Fundamentals</h1>
 
 <ul>
@@ -217,7 +174,23 @@ messageStyle: "none",
       <li><em>Hybrid deployment</em> is a common approach taken by many enterprises that connects infrastructure and apps between cloud-based resources and existing resources, typically in an existing data center.</li>
     </ul>
   </li>
-  <li><strong>Global Infrastructure</strong></li>
+</ul>
+
+<p><img class="right" src="/technology/aws-regions-availability-zones.jpg" /></p>
+
+<ul>
+  <li><strong>Global Infrastructure</strong>
+    <ul>
+      <li>Each <em>region</em> is a separate geographic area.</li>
+      <li>Each region has multiple, isolated locations known as <em>Availability Zones</em>.</li>
+      <li>Resources aren’t replicated across regions unless organizations choose to do so.</li>
+      <li>For fault tolerance and stability, each region is completely isolated from each other.</li>
+      <li>Each Availability Zone is also isolated, but they are connected through low-latency links.</li>
+      <li>Each Availability Zone is located in lower-risk flood plains using a discrete UPS and on-site backup generators. They are each fed via different grids from independent utilities to reduce single points of failures further.</li>
+      <li>Organizations retain complete control and ownership over the region in which their data is physically located, allowed them to meet regional compliance and data residency requirements.</li>
+      <li>www.cloudping.info - to estimate the latency from your browser to each AWS region</li>
+    </ul>
+  </li>
   <li><strong>Accessing the platform</strong>
     <ul>
       <li>via Amazon console</li>
@@ -269,48 +242,326 @@ messageStyle: "none",
 
 <h2 id="s3-simple-storage-service">S3 (Simple Storage Service)</h2>
 
+<p><strong>S3 Overview</strong></p>
+
 <ul>
-  <li><strong>S3 Basics</strong>
+  <li>S3 is a highly-durable and highly-scalable cloud object store</li>
+  <li>S3 Use cases: backup and recovery, nearline archive, big data analytics, static website hosting, disaster recovery, cloud apps, content distribution</li>
+  <li>S3 offers lifecycle policies using which the data can be automatically migrated to the most appropriate storage class without modifying application code</li>
+  <li>Scalability: S3 automatically partitions buckets to support very high request rates and simultaneous access by many clients</li>
+</ul>
+
+<p><strong>S3 Buckets</strong></p>
+
+<ul>
+  <li>Buckets are a simple flat folder with no file system hierarchy.</li>
+  <li>Limitations
     <ul>
-      <li>S3 is a highly-durable and highly-scalable cloud object store</li>
-      <li>S3 Use cases: backup and recovery, nearline archive, big data analytics, static website hosting, disaster recovery, cloud apps, content distribution</li>
-      <li>S3 offers a range of <em>storage classes</em>
+      <li>It cannot have a sub-bucket within a bucket.</li>
+      <li>Bucket name: max 63 lowercase letters, numbers, hyphens and periods</li>
+      <li>Each bucket can hold an unlimited number of objects.</li>
+      <li>Max 100 buckets per account.</li>
+    </ul>
+  </li>
+  <li><strong>Security</strong>
+    <ul>
+      <li>Bucket-level permissioning - existing permissioning policies can be copied or generated using ‘Bucket policy generator’</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>S3 Objects</strong></p>
+
+<ul>
+  <li>Objects reside in containers called <em>buckets</em></li>
+  <li>An object can virtually store any kind of data in any formats</li>
+  <li>Max object size = 5TB</li>
+  <li>Each object has
+    <ul>
+      <li>data (the file itself)</li>
+      <li>metadata - set of name/value pairs
         <ul>
-          <li>general purpose</li>
-          <li>infrequent access</li>
-          <li>archive</li>
+          <li><em>System metadata</em> - created and used by Amazon S3. e.g., last modified date, MD5, object size, etc</li>
+          <li><em>User metadata</em> - optional</li>
         </ul>
       </li>
-      <li>S3 offers lifecycle policies using which the data can be automatically migrated to the most appropriate storage class without modifying application code</li>
     </ul>
   </li>
-  <li><strong>S3 Internals</strong>
+  <li><strong>Object Key</strong>
     <ul>
-      <li>Each S3 objects contain both data and metadata</li>
-      <li>Each object is identified by a unique user-specified key (filename)</li>
-      <li>You cannot incrementally update portions of the object as you would with a file</li>
-      <li>Fault-tolerance: S3 objects are automatically replicated on multiple devices in multiple facilities within a region</li>
-      <li>Scalability: S3 automatically partitions buckets to support very high request rates and simultaneous access by many clients</li>
-    </ul>
-  </li>
-  <li><strong>Buckets</strong>
-    <ul>
-      <li>Objects reside in containers called <em>buckets</em></li>
-      <li>Buckets are a simple flat folder with no file system hierarchy. It cannot have a sub-bucket within a bucket.</li>
-      <li>Each bucket can hold an unlimited number of objects.</li>
-      <li>Bucket-level permissioning - existing permissioning policies can be copied or generated using ‘Bucket policy generator’</li>
-      <li><strong>ARNs (Amazon Resource Name)</strong> uniquely identify AWS resources. (http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
+      <li>Each object is identified by a unique <em>key</em> (similar to a file name).</li>
+      <li>Combination of <code>bucket + key + optional version ID</code> uniquely identifies an S3 object</li>
+      <li>Limitations
         <ul>
-          <li>Object in an Amazon S3 bucket <code>arn:aws:s3:::my_corporate_bucket/exampleobject.png</code></li>
-          <li>General formats
+          <li>Max 1024 bytes of UTF-8 characters (including slashes, backslashes, dots, dashes)</li>
+          <li>Keys must be unique within a single bucket</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>You cannot incrementally update portions of the object as you would with a file</li>
+  <li>Fault-tolerance: S3 objects are automatically replicated on multiple devices in multiple facilities within a region</li>
+  <li><strong>ARNs (Amazon Resource Name)</strong> uniquely identify AWS resources. (http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
+    <ul>
+      <li>Object in an Amazon S3 bucket <code>arn:aws:s3:::my_bucket/exampleobject.png</code></li>
+      <li>General formats
+        <ul>
+          <li><code>arn:partition:service:region:account-id:resource</code></li>
+          <li><code>arn:partition:service:region:account-id:resourcetype/resource</code></li>
+          <li><code>arn:partition:service:region:account-id:resourcetype:resource</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>S3 Durability &amp; Availability</strong></p>
+
+<ul>
+  <li><em>Durability</em>
+    <ul>
+      <li>answers the question <em>will my data still be there in the future?</em></li>
+      <li>S3 provides 99.999999999% durability - meaning for 10K objects stored, you can on average expect to incur a loss of 1 object every 10,000,000 years</li>
+      <li>Durability achieved by
+        <ul>
+          <li>automatically storing data redundantly on multiple devices in multiple facilities within a region.</li>
+          <li>design to sustain concurrent loss of data in 2 facilities without loss of user data</li>
+          <li>highly durable infrastructure</li>
+        </ul>
+      </li>
+      <li>Non-critical or easily reproducible data (e.g., thumbnails) doesn’t require high level of durability. Better choose <em>Reduced Redundancy Storage (RRS)</em> at lower cost</li>
+      <li>Best practice: protect against user-level accidental deletion or overwriting of data by using versioning, cross-region replication, MFA delete (Multi-Factor Authentication)</li>
+    </ul>
+  </li>
+  <li><em>Availability</em>
+    <ul>
+      <li>answers the question <em>can I access my data right now?</em></li>
+      <li>S3 provides 99.99% availability</li>
+      <li>S3 is an <em>eventually consistent</em> system
+        <ul>
+          <li>S3 offers <em>read-after-write</em> consistency for <code>PUT</code>s to new objects</li>
+          <li><code>PUT</code>s to existing objects and <code>DELETE</code>s are offered at <em>eventual consistency</em></li>
+          <li>Updates to a single key are atomic - for eventual-consistency reads, you will get the new data or the old data, but never an inconsistent mix of data.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>S3 Storage Classes</strong></p>
+
+<ul>
+  <li><em>Hot</em> - frequently accessed data</li>
+  <li><em>Warm</em> - less frequently accessed data as it ages</li>
+  <li><em>Cold</em> - long-term backup or archive data before eventual deletion</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th><strong>S3 Standard</strong></th>
+      <th><strong>S3 Standard - Infrequent Access (IA)</strong></th>
+      <th><strong>Reduced Redundancy Storage (RRS)</strong></th>
+      <th><strong>Amazon Glacier</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Well-suited for</td>
+      <td>short-term or long-term storage of frequently accessed data</td>
+      <td>long-lived, less frequently accessed data that is stored for longer than 30 days</td>
+      <td>derived data that can be easily reproduced (e.g., thumbnails)</td>
+      <td>data that does not require real-time access, such as archives and long-term backups,<br />where a retrieval time of several hours is suitable</td>
+    </tr>
+    <tr>
+      <td>Offers</td>
+      <td>high durability (99.999999999%),<br />high availability,<br />high performance,<br />first low-byte latency,<br />high throughput</td>
+      <td>same durability,<br />low latency,<br />high throughput</td>
+      <td>slightly lower durability (99.9999%)</td>
+      <td>secure,<br />high durability (99.999999999%)</td>
+    </tr>
+    <tr>
+      <td>Cost</td>
+      <td> </td>
+      <td>Has lower per GB-month cost than Standard<br />Price model also includes a minimum object size (128KB), minimum duration (30 days), and per-GB retrieval costs</td>
+      <td>Reduced cost than Standard or Standard-IA</td>
+      <td>Extremely low-cost</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>Reduce storage costs by automatically transitioning data from one storage class to another or eventually deleting data after a period of time. For example,
+    <ul>
+      <li>Store backup data initially in S3 Standard</li>
+      <li>After 30 days, move to Standard-IA</li>
+      <li>After 90 days, transition to Glacier,</li>
+      <li>After 3 years, delete</li>
+    </ul>
+  </li>
+  <li>Lifecycle configurations are attached to bucket or specific objects</li>
+</ul>
+
+<p><strong>S3 Data Protection</strong></p>
+
+<ul>
+  <li>By default, all S3 objects and buckets are private and can only be accessed by the owner.</li>
+  <li><strong>Access Control</strong>
+    <ul>
+      <li><em>Coarse-grained access controls</em>
+        <ul>
+          <li><strong>S3 Access Control Lists (ACLs)</strong>
             <ul>
-              <li><code>arn:partition:service:region:account-id:resource</code></li>
-              <li><code>arn:partition:service:region:account-id:resourcetype/resource</code></li>
-              <li><code>arn:partition:service:region:account-id:resourcetype:resource</code></li>
+              <li>legacy mechanism, created before IAM</li>
+              <li>Limited to read, write, or full-control at object/bucket level</li>
+              <li>Best used for enabling bucket logging or making a bucket that hosts a static website be readable</li>
             </ul>
           </li>
         </ul>
       </li>
+      <li><em>Fine-grained access controls</em>
+        <ul>
+          <li><strong>S3 bucket policies</strong>
+            <ul>
+              <li>Recommended access control mechanism</li>
+              <li>Can specify
+                <ul>
+                  <li>who can access the bucket</li>
+                  <li>from where (by <em>Classless Inter-Domain Routing (CIDR)</em> block or IP address)</li>
+                  <li>at what time of the day</li>
+                </ul>
+              </li>
+              <li>Bucket policies allows to assign cross-account access to S3 resources</li>
+              <li>Similar to IAM but
+                <ul>
+                  <li>associated with bucket resource instead of an IAM principal</li>
+                  <li>includes an explicit reference to the IAM principal in the policy. This principal can be associated with a different AWS account</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li>AWS Identity and Access Management (IAM) policies</li>
+          <li>Query String Authentication</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Encryption</strong>
+    <ul>
+      <li>Encrypt data in-flight
+        <ul>
+          <li>Transmit data using HTTPS protocol to SSL API endpoints</li>
+        </ul>
+      </li>
+      <li>Encrypt data at rest
+        <ul>
+          <li><strong><em>Server-Side Encryption (SSE)</em></strong>
+            <ul>
+              <li>S3 encrypts data at the object level as it writes it to disks and decrypts it for you when you access it</li>
+              <li><em>SSE-S3 (AWS Managed Keys)</em>
+                <ul>
+                  <li>AWS handles the key management and key protection</li>
+                  <li>Every object is encrypted with a unique key</li>
+                  <li>The object encryption key is then encrypted using a separate master key</li>
+                  <li>A new master key is issued at least monthly with AWS rotating the keys.</li>
+                  <li>Encrypted data, keys and master keys are all stored separately on secure hosts</li>
+                </ul>
+              </li>
+              <li><em>SSE-KMS (AWS KMS Keys)</em>
+                <ul>
+                  <li>AWS handles management and protection of <em>your</em> key</li>
+                  <li>SSE-KMS offers additional benefits
+                    <ul>
+                      <li>provides audit of who used the key to access, which object, when.</li>
+                      <li>Allows to view failed attempts to access data from users who did not have permissions</li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+              <li><em>SSE-C (Customer Provided Keys)</em>
+                <ul>
+                  <li>You maintain your own encryption keys, but don’t want to manage or implement your own client-side encryption library</li>
+                  <li>AWS will do the encryption/decryption of your objects while you maintain full control of the keys</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li><strong><em>Client-Side Encryption (CSE)</em></strong>
+            <ul>
+              <li>You encrypt the data before sending it to S3</li>
+              <li>2 options for using data encryption keys
+   	* Use an AWS KMS-managed customer master key
+                <ul>
+                  <li>Use a client-side master key</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Versioning</strong>
+    <ul>
+      <li>If an object is accidentally changed/deleted, one can restore the object to its original state by referencing the version ID in addition to the bucket and object key</li>
+      <li>Versioning is turned on at the bucket level. Once enabled, versioning cannot be removed from a bucket; it can only be suspended.</li>
+    </ul>
+  </li>
+  <li><strong>Multi-Factor Authentication (MFA) Delete</strong>
+    <ul>
+      <li>requires additional authentication in order to permanently delete an object version or change the versioning state of a bucket.</li>
+      <li>MFA delete can only be enabled by the root account</li>
+    </ul>
+  </li>
+  <li><strong>Pre-Signed URLs</strong>
+    <ul>
+      <li>All S3 objects are by default private.</li>
+      <li>Owner can share objects with others by creating <em>pre-signed URL</em>, using their own security credentials to grant time-limited permission to download the objects.</li>
+      <li>To create a <em>pre-signed URL</em>, you must provide: your security credentials, bucket name, object key, the HTTP method (GET for download) and an expiration date and time.</li>
+      <li>Useful to protect against ‘content scraping’ of web content such as media files stored in S3</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Advanced Topics</strong></p>
+
+<ul>
+  <li><em>Multipart Upload</em>
+    <ul>
+      <li>To support uploading/copying large objects</li>
+      <li>Allows to pause and resume. Has ability to upload objects where the size is initially unknown</li>
+      <li>Object size &gt; 100 MB - you <em>should</em> use multipart upload</li>
+      <li>Object size &gt; 5 GB - you <em>must</em> use multipart upload</li>
+      <li>Using high-level APIs and high-level S3 command in CLI (<code>aws s3 cp</code>, <code>aws s3 mv</code>, <code>aws s3 sync</code>), multipart upload is automatically performed for large objects</li>
+      <li>Using low-level APIs, you must break the file into parts and keep track of the parts.</li>
+      <li>If a multipart upload is incomplete after specified number of days, you can set an object lifecycle policy on a bucket to abort to minimize the storage costs.</li>
+    </ul>
+  </li>
+  <li><em>Range GETs</em>
+    <ul>
+      <li>is used to download (GET) only a portion of an object in S3 or Glacier.</li>
+    </ul>
+  </li>
+  <li><em>Cross-Region Replication</em>
+    <ul>
+      <li>allows to asynchronously replicate all <em>new</em> objects from one region to another.</li>
+      <li>Metadata and ACLs of the object also is replicated.</li>
+      <li>Only new objects are replicated. Existing objects must be copied via a separate command.</li>
+      <li>To enable <em>Cross-Region Replication</em>, versioning must be turned-on in both source and target buckets.</li>
+      <li>An IAM policy must be used to give S3 permission to replicate objects on your behalf.</li>
+      <li>Commonly used to reduce the latency to access objects by placing them closer to a set of users or store backup data at a certain distance from the original source data</li>
+    </ul>
+  </li>
+  <li><em>Logging</em>
+    <ul>
+      <li>Logging is off by default. While enabling, you must choose the bucket where the logs will be stored.</li>
+    </ul>
+  </li>
+  <li><em>Event Notifications</em>
+    <ul>
+      <li>Set up at bucket level to notify when an object is created, removed or lost in RRS</li>
+      <li>Notification messages can be sent to Amazon SQS or Amazon SNS or AWS Lambda</li>
     </ul>
   </li>
 </ul>
@@ -319,6 +570,26 @@ messageStyle: "none",
 
 <ul>
   <li>Extremely low-cost storage service for data archiving and long-term backup. Optimized for infrequently accessed data where a retrieval time of several hours is suitable.</li>
+  <li>To retrieve an object, issue a restore command using S3 API; 3 to 5 hours later, it is copied to S3 RRS. Restore simply creates a copy; the original data is retained in Glacier until explicitly deleted.</li>
+  <li><strong>Archives</strong>
+    <ul>
+      <li>Data is stored in <em>archives</em></li>
+      <li>Max 40 TB of data per archive</li>
+      <li>Unlimited archives can be created</li>
+      <li>Each archive is assigned a unique archive ID at the creation time</li>
+      <li>Archives are automatically encrypted</li>
+      <li>Archives are immutable</li>
+    </ul>
+  </li>
+  <li><strong>Vaults</strong>
+    <ul>
+      <li>Vaults are containers for archives.</li>
+      <li>Max 1000 vaults per account</li>
+      <li>Control access to vaults using IAM policies or vault access policies</li>
+      <li><em>Vault lock policy</em>: can specify controls such as Write Once Read Many (WORM) in a vault local policy to lock the policy from future edits.</li>
+      <li>Retrieving up to 5% of stored data is free per month.</li>
+    </ul>
+  </li>
 </ul>
 
 <h2 id="amazon-elastic-block-store-ebs">Amazon Elastic Block Store (EBS)</h2>

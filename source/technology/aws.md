@@ -59,14 +59,13 @@ footer: true
 
 ## S3 (Simple Storage Service)
 
-**S3 Overview**
+### S3 Overview
 
 * S3 is a highly-durable and highly-scalable cloud object store
-* S3 Use cases: backup and recovery, nearline archive, big data analytics, static website hosting, disaster recovery, cloud apps, content distribution
-* S3 offers lifecycle policies using which the data can be automatically migrated to the most appropriate storage class without modifying application code
+* By default, every object is world-readable
 * Scalability: S3 automatically partitions buckets to support very high request rates and simultaneous access by many clients
 
-**S3 Buckets**
+### S3 Buckets
 
 * Buckets are a simple flat folder with no file system hierarchy.
 * Limitations
@@ -74,10 +73,8 @@ footer: true
 	* Bucket name: max 63 lowercase letters, numbers, hyphens and periods
 	* Each bucket can hold an unlimited number of objects.
 	* Max 100 buckets per account.
-* **Security**
-	* Bucket-level permissioning - existing permissioning policies can be copied or generated using 'Bucket policy generator'
 
-**S3 Objects**
+### S3 Objects
 
 * Objects reside in containers called *buckets*
 * An object can virtually store any kind of data in any formats
@@ -94,7 +91,6 @@ footer: true
 		* Max 1024 bytes of UTF-8 characters (including slashes, backslashes, dots, dashes)
 		* Keys must be unique within a single bucket
 * You cannot incrementally update portions of the object as you would with a file
-* Fault-tolerance: S3 objects are automatically replicated on multiple devices in multiple facilities within a region
 * **ARNs (Amazon Resource Name)** uniquely identify AWS resources. (http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
 	* Object in an Amazon S3 bucket `arn:aws:s3:::my_bucket/exampleobject.png`
 	* General formats
@@ -102,7 +98,7 @@ footer: true
 	  * `arn:partition:service:region:account-id:resourcetype/resource`
 	  * `arn:partition:service:region:account-id:resourcetype:resource`
 
-**S3 Durability & Availability**
+### S3 Durability & Availability
 
 * *Durability*
 	* answers the question *will my data still be there in the future?*
@@ -111,8 +107,6 @@ footer: true
 		* automatically storing data redundantly on multiple devices in multiple facilities within a region.
 		* design to sustain concurrent loss of data in 2 facilities without loss of user data
 		* highly durable infrastructure
-	* Non-critical or easily reproducible data (e.g., thumbnails) doesn't require high level of durability. Better choose *Reduced Redundancy Storage (RRS)* at lower cost
-	* Best practice: protect against user-level accidental deletion or overwriting of data by using versioning, cross-region replication, MFA delete (Multi-Factor Authentication)
 * *Availability*
 	* answers the question *can I access my data right now?*
 	* S3 provides 99.99% availability
@@ -121,7 +115,7 @@ footer: true
 		* `PUT`s to existing objects and `DELETE`s are offered at *eventual consistency*
 		* Updates to a single key are atomic - for eventual-consistency reads, you will get the new data or the old data, but never an inconsistent mix of data.
 
-**S3 Storage Classes**
+### S3 Storage Classes
 
 * *Hot* - frequently accessed data
 * *Warm* - less frequently accessed data as it ages
@@ -131,7 +125,7 @@ footer: true
 | - | - | - | - | - |
 | Well-suited for | short-term or long-term storage of frequently accessed data | long-lived, less frequently accessed data that is stored for longer than 30 days | derived data that can be easily reproduced (e.g., thumbnails) | data that does not require real-time access, such as archives and long-term backups,<br>where a retrieval time of several hours is suitable |
 | Offers | high durability (99.999999999%),<br>high availability,<br>high performance,<br>first low-byte latency,<br>high throughput | same durability,<br>low latency,<br>high throughput | slightly lower durability (99.9999%) | secure,<br>high durability (99.999999999%)
-| Cost | | Has lower per GB-month cost than Standard<br>Price model also includes a minimum object size (128KB), minimum duration (30 days), and per-GB retrieval costs | Reduced cost than Standard or Standard-IA | Extremely low-cost |
+| Cost | | Has lower per GB-month cost than Standard<br>Price model also includes a minimum object size (128KB), minimum duration (30 days), and per-GB retrieval costs. 5% of data retrieval free of cost per month  | Reduced cost than Standard or Standard-IA | Extremely low-cost |
 
 * Reduce storage costs by automatically transitioning data from one storage class to another or eventually deleting data after a period of time. For example,
 	* Store backup data initially in S3 Standard
@@ -140,8 +134,9 @@ footer: true
 	* After 3 years, delete
 * Lifecycle configurations are attached to bucket or specific objects
 
-**S3 Data Protection**
+### S3 Data Protection
 
+* Bucket-level permissioning - existing permissioning policies can be copied or generated using 'Bucket policy generator'
 * By default, all S3 objects and buckets are private and can only be accessed by the owner.
 * **Access Control**
 	* *Coarse-grained access controls*
@@ -199,7 +194,7 @@ footer: true
 	* To create a *pre-signed URL*, you must provide: your security credentials, bucket name, object key, the HTTP method (GET for download) and an expiration date and time.
 	* Useful to protect against 'content scraping' of web content such as media files stored in S3
 
-**Advanced Topics**
+### Advanced Topics
 
 * *Multipart Upload*
 	* To support uploading/copying large objects

@@ -10,6 +10,8 @@ footer: true
 {:toc}
 
 
+{% img /technology/lambda-architecture.jpg %}
+
 * Data Ingestion
 	* Kafka
 	* Flume
@@ -63,5 +65,3 @@ Comparing Apache Storm and Apache Spark’s Streaming, turns out to be a bit cha
 
 * Micro-batching is a special case of batch processing where the batch size is orders smaller. Spark Streaming operates in this manner as does the Storm Trident API.
 * Micro-batching seems to be a nice mix between batching and streaming. However, micro-batching incurs a cost of latency. If sub-second latency is paramount, micro-batching will typically not suffice. On the other hand, micro-batching trivially gives stateful computation, making windowing an easy task.
-
-

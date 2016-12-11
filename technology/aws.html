@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Amazon AWS AWS Fundamentals Storage and Content Delivery Service Storage Basics S3 (Simple Storage Service) Amazon Glacier Amazon Elastic Block &hellip;">
+<meta name="description" content="Amazon AWS AWS Fundamentals Storage and Content Delivery Service Storage Basics S3 (Simple Storage Service) S3 Overview S3 Buckets S3 Objects S3 &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -111,7 +111,16 @@ messageStyle: "none",
   <li><a href="#aws-fundamentals">AWS Fundamentals</a></li>
   <li><a href="#storage-and-content-delivery-service">Storage and Content Delivery Service</a>    <ul>
       <li><a href="#storage-basics">Storage Basics</a></li>
-      <li><a href="#s3-simple-storage-service">S3 (Simple Storage Service)</a></li>
+      <li><a href="#s3-simple-storage-service">S3 (Simple Storage Service)</a>        <ul>
+          <li><a href="#s3-overview">S3 Overview</a></li>
+          <li><a href="#s3-buckets">S3 Buckets</a></li>
+          <li><a href="#s3-objects">S3 Objects</a></li>
+          <li><a href="#s3-durability--availability">S3 Durability &amp; Availability</a></li>
+          <li><a href="#s3-storage-classes">S3 Storage Classes</a></li>
+          <li><a href="#s3-data-protection">S3 Data Protection</a></li>
+          <li><a href="#advanced-topics">Advanced Topics</a></li>
+        </ul>
+      </li>
       <li><a href="#amazon-glacier">Amazon Glacier</a></li>
       <li><a href="#amazon-elastic-block-store-ebs">Amazon Elastic Block Store (EBS)</a></li>
       <li><a href="#aws-storage-gateway">AWS Storage Gateway</a></li>
@@ -242,16 +251,15 @@ messageStyle: "none",
 
 <h2 id="s3-simple-storage-service">S3 (Simple Storage Service)</h2>
 
-<p><strong>S3 Overview</strong></p>
+<h3 id="s3-overview">S3 Overview</h3>
 
 <ul>
   <li>S3 is a highly-durable and highly-scalable cloud object store</li>
-  <li>S3 Use cases: backup and recovery, nearline archive, big data analytics, static website hosting, disaster recovery, cloud apps, content distribution</li>
-  <li>S3 offers lifecycle policies using which the data can be automatically migrated to the most appropriate storage class without modifying application code</li>
+  <li>By default, every object is world-readable</li>
   <li>Scalability: S3 automatically partitions buckets to support very high request rates and simultaneous access by many clients</li>
 </ul>
 
-<p><strong>S3 Buckets</strong></p>
+<h3 id="s3-buckets">S3 Buckets</h3>
 
 <ul>
   <li>Buckets are a simple flat folder with no file system hierarchy.</li>
@@ -263,14 +271,9 @@ messageStyle: "none",
       <li>Max 100 buckets per account.</li>
     </ul>
   </li>
-  <li><strong>Security</strong>
-    <ul>
-      <li>Bucket-level permissioning - existing permissioning policies can be copied or generated using ‘Bucket policy generator’</li>
-    </ul>
-  </li>
 </ul>
 
-<p><strong>S3 Objects</strong></p>
+<h3 id="s3-objects">S3 Objects</h3>
 
 <ul>
   <li>Objects reside in containers called <em>buckets</em></li>
@@ -300,7 +303,6 @@ messageStyle: "none",
     </ul>
   </li>
   <li>You cannot incrementally update portions of the object as you would with a file</li>
-  <li>Fault-tolerance: S3 objects are automatically replicated on multiple devices in multiple facilities within a region</li>
   <li><strong>ARNs (Amazon Resource Name)</strong> uniquely identify AWS resources. (http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
     <ul>
       <li>Object in an Amazon S3 bucket <code>arn:aws:s3:::my_bucket/exampleobject.png</code></li>
@@ -315,7 +317,7 @@ messageStyle: "none",
   </li>
 </ul>
 
-<p><strong>S3 Durability &amp; Availability</strong></p>
+<h3 id="s3-durability--availability">S3 Durability &amp; Availability</h3>
 
 <ul>
   <li><em>Durability</em>
@@ -329,8 +331,6 @@ messageStyle: "none",
           <li>highly durable infrastructure</li>
         </ul>
       </li>
-      <li>Non-critical or easily reproducible data (e.g., thumbnails) doesn’t require high level of durability. Better choose <em>Reduced Redundancy Storage (RRS)</em> at lower cost</li>
-      <li>Best practice: protect against user-level accidental deletion or overwriting of data by using versioning, cross-region replication, MFA delete (Multi-Factor Authentication)</li>
     </ul>
   </li>
   <li><em>Availability</em>
@@ -348,7 +348,7 @@ messageStyle: "none",
   </li>
 </ul>
 
-<p><strong>S3 Storage Classes</strong></p>
+<h3 id="s3-storage-classes">S3 Storage Classes</h3>
 
 <ul>
   <li><em>Hot</em> - frequently accessed data</li>
@@ -384,7 +384,7 @@ messageStyle: "none",
     <tr>
       <td>Cost</td>
       <td> </td>
-      <td>Has lower per GB-month cost than Standard<br />Price model also includes a minimum object size (128KB), minimum duration (30 days), and per-GB retrieval costs</td>
+      <td>Has lower per GB-month cost than Standard<br />Price model also includes a minimum object size (128KB), minimum duration (30 days), and per-GB retrieval costs. 5% of data retrieval free of cost per month</td>
       <td>Reduced cost than Standard or Standard-IA</td>
       <td>Extremely low-cost</td>
     </tr>
@@ -403,9 +403,10 @@ messageStyle: "none",
   <li>Lifecycle configurations are attached to bucket or specific objects</li>
 </ul>
 
-<p><strong>S3 Data Protection</strong></p>
+<h3 id="s3-data-protection">S3 Data Protection</h3>
 
 <ul>
+  <li>Bucket-level permissioning - existing permissioning policies can be copied or generated using ‘Bucket policy generator’</li>
   <li>By default, all S3 objects and buckets are private and can only be accessed by the owner.</li>
   <li><strong>Access Control</strong>
     <ul>
@@ -524,7 +525,7 @@ messageStyle: "none",
   </li>
 </ul>
 
-<p><strong>Advanced Topics</strong></p>
+<h3 id="advanced-topics">Advanced Topics</h3>
 
 <ul>
   <li><em>Multipart Upload</em>

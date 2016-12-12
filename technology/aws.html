@@ -122,13 +122,24 @@ messageStyle: "none",
         </ul>
       </li>
       <li><a href="#amazon-glacier">Amazon Glacier</a></li>
-      <li><a href="#amazon-elastic-block-store-ebs">Amazon Elastic Block Store (EBS)</a></li>
+      <li><a href="#amazon-elastic-block-store-ebs">Amazon Elastic Block Store (EBS)</a>        <ul>
+          <li><a href="#ebs-volume-types">EBS Volume Types</a></li>
+          <li><a href="#ebs-snapshots">EBS Snapshots</a></li>
+        </ul>
+      </li>
       <li><a href="#aws-storage-gateway">AWS Storage Gateway</a></li>
       <li><a href="#amazon-cloudfront">Amazon CloudFront</a></li>
     </ul>
   </li>
   <li><a href="#compute-and-network-services">Compute and Network Services</a>    <ul>
-      <li><a href="#amazon-ec2">Amazon EC2</a></li>
+      <li><a href="#amazon-ec2">Amazon EC2</a>        <ul>
+          <li><a href="#instance-types">Instance Types</a></li>
+          <li><a href="#securing-an-instance">Securing an Instance</a></li>
+          <li><a href="#lifecycle-of-instances">Lifecycle of Instances</a></li>
+          <li><a href="#instance-pricing-options">Instance Pricing Options</a></li>
+          <li><a href="#tenancy-options">Tenancy options</a></li>
+        </ul>
+      </li>
       <li><a href="#aws-lambda">AWS Lambda</a></li>
       <li><a href="#auto-scaling">Auto Scaling</a></li>
       <li><a href="#elastic-load-balancing-elb">Elastic Load Balancing (ELB)</a></li>
@@ -384,7 +395,7 @@ messageStyle: "none",
     <tr>
       <td>Cost</td>
       <td> </td>
-      <td>Has lower per GB-month cost than Standard<br />Price model also includes a minimum object size (128KB), minimum duration (30 days), and per-GB retrieval costs. 5% of data retrieval free of cost per month</td>
+      <td>Has lower per GB-month cost than Standard<br />Price model also includes a minimum object size (128KB), minimum duration (30 days), and per-GB retrieval costs.</td>
       <td>Reduced cost than Standard or Standard-IA</td>
       <td>Extremely low-cost</td>
     </tr>
@@ -595,8 +606,122 @@ messageStyle: "none",
 
 <h2 id="amazon-elastic-block-store-ebs">Amazon Elastic Block Store (EBS)</h2>
 
+<p><img class="right" src="/technology/aws-ebs.PNG" width="200" height="200" /></p>
+
 <ul>
   <li>Persistent block-level storage volumes for use with EC2 instances. Each EBS volume is automatically replicated within its Availability Zone to protect from component failure, offering HA and durability.</li>
+  <li>Each EBS volume is automatically replicated within its Availability Zone</li>
+  <li>Each EBS volume can be attached to a single EC2 instances</li>
+  <li>A single EC2 instance can be attached to one or more EBS volumes</li>
+</ul>
+
+<h3 id="ebs-volume-types">EBS Volume Types</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: left"> </th>
+      <th style="text-align: left"><strong>Magnetic Volume</strong></th>
+      <th style="text-align: left"><strong>General-Purpose SSD</strong></th>
+      <th style="text-align: left"><strong>Provisioned IOPS SSD</strong></th>
+      <th style="text-align: left"><strong>Throughput-Optimized HDD Volumes</strong></th>
+      <th style="text-align: left"><strong>Cold HDD Volumes</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: left"><strong>Use Cases</strong></td>
+      <td style="text-align: left">Workloads where data is accessed infrequently, Sequential reads, Situations where low-cost storage is a requirement</td>
+      <td style="text-align: left">System boot volumes, Virtual Desktops, small-to-medium size databases, Dev to Test environments</td>
+      <td style="text-align: left">I/O intensive workloads, particularly large database workloads,<br />Critical business apps that require sustained IOPS performance or more than 10,000 IOPS or 160 MB of throughput per volume</td>
+      <td style="text-align: left">Low-cost HDD volumes designed for frequent-access, throughput-intensive workloads such as big data, data warehouses, and log processing.</td>
+      <td style="text-align: left">Designed for less frequently accessed workloads, such as colder data requiring fewer scans per day.</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>Volume Size</strong></td>
+      <td style="text-align: left">1 GB to 1 TB</td>
+      <td style="text-align: left">1 GB to 16 TB</td>
+      <td style="text-align: left">4 GB to 16 TB</td>
+      <td style="text-align: left">up to 16 TB</td>
+      <td style="text-align: left">Max 16 TB</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>Max throughput</strong></td>
+      <td style="text-align: left">40 - 90 MB</td>
+      <td style="text-align: left">160 MB</td>
+      <td style="text-align: left">320 MB</td>
+      <td style="text-align: left">500 MB/s</td>
+      <td style="text-align: left">250 MB/s</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>IOPS Performance</strong></td>
+      <td style="text-align: left">Average 100 IOPS with the ability to burst to 100s of IOPS</td>
+      <td style="text-align: left">Baseline performance of 3 IOPS/GB (max 10,000 IOPS) with the ability to burst to 3000 IOPS for volumes under 1000 GB</td>
+      <td style="text-align: left">Consistently performs at provisioned level, up to 20,000 IOPS max</td>
+      <td style="text-align: left">max 500</td>
+      <td style="text-align: left">Max 250</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>Cost</strong></td>
+      <td style="text-align: left">Cheapest</td>
+      <td style="text-align: left"> </td>
+      <td style="text-align: left">Based on the volume size provisioned (not space used) + number of IOPS provisioned, whether they are consumed or not</td>
+      <td style="text-align: left">significantly less expensive than general-purpose SSD volumes.</td>
+      <td style="text-align: left">significantly less expensive than Throughput-Optimized HDD volumes</td>
+    </tr>
+    <tr>
+      <td style="text-align: left"><strong>Misc</strong></td>
+      <td style="text-align: left">Lowest Performance</td>
+      <td style="text-align: left"> </td>
+      <td style="text-align: left">When you provision a <em>Provisioned IOPS SSD</em> volume, you should specify both the size and the desired number of IOPS<br />You can stripe multiple volumes together in a <em>RAID 0</em> configuration for larger size and greater performance</td>
+      <td style="text-align: left"> </td>
+      <td style="text-align: left"> </td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>EBS-Optimized Instances</strong></p>
+
+<ul>
+  <li>Uses an optimized configuration stack and provides additional, dedicated capacity for EBS I/O. This optimization provides the best performance for EBS volumes by minimizing contention between EBS I/O and other traffic from EC2 instance.</li>
+</ul>
+
+<h3 id="ebs-snapshots">EBS Snapshots</h3>
+
+<ul>
+  <li>Backup EBS volume data by taking snapshots through AWS console, CLI, API or setting up a schedule for regular snapshots</li>
+  <li>Snapshots are incremental backups, which means that only the blocks on the device that have changed since your most recent snapshot are saved.</li>
+  <li>Snapshot data is stored in S3.</li>
+  <li>The action of taking a snapshot is free. You pay only the storage costs for the snapshot data.</li>
+  <li>When you request a snapshot, the point-in-time snapshot is created immediately and the volume may continue to be used, but the snapshot may remain in pending status until all the modified blocks have been transferred to S3.</li>
+  <li>Snapshots are stored in AWS-controlled S3 storage; not in your account’s S3 buckets. This means you cannot manipulate them like other Amazon S3 objects. Rather, you must use the EBS snapshot features to manage them.</li>
+  <li>Snapshots are constrained to the region in which they are created, meaning you can use them to create new volumes only in the same region. If you need to restore a snapshot in a different region, you can copy a snapshot to another region.</li>
+</ul>
+
+<p><strong>Creating a Volume from a Snapshot</strong>
+* To use a snapshot, you create a new EBS volume from the snapshot. When you do this, the volume is created immediately but the data is loaded lazily. This means that the volume can be accessed upon creation, and if the data being requested has not yet been restored, it will be restored upon first request. Because of this, it is a best practice to initialize a volume created from a snapshot by accessing all the blocks in the volume.
+* Snapshots can also be used to increase the size of an EBS volume. To increase the size of an EBS volume
+	* take a snapshot of the volume
+	* create a new volume of the desired size from the snapshot
+	* Replace the original volume with the new volume.</p>
+
+<p><strong>Recovering Volumes</strong></p>
+
+<ul>
+  <li>If an Amazon EBS-backed instance fails and there is data on the boot drive, it is relatively straightforward to detach the volume from the instance.</li>
+  <li>Unless the <code>DeleteOnTermination</code> flag for the volume has been set to false, the volume should be detached before the instance is terminated.</li>
+  <li>The volume can then be attached as a data volume to another instance and the data read and recovered.</li>
+</ul>
+
+<p><strong>Encryption Options</strong></p>
+
+<ul>
+  <li>Amazon EBS offers native encryption on all volume types</li>
+  <li>When you launch an encrypted EBS volume, Amazon uses the <em>AWS KMS</em> to handle key management. A new master key will be created unless you select a master key that you created separately in the service.</li>
+  <li>Data and associated keys are encrypted using the industry-standard <em>AES-256</em> algorithm.</li>
+  <li>The encryption occurs on the servers that host EC2 instances, so the data is actually encrypted in transit between the host and the storage media and also on the media.</li>
+  <li>Encryption is transparent, so all data access is the same as unencrypted volumes, and you can expect the same IOPS performance on encrypted volumes as you would with unencrypted volumes, with a minimal effect on latency.</li>
+  <li>Snapshots that are taken from encrypted volumes are automatically encrypted, as are volumes that are created from encrypted snapshots.</li>
 </ul>
 
 <h2 id="aws-storage-gateway">AWS Storage Gateway</h2>
@@ -617,8 +742,307 @@ messageStyle: "none",
 
 <h2 id="amazon-ec2">Amazon EC2</h2>
 
+<h3 id="instance-types">Instance Types</h3>
+
 <ul>
-  <li>provides resizeable compute capacity in the cloud</li>
+  <li>2 key concepts to an instance:
+    <ul>
+      <li>the amount of virtual hardware dedicated to the Instance</li>
+      <li>the software loaded on the instance</li>
+    </ul>
+  </li>
+  <li>Instance types vary in following dimensions:
+    <ul>
+      <li>Virtual CPUs (vCPUs)</li>
+      <li>Memory</li>
+      <li>Storage</li>
+      <li>Network performance</li>
+    </ul>
+  </li>
+  <li>Instance types are grouped into families</li>
+  <li>The ratio of vCPUs to memory is constant as the size scale linearly</li>
+  <li>The hourly price for each size scales linearly. e.g., <code>Cost(m4.xlarge) = 2 x Cost(m4.large)</code></li>
+  <li>Optimized Instance Type Family
+    <ul>
+      <li><code>m4</code> family provides a balance of compute, memory and n/w resources</li>
+      <li><code>c4</code> <strong>compute optimized</strong> for workloads requiring significant processing</li>
+      <li><code>r3</code> <strong>memory optimized</strong> for memory-intensive workloads</li>
+      <li><code>i2</code> <strong>storage optimized</strong> for workloads requiring high amounts of fast SSD storage</li>
+      <li><code>g2</code> <strong>GPU-based instances</strong> for graphics and general-purpose GPU compute workloads</li>
+    </ul>
+  </li>
+  <li>Network performance
+    <ul>
+      <li>AWS publishes a relative measure of n/w performance: low, moderate, high</li>
+      <li><em>Enhanced Networking</em>:
+        <ul>
+          <li>For workloads requiring greater n/w performance, use instance types supporting <em>enhanced networking</em>.</li>
+          <li>It reduces the impact of virtualization on n/w performance enabling a capability called <strong><em>Single Root I/O Virtualization (SR-IOV)</em></strong></li>
+          <li>This results in more <em>packets per second (PPS)</em>, lower latency and less jitter</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Amazon Machine Image (AMI)</strong></p>
+
+<ul>
+  <li>defines the initial software that will be on an instance when it is launched: <em>OS + initial state of patches + application/system software</em></li>
+  <li>All AMIs are based on x86 OS (either Linux or Windows)</li>
+  <li><strong>4 Sources of AMIs</strong>
+    <ul>
+      <li><em>Published by AWS</em>: you should apply patches upon launch</li>
+      <li><em>AWS Marketplace</em></li>
+      <li><em>Generated from Existing instances</em>: published AMI + corporate standard software added</li>
+      <li><em>Uploaded Virtual Servers</em>: Using AWS VM Import/Export to create images from formats: VHD, VMDK, OVA</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Addressing an Instance</strong></p>
+
+<p>There are several ways that an instance may be addressed over the web upon creation:</p>
+
+<ul>
+  <li><strong><em>Public DNS Name</em></strong>
+    <ul>
+      <li>DNS name is generated automatically and cannot be specified by the customer.</li>
+      <li>This DNS name persists only while the instance is running and cannot be transferred to another instance.</li>
+    </ul>
+  </li>
+  <li><strong><em>Public IP</em></strong>
+    <ul>
+      <li>This IP address is assigned from the addresses reserved by AWS and cannot be specified.</li>
+      <li>This IP address is unique on the Internet, persists only while the instance is running, and cannot be transferred to another instance.</li>
+    </ul>
+  </li>
+  <li><strong><em>Elastic IP</em></strong>
+    <ul>
+      <li>An elastic IP address is an address unique on the Internet that you reserve independently and associate with an instance.</li>
+      <li>This IP address persists until the customer releases it and is not tied to the lifetime or state of an individual instance.</li>
+      <li>Because it can be transferred to a replacement instance in the event of an instance failure, it is a public address that can be shared externally without coupling clients to a particular instance.</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>Private IP addresses and Elastic Network Interfaces (ENIs) are additional methods of addressing instances that are available in the context of an Amazon VPC.</p>
+</blockquote>
+
+<h3 id="securing-an-instance">Securing an Instance</h3>
+
+<p><strong>Initial Access</strong></p>
+
+<ul>
+  <li>EC2 uses <em>public-key cryptography</em> to encrypt and decrypt login information.</li>
+  <li><em>Public-key cryptography</em> uses a public key to encrypt a piece of data and an associated private key to decrypt the data. These two keys together are called a <em>key pair</em>.</li>
+  <li>Key pairs can be created through the AWS Management Console, CLI, or API, or customers can upload their own key pairs.</li>
+  <li>AWS stores the public key in <code>~/.ssh/authorized_keys</code> folder</li>
+  <li>Private keys are kept by the customer. The private key is essential to acquiring secure access to an instance for the first time.</li>
+  <li>When launching a Windows instance, Amazon EC2 generates a random password for the local administrator account and encrypts the password using the public key. Initial access to the instance is obtained by decrypting the password with the private key, either in the console or through the API.</li>
+</ul>
+
+<p><strong>Virtual Firewall Protection</strong></p>
+
+<ul>
+  <li>AWS allows you to control traffic in and out of your instances through virtual firewalls called <strong>security groups</strong>.</li>
+  <li>Security groups allow you to control traffic based on port, protocol, and source/destination.</li>
+  <li>Security groups are applied at the instance level, as opposed to a traditional on-premises firewall that protects at the perimeter. To breach a single perimeter to access all instances, one has to breach the security groups repeatedly for each individual instances</li>
+  <li>Security groups have different capabilities :
+    <ul>
+      <li><em>EC2-Classic Security Groups</em> - Control outgoing instance traffic</li>
+      <li><em>VPC Security Groups</em>	- Control outgoing and incoming instance traffic</li>
+    </ul>
+  </li>
+  <li>Every instance must have at least one security group but can have more</li>
+  <li><em>Changing Security Group</em>
+    <ul>
+      <li>If an instance is running in an Amazon VPC, you can change which security groups are associated with an instance while the instance is running.</li>
+      <li>For instances outside of an Amazon VPC (called EC2-Classic), the association of the security groups cannot be changed after launch.</li>
+    </ul>
+  </li>
+  <li>A security group is <em>default deny</em> - it does not allow any traffic that is not explicitly allowed by a security group rule.</li>
+  <li>A <em>rule</em> is defined by 3 attributes:
+    <ul>
+      <li>Port</li>
+      <li>Protocol. e.g., HTTP, RDP, etc.</li>
+      <li>Source/Destination- can be defined in 2 ways:
+        <ul>
+          <li><strong>CIDR block</strong> — An x.x.x.x/x style definition that defines a specific range of IP addresses.</li>
+          <li>Security group — Includes any instance that is associated with the given security group. This helps prevent coupling security group rules with specific IP addresses</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>When an instance is associated with multiple security groups, the rules are aggregated and all traffic allowed by each of the individual groups is allowed. For example, if security group A allows RDP traffic from 72.58.0.0/16 and security group B allows HTTP and HTTPS traffic from 0.0.0.0/0 and your instance is associated with both groups, then both the RDP and HTTP/S traffic will be allowed in to your instance.</li>
+  <li>A security group is a <strong>stateful firewall</strong>; that is, an outgoing message is remembered so that the response is allowed through the security group without an explicit inbound rule being required.</li>
+</ul>
+
+<h3 id="lifecycle-of-instances">Lifecycle of Instances</h3>
+
+<p><strong>Bootstrapping</strong></p>
+
+<ul>
+  <li>Ability to configure instances and install applications programmatically when an instance is launched. The process of providing code to be run on an instance at launch is called <em>bootstrapping</em>.</li>
+  <li>When an instance is launched for the first time, a string-valued parameter <code>UserData</code> is passed to the OS to be executed as part of the launch process. On Linux, this can be a shell script, performing tasks like
+    <ul>
+      <li>Applying patches and updates to the OS</li>
+      <li>Installing application software</li>
+      <li>Copying a longer script or program from storage to be run on the instance</li>
+      <li>Installing Chef or Puppet and assigning the instance a role so the configuration management software can configure the instance</li>
+    </ul>
+  </li>
+  <li><code>UserData</code> is stored with the instance and is not encrypted. DO NOT include any secrets such as passwords or keys in it.</li>
+</ul>
+
+<p><strong>VM Import/Export</strong></p>
+
+<ul>
+  <li>Import VMs from your existing environment as an EC2 instance and export them back to your on-premises environment.</li>
+  <li>You can only export previously imported EC2 instances. Instances launched within AWS from AMIs cannot be exported.</li>
+</ul>
+
+<p><strong>Instance Metadata</strong></p>
+
+<ul>
+  <li>Instance metadata is data about your instance that you can use to configure or manage the running instance. This is unique in that it is a mechanism to obtain AWS properties of the instance from within the OS without making a call to the AWS API.</li>
+  <li>An HTTP call to http://169.254.169.254/latest/meta-data/ will return the top node of the instance metadata tree.</li>
+  <li>Instance metadata includes:
+    <ul>
+      <li>The associated security groups</li>
+      <li>The instance ID</li>
+      <li>The instance type</li>
+      <li>The AMI used to launch the instance</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Instance Tags</strong></p>
+
+<ul>
+  <li>Tags are key/value pairs you can associate with your instance or other service.</li>
+  <li>Tags can be used to identify attributes of an instance like project, environment (dev, test, and so on), billable department, and so forth.</li>
+  <li>Max 10 tags per instance.</li>
+</ul>
+
+<p><strong>Modifying Instance Type</strong></p>
+
+<ul>
+  <li>If the compute needs prove to be higher or lower than expected, the instances can be changed to a different size more appropriate to the workload.</li>
+  <li>Stop instance -&gt; Change instance type -&gt; Restart instance</li>
+</ul>
+
+<p><strong>Termination Protection</strong></p>
+
+<ul>
+  <li>To prevent accidental termination, when <em>Termination Protection</em> is enabled, calls to terminate the instance will fail.</li>
+  <li>It does not prevent termination triggered
+    <ul>
+      <li>by an OS shutdown command,</li>
+      <li>termination from an Auto Scaling group, or</li>
+      <li>termination of a Spot Instance due to Spot price changes</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="instance-pricing-options">Instance Pricing Options</h3>
+
+<ul>
+  <li><strong>On-Demand Instances</strong>
+    <ul>
+      <li>Least cost-effective due to the flexibility it allows customers to save by provisioning a variable level of compute for unpredictable workloads</li>
+      <li>The price is per hour for each instance type</li>
+      <li>No up-front commitment, and the customer has control over when the instance is launched and when it is terminated</li>
+    </ul>
+  </li>
+  <li><strong>Reserved Instances</strong>
+    <ul>
+      <li>75% less cost compared to On-Demand hourly rate</li>
+      <li>When purchasing a reservation, the customer specifies the instance type and Availability Zone</li>
+      <li>Capacity in the data centers is reserved for that customer.</li>
+      <li>2 factors determining the cost:
+        <ul>
+          <li><em>Term commitment</em> - the duration of the reservation</li>
+          <li><em>Payment option</em>
+            <ul>
+              <li><em>All Upfront</em> —Pay for the entire reservation up front. There is no monthly charge for the customer during the term.</li>
+              <li><em>Partial Upfront</em> —Pay a portion of the reservation charge up front and the rest in monthly installments for the duration of the term.</li>
+              <li><em>No Upfront</em> —Pay the entire reservation charge in monthly installments for the duration of the term.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>Modifying Reservation: You can modify your whole reservation, or just a subset, in one or more of the following ways:
+        <ul>
+          <li>Switch Availability Zones within the same region.</li>
+          <li>Change between EC2-VPC and EC2-Classic.</li>
+          <li>Change the instance type within the same instance family (Linux instances only).</li>
+        </ul>
+      </li>
+      <li>One may purchase two Reserved Instances to handle the average traffic, but depend on On-Demand Instances to fulfill compute needs during the peak times.</li>
+    </ul>
+  </li>
+  <li><strong>Spot Instances</strong>
+    <ul>
+      <li>offers the greatest discount</li>
+      <li>For workloads that are not time critical and are tolerant of interruption</li>
+      <li>With Spot Instances, when the customer’s bid price is above the current Spot price, the customer will receive the requested instance(s). These instances will operate like all other Amazon EC2 instances, and the customer will only pay the Spot price for the hours that instance(s) run.</li>
+      <li>The instances will run until:
+        <ul>
+          <li>The customer terminates them.</li>
+          <li>The Spot price goes above the customer’s bid price.</li>
+          <li>There is not enough unused capacity to meet the demand for Spot Instances.</li>
+          <li>If Amazon EC2 needs to terminate a Spot Instance, the instance will receive a termination notice providing a two-minute warning prior to Amazon EC2 terminating the instance.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="tenancy-options">Tenancy options</h3>
+
+<ul>
+  <li><strong>Shared Tenancy</strong>
+    <ul>
+      <li>a single host machine may house instances from different customers</li>
+      <li>Default model</li>
+      <li>AWS does not use overprovisioning and fully isolates instances from other instances on the same host, this is a secure tenancy model.</li>
+    </ul>
+  </li>
+  <li><strong>Dedicated Instance</strong>
+    <ul>
+      <li>runs on hardware that’s dedicated to a single customer.</li>
+    </ul>
+  </li>
+  <li><strong>Dedicated Host</strong>
+    <ul>
+      <li>Dedicated Host is a physical server with EC2 instance capacity fully dedicated to a single customer’s use.</li>
+      <li>The customer has complete control over which specific host runs an instance at launch. This differs from Dedicated Instances in that a Dedicated Instance can launch on any hardware that has been dedicated to the account.</li>
+      <li>can help address licensing requirements and reduce costs by allowing to use existing server-bound software licenses.</li>
+    </ul>
+  </li>
+  <li><strong>Placement Groups</strong>
+    <ul>
+      <li>is a logical grouping of instances within a single Availability Zone.</li>
+      <li>enable applications to participate in a low-latency, 10 Gbps network.</li>
+      <li>recommended for applications that benefit from low network latency, high network throughput, or both. This represents network connectivity between instances.</li>
+      <li>To fully use this network performance for your placement group, choose an instance type that supports enhanced networking and 10 Gbps network performance.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Instance Stores</strong></p>
+
+<ul>
+  <li>An instance store provides temporary block-level storage (<em>ephemeral storage</em>)</li>
+  <li>Data in the instance store is lost when:
+    <ul>
+      <li>the underlying disk drive fails</li>
+      <li>the instance stops</li>
+      <li>the instance terminates</li>
+    </ul>
+  </li>
 </ul>
 
 <h2 id="aws-lambda">AWS Lambda</h2>

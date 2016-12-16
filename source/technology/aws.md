@@ -149,7 +149,7 @@ footer: true
 			* Recommended access control mechanism
 			* Can specify
 				* who can access the bucket
-				* from where (by *Classless Inter-Domain Routing (CIDR)* block or IP address)
+				* from where (by *CIDR* block or IP address)
 				* at what time of the day
 			* Bucket policies allows to assign cross-account access to S3 resources
 			* Similar to IAM but
@@ -388,7 +388,7 @@ There are several ways that an instance may be addressed over the web upon creat
 	* Port
 	* Protocol. e.g., HTTP, RDP, etc.
 	* Source/Destination- can be defined in 2 ways:
-  	* **CIDR block** — An x.x.x.x/x style definition that defines a specific range of IP addresses.
+  	* CIDR block
   	* Security group — Includes any instance that is associated with the given security group. This helps prevent coupling security group rules with specific IP addresses
 * When an instance is associated with multiple security groups, the rules are aggregated and all traffic allowed by each of the individual groups is allowed. For example, if security group A allows RDP traffic from 72.58.0.0/16 and security group B allows HTTP and HTTPS traffic from 0.0.0.0/0 and your instance is associated with both groups, then both the RDP and HTTP/S traffic will be allowed in to your instance.
 * A security group is a **stateful firewall**; that is, an outgoing message is remembered so that the response is allowed through the security group without an explicit inbound rule being required.
@@ -515,7 +515,104 @@ There are several ways that an instance may be addressed over the web upon creat
 
 ## AWS Virtual Private Cloud (VPC)
 
-* provides a logically isolated section of the AWS cloud to launch resources in a virtual n/w. Organizations have complete control over the virtual env including the selection of the IP address range, creation of subnets, configuration of route tables, n/w gateways, etc. Orgs can extend their corporate data center n/w to AWS by using h/w or s/w VPN connections or dedicated circuits by using AWS Direct Connect.
+{% img right /technology/aws-vpc-sample.png %}
+
+* VPC is a custom-defined virtual network within AWS cloud
+* VPC is the networking layer for EC2
+* 2 networking platforms in AWS
+	* EC2-Classic (old) - single, flat n/w shared with other customers
+	* EC2-VPC
+* VPC consists of
+	* Subnets
+	* Route tables
+	* DHCP option sets
+	* Security groups
+	* Network ACLs
+	* Internet Gateways (*optional*)
+	* EIP addresses (*optional*)
+	* Elastic Network Interfaces ENIs (*optional*)
+	* Endpoints (*optional*)
+	* Peering (*optional*)
+	* NAT instances and NAT gateways (*optional*)
+	* Virtual Private Gateways (VPGs), Customer Gateways (CGWs), VPNs
+	* (*optional*)
+* VPC allows to
+	* select your own IP address range
+	* create your own subnets
+	* configure your own route tables, n/w gateways and security settings
+* Within a region, you can create multiple VPCs. Each VPC is logically isolated even if it shared its IP address space
+* VPC can span across Availability Zones
+* To create a VPC, choose CIDR block
+	* which cannot be changed after creation
+	* As large as */16 (65,636 addresses)* or as small as */28 (16 addresses)*.
+	* Should not overlap
+* Every account has a default VPC created in each region with a default subnet created in each Availability Zone.
+	* The assigned CIDR block of the VPC will be *172.31.0.0/16*
+	* Default VPCs contain one public subnet in every Availability Zone with the region, with a netmast of */20*
+* Orgs can extend their corporate data center n/w to AWS by using h/w or s/w VPN connections or dedicated circuits by using AWS Direct Connect.
+
+### Subnets
+
+* A subnet is a segment of VPC's IP address range where you can launch EC2 instances, RDS databases, etc.
+* CIDR blocks defines subnets
+* Smallest subnet you can create is a */28 (16 addresses)*.
+	* AWS reserves the first 4 addresses and the last IP address of every subnet for internal networking purposes. So, `16-4-1 = 11` IP addresses is the smallest subnet.
+* Subnets reside within one Availability Zone. CANNOT span across zones or regions.
+* One Availability Zone can have multiple subnets
+* Internal IP address range of the subnet is always _private_
+* Subnets can be classified as one of the below
+	* __Public__ : route table directs the subnet's traffic to VPC's IGW
+	* __Private__: route table DOES NOT direct the traffic to VPC's IGW
+	* __VPN-only__: route table DOES NOT direct the traffic to VPC's IGW, but to the VPC's VPG
+
+### Route Tables
+
+* contains a set of rules called _rules_ that are applied to subnets to determine where the network traffic is directed
+* allows EC2 instances in different subnets within a VPC to communicate with each other
+* Route tables can be used to specify
+	* which subnets are public (by directing Internet traffic to IGW)
+	* which subnets are private (by not having a route that directs to IGW)
+* Each route table
+	* has a default route called the _local route_, which enables communication within the VPC. This route cannot be modified or removed.
+	* custom routes can be added to exit the VPC via IGW, VPG or the NAT instance
+* Each VPC comes with a main router table that can be modified.
+* Custom route tables can be added, and subsequent new subnets created will be automatically associated with this custom route table
+* Each subnet must be associated with a route table
+* Each route in a table specifies a destination CIDR.
+
+### IGW (Internet Gateways)
+
+{% img right /technology/aws-igw.png %}
+
+* IGW allows communication between instances in VPC and the Internet.
+* IGW is horizontally scaled, redundant, and highly available VPC component
+* To route traffic subnets to Internet, route tables must have a route targeting the IGW
+* To enable an EC2 instance to send/receive traffic from the Internet, assign a public IP address or EIP address
+* IGW maintains the 1-to-1 map of the EC2 instance's private IP and public IP.
+* EC2 instances within a VPC are only aware of their private IPs. When traffic is sent from the instance to the Internet, the IGW translates the reply address to the public IP address of the instance.
+* To create a public subnet with Internet access
+	* Attach an IGW to your VPC
+	* Create a subnet route table  
+		* rule to route all non-local traffic (_0.0.0.0/0_) to the IGW
+		* (optional) rule to route all destinations not explicitly defined in the route table to IGW
+	* Configure your n/w ACLs and security group rules to allow relevant traffic flow to and from your instance
+
+### DHCP
+
+* DHCP - a standard for passing configuration information to hosts on a TCP/IP n/w
+* Following options can be configured within a DHCP message:
+	* __DNS servers__ - IP addresses of up to 4 DNS servers.
+	* __Domain name__ - e.g., _mycompany.com_
+	* __ntp-servers__ - IP addresses of up to 4 NTP (Network Time Protocol) servers
+	* __netbios-name-servers__ - IP addresses of up to 4 NetBIOS name servers
+	* __netbios-node-type__ - set this to 2
+* Upon a VPC creation, AWS automatically associates a DHCP option set to it, and sets 2 options
+	* DNS servers (defaulted to _AmazonProvidedDNS_. This option enables DNS for instances that need to communicate over the VPC's IGW)
+	* Domain name (defaulted to domain name of your region)
+* To assign your own domain name to your instances, create a custom DHCP option set and assign it to your VPC
+* Each VPC must have only one DHCP option set assigned to it.
+
+### EIPs (Elastic IP Addresses)
 
 ## AWS Direct Connect
 
@@ -615,12 +712,11 @@ There are several ways that an instance may be addressed over the web upon creat
 
 # Terminology
 
-* Fault tolerance, High availability
-* Data at Rest - EBS, S3, RDS
-* Data at Transit - (in reference to encryption and security)
 * Network perimeter - a boundary between two or more portions of a network. It can refer to the boundary between your VPC and your network, it could refer to the boundary between what you manage versus what AWS manages.
 * WAF (Web Application Firewall)
-* NAT (Network Address Translation)
+
+
+* NAT (Network Address Translation) instances and NAT Gateways - allows EC2 instances deployed in private subnets to gain Internet access
 
 
 # References

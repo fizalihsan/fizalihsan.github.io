@@ -144,7 +144,14 @@ messageStyle: "none",
       <li><a href="#auto-scaling">Auto Scaling</a></li>
       <li><a href="#elastic-load-balancing-elb">Elastic Load Balancing (ELB)</a></li>
       <li><a href="#aws-elastic-beanstalk">AWS Elastic Beanstalk</a></li>
-      <li><a href="#aws-virtual-private-cloud-vpc">AWS Virtual Private Cloud (VPC)</a></li>
+      <li><a href="#aws-virtual-private-cloud-vpc">AWS Virtual Private Cloud (VPC)</a>        <ul>
+          <li><a href="#subnets">Subnets</a></li>
+          <li><a href="#route-tables">Route Tables</a></li>
+          <li><a href="#igw-internet-gateways">IGW (Internet Gateways)</a></li>
+          <li><a href="#dhcp">DHCP</a></li>
+          <li><a href="#eips-elastic-ip-addresses">EIPs (Elastic IP Addresses)</a></li>
+        </ul>
+      </li>
       <li><a href="#aws-direct-connect">AWS Direct Connect</a></li>
       <li><a href="#amazon-route-53">Amazon Route 53</a></li>
     </ul>
@@ -440,7 +447,7 @@ messageStyle: "none",
               <li>Can specify
                 <ul>
                   <li>who can access the bucket</li>
-                  <li>from where (by <em>Classless Inter-Domain Routing (CIDR)</em> block or IP address)</li>
+                  <li>from where (by <em>CIDR</em> block or IP address)</li>
                   <li>at what time of the day</li>
                 </ul>
               </li>
@@ -869,7 +876,7 @@ messageStyle: "none",
       <li>Protocol. e.g., HTTP, RDP, etc.</li>
       <li>Source/Destination- can be defined in 2 ways:
         <ul>
-          <li><strong>CIDR block</strong> — An x.x.x.x/x style definition that defines a specific range of IP addresses.</li>
+          <li>CIDR block</li>
           <li>Security group — Includes any instance that is associated with the given security group. This helps prevent coupling security group rules with specific IP addresses</li>
         </ul>
       </li>
@@ -1071,9 +1078,153 @@ messageStyle: "none",
 
 <h2 id="aws-virtual-private-cloud-vpc">AWS Virtual Private Cloud (VPC)</h2>
 
+<p><img class="right" src="/technology/aws-vpc-sample.png" /></p>
+
 <ul>
-  <li>provides a logically isolated section of the AWS cloud to launch resources in a virtual n/w. Organizations have complete control over the virtual env including the selection of the IP address range, creation of subnets, configuration of route tables, n/w gateways, etc. Orgs can extend their corporate data center n/w to AWS by using h/w or s/w VPN connections or dedicated circuits by using AWS Direct Connect.</li>
+  <li>VPC is a custom-defined virtual network within AWS cloud</li>
+  <li>VPC is the networking layer for EC2</li>
+  <li>2 networking platforms in AWS
+    <ul>
+      <li>EC2-Classic (old) - single, flat n/w shared with other customers</li>
+      <li>EC2-VPC</li>
+    </ul>
+  </li>
+  <li>VPC consists of
+    <ul>
+      <li>Subnets</li>
+      <li>Route tables</li>
+      <li>DHCP option sets</li>
+      <li>Security groups</li>
+      <li>Network ACLs</li>
+      <li>Internet Gateways (<em>optional</em>)</li>
+      <li>EIP addresses (<em>optional</em>)</li>
+      <li>Elastic Network Interfaces ENIs (<em>optional</em>)</li>
+      <li>Endpoints (<em>optional</em>)</li>
+      <li>Peering (<em>optional</em>)</li>
+      <li>NAT instances and NAT gateways (<em>optional</em>)</li>
+      <li>Virtual Private Gateways (VPGs), Customer Gateways (CGWs), VPNs</li>
+      <li>(<em>optional</em>)</li>
+    </ul>
+  </li>
+  <li>VPC allows to
+    <ul>
+      <li>select your own IP address range</li>
+      <li>create your own subnets</li>
+      <li>configure your own route tables, n/w gateways and security settings</li>
+    </ul>
+  </li>
+  <li>Within a region, you can create multiple VPCs. Each VPC is logically isolated even if it shared its IP address space</li>
+  <li>VPC can span across Availability Zones</li>
+  <li>To create a VPC, choose CIDR block
+    <ul>
+      <li>which cannot be changed after creation</li>
+      <li>As large as <em>/16 (65,636 addresses)</em> or as small as <em>/28 (16 addresses)</em>.</li>
+      <li>Should not overlap</li>
+    </ul>
+  </li>
+  <li>Every account has a default VPC created in each region with a default subnet created in each Availability Zone.
+    <ul>
+      <li>The assigned CIDR block of the VPC will be <em>172.31.0.0/16</em></li>
+      <li>Default VPCs contain one public subnet in every Availability Zone with the region, with a netmast of <em>/20</em></li>
+    </ul>
+  </li>
+  <li>Orgs can extend their corporate data center n/w to AWS by using h/w or s/w VPN connections or dedicated circuits by using AWS Direct Connect.</li>
 </ul>
+
+<h3 id="subnets">Subnets</h3>
+
+<ul>
+  <li>A subnet is a segment of VPC’s IP address range where you can launch EC2 instances, RDS databases, etc.</li>
+  <li>CIDR blocks defines subnets</li>
+  <li>Smallest subnet you can create is a <em>/28 (16 addresses)</em>.
+    <ul>
+      <li>AWS reserves the first 4 addresses and the last IP address of every subnet for internal networking purposes. So, <code>16-4-1 = 11</code> IP addresses is the smallest subnet.</li>
+    </ul>
+  </li>
+  <li>Subnets reside within one Availability Zone. CANNOT span across zones or regions.</li>
+  <li>One Availability Zone can have multiple subnets</li>
+  <li>Internal IP address range of the subnet is always <em>private</em></li>
+  <li>Subnets can be classified as one of the below
+    <ul>
+      <li><strong>Public</strong> : route table directs the subnet’s traffic to VPC’s IGW</li>
+      <li><strong>Private</strong>: route table DOES NOT direct the traffic to VPC’s IGW</li>
+      <li><strong>VPN-only</strong>: route table DOES NOT direct the traffic to VPC’s IGW, but to the VPC’s VPG</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="route-tables">Route Tables</h3>
+
+<ul>
+  <li>contains a set of rules called <em>rules</em> that are applied to subnets to determine where the network traffic is directed</li>
+  <li>allows EC2 instances in different subnets within a VPC to communicate with each other</li>
+  <li>Route tables can be used to specify
+    <ul>
+      <li>which subnets are public (by directing Internet traffic to IGW)</li>
+      <li>which subnets are private (by not having a route that directs to IGW)</li>
+    </ul>
+  </li>
+  <li>Each route table
+    <ul>
+      <li>has a default route called the <em>local route</em>, which enables communication within the VPC. This route cannot be modified or removed.</li>
+      <li>custom routes can be added to exit the VPC via IGW, VPG or the NAT instance</li>
+    </ul>
+  </li>
+  <li>Each VPC comes with a main router table that can be modified.</li>
+  <li>Custom route tables can be added, and subsequent new subnets created will be automatically associated with this custom route table</li>
+  <li>Each subnet must be associated with a route table</li>
+  <li>Each route in a table specifies a destination CIDR.</li>
+</ul>
+
+<h3 id="igw-internet-gateways">IGW (Internet Gateways)</h3>
+
+<p><img class="right" src="/technology/aws-igw.png" /></p>
+
+<ul>
+  <li>IGW allows communication between instances in VPC and the Internet.</li>
+  <li>IGW is horizontally scaled, redundant, and highly available VPC component</li>
+  <li>To route traffic subnets to Internet, route tables must have a route targeting the IGW</li>
+  <li>To enable an EC2 instance to send/receive traffic from the Internet, assign a public IP address or EIP address</li>
+  <li>IGW maintains the 1-to-1 map of the EC2 instance’s private IP and public IP.</li>
+  <li>EC2 instances within a VPC are only aware of their private IPs. When traffic is sent from the instance to the Internet, the IGW translates the reply address to the public IP address of the instance.</li>
+  <li>To create a public subnet with Internet access
+    <ul>
+      <li>Attach an IGW to your VPC</li>
+      <li>Create a subnet route table<br />
+        <ul>
+          <li>rule to route all non-local traffic (<em>0.0.0.0/0</em>) to the IGW</li>
+          <li>(optional) rule to route all destinations not explicitly defined in the route table to IGW</li>
+        </ul>
+      </li>
+      <li>Configure your n/w ACLs and security group rules to allow relevant traffic flow to and from your instance</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="dhcp">DHCP</h3>
+
+<ul>
+  <li>DHCP - a standard for passing configuration information to hosts on a TCP/IP n/w</li>
+  <li>Following options can be configured within a DHCP message:
+    <ul>
+      <li><strong>DNS servers</strong> - IP addresses of up to 4 DNS servers.</li>
+      <li><strong>Domain name</strong> - e.g., <em>mycompany.com</em></li>
+      <li><strong>ntp-servers</strong> - IP addresses of up to 4 NTP (Network Time Protocol) servers</li>
+      <li><strong>netbios-name-servers</strong> - IP addresses of up to 4 NetBIOS name servers</li>
+      <li><strong>netbios-node-type</strong> - set this to 2</li>
+    </ul>
+  </li>
+  <li>Upon a VPC creation, AWS automatically associates a DHCP option set to it, and sets 2 options
+    <ul>
+      <li>DNS servers (defaulted to <em>AmazonProvidedDNS</em>. This option enables DNS for instances that need to communicate over the VPC’s IGW)</li>
+      <li>Domain name (defaulted to domain name of your region)</li>
+    </ul>
+  </li>
+  <li>To assign your own domain name to your instances, create a custom DHCP option set and assign it to your VPC</li>
+  <li>Each VPC must have only one DHCP option set assigned to it.</li>
+</ul>
+
+<h3 id="eips-elastic-ip-addresses">EIPs (Elastic IP Addresses)</h3>
 
 <h2 id="aws-direct-connect">AWS Direct Connect</h2>
 
@@ -1212,12 +1363,11 @@ messageStyle: "none",
 <h1 id="terminology">Terminology</h1>
 
 <ul>
-  <li>Fault tolerance, High availability</li>
-  <li>Data at Rest - EBS, S3, RDS</li>
-  <li>Data at Transit - (in reference to encryption and security)</li>
   <li>Network perimeter - a boundary between two or more portions of a network. It can refer to the boundary between your VPC and your network, it could refer to the boundary between what you manage versus what AWS manages.</li>
-  <li>WAF (Web Application Firewall)</li>
-  <li>NAT (Network Address Translation)</li>
+  <li>
+    <p>WAF (Web Application Firewall)</p>
+  </li>
+  <li>NAT (Network Address Translation) instances and NAT Gateways - allows EC2 instances deployed in private subnets to gain Internet access</li>
 </ul>
 
 <h1 id="references">References</h1>
@@ -1270,12 +1420,18 @@ messageStyle: "none",
 
 		<li>
 			<h3>Architecture</h3>
-			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/cloud-computing.html">Cloud Computing</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
 		</li>
 
 		<li>
 			<h3>BigData</h3>
 			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>
 		</li>
 
 		<li>
@@ -1315,7 +1471,7 @@ messageStyle: "none",
 
 		<li>
 			<h3>General Concepts</h3>
-			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
 		</li>
 
 		<h2>Non-Techninal</h2>

@@ -19,7 +19,7 @@ footer: true
     * Covariance, invariance, contravariance
     * Latest concurrent collections uses techniques like: *copy-on-write, compare-and-swap, Lock interface*
     * Iterators: *Fail-fast & Fail-safe (snapshot & weakly consistent)*
-    * Map: 
+    * Map:
       * general maps use equals(or hashCode)
       * IdentityHashMap use identity
       * SortedMap (TreeMap & ConcurrentSkipListMap) use Comparable or Comparator
@@ -59,15 +59,15 @@ footer: true
   * Core - Autowiring, profiles
   * JDBC - JdbcTemplate, RowMapper, RowCallback
   * MVC - lifecycle
-* Transaction - 
-  * acid, base, 
+* Transaction -
+  * acid, base,
   * txn models(local, programmatic, declarative)
   * txn types (flat, with save point, chained, nested, distributed, long-lived)
   * 4 isolation levels (read uncommitted, read committed, repeatable read, serializable, snapshot)
   * read phenomena - dirty read, non-repeatable read, phantom read
   * 2PC protocol, heuristic exceptions
-  * Concurrency control - 2-Phase Locking, MVCC, Optimistic Concurrency Control, 
-* Distributed computing - CAP, strong vs weak consistency 
+  * Concurrency control - 2-Phase Locking, MVCC, Optimistic Concurrency Control,
+* Distributed computing - CAP, strong vs weak consistency
 * Data Structures & Algorithms
   * Arrays & Strings
   * Tree - Traversals, BST, 2-3 tree, Red-Black Tree
@@ -89,7 +89,7 @@ footer: true
 * System Design and Memory Limits - (Ref GIB02)
 * General programs - (Ref GIB01)
 	* Base M to N conversion
-	* Replace blanks in a string - Ref GIB01 Pg45, 
+	* Replace blanks in a string - Ref GIB01 Pg45,
   * Write a generic program to take an nxn array and print
 
 # General Tech Questions
@@ -134,7 +134,7 @@ footer: true
 *  If you ran your own company, what kinds of people would you hire and why?
   * 2 qualities I look - strength and trustworthy
 *  Test for personal fashion - Can you tell me a goal that you have outside of work and family?  What do you do for fun?
-*  Test for initiative hunger - Tell me about something you've started? 
+*  Test for initiative hunger - Tell me about something you've started?
   * Book club within and outside of work
 *  Test for honesty - Tell me about time you've bent the rules?
 *  Test for motivation and priority - who in your life would you least want to disappoint?
@@ -174,18 +174,19 @@ footer: true
 	* [Sarah Sellers' podcast on resume writing](http://www.corejavainterviewquestions.com/podcast5)
 * *Technical Interview Questions*
 	* [algorithmist.com](http://www.algorithmist.com)
-    * [codechef.com](http://www.codechef.com)
-    * [Gainlo.co](http://blog.gainlo.co/index.php/index/) - Mock interviews with employees from Google, Amazon, Twitter, etc.
-    * [geeksforgeeks.org](http://www.geeksforgeeks.org)
-    * [hackerrank.com](http://www.hackerrank.com)
-    * [hiredintech.com](http://www.hiredintech.com)
+  * [codechef.com](http://www.codechef.com)
+  * [Gainlo.co](http://blog.gainlo.co/index.php/index/) - Mock interviews with employees from Google, Amazon, Twitter, etc.
+  * [geeksforgeeks.org](http://www.geeksforgeeks.org)
+  * [hackerrank.com](http://www.hackerrank.com)
+  * [hiredintech.com](http://www.hiredintech.com)
 	* [intearview.com](http://intearview.com/)
-    * [interviewbit.com](https://www.interviewbit.com)
+  * [interviewbit.com](https://www.interviewbit.com)
+  * [interviewcake.com](http://www.interviewcake.com)
 	* [katemats.com](http://katemats.com/interview-questions/)
-    * [leetcode.com](http://www.leetcode.com)
-    * [simplicable.com](http://www.simplicable.com)
-    * [spoj.com](http://www.spoj.com)
-    * [topcoder.com](http://www.topcoder.com)
+  * [leetcode.com](http://www.leetcode.com)
+  * [simplicable.com](http://www.simplicable.com)
+  * [spoj.com](http://www.spoj.com)
+  * [topcoder.com](http://www.topcoder.com)
 * *Background check*
 	* [Background check](https://pipl.com/)
 * *Behavioral Questions*
@@ -199,10 +200,10 @@ footer: true
   * https://underdog.io - Start up recruiters
   * Bamboo Talent
   * Clutch Talent
-  * NACE Partners 
+  * NACE Partners
   * http://www.msearchllc.com
   * [ingenium.agency](http://www.ingenium.agency)
-* FinTech Recruiters 
+* FinTech Recruiters
   * [ikasinternational.com](http://www.ikasinternational.com)
   * [bahpartners.com](http://www.bahpartners.com/)
 

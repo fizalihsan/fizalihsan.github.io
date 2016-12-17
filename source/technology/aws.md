@@ -111,7 +111,7 @@ footer: true
 	* answers the question *can I access my data right now?*
 	* S3 provides 99.99% availability
 	* S3 is an *eventually consistent* system
-		* S3 offers *read-after-write* consistency for `PUT`s to new objects
+		* S3 offers *read-after-write* consistency for `PUT`s to new objects. *Read-after-write* guarantees immediate visibility of new data to all clients.
 		* `PUT`s to existing objects and `DELETE`s are offered at *eventual consistency*
 		* Updates to a single key are atomic - for eventual-consistency reads, you will get the new data or the old data, but never an inconsistent mix of data.
 
@@ -272,6 +272,7 @@ footer: true
 * Snapshots are constrained to the region in which they are created, meaning you can use them to create new volumes only in the same region. If you need to restore a snapshot in a different region, you can copy a snapshot to another region.
 
 **Creating a Volume from a Snapshot**
+
 * To use a snapshot, you create a new EBS volume from the snapshot. When you do this, the volume is created immediately but the data is loaded lazily. This means that the volume can be accessed upon creation, and if the data being requested has not yet been restored, it will be restored upon first request. Because of this, it is a best practice to initialize a volume created from a snapshot by accessing all the blocks in the volume.
 * Snapshots can also be used to increase the size of an EBS volume. To increase the size of an EBS volume
 	* take a snapshot of the volume
@@ -613,6 +614,166 @@ There are several ways that an instance may be addressed over the web upon creat
 * Each VPC must have only one DHCP option set assigned to it.
 
 ### EIPs (Elastic IP Addresses)
+
+* An Elastic IP Addresses (EIP) is a static, public IP address in the pool for the region that you can allocate to your account (pull from the pool) and release (return to the pool).
+* EIPs allow you to maintain a set of IP addresses that remain fixed while the underlying infrastructure may change over time.
+* You must first allocate an EIP for use within a VPC and then assign it to an instance.
+* EIPs are specific to a region (that is, an EIP in one region cannot be assigned to an instance within an Amazon VPC in a different region).
+* There is a one-to-one relationship between network interfaces and EIPs.
+* You can move EIPs from one instance to another, either in the same Amazon VPC or a different Amazon VPC within the same region.
+* EIPs remain associated with your AWS account until you explicitly release them.
+* There are charges for EIPs allocated to your account, even when they are not associated with a resource.
+
+### ENIs (Elastic Network Interfaces)
+
+* An ENI is a virtual network interface that you can attach to an instance in an Amazon VPC.
+* ENIs are only available within an Amazon VPC, and they are associated with a subnet upon creation.
+* They can have 1 public IP address, 1 primary private IP and multiple non-primary private IPs.
+* Assigning a second network interface to an instance via an ENI allows it to be _dual-homed_ (have network presence in different subnets).
+* An ENI created independently of a particular instance persists regardless of the lifetime of any instance to which it is attached; if an underlying instance fails, the IP address may be preserved by attaching the ENI to a replacement instance.
+
+### Endpoints
+
+* An Amazon VPC endpoint enables you to create a private connection between your Amazon VPC and another AWS service without requiring access over the Internet or through a NAT instance, VPN connection, or AWS Direct Connect.
+* Multiple endpoints can be created for a single service, and use different route tables to enforce different access policies from different subnets to the same service.
+* To create an Amazon VPC endpoint:
+	* Specify the __VPC__.
+	* Specify the __service__. A service is identified by a prefix list of the form `com.amazonaws.<region>.<service>`.
+	* Specify the __policy__. You can allow full access or create a custom policy. This policy can be changed at any time.
+	* Specify the __route tables__. A route will be added to each specified route table, which will state the service as the destination and the endpoint as the target.
+
+Below route table directs all Internet traffic (0.0.0.0/0) to an IGW. Any traffic destined to another service will also be sent to the IGW in order to reach that service.
+
+| Destination | Target       |
+| :---------- | :----------- |
+| 10.0.0.0/16 | Local        |
+| 0.0.0.0/0   | igw-1a2b3c4d |
+
+Below route table adds the route to direct S3 traffic to the VPC Endpoint
+
+| Destination     | Target            |
+| :----------     | :-----------      |
+| 10.0.0.0/16     | Local             |
+| 0.0.0.0/0       | igw-1a2b3c4d      |
+| **p1-1a2b3c4d** | **vpce-1a2b3c4d** |
+
+### Peering
+
+* An Amazon VPC peering connection is a networking connection between two Amazon VPCs that enables instances in either VPC to communicate with each other as if they are within the same network.
+* Peering connection can be created
+	* between your own VPCs or
+	* with an Amazon VPC in another AWS account within a single region.
+* A peering connection is neither a gateway nor an Amazon VPN connection and does not introduce a single point of failure for communication.
+* Peering connections are created through a _request/accept_ protocol. The owner of the requesting VPC sends a request to peer to the owner of the peer Amazon VPC.
+	* If the peer Amazon VPC is within the same account, it is identified by its _VPC ID_.
+	* If the peer VPC is within a different account, it is identified by _Account ID_ and _VPC ID_.
+* The owner of the peer Amazon VPC has one week to accept or reject the request before it expires.
+* A VPC may have multiple peering connections, and peering is a one-to-one relationship between VPC.
+* Peering connections DO NOT support _transitive routing_. In other words, if there are peering connections between VPC A & B, and VPC B & C, it does NOT mean VPC A & C can peer directly with each other.
+* A peering connection CANNOT be created between VPCs that have matching or overlapping CIDR blocks.
+* A peering connection CANNOT be created between Amazon VPCs in different regions.
+* There CANNOT have more than one peering connection between the same two Amazon VPCs at the same time.
+
+### Security Groups
+
+* A security group is a virtual stateful firewall that controls inbound and outbound network traffic to AWS resources and EC2 instances.
+* All EC2 instances MUST be launched into a security group.
+* __Default Security Group__
+	* If an SG is not specified at launch, then the instance will be launched into the _default SG_ for the VPC.
+	* The default SG allows communication between all resources within the security group,
+		* allows all outbound traffic, and
+		* denies all other traffic.
+	* Default SG CANNOT be deleted.
+	* Rules in default SG can be changed.
+* Up to 500 SGs can be created per VPC.
+* Up to 50 inbound and 50 outbound rules can be added per SG.
+* Up to 5 SGs can be associated per Network Interface.
+* To apply more than 100 rules to an instance, associate multiple SGs.
+* You can specify _allow rules_, but NOT _deny rules_. This is an important difference between SGs and ACLs.
+* can specify separate rules for inbound and outbound traffic.
+* By default, no inbound traffic is allowed until added.
+* By default, new SGs have an outbound rule that allows all outbound traffic. You can remove the rule and add your custom rules.
+* SGs are stateful. This means that responses to allowed inbound traffic are allowed to flow outbound regardless of outbound rules and vice versa. This is an important difference between security groups and network ACLs.
+* Instances associated with the same security group CANNOT talk to each other unless you add rules allowing it (with the exception being the default security group).
+* SGs associated with an instance can be changed after launch, and changes will take effect immediately.
+
+__Sample Security Group__
+
+__Inbound__
+
+| Inbound | Source     | Protocol | Port Range | Comments |
+| :-------| :----------| :------- | :----------| :--------|
+|         | sg-xxxxxxxx| All      | All | Allow inbound traffic from instances within the same SG |
+|         | 0.0.0.0/0  | TCP      | 8   | Allow inbound traffic from the Internet port 80 |
+
+| Outbound | Destination | Protocol | Port Range | Comments |
+| :------- | :-----------| :--------| :----------| :--------|
+|          | 0.0.0.0/0   | All      | All | Allow all outbound traffic |
+
+
+### Network ACLs (Access Control Lists)
+
+* ACL is a stateless firewall on a subnet level.
+* This is another layer of security in addition to SGs.
+* A network ACL is a numbered list of rules that AWS evaluates in order, starting with the lowest numbered rule, to determine whether traffic is allowed in or out of any subnet associated with the network ACL.
+* VPCs are created with a modifiable default network ACL associated with every subnet that allows all inbound and outbound traffic.
+* When you create a custom network ACL, its initial configuration will deny all inbound and outbound traffic
+* You may set up network ACLs with rules similar to your security groups in order to add a layer of security to your Amazon VPC, or you may choose to use the default network ACL that does not filter traffic traversing the subnet boundary.
+* Overall, every subnet must be associated with a network ACL.
+
+| Security Group | Network ACL     |
+| :------------- | :------------- |
+| Operates at the instance level (1st layer of defense) | Operates at the subnet level (2nd layer of defense) |
+| Supports _allow_ rules only | Supports both _allow_ and _deny_ rules |
+| Stateful firewall: Return traffic automatically allowed | Stateless firewall: Return traffic must be explicitly allowed by rules |
+| AWS evaluates all rules before deciding whether to allow traffic | AWS processes rules in number order when deciding whether to allow traffic |
+| Applied selectively to individual instances | Automatically applied to all instances in the associated subnets; this is a backup layer of defense, so you don't have to rely on someone specifying the security group |
+
+### NAT Instances (Network Address Translation)
+
+* NAT instances and NAT gateways allow instances deployed in private subnets to gain Internet access.
+* By default, any instance that you launch into a private subnet in an Amazon VPC is not able to communicate with the Internet through the IGW.
+* NAT instance is an Amazon Linux Amazon Machine Image (AMI) designed to accept traffic from instances within a private subnet, translate the source IP address to the public IP address of the NAT instance, and forward the traffic to the IGW.
+* In addition, the NAT instance maintains the state of the forwarded traffic in order to return response traffic from the Internet to the proper instance in the private subnet.
+* These instances have the string `amzn-ami-vpc-nat` in their names, which is searchable in the Amazon EC2 console.
+* To allow instances within a private subnet to access Internet resources through the IGW via a NAT instance, you must do the following:
+	* Create a security group for the NAT with outbound rules that specify the needed Internet resources by port, protocol, and IP address.
+	* Launch an Amazon Linux NAT AMI as an instance in a public subnet and associate it with the NAT security group.
+	* Disable the Source/Destination Check attribute of the NAT.
+	* Configure the route table associated with a private subnet to direct Internet-bound traffic to the NAT instance (for example, i-1a2b3c4d).
+	* Allocate an EIP and associate it with the NAT instance.
+	* This configuration allows instances in private subnets to send outbound Internet communication, but it prevents the instances from receiving inbound traffic initiated by someone on the Internet.
+
+### NAT Gateways
+
+* A NAT gateway is an Amazon managed resource that is designed to operate just like a NAT instance, but it is simpler to manage, requires less administrative effort and highly available within an Availability Zone.
+* For common use cases, use a NAT gateway instead of a NAT instance.
+* To allow instances within a private subnet to access Internet resources through the IGW via a NAT gateway, you must do the following:
+	* Configure the route table associated with the private subnet to direct Internet-bound traffic to the NAT gateway (for example, nat-1a2b3c4d).
+	* Allocate an EIP and associate it with the NAT gateway.
+* Like a NAT instance, this managed service allows outbound Internet communication and prevents the instances from receiving inbound traffic initiated by someone on the Internet.
+* To create an Availability Zone-independent architecture, create a NAT gateway in each Availability Zone and configure your routing to ensure that resources use the NAT gateway in the same Availability Zone.
+
+### VPGs, CGWs and VPNs
+
+{% img right /technology/aws-vpg-vpn.PNG %}
+
+* Amazon VPC offers two ways to connect a corporate network to a VPC: VPG and CGW.
+* __VPG (Virtual Private Gateway)__
+	* is the virtual private network (VPN) concentrator on the AWS side of the VPN connection between the two networks.
+	* The VPG is the AWS end of the VPN tunnel.
+	* VPGs support both dynamic routing with _Border Gateway Protocol (BGP)_ and static routing.
+* __Customer gateway (CGW)__
+	* The CGW is a hardware or software application on the customer’s side of the VPN tunnel.
+	* VPC will provide the information needed by the network administrator to configure the CGW and establish the VPN connection with the VPG.
+	* VPC also supports multiple CGWs, each having a VPN connection to a single VPG (many-to-one design). In order to support this topology, the CGW IP addresses must be unique within the region.
+* __Virtual Private Network (VPN)__
+	* After these VPG and CGW are created, the last step is to create a VPN tunnel.
+	* VPN tunnel MUST be initiated from the CGW to the VPG.
+	* You must specify the type of routing that you plan to use when you create a VPN connection.
+		* If the CGW supports _Border Gateway Protocol (BGP)_, then configure the VPN connection for dynamic routing.
+		* Otherwise, configure the connections for static routing. If you will be using static routing, you must enter the routes for your network that should be communicated to the VPG. Routes will be propagated to the VPC to allow your resources to route network traffic back to the corporate network through the VGW and across the VPN tunnel.
+	* The VPN connection consists of two _Internet Protocol Security (IPSec)_ tunnels for higher availability to the Amazon VPC.
 
 ## AWS Direct Connect
 

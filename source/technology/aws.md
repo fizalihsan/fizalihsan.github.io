@@ -510,6 +510,106 @@ There are several ways that an instance may be addressed over the web upon creat
 
 * automatically distributes incoming application traffic across multiple EC2 instances. (for fault-tolerance)
 
+* ELB allows to distribute traffic across a group of EC2 instances in one or more Availability Zones, to achieve high availability in your applications.
+* ELB supports routing and load balancing of HTTP, HTTPS, TCP, and SSL traffic to EC2 instances.
+* ELB provides a stable, single _Canonical Name record (CNAME)_ entry point for DNS configuration and supports both Internet-facing and internal application-facing load balancers.
+* ELB supports health checks for EC2 instances to ensure traffic is not routed to unhealthy or failing instances. It can scale automatically based on collected metrics.
+* Long-running applications will eventually need to be maintained and updated with a newer version of the application. When using EC2 instances running behind an ELB load balancer, you may deregister these long-running EC2 instances associated with a load balancer manually and then register newly launched EC2 instances that you have started with the new updates installed.
+* __Advantages of ELB__
+	* Because ELB is a managed service, it scales in and out automatically to meet the demands of increased application traffic and is highly available within a region itself as a service.
+	* ELB helps you achieve high availability for your applications by distributing traffic across healthy instances in multiple Availability Zones.
+	* ELB seamlessly integrates with the Auto Scaling service to automatically scale the EC2 instances behind the load balancer.
+	* ELB is secure, working with VPC to route traffic internally between application tiers, allowing you to expose only Internet-facing public IP addresses.
+	* ELB also supports integrated certificate management and SSL termination.
+
+### Types of Load Balancers
+
+#### Internet-Facing Load Balancers
+
+* Takes requests from clients over the Internet and distributes them to EC2 instances that are registered with the load balancer.
+* When you configure a load balancer, it receives a public DNS name that clients can use to send requests to your application. The DNS servers resolve the DNS name to your load balancer’s public IP address, which can be visible to client applications.
+* Because ELB scales in and out to meet traffic demand, it is not recommended to bind an application to an IP address that may no longer be part of a load balancer’s pool of resources.
+* Best practice: always reference a load balancer by its DNS name, instead of by the IP address, in order to provide a single, stable entry point.
+* ELB in VPC supports IPv4 addresses only.
+* ELB in EC2-Classic supports both IPv4 and IPv6 addresses.
+
+#### Internal Load Balancers
+
+* In a multi-tier application, it is often useful to load balance between the tiers of the application. For example, an Internet-facing load balancer might receive and balance external traffic to the presentation or web tier whose Amazon EC2 instances then send its requests to a load balancer sitting in front of the application tier.
+* Internal load balancers can be used to route traffic to EC2 instances in VPCs with private subnets.
+
+#### HTTPS Load Balancers
+
+* Load balancer that uses the SSL/TLS protocol for encrypted connections (also known as ___SSL offload___).
+* This feature enables traffic encryption between your load balancer and the clients that initiate HTTPS sessions, and for connections between your load balancer and your back-end instances.
+* Elastic Load Balancing provides security policies that have predefined SSL negotiation configurations to use to negotiate connections between clients and the load balancer. In order to use SSL, you must install an SSL certificate on the load balancer that it uses to terminate the connection and then decrypt requests from clients before sending requests to the back-end EC2 instances.
+* You can optionally choose to enable authentication on your back-end instances.
+* ELB does not support _Server Name Indication (SNI)_ on your load balancer. This means that if you want to host multiple websites on a fleet of EC2 instances behind ELB with a single SSL certificate, you will need to add a _Subject Alternative Name (SAN)_ for each website to the certificate to avoid site users seeing a warning message when the site is accessed.
+
+#### Listeners
+
+* A listener is a process that checks for connection requests—for example, a CNAME configured to the A record name of the load balancer.
+* Every load balancer must have one or more listeners configured.
+* Every listener is configured with
+	* a protocol and a port (client to load balancer) for a front-end connection
+	* a protocol and a port for the back-end (load balancer to Amazon EC2 instance) connection.
+* ELB supports protocols operating at two different Open System Interconnection (OSI) layers.
+	* In the OSI model, Layer 4 is the transport layer that describes the TCP connection between the client and your back-end instance through the load balancer. Layer 4 is the lowest level that is configurable for your load
+balancer.
+	* Layer 7 is the application layer that describes the use of HTTP and HTTPS connections from clients to the load balancer and from the load balancer to your back-end instance.
+* The SSL protocol is primarily used to encrypt confidential data over insecure networks such as the Internet. The SSL protocol establishes a secure connection between a client and the back-end server and ensures that all the data passed between your client and your server is private.
+
+### ELB Configurations
+
+#### Idle Connection Timeout
+
+* For each request that a client makes through a load balancer, the load balancer maintains two connections.
+	* Connection 1: with the client
+	* Connection 2: to the back-end instance
+* For each connection, the load balancer manages an idle timeout that is triggered when no data is sent over the connection for a specified time period. After the idle timeout period has elapsed, if no data has been sent or received, the load balancer closes the connection.
+* Default idle timeout for both connections = 60 seconds. This can be modified.
+* If an HTTP request doesn’t complete within the idle timeout period, the load balancer closes the connection, even if data is still being transferred.
+* ___Keep-alive___
+	* If you use HTTP and HTTPS listeners, we recommend that you enable the _keep-alive_ option for your EC2 instances. You can enable keep-alive in your web server settings or in the kernel settings for your EC2 instances.
+	* Keep-alive, when enabled, allows the load balancer to reuse connections to your back-end instance, which reduces CPU utilization.
+	* To ensure that the load balancer is responsible for closing the connections to your back-end instance, make sure that the value you set for the keep-alive time is greater than the idle timeout setting on your load balancer.
+
+#### Cross-Zone Load Balancing
+
+* To ensure that request traffic is routed evenly across all back-end instances for your load balancer, regardless of the Availability Zone in which they are located, you should enable _cross-zone load balancing_ on your load balancer.
+* Cross-zone load balancing reduces the need to maintain equivalent numbers of back-end instances in each Availability Zone and improves your application’s ability to handle the loss of one or more back-end instances.
+* However, it is still recommended that you maintain approximately equivalent numbers of instances in each Availability Zone for higher fault tolerance.
+* For environments where clients cache DNS lookups, incoming requests might favor one of the Availability Zones. Using cross-zone load balancing, this imbalance in the request load is spread across all available back-end instances in the region, reducing the impact of misconfigured clients.
+
+#### Connection Draining
+
+* To ensure that the load balancer stops sending requests to instances that are deregistering or unhealthy, while keeping the existing connections open. This enables the load balancer to complete in-flight requests made to these instances.
+* When you enable connection draining, you can specify a maximum time for the load balancer to keep connections alive before reporting the instance as deregistered.
+* The maximum timeout value can be set between 1 and 3,600 seconds (the default is 300 seconds).
+* When the maximum time limit is reached, the load balancer forcibly closes connections to the deregistering instance.
+
+#### Proxy Protocol
+
+* When you use TCP or SSL for both front-end and back-end connections, your load balancer forwards requests to the back-end instances without modifying the request headers.
+* If you enable _Proxy Protocol_, a human-readable header is added to the request header with connection information such as the source IP address, destination IP address, and port numbers. The header is then sent to the back-end instance as part of the request.
+* Before using Proxy Protocol, verify that your load balancer is not behind a proxy server with Proxy Protocol enabled. If Proxy Protocol is enabled on both the proxy server and the load balancer, the load balancer adds another header to the request, which already has a header from the proxy server. Depending on how your back-end instance is configured, this duplication might result in errors.
+
+#### Sticky Sessions
+
+* By default, a load balancer routes each request independently to the registered instance with the smallest load. However, you can use the sticky session feature (also known as session affinity), which enables the load balancer to bind a user’s session to a specific instance. This ensures that all requests from the user during the session are sent to the same instance.
+* The key to managing sticky sessions is to determine how long your load balancer should consistently route the user’s request to the same instance. If your application has its own session cookie, you can configure ELB so that the session cookie follows the duration specified by the application’s session cookie.
+* If your application does not have its own session cookie, you can configure ELB to create a session cookie by specifying your own stickiness duration.
+* ELB creates a cookie named _AWSELB_ that is used to map the session to the instance.
+
+#### Health Checks
+
+* ELB supports health checks to test the status of the EC2 instances behind an ELB load balancer.
+* If healthy, status = _InService_, else _OutOfService_.
+* The load balancer performs health checks on all registered instances to determine whether the instance is in a healthy state or an unhealthy state.
+* A health check is a ping, a connection attempt, or a page that is checked periodically.
+* You can set the time interval between health checks and also the amount of time to wait to respond in case the health check page includes a computational aspect.
+* Finally, you can set a threshold for the number of consecutive health check failures before an instance is marked as unhealthy.
+
 ## AWS Elastic Beanstalk
 
 * Developers can simply upload their application code, and the service automatically handles all the details, such as resource provisioning, load balancing, Auto scaling, and monitoring.
@@ -806,6 +906,22 @@ __Inbound__
 ## Amazon CloudWatch
 
 * monitoring service for AWS cloud resources and the applications running on AWS
+
+Amazon CloudWatch is a service that you can use to monitor your AWS resources and your applications in real time. With Amazon CloudWatch, you can collect and track metrics, create alarms that send notifications, and make changes to the resources being monitored based on rules you define.
+For example, you might choose to monitor CPU utilization to decide when to add or remove Amazon EC2 instances in an application tier. Or, if a particular application-specific metric that is not visible to AWS is the best indicator for assessing your scaling needs, you can perform a PUT request to push that metric into Amazon CloudWatch. You can then use this custom metric to manage capacity.
+You can specify parameters for a metric over a time period and configure alarms and automated actions when a threshold is reached. Amazon CloudWatch supports multiple types of actions such as sending a notification to an Amazon Simple Notification Service (Amazon SNS) topic or executing an Auto Scaling policy.
+Amazon CloudWatch offers either basic or detailed monitoring for supported AWS products. Basic monitoring sends data points to Amazon CloudWatch every five minutes for a limited number of preselected metrics at no charge. Detailed
+monitoring sends data points to Amazon CloudWatch every minute and allows data aggregation for an additional charge. If you want to use detailed monitoring, you must enable it—basic is the default.
+Amazon CloudWatch supports monitoring and specific metrics for most AWS Cloud services, including: Auto Scaling, Amazon CloudFront, Amazon CloudSearch, Amazon DynamoDB, Amazon EC2, Amazon EC2 Container Service (Amazon ECS), Amazon ElastiCache, Amazon Elastic Block Store (Amazon EBS), Elastic Load Balancing, Amazon Elastic MapReduce (Amazon EMR), Amazon Elasticsearch Service, Amazon Kinesis Streams, Amazon Kinesis Firehose, AWS Lambda, Amazon Machine Learning, AWS OpsWorks, Amazon Redshift, Amazon Relational Database Service (Amazon RDS), Amazon Route 53, Amazon SNS, Amazon Simple Queue Service (Amazon SQS), Amazon S3, AWS Simple Workflow Service (Amazon SWF), AWS Storage Gateway, AWS WAF, and Amazon WorkSpaces.
+Read Alert
+
+You may have an application that leverages Amazon DynamoDB, and you want to know when read requests reach a certain threshold and alert yourself with an email. You can do this by using ProvisionedReadCapacityUnits for the Amazon DynamoDB table for which you want to set an alarm. You simply set a threshold value during a number of consecutive periods and then specify email as the notification type. Now, when the threshold is sustained over the number of periods, your specified email will alert you to the read activity.
+Amazon CloudWatch metrics can be retrieved by performing a GET request. When you use detailed monitoring, you can also aggregate metrics across a length of time you specify. Amazon CloudWatch does not aggregate data across regions but can aggregate across Availability Zones within a region.
+AWS provides a rich set of metrics included with each service, but you can also define custom metrics to monitor resources and events AWS does not have visibility into—for example, Amazon EC2 instance memory consumption and disk metrics that are visible to the operating system of the Amazon EC2 instance but not visible to AWS or application-specific thresholds running on instances that are not known to AWS. Amazon CloudWatch supports an Application Programming Interface (API) that
+allows programs and scripts to PUT metrics into Amazon CloudWatch as name-value pairs that can then be used to create events and trigger alarms in the same manner as the default Amazon CloudWatch metrics.
+Amazon CloudWatch Logs can be used to monitor, store, and access log files from Amazon EC2 instances, AWS CloudTrail, and other sources. You can then retrieve the log data and monitor in real time for events—for example, you can track the number of errors in your application logs and send a notification if an error rate exceeds a threshold. Amazon CloudWatch Logs can also be used to store your logs in Amazon S3 or Amazon Glacier. Logs can be retained indefinitely or according to an aging policy that will delete older logs as no longer needed.
+A CloudWatch Logs agent is available that provides an automated way to send log data to CloudWatch Logs for Amazon EC2 instances running Amazon Linux or Ubuntu. You can use the Amazon CloudWatch Logs agent installer on an existing Amazon EC2 instance to install and configure the CloudWatch Logs agent. After installation is complete, the agent confirms that it has started and it stays running until you disable it.
+Amazon CloudWatch has some limits that you should keep in mind when using the service. Each AWS account is limited to 5,000 alarms per AWS account, and metrics data is retained for two weeks by default (at the time of this writing). If you want to keep the data longer, you will need to move the logs to a persistent store like Amazon S3 or Amazon Glacier. You should familiarize yourself with the limits for Amazon CloudWatch in the Amazon CloudWatch Developer Guide.
 
 ## AWS CloudFormation
 

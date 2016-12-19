@@ -11,6 +11,15 @@ footer: true
 
 {% img /datascience/overview-mindmap.PNG %}
 
+
+# Data Science
+
+- **Descriptive Analyses** - Describe a set of data. E.g., census data, Google NGram viewer
+- **Exploratory Analyses** - Finding relationships you didn't know about. Should not be used for generalizing or prediction.
+- **Inferential Analyses** - Use a relatively small sample of data to infer for bigger population.
+- **Predictive Analyses** - To use the data on some objects to predict values for another object.
+- **Causal Analyses** - 
+
 # Bibliography
 
 ## Books

@@ -15,6 +15,12 @@ footer: true
 
 # DNS servers
 
+## CNAME record
+
+CNAME stands for Canonical Name. CNAME records can be used to alias one name to another.
+
+For example, if you have a server where you keep all of your documents online, it might normally be accessed through `docs.example.com`. You may also want to access it through `documents.example.com`. One way to make this possible is to add a CNAME record that points `documents.example.com` to `docs.example.com`. When someone visits `documents.example.com` they will see the exact same content as `docs.example.com`.
+
 # Subnet
 
 ## Why Subnet?

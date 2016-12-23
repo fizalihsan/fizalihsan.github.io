@@ -306,7 +306,7 @@ footer: true
 
 # Compute and Network Services
 
-## Amazon EC2
+## EC2
 
 ### Instance Types
 
@@ -359,7 +359,7 @@ There are several ways that an instance may be addressed over the web upon creat
 	* This IP address persists until the customer releases it and is not tied to the lifetime or state of an individual instance.
 	* Because it can be transferred to a replacement instance in the event of an instance failure, it is a public address that can be shared externally without coupling clients to a particular instance.
 
-> Private IP addresses and Elastic Network Interfaces (ENIs) are additional methods of addressing instances that are available in the context of an Amazon VPC.
+> Private IP addresses and Elastic Network Interfaces (ENIs) are additional methods of addressing instances that are available in the context of an VPC.
 
 ### Securing an Instance
 
@@ -370,7 +370,7 @@ There are several ways that an instance may be addressed over the web upon creat
 * Key pairs can be created through the AWS Management Console, CLI, or API, or customers can upload their own key pairs.
 * AWS stores the public key in `~/.ssh/authorized_keys` folder
 * Private keys are kept by the customer. The private key is essential to acquiring secure access to an instance for the first time.
-* When launching a Windows instance, Amazon EC2 generates a random password for the local administrator account and encrypts the password using the public key. Initial access to the instance is obtained by decrypting the password with the private key, either in the console or through the API.
+* When launching a Windows instance, EC2 generates a random password for the local administrator account and encrypts the password using the public key. Initial access to the instance is obtained by decrypting the password with the private key, either in the console or through the API.
 
 **Virtual Firewall Protection**
 
@@ -382,8 +382,8 @@ There are several ways that an instance may be addressed over the web upon creat
   * *VPC Security Groups*	- Control outgoing and incoming instance traffic
 * Every instance must have at least one security group but can have more
 * *Changing Security Group*
-	* If an instance is running in an Amazon VPC, you can change which security groups are associated with an instance while the instance is running.
-	* For instances outside of an Amazon VPC (called EC2-Classic), the association of the security groups cannot be changed after launch.
+	* If an instance is running in an VPC, you can change which security groups are associated with an instance while the instance is running.
+	* For instances outside of an VPC (called EC2-Classic), the association of the security groups cannot be changed after launch.
 * A security group is *default deny* - it does not allow any traffic that is not explicitly allowed by a security group rule.
 * A *rule* is defined by 3 attributes:
 	* Port
@@ -464,12 +464,12 @@ There are several ways that an instance may be addressed over the web upon creat
 * **Spot Instances**
 	* offers the greatest discount
 	* For workloads that are not time critical and are tolerant of interruption
-	* With Spot Instances, when the customer’s bid price is above the current Spot price, the customer will receive the requested instance(s). These instances will operate like all other Amazon EC2 instances, and the customer will only pay the Spot price for the hours that instance(s) run.
+	* With Spot Instances, when the customer’s bid price is above the current Spot price, the customer will receive the requested instance(s). These instances will operate like all other EC2 instances, and the customer will only pay the Spot price for the hours that instance(s) run.
 	* The instances will run until:
 		* The customer terminates them.
 		* The Spot price goes above the customer’s bid price.
 		* There is not enough unused capacity to meet the demand for Spot Instances.
-		* If Amazon EC2 needs to terminate a Spot Instance, the instance will receive a termination notice providing a two-minute warning prior to Amazon EC2 terminating the instance.
+		* If EC2 needs to terminate a Spot Instance, the instance will receive a termination notice providing a two-minute warning prior to EC2 terminating the instance.
 
 ### Tenancy options
 
@@ -506,6 +506,105 @@ There are several ways that an instance may be addressed over the web upon creat
 
 * allows to scale EC2 capacity up or down automatically according to conditions defined for the particular workload (for scaling in and out)
 
+* Advantage of deploying applications to the cloud is the ability to launch and then release servers in response to variable workloads.
+* Provisioning servers on demand and then releasing when not needed can provide significant cost savings. E.g., an end-of-month data-input system, a retail shopping site supporting flash sales, etc.
+
+* __Embrace the Spike__
+	* Many web applications have unplanned load increases based on events outside of your control.
+	* Setting up Auto Scaling in advance will allow to embrace and survive such fast increase in the number of requests. It will scale up your site to meet the increased demand and then scale down when the event subsides.
+
+### Auto Scaling Plans
+
+* __Maintain Current Instance Levels__
+	* Configure your Auto Scaling group to maintain a minimum or specified number of running instances at all times.
+	* To maintain the current instance levels, Auto Scaling performs a periodic health check on running instances within an Auto Scaling group.
+	* When Auto Scaling finds an unhealthy instance, it terminates that instance and launches a new one.
+	* Steady state workloads that need a consistent number of EC2 instances at all times can use Auto Scaling to monitor and keep that specific number of EC2 instances running.
+* __Manual Scaling__
+	* This is the most basic way to scale your resources. You just need to specify the change in the maximum, minimum, or desired capacity of your Auto Scaling group.
+	* Auto Scaling manages the process of creating or terminating instances to maintain the updated capacity.
+	* Manual scaling out can be very useful to increase resources for an infrequent event, such as movie release dates.
+	* For extremely large-scale events, even the ELB load balancers can be pre-warmed by working with your local solutions architect or AWS Support.
+* __Scheduled Scaling__
+	* When you have a recurring schedule or a predictable schedule of when you will need to increase or decrease the number of instances in your group, e.g., end-of-month, or end-of-year processing, schedule scaling is useful.
+	* Scaling actions are performed automatically as a function of time and date.
+* __Dynamic Scaling__
+	* Lets you define parameters that control the Auto Scaling process in a scaling policy. E.g., create a policy that adds more EC2 instances to the web tier when the network bandwidth, measured by CloudWatch, reaches a certain threshold.
+
+### Auto Scaling Components
+
+__Launch Configuration__
+
+* A launch configuration is the template used to create new instances, and it has the following:
+	* Name (e.g., _myLC_)
+	* AMI (e.g., _ami-0535d66c_)
+	* Instance type (e.g., _m3.medium_)
+	* Security groups (e.g., _sg-f57cde9d_)
+	* Instance key pair (e.g., _myKeyPair_)
+* Each Auto Scaling group can have only one launch configuration at a time.
+* Security groups for instances launched in EC2-Classic may be referenced by security group name or by security group IDs. Security group ID is recommended.
+* _Limits_
+	* Default limit for launch configurations = __100 per region__. If you exceed this limit, the call to create-launch-configuration will fail. To update this limit: `aws autoscaling describe-account-limits`
+	* Auto Scaling may cause you to reach limits of other services, such as the default number of EC2 instances you can currently launch = __20 per region__.
+	* When you run a command using the CLI and it fails,
+		* check your syntax first. If that checks out,
+		* verify the limits for the command you are attempting, and check to see that you have not exceeded a limit.
+		* To raise the limits, in cases allowed, create a support case at the AWS Support Center online and then choose _Service Limit Increase under Regarding_.
+
+__Auto Scaling Group__
+
+* An Auto Scaling group is a collection of EC2 instances managed by the Auto Scaling service.
+* Each Auto Scaling group contains configuration options that control when Auto Scaling should launch new instances and terminate existing instances.
+* An Auto Scaling group must contain
+	* a name
+	* a minimum and maximum number of instances that can be in the group.
+	* (optional) desired capacity, which is the number of instances that the group must have at all times. If not specified, the default desired capacity = the minimum number of instances.
+
+```
+Name: myASG
+Launch configuration: myLC
+Availability Zones: us-east-1a and us-east-1c
+Minimum size: 1
+Desired capacity: 3
+Maximum capacity: 10
+Load balancers: myELB
+```
+
+* An Auto Scaling group can use either On-Demand (default) or Spot instances, but not both.
+* Spot Instances
+	* Bid price can be modified
+	* If instances are available at or below your bid price, they will be launched in your Auto Scaling group.
+
+__Spot On!__
+
+* Spot Instances can be useful when hosting sites to provide additional compute capacity but are price constrained. E.g., a “freemium” site model where some basic functionality to users are free and additional functionality is for premium users.
+* It can be used for providing the basic functionality when available by referencing a maximum bid price in the launch configuration (`—spot-price "0.15"`) associated with the Auto Scaling group.
+
+__Scaling Policy__
+
+{% img right /technology/aws-auto-scaling.png %}
+
+* CloudWatch alarms and scaling policies can be associated with an Auto Scaling group to adjust Auto Scaling dynamically.
+* When a threshold is crossed, CloudWatch sends alarms to trigger changes (scaling in or out) to the number of EC2 instances currently receiving traffic behind a load balancer.
+* After the CloudWatch alarm sends a message to the Auto Scaling group, Auto Scaling executes the associated policy to scale your group.
+* The policy is a set of instructions that tells Auto Scaling whether to scale out, launching new EC2 instances referenced in the associated launch configuration, or to scale in and terminate instances.
+* Various ways to configure a scaling policy:
+	* increase or decrease by a specific number of instances, or
+	* adjust based on a percentage.
+	* scale by steps and increase or decrease the current capacity of the group based on a set of scaling adjustments that vary based on the size of the alarm threshold trigger.
+* More than one scaling policy can be associated with an Auto Scaling group. E.g., One policy to scale out if CPU Load > 75% for 2 minutes. Another policy to scale in if CPU Load < 40% for 20 minutes.
+
+* _Best Practice_
+	* Scale out quickly and scale in slowly so you can respond to bursts or spikes but avoid inadvertently terminating EC2 instances too quickly, only having to launch more EC2 instances if the burst is sustained.
+	* Auto Scaling also supports a _cooldown period_, which is a configurable setting that determines when to suspend scaling activities for a short time for an Auto Scaling group.
+	* If you start an EC2 instance, you will be billed for one full hour of running time. Partial instance hours consumed are billed as full hours. This means that if you have a permissive scaling policy that launches, terminates, and re-launches many instances an hour, you are billing a full hour for each and every instance you launch, even if you terminate some of those instances in less than hour.
+	* Bootstrapping new EC2 instances launched using Auto Scaling takes time to configure before the instance is healthy and capable of accepting traffic. Instances that start and are available for load faster can join the capacity pool more quickly.
+	* Stateless instances can enter and exit gracefully than a stateful instance in an Auto Scaling group.
+
+* _Rolling Out a Patch at Scale_
+	* In large deployments of EC2 instances, Auto Scaling can be used to make rolling out a patch to your instances easy.
+	* The launch configuration associated with the Auto Scaling group may be modified to reference a new AMI and even a new EC2 instance if needed. Then you can deregister or terminate instances one at a time or in small groups, and the new EC2 instances will reference the new patched AMI.
+
 ## Elastic Load Balancing (ELB)
 
 * automatically distributes incoming application traffic across multiple EC2 instances. (for fault-tolerance)
@@ -535,7 +634,7 @@ There are several ways that an instance may be addressed over the web upon creat
 
 #### Internal Load Balancers
 
-* In a multi-tier application, it is often useful to load balance between the tiers of the application. For example, an Internet-facing load balancer might receive and balance external traffic to the presentation or web tier whose Amazon EC2 instances then send its requests to a load balancer sitting in front of the application tier.
+* In a multi-tier application, it is often useful to load balance between the tiers of the application. For example, an Internet-facing load balancer might receive and balance external traffic to the presentation or web tier whose EC2 instances then send its requests to a load balancer sitting in front of the application tier.
 * Internal load balancers can be used to route traffic to EC2 instances in VPCs with private subnets.
 
 #### HTTPS Load Balancers
@@ -552,7 +651,7 @@ There are several ways that an instance may be addressed over the web upon creat
 * Every load balancer must have one or more listeners configured.
 * Every listener is configured with
 	* a protocol and a port (client to load balancer) for a front-end connection
-	* a protocol and a port for the back-end (load balancer to Amazon EC2 instance) connection.
+	* a protocol and a port for the back-end (load balancer to EC2 instance) connection.
 * ELB supports protocols operating at two different Open System Interconnection (OSI) layers.
 	* In the OSI model, Layer 4 is the transport layer that describes the TCP connection between the client and your back-end instance through the load balancer. Layer 4 is the lowest level that is configurable for your load
 balancer.
@@ -649,7 +748,7 @@ balancer.
 	* Should not overlap
 * Every account has a default VPC created in each region with a default subnet created in each Availability Zone.
 	* The assigned CIDR block of the VPC will be *172.31.0.0/16*
-	* Default VPCs contain one public subnet in every Availability Zone with the region, with a netmast of */20*
+	* Default VPCs contain one public subnet in every Availability Zone with the region, with a netmask of */20*
 * Orgs can extend their corporate data center n/w to AWS by using h/w or s/w VPN connections or dedicated circuits by using AWS Direct Connect.
 
 ### Subnets
@@ -718,25 +817,25 @@ balancer.
 * An Elastic IP Addresses (EIP) is a static, public IP address in the pool for the region that you can allocate to your account (pull from the pool) and release (return to the pool).
 * EIPs allow you to maintain a set of IP addresses that remain fixed while the underlying infrastructure may change over time.
 * You must first allocate an EIP for use within a VPC and then assign it to an instance.
-* EIPs are specific to a region (that is, an EIP in one region cannot be assigned to an instance within an Amazon VPC in a different region).
+* EIPs are specific to a region (that is, an EIP in one region cannot be assigned to an instance within an VPC in a different region).
 * There is a one-to-one relationship between network interfaces and EIPs.
-* You can move EIPs from one instance to another, either in the same Amazon VPC or a different Amazon VPC within the same region.
+* You can move EIPs from one instance to another, either in the same VPC or a different VPC within the same region.
 * EIPs remain associated with your AWS account until you explicitly release them.
 * There are charges for EIPs allocated to your account, even when they are not associated with a resource.
 
 ### ENIs (Elastic Network Interfaces)
 
-* An ENI is a virtual network interface that you can attach to an instance in an Amazon VPC.
-* ENIs are only available within an Amazon VPC, and they are associated with a subnet upon creation.
+* An ENI is a virtual network interface that you can attach to an instance in an VPC.
+* ENIs are only available within an VPC, and they are associated with a subnet upon creation.
 * They can have 1 public IP address, 1 primary private IP and multiple non-primary private IPs.
 * Assigning a second network interface to an instance via an ENI allows it to be _dual-homed_ (have network presence in different subnets).
 * An ENI created independently of a particular instance persists regardless of the lifetime of any instance to which it is attached; if an underlying instance fails, the IP address may be preserved by attaching the ENI to a replacement instance.
 
 ### Endpoints
 
-* An Amazon VPC endpoint enables you to create a private connection between your Amazon VPC and another AWS service without requiring access over the Internet or through a NAT instance, VPN connection, or AWS Direct Connect.
+* An VPC endpoint enables you to create a private connection between your VPC and another AWS service without requiring access over the Internet or through a NAT instance, VPN connection, or AWS Direct Connect.
 * Multiple endpoints can be created for a single service, and use different route tables to enforce different access policies from different subnets to the same service.
-* To create an Amazon VPC endpoint:
+* To create an VPC endpoint:
 	* Specify the __VPC__.
 	* Specify the __service__. A service is identified by a prefix list of the form `com.amazonaws.<region>.<service>`.
 	* Specify the __policy__. You can allow full access or create a custom policy. This policy can be changed at any time.
@@ -759,20 +858,20 @@ Below route table adds the route to direct S3 traffic to the VPC Endpoint
 
 ### Peering
 
-* An Amazon VPC peering connection is a networking connection between two Amazon VPCs that enables instances in either VPC to communicate with each other as if they are within the same network.
+* An VPC peering connection is a networking connection between two VPCs that enables instances in either VPC to communicate with each other as if they are within the same network.
 * Peering connection can be created
 	* between your own VPCs or
-	* with an Amazon VPC in another AWS account within a single region.
+	* with an VPC in another AWS account within a single region.
 * A peering connection is neither a gateway nor an Amazon VPN connection and does not introduce a single point of failure for communication.
-* Peering connections are created through a _request/accept_ protocol. The owner of the requesting VPC sends a request to peer to the owner of the peer Amazon VPC.
-	* If the peer Amazon VPC is within the same account, it is identified by its _VPC ID_.
+* Peering connections are created through a _request/accept_ protocol. The owner of the requesting VPC sends a request to peer to the owner of the peer VPC.
+	* If the peer VPC is within the same account, it is identified by its _VPC ID_.
 	* If the peer VPC is within a different account, it is identified by _Account ID_ and _VPC ID_.
-* The owner of the peer Amazon VPC has one week to accept or reject the request before it expires.
+* The owner of the peer VPC has one week to accept or reject the request before it expires.
 * A VPC may have multiple peering connections, and peering is a one-to-one relationship between VPC.
 * Peering connections DO NOT support _transitive routing_. In other words, if there are peering connections between VPC A & B, and VPC B & C, it does NOT mean VPC A & C can peer directly with each other.
 * A peering connection CANNOT be created between VPCs that have matching or overlapping CIDR blocks.
-* A peering connection CANNOT be created between Amazon VPCs in different regions.
-* There CANNOT have more than one peering connection between the same two Amazon VPCs at the same time.
+* A peering connection CANNOT be created between VPCs in different regions.
+* There CANNOT have more than one peering connection between the same two VPCs at the same time.
 
 ### Security Groups
 
@@ -818,7 +917,7 @@ __Inbound__
 * A network ACL is a numbered list of rules that AWS evaluates in order, starting with the lowest numbered rule, to determine whether traffic is allowed in or out of any subnet associated with the network ACL.
 * VPCs are created with a modifiable default network ACL associated with every subnet that allows all inbound and outbound traffic.
 * When you create a custom network ACL, its initial configuration will deny all inbound and outbound traffic
-* You may set up network ACLs with rules similar to your security groups in order to add a layer of security to your Amazon VPC, or you may choose to use the default network ACL that does not filter traffic traversing the subnet boundary.
+* You may set up network ACLs with rules similar to your security groups in order to add a layer of security to your VPC, or you may choose to use the default network ACL that does not filter traffic traversing the subnet boundary.
 * Overall, every subnet must be associated with a network ACL.
 
 | Security Group | Network ACL     |
@@ -832,10 +931,10 @@ __Inbound__
 ### NAT Instances (Network Address Translation)
 
 * NAT instances and NAT gateways allow instances deployed in private subnets to gain Internet access.
-* By default, any instance that you launch into a private subnet in an Amazon VPC is not able to communicate with the Internet through the IGW.
-* NAT instance is an Amazon Linux Amazon Machine Image (AMI) designed to accept traffic from instances within a private subnet, translate the source IP address to the public IP address of the NAT instance, and forward the traffic to the IGW.
+* By default, any instance that you launch into a private subnet in an VPC is not able to communicate with the Internet through the IGW.
+* NAT instance is an Amazon Linux AMI designed to accept traffic from instances within a private subnet, translate the source IP address to the public IP address of the NAT instance, and forward the traffic to the IGW.
 * In addition, the NAT instance maintains the state of the forwarded traffic in order to return response traffic from the Internet to the proper instance in the private subnet.
-* These instances have the string `amzn-ami-vpc-nat` in their names, which is searchable in the Amazon EC2 console.
+* These instances have the string `amzn-ami-vpc-nat` in their names, which is searchable in the EC2 console.
 * To allow instances within a private subnet to access Internet resources through the IGW via a NAT instance, you must do the following:
 	* Create a security group for the NAT with outbound rules that specify the needed Internet resources by port, protocol, and IP address.
 	* Launch an Amazon Linux NAT AMI as an instance in a public subnet and associate it with the NAT security group.
@@ -858,7 +957,7 @@ __Inbound__
 
 {% img right /technology/aws-vpg-vpn.PNG %}
 
-* Amazon VPC offers two ways to connect a corporate network to a VPC: VPG and CGW.
+* VPC offers two ways to connect a corporate network to a VPC: VPG and CGW.
 * __VPG (Virtual Private Gateway)__
 	* is the virtual private network (VPN) concentrator on the AWS side of the VPN connection between the two networks.
 	* The VPG is the AWS end of the VPN tunnel.
@@ -873,7 +972,7 @@ __Inbound__
 	* You must specify the type of routing that you plan to use when you create a VPN connection.
 		* If the CGW supports _Border Gateway Protocol (BGP)_, then configure the VPN connection for dynamic routing.
 		* Otherwise, configure the connections for static routing. If you will be using static routing, you must enter the routes for your network that should be communicated to the VPG. Routes will be propagated to the VPC to allow your resources to route network traffic back to the corporate network through the VGW and across the VPN tunnel.
-	* The VPN connection consists of two _Internet Protocol Security (IPSec)_ tunnels for higher availability to the Amazon VPC.
+	* The VPN connection consists of two _Internet Protocol Security (IPSec)_ tunnels for higher availability to the VPC.
 
 ## AWS Direct Connect
 
@@ -906,22 +1005,22 @@ __Inbound__
 ## Amazon CloudWatch
 
 * monitoring service for AWS cloud resources and the applications running on AWS
+* CloudWatch is a service that you can use to monitor your AWS resources and your applications in real time.
+* With CloudWatch, you can collect and track metrics, create alarms that send notifications, and make changes to the resources being monitored based on rules you define.
+* For example, you might choose to monitor CPU utilization to decide when to add or remove EC2 instances in an application tier. Or, if a particular application-specific metric that is not visible to AWS is the best indicator for assessing your scaling needs, you can perform a PUT request to push that metric into CloudWatch.
+* You can then use this custom metric to manage capacity.
+* You can specify parameters for a metric over a time period and configure alarms and automated actions when a threshold is reached. CloudWatch supports multiple types of actions such as sending a notification to an SNS topic or executing an Auto Scaling policy.
+* CloudWatch offers either basic or detailed monitoring for supported AWS products. Basic monitoring sends data points to CloudWatch every five minutes for a limited number of preselected metrics at no charge.
 
-Amazon CloudWatch is a service that you can use to monitor your AWS resources and your applications in real time. With Amazon CloudWatch, you can collect and track metrics, create alarms that send notifications, and make changes to the resources being monitored based on rules you define.
-For example, you might choose to monitor CPU utilization to decide when to add or remove Amazon EC2 instances in an application tier. Or, if a particular application-specific metric that is not visible to AWS is the best indicator for assessing your scaling needs, you can perform a PUT request to push that metric into Amazon CloudWatch. You can then use this custom metric to manage capacity.
-You can specify parameters for a metric over a time period and configure alarms and automated actions when a threshold is reached. Amazon CloudWatch supports multiple types of actions such as sending a notification to an Amazon Simple Notification Service (Amazon SNS) topic or executing an Auto Scaling policy.
-Amazon CloudWatch offers either basic or detailed monitoring for supported AWS products. Basic monitoring sends data points to Amazon CloudWatch every five minutes for a limited number of preselected metrics at no charge. Detailed
-monitoring sends data points to Amazon CloudWatch every minute and allows data aggregation for an additional charge. If you want to use detailed monitoring, you must enable it—basic is the default.
-Amazon CloudWatch supports monitoring and specific metrics for most AWS Cloud services, including: Auto Scaling, Amazon CloudFront, Amazon CloudSearch, Amazon DynamoDB, Amazon EC2, Amazon EC2 Container Service (Amazon ECS), Amazon ElastiCache, Amazon Elastic Block Store (Amazon EBS), Elastic Load Balancing, Amazon Elastic MapReduce (Amazon EMR), Amazon Elasticsearch Service, Amazon Kinesis Streams, Amazon Kinesis Firehose, AWS Lambda, Amazon Machine Learning, AWS OpsWorks, Amazon Redshift, Amazon Relational Database Service (Amazon RDS), Amazon Route 53, Amazon SNS, Amazon Simple Queue Service (Amazon SQS), Amazon S3, AWS Simple Workflow Service (Amazon SWF), AWS Storage Gateway, AWS WAF, and Amazon WorkSpaces.
-Read Alert
+* _Detailed monitoring_ sends data points to CloudWatch every minute and allows data aggregation for an additional charge. If you want to use detailed monitoring, you must enable it—basic is the default.
 
-You may have an application that leverages Amazon DynamoDB, and you want to know when read requests reach a certain threshold and alert yourself with an email. You can do this by using ProvisionedReadCapacityUnits for the Amazon DynamoDB table for which you want to set an alarm. You simply set a threshold value during a number of consecutive periods and then specify email as the notification type. Now, when the threshold is sustained over the number of periods, your specified email will alert you to the read activity.
-Amazon CloudWatch metrics can be retrieved by performing a GET request. When you use detailed monitoring, you can also aggregate metrics across a length of time you specify. Amazon CloudWatch does not aggregate data across regions but can aggregate across Availability Zones within a region.
-AWS provides a rich set of metrics included with each service, but you can also define custom metrics to monitor resources and events AWS does not have visibility into—for example, Amazon EC2 instance memory consumption and disk metrics that are visible to the operating system of the Amazon EC2 instance but not visible to AWS or application-specific thresholds running on instances that are not known to AWS. Amazon CloudWatch supports an Application Programming Interface (API) that
-allows programs and scripts to PUT metrics into Amazon CloudWatch as name-value pairs that can then be used to create events and trigger alarms in the same manner as the default Amazon CloudWatch metrics.
-Amazon CloudWatch Logs can be used to monitor, store, and access log files from Amazon EC2 instances, AWS CloudTrail, and other sources. You can then retrieve the log data and monitor in real time for events—for example, you can track the number of errors in your application logs and send a notification if an error rate exceeds a threshold. Amazon CloudWatch Logs can also be used to store your logs in Amazon S3 or Amazon Glacier. Logs can be retained indefinitely or according to an aging policy that will delete older logs as no longer needed.
-A CloudWatch Logs agent is available that provides an automated way to send log data to CloudWatch Logs for Amazon EC2 instances running Amazon Linux or Ubuntu. You can use the Amazon CloudWatch Logs agent installer on an existing Amazon EC2 instance to install and configure the CloudWatch Logs agent. After installation is complete, the agent confirms that it has started and it stays running until you disable it.
-Amazon CloudWatch has some limits that you should keep in mind when using the service. Each AWS account is limited to 5,000 alarms per AWS account, and metrics data is retained for two weeks by default (at the time of this writing). If you want to keep the data longer, you will need to move the logs to a persistent store like Amazon S3 or Amazon Glacier. You should familiarize yourself with the limits for Amazon CloudWatch in the Amazon CloudWatch Developer Guide.
+* __Read Alert__
+	* You may have an application that leverages DynamoDB, and you want to know when read requests reach a certain threshold and alert yourself with an email. You can do this by using `ProvisionedReadCapacityUnits` for the DynamoDB table for which you want to set an alarm. You simply set a threshold value during a number of consecutive periods and then specify email as the notification type. Now, when the threshold is sustained over the number of periods, your specified email will alert you to the read activity.
+* CloudWatch metrics can be retrieved by performing a GET request. When you use detailed monitoring, you can also aggregate metrics across a length of time you specify. CloudWatch does not aggregate data across regions but can aggregate across Availability Zones within a region.
+* AWS provides a rich set of metrics included with each service, but you can also define custom metrics to monitor resources and events AWS does not have visibility into—for example, EC2 instance memory consumption and disk metrics that are visible to the operating system of the EC2 instance but not visible to AWS or application-specific thresholds running on instances that are not known to AWS. CloudWatch supports an API that allows programs and scripts to PUT metrics into CloudWatch as name-value pairs that can then be used to create events and trigger alarms in the same manner as the default CloudWatch metrics.
+* CloudWatch Logs can be used to monitor, store, and access log files from EC2 instances, AWS CloudTrail, and other sources. You can then retrieve the log data and monitor in real time for events—for example, you can track the number of errors in your application logs and send a notification if an error rate exceeds a threshold. CloudWatch Logs can also be used to store your logs in S3 or Glacier. Logs can be retained indefinitely or according to an aging policy that will delete older logs as no longer needed.
+* A CloudWatch Logs agent is available that provides an automated way to send log data to CloudWatch Logs for EC2 instances running Amazon Linux or Ubuntu. You can use the CloudWatch Logs agent installer on an existing EC2 instance to install and configure the CloudWatch Logs agent. After installation is complete, the agent confirms that it has started and it stays running until you disable it.
+* CloudWatch has some limits that you should keep in mind when using the service. Each AWS account is limited to _5,000 alarms per AWS account_, and metrics data is retained for two weeks by default (at the time of this writing). If you want to keep the data longer, you will need to move the logs to a persistent store like S3 or Glacier. You should familiarize yourself with the limits for CloudWatch in the CloudWatch Developer Guide.
 
 ## AWS CloudFormation
 

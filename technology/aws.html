@@ -200,7 +200,13 @@ messageStyle: "none",
     </ul>
   </li>
   <li><a href="#security-and-identity">Security and Identity</a>    <ul>
-      <li><a href="#aws-identity-and-access-manager-iam">AWS Identity and Access Manager (IAM)</a></li>
+      <li><a href="#aws-identity-and-access-manager-iam">AWS Identity and Access Manager (IAM)</a>        <ul>
+          <li><a href="#principals">Principals</a></li>
+          <li><a href="#authentication">Authentication</a></li>
+          <li><a href="#authorization">Authorization</a></li>
+          <li><a href="#other-key-features">Other Key Features</a></li>
+        </ul>
+      </li>
       <li><a href="#aws-key-management-service-kms">AWS Key Management Service (KMS)</a></li>
       <li><a href="#aws-directory-service">AWS Directory Service</a></li>
       <li><a href="#aws-certificate-manager">AWS Certificate Manager</a></li>
@@ -1949,8 +1955,365 @@ balancer.</li>
 <h2 id="aws-identity-and-access-manager-iam">AWS Identity and Access Manager (IAM)</h2>
 
 <ul>
-  <li>enables organizations to create and manage AWS users and groups and use permissions to allow and deny their access to AWS resources.</li>
+  <li>
+    <p>enables organizations to create and manage AWS users and groups and use permissions to allow and deny their access to AWS resources.</p>
+  </li>
+  <li>IAM uses traditional identity concepts such as users, groups, and access control policies to control who can use, what services/resources, and how.</li>
+  <li>Provides granular control to limit a single user to the ability to perform
+    <ul>
+      <li>a single action</li>
+      <li>on a specific resource</li>
+      <li>from a specific IP address</li>
+      <li>during a specific time window.</li>
+    </ul>
+  </li>
+  <li>
+    <p>Access can be granted whether they are running on-premises or in the cloud.</p>
+  </li>
+  <li><strong>IAM is not an identity store/authorization system</strong>
+    <ul>
+      <li>Permissions are to manipulate AWS infrastructure, not for your application.</li>
+      <li>This is not a replacement to your on-premises application authentication/authorization.</li>
+      <li>If your application identities are based on Active Directory, your on-premises Active Directory can be extended into the cloud.</li>
+      <li><em>AWS Directory Service</em> is an Active Directory-compatible directory service that can work on its own or integrate with on-premises Active Directory.</li>
+      <li>For mobile app, consider <em>Amazon Cognito</em> for identity management</li>
+    </ul>
+  </li>
+  <li><strong>IAM is not operating system identity management</strong>
+    <ul>
+      <li>Under the shared responsibility model, you are in control of your operating system console and configuration. Whatever mechanism you currently use to control access to your server infrastructure will continue to work on EC2 instances, whether that is managing individual machine login accounts or a directory service such as Active Directory or LDAP.</li>
+      <li>You can run an Active Directory or LDAP server on EC2, or you can extend your on-premises system into the cloud.</li>
+      <li>AWS Directory Service will also work well to provide Active Directory functionality in the cloud as a service, whether standalone or integrated with your existing Active Directory.</li>
+    </ul>
+  </li>
+  <li>Authentication Technologies
+    <ul>
+      <li>For OS Access - use	Active Directory LDAP Machine-specific accounts</li>
+      <li>For Application Access - use User Repositories</li>
+      <li>For Mobile apps - Amazon Cognito</li>
+      <li>For AWS Resources - use	IAM</li>
+    </ul>
+  </li>
+  <li>IAM is controlled through AWS Console, CLI and via AWS SDKs. In addition, the AWS Partner Network (APN) includes a rich ecosystem of tools to manage and extend IAM.</li>
 </ul>
+
+<h3 id="principals">Principals</h3>
+
+<ul>
+  <li>A principal is an IAM entity that is allowed to interact with AWS resources.</li>
+  <li>A principal can be permanent or temporary, and it can represent a human or an application.</li>
+  <li>
+    <p>3 types of principals: root users, IAM users, and roles/temporary security tokens.</p>
+  </li>
+  <li><strong>1. Root User</strong>
+    <ul>
+      <li>Root user is automatically created when creating a new AWS account.</li>
+      <li>With single sign-in principal, root user has complete access to all AWS Cloud services and resources in the account.</li>
+      <li>Root user persists as long as the account is open</li>
+      <li>Root user can be used for both console and programmatic access to AWS resources.</li>
+      <li>Best practice: DO NOT use the root user for everyday tasks, even the administrative ones. Instead, use it only to create the first IAM user and then securely lock away the root user credentials.</li>
+    </ul>
+  </li>
+  <li><strong>2. IAM Users</strong>
+    <ul>
+      <li>Users are persistent identities set up through the IAM service to represent individual people or applications.</li>
+      <li>IAM users can be created by principals with IAM administrative privileges.</li>
+      <li>Users are permanent entities until an IAM admin deletes them - no expiration period</li>
+      <li>Users are an excellent way to enforce the <em>principle of least privilege</em>; i.e., the concept of allowing a person or process interacting with AWS resources to perform exactly the tasks they need but nothing else.</li>
+      <li>Users can be associated with very granular policies that define permissions.</li>
+    </ul>
+  </li>
+  <li><strong>3. Roles/Temporary Security Tokens</strong>
+    <ul>
+      <li>Roles are used to grant specific privileges to specific actors for a set duration of time.</li>
+      <li>Actors can be authenticated by AWS or some trusted external system.</li>
+      <li>When one of the actors assumes a role, AWS provides the actor with a temporary security token from the AWS Security Token Service (STS) that the actor can use to access AWS Cloud services.</li>
+      <li>Requesting a temporary security token requires specifying how long the token will exist before it expires. The range of a temporary security token lifetime is 15 minutes to 36 hours.</li>
+      <li>Roles and temporary security tokens enable a number of use cases:</li>
+      <li><strong><em>3a. Amazon EC2 Roles</em></strong>
+        <ul>
+          <li>Grant permissions to applications running on EC2 instance.</li>
+          <li>Granting permissions to an application is always tricky, as it usually requires configuring the application with some sort of credential upon installation. This leads to issues around securely storing the credential prior to use, how to access it safely during installation, and how to secure it in the configuration.</li>
+          <li>Suppose that an application running on an EC2 instance needs to access an S3 bucket.
+            <ul>
+              <li>A policy granting permission to read and write that bucket can be created and assigned to an IAM user, and the application can use the access key for that IAM user to access the S3 bucket.</li>
+              <li>The problem with this approach is that the access key for the user must be accessible to the application, probably by storing it in some sort of configuration file.</li>
+              <li>The process for obtaining the access key and storing it encrypted in the configuration is usually complicated and a hindrance to agile development.</li>
+              <li>Additionally, the access key is at risk when being passed around. Finally, when the time comes to rotate the access key, the rotation involves performing that whole process again.</li>
+            </ul>
+          </li>
+          <li>Using IAM roles for Amazon EC2 removes the need to store AWS credentials in a configuration file.</li>
+          <li>Alternative solution
+            <ul>
+              <li>Create an IAM role that grants the required access to the S3 bucket.</li>
+              <li>When the Amazon EC2 instance is launched, the role is assigned to the instance.</li>
+              <li>When the application running on the instance uses the API to access the S3 bucket, it assumes the role assigned to the instance and obtains a temporary token that it sends to the API.</li>
+              <li>The process of obtaining the temporary token and passing it to the API is handled automatically by most of the AWS SDKs, allowing the application to make a call to access the S3 bucket without worrying about authentication.</li>
+              <li>This removes any need to store an access key in a configuration file.</li>
+              <li>Also, because the API access uses a temporary token, there is no fixed access key that must be rotated.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><strong><em>3b. Cross-Account Access</em></strong>
+        <ul>
+          <li>Grant permissions to users from other AWS accounts, whether you control those accounts or not.</li>
+          <li>Common use case for IAM roles is to grant access to AWS resources to IAM users in other AWS accounts. These accounts may be other AWS accounts controlled by your company or outside agents like customers or suppliers.</li>
+          <li>Set up an IAM role with the permissions you want to grant to users in the other account, then users in the other account can assume that role to access your resources.</li>
+          <li>This is highly recommended as a best practice, as opposed to distributing access keys outside your organization.</li>
+        </ul>
+      </li>
+      <li><strong><em>3c. Federation</em></strong>
+        <ul>
+          <li>Grant permissions to users authenticated by a trusted external system.</li>
+          <li>Many organizations already have an identity repository outside of AWS and would rather leverage that repository than create a new and largely duplicate repository of IAM users.</li>
+          <li>Similarly, web-based applications may want to leverage web-based identities such as Facebook, Google, or Login with Amazon.</li>
+          <li><em>IAM Identity Providers</em> provide the ability to federate these outside identities with IAM and assign privileges to those users authenticated outside of IAM.</li>
+          <li><strong>Identity Providers (IdP)</strong> IAM can integrate with 2 different types of outside Identity providers .
+            <ul>
+              <li><em>OpenID Connect (OIDC)</em>
+                <ul>
+                  <li>For federating web identities such as Facebook, Google, or Login with Amazon, IAM supports integration via OIDC.</li>
+                  <li>This allows IAM to grant privileges to users authenticated with some of the major web-based IdPs.</li>
+                </ul>
+              </li>
+              <li><em>SAML 2.0 (Security Assertion Markup Language)</em>
+                <ul>
+                  <li>For federating internal identities, such as Active Directory or LDAP, IAM supports integration via SAML.</li>
+                  <li>A SAML-compliant IdP such as Active Directory Federation Services (ADFS) is used to federate the internal directory to IAM.</li>
+                  <li>Federation works by returning a temporary token associated with a role to the IdP for the authenticated identity to use for calls to the AWS API.</li>
+                  <li>The actual role returned is determined via information received from the IdP, either attributes of the user in the on-premises identity store or the user name and authenticating service of the web identity store.</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="authentication">Authentication</h3>
+
+<p>3 ways that IAM authenticates a principal:</p>
+
+<ul>
+  <li><strong>User Name/Password</strong>
+    <ul>
+      <li>When a principal represents a human interacting with the console, the human will provide a user name/password pair to verify their identity.</li>
+      <li>IAM allows you to create a password policy enforcing password complexity and expiration.</li>
+    </ul>
+  </li>
+  <li><strong>Access Key</strong>
+    <ul>
+      <li><code>Access Key = Access Key ID (20 chars) + Access Secret Key (40 chars)</code></li>
+      <li>When a program is manipulating the AWS infrastructure via the API, it will use these values to sign the underlying REST calls to the services.</li>
+      <li>The AWS SDKs and tools handle all the intricacies of signing the REST calls, so using an access key will almost always be a matter of providing the values to the SDK or tool.</li>
+    </ul>
+  </li>
+  <li><strong>Access Key/Session Token</strong>
+    <ul>
+      <li>When a process operates under an assumed role, the temporary security token provides an access key for authentication.</li>
+      <li>In addition to the access key, the token also includes a session token. Calls to AWS must include both the two-part access key and the session token to authenticate.</li>
+      <li>It is important to note that when an IAM user is created, it has neither an access key nor a password, and the IAM administrator can set up either or both. This adds an extra layer of security in that console users cannot use their credentials to run a program that accesses your AWS infrastructure.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="authorization">Authorization</h3>
+
+<ul>
+  <li>The process of specifying exactly what actions a principal can and cannot perform is called authorization.</li>
+  <li>
+    <p>Authorization is handled in IAM by defining specific privileges in policies and associating those policies with principals.</p>
+  </li>
+  <li><strong>Policies</strong>
+    <ul>
+      <li>A policy is a JSON document that fully defines a set of permissions to access and manipulate AWS resources.</li>
+      <li>Policy documents contain one or more permissions, with each permission defining:
+        <ul>
+          <li><em>Effect</em>: A single word: Allow or Deny.</li>
+          <li><em>Service</em>: For what service does this permission apply? Most AWS Cloud services support granting access through IAM, including IAM itself.</li>
+          <li><em>Resource</em>:
+            <ul>
+              <li>The resource value specifies the specific AWS infrastructure for which this permission applies. This is specified as an <strong><em>Amazon Resource Name (ARN)</em></strong>.</li>
+              <li>The format for an ARN varies slightly between services, but the basic format is: <code>arn:aws:service:region:account-id:[resourcetype:]resource</code></li>
+              <li>For some services, wildcard values are allowed; for instance, an S3 ARN could have a resource of <code>foldername\*</code> to indicate all objects in the specified folder.</li>
+              <li>Sample ARN
+                <ul>
+                  <li>Amazon S3 Bucket:	<code>arn:aws:s3:us-east-1:123456789012:my_corporate_bucket/*</code></li>
+                  <li>IAM User:	<code>arn:aws:iam:us-east-1:123456789012:user/David</code></li>
+                  <li>Amazon DynamoDB Table:	<code>arn:aws:dynamodb:us-east-1:123456789012:table/tablename</code></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li><em>Action</em>:
+            <ul>
+              <li>The action value specifies the subset of actions within a service that the permission allows or denies. For instance, a permission may grant access to any read-based action for S3.</li>
+              <li>A set of actions can be specified with an enumerated list or by using wildcards (Read*).</li>
+            </ul>
+          </li>
+          <li><em>Condition</em>:
+            <ul>
+              <li>The condition value optionally defines one or more additional restrictions that limit the actions allowed by the permission.</li>
+              <li>For instance, the permission might contain a condition that limits the ability to access a resource to calls that come from a specific IP address range.</li>
+              <li>Another condition could restrict the permission only to apply during a specific time interval.</li>
+              <li>A sample policy is shown in the following listing. This policy allows a principal to list the objects in a specific bucket and to retrieve those objects, but only if the call comes from a specific IP address.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="p">{</span>
+</span><span class="line">	<span class="s2">&quot;Version&quot;</span><span class="o">:</span> <span class="s2">&quot;2012–10–17&quot;</span><span class="p">,</span>
+</span><span class="line">	<span class="s2">&quot;Statement&quot;</span><span class="o">:</span> <span class="p">[</span>
+</span><span class="line">		<span class="p">{</span>
+</span><span class="line">			<span class="s2">&quot;Sid&quot;</span><span class="o">:</span> <span class="s2">&quot;Stmt1441716043000&quot;</span><span class="p">,</span>
+</span><span class="line">			<span class="s2">&quot;Effect&quot;</span><span class="o">:</span> <span class="s2">&quot;Allow&quot;</span><span class="p">,</span>
+</span><span class="line">			<span class="s2">&quot;Action&quot;</span><span class="o">:</span> <span class="p">[</span> <span class="s2">&quot;s3:GetObject&quot;</span><span class="p">,</span> <span class="s2">&quot;s3:ListBucket&quot;</span><span class="p">],</span>
+</span><span class="line">			<span class="s2">&quot;Condition&quot;</span><span class="o">:</span> <span class="p">{</span>
+</span><span class="line">				<span class="s2">&quot;IpAddress&quot;</span><span class="o">:</span> <span class="p">{</span>
+</span><span class="line">					<span class="s2">&quot;aws:SourceIp&quot;</span><span class="o">:</span> <span class="s2">&quot;192.168.0.1&quot;</span>
+</span><span class="line">				<span class="p">}</span>
+</span><span class="line">			<span class="p">},</span>
+</span><span class="line">			<span class="s2">&quot;Resource&quot;</span><span class="o">:</span> <span class="p">[</span>
+</span><span class="line">				<span class="s2">&quot;arn:aws:s3:::my_public_bucket/*&quot;</span>
+</span><span class="line">			<span class="p">]</span>
+</span><span class="line">		<span class="p">}</span>
+</span><span class="line">	<span class="p">]</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Associating Policies with Principals</strong></p>
+
+<ul>
+  <li>A policy can be associated directly with an IAM user in one of two ways:
+    <ul>
+      <li><em>User Policy</em>:
+        <ul>
+          <li>These policies exist only in the context of the user to which they are attached.</li>
+          <li>In the console, a user policy is entered into the user interface on the IAM user page.</li>
+        </ul>
+      </li>
+      <li><em>Managed Policies</em>:
+        <ul>
+          <li>Policies are created in the ‘Policies’ tab on the IAM page and exist independently of any individual user.</li>
+          <li>Same policy can be associated with many users or groups of users.</li>
+          <li>There are a large number of predefined managed policies on the Policies tab of the IAM page in the AWS Console.</li>
+          <li>You can write your own policies specific to your use cases.</li>
+          <li>
+            <ul>
+              <li>Using predefined managed policies ensures that when new permissions are added for new features, your users will still have the correct access.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>IAM Groups</strong></p>
+
+<ul>
+  <li>Common method for associating policies with users is with the IAM groups feature.</li>
+  <li>Groups simplify managing permissions for large numbers of users.</li>
+  <li>After a policy is assigned to a group, any user who is a member of that group assumes those permissions.</li>
+  <li>This is a much simpler management process than having to review what policies a new IAM user for the operations team should receive and manually adding those policies to the user.</li>
+  <li>2 ways a policy can be associated with an IAM group:
+    <ul>
+      <li><em>Group Policy</em>
+        <ul>
+          <li>These policies exist only in the context of the group to which they are attached.</li>
+          <li>In the AWS Console, a group policy is entered into the user interface on the IAM Group page.</li>
+        </ul>
+      </li>
+      <li><em>Managed Policies</em>
+        <ul>
+          <li>can be associated with IAM users and IAM groups.</li>
+          <li>A good first step is to use the root user to create a new IAM group called “IAM Administrators” and assign the managed policy, “IAMFullAccess.”</li>
+          <li>Then create a new IAM user called “Administrator,” assign a password, and add it to the IAM Administrators group. At this point, you can log off as the root user and perform all further administration with the IAM user account.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Assuming a role</strong></p>
+
+<p>The final way an actor can be associated with a policy is by assuming a role. In this case, the actor can be:</p>
+
+<ul>
+  <li>An authenticated IAM user (person or process). In this case, the IAM user must have the rights to assume the role.</li>
+  <li>A person or process authenticated by a trusted service outside of AWS, such as an on-premises LDAP directory or a web authentication service. In this situation, an AWS Cloud service will assume the role on the actor’s behalf and return a token to the actor.</li>
+</ul>
+
+<p>After an actor has assumed a role, it is provided with a temporary security token associated with the policies of that role. The token contains all the information required to authenticate API calls. This information includes a standard access key plus an additional session token required for authenticating calls under an assumed role.</p>
+
+<h3 id="other-key-features">Other Key Features</h3>
+
+<p>Beyond the critical concepts of principals, authentication, and authorization, there are several other features of the IAM service that are important to understand to realize the full benefits of IAM.</p>
+
+<p><strong>Multi-Factor Authentication (MFA)</strong></p>
+
+<ul>
+  <li>MFA adds an extra layer of security to your infrastructure by adding a second method of authentication beyond just a password or access key.</li>
+  <li>With MFA, authentication also requires entering a <em>One-Time Password (OTP)</em> from a small device. The MFA device can be either a small hardware device you carry with you or a virtual device via an app on your smart phone (for example, the AWS Virtual MFA app).</li>
+  <li>MFA requires you to verify your identity with both <strong>something you know</strong> and <strong>something you have</strong>.</li>
+  <li>MFA can be assigned to any IAM user account, whether the account represents a person or application.</li>
+  <li>When a person using an IAM user configured with MFA attempts to access the AWS  Console, after providing their password they will be prompted to enter the current code displayed on their MFA device before being granted access. An application using an IAM user configured with MFA must query the application user to provide the current code, which the application will then pass to the API.</li>
+</ul>
+
+<p><strong>Rotating Keys</strong></p>
+
+<ul>
+  <li>It is a security best practice to rotate access keys associated with your IAM users.</li>
+  <li>IAM facilitates this process by allowing two active access keys at a time.</li>
+  <li>The process to rotate keys can be conducted via the console, CLI, or SDKs:
+    <ul>
+      <li>Create a new access key for the user.</li>
+      <li>Reconfigure all applications to use the new access key.</li>
+      <li>Disable the original access key (disabling instead of deleting at this stage is critical, as it allows rollback to the original key if there are issues with the rotation).</li>
+      <li>Verify the operation of all applications.</li>
+      <li>Delete the original access key.</li>
+    </ul>
+  </li>
+  <li>Access keys should be rotated on a regular schedule.</li>
+</ul>
+
+<p><strong>Resolving Multiple Permissions</strong></p>
+
+<p>Occasionally, multiple permissions will be applicable when determining whether a principal has the privilege to perform some action. These permissions may come from multiple policies associated with a principal or resource policies attached to the AWS resource in question. It is important to know how conflicts between these permissions are resolved:</p>
+
+<ul>
+  <li>Initially the request is denied by default.</li>
+  <li>All the appropriate policies are evaluated; if there is an explicit “deny” found in any policy, the request is denied and evaluation stops.</li>
+  <li>If no explicit “deny” is found and an explicit “allow” is found in any policy, the request is allowed.</li>
+  <li>If there are no explicit “allow” or “deny” permissions found, then the default “deny” is maintained and the request is denied.</li>
+</ul>
+
+<p>The only exception to this rule is if an <em>AssumeRole</em> call includes a role and a policy, the policy cannot expand the privileges of the role (for example, the policy cannot override any permission that is denied by default in the role).</p>
 
 <h2 id="aws-key-management-service-kms">AWS Key Management Service (KMS)</h2>
 

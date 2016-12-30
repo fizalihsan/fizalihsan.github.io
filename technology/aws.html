@@ -189,6 +189,7 @@ messageStyle: "none",
   <li><a href="#database-service">Database service</a>    <ul>
       <li><a href="#amazon-relational-database-service-rds">Amazon Relational Database Service (RDS)</a></li>
       <li><a href="#amazon-redshift">Amazon Redshift</a></li>
+      <li><a href="#amazon-dynamodb">Amazon DynamoDB</a></li>
       <li><a href="#amazon-elasticcache">Amazon ElasticCache</a></li>
     </ul>
   </li>
@@ -2579,6 +2580,224 @@ balancer.</li>
     </ul>
   </li>
 </ul>
+
+<h2 id="amazon-dynamodb">Amazon DynamoDB</h2>
+
+<ul>
+  <li>fully managed NoSQL database service - provides fast and low-latency performance that scales with ease.</li>
+  <li>Developers can create a table and write an unlimited number of items with consistent latency.</li>
+  <li>can provide consistent performance levels by automatically distributing the data and traffic for a table over multiple partitions.</li>
+  <li>After you configure a certain read or write capacity, DynamoDB will automatically add enough infrastructure capacity to support the requested throughput levels.</li>
+  <li>Read or write capacity can be adjusted as per demand after a table has been created, and DynamoDB will add or remove infrastructure and adjust the internal partitioning accordingly.</li>
+  <li>To help maintain consistent, fast performance levels, all table data is stored on high-performance SSD disk drives. Performance metrics, including transactions rates, can be monitored using CloudWatch.</li>
+  <li>provides automatic high-availability and durability protections by replicating data across multiple Availability Zones within an AWS Region.</li>
+  <li>Applications can connect to the DynamoDB service endpoint and submit requests over HTTP/S to read and write items to a table or even to create and delete tables.</li>
+  <li>provides a web service API that accepts requests in JSON format.</li>
+</ul>
+
+<p><strong>Data Model</strong></p>
+
+<ul>
+  <li>Basic components of the DynamoDB data model include tables, items, and attributes.</li>
+  <li>a table is a collection of items and each item is a collection of one or more attributes.</li>
+  <li>Each item has a primary key that uniquely identifies the item.</li>
+  <li>No limit in number of attributes in an item. However, max item size = 400KB</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">{
+</span><span class="line">Id = 101
+</span><span class="line">ProductName = "Book 101 Title"
+</span><span class="line">ISBN = "123–1234567890"
+</span><span class="line">Authors = [ "Author 1", "Author 2" ]
+</span><span class="line">Price = 2.88
+</span><span class="line">Dimensions = "8.5 x 11.0 x 0.5"
+</span><span class="line">PageCount = 500
+</span><span class="line">InPublication = 1
+</span><span class="line">ProductCategory = "Book"
+</span><span class="line">}</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Data Types</strong></p>
+
+<ul>
+  <li>DynamoDB only requires a primary key attribute.</li>
+  <li>When you create a table or a secondary index, you must specify the names and data types of each primary key attribute (partition key and sort key).</li>
+  <li>Data types fall into three major categories:
+    <ul>
+      <li><em>Scalar</em>: represents exactly one value.
+        <ul>
+          <li><em>String</em>: Text and variable length characters up to 400KB. Supports Unicode with UTF8 encoding</li>
+          <li><em>Number</em>: Positive or negative number with up to 38 digits of precision</li>
+          <li><em>Binary</em>: Binary data, images, compressed objects up to 400KB in size</li>
+          <li><em>Boolean</em>: Binary flag representing a true or false value</li>
+          <li><em>Null</em>: Represents a blank, empty, or unknown state. String, Number, Binary, Boolean cannot be empty.</li>
+        </ul>
+      </li>
+      <li><em>Set</em>: represent a unique list of one or more scalar values. Each value must be the same data type. Sets do not guarantee order.
+        <ul>
+          <li><em>String Set</em></li>
+          <li><em>Number Set</em></li>
+          <li><em>Binary Set</em></li>
+        </ul>
+      </li>
+      <li><em>Document</em>: represents multiple nested attributes, similar to the structure of a JSON file - supports 2 document types: List and Map. Multiple Lists and Maps can be combined and nested to create complex structures.
+        <ul>
+          <li><em>List</em>: Each List can be used to store an ordered list of attributes of different data types.</li>
+          <li><em>Map</em>: Each Map can be used to store an unordered list of key/value pairs.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Primary Key</strong></p>
+
+<ul>
+  <li>DynamoDB supports 2 types of primary keys, and this configuration cannot be changed after a table has been created:</li>
+  <li>Primary key must be type string, number, or binary.</li>
+  <li><em>Partition Key</em>
+    <ul>
+      <li>The primary key is made of one attribute, a partition (or hash) key.</li>
+      <li>DynamoDB builds an unordered hash index on this primary key attribute.</li>
+      <li>partition key is used to distribute the request to the right partition.</li>
+    </ul>
+  </li>
+  <li><em>Partition and Sort Key</em>
+    <ul>
+      <li>The primary key is made of 2 attributes: partition key + sort (or range) key.</li>
+      <li>Each item in the table is uniquely identified by the combination of its partition and sort key values. It is possible for two items to have the same partition key value, but those two items must have different sort key values.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Provisioned Capacity</strong></p>
+
+<ul>
+  <li>When you create an DynamoDB table, you are required to provision a certain amount of read and write capacity to handle your expected workloads.</li>
+  <li>Based on your configuration settings, DynamoDB will then provision the right amount of infrastructure capacity to meet your requirements with sustained, low-latency response times.</li>
+  <li>Overall capacity is measured in read and write capacity units. These values can later be scaled up or down by using an <code>UpdateTable</code> action.</li>
+  <li>Each operation against a DynamoDB table will consume some of the provisioned capacity units.</li>
+  <li>The specific amount of capacity units consumed depends largely on the size of the item, but also on other factors.</li>
+  <li><em>Read Operations</em>
+    <ul>
+      <li>For read operations, the amount of capacity consumed also depends on the read consistency selected in the request. E.g., given a table without a local secondary index, you will consume 1 capacity unit if you read an item that is 4KB or smaller.</li>
+      <li>To read a 110KB item 110KB, 28 capacity units are consumed. (<code>110 / 4 = 27.5 </code> rounded up to 28).</li>
+      <li>For strongly consistent read operations, twice the number of capacity units are consumed. 56 in the above example.</li>
+    </ul>
+  </li>
+  <li><em>Write Operations</em>
+    <ul>
+      <li>For write operations, 1 capacity is consumed to write an item 1KB or smaller.</li>
+    </ul>
+  </li>
+  <li><em>CloudWatch metrics</em>
+    <ul>
+      <li>use CloudWatch to monitor the capacity and make scaling decisions. e.g., <code>ConsumedReadCapacityUnits</code> and <code>ConsumedWriteCapacityUnits</code>.</li>
+      <li>If you do exceed your provisioned capacity for a period of time, requests will be throttled and can be retried later. You can monitor and alert on the <code>ThrottledRequests</code> metric using CloudWatch to notify you of changing usage patterns.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Secondary Indexes</strong></p>
+
+<ul>
+  <li>A secondary index lets you query the data in the table using an alternate key, in addition to queries against the primary key.</li>
+  <li>allow you to search a large table efficiently and avoid an expensive scan operation to find items with specific attributes</li>
+  <li>When an item is modified in a table, each secondary index is updated which also consumes write capacity units.</li>
+  <li>DynamoDB supports 2 different kinds of indexes:
+    <ul>
+      <li><em>Global Secondary Index</em>:
+        <ul>
+          <li>is an index with a partition and sort key that can be different from those on the table.</li>
+          <li>can create or delete a global secondary index on a table at any time.</li>
+          <li>item updates maintain their own provisioned throughput settings separate from the table</li>
+        </ul>
+      </li>
+      <li><em>Local Secondary Index</em>:
+        <ul>
+          <li>is an index that has the same partition key attribute as the primary key of the table, but a different sort key.</li>
+          <li>can only create a local secondary index when you create a table.</li>
+          <li>item updates will consume write capacity units from the main table</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Writing and Reading Data</strong></p>
+
+<p>After you create a table with a primary key and indexes, you can begin writing and reading items to the table. Amazon DynamoDB provides multiple operations that let you create, update, and delete individual items. Amazon DynamoDB also provides multiple querying options that let you search a table or an index or retrieve back a specific item or a batch of items.</p>
+
+<p><strong>Writing Items</strong></p>
+
+<p>Amazon DynamoDB provides three primary API actions to create, update, and delete items: PutItem, UpdateItem, and DeleteItem. Using the PutItem action, you can create a new item with one or more attributes. Calls to PutItem will update an existing item if the primary key already exists. PutItem only requires a table name and a primary key; any additional attributes are optional.
+The UpdateItem action will find existing items based on the primary key and replace the attributes. This operation can be useful to only update a single attribute and leave the other attributes unchanged. UpdateItem can also be used to create items if they don’t already exist. Finally, you can remove an item from a table by using DeleteItem and specifying a specific primary key.
+The UpdateItem action also provides support for atomic counters. Atomic counters allow you to increment and decrement a value and are guaranteed to be consistent across multiple concurrent requests. For example, a counter attribute used to track the overall score of a mobile game can be updated by many clients at the same time.
+These three actions also support conditional expressions that allow you to perform validation before an action is applied. For example, you can apply a conditional expression on PutItem that checks that certain conditions are met before the item is created. This can be useful to prevent accidental overwrites or to enforce some type of business logic checks.</p>
+
+<p><strong>Reading Items</strong></p>
+
+<p>After an item has been created, it can be retrieved through a direct lookup by calling the GetItem action or through a search using the Query or Scan action. GetItem allows you to retrieve an item based
+on its primary key. All of the item’s attributes are returned by default, and you have the option to select individual attributes to filter down the results.
+If a primary key is composed of a partition key, the entire partition key needs to be specified to retrieve the item. If the primary key is a composite of a partition key and a sort key, GetItem will require both the partition and sort key as well. Each call to GetItem consumes read capacity units based on the size of the item and the consistency option selected.
+By default, a GetItem operation performs an eventually consistent read. You can optionally request a strongly consistent read instead; this will consume additional read capacity units, but it will return the most up-to-date version of the item.</p>
+
+<p><strong>Eventual Consistency</strong></p>
+
+<p>When reading items from DynamoDB, the operation can be either eventually consistent or strongly consistent. DynamoDB is a distributed system that stores multiple copies of an item across an AWS Region to provide high availability and increased durability. When an item is updated in DynamoDB, it starts replicating across multiple servers. Because DynamoDB is a distributed system, the replication can take some time to complete. Because of this we refer to the data as being eventually consistent, meaning that a read request immediately after a write operation might not show the latest change. In some cases, the application needs to guarantee that the data is the latest and DynamoDB offers an option for strongly consistent reads.
+Eventually Consistent Reads When you read data, the response might not reflect the results of a recently completed write operation. The response might include some stale data. Consistency across all copies of the data is usually reached within a second; if you repeat your read request after a short time, the response returns the latest data.
+Strongly Consistent Reads When you issue a strongly consistent read request, DynamoDB returns a response with the most up-to-date data that reflects updates by all prior related write operations to which DynamoDB returned a successful response. A strongly consistent read might be less available in the case of a network delay or outage. You can request a strongly consistent read result by specifying optional parameters in your request.</p>
+
+<p><strong>Batch Operations</strong></p>
+
+<p>DynamoDB also provides several operations designed for working with large batches of items, including <code>BatchGetItem</code> and <code>BatchWriteItem</code>. Using the <code>BatchWriteItem</code> action, you can perform up to 25 item creates or updates with a single operation. This allows you to minimize the overhead of each individual call when processing large numbers of items.</p>
+
+<p><strong>Searching Items</strong></p>
+
+<p>DynamoDB also gives you two operations, Query and Scan, that can be used to search a table or an index. A Query operation is the primary search operation you can use to find items in a table or a secondary index using only primary key attribute values. Each Query requires a partition key attribute name and a distinct value to search. You can optionally provide a sort key value and use a comparison operator to refine the search results. Results are automatically sorted by the primary key and are limited to 1MB.
+In contrast to a Query, a Scan operation will read every item in a table or a secondary index. By default, a Scan operation returns all of the data attributes for every item in the table or index. Each request can return up to 1MB of data. Items can be filtered out using expressions, but this can be a resource-intensive operation. If the result set for a Query or a Scan exceeds 1MB, you can page through the results in 1MB increments.
+inline For most operations, performing a Query operation instead of a Scan operation will be the most efficient option. Performing a Scan operation will result in a full scan of the entire table or
+secondary index, then it filters out values to provide the desired result. Use a Query operation when possible and avoid a Scan on a large table or index for only a small number of items.</p>
+
+<p><strong>Scaling and Partitioning</strong></p>
+
+<p>DynamoDB is a fully managed service that abstracts away most of the complexity involved in building and scaling a NoSQL cluster. You can create tables that can scale up to hold a virtually unlimited number of items with consistent low-latency performance. A DynamoDB table can scale horizontally through the use of partitions to meet the storage and performance requirements of your application. Each individual partition represents a unit of compute and storage capacity. A well-designed application will take the partition structure of a table into account to distribute read and write transactions evenly and achieve high transaction rates at low latencies.
+DynamoDB stores items for a single table across multiple partitions, as represented in Figure 7.4. DynamoDB decides which partition to store the item in based on the partition key. The partition key is used to distribute the new item among all of the available partitions, and items with the same partition key will be stored on the same partition.
+images
+FIGURE 7.4 Table partitioning
+As the number of items in a table grows, additional partitions can be added by splitting an existing partition. The provisioned throughput configured for a table is also divided evenly among the partitions. Provisioned throughput allocated to a partition is entirely dedicated to that partition, and there is no sharing of provisioned throughput across partitions.
+When a table is created, DynamoDB configures the table’s partitions based on the desired read and write capacity. One single partition can hold about 10GB of data and supports a maximum of 3,000 read capacity units or 1,000 write capacity units. For partitions that are not fully using their provisioned capacity, DynamoDB provides some burst capacity to handle spikes in traffic. A portion of your unused capacity will be reserved to handle bursts for short periods.
+As storage or capacity requirements change, DynamoDB can split a partition to accommodate more data or higher provisioned request rates. After a partition is split, however, it cannot be
+merged back together. Keep this in mind when planning to increase provisioned capacity temporarily and then lower it again. With each additional partition added, its share of the provisioned capacity is reduced.
+To achieve the full amount of request throughput provisioned for a table, keep your workload spread evenly across the partition key values. Distributing requests across partition key values distributes the requests across partitions. For example, if a table has 10,000 read capacity units configured but all of the traffic is hitting one partition key, you will not be able to get more than the 3,000 maximum read capacity units that one partition can support.
+inline To maximize DynamoDB throughput, create tables with a partition key that has a large number of distinct values and ensure that the values are requested fairly uniformly. Adding a random element that can be calculated or hashed is one common technique to improve partition distribution.</p>
+
+<p><strong>Security</strong></p>
+
+<p>DynamoDB gives you granular control over the access rights and permissions for users and administrators. DynamoDB integrates with the IAM service to provide strong control over permissions using policies. You can create one or more policies that allow or deny specific operations on specific tables. You can also use conditions to restrict access to individual items or attributes.
+All operations must first be authenticated as a valid user or user session. Applications that need to read and write from DynamoDB need to obtain a set of temporary or permanent access control keys. While these keys could be stored in a configuration file, a best practice is for applications running on AWS to use IAM Amazon EC2 instance profiles to manage credentials. IAM Amazon EC2 instance profiles or roles allow you to avoid storing sensitive keys in configuration files that must then be secured.
+inline For mobile applications, a best practice is to use a combination of web identity federation with the AWS Security Token Service (AWS STS) to issue temporary keys that expire after a short period.
+DynamoDB also provides support for fine-grained access control that can restrict access to specific items within a table or even specific attributes within an item. For example, you may want to limit a user to only access his or her items within a table and prevent access to items associated with a different user. Using conditions in an IAM policy allows you to restrict which actions a user can perform, on which tables, and to which attributes a user can read or write.</p>
+
+<p><strong>Amazon DynamoDB Streams</strong></p>
+
+<p>A common requirement for many applications is to keep track of recent changes and then perform some kind of processing on the changed records. DynamoDB Streams makes it easy to get a list of item modifications for the last 24-hour period. For example, you might need to calculate metrics on a rolling basis and update a dashboard, or maybe synchronize two tables or log activity and changes to an audit trail. With DynamoDB Streams, these types of applications become easier to build.
+DynamoDB Streams allows you to extend application functionality without modifying the original application. By reading the log of activity changes from the stream, you can build new
+integrations or support new reporting requirements that weren’t part of the original design.
+Each item change is buffered in a time-ordered sequence or stream that can be read by other applications. Changes are logged to the stream in near real-time and allow you to respond quickly or chain together a sequence of events based on a modification.
+Streams can be enabled or disabled for an DynamoDB table using the AWS Management Console, Command Line Interface (CLI), or SDK. A stream consists of stream records. Each stream record represents a single data modification in the DynamoDB table to which the stream belongs. Each stream record is assigned a sequence number, reflecting the order in which the record was published to the stream.
+Stream records are organized into groups, also referred to as shards. Each shard acts as a container for multiple stream records and contains information on accessing and iterating through the records. Shards live for a maximum of 24 hours and, with fluctuating load levels, could be split one or more times before they are eventually closed.
+inline To build an application that reads from a shard, it is recommended to use the DynamoDB Streams Kinesis Adapter. The Kinesis Client Library (KCL) simplifies the application logic required to process reading records from streams and shards.</p>
 
 <h2 id="amazon-elasticcache">Amazon ElasticCache</h2>
 

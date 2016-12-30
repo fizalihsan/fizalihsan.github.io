@@ -628,7 +628,7 @@ __Scaling Policy__
 * Takes requests from clients over the Internet and distributes them to EC2 instances that are registered with the load balancer.
 * When you configure a load balancer, it receives a public DNS name that clients can use to send requests to your application. The DNS servers resolve the DNS name to your load balancer’s public IP address, which can be visible to client applications.
 * Because ELB scales in and out to meet traffic demand, it is not recommended to bind an application to an IP address that may no longer be part of a load balancer’s pool of resources.
-* Best practice: always reference a load balancer by its DNS name, instead of by the IP address, in order to provide a single, stable entry point.
+* Best practice: always refer a load balancer by its DNS name, instead of by the IP address, in order to provide a single, stable entry point.
 * ELB in VPC supports IPv4 addresses only.
 * ELB in EC2-Classic supports both IPv4 and IPv6 addresses.
 
@@ -656,7 +656,6 @@ __Scaling Policy__
 	* In the OSI model, Layer 4 is the transport layer that describes the TCP connection between the client and your back-end instance through the load balancer. Layer 4 is the lowest level that is configurable for your load
 balancer.
 	* Layer 7 is the application layer that describes the use of HTTP and HTTPS connections from clients to the load balancer and from the load balancer to your back-end instance.
-* The SSL protocol is primarily used to encrypt confidential data over insecure networks such as the Internet. The SSL protocol establishes a secure connection between a client and the back-end server and ensures that all the data passed between your client and your server is private.
 
 ### ELB Configurations
 
@@ -986,13 +985,527 @@ __Inbound__
 
 # Database service
 
-## Amazon DynamoDB
+* __Data Warehouses__
+    * A data warehouse is a central repository for data that can come from one or more sources.
+    * RDS - used for OLTP, but can be used for OLAP
+    * Redshift is a high-performance data warehouse designed specifically for OLAP.
+    * It is also common to combine RDS with Redshift in the same application and periodically extract recent transactions and load them into a reporting database.
+* __NoSQL databases__
+    * Traditional relational databases are difficult to scale beyond a single server without significant engineering and cost, but a NoSQL architecture allows for horizontal scalability on commodity hardware.
+    * NoSQL database can be installed and run on EC2 instances, or choose a managed service like Amazon DynamoDB to deal with the heavy lifting involved with building a distributed cluster spanning multiple data centers.
 
-* document and key/value NoSQL DB service - single-digit millisecond latency at any scale
+## Amazon Relational Database Service (RDS)
+
+* RDS is a service that simplifies the setup, operations, and scaling of a relational database on AWS. With Amazon
+* RDS offloads common tasks like backups, patching, scaling, and replication from user.
+* RDS helps you to streamline the installation of the database software and also the provisioning of infrastructure capacity.
+* After the initial launch, RDS simplifies ongoing maintenance by automating common administrative tasks on a recurring basis.
+* With RDS, you can accelerate your development timelines and establish a consistent operating model for managing relational databases. For example, RDS makes it easy to replicate your data to increase availability, improve durability, or scale up or beyond a single database instance for read-heavy database workloads.
+* RDS exposes a database endpoint to connect and execute SQL.
+* RDS does not provide shell access to DB Instances, and restricts access to certain system procedures and tables that require advanced privileges.
+
+__Database Instances__
+
+* The RDS service itself provides an API that lets you create and manage one or more DB Instances.
+* A DB Instance is an isolated database environment deployed in your private network segments in the cloud.
+* Each DB Instance runs and manages a popular commercial or open source database engine on your behalf.
+* To launch a new DB Instance: use AWS console or call `CreateDBInstance` API
+* To change or resize existing DB Instances: `ModifyDBInstance` API.
+* A DB Instance can contain multiple different databases, all of which you create and manage within the DB Instance itself by executing SQL commands with the RDS endpoint.
+* _DB Instance Class_
+    * The compute and memory resources of a DB Instance are determined by its DB Instance class.
+    * The range of DB Instance classes extends from a _db.t2.micro_ with 1 virtual CPU (vCPU) and 1 GB of memory, up to a db.r3.8xlarge with 32 vCPUs and 244 GB of memory.
+    * Instance class can changed, and RDS will migrate data to a larger or smaller instance class.
+    * Size and performance characteristics of the storage used can be controlled independent from the DB Instance class selected.
+* Many features and common configuration settings are exposed and managed using DB parameter groups and DB option groups.
+* _DB parameter group_
+    * A DB parameter group acts as a container for engine configuration values that can be applied to one or more DB Instances.
+    * Change the DB parameter group for an existing instance requires a reboot.
+* _DB option group_
+    * A DB option group acts as a container for engine features, which is empty by default.
+    * To enable specific features of a DB engine (for example, Oracle Statspack, Microsoft SQL Server Mirroring), create a new DB option group and configure the settings accordingly.
+* _Data migration_
+    * Existing databases can be migrated to RDS using native tools and techniques that vary depending on the engine. For example with MySQL, you can export a backup using mysqldump and import the file into RDS MySQL.
+    * AWS Database Migration Service gives you a graphical interface that simplifies the migration of both schema and data between databases.
+    * AWS Database Migration Service helps convert databases from one database engine to another.
+
+__Operational Benefits__
+
+* RDS increases the operational reliability of your databases by applying a very consistent deployment and operational model.
+* This level of consistency is achieved in part by limiting the types of changes that can be made to the underlying infrastructure and through the extensive use of automation.
+* For example with RDS, you cannot use Secure Shell (SSH) to log in to the host instance and install a custom piece of software. You can, however, connect using SQL administrator tools or use DB option groups and DB parameter groups to change the behavior or feature configuration for a DB Instance.
+* If you want full control of the OS or require elevated permissions to run, then consider installing your database on EC2 instead of RDS.
+* RDS is designed to simplify the common tasks required to operate a relational database in a reliable manner.
+
+_Comparison of Operational Responsibilities_
+
+| Responsibility  | Database On-Premise | Database on EC2 | Database on RDS |
+| :------------- | :------------- | :------------- | :------------- |
+| App Optimization |You | You | You |
+| Scaling | You | You | AWS |
+| High Availability | You | You | AWS |
+| Backups | You | You | AWS |
+| DB Engine Patches | You | You | AWS |
+| Software Installation | You | You | AWS |
+| OS Patches | You | You | AWS |
+| OS Installation | You | AWS | AWS |
+| Server Maintenance | You | AWS | AWS |
+| Rack and Stack | You | AWS | AWS |
+| Power and Cooling | You | AWS | AWS |
+
+__Database Engines__
+
+* RDS supports six database engines: MySQL, PostgreSQL, MariaDB, Oracle, SQL Server, and Amazon Aurora. Features and capabilities vary slightly depending on the engine that you select.
+* ___MySQL___
+    * RDS for MySQL currently supports MySQL 5.7, 5.6, 5.5, and 5.1.
+    * The engine is running the open source Community Edition with _InnoDB_ as the default and recommended database storage engine.
+    * RDS MySQL allows you to connect using standard MySQL tools such as MySQL Workbench or SQL Workbench/J.
+    * RDS MySQL supports Multi-AZ deployments for high availability and read replicas for horizontal scaling.
+* ___PostgreSQL___
+    * RDS supports PostgreSQL 9.5.x, 9.4.x, and 9.3.x.
+    * RDS PostgreSQL can be managed using standard tools like `pgAdmin` and supports standard JDBC/ODBC drivers.
+    * supports Multi-AZ deployment for high availability and read replicas for horizontal scaling.
+* ___MariaDB___
+    * MariaDB is an open source database engine built by the creators of MySQL and enhanced with enterprise tools and functionality.
+    * MariaDB adds features that enhance the performance, availability, and scalability of MySQL.
+    * AWS supports MariaDB 10.0.17.
+    * RDS fully supports the `XtraDB` storage engine for MariaDB DB Instances and, like RDS MySQL and PostgreSQL, has support for Multi-AZ deployment and read replicas.
+* ___Oracle___
+    * RDS supports DB Instances running several editions of Oracle 11g and Oracle 12c.
+    * RDS supports access to schemas on a DB Instance using any standard SQL client application, such as Oracle SQL Plus.
+    * RDS Oracle supports 3 different editions of the popular database engine: Standard Edition One, Standard Edition, and Enterprise Edition.
+
+_RDS Oracle Editions Compared_
+
+|  Edition |	Performance	| Multi-AZ | Encryption
+| :--------- | :-------- | :--- | :------------- |
+| Standard One | 	++++ |	Yes |	KMS |
+| Standard |	++++++++ |	Yes |	KMS |
+| Enterprise |	++++++++ |	Yes |	KMS and TDE |
+
+* ___Microsoft SQL Server___
+    * RDS allows DBAs to connect to their SQL Server DB Instance in the cloud using native tools like SQL Server Management Studio.
+    * Versions supported: SQL Server 2008 R2, SQL Server 2012, and SQL Server 2014.
+    * Editions supported: Express Edition, Web Edition, Standard Edition, and Enterprise Edition.
+
+_RDS SQL Server Editions Compared_
+
+| Edition |	Performance	| Multi-AZ | Encryption
+| :--------- | :-------- | :--- | :------------- |
+| Express | + |	No |	KMS |
+| Web |	++++ |	No |	KMS |
+| Standard |	++++ |	Yes |	KMS |
+| Enterprise |	++++++++ |	Yes |	KMS and TDE |
+
+* ___Licensing___
+    * RDS Oracle and Microsoft SQL Server are commercial software products that require appropriate licenses to operate in the cloud.
+    * AWS offers two licensing models: License Included and Bring Your Own License (BYOL).
+    * _License Included Model_:
+        * In this model, the license is held by AWS and is included in the RDS instance price.
+        * For Oracle, this provides licensing for Standard Edition One.
+        * For SQL Server, License Included provides licensing for SQL Server Express Edition, Web Edition, and Standard Edition.
+    * _Bring Your Own License (BYOL)_
+        * In this model, you provide your own license.
+        * For Oracle, you must have the appropriate Oracle Database license for the DB Instance class and Oracle Database edition you want to run. You can bring over Standard Edition One, Standard Edition, and Enterprise Edition.
+        * For SQL Server, you provide your own license under the Microsoft License Mobility program. You can bring over Microsoft SQL Standard Edition and also Enterprise Edition. You are responsible for tracking and managing how licenses are allocated.
+* ___Amazon Aurora___
+    * Aurora offers enterprise-grade commercial database technology while offering the simplicity and cost effectiveness of an open source database.
+    * This is achieved by redesigning the internal components of MySQL to take a more service-oriented approach.
+    * Like other RDS engines, Aurora is a fully managed service, is MySQL-compatible out of the box, and provides for increased reliability and performance over standard MySQL deployments.
+    * Aurora can deliver up to 5x performance of MySQL without requiring changes to most of your existing web applications. You can use the same code, tools, and applications that you use with your existing MySQL databases with Aurora.
+    * _DB Cluster_
+        * When you first create an Amazon Aurora instance, you create a DB cluster.
+        * A DB cluster has one or more instances and includes a cluster volume that manages the data for those instances.
+        * An Aurora cluster volume is a virtual database storage volume that spans multiple Availability Zones, with each Availability Zone having a copy of the cluster data.
+        * An Aurora DB cluster consists of 2 different types of instances: Primary Instance and Aurora Replicate instance
+        * _Primary Instance_:
+            * This is the main instance, which supports both read and write workloads.
+            * When you modify your data, you are modifying the primary instance.
+            * Each Aurora DB cluster has one primary instance.
+        * _Aurora Replica_:
+            * This is a secondary instance that supports only read operations.
+            * Each DB cluster can have up to __15__ Aurora Replicas in addition to the primary instance.
+            * By using multiple Aurora Replicas, you can distribute the read workload among various instances, increasing performance.
+            * You can also locate your Aurora Replicas in multiple Availability Zones to increase your database availability.
+
+__Storage Options__
+
+* RDS is built using EBS and allows you to select the right storage option based on your performance and cost requirements.
+* Depending on the database engine and workload, you can scale up to 4 to 6TB in provisioned storage and up to 30,000 IOPS.
+* RDS supports 3 storage types:
+    * _Magnetic Magnetic storage_: also called _standard storage_, offers cost-effective storage that is ideal for applications with light I/O requirements.
+    * _General Purpose (SSD)_: also called _gp2_, can provide faster access than magnetic storage. This storage type can provide burst performance to meet spikes and is excellent for small- to medium-sized databases.
+    * _Provisioned IOPS (SSD)_: is designed to meet the needs of I/O-intensive workloads, particularly database workloads, that are sensitive to storage performance and consistency in random access I/O throughput.
+* For most applications, General Purpose (SSD) is the best option and provides a good mix of lower-cost and higher-performance characteristics.
+
+_RDS Storage Types_
+
+|   | Magnetic | General Purpose (SSD) | Provisioned IOPS (SSD) |
+| :---- | :------ | :------ | :------ |
+| Size | +++ | +++++ | +++++ |
+| Performance | + | +++ | +++++ |
+| Cost | ++ | +++ | +++++ |
+
+
+__Backup and Recovery__
+
+* RDS provides a consistent operational model for backup and recovery procedures across the different database engines.
+* RDS provides two mechanisms for backing up the database: automated backups and manual snapshots.
+* By using a combination of both techniques, you can design a backup recovery model to protect your application data.
+* ___Recovery Point Objective (RPO)___ and ___Recovery Time Objective (RTO)___
+    * _RPO_
+        * is defined as the maximum period of data loss that is acceptable in the event of a failure or incident.
+        * For example, many systems back up transaction logs every 15 minutes to allow them to minimize data loss in the event of an accidental deletion or hardware failure.
+    * _RTO_
+        * is defined as the maximum amount of downtime that is permitted to recover from backup and to resume processing.
+        * For large databases in particular, it can take hours to restore from a full backup.
+        * In the event of a hardware failure, you can reduce your RTO to minutes by failing over to a secondary node.
+        * You should create a recovery plan that, at a minimum, lets you recover from a recent backup.
+    * Each organization typically will define a RPO and RTO for important applications based on the criticality of the application and the expectations of the users.
+    * It’s common for enterprise systems to have an RPO measured in minutes and an RTO measured in hours or even days, while some critical applications may have much lower tolerances.
+* ___Backup Mechanisms___
+    * _Automated Backups_
+        * continuously tracks changes and backs up database.
+        * RDS creates a storage volume snapshot of the DB Instance, backing up the entire DB Instance and not just individual databases.
+        * Backup retention period can be set up while creating a DB Instance.
+        * Default backup retention period = 1 day. Max retention = 35 days.
+        * When a DB Instance is deleted, all automated backup snapshots are deleted and cannot be recovered. Manual snapshots, however, are not deleted.
+        * Automated backups will occur daily during a configurable 30-minute maintenance window called the _backup window_.
+        * DB Instance can be restored to any specific time during the retention period, creating a new DB Instance.
+    * _Manual DB Snapshots_
+        * In addition to automated backups, manual DB snapshots can be performed at any time.
+        * A DB snapshot is initiated by you and can be created as frequently as you want.
+        * You can then restore the DB Instance to the specific state in the DB snapshot at any time.
+        * DB snapshots can be created with the RDS console or the `CreateDBSnapshot` action.
+        * Unlike automated snapshots that are deleted after the retention period, manual DB snapshots are kept until you explicitly delete them with the RDS console or the `DeleteDBSnapshot` action.
+        * For busy databases, use Multi-AZ to minimize the performance impact of a snapshot. During the backup window, storage I/O may be suspended while your data is being backed up, and you may experience elevated latency. This I/O suspension typically lasts for the duration of the snapshot. This period of I/O suspension is shorter for Multi-AZ DB deployments because the backup is taken from the standby, but latency can occur during the backup process.
+* ___Recovery___
+    * RDS allows you to recover your database quickly whether you are performing automated backups or manual DB snapshots.
+    * You cannot restore from a DB snapshot to an existing DB Instance; a new DB Instance is created when you restore.
+    * When you restore a DB Instance, only the default DB parameter and security groups are associated with the restored instance. As soon as the restore is complete, you should associate any custom DB parameter or security groups used by the instance from which you restored.
+    * When using automated backups, RDS combines the daily backups performed during your predefined maintenance window in conjunction with transaction logs to enable you to restore your DB Instance to any point during your retention period, typically up to the last 5 minutes.
+
+{% img right /technology/rds-multi_az.png 400 400 %}
+
+* ___High Availability with Multi-AZ___
+    * RDS Multi-AZ deployments allows you to create a database cluster across multiple Availability Zones.
+    * Setting up a relational database to run in a highly available and fault-tolerant fashion is a challenging task.
+    * With a single option, RDS can increase the availability of your database using replication.
+    * Multi-AZ lets you meet the most demanding RPO and RTO targets by using synchronous replication to minimize RPO and fast failover to minimize RTO to minutes.
+    * Multi-AZ allows you to place a secondary copy of your database in another Availability Zone for disaster recovery purposes.
+    * Multi-AZ deployments are available for all types of RDS database engines.
+    * When you create a Multi-AZ DB Instance, a primary instance is created in one Availability Zone and a secondary instance is created in another Availability Zone. You are assigned a database instance endpoint such as : `my_app_db.ch6fe7ykq1zd.us-west-2.rds.amazonaws.com`. This endpoint is a DNS name that AWS takes responsibility for resolving to a specific IP address. You use this DNS name when creating the connection to your database.
+    * RDS automatically replicates the data from the master database or primary instance to the slave database or secondary instance using synchronous replication.
+    * Each Availability Zone runs on its own physically distinct, independent infrastructure and is engineered to be highly reliable.
+    * RDS detects and automatically recovers from the most common failure scenarios for Multi-AZ deployments so that you can resume database operations as quickly as possible without administrative intervention.
+    * Multi-AZ deployments are for disaster recovery only; they are not meant to enhance database performance. The standby DB Instance is not available to offline queries from the primary master DB Instance. To improve database performance using multiple DB Instances, use read replicas or other DB caching technologies such as Amazon ElastiCache.
+    * _Automatic Failover__
+        * RDS will automatically fail over to the standby instance without user intervention.
+        * The DNS name remains the same, but the RDS service changes the CNAME to point to the standby.
+        * The primary DB Instance switches over automatically to the standby replica if there was an Availability Zone service disruption, if the primary DB Instance fails, or if the instance type is changed.
+        * RDS automatically performs a failover in the event of any of the following:
+            * Loss of availability in primary Availability Zone
+            * Loss of network connectivity to primary database
+            * Compute unit failure on primary database
+            * Storage failure on primary database
+    * _Manual Failover_: You can also perform a manual failover of the DB Instance. Failover between the primary and the secondary instance is fast, and the time automatic failover takes to complete is typically one to two minutes.
+
+__Scaling Up and Out__
+
+* RDS allows you to scale compute and storage vertically, and for some DB engines, you can scale horizontally.
+* ___Vertical Scalability___
+    * RDS makes it easy to scale up or down your database tier to meet the demands of your application.
+    * Changes can be scheduled to occur during the next maintenance window or to begin immediately using the `ModifyDBInstance` action.
+    * To change the amount of compute and memory, you can select a different DB Instance class of the database.
+    * After you select a larger or smaller DB Instance class, RDS automates the migration process to a new class with only a short disruption and minimal effort.
+    * _Storage Expansion_
+        * You can also increase the amount of storage, the storage class, and the storage performance for an RDS Instance.
+        * Each database instance can scale from 5GB up to 6TB in provisioned storage depending on the storage type and engine.
+        * Storage for RDS can be increased over time as needs grow with minimal impact to the running database.
+        * Storage expansion is supported for all of the database engines except for SQL Server.
+* ___Horizontal Scalability with Partitioning___
+    * Partitioning a large relational database into multiple instances or shards is a common technique for handling more requests beyond the capabilities of a single instance.
+    * Partitioning, or sharding, allows you to scale horizontally to handle more users and requests but requires additional logic in the application layer.
+    * The application needs to decide how to route database requests to the correct shard and becomes limited in the types of queries that can be performed across server boundaries.
+* ___Horizontal Scalability with Read Replicas___
+    * Another important scaling technique is to use read replicas to offload read transactions from the primary database and increase the overall number of transactions. RDS supports read replicas that allow you to scale out elastically beyond the capacity constraints of a single DB Instance for read-heavy database workloads.
+    * Use cases where deploying one or more read replica DB Instances is helpful:
+        * for read-heavy workloads e.g., blog sites
+        * Handle read traffic while the source DB Instance is unavailable for backups or scheduled maintenance
+        * Offload reporting or data warehousing scenarios
+    * Read replicas are currently supported in RDS for MySQL, PostgreSQL, MariaDB, and Aurora.
+    * RDS uses the MySQL, MariaDB, and PostgreSQL DB engines’ built-in replication functionality to create a special type of DB Instance, called a _read replica_, from a source DB Instance. Updates made to the source DB Instance are asynchronously copied to the read replica.
+    * You can create one or more replicas of a database within a single AWS Region or across multiple AWS Regions.
+    * To enhance your disaster recovery capabilities or reduce global latencies, you can use cross-region read replicas
+
+__Security__
+
+* Securing your RDS DB Instances and relational databases requires a comprehensive plan that addresses the many layers commonly found in database-driven systems. This includes the infrastructure resources, the database, and the network.
+* _Infrastructure level_: Protect access to infrastructure resources using IAM policies limiting the actions to perform. e.g., `CreateDBInstance` and `DeleteDBInstance` actions to administrators only.
+* _Network level_
+    * _VPC_: deploy RDS DB Instances into a private subnet within a VPC limiting network access to the DB Instance. Before deploying into a VPC, first create a DB subnet group that predefines which subnets are available for RDS deployments.
+    * _Security Groups & ACL_: Along with VPC, restrict network access using network ACLs and security groups to limit inbound traffic to a short list of source IP addresses.
+* _Database level_
+    * create users and grant them permissions to read and write to your databases.
+    * create users with strong passwords that you rotate frequently.
+* _Data level_:
+    * protect the confidentiality of your data in transit and at rest with multiple encryption capabilities provided with RDS.
+    * Security features vary slightly from one engine to another, but all engines support some form of in-transit encryption and also at-rest encryption.
+    * Use SSL to protect data in transit.
+    * Encryption at rest is possible for all engines using the Amazon Key Management Service (KMS) or Transparent Data Encryption (TDE).
+    * All logs, backups, and snapshots are encrypted for an encrypted RDS instance.
 
 ## Amazon Redshift
 
-* columnar DB - petabyte-scale data warehouse service to analyze structured data - by leveraging columnar storage technology it can run parallelized queries across multiple nodes
+* Redshift is a fast, powerful, fully managed, petabyte-scale data warehouse service in the cloud.
+* Redshift is a relational database designed for OLAP scenarios and optimized for high-performance analysis and reporting of very large datasets.
+* Traditional data warehouses are difficult and expensive to manage, especially for large datasets. Redshift lowers the cost of a data warehouse and also makes it easy to analyze large amounts of data very quickly.
+* Redshift gives you fast querying capabilities over structured data using standard SQL commands to support interactive querying over large datasets.
+* With connectivity via ODBC or JDBC, Redshift integrates well with various data loading, reporting, data mining, and analytics tools.
+* Redshift is based on industry-standard PostgreSQL
+* Redshift manages the work needed to set up, operate, and scale a data warehouse, from provisioning the infrastructure capacity to automating ongoing administrative tasks such as backups and patching. Redshift automatically monitors your nodes and drives to help you recover from failures.
+
+__Clusters and Nodes__
+
+{% img right /technology/aws-redshift-cluster.png 400 400 %}
+
+* A cluster is composed of a leader node and one or more compute nodes.
+* The client application interacts directly only with the leader node, and the compute nodes are transparent to external applications.
+* Redshift currently has support for 6 different node types and each has a different mix of CPU, memory, and storage. The 6 node types are grouped into two categories:
+    * _Dense Compute_ node types support clusters up to 326TB using fast SSDs
+    * _Dense Storage_ nodes support clusters up to 2PB using large magnetic disks
+* Each cluster contains one or more databases.
+* User data for each table is distributed across the compute nodes. Your application or SQL client communicates with Redshift using standard JDBC or ODBC connections with the leader node, which in turn coordinates query execution with the compute nodes. Your application does not interact directly with the compute nodes.
+* _Slices_
+    * The disk storage for a compute node is divided into a number of slices.
+    * The number of slices per node depends on the node size of the cluster and typically varies between 2 and 16.
+    * The nodes all participate in parallel query execution, working on data that is distributed as evenly as possible across the slices.
+* You can increase query performance by adding multiple nodes to a cluster. When you submit a query, Redshift distributes and executes the query in parallel across all of a cluster’s compute nodes. Redshift also spreads your table data across all compute nodes in a cluster based on a distribution strategy that you specify. This partitioning of data across multiple compute resources allows you to achieve high levels of performance.
+* Redshift allows
+    * to resize a cluster to add storage and compute capacity
+    * change the node type of a cluster and keep the overall size the same.
+* During resize, Redshift will create a new cluster and migrate data from the old cluster to the new one. During a resize operation, the database will become read-only until the operation is finished.
+
+__Table Design__
+
+* Redshift CREATE TABLE command supports specifying compression encodings, distribution strategy, and sort keys.
+* Additional columns can be added to a table using the ALTER TABLE command; however, existing columns cannot be modified.
+* _Compression Encoding_
+    * One of the key performance optimizations used by Redshift is data compression.
+    * When loading data for the first time into an empty table, Redshift will automatically sample your data and select the best compression scheme for each column.
+    * Alternatively, you can specify compression encoding on a per-column basis as part of the CREATE TABLE command.
+* _Distribution Strategy_
+    * One of the primary decisions when creating a table in Redshift is how to distribute the records across the nodes and slices in a cluster. You can configure the distribution style of a table to give Redshift hints as to how the data should be partitioned to best meet your query patterns. When you run a query, the optimizer shifts the rows to the compute nodes as needed to perform any joins and aggregates.
+    * The goal in selecting a table distribution style is to minimize the impact of the redistribution step by putting the data where it needs to be before the query is performed.
+    * The data distribution style that you select for your database has a big impact on query performance, storage requirements, data loading, and maintenance. By choosing the best distribution strategy for each table, you can balance your data distribution and significantly improve overall system performance.
+    * ___Distribution styles___
+        * _EVEN distribution_: Default option. Results in the data being distributed across the slices in a uniform fashion regardless of the data.
+        * _KEY distribution_: the rows are distributed according to the values in one column. The leader node will store matching values close together and increase query performance for joins.
+        * _ALL distribution_: a full copy of the entire table is distributed to every node. This is useful for lookup tables and other large tables that are not updated frequently.
+* _Sort Keys_
+    * While creating a table, specify one or more columns as sort keys.
+    * Sorting enables efficient handling of range-restricted predicates. If a query uses a range-restricted predicate, the query processor can rapidly skip over large numbers of blocks during table scans.
+    * The sort keys for a table can be either
+        * A _compound sort key_ is more efficient when query predicates use a prefix, which is a subset of the sort key columns in order.
+        * An _interleaved sort key_ gives equal weight to each column in the sort key, so query predicates can use any subset of the columns that make up the sort key, in any order.
+* _Loading Data_
+    * supports INSERT and UPDATE
+    * Bulk data upload
+        * use `COPY` command
+        * supports multiple types of input data sources
+        * fastest way to load data from flat files stored in an S3 bucket or from an DynamoDB table
+        * can read from multiple files from S3 at the same time - can distribute the workload to the nodes and perform the load process in parallel
+        * After each bulk data load
+            * run `VACUUM` command to reorganize the data and reclaim space after deletes.
+            * recommended to run `ANALYZE` command to update table statistics.
+    * Data Export: use `UNLOAD` command - can be used to generate delimited text files and store them in S3.
+* _Querying Data_
+    * supports standard SQL
+    * For complex queries, query plan can be analyzed to better optimize the access pattern.
+    * Performance of the cluster and specific queries can be monitored using CloudWatch and the Redshift web console.
+    * ___Workload Management (WLM)___
+        * WLM is used queue and prioritize queries for large clusters supporting many users
+        * WLM allows you define multiple queues and set the concurrency level for each queue.
+        * For example, you might want to have one queue set up for long-running queries and limit the concurrency and another queue for short-running queries and allow higher levels of concurrency.
+* _Snapshots_
+    * Similar to RDS, you can create point-in-time snapshots of the cluster.
+    * A snapshot can then be used to restore a copy or create a clone of your original cluster.
+    * Snapshots are durably stored internally in S3 by Redshift.
+    * Redshift supports both automated snapshots and manual snapshots.
+        * _automated snapshots_ periodically takes snapshots of your cluster and keeps a copy for a configurable retention period.
+        * _manual snapshots_ can be shared across regions or even with other AWS accounts - retained until you explicitly delete them.
+* _Security_
+    * Security plan should include controls to protect the infrastructure resources, the database schema, the records in the table, and network access.
+    * _Infrastructure level_: using IAM policies that limit the actions AWS administrators can perform. e.g., permission to create and manage the lifecycle of a cluster, including scaling, backup, and recovery operations.
+    * _Network level_: clusters can be deployed within the private IP address space of your VPC to restrict overall network connectivity. Fine-grained network access can be further restricted using security groups and network ACLs at the subnet level.
+    * _Database level_:
+        * When initially creating a Redshift cluster, create a master user account and password.
+        * The master account can be used to log in to the Redshift database and to create more users and groups. Each database user can be granted permission to schemas, tables, and other database objects. These permissions are independent from the IAM policies used to control access to the infrastructure resources and the Redshift cluster configuration.
+    * _Data level_:
+        * Encryption of data in transit using SSL-encrypted connections, and also encryption of data at rest using multiple techniques.
+        * To encrypt data at rest, Redshift integrates with KMS and AWS CloudHSM for encryption key management services.
+        * Encryption at rest and in transit assists in meeting compliance requirements, and provides additional protections for your data.
+
+## Amazon DynamoDB
+
+* fully managed NoSQL database service - provides fast and low-latency performance that scales with ease.
+* Developers can create a table and write an unlimited number of items with consistent latency.
+* can provide consistent performance levels by automatically distributing the data and traffic for a table over multiple partitions.
+* After you configure a certain read or write capacity, DynamoDB will automatically add enough infrastructure capacity to support the requested throughput levels.
+* Read or write capacity can be adjusted as per demand after a table has been created, and DynamoDB will add or remove infrastructure and adjust the internal partitioning accordingly.
+* To help maintain consistent, fast performance levels, all table data is stored on high-performance SSD disk drives. Performance metrics, including transactions rates, can be monitored using CloudWatch.
+* provides automatic high-availability and durability protections by replicating data across multiple Availability Zones within an AWS Region.
+* Applications can connect to the DynamoDB service endpoint and submit requests over HTTP/S to read and write items to a table or even to create and delete tables.
+* provides a web service API that accepts requests in JSON format.
+
+__Data Model__
+
+* Basic components of the DynamoDB data model include tables, items, and attributes.
+* a table is a collection of items and each item is a collection of one or more attributes.
+* Each item has a primary key that uniquely identifies the item.
+* No limit in number of attributes in an item. However, max item size = 400KB
+
+```
+{
+Id = 101
+ProductName = "Book 101 Title"
+ISBN = "123–1234567890"
+Authors = [ "Author 1", "Author 2" ]
+Price = 2.88
+Dimensions = "8.5 x 11.0 x 0.5"
+PageCount = 500
+InPublication = 1
+ProductCategory = "Book"
+}
+```
+
+__Data Types__
+
+* DynamoDB only requires a primary key attribute.
+* When you create a table or a secondary index, you must specify the names and data types of each primary key attribute (partition key and sort key).
+* Data types fall into three major categories:
+	* _Scalar_: represents exactly one value.
+		* _String_: Text and variable length characters up to 400KB. Supports Unicode with UTF8 encoding
+		* _Number_: Positive or negative number with up to 38 digits of precision
+		* _Binary_: Binary data, images, compressed objects up to 400KB in size
+		* _Boolean_: Binary flag representing a true or false value
+		* _Null_: Represents a blank, empty, or unknown state. String, Number, Binary, Boolean cannot be empty.
+	* _Set_: represent a unique list of one or more scalar values. Each value must be the same data type. Sets do not guarantee order.
+		* _String Set_
+		* _Number Set_
+		* _Binary Set_
+	* _Document_: represents multiple nested attributes, similar to the structure of a JSON file - supports 2 document types: List and Map. Multiple Lists and Maps can be combined and nested to create complex structures.
+		* _List_: Each List can be used to store an ordered list of attributes of different data types.
+		* _Map_: Each Map can be used to store an unordered list of key/value pairs.
+
+__Primary Key__
+
+* DynamoDB supports 2 types of primary keys, and this configuration cannot be changed after a table has been created:
+* Primary key must be type string, number, or binary.
+* _Partition Key_
+	* The primary key is made of one attribute, a partition (or hash) key.
+	* DynamoDB builds an unordered hash index on this primary key attribute.
+	* partition key is used to distribute the request to the right partition.
+* _Partition and Sort Key_
+	* The primary key is made of 2 attributes: partition key + sort (or range) key.
+	* Each item in the table is uniquely identified by the combination of its partition and sort key values. It is possible for two items to have the same partition key value, but those two items must have different sort key values.
+
+__Provisioned Capacity__
+
+* When you create an DynamoDB table, you are required to provision a certain amount of read and write capacity to handle your expected workloads.
+* Based on your configuration settings, DynamoDB will then provision the right amount of infrastructure capacity to meet your requirements with sustained, low-latency response times.
+* Overall capacity is measured in read and write capacity units. These values can later be scaled up or down by using an `UpdateTable` action.
+* Each operation against a DynamoDB table will consume some of the provisioned capacity units.
+* The specific amount of capacity units consumed depends largely on the size of the item, but also on other factors.
+* _Read Operations_
+	* For read operations, the amount of capacity consumed also depends on the read consistency selected in the request. E.g., given a table without a local secondary index, you will consume 1 capacity unit if you read an item that is 4KB or smaller.
+	* To read a 110KB item 110KB, 28 capacity units are consumed. (`110 / 4 = 27.5 ` rounded up to 28).
+	* For strongly consistent read operations, twice the number of capacity units are consumed. 56 in the above example.
+* _Write Operations_
+	* For write operations, 1 capacity is consumed to write an item 1KB or smaller.
+* _CloudWatch metrics_
+	* use CloudWatch to monitor the capacity and make scaling decisions. e.g., `ConsumedReadCapacityUnits` and `ConsumedWriteCapacityUnits`.
+	* If you do exceed your provisioned capacity for a period of time, requests will be throttled and can be retried later. You can monitor and alert on the `ThrottledRequests` metric using CloudWatch to notify you of changing usage patterns.
+
+__Secondary Indexes__
+
+* A secondary index lets you query the data in the table using an alternate key, in addition to queries against the primary key.
+* allow you to search a large table efficiently and avoid an expensive scan operation to find items with specific attributes
+* When an item is modified in a table, each secondary index is updated which also consumes write capacity units.
+* DynamoDB supports 2 different kinds of indexes:
+	* _Global Secondary Index_:
+		* is an index with a partition and sort key that can be different from those on the table.
+		* can create or delete a global secondary index on a table at any time.
+		* item updates maintain their own provisioned throughput settings separate from the table
+	* _Local Secondary Index_:
+		* is an index that has the same partition key attribute as the primary key of the table, but a different sort key.
+		* can only create a local secondary index when you create a table.
+		* item updates will consume write capacity units from the main table
+
+__Writing and Reading Data__
+
+After you create a table with a primary key and indexes, you can begin writing and reading items to the table. Amazon DynamoDB provides multiple operations that let you create, update, and delete individual items. Amazon DynamoDB also provides multiple querying options that let you search a table or an index or retrieve back a specific item or a batch of items.
+
+__Writing Items__
+
+Amazon DynamoDB provides three primary API actions to create, update, and delete items: PutItem, UpdateItem, and DeleteItem. Using the PutItem action, you can create a new item with one or more attributes. Calls to PutItem will update an existing item if the primary key already exists. PutItem only requires a table name and a primary key; any additional attributes are optional.
+The UpdateItem action will find existing items based on the primary key and replace the attributes. This operation can be useful to only update a single attribute and leave the other attributes unchanged. UpdateItem can also be used to create items if they don’t already exist. Finally, you can remove an item from a table by using DeleteItem and specifying a specific primary key.
+The UpdateItem action also provides support for atomic counters. Atomic counters allow you to increment and decrement a value and are guaranteed to be consistent across multiple concurrent requests. For example, a counter attribute used to track the overall score of a mobile game can be updated by many clients at the same time.
+These three actions also support conditional expressions that allow you to perform validation before an action is applied. For example, you can apply a conditional expression on PutItem that checks that certain conditions are met before the item is created. This can be useful to prevent accidental overwrites or to enforce some type of business logic checks.
+
+__Reading Items__
+
+After an item has been created, it can be retrieved through a direct lookup by calling the GetItem action or through a search using the Query or Scan action. GetItem allows you to retrieve an item based
+on its primary key. All of the item’s attributes are returned by default, and you have the option to select individual attributes to filter down the results.
+If a primary key is composed of a partition key, the entire partition key needs to be specified to retrieve the item. If the primary key is a composite of a partition key and a sort key, GetItem will require both the partition and sort key as well. Each call to GetItem consumes read capacity units based on the size of the item and the consistency option selected.
+By default, a GetItem operation performs an eventually consistent read. You can optionally request a strongly consistent read instead; this will consume additional read capacity units, but it will return the most up-to-date version of the item.
+
+__Eventual Consistency__
+
+When reading items from DynamoDB, the operation can be either eventually consistent or strongly consistent. DynamoDB is a distributed system that stores multiple copies of an item across an AWS Region to provide high availability and increased durability. When an item is updated in DynamoDB, it starts replicating across multiple servers. Because DynamoDB is a distributed system, the replication can take some time to complete. Because of this we refer to the data as being eventually consistent, meaning that a read request immediately after a write operation might not show the latest change. In some cases, the application needs to guarantee that the data is the latest and DynamoDB offers an option for strongly consistent reads.
+Eventually Consistent Reads When you read data, the response might not reflect the results of a recently completed write operation. The response might include some stale data. Consistency across all copies of the data is usually reached within a second; if you repeat your read request after a short time, the response returns the latest data.
+Strongly Consistent Reads When you issue a strongly consistent read request, DynamoDB returns a response with the most up-to-date data that reflects updates by all prior related write operations to which DynamoDB returned a successful response. A strongly consistent read might be less available in the case of a network delay or outage. You can request a strongly consistent read result by specifying optional parameters in your request.
+
+__Batch Operations__
+
+DynamoDB also provides several operations designed for working with large batches of items, including `BatchGetItem` and `BatchWriteItem`. Using the `BatchWriteItem` action, you can perform up to 25 item creates or updates with a single operation. This allows you to minimize the overhead of each individual call when processing large numbers of items.
+
+__Searching Items__
+
+DynamoDB also gives you two operations, Query and Scan, that can be used to search a table or an index. A Query operation is the primary search operation you can use to find items in a table or a secondary index using only primary key attribute values. Each Query requires a partition key attribute name and a distinct value to search. You can optionally provide a sort key value and use a comparison operator to refine the search results. Results are automatically sorted by the primary key and are limited to 1MB.
+In contrast to a Query, a Scan operation will read every item in a table or a secondary index. By default, a Scan operation returns all of the data attributes for every item in the table or index. Each request can return up to 1MB of data. Items can be filtered out using expressions, but this can be a resource-intensive operation. If the result set for a Query or a Scan exceeds 1MB, you can page through the results in 1MB increments.
+inline For most operations, performing a Query operation instead of a Scan operation will be the most efficient option. Performing a Scan operation will result in a full scan of the entire table or
+secondary index, then it filters out values to provide the desired result. Use a Query operation when possible and avoid a Scan on a large table or index for only a small number of items.
+
+__Scaling and Partitioning__
+
+DynamoDB is a fully managed service that abstracts away most of the complexity involved in building and scaling a NoSQL cluster. You can create tables that can scale up to hold a virtually unlimited number of items with consistent low-latency performance. A DynamoDB table can scale horizontally through the use of partitions to meet the storage and performance requirements of your application. Each individual partition represents a unit of compute and storage capacity. A well-designed application will take the partition structure of a table into account to distribute read and write transactions evenly and achieve high transaction rates at low latencies.
+DynamoDB stores items for a single table across multiple partitions, as represented in Figure 7.4. DynamoDB decides which partition to store the item in based on the partition key. The partition key is used to distribute the new item among all of the available partitions, and items with the same partition key will be stored on the same partition.
+images
+FIGURE 7.4 Table partitioning
+As the number of items in a table grows, additional partitions can be added by splitting an existing partition. The provisioned throughput configured for a table is also divided evenly among the partitions. Provisioned throughput allocated to a partition is entirely dedicated to that partition, and there is no sharing of provisioned throughput across partitions.
+When a table is created, DynamoDB configures the table’s partitions based on the desired read and write capacity. One single partition can hold about 10GB of data and supports a maximum of 3,000 read capacity units or 1,000 write capacity units. For partitions that are not fully using their provisioned capacity, DynamoDB provides some burst capacity to handle spikes in traffic. A portion of your unused capacity will be reserved to handle bursts for short periods.
+As storage or capacity requirements change, DynamoDB can split a partition to accommodate more data or higher provisioned request rates. After a partition is split, however, it cannot be
+merged back together. Keep this in mind when planning to increase provisioned capacity temporarily and then lower it again. With each additional partition added, its share of the provisioned capacity is reduced.
+To achieve the full amount of request throughput provisioned for a table, keep your workload spread evenly across the partition key values. Distributing requests across partition key values distributes the requests across partitions. For example, if a table has 10,000 read capacity units configured but all of the traffic is hitting one partition key, you will not be able to get more than the 3,000 maximum read capacity units that one partition can support.
+inline To maximize DynamoDB throughput, create tables with a partition key that has a large number of distinct values and ensure that the values are requested fairly uniformly. Adding a random element that can be calculated or hashed is one common technique to improve partition distribution.
+
+__Security__
+
+DynamoDB gives you granular control over the access rights and permissions for users and administrators. DynamoDB integrates with the IAM service to provide strong control over permissions using policies. You can create one or more policies that allow or deny specific operations on specific tables. You can also use conditions to restrict access to individual items or attributes.
+All operations must first be authenticated as a valid user or user session. Applications that need to read and write from DynamoDB need to obtain a set of temporary or permanent access control keys. While these keys could be stored in a configuration file, a best practice is for applications running on AWS to use IAM Amazon EC2 instance profiles to manage credentials. IAM Amazon EC2 instance profiles or roles allow you to avoid storing sensitive keys in configuration files that must then be secured.
+inline For mobile applications, a best practice is to use a combination of web identity federation with the AWS Security Token Service (AWS STS) to issue temporary keys that expire after a short period.
+DynamoDB also provides support for fine-grained access control that can restrict access to specific items within a table or even specific attributes within an item. For example, you may want to limit a user to only access his or her items within a table and prevent access to items associated with a different user. Using conditions in an IAM policy allows you to restrict which actions a user can perform, on which tables, and to which attributes a user can read or write.
+
+__Amazon DynamoDB Streams__
+
+A common requirement for many applications is to keep track of recent changes and then perform some kind of processing on the changed records. DynamoDB Streams makes it easy to get a list of item modifications for the last 24-hour period. For example, you might need to calculate metrics on a rolling basis and update a dashboard, or maybe synchronize two tables or log activity and changes to an audit trail. With DynamoDB Streams, these types of applications become easier to build.
+DynamoDB Streams allows you to extend application functionality without modifying the original application. By reading the log of activity changes from the stream, you can build new
+integrations or support new reporting requirements that weren’t part of the original design.
+Each item change is buffered in a time-ordered sequence or stream that can be read by other applications. Changes are logged to the stream in near real-time and allow you to respond quickly or chain together a sequence of events based on a modification.
+Streams can be enabled or disabled for an DynamoDB table using the AWS Management Console, Command Line Interface (CLI), or SDK. A stream consists of stream records. Each stream record represents a single data modification in the DynamoDB table to which the stream belongs. Each stream record is assigned a sequence number, reflecting the order in which the record was published to the stream.
+Stream records are organized into groups, also referred to as shards. Each shard acts as a container for multiple stream records and contains information on accessing and iterating through the records. Shards live for a maximum of 24 hours and, with fluctuating load levels, could be split one or more times before they are eventually closed.
+inline To build an application that reads from a shard, it is recommended to use the DynamoDB Streams Kinesis Adapter. The Kinesis Client Library (KCL) simplifies the application logic required to process reading records from streams and shards.
 
 ## Amazon ElasticCache
 

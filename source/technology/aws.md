@@ -217,7 +217,7 @@ footer: true
 	* Logging is off by default. While enabling, you must choose the bucket where the logs will be stored.
 * *Event Notifications*
 	* Set up at bucket level to notify when an object is created, removed or lost in RRS
-	* Notification messages can be sent to Amazon SQS or Amazon SNS or AWS Lambda
+	* Notification messages can be sent to Amazon SQS or SNS or AWS Lambda
 
 ## Amazon Glacier
 
@@ -1442,70 +1442,113 @@ __Secondary Indexes__
 		* can only create a local secondary index when you create a table.
 		* item updates will consume write capacity units from the main table
 
-__Writing and Reading Data__
-
-After you create a table with a primary key and indexes, you can begin writing and reading items to the table. Amazon DynamoDB provides multiple operations that let you create, update, and delete individual items. Amazon DynamoDB also provides multiple querying options that let you search a table or an index or retrieve back a specific item or a batch of items.
+### Writing and Reading Data
 
 __Writing Items__
 
-Amazon DynamoDB provides three primary API actions to create, update, and delete items: PutItem, UpdateItem, and DeleteItem. Using the PutItem action, you can create a new item with one or more attributes. Calls to PutItem will update an existing item if the primary key already exists. PutItem only requires a table name and a primary key; any additional attributes are optional.
-The UpdateItem action will find existing items based on the primary key and replace the attributes. This operation can be useful to only update a single attribute and leave the other attributes unchanged. UpdateItem can also be used to create items if they don’t already exist. Finally, you can remove an item from a table by using DeleteItem and specifying a specific primary key.
-The UpdateItem action also provides support for atomic counters. Atomic counters allow you to increment and decrement a value and are guaranteed to be consistent across multiple concurrent requests. For example, a counter attribute used to track the overall score of a mobile game can be updated by many clients at the same time.
-These three actions also support conditional expressions that allow you to perform validation before an action is applied. For example, you can apply a conditional expression on PutItem that checks that certain conditions are met before the item is created. This can be useful to prevent accidental overwrites or to enforce some type of business logic checks.
+* DynamoDB provides 3 primary API actions to create, update, and delete items
+* `PutItem` action
+    * create a new item with one or more attributes.
+    * if the primary key already exists, updates an existing item .
+    * only requires a table name and a primary key; any additional attributes are optional.
+* `UpdateItem` action
+    * finds existing items based on the primary key and replace the attributes.
+    * useful to only update a single attribute and leave the other attributes unchanged.
+    * can also be used to create items if they don’t already exist.
+    * also provides support for _atomic counters_ which allows to increment and decrement a value and are guaranteed to be consistent across multiple concurrent requests. E.g., a counter attribute used to track the overall score of a mobile game can be updated by many clients at the same time.
+* `DeleteItem` action
+    * remove an item from a table by specifying a primary key.
+* All 3 actions also support _conditional expressions_ that allow you to perform validation before an action is applied. This can be useful to prevent accidental overwrites or to enforce some type of business logic checks.
 
 __Reading Items__
 
-After an item has been created, it can be retrieved through a direct lookup by calling the GetItem action or through a search using the Query or Scan action. GetItem allows you to retrieve an item based
-on its primary key. All of the item’s attributes are returned by default, and you have the option to select individual attributes to filter down the results.
-If a primary key is composed of a partition key, the entire partition key needs to be specified to retrieve the item. If the primary key is a composite of a partition key and a sort key, GetItem will require both the partition and sort key as well. Each call to GetItem consumes read capacity units based on the size of the item and the consistency option selected.
-By default, a GetItem operation performs an eventually consistent read. You can optionally request a strongly consistent read instead; this will consume additional read capacity units, but it will return the most up-to-date version of the item.
+* Retrieved data through a direct lookup  using `GetItem` action or through a search using the `Query` or `Scan` action.
+* `GetItem`
+    * `GetItem` allows you to retrieve an item based on its primary key.
+    * All (default) or some of the item’s attributes can be queried
+    * If a PK is composed of a partition key, the entire partition key is needed to retrieve the item.
+    * If the PK is a composite of a partition key and a sort key, then both the partition and sort key is needed.
+    * Each call consumes read capacity units based on the size of the item and the consistency option selected.
+    * By default, `GetItem` reads are eventually consistent.
+    * Strongly consistent reads can be requested optionally; this will consume additional read capacity units, but it will return the most up-to-date version of the item.
 
 __Eventual Consistency__
 
-When reading items from DynamoDB, the operation can be either eventually consistent or strongly consistent. DynamoDB is a distributed system that stores multiple copies of an item across an AWS Region to provide high availability and increased durability. When an item is updated in DynamoDB, it starts replicating across multiple servers. Because DynamoDB is a distributed system, the replication can take some time to complete. Because of this we refer to the data as being eventually consistent, meaning that a read request immediately after a write operation might not show the latest change. In some cases, the application needs to guarantee that the data is the latest and DynamoDB offers an option for strongly consistent reads.
-Eventually Consistent Reads When you read data, the response might not reflect the results of a recently completed write operation. The response might include some stale data. Consistency across all copies of the data is usually reached within a second; if you repeat your read request after a short time, the response returns the latest data.
-Strongly Consistent Reads When you issue a strongly consistent read request, DynamoDB returns a response with the most up-to-date data that reflects updates by all prior related write operations to which DynamoDB returned a successful response. A strongly consistent read might be less available in the case of a network delay or outage. You can request a strongly consistent read result by specifying optional parameters in your request.
+* By default, `GetItem` reads are eventually consistent.
+* Strongly consistent reads
+    * can be requested optionally;
+    * will consume additional read capacity units, but it will return the most up-to-date version of the item.
+    * A strongly consistent read might be less available in the case of a network delay or outage.
 
 __Batch Operations__
 
-DynamoDB also provides several operations designed for working with large batches of items, including `BatchGetItem` and `BatchWriteItem`. Using the `BatchWriteItem` action, you can perform up to 25 item creates or updates with a single operation. This allows you to minimize the overhead of each individual call when processing large numbers of items.
+* `BatchGetItem`
+* `BatchWriteItem` - up to 25 item creates or updates with a single operation - allows you to minimize the overhead of each individual call when processing large numbers of items.
 
 __Searching Items__
 
-DynamoDB also gives you two operations, Query and Scan, that can be used to search a table or an index. A Query operation is the primary search operation you can use to find items in a table or a secondary index using only primary key attribute values. Each Query requires a partition key attribute name and a distinct value to search. You can optionally provide a sort key value and use a comparison operator to refine the search results. Results are automatically sorted by the primary key and are limited to 1MB.
-In contrast to a Query, a Scan operation will read every item in a table or a secondary index. By default, a Scan operation returns all of the data attributes for every item in the table or index. Each request can return up to 1MB of data. Items can be filtered out using expressions, but this can be a resource-intensive operation. If the result set for a Query or a Scan exceeds 1MB, you can page through the results in 1MB increments.
-inline For most operations, performing a Query operation instead of a Scan operation will be the most efficient option. Performing a Scan operation will result in a full scan of the entire table or
-secondary index, then it filters out values to provide the desired result. Use a Query operation when possible and avoid a Scan on a large table or index for only a small number of items.
+* `Query` and `Scan` actions used to search a table or an index.
+* `Query` operation
+    * is the primary search operation to find items in a table or a secondary index using only primary key attribute values.
+    * Each Query requires a partition key attribute name and a distinct value to search.
+    * can optionally provide a sort key value and use a comparison operator to refine the search results.
+    * Results are automatically sorted by the primary key and are limited to 1MB.
+* `Scan` operation
+    * will read every item in a table or a secondary index, then it filters out values to provide the desired result
+    * By default, a Scan operation returns all of the data attributes for every item in the table or index.
+    * Each request can return up to 1MB of data.
+    * Items can be filtered out using expressions, but this can be a resource-intensive operation.
+* If the result set for a `Query` or a `Scan` exceeds 1MB, you can page through the results in 1MB increments.
 
 __Scaling and Partitioning__
 
-DynamoDB is a fully managed service that abstracts away most of the complexity involved in building and scaling a NoSQL cluster. You can create tables that can scale up to hold a virtually unlimited number of items with consistent low-latency performance. A DynamoDB table can scale horizontally through the use of partitions to meet the storage and performance requirements of your application. Each individual partition represents a unit of compute and storage capacity. A well-designed application will take the partition structure of a table into account to distribute read and write transactions evenly and achieve high transaction rates at low latencies.
-DynamoDB stores items for a single table across multiple partitions, as represented in Figure 7.4. DynamoDB decides which partition to store the item in based on the partition key. The partition key is used to distribute the new item among all of the available partitions, and items with the same partition key will be stored on the same partition.
-images
-FIGURE 7.4 Table partitioning
-As the number of items in a table grows, additional partitions can be added by splitting an existing partition. The provisioned throughput configured for a table is also divided evenly among the partitions. Provisioned throughput allocated to a partition is entirely dedicated to that partition, and there is no sharing of provisioned throughput across partitions.
-When a table is created, DynamoDB configures the table’s partitions based on the desired read and write capacity. One single partition can hold about 10GB of data and supports a maximum of 3,000 read capacity units or 1,000 write capacity units. For partitions that are not fully using their provisioned capacity, DynamoDB provides some burst capacity to handle spikes in traffic. A portion of your unused capacity will be reserved to handle bursts for short periods.
-As storage or capacity requirements change, DynamoDB can split a partition to accommodate more data or higher provisioned request rates. After a partition is split, however, it cannot be
-merged back together. Keep this in mind when planning to increase provisioned capacity temporarily and then lower it again. With each additional partition added, its share of the provisioned capacity is reduced.
-To achieve the full amount of request throughput provisioned for a table, keep your workload spread evenly across the partition key values. Distributing requests across partition key values distributes the requests across partitions. For example, if a table has 10,000 read capacity units configured but all of the traffic is hitting one partition key, you will not be able to get more than the 3,000 maximum read capacity units that one partition can support.
-inline To maximize DynamoDB throughput, create tables with a partition key that has a large number of distinct values and ensure that the values are requested fairly uniformly. Adding a random element that can be calculated or hashed is one common technique to improve partition distribution.
+* DynamoDB tables can scale horizontally through the use of partitions
+* Each individual partition represents a unit of compute and storage capacity.
+* DynamoDB stores items for a single table across multiple partitions.
+* DynamoDB decides which partition to store the item in based on the partition key. The partition key is used to distribute the new item among all of the available partitions, and items with the same partition key will be stored on the same partition.
+* As the number of items in a table grows, additional partitions can be added by splitting an existing partition.
+* The provisioned throughput configured for a table is also divided evenly among the partitions.
+* Provisioned throughput allocated to a partition is entirely dedicated to that partition, and there is no sharing of provisioned throughput across partitions.
+* When a table is created, DynamoDB configures the table’s partitions based on the desired read and write capacity.
+* Limits
+    * 1 single partition = max 10GB of data
+    * Max 3,000 read capacity units or 1,000 write capacity units
+* For partitions that are not fully using their provisioned capacity, DynamoDB provides some burst capacity to handle spikes in traffic.
+* A portion of your unused capacity will be reserved to handle bursts for short periods.
+* As storage or capacity requirements change, DynamoDB can split a partition to accommodate more data or higher provisioned request rates.
+* After a partition is split, however, it cannot be merged back together. Keep this in mind when planning to increase provisioned capacity temporarily and then lower it again.
+* With each additional partition added, its share of the provisioned capacity is reduced.
+* To achieve the full amount of request throughput provisioned for a table, keep your workload spread evenly across the partition key values.
+* Distributing requests across partition key values distributes the requests across partitions. For example, if a table has 10,000 read capacity units configured but all of the traffic is hitting one partition key, you will not be able to get more than the 3,000 maximum read capacity units that one partition can support.
+* To maximize DynamoDB throughput, create tables with a partition key that has a large number of distinct values and ensure that the values are requested fairly uniformly. Adding a random element that can be calculated or hashed is one common technique to improve partition distribution.
 
 __Security__
 
-DynamoDB gives you granular control over the access rights and permissions for users and administrators. DynamoDB integrates with the IAM service to provide strong control over permissions using policies. You can create one or more policies that allow or deny specific operations on specific tables. You can also use conditions to restrict access to individual items or attributes.
-All operations must first be authenticated as a valid user or user session. Applications that need to read and write from DynamoDB need to obtain a set of temporary or permanent access control keys. While these keys could be stored in a configuration file, a best practice is for applications running on AWS to use IAM Amazon EC2 instance profiles to manage credentials. IAM Amazon EC2 instance profiles or roles allow you to avoid storing sensitive keys in configuration files that must then be secured.
-inline For mobile applications, a best practice is to use a combination of web identity federation with the AWS Security Token Service (AWS STS) to issue temporary keys that expire after a short period.
-DynamoDB also provides support for fine-grained access control that can restrict access to specific items within a table or even specific attributes within an item. For example, you may want to limit a user to only access his or her items within a table and prevent access to items associated with a different user. Using conditions in an IAM policy allows you to restrict which actions a user can perform, on which tables, and to which attributes a user can read or write.
+* DynamoDB integrates with the IAM service to provide strong control over permissions using policies.
+* can create one or more policies that allow or deny specific operations on specific tables.
+* can also use conditions to restrict access to individual items or attributes.
+* All operations must first be authenticated as a valid user or user session.
+* Applications that need to read and write from DynamoDB need to obtain a set of temporary or permanent access control keys. While these keys could be stored in a configuration file, a best practice is for applications running on AWS to use _IAM EC2 instance profiles_ to manage credentials. IAM EC2 instance profiles or roles allow you to avoid storing sensitive keys in configuration files that must then be secured.
+* For mobile applications, a best practice is to use a combination of web identity federation with the AWS Security Token Service (AWS STS) to issue temporary keys that expire after a short period.
+* DynamoDB also provides support for fine-grained access control that can restrict access to specific items within a table or even specific attributes within an item. For example, you may want to limit a user to only access his or her items within a table and prevent access to items associated with a different user. Using conditions in an IAM policy allows you to restrict which actions a user can perform, on which tables, and to which attributes a user can read or write.
 
-__Amazon DynamoDB Streams__
+__DynamoDB Streams__
 
-A common requirement for many applications is to keep track of recent changes and then perform some kind of processing on the changed records. DynamoDB Streams makes it easy to get a list of item modifications for the last 24-hour period. For example, you might need to calculate metrics on a rolling basis and update a dashboard, or maybe synchronize two tables or log activity and changes to an audit trail. With DynamoDB Streams, these types of applications become easier to build.
-DynamoDB Streams allows you to extend application functionality without modifying the original application. By reading the log of activity changes from the stream, you can build new
-integrations or support new reporting requirements that weren’t part of the original design.
-Each item change is buffered in a time-ordered sequence or stream that can be read by other applications. Changes are logged to the stream in near real-time and allow you to respond quickly or chain together a sequence of events based on a modification.
-Streams can be enabled or disabled for an DynamoDB table using the AWS Management Console, Command Line Interface (CLI), or SDK. A stream consists of stream records. Each stream record represents a single data modification in the DynamoDB table to which the stream belongs. Each stream record is assigned a sequence number, reflecting the order in which the record was published to the stream.
-Stream records are organized into groups, also referred to as shards. Each shard acts as a container for multiple stream records and contains information on accessing and iterating through the records. Shards live for a maximum of 24 hours and, with fluctuating load levels, could be split one or more times before they are eventually closed.
-inline To build an application that reads from a shard, it is recommended to use the DynamoDB Streams Kinesis Adapter. The Kinesis Client Library (KCL) simplifies the application logic required to process reading records from streams and shards.
+* A common requirement for many applications is to keep track of recent changes and then perform some kind of processing on the changed records. DynamoDB Streams makes it easy to get a list of item modifications for the last 24-hour period. For example, you might need to calculate metrics on a rolling basis and update a dashboard, or maybe synchronize two tables or log activity and changes to an audit trail. With DynamoDB Streams, these types of applications become easier to build.
+* DynamoDB Streams allows you to extend application functionality without modifying the original application.
+* By reading the log of activity changes from the stream, you can build new integrations or support new reporting requirements that weren’t part of the original design.
+* Each item change is buffered in a time-ordered sequence or stream that can be read by other applications.
+* Changes are logged to the stream in _near real-time_ and allow you to respond quickly or chain together a sequence of events based on a modification.
+* Streams can be enabled or disabled for an DynamoDB table using the AWS Management Console, CLI, or SDK.
+* _Stream_
+    * A stream consists of stream records.
+    * Each stream record represents a single data modification in the DynamoDB table to which the stream belongs.
+    * Each stream record is assigned a sequence number, reflecting the order in which the record was published to the stream.
+* _Shards_
+    * Stream records are organized into groups, also referred to as _shards_.
+    * Each shard acts as a container for multiple stream records and contains information on accessing and iterating through the records.
+    * Shards live for a maximum of 24 hours and, with fluctuating load levels, could be split one or more times before they are eventually closed.
+    * To build an application that reads from a shard, it is recommended to use the DynamoDB Streams Kinesis Adapter. The Kinesis Client Library (KCL) simplifies the application logic required to process reading records from streams and shards.
 
 ## Amazon ElasticCache
 
@@ -1808,17 +1851,243 @@ The only exception to this rule is if an _AssumeRole_ call includes a role and a
 
 ## Amazon Simple Notification Service (SNS)
 
-* is a web service that coordinates and manages the delivery of messages to recipients.
+{% img right /technology/aws-sns.jpg 400 400 %}
+
+* is a web service for mobile and enterprise messaging that enables you to set up, operate, and send notifications.
+* Designed to make web-scale computing easier for developers.
+* follows the pub-sub messaging paradigm- no need to poll periodically. e.g., you can send notifications to Apple, Android, Fire OS, and Windows devices.
+* In China, you can send messages to Android devices with Baidu Cloud Push.
+* can send SMS messages to mobile device users in the United States or to email recipients worldwide.
+* messages are delivered to subscribers using different methods, such as Amazon SQS, HTTP, HTTPS, email, SMS, and AWS Lambda.
+* When using SNS, you (as the owner) create a topic and control access to it by defining policies that determine which publishers and subscribers can communicate with the topic and via which technologies.
+* Publishers send messages to topics that they created or that they have permission to publish to.
+
+__Common Scenarios__
+
+* SNS can support a wide variety of needs, including monitoring applications, workflow systems, time-sensitive information updates, mobile applications, and any other application that generates or consumes notifications.
+* SNS can be used to relay events in workflow systems among distributed computer applications, move data between data stores, or update records in business systems.
+* Event updates and notifications concerning validation, approval, inventory changes, and shipment status are immediately delivered to relevant system components and end users.
+* Another example use for SNS is to relay time-critical events to mobile applications and devices.
+* SNS is both highly reliable and scalable, and provides significant advantages to developers who build applications that rely on real-time events.
+
+{% img right /technology/aws-sns-fanout.jpg 400 400 %}
+
+* ___Fanout___
+	* A fanout scenario is when an SNS message is sent to a topic and then replicated and pushed to multiple SQS queues, HTTP endpoints, or email addresses. This allows for parallel asynchronous processing.
+	* e.g., you can develop an application that sends an SNS message to a topic whenever an order is placed for a product. Then the SQS queues that are subscribed to that topic will receive identical notifications for the new order. An EC2 instance attached to one of the queues handles the processing or fulfillment of the order, while an Amazon EC2 instance attached to a parallel queue sends order data to a data warehouse application/service for analysis.
+	* Another way to use fanout is to replicate data sent to your production environment and integrate it with your development environment. You can subscribe yet another queue to the same topic for new incoming orders to flow into your development environment to improve and test your application using data received from your production environment.
+* ___Application and System Alerts___
+	* Application and system alerts are SMS and/or email notifications that are triggered by predefined thresholds. For example, because many AWS Cloud services use SNS, you can receive immediate notification when an event occurs, such as a specific change to your Auto Scaling group in AWS.
+* ___Push Email and Text Messaging___
+	* Push email and text messaging are two ways to transmit messages to individuals or groups via email and/or SMS.
+* ___Mobile Push Notifications___
+	* Mobile push notifications enable you to send messages directly to mobile applications.
 
 ## Amazon Simple Email Service (SES)
 
 ## Amazon Simple Workflow Service (SWF)
 
+{% img right /technology/aws-swf.jpg %}
+
 * helps build, run and scale background jobs that have parallel or sequential steps - has fully managed state tracker and task coordinator on the cloud - provides ability to recover or retry if a task fails.
+* SWF makes it easy to build applications that coordinate work across distributed components.
+* In SWF, a task represents a logical unit of work that is performed by a component of your application. Coordinating tasks across the application involves managing inter-task dependencies, scheduling, and concurrency in accordance with the logical flow of the application.
+* SWF gives you full control over implementing and coordinating tasks without worrying about underlying complexities such as tracking their progress and maintaining their state.
+* When using SWF, you implement workers to perform tasks. These workers can run either on cloud infrastructure, such as EC2, or on your own premises.
+* You can create long-running tasks that might fail, time out, or require restarts, or tasks that can complete with varying throughput and latency.
+* SWF stores tasks, assigns them to workers when they are ready, monitors their progress, and maintains their state, including details on their completion.
+* To coordinate tasks, you write a program that gets the latest state of each task from SWF and uses it to initiate subsequent tasks.
+* SWF maintains an application’s execution state durably so that the application is resilient to failures in individual components.
+* With SWF, you can implement, deploy, scale, and modify these application components independently.
+
+* __Workflows__
+	* Using SWF, you can implement distributed, asynchronous applications as workflows.
+	* Workflows coordinate and manage the execution of activities that can be run asynchronously across multiple computing devices and that can feature both sequential and parallel processing.
+	* When designing a workflow, analyze your application to identify its component tasks, which are represented in SWF as activities.
+	* The workflow’s coordination logic determines the order in which activities are executed.
+* __Workflow Domains__
+	* Domains provide a way of scoping SWF resources within your AWS account.
+	* You must specify a domain for all the components of a workflow, such as the workflow type and activity types.
+	* It is possible to have more than one workflow in a domain
+	* Workflows in different domains cannot interact with one another.
+* __Workflow History__
+	* The workflow history is a detailed, complete, and consistent record of every event that occurred since the workflow execution started.
+	* An event represents a discrete change in your workflow execution’s state, such as scheduled and completed activities, task timeouts, and signals.
+* __Actors__
+	* SWF consists of a number of different types of programmatic features known as actors.
+	* Actors can be workflow starters, deciders, or activity workers. These actors communicate with SWF through its API.
+	* Actors can be developed in any programming language.
+	* ___Workflow starter___
+		* is any application that can initiate workflow executions. e.g., a mobile application where a customer orders takeout food or requests a taxi.
+		* Activities within a workflow can run sequentially, in parallel, synchronously, or asynchronously.
+	* ___Decider___:
+		* The logic that coordinates the tasks in a workflow is called the decider.
+		* The decider schedules the activity tasks and provides input data to the activity workers.
+		* The decider also processes events that arrive while the workflow is in progress and closes the workflow when the objective has been completed.
+	* ___Activity Worker___
+		* is a single computer process (or thread) that performs the activity tasks in your workflow.
+		* Different types of activity workers process tasks of different activity types, and multiple activity workers can process the same type of task.
+		* When an activity worker is ready to process a new activity task, it polls SWF for tasks that are appropriate for that activity worker. After receiving a task, the activity worker processes the task to completion and then returns the status and result to SWF. The activity worker then polls for a new task.
+* __Tasks__
+	* SWF provides activity workers and deciders with work assignments, given as one of 3 types of tasks:
+		* activity tasks,
+		* AWS Lambda tasks, and
+		* decision tasks.
+	* ___Activity task___
+		* tells an activity worker to perform its function, such as to check inventory or charge a credit card.
+		* The activity task contains all the information that the activity worker needs to perform its function.
+	* ___AWS Lambda task___
+		* is similar to an activity task, but executes an AWS Lambda function instead of a traditional SWF activity.
+	* ___Decision Task___
+		* tells a decider that the state of the workflow execution has changed so that the decider can determine the next activity that needs to be performed.
+		* The decision task contains the current workflow history.
+		* SWF schedules a decision task when the workflow starts and whenever the state of the workflow changes, such as when an activity task completes.
+		* Each decision task contains a paginated view of the entire workflow execution history.
+		* The decider analyzes the workflow execution history and responds back to SWF with a set of decisions that specify what should occur next in the workflow execution. Essentially, every decision task gives the decider an opportunity to assess the workflow and provide direction back to SWF.
+* __Task Lists__
+	* Task lists provide a way of organizing the various tasks associated with a workflow.
+	* Task lists are similar to dynamic queues. When a task is scheduled in SWF, you can specify a queue (task list) to put it in. Similarly, when you poll SWF for a task, you determine which queue (task list) to get the task from.
+	* Task lists provide a flexible mechanism to route tasks to workers.
+	* Task lists are dynamic in that you don’t need to register a task list or explicitly create it through an action. Ssimply scheduling a task creates the task list if it doesn’t already exist.
+* __Long Polling__
+	* Deciders and activity workers communicate with SWF using long polling.
+	* The decider or activity worker periodically initiates communication with SWF, notifying SWF of its availability to accept a task, and then specifies a task list to get tasks from.
+	* Long polling works well for high-volume task processing.
+	* Deciders and activity workers can manage their own capacity.
+* __Object Identifiers__
+	* SWF objects are uniquely identified by workflow type, activity type, decision and activity tasks, and workflow execution:
+	* ___Workflow Type___: A registered workflow type is identified by its domain, name, and version. Workflow types are specified in the call to `RegisterWorkflowType`.
+	* ___Activity Type___: A registered activity type is identified by its domain, name, and version. Activity types are specified in the call to `RegisterActivityType`.
+	* ___Task Token___
+		* Each decision task and activity task is identified by a unique task token.
+		* The task token is generated by SWF and is returned with other information about the task in the response from `PollForDecisionTask` or `PollForActivityTask`.
+		* is most commonly used by the process that received the task
+		* a process could pass the token to another process, which could then report the completion or failure of the task.
+	* ___Workflow execution___
+		* A single execution of a workflow is identified by the domain, workflow ID, and run ID.
+		* The first two are parameters that are passed to `StartWorkflowExecution`. The run ID is returned by `StartWorkflowExecution`.
+* __Workflow Execution Closure__
+	* After you start a workflow execution, it is open.
+	* An open workflow execution can be closed as completed, canceled, failed, or timed out.
+	* It can also be continued as a new execution, or it can be terminated.
+	* The decider, the person administering the workflow, or SWF can close a workflow execution.
 
 ## Amazon Simple Queue Service (SQS)
 
 * managed message queueing service
+* With Amazon SQS, you can offload the administrative burden of operating and scaling a highly available messaging cluster while paying a low price for only what you use.
+* Most of the time each message will be delivered to your application exactly once, however the system should be _idempotent_ by design (i.e., it must not be adversely affected if it processes the same message more than once).
+* The service does not guarantee FIFO delivery of messages. If the system requires that order be preserved, you can place sequencing information in each message to reorder the messages when they are retrieved from the queue.
+
+__Message Lifecycle__
+
+* `Component 1` sends `Message A` to a queue, and the message is redundantly distributed across the SQS servers.
+* When `Component 2` is ready to process a message, it retrieves messages from the queue, and `Message A` is returned. While `Message A` is being processed, it remains in the queue and is not returned to subsequently receive requests for the duration of the visibility timeout.
+* `Component 2` deletes `Message A` from the queue to prevent the message from being received and processed again after the visibility timeout expires.
+
+__Delay Queues and Visibility Timeouts__
+
+* _Delay queues_ allow you to postpone the delivery of new messages in a queue for a specific number of seconds.
+* Any message sent to delay queue will be invisible to consumers for the duration of the delay period.
+* To create a delay queue, use `CreateQueue` and set the `DelaySeconds` attribute to any value between _0 and 900 (15 minutes)_.
+* Existing queue can be turned into a delay queue by using `SetQueueAttributes` to set the queue’s `DelaySeconds` attribute (default value = 0).
+* Delay queues are similar to visibility timeouts in that both features make messages unavailable to consumers for a specific period of time. The difference is that a delay queue hides a message when it is first added to the queue, whereas a visibility timeout hides a message only after that message is retrieved from the queue.
+* When a message is in the queue but is neither delayed nor in a visibility timeout, it is considered to be _“in flight.”_
+* Up to 120,000 messages can be _in flight_ at any given time.
+* SQS supports up to 12 hours’ maximum visibility timeout.
+
+__Separate Throughput from Latency__
+
+* SQS is accessed through HTTP request-response, and a typical request-response takes a bit less than 20ms from EC2.
+* This means that from a single thread, you can, on average, issue 50+ API requests per second (a bit fewer for batch API requests since they do more work).
+* The throughput scales horizontally, so the more threads and hosts you add, the higher the throughput. Using this scaling model, some AWS customers have queues that process thousands of messages every second.
+
+__Queue Operations, Unique IDs, and Metadata__
+
+* SQS Operations: `CreateQueue`, `ListQueues`, `DeleteQueue`, `SendMessage`, `SendMessageBatch`, `ReceiveMessage`, `DeleteMessage`, `DeleteMessageBatch`, `PurgeQueue`, `ChangeMessageVisibility`, `ChangeMessageVisibilityBatch`, `SetQueueAttributes`, `GetQueueAttributes`, `GetQueueUrl`, `ListDeadLetterSourceQueues`, `AddPermission`, and `RemovePermission`.
+* Only the AWS account owner or an AWS identity that has been granted the proper permissions can perform operations.
+* Messages are identified via a globally unique ID that SQS returns when the message is delivered to the queue.
+* When you receive a message from the queue, the response includes a receipt handle, which you must provide when deleting the message.
+
+__Queue and Message Identifiers__
+
+SQS uses 3 identifiers:
+
+* Queue URLs
+	* When creating a new queue, the queue name must be unique.
+	* SQS assigns each queue an identifier called a _queue URL_, which includes the queue name and other components that SQS determines.
+	* Whenever you want to perform an action on a queue, you must provide its queue URL.
+* Message IDs
+	* SQS assigns each message a unique ID - returned as part of the `SendMessage` response.
+	* Max length = 100 characters.
+* Receipt handles.
+	* Each time you receive a message from a queue, you receive a receipt handle for that message.
+	* The handle is associated with the act of receiving the message, not with the message itself.
+	* Receipt handle is needed to delete a message or to change the message visibility
+	* You must always receive a message before you can delete it (i.e., you can’t put a message into the queue and then recall it).
+	* Max length = 1,024 characters.
+
+__Message Attributes__
+
+* SQS provides support for message attributes.
+* Message attributes allow you to provide structured metadata items (such as timestamps, geospatial data, signatures, and identifiers) about the message.
+* Message attributes are optional and separate from, but sent along with, the message body.
+* The receiver of the message can use this information to help decide how to handle the message without having to process the message body first.
+* Max 10 attributes allowed per message.
+* can be specified via AWS Console, AWS SDKs, or a query API.
+
+__Long Polling__
+
+* When an application queries the SQS queue for messages, it calls the function `ReceiveMessage`.
+* `ReceiveMessage` will check for the existence of a message in the queue and return immediately, either with or without a message.
+* `ReceiveMessage` burn CPU cycles and tie up a thread. So calling this in a loop repeatdly is problematic.
+* With long polling, you send a `WaitTimeSeconds` argument to `ReceiveMessage` of up to 20 seconds.
+* If there is no message in the queue, then the call will wait up to `WaitTimeSeconds` for a message to appear before returning.
+* If a message appears before the time expires, the call will return the message right away.
+* Long polling drastically reduces the amount of load on your client.
+
+__Dead Letter Queues__
+
+* SQS provides support for dead letter queues.
+* A dead letter queue is a queue that other (source) queues can target to send messages that for some reason could not be successfully processed.
+* Benefit: ability to sideline and isolate the unsuccessfully processed messages, then analyze to determine the cause of failure.
+* Messages can be sent to and received from a dead letter queue, just like any other Amazon SQS queue.
+* can be created from SQS API and the SQS console.
+
+__Access Control__
+
+* While IAM can be used to control the interactions of different AWS identities with queues, there are often times when you will want to expose queues to other accounts. For example:
+	* to grant another AWS account a particular type of access to your queue (for example, `SendMessage`).
+	* to grant another AWS account access to your queue for a specific period of time.
+	* to grant another AWS account access to your queue only if the requests come from your EC2 instances.
+	* You want to deny another AWS account access to your queue.
+* While close coordination between accounts may allow these types of actions through the use of IAM roles, that level of coordination is frequently unfeasible.
+* SQS Access Control allows you to assign policies to queues that grant specific interactions to other accounts without that account having to assume IAM roles from your account.
+* Sample policy below, gives the developer with AWS account number 12345 the SendMessage permission for the queue named 54321/queue1 in the US East region.
+
+```js
+{
+	"Version": "2012&#x02013;10–17",
+	"Id": "Queue1_Policy_UUID",
+	"Statement": [
+		{
+			"Sid":"Queue1_SendMessage",
+			"Effect": "Allow",
+			"Principal": {
+				"AWS": "12345"
+			},
+			"Action": "sqs:SendMessage",
+			"Resource": "arn:aws:sqs:us-east-1:54321:queue1"
+		}
+	]
+}
+```
+
+__Tradeoff Message Durability and Latency__
+
+* SQS does not return success to a `SendMessage` API call until the message is durably stored in SQS. This makes the programming model very simple with no doubt about the safety of messages, unlike the situation with an asynchronous messaging model.
+* If you don’t need a durable messaging system, however, you can build an asynchronous, client-side batching on top of SQS libraries that delays enqueue of messages to SQS and transmits a set of messages in a batch.
+* Caution: With a client-side batching approach, you could potentially lose messages when your client process or client host dies for any reason.
 
 ---
 

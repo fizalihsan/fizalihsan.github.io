@@ -301,7 +301,7 @@ footer: true
 ## Amazon CloudFront
 
 * is a content delivery web service - an easy way to distribute content with low-latency, high data transfer speeds - can be used to deliver websites including dynamic, static, streaming and interactive content, using a global network of edge locations. Request for content are automatically routed to the nearest edge location for best performance.
-
+* _Edge caching_ refers to the use of caching servers to store content closer to end users. For instance, if you visit a popular Web site and download some static content that gets cached, each subsequent user will get served that content directly from the caching server until it expires.
 ---
 
 # Compute and Network Services
@@ -979,7 +979,112 @@ __Inbound__
 
 ## Amazon Route 53
 
+[Read about DNS basics here](/technology/networking.html)
+
 * is a highly available and scalable DNS web service. Also serves as domain registrar, allowing you to purchase and manage domains directly from AWS
+* Amazon Route 53 performs 3 main functions. You can use none or any combination of these functions:
+	* Domain registration
+	* DNS service
+	* Health checking
+* _Domain Registration_
+	* a registered website can be transfered to Route 53
+	* It isn’t required to use Route 53 as your DNS service or to configure health checking for your resources.
+	* Route 53 supports a wide variety of generic TLDs (for example, .com and .org) and geographic TLDs (for example, .be and .us).
+* _DNS Service_
+	* Route 53 responds to DNS queries using a global network of authoritative DNS servers, which reduces latency.
+	* To comply with DNS standards, responses sent over UDP protocol are limited to _512 bytes_ in size.
+	* Responses exceeding 512 bytes are truncated, and the resolver must re-issue the request over TCP.
+	* If you register a new domain name with Route 53, then Route 53 will be automatically configured as the DNS service for the domain, and a ___hosted zone___ will be created for your domain.
+	* You add resource record sets to the hosted zone, which define how you want Route 53 to respond to DNS queries for your domain (for example, with the IP address for a web server, the IP address for the nearest CloudFront edge location, or the IP address for an Elastic Load Balancing load balancer).
+	* If you registered your domain with another domain registrar, that registrar is probably providing the DNS service for your domain. You can transfer DNS service to Route 53, with or without transferring registration for the domain.
+* _Health Check_
+	* Route 53 sends automated requests over the Internet to your application to verify that it’s reachable, available, and functional.
+	* Route 53 health checks monitor the health of your resources such as web servers and email servers.
+	* You can configure CloudWatch alarms for your health checks so that you receive notification when a resource becomes unavailable.
+	* You can also configure Route 53 to route Internet traffic away from resources that are unavailable.
+	* High Availability and Resiliency
+		* Health checks and DNS failover are major tools in the Route 53 feature set that help make your application highly available and resilient to failures.
+		* If you deploy an application in multiple Availability Zones and multiple AWS regions, with Route 53 health checks attached to every endpoint, Route 53 can send back a list of healthy endpoints only.
+		* Health checks can automatically switch to a healthy endpoint with minimal disruption to your clients and without any configuration changes.
+		* You can use this automatic recovery scenario in _active-active_ or _active-passive_ setups, depending on whether your additional endpoints are always hit by live traffic or only after all primary endpoints have failed.
+		* Using health checks and automatic failovers, Route 53 improves your service uptime, especially when compared to the traditional ___monitor-alert-restart___ approach of addressing failures.
+		* Route 53 health checks are not triggered by DNS queries; they are run periodically by AWS, and results are published to all DNS servers. This way, name servers can be aware of an unhealthy endpoint and route differently within approximately 30 seconds of a problem (after three failed tests in a row), and new DNS results will be known to clients a minute later (assuming your TTL is 60 seconds), bringing complete recovery time to about a minute and a half in total in this scenario.
+* _Hosted Zones_
+	* A hosted zone is a collection of resource record sets hosted by Route 53.
+	* Like a traditional DNS zone file, a hosted zone represents resource record sets that are managed together under a single domain name.
+	* Each hosted zone has its own metadata and configuration information.
+	* 2 types of hosted zones:
+		* Private hosted zone: is a container that holds information about how you want to route traffic for a domain and its subdomains within one or more VPCs.
+		* Public hosted zone: is a container that holds information about how you want to route traffic on the Internet for a domain (for example, `example.com`) and its subdomains (for example, `apex.example.com` and `acme.example.com`).
+	* The resource record sets contained in a hosted zone must share the same suffix. e.g., the `example.com` hosted zone can contain resource record sets for the `www.example.com` and `www.aws.example.com` subdomains, but it cannot contain resource record sets for a `www.example.ca` subdomain.
+	* You can use S3 to host your static website at the hosted zone (for example, `domain.com`) and redirect all requests to a subdomain (for example, `www.domain.com`). Then, in Route 53, you can create an alias resource record that sends requests for the root domain to the S3 bucket.
+	* DO NOT use CNAME for your hosted zone. Use _an alias record_. CNAMEs are not allowed for hosted zones in Route 53.
+	* DO NOT use _A records_ for subdomains (for example, `www.domain.com`), as they refer to hardcoded IP addresses. Use Route 53 _alias records_ or traditional CNAME records to always point to the right resource, wherever your site is hosted, even when the physical server has changed its IP address.
+
+### Supported Record Types
+
+* Route 53 supports the following DNS resource record types:
+	* `A`
+	* `AAAA`
+	* `CNAME`
+	* `MX`
+	* `NS`
+	* `PTR`
+	* `SOA`
+	* `SPF`
+	* `SRV`
+	* `TXT`
+* When you access  Route 53 using the API, you will see examples of how to format the `Value` element for each record type.
+
+__Routing Policies__
+
+* When you create a resource record set, you choose a routing policy, which determines how Route 53 responds to queries.
+* Routing policy options: simple, weighted, latency-based, failover, and geolocation.
+* When specified, Route 53 evaluates a resource’s relative weight, the client’s network latency to the resource, or the client’s geographical location when deciding which resource to send back in a DNS response.
+* Routing policies can be associated with health checks, so resource health status is considered before it even becomes a candidate in a conditional decision tree.
+* ___Simple___
+	* Default routing policy when a new resource is created.
+	* Use a simple routing policy when you have a single resource that performs a given function for your domain (for example, one web server that serves content for the `example.com` website). In this case, Route 53 responds to DNS queries based only on the values in the resource record set (for example, the IP address in an _A record_).
+* ___Weighted___
+	* With weighted DNS, you can associate multiple resources (such as EC2 instances or ELB load balancers) with a single DNS name.
+	* Use the weighted routing policy when you have multiple resources that perform the same function (such as web servers that serve the same website), and you want Route 53 to route traffic to those resources in proportions that you specify. For example, you may use this for load balancing between different AWS regions or to test new versions of your website (you can send 10 percent of traffic to the test environment and 90 percent of traffic to the older version of your website).
+	* To create a group of weighted resource record sets, you need to create two or more resource record sets that have the same DNS name and type. You then assign each resource record set a unique identifier and a relative weight.
+	* When processing a DNS query, Route 53 searches for a resource record set or a group of resource record sets that have the same name and DNS record type (such as an A record). Route 53 then selects one record from the group.
+	* The probability of any resource record set being selected is governed by the following formula: `Weight for a given resource record set / Sum of the weights for the resource record sets in the group`
+* ___Latency-Based___
+	* Latency-based routing allows you to route your traffic based on the lowest network latency for your end user (for example, using the AWS region that will give them the fastest response time).
+	* Use the latency routing policy when you have resources that perform the same function in multiple AWS Availability Zones or regions and you want Route 53 to respond to DNS queries using the resources that provide the best latency. For example, suppose you have ELB load balancers in the U.S. East region and in the Asia Pacific region, and you created a latency resource record set in Route 53 for each load balancer.
+	* A user in London enters the name of your domain in a browser, and DNS routes the request to an Route 53 name server. Route 53 refers to its data on latency between London and the Singapore region and between London and the Oregon region. If latency is lower between London and the Oregon region, Route 53 responds to the user’s request with the IP address of your load balancer in Oregon. If latency is lower between London and the Singapore region, Route 53 responds with the IP address of your load balancer in Singapore.
+* ___Failover___
+	* Use a failover routing policy to configure active-passive failover, in which one resource takes all the traffic when it’s available and the other resource takes all the traffic when the first resource isn’t available.
+	* Note: you can’t create failover resource record sets for private hosted zones.
+	* For example, you might want your primary resource record set to be in U.S. West (N. California) and your secondary, Disaster Recovery (DR) resource(s) to be in U.S. East (N. Virginia). Route 53 will monitor the health of your primary resource endpoints using a health check.
+	* A health check tells Route 53 how to send requests to the endpoint whose health you want to check: which protocol to use (HTTP, HTTPS, or TCP), which IP address and port to use, and, for HTTP/HTTPS health checks, a domain name and path.
+	* After you have configured a health check, Amazon will monitor the health of your selected DNS endpoint. If your health check fails, then failover routing policies will be applied and your DNS will fail over to your DR site.
+* ___Geolocation___
+	* Geolocation routing lets you choose where Route 53 will send your traffic based on the geographic location of your users (the location from which DNS queries originate). For example, you might want all queries from Europe to be routed to a fleet of EC2 instances that are specifically configured for your European customers, with local languages and pricing in Euros.
+	* can also use geolocation routing to restrict distribution of content to only the locations in which you have distribution rights. Another possible use is for balancing load across endpoints in a predictable, easy-to-manage way so that each user location is consistently routed to the same endpoint.
+	* can specify geographic locations by continent, by country, or even by state in the United States.
+	* You can also create separate resource record sets for overlapping geographic regions, and priority goes to the smallest geographic region. For example, you might have one resource record set for Europe and one for the UK. This allows you to route some queries for selected countries (in this example, the United Kingdom) to one resource and to route queries for the rest of the continent (in this example, Europe) to a different resource.
+	* Geolocation works by mapping IP addresses to locations. You should be cautious, however, as some IP addresses aren’t mapped to geographic locations. Even if you create geolocation resource record sets that cover all seven continents, Route 53 will receive some DNS queries from locations that it can’t identify. In this case, you can create a default resource record set that handles both queries from IP addresses that aren’t mapped to any location and queries that come from locations for which you haven’t created geolocation resource record sets.
+	* If you don’t create a default resource record set, Route 53 returns a “no answer” response for queries from those locations.
+	* You cannot create two geolocation resource record sets that specify the same geographic location.
+	* You also cannot create geolocation resource record sets that have the same values for “Name” and “Type” as the “Name” and “Type” of non-geolocation resource record sets.
+
+### Route 53 Enables Resiliency
+
+When pulling these concepts together to build an application that is highly available and resilient to failures, consider these building blocks:
+
+* In every AWS region, an ELB load balancer is set up with cross-zone load balancing and connection draining. This distributes the load evenly across all instances in all Availability Zones, and it ensures requests in flight are fully served before an EC2 instance is disconnected from an ELB load balancer for any reason.
+* Each ELB load balancer delegates requests to EC2 instances running in multiple Availability Zones in an auto-scaling group. This protects the application from Availability Zone outages, ensures that a minimal amount of instances is always running, and responds to changes in load by properly scaling each group’s EC2 instances.
+* Each ELB load balancer has health checks defined to ensure that it delegates requests only to healthy instances.
+* Each ELB load balancer also has an Route 53 health check associated with it to ensure that requests are routed only to load balancers that have healthy EC2 instances.
+* The application’s production environment (for example, `prod.domain.com`) has Route 53 alias records that point to ELB load balancers. The production environment also uses a latency-based routing policy that is associated with ELB health checks. This ensures that requests are routed to a healthy load balancer, thereby providing minimal latency to a client.
+* The application’s failover environment (for example, `fail.domain.com`) has an Route 53 alias record that points to a CloudFront distribution of an S3 bucket hosting a static version of the application.
+* The application’s subdomain (for example, `www.domain.com`) has an Route 53 alias record that points to `prod.domain.com` (as primary target) and `fail.domain.com` (as secondary target) using a failover routing policy. This ensures `www.domain.com` routes to the production load balancers if at least one of them is healthy or the “fail whale” if all of them appear to be unhealthy.
+* The application’s hosted zone (for example, domain.com) has an Route 53 alias record that redirects requests to www.domain.com using an S3 bucket of the same name.
+* Application content (both static and dynamic) can be served using  CloudFront. This ensures that the content is delivered to clients from CloudFront edge locations spread all over the world to provide minimal latency. Serving dynamic content from a CDN, where it is cached for short periods of time (that is, several seconds), takes the load off of the application and further improves its latency and responsiveness.
+* The application is deployed in multiple AWS regions, protecting it from a regional outage.
 
 ---
 

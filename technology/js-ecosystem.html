@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="JavaScript Ecosystem AngularJS AngularJS Angular compiles takes a ‘template’, loads, compiles, tranforms and renders to DOM called ‘view’. Templates &hellip;">
+<meta name="description" content="JavaScript Ecosystem JS Ecosystem Overview AngularJS Node.js References JS Ecosystem Overview “JavaScript” is not really a single language. Each &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -108,7 +108,45 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
+  <li><a href="#js-ecosystem-overview">JS Ecosystem Overview</a></li>
   <li><a href="#angularjs">AngularJS</a></li>
+  <li><a href="#nodejs">Node.js</a></li>
+  <li><a href="#references">References</a></li>
+</ul>
+
+<h1 id="js-ecosystem-overview">JS Ecosystem Overview</h1>
+
+<ul>
+  <li>“JavaScript” is not really a single language. Each browser vendor implements their own JavaScript engine, and due to variations between browsers and versions, JavaScript suffers from some serious fragmentation. (<a href="http://caniuse.com">CanIUse.com</a> documents some of these inconsistencies).</li>
+  <li><strong>ES6</strong>, also known as ES2015 / Harmony / ECMAScript 6 / ECMAScript 2015, is the most-recent version of the JavaScript specification. (<a href="http://blog.teamtreehouse.com/get-started-ecmascript-6">good primer on ES6</a>).</li>
+  <li><strong>Transpilers</strong>
+    <ul>
+      <li>Tools: <code>Babel</code></li>
+      <li>process of transforming the standardized JavaScript into a version that’s compatible with older platforms is called_ transpiling_. e.g., ES6 to ES5</li>
+      <li>It’s not much different from compiling. By using a transpiler, you don’t need to worry as much about the headaches of whether or not a given browser will support the JavaScript feature you’re using.</li>
+      <li>Transpiler tools don’t just convert ES6 JavaScript to ES5. There are also tools to do the same thing for JavaScript-variants (such as ClojureScript, TypeScript, and CoffeeScript) to regular JavaScript.
+        <ul>
+          <li>ClojureScript is a version of Clojure that compiles down to JavaScript.</li>
+          <li>TypeScript is essentially JavaScript, but with a type system.</li>
+          <li>CoffeeScript is very similar to JavaScript, but with shinier syntax; much of the syntactic sugar promoted by CoffeeScript has been adopted by ES6 now.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Build Tools</strong>
+    <ul>
+      <li>Tools: <code>grunt</code>, <code>gulp</code>, <code>bower</code>, <code>browserify</code>, <code>webpack</code></li>
+      <li>Basically compiling the code into a production-ready format.</li>
+      <li>Requiring each JavaScript dependency as part of a page, script tag by script tag, is slow. Therefore, most sites use so-called JavaScript <em>bundles</em>. The bundling process takes all of the dependencies and “bundles” them together into a single file for inclusion on your page.</li>
+    </ul>
+  </li>
+  <li><strong>Test Tools</strong>
+    <ul>
+      <li>Tools: <code>Mocha</code>, <code>Jasmine</code>, <code>Chai</code>, <code>Tape</code>, <code>Karma</code>, <code>PhantomJS</code></li>
+      <li>Karma is a test runner that can run both Jasmine and Mocha-style tests.</li>
+      <li>PhantomJS is a <em>headless browser</em> - it runs without GUI.</li>
+    </ul>
+  </li>
 </ul>
 
 <h1 id="angularjs">AngularJS</h1>
@@ -126,8 +164,8 @@ messageStyle: "none",
       <li>Double curly braces - &#8220; - An “expression” in a template is a JavaScript-like code snippet that allows to read and write variables.A filter formats the value of an expression for display to the user.</li>
     </ul>
   </li>
-  <li><strong>2-way data binding</strong> - Angular provides live bindings or “two-way data binding”: Whenever the input values change, the value of the expressions are automatically recalculated and the DOM is updated with their values. </li>
-  <li><strong>Controllers</strong> - The purpose of controllers is to expose variables and functionality to expressions and directives. </li>
+  <li><strong>2-way data binding</strong> - Angular provides live bindings or “two-way data binding”: Whenever the input values change, the value of the expressions are automatically recalculated and the DOM is updated with their values.</li>
+  <li><strong>Controllers</strong> - The purpose of controllers is to expose variables and functionality to expressions and directives.</li>
   <li><strong>Services</strong> - The purpose of services is to expose view-independent business logic.</li>
   <li><strong>Factory</strong>
   …</li>
@@ -143,6 +181,60 @@ messageStyle: "none",
       <li><code>ng-click</code></li>
       <li><code>ng-dblclick</code></li>
       <li><code>ng-show</code>/<code>ng-hide</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="nodejs">Node.js</h1>
+
+<ul>
+  <li>Node.js is a tool for writing server-side JavaScript.</li>
+  <li><strong><em>npm</em></strong> Node package manager. JavaScript modules are usually packaged and shared via npm.</li>
+  <li><strong><em>nvm</em></strong> Node version manager. Facilitates managing different version of Node.js.</li>
+</ul>
+
+<p><strong>Runtime Environment</strong></p>
+
+<ul>
+  <li>Node.js is not a language; not a framework; not a tool. It is a runtime environment for running JS-based applications like JRE for Java.</li>
+  <li><em>JavaScript Virtual Machine (JsVM)</em>
+    <ul>
+      <li>Node.js has a virtual machine called <em>JavaScript Virtual Machine (JsVM)</em> which generates machine code for JS-based applications to enable it on different platforms.</li>
+      <li>We have separate Node.js requirements for different platforms like Windows, Macintosh, and Linux and hence the JsVM.</li>
+      <li>V8 is an open source JavaScript engine from Google. (Nashorn is the Java-based JS engine in JVM). Like the JVM, the JsVM (V8 engine) also has main components like JIT and GC for performing tasks, runtime compilation, and memory management respectively.</li>
+    </ul>
+  </li>
+  <li>
+    <p>Node.js also has a set of libraries which may otherwise be known as <em>Node API</em> or <em>Node Modules</em> to help run JS applications at runtime, similar to Java Libraries within the JRE.</p>
+  </li>
+  <li>How the JavaScript program is compiled and executed.
+    <ul>
+      <li>The source code is written in JavaScript (.js). There is no intermediate code generated before giving it to JsVM, the V8 engine.</li>
+      <li>The JsVM takes this source code directly and compiles it to machine code specific to the given target platform for execution.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Web Application Architecture</strong></p>
+
+<ul>
+  <li>The client requests are handled by a single thread, but asynchronously. With Java, each client request is handled by a separate thread synchronously.</li>
+  <li>There are many frameworks/libraries available for Node.js-based web application development. E.g., Express.js, Angular.js, Mongoose.js, etc.
+    <ul>
+      <li>Client layer: Angular.js, a client-side MVC framework.</li>
+      <li>Presentation + Service layer: can be developed by using Express.js. This also comes with a standalone server for running Node.js applications.</li>
+      <li>Data layer: uses an Object Data Modelling module (e.g. Mongoose.js) for communicating with NoSQL databases like MongoDB.  </li>
+      <li>This particular stack is called <em>MEAN stack</em> , which consists of MongoDB, Express.js, Angular.js, and Node.js (the runtime environment)</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="references">References</h1>
+
+<ul>
+  <li>Websites
+    <ul>
+      <li><a href="https://www.infoq.com/articles/state-of-javascript-2016?utm_source=twitter&amp;utm_medium=link&amp;utm_campaign=calendar">State of JavaScript 2016</a></li>
     </ul>
   </li>
 </ul>

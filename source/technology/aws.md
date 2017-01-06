@@ -294,14 +294,152 @@ footer: true
 * Encryption is transparent, so all data access is the same as unencrypted volumes, and you can expect the same IOPS performance on encrypted volumes as you would with unencrypted volumes, with a minimal effect on latency.
 * Snapshots that are taken from encrypted volumes are automatically encrypted, as are volumes that are created from encrypted snapshots.
 
-## AWS Storage Gateway
-
-* is a service connecting an on-premise s/w with cloud-based storage to provide seamless and secure integration. It provides low-latency performance by maintaining a cache of frequently accessed data on-premises while securely storing all of your data encrypted in S3 or Glacier.
-
 ## Amazon CloudFront
 
-* is a content delivery web service - an easy way to distribute content with low-latency, high data transfer speeds - can be used to deliver websites including dynamic, static, streaming and interactive content, using a global network of edge locations. Request for content are automatically routed to the nearest edge location for best performance.
+* is a global CDN service
+* can be used to deliver websites including dynamic, static, streaming and interactive content, using a global network of edge locations. Request for content are automatically routed to the nearest edge location for best performance.
 * __Edge caching__ refers to the use of caching servers to store content closer to end users. For instance, if you visit a popular Web site and download some static content that gets cached, each subsequent user will get served that content directly from the caching server until it expires.
+
+* __CDN Overview__
+	* A CDN is a globally distributed network of caching servers that speed up the downloading of web pages and other content.
+	* CDNs use DNS geo-location to determine the geographic location of each request for a web page or other content, then they serve that content from edge caching servers closest to that location instead of the original web server.
+	* A CDN allows you to increase the scalability of a website or mobile application easily in response to peak traffic spikes.
+	* In most cases, using a CDN is completely transparent—end users simply experience better website performance, while the load on your original website is reduced.
+
+* When a user requests content that you’re serving with CloudFront, the user is routed to the edge location that provides the lowest latency (time delay), so content is delivered with the best possible performance. If the content is already in the edge location with the lowest latency, CloudFront delivers it immediately. If the content is not currently in that edge location, CloudFront retrieves it from the origin server, such as an S3 bucket or a web server, which stores the original, definitive versions of your files.
+* CloudFront is optimized to work with other AWS cloud services as the origin server, including S3 buckets, S3 static websites, EC2, and ELB.
+* CloudFront also works seamlessly with any non-AWS origin server, such as an existing on-premises web server.
+* CloudFront also integrates with Route 53.
+* CloudFront supports all content that can be served over HTTP or HTTPS.
+* CloudFront supports serving both static and dynamic web pages.
+* CloudFront supports media streaming, using both HTTP and RTMP.
+
+### 3 Core Concepts
+
+* __Distributions__
+	* To use CloudFront, you start by creating a distribution, which is identified by a DNS domain name such as `d111111abcdef8.cloudfront.net`.
+	* To serve files from CloudFront, you simply use the distribution domain name in place of your website’s domain name; the rest of the file paths stay unchanged.
+	* You can use the CloudFront distribution domain name as-is, or you can create a user-friendly DNS name in your own domain by creating a CNAME record in Route 53 or another DNS service. The CNAME is automatically redirected to your CloudFront distribution domain name.
+* __Origins__
+	* When you create a distribution, you must specify the DNS domain name of the origin—the S3 bucket or HTTP server—from which you want CloudFront to get the definitive version of your objects (web files)
+* __Cache Control__
+	* Once requested and served from an edge location, objects stay in the cache until they expire or are evicted to make room for more frequently requested content.
+	* By default, objects expire from the cache after 24 hours.
+	* Once an object expires, the next request results in CloudFront forwarding the request to the origin to verify that the object is unchanged or to fetch a new version if it has changed.
+	* Optionally, control how long objects stay in an CloudFront cache before expiring.
+		* _Cache-Control headers_: set by your origin server, or
+		* _TTL_: set the minimum, maximum, and default Time to Live (TTL) for objects in your CloudFront distribution.
+	* _Invalidation Feature_
+		* can also remove copies of an object from all CloudFront edge locations at any time by calling the invalidation API.
+		* removes the object from every CloudFront edge location regardless of the expiration period you set for that object on your origin server.
+		* The invalidation feature is designed to be used in unexpected circumstances, such as to correct an error or to make an unanticipated update to a website, not as part of your everyday workflow.
+	* _Versioning_
+		* Instead of invalidating objects manually or programmatically, it is a best practice to use a version identifier as part of the object (file) path name. For example:
+			* Old file: `assets/v1/css/narrow.css`
+			* New file: `assets/v2/css/narrow.css`
+		* When using versioning, users always see the latest content through CloudFront when you update your site without using invalidation.
+		* Old versions will expire from the cache automatically.
+
+### Advanced Features
+
+{% img right /technology/aws-cloudfront-cache-behaviors.jpg %}
+
+* __Cache Behaviors__
+	* Cache behaviors allows to
+		* To use more than one origin server
+		* control which requests are served by which origin
+		* how requests are cached
+	* A cache behavior lets you configure a variety of CloudFront functionalities for a given URL path pattern for files on your website.
+	* E.g., One cache behavior applies to all PHP files in a web server (dynamic content), using the path pattern `*.php`, while another behavior applies to all JPEG images in another origin server (static content), using the path pattern `*.jpg`.
+	* Each cache behavior includes the following:
+		* The path pattern
+		* Which origin to forward your requests to
+		* Whether to forward query strings to your origin
+		* Whether accessing the specified files requires signed URLs
+		* Whether to require HTTPS access
+		* The amount of time that those files stay in the CloudFront cache (regardless of the value of any `Cache-Control` headers that your origin adds to the files)
+	* Cache behaviors are applied in order; if a request does not match the first path pattern, it drops down to the next path pattern. Normally the last path pattern specified is `*` to match all files.
+* __Whole Website__
+	* Using cache behaviors and multiple origins, you can easily use CloudFront to serve your whole website and to support different behaviors for different client devices.
+* __Private Content__
+	* In many cases, you may want to restrict access to content in CloudFront to only selected requestors, such as paid subscribers or to applications or users in your company network.
+	* CloudFront provides several mechanisms to allow you to serve private content.
+		* ___Signed URLs___: Use URLs that are valid only between certain times and optionally from certain IP addresses.
+		* ___Signed Cookies___: Require authentication via public and private key pairs.
+		* ___Origin Access Identities (OAI)___: Restrict access to an S3 bucket only to a special CloudFront user associated with your distribution. This is the easiest way to ensure that content in a bucket is only accessed by CloudFront.
+
+### Use Cases
+
+_Good Use Cases_
+
+* Serving the Static Assets of Popular Websites
+* Serving a Whole Website or Web Application
+* Serving Content to Users Who Are Widely Distributed Geographically
+* Distributing Software or Other Large Files
+* Serving Streaming Media
+
+_Inappropriate Use Cases_
+
+* _All or Most Requests Come From a Single Location_: If all or most of your requests come from a single geographic location, such as a large corporate campus, you will not take advantage of multiple edge locations.
+* _All or Most Requests Come Through a Corporate VPN_: Similarly, if your users connect via a corporate VPN, even if they are distributed, user requests appear to CloudFront to originate from one or a few locations.
+
+## AWS Storage Gateway
+
+* AWS Storage Gateway is a service to provide seamless and secure integration between an organization’s on-premises IT environment and AWS storage infrastructure.
+* supports industry-standard storage protocols that work with your existing applications.
+* It provides low-latency performance by caching frequently accessed data on-premises while encrypting and storing all of your data in S3 or Glacier.
+* AWS Storage Gateway’s software appliance is available for download as a VM image that you install on a host in your data center and then register with your AWS account through the AWS Management Console. The storage associated with the appliance is exposed as an iSCSI device that can be mounted by your on-premises applications.
+
+|   |   |
+| :---| :---|
+| {% img right /technology/aws-gateway-cached-volumes.png %} | {% img right /technology/aws-gateway-vtl.png %} |
+
+
+__3 configurations for AWS Storage Gateway__
+
+* ___Gateway-Cached Volumes___
+	* allows to expand local storage capacity into S3.
+	* All data stored on a Gateway-Cached volume is moved to S3, while recently read data is retained in local storage to provide low-latency access.
+	* Max volume size = 32TB
+	* Max number volumes per gateway = 32 (max storage = 32TB * 32 = 1PB)
+	* _Backup_
+		* Point-in-time snapshots can be taken to back up your AWS Storage Gateway- snapshots are performed incrementally, and only the data that has changed since the last snapshot is stored.
+		* All volume data and snapshot data is transferred to S3 over encrypted SSL connections - encrypted at rest in S3 using SSE.
+	* Data cannot be directly accessed with the S3 API or other tools such as the S3 console; instead you must access it through the AWS Storage Gateway service.
+* ___Gateway-Stored Volumes___
+	* allows to store on-premises storage to S3 and asynchronously back up that data to S3.
+	* provides low-latency access to all data, while also providing off-site backups taking advantage of the durability of S3.
+	*  While each volume is limited to a maximum size of 16TB, a single gateway can support up to 32 volumes for a maximum storage of 512TB.
+	* Max volume size = 16TB
+	* Max number of volumes per gateway = 32 (max storage = 16TB * 32 = 512TB)
+	* _Backup_
+		* The data is backed up in the form of EBS snapshots.
+		* Point-in-time snapshots can be taken to back up your AWS Storage Gateway. 
+		* Gateway stores the snapshots in S3 as EBS snapshots. When a new snapshot is taken, only the data that has changed since last snapshot is stored.
+		* Snapshots can be initiated on a scheduled or one-time basis.
+		* Because these snapshots are stored as EBS snapshots, a new EBS volume can be created from a Gateway-Stored volume.
+		* All volume data and snapshot data is transferred to S3 over encrypted SSL connections - encrypted at rest in S3 using SSE. 
+	* Data cannot be directly accessed with the S3 API or other tools such as the S3 console.
+	* If your on-premises appliance or even entire data center becomes unavailable, the data in AWS Storage Gateway can still be retrieved.
+	* If it’s only the appliance that is unavailable, a new appliance can be launched in the data center and attached to the existing AWS Storage Gateway.
+	* A new appliance can also be launched in another data center or even on an EC2 instance on the cloud.
+* ___Gateway Virtual Tape Libraries (VTL)___
+	* Gateway-VTL offers a durable, cost-effective solution to archive your data on the AWS cloud.
+	* The VTL interface lets you leverage your existing tape-based backup application infrastructure to store data on virtual tape cartridges that you create on your Gateway-VTL.
+	* A virtual tape is analogous to a physical tape cartridge, except the data is stored on the AWS cloud.
+	* Tapes are created blank through the console or programmatically and then filled with backed up data.
+	* Virtual tapes appear in your gateway’s VTL, a virtualized version of a physical tape library. Virtual tapes are discovered by your backup application using its standard media inventory procedure.
+	* When your tape software ejects a tape, it is archived on a Virtual Tape Shelf (VTS) and stored in Glacier. 
+	* Max number of tapes per gateway  = 1,500 (max storage = 1 PB)
+	* Max VTS allowed per region = 1 VTS 
+	* Multiple gateways in the same region can share a VTS.
+
+__Use Cases__
+
+* Gateway-Cached volumes enable you to expand local storage hardware to S3, allowing you to store much more data without drastically increasing your storage hardware or changing your storage processes.
+* Gateway-Stored volumes provide seamless, asynchronous, and secure backup of your on-premises storage without new processes or hardware.
+* Gateway-VTLs enable you to keep your current tape backup software and processes while storing your data more cost-effectively and simply on the cloud.
+
 
 ---
 
@@ -1783,7 +1921,7 @@ __DynamoDB Streams__
 	* You may have an application that leverages DynamoDB, and you want to know when read requests reach a certain threshold and alert yourself with an email. You can do this by using `ProvisionedReadCapacityUnits` for the DynamoDB table for which you want to set an alarm. You simply set a threshold value during a number of consecutive periods and then specify email as the notification type. Now, when the threshold is sustained over the number of periods, your specified email will alert you to the read activity.
 * CloudWatch metrics can be retrieved by performing a GET request. When you use detailed monitoring, you can also aggregate metrics across a length of time you specify. CloudWatch does not aggregate data across regions but can aggregate across Availability Zones within a region.
 * AWS provides a rich set of metrics included with each service, but you can also define custom metrics to monitor resources and events AWS does not have visibility into—for example, EC2 instance memory consumption and disk metrics that are visible to the operating system of the EC2 instance but not visible to AWS or application-specific thresholds running on instances that are not known to AWS. CloudWatch supports an API that allows programs and scripts to PUT metrics into CloudWatch as name-value pairs that can then be used to create events and trigger alarms in the same manner as the default CloudWatch metrics.
-* CloudWatch Logs can be used to monitor, store, and access log files from EC2 instances, AWS CloudTrail, and other sources. You can then retrieve the log data and monitor in real time for events—for example, you can track the number of errors in your application logs and send a notification if an error rate exceeds a threshold. CloudWatch Logs can also be used to store your logs in S3 or Glacier. Logs can be retained indefinitely or according to an aging policy that will delete older logs as no longer needed.
+* CloudWatch Logs can be used to monitor, store, and access log files from EC2 instances, CloudTrail, and other sources. You can then retrieve the log data and monitor in real time for events—for example, you can track the number of errors in your application logs and send a notification if an error rate exceeds a threshold. CloudWatch Logs can also be used to store your logs in S3 or Glacier. Logs can be retained indefinitely or according to an aging policy that will delete older logs as no longer needed.
 * A CloudWatch Logs agent is available that provides an automated way to send log data to CloudWatch Logs for EC2 instances running Amazon Linux or Ubuntu. You can use the CloudWatch Logs agent installer on an existing EC2 instance to install and configure the CloudWatch Logs agent. After installation is complete, the agent confirms that it has started and it stays running until you disable it.
 * CloudWatch has some limits that you should keep in mind when using the service. Each AWS account is limited to _5,000 alarms per AWS account_, and metrics data is retained for two weeks by default (at the time of this writing). If you want to keep the data longer, you will need to move the logs to a persistent store like S3 or Glacier. You should familiarize yourself with the limits for CloudWatch in the CloudWatch Developer Guide.
 
@@ -1794,6 +1932,35 @@ __DynamoDB Streams__
 ## AWS CloudTrail
 
 * a web service that records AWS API calls for an account and delivers log files for audit and review.
+
+* provides visibility into user activity by recording API calls made on your account. 
+* records important information about each API call, including the name of the API, the identity of the caller, the time of the API call, the request parameters, and the response elements returned by the AWS service. 
+* makes it easier to ensure compliance with internal policies and regulatory standards.
+* captures AWS API calls and related events made by or on behalf of an AWS account and delivers log files to an S3 bucket specified. 
+* Optionally, CloudTrail can be configured to deliver events to a log group monitored by CloudWatch Logs. 
+* can also choose to receive SNS notifications each time a log file is delivered to your bucket. 
+* can create a trail with the CloudTrail console, the AWS CLI, or the CloudTrail API. 
+* A trail is a configuration that enables logging of the AWS API activity and related events in your account.
+* 2 Types of Trails:
+	* ___A Trail That Applies to All Regions___
+		* When you create a trail that applies to all AWS regions, CloudTrail creates the same trail in each region, records the log files in each region, and delivers the log files to the single S3 bucket (and optionally to the CloudWatch Logs log group) that you specify. 
+		* This is the default option when you create a trail using the CloudTrail console. 
+		* If you choose to receive SNS notifications for log file deliveries, one SNS topic will suffice for all regions. 
+		* If you choose to have CloudTrail send events from a trail that applies to all regions to an CloudWatch Logs log group, events from all regions will be sent to the single log group.
+	* ___A Trail That Applies to One Region___
+		* You specify a bucket that receives events only from that region. The bucket can be in any region that you specify. 
+		* If you create additional individual trails that apply to specific regions, you can have those trails deliver event logs to a single S3 bucket.
+* By default, log files are encrypted using S3 SSE. You can store your log files in your bucket for as long as you want, but you can also define S3 lifecycle rules to archive or delete log files automatically.
+* CloudTrail typically delivers log files within 15 minutes of an API call. 
+* the service publishes new log files multiple times an hour, usually about every 5 minutes. These log files contain API calls from all of the account’s services that support CloudTrail.
+* Enable CloudTrail on all of your AWS accounts. Instead of configuring a trail for one region, you should enable trails for all regions.
+
+__Use Cases__
+
+* ___External Compliance Audits___
+	* Events from CloudTrail can be used to show the degree to which you are compliant with the regulations.
+* ___Unauthorized Access to Your AWS Account___
+	* CloudTrail records all sign-on attempts to your AWS account, including AWS Management Console login attempts, AWS SDK API calls, and AWS CLI API calls. Routine examination of CloudTrail events will provide the needed information to determine if your AWS account is being targeted for unauthorized access.
 
 ## AWS Config
 
@@ -2030,13 +2197,111 @@ Occasionally, multiple permissions will be applicable when determining whether a
 
 The only exception to this rule is if an _AssumeRole_ call includes a role and a policy, the policy cannot expand the privileges of the role (for example, the policy cannot override any permission that is denied by default in the role).
 
-## AWS Key Management Service (KMS)
-
-* enables organizations to create and control the encryption keys used to encrypt their data and uses Hardware Security Modules (HSM) to protect the security of the keys.
-
 ## AWS Directory Service
 
+* AWS Directory Service is a managed service offering that provides directories that contain information about your organization, including users, groups, computers, and other resources.
 * allows organizations to set up and run Microsoft Active Directory on the AWS cloud or connect their AWS resources with an existing on-premises Microsoft Active Directory.
+* designed to reduce identity management tasks. 
+* each directory is deployed across multiple Availability Zones, and monitoring automatically detects and replaces domain controllers that fail. 
+* data replication and automated daily snapshots are configured. 
+* no software to install, and AWS handles all of the patching and software updates.
+
+__3 types of directory types__
+
+* __AWS Directory Service for Microsoft Active Directory (Enterprise Edition)___
+	* AWS Directory Service for Microsoft Active Directory (Enterprise Edition), also referred to as Microsoft AD
+	* is a managed Microsoft Active Directory hosted on the AWS cloud. 
+	* It provides much of the functionality offered by Microsoft Active Directory plus integration with AWS applications. 
+	* With the additional Active Directory functionality, you can, for example, easily set up trust relationships with your existing Active Directory domains to extend those directories to AWS cloud services.
+* ___Simple AD___ 
+	* is a Microsoft Active Directory-compatible directory from AWS Directory Service that is powered by Samba 4. 
+	* supports commonly used Active Directory features such as 
+		* user accounts, 
+		* group memberships, 
+		* domain-joining EC2 instances running Linux and Microsoft Windows, 
+		* Kerberos-based Single Sign-On (SSO), 
+		* and group policies. 
+	* makes it even easier to manage EC2 instances running Linux and Windows and deploy Windows applications on the AWS cloud.
+	* User accounts in Simple AD 
+		* can also access AWS applications, such as Amazon WorkSpaces, Amazon WorkDocs, or Amazon WorkMail. 
+		* can also use AWS IAM roles to access the AWS Management Console and manage AWS resources. 
+	* provides daily automated snapshots to enable point-in-time recovery.
+	* Note: you 
+	* Features NOT support
+		* cannot set up trust relationships between Simple AD and other Active Directory domains.
+		* DNS dynamic update, 
+		* schema extensions, 
+		* Multi-Factor Authentication (MFA), 
+		* communication over LDAP, 
+		* PowerShell AD cmdlets, 
+		* and the transfer of Flexible Single-Master Operations (FSMO) roles.
+* ___AD Connector___
+	* is a proxy service for connecting your on-premises Microsoft Active Directory to the AWS cloud without requiring complex directory synchronization or the cost and complexity of hosting a federation infrastructure.
+	* AD Connector forwards sign-in requests to your Active Directory domain controllers for authentication and provides the ability for applications to query the directory for data. 
+	* After setup, users can use their existing corporate credentials to log on to AWS applications, such as Amazon WorkSpaces, Amazon WorkDocs, or Amazon WorkMail. 
+	* With the proper IAM permissions, users can also access the AWS Management Console and manage AWS resources such as EC2 instances or S3 buckets. 
+	* AD Connector can also be used to enable MFA by integrating it with your existing Remote Authentication Dial-Up Service (RADIUS)-based MFA infrastructure to provide an additional layer of security when users access AWS applications.
+	* With AD Connector, you continue to manage your Active Directory as usual. For example, adding new users, adding new groups, or updating passwords are all accomplished using standard directory administration tools with your on-premises directory. Thus, in addition to providing a streamlined experience for your users, AD Connector enables consistent enforcement of your existing security policies, such as password expiration, password history, and account lockouts, whether users are accessing resources on-premises or on the AWS cloud.
+
+__Use Cases__
+
+* Microsoft AD is your best choice if you have more than 5,000 users and need a trust relationship set up between an AWS-hosted directory and your on-premises directories.
+* Simple AD is the least expensive option and your best choice if you have 5,000 or fewer users and don’t need the more advanced Microsoft Active Directory features.
+* AD Connector is your best choice when you want to use your existing on-premises directory with AWS cloud services.
+
+## AWS Key Management Service (KMS)
+
+* Key management is the management of cryptographic keys within a cryptosystem. This includes dealing with the generation, exchange, storage, use, and replacement of keys.
+* AWS offers 2 services to manage your own _symmetric_ or _asymmetric_ cryptographic keys:
+	* AWS KMS 
+	* AWS CloudHSM
+
+* KMS is a service enabling you to generate, store, enable/disable, and delete symmetric keys
+* KMS makes it easy to create and control the encryption keys used to encrypt your data. 
+* can create keys that can never be exported from the service and can be used to encrypt and decrypt data based on policies defined.
+* KMS enables you to maintain control over who can use your keys and gain access to your encrypted data.
+* ___Customer Managed Keys___ 
+	* KMS uses a type of key called a _Customer Master Key (CMK)_ to encrypt and decrypt data. 
+	* CMKs are the fundamental resources that KMS manages. 
+	* CMKs can be used inside of KMS to encrypt or decrypt up to 4 KB of data directly. 
+	* CMKs can also be used to encrypt generated data keys that are then used to encrypt or decrypt larger amounts of data outside of the service. 
+	* CMKs can never leave KMS unencrypted, but data keys can leave the service unencrypted.
+* ___Data Keys___
+	* used to encrypt large data objects within your own application outside KMS. 
+	* When you call `GenerateDataKey`, KMS returns a plaintext version of the key and ciphertext that contains the key encrypted under the specified CMK. 
+	* KMS tracks which CMK was used to encrypt the data key. 
+	* Use the plaintext data key in your application to encrypt data, and you typically store the encrypted key alongside your encrypted data
+	* Security best practices suggest that you should remove the plaintext key from memory as soon as is practical after use. 
+	* To decrypt data in your application, pass the encrypted data key to the `Decrypt` function. 
+	* KMS uses the associated CMK to decrypt and retrieve your plaintext data key. 
+	* Use the plaintext key to decrypt your data, and then remove the key from memory.
+* ___Envelope Encryption___
+	* KMS uses envelope encryption to protect data. 
+	* KMS creates a data key, encrypts it under a CMK, and returns plaintext and encrypted versions of the data key to you. You use the plaintext key to encrypt data and store the encrypted key alongside the encrypted data. The key should be removed from memory as soon as is practical after use. You can retrieve a plaintext data key only if you have the encrypted data key and you have permission to use the corresponding master key.
+* ___Encryption Context___
+	* All KMS cryptographic operations accept an optional key/value map of additional contextual information called an encryption context. 
+	* The specified context must be the same for both the encrypt and decrypt operations or decryption will not succeed. 
+	* The encryption context is logged, can be used for additional auditing, and is available as context in the AWS policy language for fine-grained policy-based authorization.
+
+## AWS CloudHSM
+
+{% img right /technology/aws-cloudhsm.jpg %}
+
+* A service providing you with secure cryptographic key storage by making Hardware Security Modules (HSMs) available on the AWS cloud
+* AWS CloudHSM helps you meet corporate, contractual, and regulatory compliance requirements for data security by using dedicated HSM appliances within the AWS cloud. 
+* An HSM is a hardware appliance that provides secure key storage and cryptographic operations within a tamper-resistant hardware module. 
+* HSMs are designed to securely store cryptographic key material and use the key material without exposing it outside the cryptographic boundary of the appliance.
+* The recommended configuration for using AWS CloudHSM is to use two HSMs configured in a high-availability configuration, as illustrated in the picture above
+* AWS CloudHSM allows you to protect your encryption keys within HSMs that are designed and validated to government standards for secure key management. 
+* You can securely generate, store, and manage the cryptographic keys used for data encryption in a way that ensures that only you have access to the keys. 
+* AWS CloudHSM helps you comply with strict key management requirements within the AWS cloud without sacrificing application performance.
+
+__Use Cases__
+
+* ___Scalable Symmetric Key Distribution___ 
+	* Symmetric encryption algorithms require that the same key be used for both encrypting and decrypting the data. This is problematic because transferring the key from the sender to the receiver must be done either through a known secure channel or some “out of band” process.
+* ___Government-Validated Cryptography___
+	* Certain types of data (for example, Payment Card Industry—PCI—or health information records) must be protected with cryptography that has been validated by an outside party as conforming to the algorithm(s) asserted by the claiming party.
 
 ## AWS Certificate Manager
 

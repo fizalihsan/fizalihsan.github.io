@@ -301,7 +301,8 @@ footer: true
 ## Amazon CloudFront
 
 * is a content delivery web service - an easy way to distribute content with low-latency, high data transfer speeds - can be used to deliver websites including dynamic, static, streaming and interactive content, using a global network of edge locations. Request for content are automatically routed to the nearest edge location for best performance.
-* _Edge caching_ refers to the use of caching servers to store content closer to end users. For instance, if you visit a popular Web site and download some static content that gets cached, each subsequent user will get served that content directly from the caching server until it expires.
+* __Edge caching__ refers to the use of caching servers to store content closer to end users. For instance, if you visit a popular Web site and download some static content that gets cached, each subsequent user will get served that content directly from the caching server until it expires.
+
 ---
 
 # Compute and Network Services
@@ -986,6 +987,7 @@ __Inbound__
 	* Domain registration
 	* DNS service
 	* Health checking
+* DNS uses port 53 to serve requests
 * _Domain Registration_
 	* a registered website can be transfered to Route 53
 	* It isn’t required to use Route 53 as your DNS service or to configure health checking for your resources.
@@ -1037,6 +1039,8 @@ __Inbound__
 * When you access  Route 53 using the API, you will see examples of how to format the `Value` element for each record type.
 
 __Routing Policies__
+
+{% img right /technology/aws-route53.jpg %}
 
 * When you create a resource record set, you choose a routing policy, which determines how Route 53 responds to queries.
 * Routing policy options: simple, weighted, latency-based, failover, and geolocation.
@@ -1303,7 +1307,7 @@ __Backup and Recovery__
     * RDS automatically replicates the data from the master database or primary instance to the slave database or secondary instance using synchronous replication.
     * Each Availability Zone runs on its own physically distinct, independent infrastructure and is engineered to be highly reliable.
     * RDS detects and automatically recovers from the most common failure scenarios for Multi-AZ deployments so that you can resume database operations as quickly as possible without administrative intervention.
-    * Multi-AZ deployments are for disaster recovery only; they are not meant to enhance database performance. The standby DB Instance is not available to offline queries from the primary master DB Instance. To improve database performance using multiple DB Instances, use read replicas or other DB caching technologies such as Amazon ElastiCache.
+    * Multi-AZ deployments are for disaster recovery only; they are not meant to enhance database performance. The standby DB Instance is not available to offline queries from the primary master DB Instance. To improve database performance using multiple DB Instances, use read replicas or other DB caching technologies such as ElastiCache.
     * _Automatic Failover__
         * RDS will automatically fail over to the standby instance without user intervention.
         * The DNS name remains the same, but the RDS service changes the CNAME to point to the standby.
@@ -1657,7 +1661,107 @@ __DynamoDB Streams__
 
 ## Amazon ElasticCache
 
-* a web service that simplifies scaling of an in-memory cache in the cloud - supports Memcached and Redis cache engines
+{% img right /technology/cache-aside-pattern.jpg 500 500 %}
+
+* a web service that simplifies scaling of an in-memory cache in the cloud
+* Using ElastiCache,
+	* switching between Memcached or Redis engines is just a configuration change (since ElastiCache is protocol-compliant)
+	* you can implement any number of caching patterns. Most common pattern is the _cache-aside pattern_. In this scenario, the app server checks the cache first to see if it contains the data it needs. If the data does not exist in the cache node, it will query the database and serialize and write the query results to the cache. The next user request will then be able to read the data directly from the cache instead of querying the database.
+* It is certainly possible to build and manage a cache cluster yourself on EC2, however the underlying EC2 instances can become impaired occasionally. ElastiCache can automatically detect and recover from the failure of a cache node. With the Redis engine, ElastiCache makes it easy to set up read replicas and fail over from the primary to a replica in the event of a problem.
+
+* ___Data Access Patterns___
+	* Retrieving a flat key from an in-memory cache will always be faster than the most optimized database query.
+	* should always evaluate the access pattern of the data before you decide to store it in cache. e.g., list of products in a catalog
+	* Data items that should not be cached: if you generate a unique page every request, you probably should not cache the page results.
+* ___Cache Engines___
+	* ElastiCache allows you to quickly deploy clusters of two different types of popular cache engines: Memcached and Redis.
+	* At a high level, Memcached and Redis may seem similar, but they support a variety of different use cases and provide different functionality.
+	* _Memcached_
+		* is a simple-to-use in-memory key/value store that can be used to store arbitrary types of data.
+		* With ElastiCache, you can elastically grow and shrink a cluster of Memcached nodes to meet your demands.
+		* You can partition your cluster into shards and support parallelized operations for very high performance throughput.
+		* Memcached deals with objects as blobs that can be retrieved using a unique key. Value object can be of any type; from strings to binary data.
+		* Memcached versions supported: 1.4.24, 1.4.5.
+		* When a new version of Memcached is released, you just have to spin up a new cluster with the latest version.
+	* _Redis_
+		* is a flexible in-memory data structure store that can be used as a cache, database, or even as a message broker.
+		* Redis versions supported: 2.8.24, and also a number of older versions.
+		* Beyond the object support provided in Memcached, Redis supports a rich set of data types likes strings, lists, and sets.
+		* Unlike Memcached, Redis supports the ability to persist the in-memory data onto disk. This allows you to create snapshots that back up your data and then recover or replicate from the backups.
+		* Redis clusters also can support up to 5 read replicas to offload read requests. In the event of failure of the primary node, a read replica can be promoted and become the new master using Multi-AZ replication groups.
+		* Redis also has advanced features that make it easy to sort and rank data. Some common use cases include building a leaderboard for a mobile application or serving as a high-speed message broker in a distributed system.
+		* With a Redis cluster, you can leverage a pub-subs messaging abstraction that allows you to decouple the components of your applications.
+* ___Nodes and Clusters___
+	* Each deployment of ElastiCache consists of one or more nodes in a cluster.
+	* A single Memcached cluster can contain up to 20 nodes.
+	* Redis clusters are always made up of a single node; however, multiple clusters can be grouped into a Redis replication group.
+	* Node Types
+		* The individual node types are derived from a subset of the EC2 instance type families, like `t2`, `m3`, and `r3`.
+		* Node types range from a `t2.micro` node type with 555MB of memory up to an `r3.8xlarge` with 237GB of memory, with many choices in between.
+		* The `t2` cache node family is ideal for development and low-volume applications with occasional bursts, but certain features may not be available.
+		* The `m3` family is a good blend of compute and memory, while the `r3` family is optimized for memory-intensive workloads.
+	* Each node type comes with a preconfigured amount of memory, with a small amount of the memory allocated to the caching engine and operating system itself.
+* ___Design for Failure___
+	* For Memcached clusters,
+		* you can decrease the impact of the failure of a cache node by using a larger number of nodes with a smaller capacity, instead of a few large nodes.
+		* In the event that ElastiCache detects the failure of a node, it will provision a replacement and add it back to the cluster. During this time, your database will experience increased load, because any requests that would have been cached will now need to be read from the database.
+	* For Redis clusters,
+		* ElastiCache will detect failure and replace the primary node.
+		* If a Multi-AZ replication group is enabled, a read replica can be automatically promoted to primary.
+* ___Memcached Auto Discovery___
+	* For Memcached clusters partitioned across multiple nodes, ElastiCache supports Auto Discovery with the provided client library.
+	* Auto Discovery abstracts the infrastructure topology of the cache cluster from the application layer.
+	* The Auto Discovery client gives your applications the ability to identify automatically all of the nodes in a cache cluster and to initiate and maintain connections to all of these nodes. The Auto Discovery client is available for .NET, Java, and PHP platforms.
+* ___Scaling___
+	* Adding additional cache nodes allows you to easily expand horizontally and meet higher levels of read or write performance.
+	* can also select different classes of cache nodes to scale vertically.
+	* _Horizontal Scaling_:
+		* With Memcached, you can partition your data and scale horizontally to 20 nodes or more. With Auto Discovery, your application can discover Memcached nodes that are added or removed from a cluster.
+		* A Redis cluster consists of a single cache node that is handling read and write transactions. Additional clusters can be created and grouped into a Redis replication group. While you can only have one node handling write commands, you can have up to 5 read replicas handling read-only requests.
+	* _Vertical Scaling_:
+		* Support for vertical scaling is more limited with ElastiCache.
+		* If you like to change the cache node type and scale the compute resources vertically, the service does not directly allow you to resize your cluster in this manner. You can, however, quickly spin up a new cluster with the desired cache node types and start redirecting traffic to the new cluster.
+		* __Note__: a new Memcached cluster always starts empty, while a Redis cluster can be initialized from a backup.
+
+{% img right /technology/aws-redis-replication-group.jpg 500 500 %}
+
+* ___Replication and Multi-AZ___
+	* Replication is a useful technique
+		* to provide rapid recovery in the event of a node failure
+		* to serve up very high volumes of read queries beyond the capabilities of a single node.
+	* ElastiCache clusters running Redis support both of these design requirements. Unlike Redis, cache clusters running Memcached are _standalone in-memory services without any redundant data protection services_.
+	* replication between the clusters is performed asynchronously and there will be a small delay before data is available on all cluster nodes.
+	* _Replication Groups_
+		* Cache clusters running Redis support the concept of replication groups.
+		* A replication group consists of up to 6 clusters, with 5 of them designated as read replicas.
+		* This allows you to scale horizontally by writing code in your application to offload reads to one of the 5 clones.
+	* _Multi-AZ Replication Groups_
+		* can also create a Multi-AZ replication group that allows you to increase availability and minimize the loss of data.
+		* Multi-AZ simplifies the process of dealing with a failure by automating the replacement and failover from the primary node.
+		* In the event the primary node fails or can’t be reached, Multi-AZ will select and promote a read replica to become the new primary, and a new node will be provisioned to replace the failed one. ElastiCache will then update the DNS entry of the new primary node to allow your application to continue processing without any configuration change and with only a short disruption.
+* ___Backup and Recovery___
+	* ElastiCache clusters running Redis allow you to persist your data from in-memory to disk and create a snapshot.
+	* Each snapshot is a full clone of the data that can be used to recover to a specific point in time or to create a copy for other purposes.
+	* Snapshots cannot be created for clusters using the Memcached engine because it is a purely in-memory key/value store and always starts empty.
+	* ElastiCache uses the native backup capabilities of Redis and will generate a standard Redis database backup file that gets stored in S3.
+	* Snapshots require compute and memory resources to perform and can potentially have a performance impact on heavily used clusters.
+	* ElastiCache will try different backup techniques depending on the amount of memory currently available.
+	* Best practice: set up a replication group and perform a snapshot against one of the read replicas instead of the primary node.
+	* In addition to manually initiated snapshots, snapshots can be created automatically based on a schedule. You can also configure a window for the snapshot operation to be completed and specify how many days of backups you want to store.
+	* Manual snapshots are stored indefinitely until you delete them.
+	* Whether the snapshot was created automatically or manually, the snapshot can then be used to create a new cluster at any time.
+	* By default, the new cluster will have the same configuration as the source cluster, but you can override these settings.
+	* You can also restore from an RDB file generated from any other compatible Redis cluster.
+* ___Access Control___
+	* Access to your ElastiCache cluster is controlled primarily by restricting inbound network access to your cluster through the use of security groups.
+	* Each security group defines one or more inbound rules that restrict the source traffic.
+	* When deployed inside of a VPC, each node will be issued a private IP address within one or more subnets that you select.
+	* Individual nodes can never be accessed from the Internet or from EC2 instances outside the VPC.
+	* You can further restrict network ingress at the subnet level by modifying the network ACLs.
+	* Access to manage the configuration and infrastructure of the cluster is controlled separately from access to the actual Memcached or Redis service endpoint.
+	* Using the IAM service, you can define policies that control which AWS users can manage the ElastiCache infrastructure.
+	* Some of the key actions an administrator can perform include `CreateCacheCluster`, `ModifyCacheCluster`, or `DeleteCacheCluster`.
+	* Redis clusters also support `CreateReplicationGroup` and `CreateSnapshot` actions, among others.
 
 ---
 
@@ -1966,6 +2070,8 @@ The only exception to this rule is if an _AssumeRole_ call includes a role and a
 * messages are delivered to subscribers using different methods, such as Amazon SQS, HTTP, HTTPS, email, SMS, and AWS Lambda.
 * When using SNS, you (as the owner) create a topic and control access to it by defining policies that determine which publishers and subscribers can communicate with the topic and via which technologies.
 * Publishers send messages to topics that they created or that they have permission to publish to.
+* Once published, messages cannot be recalled.
+* Topic names should typically be available for reuse approximately 30–60 seconds after the previous topic with the same name has been deleted. The exact time will depend on the number ofsubscriptions active on the topic; topics with a few subscribers will be available instantly for reuse, while topics with larger subscriber lists may take longer.
 
 __Common Scenarios__
 

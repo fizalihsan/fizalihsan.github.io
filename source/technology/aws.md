@@ -2567,6 +2567,143 @@ __Tradeoff Message Durability and Latency__
 
 ---
 
+# Analytics
+
+## Amazon Kinesis
+
+* Kinesis is a streaming data platform to load and analyze massive data
+Kinesis Firehose: 
+Kinesis Streams: 
+Kinesis Analytics: A service enabling you to easily analyze streaming data real time with standard SQL
+Each of these services can scale to handle virtually limitless data streams.
+
+___Kinesis Firehose___
+
+{% img right /technology/aws-kinesis.jpg %}
+
+* A service to load massive volumes of streaming data into AWS
+* receives stream data and stores it in S3, Redshift, or Amazon Elasticsearch. 
+* No need write any code; just create a delivery stream and configure the destination for your data. 
+* Clients write data to the stream using an AWS API call and the data is automatically sent to the proper destination.
+* S3: When configured to save a stream to S3, Kinesis Firehose sends the data directly to S3. 
+* Redshift: For a Redshift destination, the data is first written to S3, and then a Redshift `COPY` command is executed to load the data into Redshift. 
+* Elasticsearch: Kinesis Firehose can also write data out to Amazon Elasticsearch, with the option to back the data up concurrently to S3.
+
+___Kinesis Streams___
+
+{% img right /technology/aws-kinesis-streams.jpg %}
+
+* A service to collect and process large streams of data records in real time. 
+* Using AWS SDKs, you can create an Kinesis Streams application that processes the data as it moves through the stream. Because response time for data intake and processing is in near real time, the processing is typically lightweight. 
+* Kinesis Streams can scale to support nearly limitless data streams by distributing incoming data across a number of shards. If any shard becomes too busy, it can be further divided into more shards to distribute the load further. 
+* The processing is then executed on consumers, which read data from the shards and run the Kinesis Streams application.
+
+__Use Cases__
+
+* Massive Data Ingestion: Kinesis Firehose
+* Real-Time Processing of Massive Data Streams: Kinesis Streams
+
+## Amazon Elastic MapReduce (Amazon EMR)
+
+* Amazon EMR provides a fully managed, on-demand Hadoop framework. 
+* When you launch an Amazon EMR cluster, you specify:
+	* The instance type of the nodes in the cluster
+	* The number of nodes in the cluster
+	* Hadoop version to run (supports several recent versions of Apache Hadoop, and MapR Hadoop.)
+	* Additional tools or applications like Hive, Pig, Spark, or Presto
+* 2 types of storage that can be used with Amazon EMR:
+	* HDFS: 
+		* All data is replicated across multiple instances to ensure durability. 
+		* Amazon EMR can use EC2 instance storage or EBS for HDFS. 
+		* When a cluster is shut down, instance storage is lost and the data does not persist. 
+		* HDFS can also make use of EBS storage without losing data after shutdown.
+	* EMR File System (EMRFS) 
+		* is an implementation of HDFS that allows clusters to store data on S3. 
+		* EMRFS allows you to get the durability and low cost of S3 while preserving your data even if the cluster is shut down.
+* __Persistent Clusters__
+	* A persistent cluster continues to run 24×7 after it is launched. 
+	* Persistent clusters are appropriate when continuous analysis is going to be run on the data. 
+	* For persistent clusters, HDFS is a common choice. 
+	* Persistent clusters take advantage of the low latency of HDFS, especially on instance storage, when constant operation means no data lost when shutting down a cluster. 
+* __Transient Clusters__
+	* Clusters that are started when needed and then immediately stopped when done are called _transient clusters_. 
+	* EMRFS is well suited for transient clusters, as the data persists independent of the lifetime of the cluster.
+	* combination of local HDFS and EMRFS can also be used.
+
+__Use Cases__
+
+* Log Processing
+* Clickstream Analysis
+* Genomics and Life Sciences
+
+## AWS Data Pipeline
+
+{% img right /technology/aws-datapipeline.jpg %}
+
+* is a web service that helps to reliably process and move data between different AWS compute and storage services, and also on-premises data sources, at specified intervals. 
+* AWS Data Pipeline can be used for virtually any batch mode ETL process.
+* With AWS Data Pipeline, you can regularly access your data where it’s stored, transform and process it at scale, and efficiently transfer the results to S3, RDS, DynamoDB, and EMR.
+* Everything in AWS Data Pipeline starts with the pipeline itself. A pipeline schedules and runs tasks according to the pipeline definition. 
+* The scheduling is flexible and can run every 15 minutes, every day, every week, and so forth.
+* _Data Nodes_
+	* The pipeline interacts with data stored in data nodes. 
+	* Data nodes are locations where the pipeline reads input data or writes output data, such as S3, a MySQL database, or a Redshift cluster. 
+	* Data nodes can be on AWS or on your premises.
+* The pipeline will execute activities that represent common scenarios, such as moving data from one location to another, running Hive queries, and so forth. 
+* Activities may require additional resources to run, such as an EMR cluster or an EC2 instance. In these situations, AWS Data Pipeline will automatically launch the required resources and tear them down when the activity is completed.
+* _Precondition_: conditional statements that must be true before an activity can run. E.g., whether an S3 key is present, whether a DynamoDB table contains any data, and so forth.
+* _Retry_: If an activity fails, retry is automatic - will continue to retry up to the limit you configure. 
+* You can define actions to take in the event when the activity reaches that limit without succeeding.
+
+__Use Cases__
+
+The pipeline in the picture performs the following workflow:
+
+* Every hour an activity begins to extract log data from on-premises storage to S3. A precondition checks that there is data to be transferred before actually starting the activity.
+* The next activity launches a transient EMR cluster that uses the extracted dataset as input, validates and transforms it, and then outputs the data to an S3 bucket.
+* The final activity moves the transformed data from S3 to Redshift via `COPY` command.
+
+## AWS Import/Export
+
+* AWS Import/Export is a service that accelerates transferring large amounts of data into and out of AWS using physical storage appliances, bypassing the Internet. 
+* The data is copied to a device at the source (your data center or an AWS region), shipped via standard shipping mechanisms, and then copied to the
+destination (your data center or an AWS region).
+* AWS Import/Export has two features that support shipping data into and out of your AWS infrastructure: 
+	* AWS Import/Export Snowball (AWS Snowball) 
+	* AWS Import/Export Disk.
+* __AWS Snowball__ 
+	* uses Amazon-provided shippable storage appliances shipped through UPS. 
+	* Each AWS Snowball is protected by AWS KMS and made physically rugged to secure and protect your data while the device is in transit. 
+	* At the time of this writing, AWS Snowballs come in two sizes: 50TB and 80TB, and the availability of each varies by region.
+	* AWS Snowball provides the following features:
+		* can import and export data TB or even PB of data between your on-premises data storage locations and S3.
+		* Encryption is enforced, protecting your data at rest and in physical transit.
+		* don’t have to buy or maintain your own hardware devices.
+		* can manage your jobs through the AWS Snowball console.
+		* AWS Snowball is its own shipping container, and the shipping label is an E-Ink display that automatically shows the correct address when the AWS Snowball is ready to ship. You can drop it off with UPS, no box required.
+* __AWS Import/Export Disk__
+	* supports data transfers directly onto and off of storage devices you own using the Amazon high-speed internal network.
+	* Features:
+		* can import your data into Glacier and EBS, in addition to S3.
+		* can export data from S3.
+		* Encryption is optional and not enforced.
+		* have to buy and maintain your own hardware devices.
+		* can’t manage your jobs through the AWS Snowball console.
+		* Unlike AWS Snowball, AWS Import/Export Disk has an upper limit of 16TB.
+
+__Use Cases__ 
+
+* _Storage Migration_: When companies shut down a data center, they often need to move massive amounts of storage to another location.
+* _Migrating Applications_: Migrating an application to the cloud often involves moving huge amounts of data.
+
+---
+
+# DevOps
+
+
+
+---
+
 # Terminology
 
 * Network perimeter - a boundary between two or more portions of a network. It can refer to the boundary between your VPC and your network, it could refer to the boundary between what you manage versus what AWS manages.

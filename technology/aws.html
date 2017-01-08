@@ -205,10 +205,12 @@ messageStyle: "none",
       <li><a href="#amazon-elasticcache">Amazon ElasticCache</a></li>
     </ul>
   </li>
-  <li><a href="#management-tools">Management Tools</a>    <ul>
+  <li><a href="#devops--management-tools">DevOps &amp; Management Tools</a>    <ul>
       <li><a href="#amazon-cloudwatch">Amazon CloudWatch</a></li>
+      <li><a href="#aws-opsworks">AWS OpsWorks</a></li>
       <li><a href="#aws-cloudformation">AWS CloudFormation</a></li>
       <li><a href="#aws-cloudtrail">AWS CloudTrail</a></li>
+      <li><a href="#aws-trusted-advisor">AWS Trusted Advisor</a></li>
       <li><a href="#aws-config">AWS Config</a></li>
     </ul>
   </li>
@@ -243,7 +245,6 @@ messageStyle: "none",
       <li><a href="#aws-importexport">AWS Import/Export</a></li>
     </ul>
   </li>
-  <li><a href="#devops">DevOps</a></li>
   <li><a href="#terminology">Terminology</a></li>
   <li><a href="#references">References</a></li>
 </ul>
@@ -1646,7 +1647,57 @@ balancer.</li>
 <h2 id="aws-elastic-beanstalk">AWS Elastic Beanstalk</h2>
 
 <ul>
+  <li>AWS Elastic Beanstalk is the fastest and simplest way to get an application up and running on AWS. </li>
   <li>Developers can simply upload their application code, and the service automatically handles all the details, such as resource provisioning, load balancing, Auto scaling, and monitoring.</li>
+  <li>With AWS Elastic Beanstalk, you can quickly deploy and manage applications on the AWS cloud without worrying about the infrastructure that runs those applications. * An AWS Elastic Beanstalk application is the logical collection of these AWS Elastic Beanstalk components, which includes environments, versions, and environment configurations. </li>
+  <li>In AWS Elastic Beanstalk, an application is conceptually similar to a folder.</li>
+  <li><em>Application Version</em>
+    <ul>
+      <li>An application version refers to a specific, labeled iteration of deployable code for a web application. </li>
+      <li>An application version points to an S3 object that contains the deployable code. </li>
+      <li>Applications can have many versions and each application version is unique. </li>
+      <li>In a running environment, organizations can deploy any application version they already uploaded to the application, or they can upload and immediately deploy a new application version. </li>
+      <li>Organizations might upload multiple application versions to test differences between one version of their web application and another.</li>
+    </ul>
+  </li>
+  <li><em>Environment</em>
+    <ul>
+      <li>An environment is an application version that is deployed onto AWS resources. </li>
+      <li>Each environment runs only a single application version at a time; however, the same version or different versions can run in as many environments at the same time as needed. </li>
+      <li>When an environment is created, AWS Elastic Beanstalk provisions the resources needed to run the application version that is specified.</li>
+      <li><em>Environment Configuration</em>
+        <ul>
+          <li>An environment configuration identifies a collection of parameters and settings that define how an environment and its associated resources behave. </li>
+          <li>When an environment’s configuration settings are updated, AWS Elastic Beanstalk automatically applies the changes to existing resources or deletes and deploys new resources depending on the type of change.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>When an AWS Elastic Beanstalk environment is launched, the environment tier, platform, and environment type are specified. </li>
+  <li><em>Environment tier</em> : that determines whether AWS Elastic Beanstalk provisions resources to support a web application that handles HTTP(S) requests (<strong><em>web server tier</em></strong>) or an application that handles background-processing tasks (<strong><em>worker tier</em></strong>).</li>
+  <li>Elastic Beanstalk provides platform support for the programming languages Java, Node.js, PHP, Python, Ruby, and Go with support for the web containers Tomcat, Passenger, Puma, and Docker.</li>
+</ul>
+
+<p><strong>Use Cases</strong></p>
+
+<p>A company provides a website for prospective home buyers, sellers, and renters to browse home and apartment listings for more than 110 million homes. The website processes more than three million new images daily. It receives more than 17,000 image requests per second on its website during peak traffic from both desktop and mobile clients.
+The company was looking for ways to be more agile with deployments and empower its developers to focus more on writing code instead of spending time managing and configuring servers, databases, load balancers, firewalls, and networks. It began using AWS Elastic Beanstalk as the service for deploying and scaling the web applications and services. Developers were empowered to upload code to AWS Elastic Beanstalk, which then automatically handled the deployment, from capacity provisioning, load balancing, and Auto Scaling, to application health monitoring.
+Because the company ingests data in a haphazard way, running feeds that dump a ton of work into the image processing system all at once, it needs to scale up its image converter fleet to meet peak demand. The company determined that an AWS Elastic Beanstalk worker fleet to run a Python Imaging Library with custom code was the simplest way to meet the requirement. This eliminated the need to have a number of static instances or, worse, trying to write their own Auto Scaling configuration.
+By making the move to AWS Elastic Beanstalk, the company was able to reduce operating costs while increasing agility and scalability for its image processing and delivery system.</p>
+
+<p><strong>Key Features</strong></p>
+
+<ul>
+  <li>Additionally, developers retain full control over the AWS resources powering their application and can perform a variety of functions by simply adjusting the configuration settings such as:
+    <ul>
+      <li>Selecting the EC2 instance type</li>
+      <li>Choosing the database and storage options</li>
+      <li>Enabling login access to EC2 instances</li>
+      <li>Enhancing application security by enabling HTTPS protocol on the load balancer</li>
+      <li>Adjusting application server settings (for example, JVM settings) and passing environment variables</li>
+      <li>Adjust Auto Scaling settings to control the metrics and thresholds used to determine when to add or remove instances from an environment</li>
+    </ul>
+  </li>
 </ul>
 
 <h2 id="aws-virtual-private-cloud-vpc">AWS Virtual Private Cloud (VPC)</h2>
@@ -2292,7 +2343,7 @@ balancer.</li>
 <h2 id="amazon-relational-database-service-rds">Amazon Relational Database Service (RDS)</h2>
 
 <ul>
-  <li>RDS is a service that simplifies the setup, operations, and scaling of a relational database on AWS. With Amazon</li>
+  <li>RDS is a service that simplifies the setup, operations, and scaling of a relational database on AWS.</li>
   <li>RDS offloads common tasks like backups, patching, scaling, and replication from user.</li>
   <li>RDS helps you to streamline the installation of the database software and also the provisioning of infrastructure capacity.</li>
   <li>After the initial launch, RDS simplifies ongoing maintenance by automating common administrative tasks on a recurring basis.</li>
@@ -2313,7 +2364,7 @@ balancer.</li>
   <li><em>DB Instance Class</em>
     <ul>
       <li>The compute and memory resources of a DB Instance are determined by its DB Instance class.</li>
-      <li>The range of DB Instance classes extends from a <em>db.t2.micro</em> with 1 virtual CPU (vCPU) and 1 GB of memory, up to a db.r3.8xlarge with 32 vCPUs and 244 GB of memory.</li>
+      <li>The range of DB Instance classes extends from a <code>db.t2.micro</code> with 1 virtual CPU (vCPU) and 1 GB of memory, up to a <code>db.r3.8xlarge</code> with 32 vCPUs and 244 GB of memory.</li>
       <li>Instance class can changed, and RDS will migrate data to a larger or smaller instance class.</li>
       <li>Size and performance characteristics of the storage used can be controlled independent from the DB Instance class selected.</li>
     </ul>
@@ -3450,7 +3501,7 @@ balancer.</li>
 
 <hr />
 
-<h1 id="management-tools">Management Tools</h1>
+<h1 id="devops--management-tools">DevOps &amp; Management Tools</h1>
 
 <h2 id="amazon-cloudwatch">Amazon CloudWatch</h2>
 
@@ -3479,10 +3530,140 @@ balancer.</li>
   <li>CloudWatch has some limits that you should keep in mind when using the service. Each AWS account is limited to <em>5,000 alarms per AWS account</em>, and metrics data is retained for two weeks by default (at the time of this writing). If you want to keep the data longer, you will need to move the logs to a persistent store like S3 or Glacier. You should familiarize yourself with the limits for CloudWatch in the CloudWatch Developer Guide.</li>
 </ul>
 
+<h2 id="aws-opsworks">AWS OpsWorks</h2>
+
+<p><img class="right" src="/technology/aws-opsworks-stack.jpg" /></p>
+
+<ul>
+  <li>AWS OpsWorks is a configuration management service that helps you configure and operate applications using Chef. </li>
+  <li>AWS OpsWorks will work with applications of any level of complexity and is independent of any particular architectural pattern. </li>
+  <li>You can define an application’s architecture and the specification of each component, including package installation, software configuration, and resources such as storage.</li>
+  <li>AWS OpsWorks supports both Linux or Windows servers, including existing EC2 instances or servers running in your own data center. </li>
+  <li>This allows organizations to use a single configuration management service to deploy and operate applications across hybrid architectures.</li>
+  <li>
+    <p>can use AWS OpsWorks or IAM to manage user permissions. The 2 options are not mutually exclusive; it is sometimes desirable to use both.</p>
+  </li>
+  <li><strong><em>Stack</em></strong>
+    <ul>
+      <li>Stack is a container for AWS resources—EC2 instances, RDS database instances, and so on—that are created and managed collectively for a common purpose. For example, these architectures typically require application servers, database servers, load balancers, and so on.</li>
+      <li>In addition to creating the instances and installing the necessary packages, you need a way to distribute applications to the application servers, monitor the stack’s performance, manage security and permissions, and so on. </li>
+      <li>The stack helps you manage these resources as a group and defines some default configuration settings, such as the EC2 instances’ operating system and AWS region. </li>
+      <li>If you want to isolate some stack components from direct user interaction, you can run the stack in a VPC. </li>
+      <li>Each stack lets you grant users permission to access the stack and specify what actions they can take.</li>
+      <li>Using AWS OpsWorks, you can create and manage stacks and applications.</li>
+    </ul>
+  </li>
+  <li><strong><em>Layer</em></strong>
+    <ul>
+      <li>can define the elements of a stack by adding one or more layers. </li>
+      <li>A layer represents a set of resources that serve a particular purpose, such as load balancing, web applications, or hosting a database server. </li>
+      <li>can customize or extend layers by modifying the default configurations or adding Chef recipes to perform tasks such as installing additional packages. </li>
+      <li>Layers give you complete control over which packages are installed, how they are configured, how applications are deployed, and more.</li>
+      <li>Layers depend on Chef recipes to handle tasks such as installing packages on instances, deploying applications, and running scripts. </li>
+      <li>AWS OpsWorks features has a set of lifecycle events that automatically run a specified set of recipes at the appropriate time on each instance.</li>
+    </ul>
+  </li>
+  <li><strong><em>Instance</em></strong>
+    <ul>
+      <li>An instance represents a single computing resource, such as an EC2 instance. </li>
+      <li>It defines the resource’s basic configuration, such as operating system and size. </li>
+      <li>Other configuration settings, such as Elastic IP addresses or EBS volumes, are defined by the instance’s layers. </li>
+      <li>The layer’s recipes complete the configuration by performing tasks, such as installing and configuring packages and deploying applications.</li>
+    </ul>
+  </li>
+  <li>store applications and related files in a <strong><em>repository</em></strong>, such as an S3 bucket or Git repo. </li>
+  <li>Each application is represented by an <strong><em>app</em></strong>, which specifies the application type and contains the information that is needed to deploy the application from the repository to your instances, such as the repository URL and password. </li>
+  <li>When you deploy an app, AWS OpsWorks triggers a <em>Deploy</em> event, which runs the Deploy recipes on the stack’s instances.</li>
+  <li>Using the concepts of stacks, layers, and apps, you can model and visualize your application and resources in an organized fashion.</li>
+  <li>AWS OpsWorks sends all of your resource metrics to Amazon CloudWatch, making it easy to view graphs and set alarms to help you troubleshoot and take automated action based on the state of your resources. </li>
+  <li>AWS OpsWorks provides many custom metrics, such as CPU idle, memory total, average load for one minute, and more. </li>
+  <li>Each instance in the stack has detailed monitoring to provide insights into your workload.</li>
+</ul>
+
+<p><strong>Use Cases</strong></p>
+
+<ul>
+  <li>Host Multi-Tier Web Applications: AWS OpsWorks lets you model and visualize your application with layers that define how to configure a set of resources that are managed together. Because AWS OpsWorks uses the Chef framework, you can bring your own recipes or leverage hundreds of community-built configurations.</li>
+  <li>Support Continuous Integration: AWS OpsWorks supports DevOps principles, such as continuous integration. Everything in your environment can be automated.</li>
+</ul>
+
 <h2 id="aws-cloudformation">AWS CloudFormation</h2>
 
 <ul>
-  <li>defines a JSON-based templating language that can be used to describe all the AWS resources needed for a workload. When templates are submitted to the AWS CloudFormation, it will take care of provisioning and configuring those resources in appropriate order</li>
+  <li>defines a JSON-based templating language that can be used to describe all the AWS resources needed for a workload. </li>
+  <li>When templates are submitted to the AWS CloudFormation, it will take care of provisioning and configuring those resources in appropriate order </li>
+  <li>AWS CloudFormation allows organizations to deploy, modify, and update resources in a controlled and predictable way, in effect applying version control to AWS infrastructure the same way one would do with software.</li>
+  <li>AWS CloudFormation gives developers and systems administrators an easy way to create and manage a collection of related AWS resources, provisioning and updating them in an orderly and predictable fashion. </li>
+  <li>When you use AWS CloudFormation, you work with templates and stacks.</li>
+</ul>
+
+<p><img class="right" src="/technology/aws-cloudformation-create-stack.jpg" width="500" height="500" /></p>
+
+<ul>
+  <li><strong><em>Template</em></strong>
+    <ul>
+      <li>A template is a JSON file to define your AWS resources and their properties</li>
+      <li>Templates are used as blueprints for building your AWS resources.</li>
+      <li>can reuse template to set up resources consistently and repeatedly. Describe the resources once, and then provision the same resources over and over in multiple regions.</li>
+    </ul>
+  </li>
+  <li><strong><em>Stack</em></strong>
+    <ul>
+      <li>Multiple related resources are managed as a single unit called a stack. </li>
+      <li>create, update, and delete a collection of resources by creating, updating, and deleting stacks. </li>
+      <li>All of the resources in a stack are defined by the stack’s template. </li>
+      <li>Suppose you created a template that includes an Auto Scaling group, ELB load balancer, and an RDS instance. To create those resources, you create a stack by submitting your template that defines those resources, and AWS CloudFormation handles all of the provisioning for you. After all of the resources have been created, AWS CloudFormation reports that your stack has been created. You can then start using the resources in your stack. If stack creation fails, AWS CloudFormation rolls back your changes by deleting the resources that it created.</li>
+    </ul>
+  </li>
+  <li><strong><em>Template Parameters</em></strong>
+    <ul>
+      <li>can use parameters to customize template at runtime, when the stack is built. e.g., 
+        <ul>
+          <li>RDS database size, </li>
+          <li>EC2 instance types, </li>
+          <li>database, and web server port numbers</li>
+        </ul>
+      </li>
+      <li>By leveraging template parameters, a single template is reused for many infrastructure deployments with different configuration values. e.g., 
+        <ul>
+          <li>EC2 instance types, </li>
+          <li>CloudWatch alarm thresholds, </li>
+          <li>RDS read-replica settings</li>
+        </ul>
+      </li>
+      <li>template parameters can be used to tune the settings and thresholds in each region separately and still be sure that the application is deployed consistently across the regions.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img class="right" src="/technology/aws-cloudformation-update-stack.jpg" width="500" height="500" /></p>
+
+<ul>
+  <li><strong><em>Change Set</em></strong>
+    <ul>
+      <li>Because environments are dynamic in nature, you inevitably will need to update your stack’s resources from time to time. </li>
+      <li>There is no need to create a new stack and delete the old one; you can simply modify the existing stack’s template. </li>
+      <li>To update a stack, create a change set by submitting a modified version of the original stack template, different input parameter values, or both. </li>
+      <li>AWS CloudFormation compares the modified template with the original template and generates a change set. </li>
+      <li>The change set lists the proposed changes. After reviewing the changes, you can execute the change set to update your stack. </li>
+    </ul>
+  </li>
+  <li><strong><em>Delete Stack</em></strong>
+    <ul>
+      <li>can delete the stack and all of the resources in that stack.</li>
+      <li>If you want to delete a stack but still retain some resources in that stack, you can use a deletion policy to retain those resources. </li>
+      <li>If a resource has no deletion policy, AWS CloudFormation deletes the resource by default.</li>
+      <li>After all of the resources have been deleted, AWS CloudFormation signals that your stack has been successfully deleted. </li>
+      <li>If AWS CloudFormation cannot delete a resource, the stack will not be deleted. Any resources that haven’t been deleted will remain until you can successfully delete the stack.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Use Case</strong></p>
+
+<ul>
+  <li>Quickly Launch New Test Environments</li>
+  <li>Reliably Replicate Configuration Between Environments</li>
 </ul>
 
 <h2 id="aws-cloudtrail">AWS CloudTrail</h2>
@@ -3538,10 +3719,122 @@ balancer.</li>
   </li>
 </ul>
 
+<h2 id="aws-trusted-advisor">AWS Trusted Advisor</h2>
+
+<p><img class="right" src="/technology/aws-trusted-advisor.jpg" width="500" height="500" /></p>
+
+<ul>
+  <li>AWS Trusted Advisor inspects your AWS environment and makes recommendations when opportunities exist to save money, improve system availability and performance, or help close security gaps.</li>
+  <li>You can view the overall status of your AWS resources and savings estimations on the AWS Trusted Advisor dashboard.</li>
+  <li>Accessed via AWS console and programmatic access with the AWS Support API.</li>
+  <li>4 categories of best practices: 
+    <ul>
+      <li>cost optimization, </li>
+      <li>security, </li>
+      <li>fault tolerance, and </li>
+      <li>performance improvement. </li>
+    </ul>
+  </li>
+  <li>The color coding reflects the following information:
+    <ul>
+      <li>Red: Action recommended</li>
+      <li>Yellow: Investigation recommended</li>
+      <li>Green: No problem detected</li>
+    </ul>
+  </li>
+  <li>For each check, you can review a detailed description of the recommended best practice, a set of alert criteria, guidelines for action, and a list of useful resources on the topic.</li>
+  <li>All AWS customers have access to the below 4 standard AWS Trusted Advisor checks at no cost:
+    <ul>
+      <li><strong><em>Service Limits</em></strong>: Checks for usage that is more than 80% of the service limit. These values are based on a snapshot, so current usage might differ and can take up to 24 hours to reflect changes.</li>
+      <li><strong><em>Security Groups-Specific Ports Unrestricted Checks</em></strong>:  security groups for rules that allow unrestricted access (<code>0.0.0.0/0</code>) to specific ports</li>
+      <li><strong><em>IAM Use Checks</em></strong> for your use of AWS IAM</li>
+      <li><strong><em>MFA on Root Account Checks</em></strong> the root account and warns if MFA is not enabled</li>
+    </ul>
+  </li>
+  <li>Customers with a Business or Enterprise AWS Support plan can view all AWS Trusted Advisor checks—over 50 checks.</li>
+  <li>You have the ability to exclude items from a check and optionally restore them later at any time.  </li>
+</ul>
+
 <h2 id="aws-config">AWS Config</h2>
 
 <ul>
-  <li>With this, one can export an inventory of their AWS resources with all configuration details, and determine how a resource was configured at any point in time - enables compliance auditing, security analysis, resource change tracking, and troubleshooting.</li>
+  <li>AWS Config is a fully managed service that provides you with an AWS resource inventory, configuration history, and configuration change notifications to enable security and governance. * With AWS Config,
+    <ul>
+      <li>one can discover existing and deleted AWS resources, </li>
+      <li>determine the overall compliance against rules, </li>
+      <li>detailed view of the configuration details of a resource at any point in time.</li>
+      <li>how the resources are related and how the configurations and relationships changed over time</li>
+      <li>enable compliance auditing, security analysis, resource change tracking, and troubleshooting.</li>
+    </ul>
+  </li>
+  <li>AWS Config defines a resource as an entity you can work with in AWS, such as an EC2 instance, an EBS volume, a security group, or an Amazon VPC.</li>
+  <li>When you turn on AWS Config, it first discovers the supported AWS resources that exist in your account and generates a configuration item for each resource. </li>
+  <li><em>Configuration Item</em>
+    <ul>
+      <li>A configuration item represents a point-in-time view of the various attributes of a supported AWS resource that exists in your account. </li>
+      <li>Configuration item components
+        <ul>
+          <li>metadata, </li>
+          <li>attributes, </li>
+          <li>relationships, </li>
+          <li>current configuration, </li>
+          <li>and related events.</li>
+        </ul>
+      </li>
+      <li>AWS Config will generate configuration items when the configuration of a resource changes, and it maintains historical records of the configuration items of your resources from the time you start the configuration recorder. </li>
+    </ul>
+  </li>
+  <li><em>Configuration Recorder</em>
+    <ul>
+      <li>The configuration recorder stores the configurations of the supported resources in your account as configuration items. </li>
+      <li>By default, AWS Config creates configuration items for every supported resource in the region. </li>
+      <li>If you don’t want AWS Config to create configuration items for all supported resources, you can specify the resource types that you want it to track.</li>
+    </ul>
+  </li>
+  <li>helps assess the overall compliance and risk status from a configuration perspective, view compliance trends over time, and pinpoint which configuration change caused a resource to drift out of compliance. </li>
+  <li><em>Config Rule</em>
+    <ul>
+      <li>An AWS Config Rule represents desired configuration settings for specific AWS resources or for an entire AWS account. </li>
+      <li>While AWS Config continuously tracks your resource configuration changes, it checks whether these changes violate any of the conditions in your rules. </li>
+      <li>If a resource violates a rule, AWS Config flags the resource and the rule as noncompliant and notifies you through Amazon SNS.</li>
+    </ul>
+  </li>
+  <li>AWS Config makes it easy to track resource configuration without the need for up-front investments and while avoiding the complexity of installing and updating agents for data collection or maintaining large databases. </li>
+  <li>Once AWS Config is enabled, organizations can view continuously updated details of all configuration attributes associated with AWS resources.</li>
+  <li><strong>Features</strong>
+    <ul>
+      <li>Change Management
+        <ul>
+          <li>Organizations needed to poll resource APIs and maintain their own external database for change management. AWS Config resolves this previous need and automatically records resource configuration information and will evaluate any rules that are triggered by a change. </li>
+          <li>The configuration of the resource and its overall compliance against rules are presented in a dashboard.</li>
+        </ul>
+      </li>
+      <li>Integration with AWS CloudTrail
+        <ul>
+          <li>If the configuration change of a resource was the result of an API call, AWS Config also records the AWS CloudTrail event ID that corresponds to the API call that changed the resource’s configuration. </li>
+          <li>Organizations can then leverage the AWS CloudTrail logs to obtain details of the API call that was made—including who made the API call, at what time, and from which IP address—to use for troubleshooting purposes.</li>
+        </ul>
+      </li>
+      <li>Change Notification
+        <ul>
+          <li>When a configuration change is made to a resource or when the compliance of an AWS Config rule changes, a notification message is delivered that contains the updated configuration of the resource or compliance state of the rule and key information such as the old and new values for each changed attribute. </li>
+          <li>AWS Config sends notifications when a Configuration History file is delivered to S3 and when the customer initiates a Configuration Snapshot. These messages are all streamed to a specified SNS topic.</li>
+          <li>AWS Config will also automatically deliver a history file to the Amazon S3 bucket you specify every six hours that contains all changes to your resource configurations.</li>
+        </ul>
+      </li>
+      <li>Configuration History: Organizations can use the AWS Management Console, API, or AWS CLI to obtain details of what a resource’s configuration looked like at any point in the past. </li>
+    </ul>
+  </li>
+</ul>
+
+<p><em>Use Cases</em></p>
+
+<ul>
+  <li>Discovery.</li>
+  <li>Change Management</li>
+  <li>Continuous Audit and Compliance </li>
+  <li>Troubleshooting </li>
+  <li>Security and Incident Analysis </li>
 </ul>
 
 <hr />
@@ -4649,17 +4942,11 @@ destination (your data center or an AWS region).</li>
 
 <hr />
 
-<h1 id="devops">DevOps</h1>
-
-<hr />
-
 <h1 id="terminology">Terminology</h1>
 
 <ul>
   <li>Network perimeter - a boundary between two or more portions of a network. It can refer to the boundary between your VPC and your network, it could refer to the boundary between what you manage versus what AWS manages.</li>
-  <li>
-    <p>WAF (Web Application Firewall)</p>
-  </li>
+  <li>WAF (Web Application Firewall)</li>
   <li>NAT (Network Address Translation) instances and NAT Gateways - allows EC2 instances deployed in private subnets to gain Internet access</li>
 </ul>
 

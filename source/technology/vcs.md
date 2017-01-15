@@ -96,6 +96,7 @@ git merge --no-ff new_feature
 * `git add`
   * `git add <file_name>` - tells Git start tracking a new file or it could mean to stage the changes in an existing file
   * `git add .` - tells Git to start tracking current directory and sub-directories
+  * `git ls-files --deleted | xargs git rm` - stage locally deleted files for committing
 * `git bisect` - performs a binary search through commits
 * `git blame <file_name>` - gives detailed information about each line in the file.
 * `git branch`
@@ -106,8 +107,8 @@ git merge --no-ff new_feature
   * `git branch -b <branch_name>` - Creates a branch off of latest commit and switches to it
   * `git branch -b <branch_name> <commit_id>` - Creates a branch off of given commit id
   * `git branch -m <branch_name>` - Rename current branch
-  * `git branch -D <branch_name>` - deletes the branch without warning of any uncommited files
-  * `git branch -d <branch_name>` - deletes the branch with warning of any uncommited
+  * `git branch -D <branch_name>` - deletes the branch without warning of any uncommitted files
+  * `git branch -d <branch_name>` - deletes the branch with warning of any uncommitted files. To delete the remote branch, `git push <remote_name> <branch_name>`
 * `git checkout`
   * `git checkout` - change the status of files to a different branch
   * `git checkout <filename>` - revert the given file to the state during the last commit.

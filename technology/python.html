@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Python Basics Data types String List List Comprehension Generator Expression Dict Dict Comprehension Set Set Comprehension Utilities Slicing Zip &hellip;">
+<meta name="description" content="Python Basics Data types String List List Comprehension Generator Expression Dict Dict Comprehension Set Set Comprehension Utilities Slicing &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -128,22 +128,26 @@ messageStyle: "none",
   </li>
   <li><a href="#utilities">Utilities</a>    <ul>
       <li><a href="#slicing">Slicing</a></li>
+      <li><a href="#striding">Striding</a></li>
       <li><a href="#zip">Zip</a></li>
     </ul>
   </li>
-  <li><a href="#functions">Functions</a></li>
+  <li><a href="#functions">Functions</a>    <ul>
+      <li><a href="#generator-functions">Generator Functions</a></li>
+    </ul>
+  </li>
   <li><a href="#modules">Modules</a>    <ul>
       <li><a href="#itertools">itertools</a></li>
       <li><a href="#collections">collections</a></li>
     </ul>
   </li>
   <li><a href="#object-oriented-programming">Object-oriented Programming</a>    <ul>
+      <li><a href="#how-python-class-instantiation-work">How Python class instantiation work?</a></li>
       <li><a href="#naming-notations">Naming Notations</a></li>
       <li><a href="#categories">Categories</a></li>
       <li><a href="#special-methods">Special methods</a></li>
     </ul>
   </li>
-  <li><a href="#others">Others</a></li>
   <li><a href="#notes">Notes</a></li>
   <li><a href="#references">References</a></li>
 </ul>
@@ -154,7 +158,7 @@ messageStyle: "none",
   <li>Semi-compiled to byte-code, executed by interpreter</li>
   <li>Type is associated with objects, not variables - dynamically typed?</li>
   <li>Python runtimes:Cython, Jython, IronPython, PyPy</li>
-  <li>PEP 8: Python Enhancement Proposal #8</li>
+  <li>PEP 8: Python Enhancement Proposal No. 8</li>
 </ul>
 
 <h1 id="data-types">Data types</h1>
@@ -238,7 +242,8 @@ messageStyle: "none",
 </span><span class="line"><span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="err">   </span><span class="c"># [&#39;c&#39;, &#39;d&#39;, &#39;e&#39;, &#39;f&#39;, &#39;g&#39;]</span>
 </span><span class="line"><span class="n">a</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="err">  </span><span class="c"># [&#39;f&#39;, &#39;g&#39;]</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-<p>## Striding</p>
+
+<h2 id="striding">Striding</h2>
 
 <p>Python has special syntax for the stride of a slice in the form <code>somelist[start:end:stride]</code>. This lets you take every nth item when slicing a sequence.</p>
 
@@ -260,6 +265,69 @@ messageStyle: "none",
 
 <h1 id="functions">Functions</h1>
 
+<h2 id="generator-functions">Generator Functions</h2>
+
+<ul>
+  <li>A generator function is defined like a normal function, but whenever it needs to generate a value, it does so with the <code>yield</code> keyword rather than return.</li>
+  <li>If the body of a def contains <code>yield</code>, the function automatically becomes a generator function (even if it also contains a <code>return</code> statement)</li>
+  <li>Generator functions create <em>generator iterators</em> or <em>generators</em> - a special type of iterator.</li>
+  <li>To get the next value from a generator, we use the same built-in function as for iterators: <code>next()</code> which calls the generator’s <code>__next__()</code> method. When <code>next()</code> is called on a generator, it calls <code>yield</code>.</li>
+  <li><code>yield</code> is just <code>return</code> (plus a little magic explained below) for generator functions.</li>
+  <li>When a generator function calls <code>yield</code>, the “state” of the generator function is frozen; the values of all variables are saved and the next line of code to be executed is recorded until <code>next()</code> is called again. When it is called again, the generator function simply resumes where it left off. If <code>next()</code> is never called again, the state recorded during the <code>yield</code> call is (eventually) discarded.</li>
+  <li>If a generator function calls <code>return</code> or reaches the end its definition, a <code>StopIteration</code> exception is raised. This signals to whoever was calling <code>next()</code> that the generator is exhausted (this is normal <code>iterator</code> behavior).</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">simple_generator_function</span><span class="p">():</span>
+</span><span class="line">	<span class="k">yield</span> <span class="mi">1</span>
+</span><span class="line">	<span class="k">yield</span> <span class="mi">2</span>
+</span><span class="line">	<span class="k">yield</span> <span class="mi">3</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Simple ways to use it</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="o">&gt;&gt;&gt;</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">simple_generator_function</span><span class="p">():</span>
+</span><span class="line"><span class="o">&gt;&gt;&gt;</span>   <span class="k">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+</span><span class="line"><span class="mi">1</span>
+</span><span class="line"><span class="mi">2</span>
+</span><span class="line"><span class="mi">3</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="o">&gt;&gt;&gt;</span> <span class="n">our_generator</span> <span class="o">=</span> <span class="n">simple_generator_function</span><span class="p">()</span>
+</span><span class="line"><span class="o">&gt;&gt;&gt;</span> <span class="nb">next</span><span class="p">(</span><span class="n">our_generator</span><span class="p">)</span>
+</span><span class="line"><span class="mi">1</span>
+</span><span class="line"><span class="o">&gt;&gt;&gt;</span> <span class="nb">next</span><span class="p">(</span><span class="n">our_generator</span><span class="p">)</span>
+</span><span class="line"><span class="mi">2</span>
+</span><span class="line"><span class="o">&gt;&gt;&gt;</span> <span class="nb">next</span><span class="p">(</span><span class="n">our_generator</span><span class="p">)</span>
+</span><span class="line"><span class="mi">3</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Generators have the power
+    <ul>
+      <li>to yield a value,</li>
+      <li>receive a value (via <code>send()</code> method), or</li>
+      <li>both yield a value and receive a (possibly different) value in a single statement.</li>
+    </ul>
+  </li>
+  <li>A statement of the form <code>other = yield foo</code> means, “<code>yield</code> foo and, when a value is sent to me, set <code>other</code> to that value.” You can “send” values to a generator using the generator’s <code>send</code> method. This way you can set a variable inside a generator to a different value passed in by the user.</li>
+</ul>
+
 <h1 id="modules">Modules</h1>
 
 <h2 id="itertools">itertools</h2>
@@ -278,6 +346,76 @@ messageStyle: "none",
     </ul>
   </li>
 </ul>
+
+<h2 id="how-python-class-instantiation-work">How Python class instantiation work?</h2>
+
+<p>Let’s say you have a class <code>Foo</code>:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">class</span> <span class="nc">Foo</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</span><span class="line">    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+</span><span class="line">        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+</span><span class="line">        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>When <code>Foo(1, y=2)</code> is called, how is it that a new instance of <code>Foo</code> is returned with <code>x=1, y=2</code> initialized:</p>
+
+<ul>
+  <li><code>Foo(*args, **kwargs)</code> is equivalent to <code>Foo.__call__(*args, **kwargs)</code>.</li>
+  <li>Since <code>Foo</code> is an instance of <code>type</code>, <code>Foo.__call__(*args, **kwargs)</code> calls <code>type.__call__(Foo, *args, **kwargs)</code>.</li>
+  <li><code>type.__call__(Foo, *args, **kwargs)</code> calls <code>type.__new__(Foo, *args, **kwargs)</code> which returns <code>obj</code>. <code>__new__</code> method is responsible for allocating memory and actual object creation. It should be noted that while <code>__new__</code> is a static method, you don’t need to declare it with <code>@staticmethod</code> - it is special-cased by the Python interpreter.</li>
+  <li><code>obj</code> is then initialized by calling <code>obj.__init__(*args, **kwargs)</code>.</li>
+  <li><code>obj</code> is returned.</li>
+</ul>
+
+<p>So it is
+<code>Foo(*args, **kwargs) -&gt; Foo.__call__(*args, **kwargs) -&gt; type.__call__(Foo, *args, **kwargs) -&gt; type.__new__(Foo, *args, **kwargs) -&gt; obj.__init__(*args, **kwargs)</code></p>
+
+<p><strong>Singleton pattern</strong>
+&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;figcaption&gt;<span></span>&lt;/figcaption&gt;&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class="python"><span class="line"><span class="k">class</span> <span class="nc">Singleton</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</span><span class="line">    <span class="n">_instance</span> <span class="o">=</span> <span class="bp">None</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span class="line">        <span class="k">if</span> <span class="n">cls</span><span class="o">.</span><span class="n">_instance</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+</span><span class="line">            <span class="n">cls</span><span class="o">.</span><span class="n">_instance</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span class="line">        <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span class="n">_instance</span>
+</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</figure></notextile>&lt;/div&gt;</p>
+
+<p><strong>Borg pattern (nonpattern)</strong></p>
+
+<p>Unlike singleton, this creates multiple distinct instances, but the state is shared. There is no real use-case for this pattern.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">class</span> <span class="nc">Borg</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</span><span class="line">    <span class="n">_dict</span> <span class="o">=</span> <span class="bp">None</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span class="line">        <span class="n">obj</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span class="line">        <span class="k">if</span> <span class="n">cls</span><span class="o">.</span><span class="n">_dict</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+</span><span class="line">            <span class="n">cls</span><span class="o">.</span><span class="n">_dict</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">__dict__</span>
+</span><span class="line">        <span class="k">else</span><span class="p">:</span>
+</span><span class="line">            <span class="n">obj</span><span class="o">.</span><span class="n">__dict__</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">_dict</span>
+</span><span class="line">        <span class="k">return</span> <span class="n">obj</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h2 id="naming-notations">Naming Notations</h2>
 
@@ -313,19 +451,6 @@ messageStyle: "none",
   <li><code>__lt__()</code>, <code>__le__()</code>, <code>__eq__()</code>, <code>__ne__()</code>, <code>__gt__()</code>, and <code>__ge__()</code> -</li>
   <li><code>__new__()</code> -</li>
   <li><code>__del__()</code> -</li>
-</ul>
-
-<h1 id="others">Others</h1>
-
-<ul>
-  <li>Exception handling</li>
-  <li>What are these?
-    <ul>
-      <li>Jupyter</li>
-    </ul>
-  </li>
-  <li>How to read and understand Python docs</li>
-  <li>How to print a tuple or list like this print(“List = “, list)</li>
 </ul>
 
 <h1 id="notes">Notes</h1>

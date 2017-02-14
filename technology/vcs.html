@@ -251,6 +251,7 @@ When Git merges the two branches, it looks at the changes in each branch since t
     <ul>
       <li><code>git add &lt;file_name&gt;</code> - tells Git start tracking a new file or it could mean to stage the changes in an existing file</li>
       <li><code>git add .</code> - tells Git to start tracking current directory and sub-directories</li>
+      <li><code>git ls-files --deleted | xargs git rm</code> - stage locally deleted files for committing</li>
     </ul>
   </li>
   <li><code>git bisect</code> - performs a binary search through commits</li>
@@ -264,8 +265,8 @@ When Git merges the two branches, it looks at the changes in each branch since t
       <li><code>git branch -b &lt;branch_name&gt;</code> - Creates a branch off of latest commit and switches to it</li>
       <li><code>git branch -b &lt;branch_name&gt; &lt;commit_id&gt;</code> - Creates a branch off of given commit id</li>
       <li><code>git branch -m &lt;branch_name&gt;</code> - Rename current branch</li>
-      <li><code>git branch -D &lt;branch_name&gt;</code> - deletes the branch without warning of any uncommited files</li>
-      <li><code>git branch -d &lt;branch_name&gt;</code> - deletes the branch with warning of any uncommited</li>
+      <li><code>git branch -D &lt;branch_name&gt;</code> - deletes the branch without warning of any uncommitted files</li>
+      <li><code>git branch -d &lt;branch_name&gt;</code> - deletes the branch with warning of any uncommitted files. To delete the remote branch, <code>git push &lt;remote_name&gt; &lt;branch_name&gt;</code></li>
     </ul>
   </li>
   <li><code>git checkout</code>

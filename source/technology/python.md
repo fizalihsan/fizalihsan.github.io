@@ -167,10 +167,11 @@ When `Foo(1, y=2)` is called, how is it that a new instance of `Foo` is returned
 * `obj` is then initialized by calling `obj.__init__(*args, **kwargs)`.
 * `obj` is returned.
 
-So it is
-`Foo(*args, **kwargs) -> Foo.__call__(*args, **kwargs) -> type.__call__(Foo, *args, **kwargs) -> type.__new__(Foo, *args, **kwargs) -> obj.__init__(*args, **kwargs)`
+So it goes like
+`Foo(*args, **kwargs)` -> `Foo.__call__(*args, **kwargs)` -> `type.__call__(Foo, *args, **kwargs)` -> `type.__new__(Foo, *args, **kwargs)` -> `obj.__init__(*args, **kwargs)`
 
 __Singleton pattern__
+
 ```python
 class Singleton(object):
     _instance = None

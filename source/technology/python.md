@@ -14,7 +14,7 @@ footer: false
 * Semi-compiled to byte-code, executed by interpreter
 * Type is associated with objects, not variables - dynamically typed?
 * Python runtimes:Cython, Jython, IronPython, PyPy
-* PEP 8: Python Enhancement Proposal #8
+* PEP 8: Python Enhancement Proposal No. 8
 
 # Data types
 
@@ -72,6 +72,7 @@ a[2:5]    # ['c', 'd', 'e']
 a[2:-1]   # ['c', 'd', 'e', 'f', 'g']
 a[-3:-1]  # ['f', 'g']
 ```
+
 ## Striding
 
 Python has special syntax for the stride of a slice in the form `somelist[start:end:stride]`. This lets you take every nth item when slicing a sequence.
@@ -102,9 +103,9 @@ The problem is that the stride syntax often causes unexpected behavior that can 
 
 ```python
 def simple_generator_function():
-  yield 1
-  yield 2
-  yield 3
+	yield 1
+	yield 2
+	yield 3
 ```
 
 Simple ways to use it
@@ -182,7 +183,7 @@ class Singleton(object):
 
 __Borg pattern (nonpattern)__
 
-Unlike singleton, this creates multiple distinct instances, but the state is shared. There is no real use-case for this pattern. 
+Unlike singleton, this creates multiple distinct instances, but the state is shared. There is no real use-case for this pattern.
 
 ```python
 class Borg(object):
@@ -217,21 +218,9 @@ class Borg(object):
 
 * `__str__()` - The `print()` function will use `str()` to prepare an object for printing.
 * `__repr__()`- The `format()` method of a string can also access these methods. When we use `%r` or `%s` formatting, we're requesting `__repr__()` or `__str__()`, respectively.
-* `__hash__()` -
 * `__bool__()` -
 * `__bytes__()` -
-* `__lt__()`, `__le__()`, `__eq__()`, `__ne__()`, `__gt__()`, and `__ge__()` -
-* `__new__()` -
 * `__del__()` -
-
-# Others
-
-* Exception handling
-* What are these?
-	* Jupyter
-
-* How to read and understand Python docs
-* How to print a tuple or list like this print("List = ", list)
 
 # Notes
 

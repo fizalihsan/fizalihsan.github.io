@@ -90,7 +90,48 @@ The problem is that the stride syntax often causes unexpected behavior that can 
 
 # Functions
 
+## Generator Functions
 
+* A generator function is defined like a normal function, but whenever it needs to generate a value, it does so with the `yield` keyword rather than return.
+* If the body of a def contains `yield`, the function automatically becomes a generator function (even if it also contains a `return` statement)
+* Generator functions create *generator iterators* or *generators* - a special type of iterator.
+* To get the next value from a generator, we use the same built-in function as for iterators: `next()` which calls the generator's `__next__()` method. When `next()` is called on a generator, it calls `yield`.
+* `yield` is just `return` (plus a little magic explained below) for generator functions.
+*  When a generator function calls `yield`, the "state" of the generator function is frozen; the values of all variables are saved and the next line of code to be executed is recorded until `next()` is called again. When it is called again, the generator function simply resumes where it left off. If `next()` is never called again, the state recorded during the `yield` call is (eventually) discarded.
+* If a generator function calls `return` or reaches the end its definition, a `StopIteration` exception is raised. This signals to whoever was calling `next()` that the generator is exhausted (this is normal `iterator` behavior).
+
+```python
+def simple_generator_function():
+  yield 1
+  yield 2
+  yield 3
+```
+
+Simple ways to use it
+
+```
+>>> for value in simple_generator_function():
+>>>   print(value)
+1
+2
+3
+```
+
+```
+>>> our_generator = simple_generator_function()
+>>> next(our_generator)
+1
+>>> next(our_generator)
+2
+>>> next(our_generator)
+3
+```
+
+* Generators have the power
+	* to yield a value,
+	* receive a value (via `send()` method), or
+	* both yield a value and receive a (possibly different) value in a single statement.
+* A statement of the form `other = yield foo` means, "`yield` foo and, when a value is sent to me, set `other` to that value." You can "send" values to a generator using the generator's `send` method. This way you can set a variable inside a generator to a different value passed in by the user.
 
 # Modules
 
@@ -105,6 +146,56 @@ The problem is that the stride syntax often causes unexpected behavior that can 
 	* Most names are public.
 	* Names that start with `_` are somewhat less public. Use them for implementation details that are truly subject to change.
 	* Names that begin and end with `__` are internal to Python.
+
+## How Python class instantiation work?
+
+Let’s say you have a class `Foo`:
+
+```python
+class Foo(object):
+    def __init__(self, x, y=0):
+        self.x = x
+        self.y = y
+```
+
+When `Foo(1, y=2)` is called, how is it that a new instance of `Foo` is returned with `x=1, y=2` initialized:
+
+* `Foo(*args, **kwargs)` is equivalent to `Foo.__call__(*args, **kwargs)`.
+* Since `Foo` is an instance of `type`, `Foo.__call__(*args, **kwargs)` calls `type.__call__(Foo, *args, **kwargs)`.
+* `type.__call__(Foo, *args, **kwargs)` calls `type.__new__(Foo, *args, **kwargs)` which returns `obj`. `__new__` method is responsible for allocating memory and actual object creation. It should be noted that while `__new__` is a static method, you don’t need to declare it with `@staticmethod` - it is special-cased by the Python interpreter.
+* `obj` is then initialized by calling `obj.__init__(*args, **kwargs)`.
+* `obj` is returned.
+
+So it is
+`Foo(*args, **kwargs) -> Foo.__call__(*args, **kwargs) -> type.__call__(Foo, *args, **kwargs) -> type.__new__(Foo, *args, **kwargs) -> obj.__init__(*args, **kwargs)`
+
+__Singleton pattern__
+```python
+class Singleton(object):
+    _instance = None
+
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls, *args, **kwargs)
+        return cls._instance
+```
+
+__Borg pattern (nonpattern)__
+
+Unlike singleton, this creates multiple distinct instances, but the state is shared. There is no real use-case for this pattern. 
+
+```python
+class Borg(object):
+    _dict = None
+
+    def __new__(cls, *args, **kwargs):
+        obj = super().__new__(cls, *args, **kwargs)
+        if cls._dict is None:
+            cls._dict = obj.__dict__
+        else:
+            obj.__dict__ = cls._dict
+        return obj
+```
 
 ## Naming Notations
 

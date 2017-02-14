@@ -371,25 +371,26 @@ messageStyle: "none",
   <li><code>obj</code> is returned.</li>
 </ul>
 
-<p>So it is
-<code>Foo(*args, **kwargs) -&gt; Foo.__call__(*args, **kwargs) -&gt; type.__call__(Foo, *args, **kwargs) -&gt; type.__new__(Foo, *args, **kwargs) -&gt; obj.__init__(*args, **kwargs)</code></p>
+<p>So it goes like
+<code>Foo(*args, **kwargs)</code> -&gt; <code>Foo.__call__(*args, **kwargs)</code> -&gt; <code>type.__call__(Foo, *args, **kwargs)</code> -&gt; <code>type.__new__(Foo, *args, **kwargs)</code> -&gt; <code>obj.__init__(*args, **kwargs)</code></p>
 
-<p><strong>Singleton pattern</strong>
-&lt;div class=&#8217;bogus-wrapper&#8217;&gt;<notextile><figure class="code">&lt;figcaption&gt;<span></span>&lt;/figcaption&gt;&lt;div class=&#8221;highlight&#8221;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&#8221;gutter&#8221;&gt;&lt;pre class=&#8221;line-numbers&#8221;&gt;<span class="line-number">1</span>
+<p><strong>Singleton pattern</strong></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
 <span class="line-number">5</span>
 <span class="line-number">6</span>
 <span class="line-number">7</span>
-&lt;/pre&gt;&lt;/td&gt;&lt;td class=&#8217;code&#8217;&gt;&lt;pre&gt;<code class="python"><span class="line"><span class="k">class</span> <span class="nc">Singleton</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">class</span> <span class="nc">Singleton</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
 </span><span class="line">    <span class="n">_instance</span> <span class="o">=</span> <span class="bp">None</span>
 </span><span class="line">
 </span><span class="line">    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 </span><span class="line">        <span class="k">if</span> <span class="n">cls</span><span class="o">.</span><span class="n">_instance</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
 </span><span class="line">            <span class="n">cls</span><span class="o">.</span><span class="n">_instance</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 </span><span class="line">        <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span class="n">_instance</span>
-</span></code>&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;&lt;/div&gt;</figure></notextile>&lt;/div&gt;</p>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p><strong>Borg pattern (nonpattern)</strong></p>
 
@@ -445,11 +446,8 @@ messageStyle: "none",
 <ul>
   <li><code>__str__()</code> - The <code>print()</code> function will use <code>str()</code> to prepare an object for printing.</li>
   <li><code>__repr__()</code>- The <code>format()</code> method of a string can also access these methods. When we use <code>%r</code> or <code>%s</code> formatting, we’re requesting <code>__repr__()</code> or <code>__str__()</code>, respectively.</li>
-  <li><code>__hash__()</code> -</li>
   <li><code>__bool__()</code> -</li>
   <li><code>__bytes__()</code> -</li>
-  <li><code>__lt__()</code>, <code>__le__()</code>, <code>__eq__()</code>, <code>__ne__()</code>, <code>__gt__()</code>, and <code>__ge__()</code> -</li>
-  <li><code>__new__()</code> -</li>
   <li><code>__del__()</code> -</li>
 </ul>
 

@@ -187,7 +187,8 @@ Red-black BSTs as BSTs having red and black links and satisfying the following t
 
 ## Bloom Filter
 
-[http://www.michaelnielsen.org/ddi/why-bloom-filters-work-the-way-they-do/](Why Bloom filters work the way they do - Mathematical analysis)
+* [https://llimllib.github.io/bloomfilter-tutorial/](Simple Bloom Filter Tutorial)
+* [http://www.michaelnielsen.org/ddi/why-bloom-filters-work-the-way-they-do/](Why Bloom filters work the way they do - Mathematical analysis)
 
 # Graphs
 

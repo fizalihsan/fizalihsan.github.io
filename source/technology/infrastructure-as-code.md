@@ -17,9 +17,13 @@ footer: true
 * creates a configuration file with CPU, memory, etc.: `vagrant init bento/centos-7.2`
 * Uses the configuration file to create a virtual machine instance: `vagrant up`
 * Connect to the instance: `vagrant ssh`
+* Stop/shutdown an instance: `vagrant halt`
 * Destroy vagrant instance: `vagrant destroy --force`
 
 ## Chef
+
+* A recipe is a collection of resources
+* A cookbook is a collection of recipes
 
 * install Chef DK `curl https://omnitruck.chef.io/install.sh | sudo bash -s -- -P chefdk -c stable -v 0.18.30`
 * `mkdir ~/chef-repo`

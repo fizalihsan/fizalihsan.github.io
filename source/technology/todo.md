@@ -15,8 +15,6 @@ footer: false
 * Architecture
 	* Shared nothing architecture
 	* SEDA
-* Camel
-	* Complete this book - Camel in Action by Claus Ibsen, Jonathan
 * Cloud computing
 	* What are the things to do to migrate an application to cloud? or How do you design an application to be cloud-native?
 * Coding principles
@@ -26,7 +24,6 @@ footer: false
 	* Self-balanced tree
 	* Splay tree
 	* Graphs
-	* Bloom filter
 * Db Design
 	* Time-series database
 * Db performance
@@ -85,7 +82,6 @@ println p2
 		* [5. Becoming a Java GC Expert - The Principles of Java Application Performance Tuning](http://www.cubrid.org/blog/dev-platform/the-principles-of-java-application-performance-tuning/)
 		* [How Statement Pooling in JDBC affects the Garbage Collection](http://www.cubrid.org/blog/dev-platform/how-statement-pooling-in-jdbc-affects-garbage-collection/)
 	* How G1 collector works
-	* [CodeHale](https://github.com/dropwizard/metrics)
 * Java
 	* Dates
 		* [TimeZone uncertainity](http://martinfowler.com/bliki/TimeZoneUncertainty.html)
@@ -111,5 +107,4 @@ println p2
 * Transaction
 	* Check Spring in Action Chapter 9
 * VCS
-	* Git Stashing
 	* Git flow

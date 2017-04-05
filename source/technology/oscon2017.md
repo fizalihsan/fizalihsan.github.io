@@ -1,26 +1,13 @@
-# Schedule
+---
+layout: page
+title: "O'Reilly Software Architecture Conference 2017"
+comments: false
+sharing: false
+footer: false
+---
 
-Date/Time | Topic | Location
---------- | ----- | --------
-4/3 9am | Building a reactive system with Akka | Beekman Parlor|
-4/3 1:30pm | Cloud-native architecture patterns | Sutton North/Center
-4/4 9-10:05am | Key note | Grand Ballroom
-4/4 10:45am-12:15pm | Architectural Resiliency |Grand Ballroom West
-4/4 12:15pm-1:15pm | Lunch | America's Hall 1
-4/4 1:15pm-2:15pm | From VMs to Container: A DevOps Journey | Sutton South/Regent Parlor
- | This Stuff is so cool, how can I get my company to do it | Sutton North/Center 
-4/4 2:15-3:05pm | Daily development with Docker, Kubernetes and OpenShift | Nassau East/West
-4/4 3:50pm-4:50pm | Designing for consumption | Sutton South/Regent Parlor
- | When microservices met event sourcing | Sutton North/Center
-4/4 4:50pm-5:45pm | Scaling to 100 million users | Sutton South/Regent Parlor
-4/5 9-10:10am | Key note | Grand Ballroom
-4/5 10:45am-12:15pm | An architect's guide to evaluating cloud services | Grand Ballroom West
-4/5 12:15pm-1:15pm | Lunch | Mercury Suite and Trianon Complex
-4/5 1:15pm-2:15pm| It’s not continuous delivery if you can’t deploy right now. | Nassau East/West
-4/5 2:15-3:05pm | Hybrid cloud deployment patterns using Kubernetes | Grand Ballroom West
- | Applying SRE techniques to microservice design | Nassau East/West
-4/5 3:50-4:50pm | The little things of horror | Beekman Parlor
-4/5 4:50-5:50pm | 10 lessons learned from building cloud-native middleware microservices | Sutton North/Center
+* list element with functor item
+{:toc}
 
 # Day 1
 
@@ -91,9 +78,10 @@ Date/Time | Topic | Location
 	* Mortar Patterns
 		* Service Discovery
 	* Edge Gateway
-	* Fault Tolerance
-		* Circuit breaker - e.g., 10 failures in 1 minute
-		* [Netflix Hystrix](https://github.com/Netflix/Hystrix)
+	* Fault Tolerance/Resilience patterns
+		* Circuit breaker - e.g., 10 failures in 1 minute. [Netflix Hystrix](https://github.com/Netflix/Hystrix) is an open-source circuit breaker solution.
+		* Tolerant Reader
+		* Intelligent Agent
 * __Blue-Green deployment__, __Canary releases__, AB deploys
 * [Netflix Eureka](https://github.com/Netflix/eureka/wiki)
 * BFF pattern ([Backends for frontend](http://samnewman.io/patterns/architectural/bff/))
@@ -288,6 +276,134 @@ Date/Time | Topic | Location
 * Available Tooling
 	* how good is the documentation
 	* does the service have a well designed API
+	* are client libraries available for your language(s) of choice?
+	* Does your app framework of choice support the service?
+	* is good management tooling available?
+	* is there a management API? ß
+	* is there automation tooling available for management?
+* Undifferentiated heavy lifting
+	* what gaps do you need to close that EVERYONE has to close?
+	* what will it cost you to close those gaps?
+	* what will it cost you to keep them closed? 
+	* are there ecosystem partners in ths business of closing these gaps?
+	* is the provider working on closing these gaps?
+* Differentiating Features
+	* (this is where we often start, but is the least important one. Don't look for the latest shiny thing)
+	* there's a lot of parity out there
+	* but could be the decision maker (AWS, Azure, Google - Google has its own fiber for networking)
+
+* Scorecard
+	* summarized view of why you made a particular choice
+	* you want an organized way to demonstrate why you made your decision
+	* Scorecard
+		*KISS
+		* No binary 
+		* Simple ranges: 1-3 or 1-5 
+		* Add weights for prioritization
+		* Call out subcategories when valuable
+
+## It’s not continuous delivery if you can’t deploy right now.
+
+* Ken Mugrage (ThoughtWorks ) - [GoCD](https://www.thoughtworks.com/go/)
+* Job of a a pipeline is to avoid release candidates
+* Continuous deployment is not continuous delivery. Deployment is installing in prod. Delivery/Release is when the business approves to toggle the flag and users start to see the changes.
+* Recommended CI practices
+	* everyone commits to trunk at least daily
+	* automates tests are run for evey commit
+	* avoid branches
+* Releasing incomplete work
+	* Feature toggles (http://martinfowler.com/articles/feature-toggles.html) 
+		* Don't confuse deploy with release
+* Pipelines you should be including
+	* test before you commit http://thoughtworks.github.io/talisman
+	* have you included private keys? Authentication tokens?
+	* Static Application Security Testing (SAST) - like FindBugs?
+	* Dynamic Application Security Testing (DAST)
+* Performance Testing
+	* Load testing - simplest form of performance testing. 
+	* Stress testing - to understand the upper limits of capacity within the system
+	* Soak testing (or endurance testing) is usually done to determine if the system can sustain the continuous expected load	* Spike testing
+* Build pipeline
+	* Run as much as possible in parallel
+* Managing Risk
+	* Deployment patterns
+		* Canary release
+		* Dark launching	- Facebook messenger trial running their app selectively
+		* http://githubengineering.com/move-fast
+	* Feeback loops
+		* create useful logging for everything
+		* Run (some of) your tests against production
+		* Ensure alerts are useful
+	* Optimized for Recovery
+		* MTBF (Mean time between failures)
+		* MTTR (Mean time to repair)
+		* State of devops report 
+	* Knight Capital
+		* deployed untested software to prod which had an obsolete function. Incident happened due to a techician forgetting to copy the new Retail Liquidity Program (Lack of automated testing costed the company $440,000,000)
+
+## Hybrid cloud deployment patterns using Kubernetes
+
+* Sandeep Parikh (Google)
+* Kubernetes, Pods, Services, Replica Sets, Namespaces, Container Engine
+* Deployment Types
+	* Hybrid, heterogenous, multi-cloud, public/private
+	* _Heterogenous_
+		* Why Heterogenous
+			* maxed out resources
+			* limited geo reach
+			* high availability
+			* avoid vendor lock-in
+			* comuter flexibility
+			* access to services
+		* Heterogenous is hard
+	* _Multiple cloud_ 
+		* Auto-scaling is hard
+		* Load balancing 
+* Service spec
+	* Handling requests with Ingress
+* Federation
+	* Why?
+		* Sync resources across clusters
+		* cross-cluster service discovery
+		* HA apps
+	* Why not?
+		* increased network bandwidth and cost
+		* reduced cross-cluster isolation
+		* each deployment is a snowflake (https://martinfowler.com/bliki/SnowflakeServer.html)
+
+## The little things of horror 
+
+* Alasdair Allan (Babilim Light Industries)
+* Security breaches
+ 	* 750GB+ of TSA data exposed to public for over a year
+	* CCTV cameras
+	* IoT devices taken over
+	* Baby monitors
+	* Baby Toys - Cloud Pets teddy bears
+	* Carna botnet 
+	* Hacking printers
+	* Garage door - Garadget company
+	* 'Ring' smart door bell company
+	* iKettle
+	* Hotel radio connected to Wifi
+
+## 10 lessons learned from building cloud-native middleware microservices
+
+* Kai Wähner (TIBCO)
+* Pattern
+	* Backends for frontends (http://thoughtworks.com/insights/blog/bff-soundcloud
+* _4_ Design microservices with open APIs in mind
+	* [12 factor apps](https://12factor.net)
+* _5_ Cloud-native is much more than just cloud-washed
+* Containers
+	* Cloud Foundry uses Garden
+* _6_ Microservices and containers are often used together, but also work very well without each other
+	* http://github.com/cncf/landscape
+	* http://slideshare.net/cdavisafc/cloud-foundry-technical-overview
+* _7_ Be cloud platform-agnostic
+* _8_ containers are low-level technology. Only the infrastructure provider should care, but not the app developer
+* _9_ Automation (CI/CD/DevOps) and cultural changes are key changes to success
+* _10_ Cloud native middleware microservices leverage various technologies, open source frameworks and infrastructure components like containers or messaging
 
 # TODO
 
@@ -305,5 +421,11 @@ Date/Time | Topic | Location
 	* Reactive toolkits: Netty, Akka, Play, RxJava
 	* Back-pressure 
 
-	
+# Theme
+
+* Container ecosystem - Kubernetes, OpenShift
+* DevOps - Continuous Delivery
+* Reactive architecture - Akka
+* Microservices
+* Serverless
 

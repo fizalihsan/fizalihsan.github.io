@@ -10,6 +10,7 @@ footer: false
 {:toc}
 
 * [Environmental Setup - Cheat Sheets]({{ root_url }}/cheat-sheets.html)
+* [O'Reilly Software Architecture Conference 2017]({{ root_url }}/technology/oscon2017.html)
 * [Interview]({{ root_url }}/softskills/interview.html)
 * [Physics]({{ root_url }}/misc/physics.html)
 * [Tabligh]({{ root_url }}/islamic/dawah.html)

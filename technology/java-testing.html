@@ -1,0 +1,809 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Java Testing - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Java Testing Concepts JUnit Method Level Annotations Class Level Annotations Parameterized Tests Mockito Examples Hamcrest Spock Framework &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/java-testing.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Java Testing</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#concepts" id="markdown-toc-concepts">Concepts</a></li>
+  <li><a href="#junit" id="markdown-toc-junit">JUnit</a>    <ul>
+      <li><a href="#method-level-annotations" id="markdown-toc-method-level-annotations">Method Level Annotations</a></li>
+      <li><a href="#class-level-annotations" id="markdown-toc-class-level-annotations">Class Level Annotations</a></li>
+      <li><a href="#parameterized-tests" id="markdown-toc-parameterized-tests">Parameterized Tests</a></li>
+    </ul>
+  </li>
+  <li><a href="#mockito" id="markdown-toc-mockito">Mockito</a>    <ul>
+      <li><a href="#examples" id="markdown-toc-examples">Examples</a></li>
+    </ul>
+  </li>
+  <li><a href="#hamcrest" id="markdown-toc-hamcrest">Hamcrest</a></li>
+  <li><a href="#spock-framework" id="markdown-toc-spock-framework">Spock Framework</a></li>
+  <li><a href="#bibliography" id="markdown-toc-bibliography">Bibliography</a></li>
+</ul>
+
+<h1 id="concepts">Concepts</h1>
+
+<ul>
+  <li><a href="http://www.artima.com/weblogs/viewpost.jsp?thread=198296">Characterization test</a></li>
+  <li><a href="http://martinfowler.com/articles/modernMockingTools.html">Characterization Testing static methods using different techniques</a></li>
+  <li><a href="http://martinfowler.com/articles/mocksArentStubs.html">Mocks aren’t Stubs</a></li>
+</ul>
+
+<h1 id="junit">JUnit</h1>
+
+<h2 id="method-level-annotations">Method Level Annotations</h2>
+
+<ul>
+  <li><code>@BeforeClass</code> - Marks the method to execute before the test case class begins</li>
+  <li><code>@AfterClass</code> - Marks the method to execute after the test case class completes</li>
+  <li><code>@Before</code> - Marks the method to execute before the test case begins</li>
+  <li><code>@After</code> - Marks the method to execute after the test case completes</li>
+  <li><code>@Test</code> - Marks the method as a test case</li>
+  <li><code>@Test(exception = NullPointerException.class)</code> - Marks the method to expect the given exception</li>
+  <li><code>@Test(timeout=1)</code> - Marks the maximum time in milliseconds the test case can take to run</li>
+  <li><code>@Ignore("Comment")</code> - Mark a method to ignore from testing</li>
+</ul>
+
+<h2 id="class-level-annotations">Class Level Annotations</h2>
+
+<ul>
+  <li>Runner - is a class which runs tests. JUnit provides a bunch of runners out-of-the-box:
+    <ul>
+      <li>JUnit4 - starts the test case as a Junit4 test case</li>
+      <li>Parameterized - runs the same test method with different parameters</li>
+      <li>Suite - executes all the @Test annotated methods in a class</li>
+    </ul>
+  </li>
+  <li><code>@RunWith(runner.class)</code> - Custom runner classes can be provided with this annotation</li>
+  <li><code>@SuiteClasses(value={foo1.class, foo2.class})</code>
+    <ul>
+      <li>Suite is a container to combine more than one test cases for grouping and invocation</li>
+      <li>When there are 2 test methods in a class, JUnit4 uses a Suite by default.</li>
+      <li>Runner invokes the Suite. Ordering or execution is up to the Suite implementation.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="parameterized-tests">Parameterized Tests</h2>
+
+<ul>
+  <li><code>Parameterized.class</code> is a Runner class provided by JUnit4</li>
+  <li>Same test method is tested with different parameters returned by the method defined by <code>@Parameters</code>.</li>
+  <li>Signature of parmeters method should be <code>@Parameters public static Collection</code>. Collection elements should be arrays of same length</li>
+  <li>Variables used in the test method should be defined as instance variables in the test class and there should be public constructor setting all these instance variables.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@RunWith</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="n">Parameterized</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ParameterizedTest</span> <span class="o">{</span>
+</span><span class="line">  <span class="kd">private</span> <span class="kt">double</span> <span class="n">expected</span><span class="o">,</span> <span class="n">valueOne</span><span class="o">,</span> <span class="n">valueTwo</span><span class="o">;</span>
+</span><span class="line">
+</span><span class="line">
+</span><span class="line">  <span class="nd">@Parameterized.Parameters</span>
+</span><span class="line">  <span class="kd">public</span> <span class="kd">static</span> <span class="n">Collection</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">[]&gt;</span> <span class="nf">getTestParameters</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">    <span class="k">return</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="k">new</span> <span class="n">Integer</span><span class="o">[][]{</span>
+</span><span class="line">      <span class="o">{</span><span class="mi">2</span><span class="o">,</span> <span class="mi">1</span><span class="o">,</span> <span class="mi">1</span><span class="o">},</span> <span class="c1">//expected, valueOne, valueTwo</span>
+</span><span class="line">      <span class="o">{</span><span class="mi">3</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">1</span><span class="o">},</span> <span class="c1">//expected, valueOne, valueTwo</span>
+</span><span class="line">      <span class="o">{</span><span class="mi">4</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">1</span><span class="o">},</span> <span class="c1">//expected, valueOne, valueTwo</span>
+</span><span class="line">    <span class="o">});</span>
+</span><span class="line">  <span class="o">}</span>
+</span><span class="line">
+</span><span class="line">  <span class="kd">public</span> <span class="nf">ParameterizedTest</span><span class="o">(</span><span class="kt">double</span> <span class="n">expected</span><span class="o">,</span> <span class="kt">double</span> <span class="n">valueOne</span><span class="o">,</span> <span class="kt">double</span> <span class="n">valueTwo</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">    <span class="k">this</span><span class="o">.</span><span class="na">expected</span> <span class="o">=</span> <span class="n">expected</span><span class="o">;</span> <span class="k">this</span><span class="o">.</span><span class="na">valueOne</span> <span class="o">=</span> <span class="n">valueOne</span><span class="o">;</span> <span class="k">this</span><span class="o">.</span><span class="na">valueTwo</span> <span class="o">=</span> <span class="n">valueTwo</span><span class="o">;</span>
+</span><span class="line">  <span class="o">}</span>
+</span><span class="line">
+</span><span class="line">  <span class="nd">@Test</span>
+</span><span class="line">  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">sum</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">    <span class="n">Assert</span><span class="o">.</span><span class="na">assertEquals</span><span class="o">(</span><span class="n">expected</span><span class="o">,</span> <span class="k">new</span> <span class="nf">Calculator</span><span class="o">().</span><span class="na">add</span><span class="o">(</span><span class="n">valueOne</span><span class="o">,</span> <span class="n">valueTwo</span><span class="o">),</span> <span class="mi">0</span><span class="o">);</span>
+</span><span class="line">  <span class="o">}</span>
+</span><span class="line">
+</span><span class="line">  <span class="kd">private</span> <span class="kd">class</span> <span class="nc">Calculator</span><span class="o">{</span>
+</span><span class="line">    <span class="kt">double</span> <span class="nf">add</span><span class="o">(</span><span class="kt">double</span> <span class="n">i</span><span class="o">,</span> <span class="kt">double</span> <span class="n">j</span><span class="o">){</span> <span class="k">return</span> <span class="n">i</span><span class="o">+</span><span class="n">j</span><span class="o">;</span> <span class="o">}</span>
+</span><span class="line">  <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Parameterized.class is a Runner class provided by JUnit4
+Same test method is tested with different parameters returned by the method defined by@Parameters.
+Signature of parmeters method should be@Parameters public static Collection. Collection elements should be arrays of same length
+Variables used in the test method should be defined as instance variables in the test class and there should be public constructor setting all these instance variables.</p>
+
+<h1 id="mockito">Mockito</h1>
+
+<ul>
+  <li>On mock object, all methods that return value returns null by default</li>
+  <li>Mockito follows <code>Arrange - Act - Assert</code> unlike other mock frameworks which follow <code>Expect-Run-Verify</code> pattern.</li>
+  <li>What is not possible in Mockito compared to others?
+    <ul>
+      <li>Testing static methods (check PowerMockito)</li>
+      <li>Mocking final classes</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="examples">Examples</h2>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Example of Verify</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kn">import</span> <span class="nn">org.junit.Test</span><span class="o">;</span>
+</span><span class="line"><span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+</span><span class="line"><span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">junit</span><span class="o">.</span><span class="na">Assert</span><span class="o">.*</span>
+</span><span class="line"><span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">mockito</span><span class="o">.</span><span class="na">Mockito</span><span class="o">.*;</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MockitoTest</span> <span class="o">{</span>
+</span><span class="line">    <span class="nd">@Test</span> <span class="kd">public</span> <span class="kt">void</span> <span class="nf">testVerify</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">        <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">mockedList</span> <span class="o">=</span> <span class="n">mock</span><span class="o">(</span><span class="n">List</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class="line">        <span class="n">mockedList</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">&quot;once&quot;</span><span class="o">);</span>
+</span><span class="line">        <span class="n">mockedList</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">&quot;twice&quot;</span><span class="o">);</span>
+</span><span class="line">        <span class="n">mockedList</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">&quot;twice&quot;</span><span class="o">);</span>
+</span><span class="line">        <span class="n">mockedList</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">&quot;three times&quot;</span><span class="o">);</span>
+</span><span class="line">        <span class="n">mockedList</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">&quot;three times&quot;</span><span class="o">);</span>
+</span><span class="line">        <span class="n">mockedList</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">&quot;three times&quot;</span><span class="o">);</span>
+</span><span class="line">
+</span><span class="line">        <span class="c1">//following two verifications work exactly the same - times(1) is used by default</span>
+</span><span class="line">        <span class="n">verify</span><span class="o">(</span><span class="n">mockedList</span><span class="o">).</span><span class="na">add</span><span class="o">(</span><span class="s">&quot;once&quot;</span><span class="o">);</span>
+</span><span class="line">        <span class="n">verify</span><span class="o">(</span><span class="n">mockedList</span><span class="o">,</span> <span class="n">times</span><span class="o">(</span><span class="mi">1</span><span class="o">)).</span><span class="na">add</span><span class="o">(</span><span class="s">&quot;once&quot;</span><span class="o">);</span>
+</span><span class="line">
+</span><span class="line">        <span class="c1">//exact number of invocations verification</span>
+</span><span class="line">        <span class="n">verify</span><span class="o">(</span><span class="n">mockedList</span><span class="o">,</span> <span class="n">times</span><span class="o">(</span><span class="mi">2</span><span class="o">)).</span><span class="na">add</span><span class="o">(</span><span class="s">&quot;twice&quot;</span><span class="o">);</span>
+</span><span class="line">        <span class="n">verify</span><span class="o">(</span><span class="n">mockedList</span><span class="o">,</span> <span class="n">times</span><span class="o">(</span><span class="mi">3</span><span class="o">)).</span><span class="na">add</span><span class="o">(</span><span class="s">&quot;three times&quot;</span><span class="o">);</span>
+</span><span class="line">
+</span><span class="line">        <span class="c1">//verification using never(). never() is an alias to times(0)</span>
+</span><span class="line">        <span class="n">verify</span><span class="o">(</span><span class="n">mockedList</span><span class="o">,</span> <span class="n">never</span><span class="o">()).</span><span class="na">add</span><span class="o">(</span><span class="s">&quot;never happened&quot;</span><span class="o">);</span>
+</span><span class="line">
+</span><span class="line">        <span class="c1">//verification using atLeast()/atMost()</span>
+</span><span class="line">        <span class="n">verify</span><span class="o">(</span><span class="n">mockedList</span><span class="o">,</span> <span class="n">atLeastOnce</span><span class="o">()).</span><span class="na">add</span><span class="o">(</span><span class="s">&quot;three times&quot;</span><span class="o">);</span>
+</span><span class="line">        <span class="n">verify</span><span class="o">(</span><span class="n">mockedList</span><span class="o">,</span> <span class="n">atLeast</span><span class="o">(</span><span class="mi">2</span><span class="o">)).</span><span class="na">add</span><span class="o">(</span><span class="s">&quot;three times&quot;</span><span class="o">);</span>
+</span><span class="line">        <span class="n">verify</span><span class="o">(</span><span class="n">mockedList</span><span class="o">,</span> <span class="n">atMost</span><span class="o">(</span><span class="mi">5</span><span class="o">)).</span><span class="na">add</span><span class="o">(</span><span class="s">&quot;three times&quot;</span><span class="o">);</span>
+</span><span class="line">    <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Example of Stubbing</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Test</span> <span class="kd">public</span> <span class="kt">void</span> <span class="nf">stubbing</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">        <span class="c1">//Arrange - Act - Assert Pattern</span>
+</span><span class="line">        <span class="n">Iterator</span> <span class="n">i</span> <span class="o">=</span> <span class="n">mock</span><span class="o">(</span><span class="n">Iterator</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class="line">        <span class="c1">//when next() method is called, return &quot;Hello&quot; first and on 2nd invocation return &quot;World&quot;</span>
+</span><span class="line">        <span class="n">when</span><span class="o">(</span><span class="n">i</span><span class="o">.</span><span class="na">next</span><span class="o">()).</span><span class="na">thenReturn</span><span class="o">(</span><span class="s">&quot;Hello&quot;</span><span class="o">).</span><span class="na">thenReturn</span><span class="o">(</span><span class="s">&quot;World&quot;</span><span class="o">);</span> <span class="c1">//Arrange</span>
+</span><span class="line">        <span class="n">String</span> <span class="n">result</span> <span class="o">=</span> <span class="n">i</span><span class="o">.</span><span class="na">next</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot; &quot;</span> <span class="o">+</span> <span class="n">i</span><span class="o">.</span><span class="na">next</span><span class="o">();</span> <span class="c1">//Act</span>
+</span><span class="line">        <span class="n">assertThat</span><span class="o">(</span><span class="s">&quot;Hello World&quot;</span><span class="o">,</span> <span class="n">is</span><span class="o">(</span><span class="n">result</span><span class="o">));</span> <span class="c1">//Assert</span>
+</span><span class="line">    <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Example of Stubbing void methods</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Test</span><span class="o">(</span><span class="n">expected</span> <span class="o">=</span> <span class="n">IOException</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+</span><span class="line">    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">voidMethodCalls</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+</span><span class="line">        <span class="n">OutputStream</span> <span class="n">stream</span> <span class="o">=</span> <span class="n">mock</span><span class="o">(</span><span class="n">OutputStream</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class="line">        <span class="n">doThrow</span><span class="o">(</span><span class="k">new</span> <span class="nf">IOException</span><span class="o">()).</span><span class="na">when</span><span class="o">(</span><span class="n">stream</span><span class="o">).</span><span class="na">close</span><span class="o">();</span> <span class="c1">//when close() method is called throw exception</span>
+</span><span class="line">        <span class="n">stream</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+</span><span class="line">    <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Example of Argument Matchers</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Test</span><span class="o">(</span><span class="n">expected</span> <span class="o">=</span> <span class="n">NullPointerException</span><span class="o">.</span><span class="na">class</span><span class="o">)</span>
+</span><span class="line">    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">throwException</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">        <span class="n">Comparable</span> <span class="n">c</span> <span class="o">=</span> <span class="n">mock</span><span class="o">(</span><span class="n">Comparable</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class="line">        <span class="n">when</span><span class="o">(</span><span class="n">c</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="s">&quot;Test&quot;</span><span class="o">)).</span><span class="na">thenReturn</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+</span><span class="line">        <span class="n">when</span><span class="o">(</span><span class="n">c</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="kc">null</span><span class="o">)).</span><span class="na">thenThrow</span><span class="o">(</span><span class="k">new</span> <span class="nf">NullPointerException</span><span class="o">(</span><span class="s">&quot;Null....&quot;</span><span class="o">));</span><span class="c1">//when input is null, throw NPE</span>
+</span><span class="line">        <span class="n">assertThat</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">is</span><span class="o">(</span><span class="n">c</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="s">&quot;Test&quot;</span><span class="o">)));</span>
+</span><span class="line">        <span class="n">assertThat</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="n">is</span><span class="o">(</span><span class="n">c</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="s">&quot;Something&quot;</span><span class="o">)));</span>
+</span><span class="line">        <span class="n">assertThat</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="n">is</span><span class="o">(</span><span class="n">c</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="kc">null</span><span class="o">)));</span> <span class="c1">//throws NPE</span>
+</span><span class="line">
+</span><span class="line">        <span class="n">when</span><span class="o">(</span><span class="n">c</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="n">anyString</span><span class="o">())).</span><span class="na">thenReturn</span><span class="o">(</span><span class="mi">100</span><span class="o">);</span><span class="c1">//regardless of the input, return 100. anyString() is called Argument Matchers</span>
+</span><span class="line">        <span class="n">assertThat</span><span class="o">(</span><span class="mi">100</span><span class="o">,</span> <span class="n">is</span><span class="o">(</span><span class="n">c</span><span class="o">.</span><span class="na">compareTo</span><span class="o">(</span><span class="s">&quot;Test&quot;</span><span class="o">)));</span>
+</span><span class="line">    <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>To learn more about Argument Matchers: http://docs.mockito.googlecode.com/hg/latest/org/mockito/Matchers.html</p>
+
+<h1 id="hamcrest">Hamcrest</h1>
+
+<p>Hamcrest is a Google library shipped with JUnit 4.x to make the assertions simpler.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Method</th>
+      <th>Description</th>
+      <th> </th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>anything</code></td>
+      <td>Matches absolutely anything. Useful in some cases where you want to make the assert statement more readable.</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code>is</code></td>
+      <td>Is used only to improve the readability of your statements.</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code>allOf</code></td>
+      <td>Checks to see if all contained matchers match (just like the &amp;&amp; operator).</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code>anyOf</code></td>
+      <td>Checks to see if any of the contained matchers match (like the</td>
+      <td> </td>
+      <td>operator).</td>
+    </tr>
+    <tr>
+      <td><code>not</code></td>
+      <td>Traverses the meaning of the contained matchers (just like the ! operator in Java).</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code>instanceOf,isCompatibleType</code></td>
+      <td>Match whether objects are of compatible type (are instances of one another).</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code>sameInstance</code></td>
+      <td>Tests object identity.</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code>notNullValue,nullValue</code></td>
+      <td>Tests for null values (or non-null values).</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code>hasProperty</code></td>
+      <td>Tests whether a JavaBean has a certain property.</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code>hasEntry,hasKey,hasValue</code></td>
+      <td>Tests whether a given Map has a given entry, key, or value.</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code>hasItem,hasItems</code></td>
+      <td>Tests a given collection for the presence of an item or items.</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code>closeTo,greaterThan,greaterThanOrEqual,lessThan,lessThanOrEqual</code></td>
+      <td>Test whether given numbers are close to, greater than, greater than or equal to, less than, or less than or equal to a given value.</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code>equalToIgnoringCase</code></td>
+      <td>Tests whether a given string equals another one, ignoring the case.</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code>equalToIgnoringWhiteSpace</code></td>
+      <td>Tests whether a given string equals another one, by ignoring the white spaces.</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td><code>containsString,endsWith,startWith</code></td>
+      <td>Test whether the given string contains, starts with, or ends with a certain string</td>
+      <td> </td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Examples of Hamcrest functions</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kn">import</span> <span class="nn">org.junit.Test</span><span class="o">;</span>
+</span><span class="line"><span class="kn">import</span> <span class="nn">java.util.Arrays</span><span class="o">;</span>
+</span><span class="line"><span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+</span><span class="line"><span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">hamcrest</span><span class="o">.</span><span class="na">CoreMatchers</span><span class="o">.*;</span>
+</span><span class="line"><span class="kn">import</span> <span class="nn">static</span> <span class="n">org</span><span class="o">.</span><span class="na">junit</span><span class="o">.</span><span class="na">Assert</span><span class="o">.</span><span class="na">assertThat</span><span class="o">;</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">HamcrestTest</span> <span class="o">{</span>
+</span><span class="line">    <span class="nd">@Test</span> <span class="kd">public</span> <span class="kt">void</span> <span class="nf">simpleAssertions</span><span class="o">(){</span>
+</span><span class="line">        <span class="n">List</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">nums</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="mi">2</span><span class="o">,</span> <span class="mi">3</span><span class="o">,</span> <span class="mi">4</span><span class="o">,</span> <span class="mi">5</span><span class="o">);</span>
+</span><span class="line">        <span class="n">assertThat</span><span class="o">(</span><span class="n">nums</span><span class="o">.</span><span class="na">size</span><span class="o">(),</span> <span class="n">is</span><span class="o">(</span><span class="mi">5</span><span class="o">));</span> <span class="c1">//Assert equals</span>
+</span><span class="line">        <span class="n">assertThat</span><span class="o">(</span><span class="n">nums</span><span class="o">.</span><span class="na">size</span><span class="o">(),</span> <span class="n">is</span><span class="o">(</span><span class="n">equalTo</span><span class="o">(</span><span class="mi">5</span><span class="o">)));</span><span class="c1">//Assert equals</span>
+</span><span class="line">        <span class="n">assertThat</span><span class="o">(</span><span class="n">nums</span><span class="o">,</span> <span class="n">allOf</span><span class="o">(</span><span class="n">notNullValue</span><span class="o">(),</span> <span class="n">instanceOf</span><span class="o">(</span><span class="n">List</span><span class="o">.</span><span class="na">class</span><span class="o">)));</span><span class="c1">//AND operation</span>
+</span><span class="line">        <span class="n">assertThat</span><span class="o">(</span><span class="n">nums</span><span class="o">,</span> <span class="n">anyOf</span><span class="o">(</span><span class="n">nullValue</span><span class="o">(),</span> <span class="n">instanceOf</span><span class="o">(</span><span class="n">List</span><span class="o">.</span><span class="na">class</span><span class="o">)));</span><span class="c1">//OR operation</span>
+</span><span class="line">        <span class="n">assertThat</span><span class="o">(</span><span class="n">nums</span><span class="o">,</span> <span class="n">not</span><span class="o">(</span><span class="n">equalTo</span><span class="o">(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="mi">1</span><span class="o">))));</span><span class="c1">//NOT operation</span>
+</span><span class="line">    <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h1 id="spock-framework">Spock Framework</h1>
+
+<p>Spock is a testing and specification framework for Java and Groovy applications.</p>
+
+<ul>
+  <li>Specification - compare to TestCase/GroovyTestCase. Instructs JUnit to run Sputnik (custom JUnitRunner)</li>
+  <li>Every member field in test class is reinitialized for every test unless marked as @Shared.</li>
+  <li>Feature - compare to test method or @Test</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Fixture Methods</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"> <span class="kt">def</span> <span class="nf">setup</span><span class="o">(){}</span> <span class="c1">//run before every feature method</span>
+</span><span class="line"> <span class="kt">def</span> <span class="nf">cleanup</span><span class="o">(){}</span> <span class="c1">//run after every feature method</span>
+</span><span class="line"> <span class="kt">def</span> <span class="nf">setupSpec</span><span class="o">(){}</span> <span class="c1">//run before the first feature method</span>
+</span><span class="line"> <span class="kt">def</span> <span class="nf">cleanupSpec</span><span class="o">(){}</span> <span class="c1">//run after the first feature method</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>2 ways of setup using DSL keywords- setup or given</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"><span class="nl">setup:</span> <span class="n">OR</span> <span class="nl">given:</span> <span class="s2">&quot;setup and init of...&quot;</span> <span class="c1">//must be first and only. label is optional</span>
+</span><span class="line"><span class="kt">def</span> <span class="n">stack</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Stack</span><span class="o">()</span>
+</span><span class="line"><span class="kt">def</span> <span class="n">elem</span> <span class="o">=</span> <span class="s2">&quot;push me&quot;</span>
+</span><span class="line">
+</span><span class="line"><span class="n">when</span><span class="s">/then blocks</span>
+</span><span class="line"><span class="s">when: //stimulus</span>
+</span><span class="line"><span class="s">stack.push(elem)</span>
+</span><span class="line">
+</span><span class="line"><span class="s">then: //response</span>
+</span><span class="line"><span class="s">!stack.empty /</span><span class="o">/</span><span class="n">leverages</span> <span class="n">Groovy</span> <span class="n">truthy</span> <span class="n">feature</span><span class="o">.</span> <span class="n">Implicitly</span> <span class="n">asserts</span> <span class="n">the</span> <span class="n">collection</span> <span class="n">is</span> <span class="n">not</span> <span class="kc">null</span> <span class="n">and</span> <span class="n">not</span> <span class="n">empty</span>
+</span><span class="line"><span class="n">stack</span><span class="o">.</span><span class="na">size</span><span class="o">()</span> <span class="o">==</span> <span class="mi">1</span>
+</span><span class="line"><span class="n">stack</span><span class="o">.</span><span class="na">peek</span><span class="o">()</span> <span class="o">==</span> <span class="n">elem</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Example 1: checking for an exception thrown</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"><span class="nl">when:</span>
+</span><span class="line"><span class="n">stack</span><span class="o">.</span><span class="na">pop</span><span class="o">()</span>
+</span><span class="line">
+</span><span class="line"><span class="nl">then:</span>
+</span><span class="line"><span class="n">thrown</span><span class="o">(</span><span class="n">EmptyStackException</span><span class="o">)</span>
+</span><span class="line"><span class="n">stack</span><span class="o">.</span><span class="na">empty</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Example 2: ensuring no exception is thrown</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"><span class="nl">when:</span>
+</span><span class="line"><span class="n">stack</span><span class="o">.</span><span class="na">pop</span><span class="o">()</span>
+</span><span class="line">
+</span><span class="line"> <span class="nl">then:</span>
+</span><span class="line"> <span class="n">EmptyStackException</span> <span class="n">e</span> <span class="o">=</span> <span class="n">thrown</span><span class="o">()</span>
+</span><span class="line"> <span class="n">e</span><span class="o">.</span><span class="na">cause</span> <span class="o">==</span> <span class="kc">null</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Example 3:</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"> <span class="nl">when:</span>
+</span><span class="line"> <span class="n">stack</span><span class="o">.</span><span class="na">pop</span><span class="o">()</span>
+</span><span class="line">
+</span><span class="line"> <span class="nl">then:</span>
+</span><span class="line"> <span class="n">notThrown</span><span class="o">(</span><span class="n">EmptyStackException</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h1 id="bibliography">Bibliography</h1>
+
+<ul>
+  <li>Books
+    <ul>
+      <li>xUnit Patterns</li>
+    </ul>
+  </li>
+  <li><a href="http://jdave.org/">BDD</a></li>
+  <li><a href="http://jmeter.apache.org/">Apache JMeter - Load Testing tool</a></li>
+  <li>http://tedyoung.me/2011/01/23/junit-runtime-tests-custom-runners/</li>
+  <li>http://stackoverflow.com/questions/13489388/how-junit-rule-works</li>
+  <li>http://www.mkyong.com/unittest/junit-4-tutorial-6-parameterized-test/</li>
+  <li>http://stackoverflow.com/questions/4055022/mark-unit-test-as-an-expected-failure-in-junit/8092927#8092927</li>
+  <li>http://java.dzone.com/articles/dry-use-junit-rule-instead</li>
+</ul>
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/java-testing.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/java-testing.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

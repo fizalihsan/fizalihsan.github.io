@@ -1,0 +1,588 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Data Structures - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Data Structures Overview Lists Trees Binary Tree Binary search tree (BST) Balanced tree Height-balanced binary search tree (OR) AVL tree Self- &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/datastructures.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Data Structures</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#overview" id="markdown-toc-overview">Overview</a></li>
+  <li><a href="#lists" id="markdown-toc-lists">Lists</a></li>
+  <li><a href="#trees" id="markdown-toc-trees">Trees</a>    <ul>
+      <li><a href="#binary-tree" id="markdown-toc-binary-tree">Binary Tree</a></li>
+      <li><a href="#binary-search-tree-bst" id="markdown-toc-binary-search-tree-bst">Binary search tree (BST)</a></li>
+      <li><a href="#balanced-tree" id="markdown-toc-balanced-tree">Balanced tree</a></li>
+      <li><a href="#height-balanced-binary-search-tree-or-avl-tree" id="markdown-toc-height-balanced-binary-search-tree-or-avl-tree">Height-balanced binary search tree (OR) AVL tree</a></li>
+      <li><a href="#self-balanced-tree" id="markdown-toc-self-balanced-tree">Self-balanced tree</a></li>
+      <li><a href="#splay-trees" id="markdown-toc-splay-trees">Splay Trees</a></li>
+      <li><a href="#balanced-search-trees" id="markdown-toc-balanced-search-trees">Balanced Search Trees</a>        <ul>
+          <li><a href="#search-tree" id="markdown-toc-search-tree">2-3 Search Tree</a></li>
+          <li><a href="#red-black-tree" id="markdown-toc-red-black-tree">Red-Black Tree</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#hashes" id="markdown-toc-hashes">Hashes</a>    <ul>
+      <li><a href="#bloom-filter" id="markdown-toc-bloom-filter">Bloom Filter</a></li>
+    </ul>
+  </li>
+  <li><a href="#graphs" id="markdown-toc-graphs">Graphs</a>    <ul>
+      <li><a href="#undirected-graphs" id="markdown-toc-undirected-graphs">Undirected Graphs</a></li>
+      <li><a href="#directed-graphs" id="markdown-toc-directed-graphs">Directed Graphs</a></li>
+      <li><a href="#minimum-spanning-trees" id="markdown-toc-minimum-spanning-trees">Minimum Spanning Trees</a></li>
+      <li><a href="#shortest-paths" id="markdown-toc-shortest-paths">Shortest Paths</a></li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/technology/datastructure-efficiencies.png" /></p>
+
+<h1 id="overview">Overview</h1>
+
+<p><a href="https://en.wikipedia.org/wiki/List_of_data_structures">List of Data Structures (Wikipedia)</a></p>
+
+<ul>
+  <li>Abstract Data Types
+    <ul>
+      <li>List</li>
+      <li>Set</li>
+      <li>Map</li>
+      <li>Stack</li>
+      <li>Queue (Single-ended queue, Double-ended queue, Priority queue)</li>
+      <li>Tree</li>
+      <li>Graph</li>
+    </ul>
+  </li>
+  <li>Linear Data Structures
+    <ul>
+      <li>Arrays</li>
+      <li>Lists</li>
+    </ul>
+  </li>
+  <li>Trees
+    <ul>
+      <li>Binary Trees</li>
+      <li>B-Trees</li>
+      <li>Heaps</li>
+      <li>Trees</li>
+      <li>Multiway Trees</li>
+      <li>Space-partitioning Trees</li>
+    </ul>
+  </li>
+  <li>Hashes
+    <ul>
+      <li>Hash table</li>
+      <li>Bloom filter</li>
+      <li>Distributed Hash table</li>
+    </ul>
+  </li>
+  <li>Graphs</li>
+</ul>
+
+<h1 id="lists">Lists</h1>
+
+<ul>
+  <li>Array</li>
+  <li>LinkedList
+    <ul>
+      <li><a href="/technology/LinkedListBasics.pdf">Basics</a></li>
+      <li><a href="/technology/LinkedListProblems.pdf">Problems</a></li>
+    </ul>
+  </li>
+  <li>Skiplist (invented by William Pugh - look paper on alternative to Binary Tree - learn the Java implementations - when to prefer this over Maps)</li>
+</ul>
+
+<h1 id="trees">Trees</h1>
+
+<p><a href="http://webdocs.cs.ualberta.ca/~holte/T26/top.realTop.html">Trees Basics</a></p>
+
+<h2 id="binary-tree">Binary Tree</h2>
+
+<blockquote>
+  <p><strong>Definition</strong>: A binary search tree (BST) is a binary tree where each node has a <code>Comparable</code> key (and an associated value) and satisfies the restriction that the key in any node is larger than the keys in all nodes in that node’s left subtree and smaller than the keys in all nodes in that node’s right subtree</p>
+</blockquote>
+
+<p>​
+A property of a binary tree that is sometimes important is that the depth of an average binary tree is considerably smaller than <code>N</code>. An analysis shows that the average depth is <code>√O(N)</code>, and that for a special type of binary tree, namely the binary search tree, the average value of the depth is <code>O(log N)</code>. Unfortunately, the depth can be as large as <code>N − 1</code></p>
+
+<ul>
+  <li><a href="/technology/BinaryTrees.pdf">Binary Tree Problems</a></li>
+  <li><a href="/technology/TreeListRecursion.pdf">Tree-List Recursion Problems</a></li>
+  <li><strong>Full Binary Tree</strong> - Each node in a <em>full binary tree</em> is either (1) an internal node with exactly two non-empty children or (2) a leaf</li>
+  <li><strong>Complete Binary Tree</strong> - has a restricted shape obtained by starting at the root and filling the tree by levels from left to right. In the complete binary tree of height <em>d</em>, all levels except possibly level <em>d-1</em> are completely full. The bottom level has its nodes filled in from the left side.</li>
+</ul>
+
+<p><img class="right" src="/technology/full_complete_binarytrees.png" /></p>
+
+<ul>
+  <li><strong>Traversals</strong>
+    <ul>
+      <li>Preorder traversal - <em>Parent node, left child, right child</em>.</li>
+      <li>Inorder traversal - <em>Left child, Parent node, right child</em> - An inorder traversal first visits the left child (including its entire subtree), then visits the node, and finally visits the right child (including its entire subtree).</li>
+      <li>Postorder traversal - <em>Left child, right child, Parent node</em></li>
+      <li><a href="https://gist.github.com/fizalihsan/cc21a12af3d751baf7ec8dac57ea8775">Binary Tree Traversal - Java Code</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="binary-search-tree-bst">Binary search tree (BST)</h2>
+
+<p><img class="right" src="/technology/bst-possibilities.png" /></p>
+
+<ul>
+  <li><a href="https://gist.github.com/fizalihsan/73f5326f45b0f9f438496fc12634a1a0">Check if a given tree is a Binary Search Tree</a></li>
+  <li>A BST is a binary tree that conforms to the following condition, known as the <strong>Binary Search Tree Property</strong>.
+    <ul>
+      <li>All nodes stored in the left subtree of a node whose key value is <code>K</code> have key values less than <code>K</code>.</li>
+      <li>All nodes stored in the right subtree of a node whose key value is <code>K</code> have key values greater than or equal to <code>K</code>.</li>
+    </ul>
+  </li>
+  <li>If the BST nodes are printed using an inorder traversal, the resulting enumeration will be in sorted order from lowest to highest.</li>
+  <li>Analysis: The running times of algorithms on binary search trees depend on the shapes of the trees, which, in turn, depend on the order in which keys are inserted.
+    <ul>
+      <li>In the best case, a tree with <code>N</code> nodes could be perfectly balanced, with <code>~log N</code> nodes between the root and each null link.</li>
+      <li>In the worst case, there could be <code>N</code> nodes on the search path.</li>
+      <li>The balance in typical trees turns out to be much closer to the best case than the worst case.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="balanced-tree">Balanced tree</h2>
+
+<ul>
+  <li>If a binary tree is balanced, then the height for a tree of <code>n</code> nodes is approximately <code>log n</code>. However, if the tree is completely unbalanced, then the height for a tree with <code>n</code> nodes can be as great as <code>n</code>.</li>
+  <li>a balanced BST will in the average case have operations costing <code>O(log n)</code>, while a badly unbalanced BST can have operations in the worst case costing <code>O(n)</code>.</li>
+  <li>While the BST is simple to implement and efficient when the tree is balanced, the possibility of its being unbalanced is a serious liability. There are techniques for organizing a BST to guarantee good performance: like AVL tree and the splay tree.</li>
+</ul>
+
+<h2 id="height-balanced-binary-search-tree-or-avl-tree">Height-balanced binary search tree (OR) AVL tree</h2>
+
+<blockquote>
+  <p>Source: Data Structures and Algorithm Analysis in Java, 3rd Edition by Mark Allen Weiss</p>
+</blockquote>
+
+<table>
+  <tbody>
+    <tr>
+      <td><strong>Fig #1: Bad Binary Tree</strong> <br /><img src="/technology/bad-binary-tree.png" /></td>
+      <td><strong>Fig #2: Binary Tree, not AVL Tree</strong> <br /><img src="/technology/binary-tree-not-avl.png" /></td>
+    </tr>
+    <tr>
+      <td><strong>Fig #3: AVL tree</strong> <br /><img src="/technology/avl-tree.png" /></td>
+      <td><strong>Fig #4: Smallest AVL tree of height 9</strong> <br /><img src="/technology/smallest-avl-tree-height-9.png" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>An AVL (Adelson-Velskii and Landis) tree is a binary search tree with a balance condition.</li>
+  <li>The balance condition must be easy to maintain, and it ensures that the depth of the tree is <code>O(logN)</code>.</li>
+  <li>The simplest idea is to require that the left and right subtrees have the same height. As the above picture shows, this idea does not force the tree to be shallow.</li>
+  <li>Another balance condition would insist that every node must have left and right subtrees of the same height. If the height of an empty subtree is defined to be <code>−1</code> (as is usual), then only perfectly balanced trees of <code>2k − 1</code> nodes would satisfy this criterion. Thus, although this guarantees trees of small depth, the balance condition is too rigid to be useful and needs to be relaxed.</li>
+  <li><strong>An AVL tree is identical to a binary search tree, except that for every node in the tree, the height of the left and right subtrees can differ by at most <code>1</code></strong>. (The height of an empty tree is defined to be <code>−1</code>.) In above pictures, height information is kept for each node (in the node structure). It can be shown that the height of an AVL tree is at most roughly <code>1.44 log(N + 2) − 1.328</code>, but in practice it is only slightly more than <code>logN</code>.</li>
+  <li>As an example, the AVL tree of height 9 with the fewest nodes (143) is shown in Fig 4. This tree has as a left subtree an AVL tree of height 7 of minimum size. The right subtree is an AVL tree of height 8 of minimum size. This tells us that the minimum number of nodes, <code>S(h)</code>, in an AVL tree of height <code>h</code> is given by <code>S(h) = S(h−1) + S(h−2) + 1</code>.
+    <ul>
+      <li>For <code>h = 0, S(h) = 1</code>.</li>
+      <li>For <code>h = 1, S(h) = 2</code>.</li>
+      <li>The function <code>S(h)</code> is closely related to the Fibonacci numbers, from which the bound claimed above on the height of an AVL tree follows.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="self-balanced-tree">Self-balanced tree</h2>
+
+<h2 id="splay-trees">Splay Trees</h2>
+
+<blockquote>
+  <p>Source: Data Structures and Algorithm Analysis in Java, 3rd Edition by Mark Allen Weiss</p>
+</blockquote>
+
+<h2 id="balanced-search-trees">Balanced Search Trees</h2>
+
+<ul>
+  <li>Binary tree and Binary search trees work well for a wide variety of applications, but they have poor worst-case performance. However, there are some types of binary search tree where costs are <em>guaranteed</em> to be logarithmic, no matter what sequence of keys is used to construct them.</li>
+</ul>
+
+<h3 id="search-tree">2-3 Search Tree</h3>
+
+<ul>
+  <li>Ideally, we would like to keep our binary search trees <em>perfectly balanced</em>. In an <code>N</code>-node tree, we would like the height to be <code>~log N</code> so that we can guarantee that all searches can be completed in <code>~log N</code> compares, just as for binary search. But, maintaining perfect balance for dynamic insertions is too expensive.</li>
+  <li>2-3 search tree slightly relaxes the perfect balance requirement to provide <em>guaranteed logarithmic</em> performance not just for the insert and search operations in our symbol-table API but also for all of
+the ordered operations (except range search).</li>
+</ul>
+
+<p><img class="right" src="/technology/2-3-search-tree.png" /></p>
+
+<p><strong>Definition</strong></p>
+
+<p>A <em>2-3 search tree</em> is a tree that is either empty or
+* A <em>2-node</em>, with one key (and associated value) and two links, 
+	* a left link to a 2-3 search tree with smaller keys, and 
+	* a right link to a 2-3 search tree with larger keys
+* A <em>3-node</em>, with two keys (and associated values) and three links, 
+	* a left link to a 2-3 search tree with smaller keys, 
+	* a middle link to a 2-3 search tree with keys between the node’s keys, and 
+	* a right link to a 2-3 search tree with larger keys</p>
+
+<ul>
+  <li>A <em>perfectly balanced 2-3 search tree</em> is one whose null links are all the same distance from the root. To be concise, we use the term 2-3 tree to refer to a perfectly balanced 2-3 search tree</li>
+</ul>
+
+<h3 id="red-black-tree">Red-Black Tree</h3>
+
+<p><img class="right" src="/technology/red-black-tree.png" /></p>
+
+<p><strong>Definition #1</strong></p>
+
+<ul>
+  <li>The basic idea behind red-black BSTs is to <em>encode 2-3 trees</em> by starting with standard BSTs (which are made up of 2-nodes) and adding extra information to encode 3-nodes.</li>
+  <li>We think of the links as being of two different types:
+    <ul>
+      <li>red links, which bind together two 2-nodes to represent 3-nodes, and</li>
+      <li>black links, which bind together the 2-3 tree.</li>
+    </ul>
+  </li>
+  <li>Specifically, we represent 3-nodes as two 2-nodes connected by a single red link that leans left (one of the 2-nodes is the left child of the other).</li>
+</ul>
+
+<p><strong>Definition #2</strong></p>
+
+<p>Red-black BSTs as BSTs having red and black links and satisfying the following three restrictions:</p>
+
+<ul>
+  <li>A red-black tree storing <code>n</code> values has height at most <code>2logn</code>.</li>
+  <li>The <code>add(x)</code> and <code>remove(x)</code> operations on a red-black tree run in <code>O(logn)</code> worst-case time.</li>
+  <li>The amortized number of rotations performed during an <code>add(x)</code> or <code>remove(x)</code> operation is constant.</li>
+</ul>
+
+<p><strong>1-1 Correspondence between Red-Black BST and 2-3 tree</strong></p>
+
+<ul>
+  <li>If we draw the red links horizontally in a red-black BST, all of the null links are the same distance from the root, and if we then collapse together the nodes connected by red links, the result is a 2-3 tree.</li>
+  <li>Conversely, if we draw 3-nodes in a 2-3 tree as two 2-nodes connected by a red link that leans left, then no node has two red links connected to it, and the tree has perfect black balance, since the black links correspond to the 2-3 tree links, which are perfectly balanced by definition.</li>
+  <li>Whichever way we choose to define them, <em>red-black BSTs are both BSTs and 2-3 trees</em>.</li>
+  <li>Thus, if we can implement the 2-3 tree insertion algorithm by maintaining the 1-1 correspondence, then we get the best of both worlds:
+    <ul>
+      <li>the simple and efficient search method from standard BSTs and</li>
+      <li>the efficient insertion- balancing method from 2-3 trees.</li>
+    </ul>
+  </li>
+</ul>
+
+<table>
+  <tbody>
+    <tr>
+      <td><img src="/technology/red-black-tree2.png" /></td>
+      <td><img src="/technology/red-black-tree3.png" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Uses</strong></p>
+
+<ul>
+  <li>Used in <code>java.util.TreeMap</code></li>
+  <li>C++ Standard Template Library</li>
+  <li>
+    <p>Linux Kernel</p>
+  </li>
+  <li>B+ tree &amp; Balanced B+ tree - used in DB indexes</li>
+  <li>M-way trees</li>
+  <li>B trees: Perfectly Height-balanced M-way search trees</li>
+  <li>Tries</li>
+</ul>
+
+<h1 id="hashes">Hashes</h1>
+
+<h2 id="bloom-filter">Bloom Filter</h2>
+
+<ul>
+  <li><a href="Simple Bloom Filter Tutorial">https://llimllib.github.io/bloomfilter-tutorial/</a></li>
+  <li><a href="Why Bloom filters work the way they do - Mathematical analysis">http://www.michaelnielsen.org/ddi/why-bloom-filters-work-the-way-they-do/</a></li>
+</ul>
+
+<h1 id="graphs">Graphs</h1>
+
+<h2 id="undirected-graphs">Undirected Graphs</h2>
+
+<h2 id="directed-graphs">Directed Graphs</h2>
+
+<h2 id="minimum-spanning-trees">Minimum Spanning Trees</h2>
+
+<h2 id="shortest-paths">Shortest Paths</h2>
+
+
+  
+    <footer>
+      
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

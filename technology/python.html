@@ -1,0 +1,638 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Python - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Python Basics Data types String List List Comprehension Generator Expression Dict Dict Comprehension Set Set Comprehension Utilities Slicing &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/python.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Python</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#basics" id="markdown-toc-basics">Basics</a></li>
+  <li><a href="#data-types" id="markdown-toc-data-types">Data types</a>    <ul>
+      <li><a href="#string" id="markdown-toc-string">String</a></li>
+      <li><a href="#list" id="markdown-toc-list">List</a>        <ul>
+          <li><a href="#list-comprehension" id="markdown-toc-list-comprehension">List Comprehension</a></li>
+          <li><a href="#generator-expression" id="markdown-toc-generator-expression">Generator Expression</a></li>
+        </ul>
+      </li>
+      <li><a href="#dict" id="markdown-toc-dict">Dict</a>        <ul>
+          <li><a href="#dict-comprehension" id="markdown-toc-dict-comprehension">Dict Comprehension</a></li>
+        </ul>
+      </li>
+      <li><a href="#set" id="markdown-toc-set">Set</a>        <ul>
+          <li><a href="#set-comprehension" id="markdown-toc-set-comprehension">Set Comprehension</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#utilities" id="markdown-toc-utilities">Utilities</a>    <ul>
+      <li><a href="#slicing" id="markdown-toc-slicing">Slicing</a></li>
+      <li><a href="#striding" id="markdown-toc-striding">Striding</a></li>
+      <li><a href="#zip" id="markdown-toc-zip">Zip</a></li>
+    </ul>
+  </li>
+  <li><a href="#functions" id="markdown-toc-functions">Functions</a>    <ul>
+      <li><a href="#generator-functions" id="markdown-toc-generator-functions">Generator Functions</a></li>
+    </ul>
+  </li>
+  <li><a href="#modules" id="markdown-toc-modules">Modules</a>    <ul>
+      <li><a href="#itertools" id="markdown-toc-itertools">itertools</a></li>
+      <li><a href="#collections" id="markdown-toc-collections">collections</a></li>
+    </ul>
+  </li>
+  <li><a href="#object-oriented-programming" id="markdown-toc-object-oriented-programming">Object-oriented Programming</a>    <ul>
+      <li><a href="#how-python-class-instantiation-work" id="markdown-toc-how-python-class-instantiation-work">How Python class instantiation work?</a></li>
+      <li><a href="#naming-notations" id="markdown-toc-naming-notations">Naming Notations</a></li>
+      <li><a href="#categories" id="markdown-toc-categories">Categories</a></li>
+      <li><a href="#special-methods" id="markdown-toc-special-methods">Special methods</a></li>
+    </ul>
+  </li>
+  <li><a href="#notes" id="markdown-toc-notes">Notes</a></li>
+  <li><a href="#references" id="markdown-toc-references">References</a></li>
+</ul>
+
+<h1 id="basics">Basics</h1>
+
+<ul>
+  <li>Semi-compiled to byte-code, executed by interpreter</li>
+  <li>Type is associated with objects, not variables - dynamically typed?</li>
+  <li>Python runtimes:Cython, Jython, IronPython, PyPy</li>
+  <li>PEP 8: Python Enhancement Proposal No. 8</li>
+</ul>
+
+<h1 id="data-types">Data types</h1>
+
+<h2 id="string">String</h2>
+
+<ul>
+  <li>In Python 2, a sequence of characters can be represented as
+    <ul>
+      <li><code>str</code> - raw 8-bit values</li>
+      <li><code>unicode</code> - unicode characters</li>
+    </ul>
+  </li>
+  <li>In Python 3, it is
+    <ul>
+      <li><code>bytes</code> - raw 8-bit values</li>
+      <li><code>str</code> - unicode characters</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="list">List</h2>
+
+<h3 id="list-comprehension">List Comprehension</h3>
+
+<ul>
+  <li>Python provides a compact syntax for deriving one list from another called <em>list comprehension</em></li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="n">a</span> <span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
+</span><span class="line"><span class="n">squares</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">a</span><span class="p">]</span>
+</span><span class="line"><span class="k">print</span> <span class="n">squares</span> <span class="c"># [1, 4, 9, 16]</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Cons
+    <ul>
+      <li>More than 2 expressions in list comprehension becomes unreadable</li>
+      <li>Not scalable.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="generator-expression">Generator Expression</h3>
+
+<p>For example, say you want to read a file and return the number of characters on each line. Doing this with list comprehension would require holding the length of every line of the file in memory.</p>
+
+<p>To solve this, Python provides <strong><em>generator expressions</em></strong>, a generalization of list comprehensions and generators. Generator expressions don’t materialize the whole output sequence when they’re run. Instead, generator expressions evaluate to an iterator that yields one item at a time from the expression.</p>
+
+<h2 id="dict">Dict</h2>
+
+<h3 id="dict-comprehension">Dict Comprehension</h3>
+
+<h2 id="set">Set</h2>
+
+<h3 id="set-comprehension">Set Comprehension</h3>
+
+<h1 id="utilities">Utilities</h1>
+
+<h2 id="slicing">Slicing</h2>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;a&#39;</span><span class="p">,</span> <span class="s">&#39;b&#39;</span><span class="p">,</span> <span class="s">&#39;c&#39;</span><span class="p">,</span> <span class="s">&#39;d&#39;</span><span class="p">,</span> <span class="s">&#39;e&#39;</span><span class="p">,</span> <span class="s">&#39;f&#39;</span><span class="p">,</span> <span class="s">&#39;g&#39;</span><span class="p">,</span> <span class="s">&#39;h&#39;</span><span class="p">]</span>
+</span><span class="line"><span class="n">a</span><span class="p">[:]</span><span class="err">      </span><span class="c"># [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;, &#39;f&#39;, &#39;g&#39;, &#39;h&#39;]</span>
+</span><span class="line"><span class="n">a</span><span class="p">[:</span><span class="mi">5</span><span class="p">]</span><span class="err">     </span><span class="c"># [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;]</span>
+</span><span class="line"><span class="n">a</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="err">    </span><span class="c"># [&#39;a&#39;, &#39;b&#39;, &#39;c&#39;, &#39;d&#39;, &#39;e&#39;, &#39;f&#39;, &#39;g&#39;]</span>
+</span><span class="line"><span class="n">a</span><span class="p">[</span><span class="mi">4</span><span class="p">:]</span><span class="err">     </span><span class="c"># [&#39;e&#39;, &#39;f&#39;, &#39;g&#39;, &#39;h&#39;]</span>
+</span><span class="line"><span class="n">a</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">:]</span><span class="err">    </span><span class="c"># [&#39;f&#39;, &#39;g&#39;, &#39;h&#39;]</span>
+</span><span class="line"><span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">5</span><span class="p">]</span><span class="err">    </span><span class="c"># [&#39;c&#39;, &#39;d&#39;, &#39;e&#39;]</span>
+</span><span class="line"><span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="err">   </span><span class="c"># [&#39;c&#39;, &#39;d&#39;, &#39;e&#39;, &#39;f&#39;, &#39;g&#39;]</span>
+</span><span class="line"><span class="n">a</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="err">  </span><span class="c"># [&#39;f&#39;, &#39;g&#39;]</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="striding">Striding</h2>
+
+<p>Python has special syntax for the stride of a slice in the form <code>somelist[start:end:stride]</code>. This lets you take every nth item when slicing a sequence.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;red&#39;</span><span class="p">,</span> <span class="s">&#39;orange&#39;</span><span class="p">,</span> <span class="s">&#39;yellow&#39;</span><span class="p">,</span> <span class="s">&#39;green&#39;</span><span class="p">,</span> <span class="s">&#39;blue&#39;</span><span class="p">,</span> <span class="s">&#39;purple&#39;</span><span class="p">]</span>
+</span><span class="line"><span class="n">odds</span> <span class="o">=</span> <span class="n">a</span><span class="p">[::</span><span class="mi">2</span><span class="p">]</span>
+</span><span class="line"><span class="n">evens</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span>
+</span><span class="line"><span class="k">print</span><span class="p">(</span><span class="n">odds</span><span class="p">)</span> <span class="c"># [&#39;red&#39;, &#39;yellow&#39;, &#39;blue&#39;]</span>
+</span><span class="line"><span class="k">print</span><span class="p">(</span><span class="n">evens</span><span class="p">)</span> <span class="c"># [&#39;orange&#39;, &#39;green&#39;, &#39;purple&#39;]</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>The problem is that the stride syntax often causes unexpected behavior that can introduce bugs. For example, a common Python trick for reversing a byte string is to slice the string with a stride of -1.</p>
+
+<h2 id="zip">Zip</h2>
+
+<h1 id="functions">Functions</h1>
+
+<h2 id="generator-functions">Generator Functions</h2>
+
+<ul>
+  <li>A generator function is defined like a normal function, but whenever it needs to generate a value, it does so with the <code>yield</code> keyword rather than return.</li>
+  <li>If the body of a def contains <code>yield</code>, the function automatically becomes a generator function (even if it also contains a <code>return</code> statement)</li>
+  <li>Generator functions create <em>generator iterators</em> or <em>generators</em> - a special type of iterator.</li>
+  <li>To get the next value from a generator, we use the same built-in function as for iterators: <code>next()</code> which calls the generator’s <code>__next__()</code> method. When <code>next()</code> is called on a generator, it calls <code>yield</code>.</li>
+  <li><code>yield</code> is just <code>return</code> (plus a little magic explained below) for generator functions.</li>
+  <li>When a generator function calls <code>yield</code>, the “state” of the generator function is frozen; the values of all variables are saved and the next line of code to be executed is recorded until <code>next()</code> is called again. When it is called again, the generator function simply resumes where it left off. If <code>next()</code> is never called again, the state recorded during the <code>yield</code> call is (eventually) discarded.</li>
+  <li>If a generator function calls <code>return</code> or reaches the end its definition, a <code>StopIteration</code> exception is raised. This signals to whoever was calling <code>next()</code> that the generator is exhausted (this is normal <code>iterator</code> behavior).</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">def</span> <span class="nf">simple_generator_function</span><span class="p">():</span>
+</span><span class="line">	<span class="k">yield</span> <span class="mi">1</span>
+</span><span class="line">	<span class="k">yield</span> <span class="mi">2</span>
+</span><span class="line">	<span class="k">yield</span> <span class="mi">3</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Simple ways to use it</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="o">&gt;&gt;&gt;</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">simple_generator_function</span><span class="p">():</span>
+</span><span class="line"><span class="o">&gt;&gt;&gt;</span>   <span class="k">print</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+</span><span class="line"><span class="mi">1</span>
+</span><span class="line"><span class="mi">2</span>
+</span><span class="line"><span class="mi">3</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="o">&gt;&gt;&gt;</span> <span class="n">our_generator</span> <span class="o">=</span> <span class="n">simple_generator_function</span><span class="p">()</span>
+</span><span class="line"><span class="o">&gt;&gt;&gt;</span> <span class="nb">next</span><span class="p">(</span><span class="n">our_generator</span><span class="p">)</span>
+</span><span class="line"><span class="mi">1</span>
+</span><span class="line"><span class="o">&gt;&gt;&gt;</span> <span class="nb">next</span><span class="p">(</span><span class="n">our_generator</span><span class="p">)</span>
+</span><span class="line"><span class="mi">2</span>
+</span><span class="line"><span class="o">&gt;&gt;&gt;</span> <span class="nb">next</span><span class="p">(</span><span class="n">our_generator</span><span class="p">)</span>
+</span><span class="line"><span class="mi">3</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Generators have the power
+    <ul>
+      <li>to yield a value,</li>
+      <li>receive a value (via <code>send()</code> method), or</li>
+      <li>both yield a value and receive a (possibly different) value in a single statement.</li>
+    </ul>
+  </li>
+  <li>A statement of the form <code>other = yield foo</code> means, “<code>yield</code> foo and, when a value is sent to me, set <code>other</code> to that value.” You can “send” values to a generator using the generator’s <code>send</code> method. This way you can set a variable inside a generator to a different value passed in by the user.</li>
+</ul>
+
+<h1 id="modules">Modules</h1>
+
+<h2 id="itertools">itertools</h2>
+
+<h2 id="collections">collections</h2>
+
+<h1 id="object-oriented-programming">Object-oriented Programming</h1>
+
+<ul>
+  <li>Each Python class definition has an implicit superclass: <code>object</code></li>
+  <li>The rules for the visibility of Python names are as follows:
+    <ul>
+      <li>Most names are public.</li>
+      <li>Names that start with <code>_</code> are somewhat less public. Use them for implementation details that are truly subject to change.</li>
+      <li>Names that begin and end with <code>__</code> are internal to Python.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="how-python-class-instantiation-work">How Python class instantiation work?</h2>
+
+<p>Let’s say you have a class <code>Foo</code>:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">class</span> <span class="nc">Foo</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</span><span class="line">    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+</span><span class="line">        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
+</span><span class="line">        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>When <code>Foo(1, y=2)</code> is called, how is it that a new instance of <code>Foo</code> is returned with <code>x=1, y=2</code> initialized:</p>
+
+<ul>
+  <li><code>Foo(*args, **kwargs)</code> is equivalent to <code>Foo.__call__(*args, **kwargs)</code>.</li>
+  <li>Since <code>Foo</code> is an instance of <code>type</code>, <code>Foo.__call__(*args, **kwargs)</code> calls <code>type.__call__(Foo, *args, **kwargs)</code>.</li>
+  <li><code>type.__call__(Foo, *args, **kwargs)</code> calls <code>type.__new__(Foo, *args, **kwargs)</code> which returns <code>obj</code>. <code>__new__</code> method is responsible for allocating memory and actual object creation. It should be noted that while <code>__new__</code> is a static method, you don’t need to declare it with <code>@staticmethod</code> - it is special-cased by the Python interpreter.</li>
+  <li><code>obj</code> is then initialized by calling <code>obj.__init__(*args, **kwargs)</code>.</li>
+  <li><code>obj</code> is returned.</li>
+</ul>
+
+<p>So it goes like
+<code>Foo(*args, **kwargs)</code> -&gt; <code>Foo.__call__(*args, **kwargs)</code> -&gt; <code>type.__call__(Foo, *args, **kwargs)</code> -&gt; <code>type.__new__(Foo, *args, **kwargs)</code> -&gt; <code>obj.__init__(*args, **kwargs)</code></p>
+
+<p><strong>Singleton pattern</strong></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">class</span> <span class="nc">Singleton</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</span><span class="line">    <span class="n">_instance</span> <span class="o">=</span> <span class="bp">None</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span class="line">        <span class="k">if</span> <span class="n">cls</span><span class="o">.</span><span class="n">_instance</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+</span><span class="line">            <span class="n">cls</span><span class="o">.</span><span class="n">_instance</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span class="line">        <span class="k">return</span> <span class="n">cls</span><span class="o">.</span><span class="n">_instance</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Borg pattern (nonpattern)</strong></p>
+
+<p>Unlike singleton, this creates multiple distinct instances, but the state is shared. There is no real use-case for this pattern.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class="python"><span class="line"><span class="k">class</span> <span class="nc">Borg</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</span><span class="line">    <span class="n">_dict</span> <span class="o">=</span> <span class="bp">None</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+</span><span class="line">        <span class="n">obj</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="n">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+</span><span class="line">        <span class="k">if</span> <span class="n">cls</span><span class="o">.</span><span class="n">_dict</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+</span><span class="line">            <span class="n">cls</span><span class="o">.</span><span class="n">_dict</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">__dict__</span>
+</span><span class="line">        <span class="k">else</span><span class="p">:</span>
+</span><span class="line">            <span class="n">obj</span><span class="o">.</span><span class="n">__dict__</span> <span class="o">=</span> <span class="n">cls</span><span class="o">.</span><span class="n">_dict</span>
+</span><span class="line">        <span class="k">return</span> <span class="n">obj</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="naming-notations">Naming Notations</h2>
+
+<ul>
+  <li><strong>Notations</strong>
+    <ul>
+      <li><strong>Postfix notation</strong> (object-oriented): <code>object.method()</code> or <code>object.attribute</code>.</li>
+      <li><strong>Prefix notation</strong> (procedural programming): <code>function(object)</code>. The prefix notation <code>str(x)</code> is implemented as <code>x.__str__()</code> under the hood.</li>
+      <li><strong>Infix notation</strong>: <code>object+other</code>. A construct such as <code>a+b</code> may be implemented as <code>a.__add__(b)</code> or <code>b.__radd__(a)</code> depending on the type of compatibility rules that were built into the class definitions for objects <code>a</code> and <code>b</code>.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="categories">Categories</h2>
+
+<ul>
+  <li><strong>Attribute Access</strong>: E.g., <code>object.attribute = value</code> or <code>del object.attribute</code>.</li>
+  <li><strong>Callables</strong>: This special method implements what we see as a function that is applied to arguments, much like the built-in <code>len()</code> function.</li>
+  <li><strong>Collections</strong>: These special methods implement the numerous features of collections. This involves methods such as <code>sequence[index]</code>, <code>mapping[key]</code>, and <code>set1|set2</code>.</li>
+  <li><strong>Numbers</strong>: These special methods provide arithmetic operators and comparison operators. We can use these methods to expand the domain of numbers that Python works with.</li>
+  <li><strong>Contexts</strong>: There are two special methods we’ll use to implement a context manager that works with the <code>with</code> statement.</li>
+  <li><strong>Iterators</strong>: There are special methods that define an iterator. This isn’t essential since generator functions handle this feature so elegantly.</li>
+</ul>
+
+<h2 id="special-methods">Special methods</h2>
+
+<ul>
+  <li><code>__str__()</code> - The <code>print()</code> function will use <code>str()</code> to prepare an object for printing.</li>
+  <li><code>__repr__()</code>- The <code>format()</code> method of a string can also access these methods. When we use <code>%r</code> or <code>%s</code> formatting, we’re requesting <code>__repr__()</code> or <code>__str__()</code>, respectively.</li>
+  <li><code>__bool__()</code> -</li>
+  <li><code>__bytes__()</code> -</li>
+  <li><code>__del__()</code> -</li>
+</ul>
+
+<h1 id="notes">Notes</h1>
+
+<ul>
+  <li>Docstring. RST (ReStructured Text) markup.</li>
+</ul>
+
+<h1 id="references">References</h1>
+
+<ul>
+  <li>Books
+    <ul>
+      <li>Learning Python the hard way</li>
+      <li>Think Python</li>
+      <li>Mastering object-oriented Python</li>
+    </ul>
+  </li>
+</ul>
+
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

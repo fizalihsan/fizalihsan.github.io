@@ -1,0 +1,662 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Statistics - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Statistics Charts Pie chart Bar chart Histogram Line Chart What type of chart to use? Measuring Central Tendency Mean ($\mu$) Median Mode Measuring &hellip;">
+<meta name="keywords" content="statistics, mean, median, mode, bar chart, standard deviation">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/datascience/statistics.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Statistics</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#charts" id="markdown-toc-charts">Charts</a>    <ul>
+      <li><a href="#pie-chart" id="markdown-toc-pie-chart">Pie chart</a></li>
+      <li><a href="#bar-chart" id="markdown-toc-bar-chart">Bar chart</a></li>
+      <li><a href="#histogram" id="markdown-toc-histogram">Histogram</a></li>
+      <li><a href="#line-chart" id="markdown-toc-line-chart">Line Chart</a></li>
+      <li><a href="#what-type-of-chart-to-use" id="markdown-toc-what-type-of-chart-to-use">What type of chart to use?</a></li>
+    </ul>
+  </li>
+  <li><a href="#measuring-central-tendency" id="markdown-toc-measuring-central-tendency">Measuring Central Tendency</a>    <ul>
+      <li><a href="#mean-mu" id="markdown-toc-mean-mu">Mean ($\mu$)</a></li>
+      <li><a href="#median" id="markdown-toc-median">Median</a></li>
+      <li><a href="#mode" id="markdown-toc-mode">Mode</a></li>
+    </ul>
+  </li>
+  <li><a href="#measuring-spread" id="markdown-toc-measuring-spread">Measuring Spread</a>    <ul>
+      <li><a href="#range" id="markdown-toc-range">Range</a></li>
+      <li><a href="#quartiles" id="markdown-toc-quartiles">Quartiles</a></li>
+      <li><a href="#percentiles" id="markdown-toc-percentiles">Percentiles</a></li>
+    </ul>
+  </li>
+  <li><a href="#measuring-variability" id="markdown-toc-measuring-variability">Measuring Variability</a>    <ul>
+      <li><a href="#variance--standard-deviation-sigma" id="markdown-toc-variance--standard-deviation-sigma">Variance &amp; Standard Deviation ($\sigma$)</a></li>
+      <li><a href="#standard-score-z" id="markdown-toc-standard-score-z">Standard Score ($z$)</a></li>
+    </ul>
+  </li>
+  <li><a href="#probability" id="markdown-toc-probability">Probability</a>    <ul>
+      <li><a href="#basics" id="markdown-toc-basics">Basics</a>        <ul>
+          <li><a href="#complementary-event" id="markdown-toc-complementary-event">Complementary event</a></li>
+          <li><a href="#exclusive-events" id="markdown-toc-exclusive-events">Exclusive events</a></li>
+          <li><a href="#intersection-events" id="markdown-toc-intersection-events">Intersection events</a></li>
+          <li><a href="#conditional-probabilities" id="markdown-toc-conditional-probabilities">Conditional probabilities</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#appendix" id="markdown-toc-appendix">Appendix</a>    <ul>
+      <li><a href="#about-roulette-wheel" id="markdown-toc-about-roulette-wheel">About Roulette Wheel</a></li>
+    </ul>
+  </li>
+  <li><a href="#bibliography" id="markdown-toc-bibliography">Bibliography</a></li>
+</ul>
+
+<h1 id="charts">Charts</h1>
+
+<h2 id="pie-chart">Pie chart</h2>
+<ul>
+  <li>Used to visualize proportions</li>
+  <li>Never use percentage as proportions</li>
+</ul>
+
+<h2 id="bar-chart">Bar chart</h2>
+<ul>
+  <li>Prefer horizontal bar chart when the category names are longer.</li>
+  <li>Segmented bar chart is used to show both frequency and percentage.</li>
+</ul>
+
+<h2 id="histogram">Histogram</h2>
+<ul>
+  <li>Histogram’s bar area must be proportional to frequency.</li>
+  <li>Frequency Density = Frequency / Group Width</li>
+</ul>
+
+<blockquote>
+  <p>What is the difference between Histogram &amp; Bar chart?
+* Widths are constant in bar charts. It varies in histogram.
+* No gaps between bars in histogram.</p>
+</blockquote>
+
+<h2 id="line-chart">Line Chart</h2>
+<ul>
+  <li>Use only for numerical data. Never for categorical data.</li>
+</ul>
+
+<blockquote>
+  <p>Rule: When using percentages in charts, show frequency also.</p>
+</blockquote>
+
+<h2 id="what-type-of-chart-to-use">What type of chart to use?</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>To show</th>
+      <th>use</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Category + Frequency</td>
+      <td>Pie chart</td>
+    </tr>
+    <tr>
+      <td>Category + Percentage</td>
+      <td>Bar chart</td>
+    </tr>
+    <tr>
+      <td>Category + Frequency + Percentage</td>
+      <td>Segmented Bar</td>
+    </tr>
+    <tr>
+      <td>Range of numbers + Frequency</td>
+      <td>Histogram</td>
+    </tr>
+    <tr>
+      <td>Range of numbers + Cumulative Frequency</td>
+      <td>Line chart</td>
+    </tr>
+  </tbody>
+</table>
+
+<hr />
+
+<h1 id="measuring-central-tendency">Measuring Central Tendency</h1>
+
+<p>There are 3 types of average: Mean, Median &amp; Mode.</p>
+
+<h2 id="mean-mu">Mean ($\mu$)</h2>
+<ul>
+  <li><strong>Outliers</strong> - An extreme high or low value that stands out from the rest of the data.</li>
+  <li><strong>Skewed Data</strong> - When outliers pull the data to the left or right.</li>
+</ul>
+
+<h2 id="median">Median</h2>
+<ul>
+  <li>Sort and find the middle value.</li>
+  <li>Use this when the data is skewed.</li>
+  <li>Can fluctuate if the data is symmetrical.</li>
+</ul>
+
+<h2 id="mode">Mode</h2>
+<ul>
+  <li>Most frequent value. There can be more than one mode in a data set.</li>
+  <li>Bimodal - data set with 2 modes</li>
+  <li>Group / category with highest frequency is <code>modal class</code></li>
+  <li>When to use?
+    <ul>
+      <li>When the data is categorical</li>
+      <li>For the data with clusters</li>
+    </ul>
+  </li>
+  <li>When not to use?
+    <ul>
+      <li>When there are many modes.</li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h1 id="measuring-spread">Measuring Spread</h1>
+
+<h2 id="range">Range</h2>
+<ul>
+  <li>The range is a way of measuring how spread out a set of values are. It’s given by:
+<code>range = upper bound - lower bound</code>.</li>
+  <li>The range only describes the width of the data, not how it’s dispersed between the bounds.</li>
+  <li>Range value is misleading when there are outliers.</li>
+</ul>
+
+<h2 id="quartiles">Quartiles</h2>
+<ul>
+  <li>Quartiles are values that split your data into quarters.</li>
+  <li>The lowest quartile is known as the <em>lower quartile</em>, or first quartile
+(Q1), and the highest quartile is known as the <em>upper quartile</em>, or third
+quartile (Q3). The quartile in the middle (Q2) is the <em>median</em>, as it splits
+the data in half.</li>
+  <li>The lowest quartile is called the <em>lower quartile</em> (Q1), and the highest quartile is called the <em>upper quartile</em> (Q3). The middle quartile is the <em>median</em>.</li>
+  <li><strong>Interquartile Range (IQR)</strong> - is the range of central 50% of the data between lower and upper quartiles. You find it by calculating <code>Upper quartile - Lower quartile</code>.</li>
+  <li>Box and whisker chart or Box plot is used to visualize the range, IQR and median.</li>
+</ul>
+
+<h2 id="percentiles">Percentiles</h2>
+<ul>
+  <li>If you break up a set of data into percentages, the values that split the data are called <em>percentiles</em>. For example, if the data is split into tenths (10% each), then the values are called <em>deciles</em>.</li>
+  <li>P<sub>k</sub> is the value k% of the way through your data. If you scored 50 and knew
+that P<sub>90</sub> = 50, you’d have beaten or matched the score of 90% of other people.</li>
+  <li>Quartiles are a type of percentile. Q1 is P<sub>25</sub>, Q2 is P<sub>50</sub> and Q3 is P<sub>75</sub>.</li>
+  <li>We can use percentiles to construct a new range called the <strong>interpercentile range</strong>.</li>
+</ul>
+
+<hr />
+
+<h1 id="measuring-variability">Measuring Variability</h1>
+
+<h2 id="variance--standard-deviation-sigma">Variance &amp; Standard Deviation ($\sigma$)</h2>
+<ul>
+  <li>The variance is a way of measuring spread, and it’s the average of the distance of values from the mean squared.</li>
+</ul>
+
+<script type="math/tex; mode=display">Variance = \frac{\Sigma(x-\mu)^2} {n}</script>
+
+<ul>
+  <li>For faster variance calculation, use below formula. Here you don’t have to calculate ${\Sigma(x-\mu)^2}$ for every number.</li>
+</ul>
+
+<script type="math/tex; mode=display">Variance = \frac{\Sigma x^2} {n} - \mu^2</script>
+
+<ul>
+  <li><strong>Standard Deviation</strong> is a way of saying how far typical values are from the mean. The smaller the standard deviation, the closer values are to the mean. The smallest value the standard deviation can take is 0. $\sigma = \sqrt{variance}$</li>
+</ul>
+
+<h2 id="standard-score-z">Standard Score ($z$)</h2>
+<ul>
+  <li>Standard scores give you a way of comparing values across different sets of data
+where the mean and standard deviation differ. They’re a way of comparing
+related data values in different circumstances. $ z = \frac{x - \mu} {\sigma} $</li>
+  <li>You find the standard score of a particular value using the mean and standard
+deviation of the entire data set.</li>
+</ul>
+
+<p><em>Example</em>: Imagine a situation in which you have two basketball players of different ability. The first player gets the ball into the net an average of 70% of the time, and he
+has a standard deviation of 20%. The second player has a mean of 40% and a
+standard deviation of 10%. 
+In a particular practice session, Player 1 gets the ball into the net 75% of the time, and Player 2 makes a basket 55% of the time. Which player does best against their personal track record?</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Player 1</th>
+      <th> </th>
+      <th>Player 2</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>$x$ = 75</td>
+      <td> </td>
+      <td>$x$ = 55</td>
+    </tr>
+    <tr>
+      <td>$\mu$ = 70</td>
+      <td> </td>
+      <td>$\mu$ = 40</td>
+    </tr>
+    <tr>
+      <td>$\sigma$ = 20</td>
+      <td> </td>
+      <td>$\sigma$ = 10</td>
+    </tr>
+    <tr>
+      <td>$z1 = \frac{75-70}{20} = 0.25$</td>
+      <td> </td>
+      <td>$z2 = \frac{55-40}{10} = 1.5 $</td>
+    </tr>
+  </tbody>
+</table>
+
+<h1 id="probability">Probability</h1>
+
+<h2 id="basics">Basics</h2>
+
+<ul>
+  <li>Event - An outcome or occurrence that has a probability assigned to it</li>
+  <li>Probability = (# of ways of winning) / (# of possible outcomes)</li>
+</ul>
+
+<blockquote>
+  <p>P(A) = n(A) / n(S)</p>
+</blockquote>
+
+<p>where</p>
+
+<ul>
+  <li>P(A) - probability of event A occurring</li>
+  <li>n(A) - number of ways of getting an event A</li>
+  <li>n(S) - number of possible outcomes</li>
+  <li>S - <strong>possibility space</strong> or <strong>sample space</strong></li>
+</ul>
+
+<h3 id="complementary-event">Complementary event</h3>
+<ul>
+  <li>A<sup>I</sup> is the complementary event of A. It is the probability that event A does not occur.</li>
+</ul>
+
+<blockquote>
+  <p>P(A) + P(A<sup>I</sup>) = 1</p>
+</blockquote>
+
+<ul>
+  <li>Use Venn Diagram to easily visualize the probabilities</li>
+</ul>
+
+<p><img class="right" src="/datascience/venn-diagram.png" /></p>
+
+<ul>
+  <li>Adding probabilities - e.g., what is the probability of getting an even number in a dice throw.</li>
+</ul>
+
+<script type="math/tex; mode=display">\begin{split}
+P(even) = P(2) + P(4) + P(6) \\
+        = 1/6 + 1/6 + 1/6 \\
+        = 3/6 = 0.5
+\end{split}</script>
+
+<h3 id="exclusive-events">Exclusive events</h3>
+
+<ul>
+  <li>If two events are mutually exclusive, only one of the two can occur. e.g., head and tail in a coin toss</li>
+</ul>
+
+<h3 id="intersection-events">Intersection events</h3>
+
+<ul>
+  <li>If two events intersect, it’s possible they can occur simultaneously. e.g., black and even number in roulette</li>
+  <li><strong>i$\bigcap$tersection</strong>
+    <ul>
+      <li>$A \bigcap B$ refers to intersection between event A and B.</li>
+      <li>Think of this symbol as <strong>and</strong></li>
+    </ul>
+  </li>
+  <li><strong>$\bigcup$nion</strong>
+    <ul>
+      <li>$A \bigcup B$ refers to union of A and B. It includes all of the elements in A and B.</li>
+      <li>Think of this symbol as <strong>or</strong></li>
+      <li>If $A \bigcup B = 1$, then A and B are said to be <strong>exhaustive</strong>. Between them, they make up the whole of S.</li>
+    </ul>
+  </li>
+</ul>
+
+<script type="math/tex; mode=display">P(A \bigcup B) = P(A) + P(B) + P(A \bigcap B)</script>
+
+<p>where</p>
+
+<script type="math/tex; mode=display">P(A \bigcup B) = P(A or B) \\
+P(A \bigcap B) = P(A and B)</script>
+
+<ul>
+  <li>Mutually exclusive events have no elements in common with each other, so <script type="math/tex">P(A \bigcap B) = 0</script></li>
+</ul>
+
+<h3 id="conditional-probabilities">Conditional probabilities</h3>
+
+<p><img class="right" src="/datascience/decision-tree.png" /></p>
+
+<ul>
+  <li>measures the probability of an event occurring relative to another occurring.</li>
+  <li>
+    <table>
+      <tbody>
+        <tr>
+          <td>it is represented by pipe symbol. e.g., P(A</td>
+          <td>B) is read as the probability of A given that wek now B has happened.</td>
+        </tr>
+      </tbody>
+    </table>
+  </li>
+  <li>conditional probabilities are best visualized using probability tree.</li>
+</ul>
+
+<script type="math/tex; mode=display">P(A | B) = \frac {P(A \bigcap B)} {P(B)}</script>
+
+<p>which means</p>
+
+<script type="math/tex; mode=display">P(A \bigcap B) = P(A | B) \times P(B)</script>
+
+<h1 id="appendix">Appendix</h1>
+
+<h2 id="about-roulette-wheel">About Roulette Wheel</h2>
+
+<ul>
+  <li>It has 38 pockets that the ball can fall into.</li>
+  <li>The main pockets are numbered from 1 to 36, and each pocket is colored either red or black.</li>
+  <li>There are two extra pockets numbered 0 and 00. These pockets are both green.</li>
+</ul>
+
+<h1 id="bibliography">Bibliography</h1>
+
+<ul>
+  <li>Head First Statistics</li>
+</ul>
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/datascience/statistics.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/datascience/statistics.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

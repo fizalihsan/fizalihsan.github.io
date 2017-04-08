@@ -1,0 +1,1287 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Transaction Management - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Transaction Management Overview ACID &amp; BASE ACID property BASE property Concurrency Control Concurrency Issues Lock Strategies Pessimistic &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/transaction.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Transaction Management</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#overview" id="markdown-toc-overview">Overview</a></li>
+  <li><a href="#acid--base" id="markdown-toc-acid--base">ACID &amp; BASE</a>    <ul>
+      <li><a href="#acid-property" id="markdown-toc-acid-property">ACID property</a></li>
+      <li><a href="#base-property" id="markdown-toc-base-property">BASE property</a></li>
+    </ul>
+  </li>
+  <li><a href="#concurrency-control" id="markdown-toc-concurrency-control">Concurrency Control</a>    <ul>
+      <li><a href="#concurrency-issues" id="markdown-toc-concurrency-issues">Concurrency Issues</a></li>
+      <li><a href="#lock-strategies" id="markdown-toc-lock-strategies">Lock Strategies</a>        <ul>
+          <li><a href="#pessimistic-locking" id="markdown-toc-pessimistic-locking">Pessimistic Locking</a></li>
+          <li><a href="#optimistic-locking" id="markdown-toc-optimistic-locking">Optimistic Locking</a></li>
+          <li><a href="#semi-optimistic-locking" id="markdown-toc-semi-optimistic-locking">Semi-optimistic Locking</a></li>
+        </ul>
+      </li>
+      <li><a href="#methods" id="markdown-toc-methods">Methods</a>        <ul>
+          <li><a href="#locking" id="markdown-toc-locking">Locking</a></li>
+          <li><a href="#mvcc" id="markdown-toc-mvcc">MVCC</a></li>
+          <li><a href="#timestamp-ordering-to" id="markdown-toc-timestamp-ordering-to">Timestamp ordering (TO)</a></li>
+          <li><a href="#serialization-graph-checking" id="markdown-toc-serialization-graph-checking">Serialization graph checking</a></li>
+          <li><a href="#commit-ordering-co" id="markdown-toc-commit-ordering-co">Commit ordering (CO)</a></li>
+          <li><a href="#index-concurrency-control" id="markdown-toc-index-concurrency-control">Index concurrency control</a></li>
+          <li><a href="#private-workspace-model" id="markdown-toc-private-workspace-model">Private workspace model</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#transaction-types" id="markdown-toc-transaction-types">Transaction Types</a>    <ul>
+      <li><a href="#flat-transactions" id="markdown-toc-flat-transactions">Flat Transactions</a></li>
+      <li><a href="#flat-transactions-with-savepoints" id="markdown-toc-flat-transactions-with-savepoints">Flat Transactions with Savepoints</a></li>
+      <li><a href="#chained-transactions" id="markdown-toc-chained-transactions">Chained Transactions</a></li>
+      <li><a href="#nested-transactions" id="markdown-toc-nested-transactions">Nested Transactions</a></li>
+      <li><a href="#distributed-transactions" id="markdown-toc-distributed-transactions">Distributed Transactions</a></li>
+      <li><a href="#long-lived-transactions" id="markdown-toc-long-lived-transactions">Long-Lived Transactions</a></li>
+    </ul>
+  </li>
+  <li><a href="#transaction-models" id="markdown-toc-transaction-models">Transaction Models</a>    <ul>
+      <li><a href="#local-transactions" id="markdown-toc-local-transactions">Local transactions</a></li>
+      <li><a href="#global-transactions" id="markdown-toc-global-transactions">Global Transactions</a></li>
+      <li><a href="#programmatic-transactions" id="markdown-toc-programmatic-transactions">Programmatic transactions</a></li>
+      <li><a href="#declarative-transactions" id="markdown-toc-declarative-transactions">Declarative transactions</a>        <ul>
+          <li><a href="#transaction-attributes" id="markdown-toc-transaction-attributes">Transaction Attributes</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#transaction-isolation-level" id="markdown-toc-transaction-isolation-level">Transaction Isolation Level</a></li>
+  <li><a href="#transaction-read-phenomena" id="markdown-toc-transaction-read-phenomena">Transaction Read Phenomena</a>    <ul>
+      <li><a href="#dirty-read--uncommitted-read" id="markdown-toc-dirty-read--uncommitted-read">1. Dirty Read / Uncommitted Read</a></li>
+      <li><a href="#non-repeatable-read" id="markdown-toc-non-repeatable-read">2. Non-Repeatable Read</a></li>
+      <li><a href="#phantom-read" id="markdown-toc-phantom-read">3. Phantom Read</a></li>
+    </ul>
+  </li>
+  <li><a href="#distributed-transaction-processing" id="markdown-toc-distributed-transaction-processing">Distributed Transaction Processing</a>    <ul>
+      <li><a href="#xa-transaction-processing" id="markdown-toc-xa-transaction-processing">XA Transaction Processing</a>        <ul>
+          <li><a href="#xa-resource" id="markdown-toc-xa-resource">XA Resource</a></li>
+        </ul>
+      </li>
+      <li><a href="#phase-commit-protocol" id="markdown-toc-phase-commit-protocol">2-phase commit protocol</a></li>
+      <li><a href="#heuristic-exceptions" id="markdown-toc-heuristic-exceptions">Heuristic Exceptions</a>        <ul>
+          <li><a href="#heuristic-exception-types" id="markdown-toc-heuristic-exception-types">Heuristic Exception Types</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#transaction-strategies" id="markdown-toc-transaction-strategies">Transaction Strategies</a>    <ul>
+      <li><a href="#api-layer-strategy" id="markdown-toc-api-layer-strategy">1. API Layer Strategy</a></li>
+      <li><a href="#client-orchestration-strategy" id="markdown-toc-client-orchestration-strategy">2. Client Orchestration Strategy</a></li>
+      <li><a href="#high-concurrency-strategy" id="markdown-toc-high-concurrency-strategy">3. High Concurrency Strategy</a></li>
+      <li><a href="#high-performance-strategy" id="markdown-toc-high-performance-strategy">4. High Performance Strategy</a></li>
+    </ul>
+  </li>
+  <li><a href="#transaction-patterns" id="markdown-toc-transaction-patterns">Transaction Patterns</a>    <ul>
+      <li><a href="#phase-commit-protocol-or-pattern" id="markdown-toc-phase-commit-protocol-or-pattern">2 Phase Commit Protocol or Pattern</a></li>
+      <li><a href="#shared-resource-transaction-pattern" id="markdown-toc-shared-resource-transaction-pattern">Shared Resource Transaction Pattern</a></li>
+      <li><a href="#best-effort-pattern" id="markdown-toc-best-effort-pattern">Best Effort Pattern</a></li>
+    </ul>
+  </li>
+  <li><a href="#bibliography" id="markdown-toc-bibliography">Bibliography</a></li>
+</ul>
+
+<h1 id="overview">Overview</h1>
+
+<ul>
+  <li>JTA (Java Transaction API)
+    <ul>
+      <li>is a high-level, implementation-independent, protocol-independent API that allows applications and application servers to access transactions.</li>
+      <li>is an API, just like JDBC, implemented by vendors - typically by commercial servers or by open source txn managers such as JBoss Txn Service or JOTM.</li>
+    </ul>
+  </li>
+  <li>JTS (Java Transaction Services)
+    <ul>
+      <li>specifies the implementation of a Transaction Manager which supports JTA and implements the Java mapping of the OMG Object Transaction Service (OTS) 1.1 specification at the level below the API.</li>
+      <li>JTS propagates transactions using the Internet Inter-ORB Protocol (IIOP).</li>
+    </ul>
+  </li>
+  <li>JTA interfaces
+    <ul>
+      <li><code>UserTransaction</code> Interface</li>
+      <li><code>javax.transaction.UserTransaction</code> - allows to programmatically begin, commit or rollback txns, or get status.</li>
+      <li><code>TransactionManager</code> Interface</li>
+      <li>primarily used within the Declarative Txn Model.</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="acid--base">ACID &amp; BASE</h1>
+
+<h2 id="acid-property">ACID property</h2>
+
+<ul>
+  <li><strong>Atomicity</strong> - means a txn must either be a commit or rollback all updates as a single unit of work.</li>
+  <li><strong>Consistency</strong> - means during the course of the txn, the resource (db or EMS) will not be left in an inconsistent state.</li>
+  <li><strong>Isolation</strong> - During the course of the txn, intermittent status of various participants is not visible to the external world.</li>
+  <li><strong>Durability</strong> - means when the txn is committed, then it is guaranteed that the txn is complete and the db or JMS updates are permanent.</li>
+</ul>
+
+<p>ACID mean that once a transaction is complete, its data is consistent (<em>tech lingo: write consistency</em>) and stable on disk, which may involve multiple distinct memory locations.</p>
+
+<p>Write consistency can be a wonderful thing for application developers, but it also requires sophisticated locking which is typically a heavyweight pattern for most use cases.</p>
+
+<h2 id="base-property">BASE property</h2>
+
+<ul>
+  <li><strong>Basic Availability</strong> - The database appears to work most of the time.</li>
+  <li><strong>Soft-state</strong> - Stores don’t have to be write-consistent, nor do different replicas have to be mutually consistent all the time.</li>
+  <li><strong>Eventual consistency</strong> - Stores exhibit consistency at some later point (e.g., lazily at read time).</li>
+</ul>
+
+<p>A BASE datastore values availability (since that’s important for scale), but it doesn’t offer guaranteed consistency of replicated data at write time. Overall, the BASE consistency model provides a less strict assurance than ACID: data will be consistent in the future, either at read time (e.g., Riak) or it will always be consistent, but only for certain processed past snapshots (e.g., Datomic).</p>
+
+<h1 id="concurrency-control">Concurrency Control</h1>
+
+<p>If someone is reading from a DB at the same time as someone else is writing to it, it is possible that the reader will see a half-written or inconsistent piece of data. There are several ways of solving this problem, known as <em>concurrency control methods</em>. The simplest way is to make all readers wait until the writer is done, which is known as a <em>lock</em>.</p>
+
+<h2 id="concurrency-issues">Concurrency Issues</h2>
+
+<ul>
+  <li><strong>Lost Updates</strong></li>
+</ul>
+
+<p>A <em>lost update</em> occurs when the following events occur, in the order presented here:</p>
+
+<ol>
+  <li>A transaction in Session1 retrieves (queries) a row of data into local memory and displays it to an end user, User1.</li>
+  <li>Another transaction in Session2 retrieves that same row, but displays the data to a different end user, User2.</li>
+  <li>User1, using the application, modifies that row and has the application update the database and commit. Session1’s transaction is now complete.</li>
+  <li>User2 modifies that row also, and has the application update the database and commit. Session2’s transaction is now complete.</li>
+</ol>
+
+<ul>
+  <li><strong>Blocking</strong>
+    <ul>
+      <li>Blocking occurs when one session holds a lock on a resource that another session is requesting. As a result, the requesting session will be blocked—it will hang until the holding session gives up the locked resource.</li>
+      <li>The five common DML statements that will block in the database are <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code>, <code>MERGE</code>, and <code>SELECT FOR UPDATE</code></li>
+      <li><strong>Blocked Selects</strong>
+        <ul>
+          <li>Can be awaited with <code>NOWAIT</code> - like <code>SELECT ... WHERE ... FOR UPDATE NOWAIT</code></li>
+        </ul>
+      </li>
+      <li><strong>Blocked Inserts</strong>
+        <ul>
+          <li>Blocked inserts typically happen when 2 users try to insert same value into a table that contains a primary key/unique column.</li>
+          <li>It can be easily avoided by using a sequence or SYS_GUID() function</li>
+          <li>If the above solution doesn’t work, then a manual lock can be used. In Oracle, <code>DBMS_LOCK.REQUEST(id)</code> will request an explicit lock. If 2 users request the lock with the same id, latter request will fail.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Deadlocks</strong></li>
+</ul>
+
+<h2 id="lock-strategies">Lock Strategies</h2>
+
+<h3 id="pessimistic-locking">Pessimistic Locking</h3>
+
+<ul>
+  <li>Block an operation of a transaction (using locks), if it may cause violation of the rules, until the possibility of violation disappears. Blocking operations is typically involved with performance reduction.</li>
+  <li>Most non-optimistic mechanisms (with blocking) are prone to deadlocks which are resolved by an intentional abort of a stalled transaction (which releases the other transactions in that deadlock), and its immediate restart and re-execution.</li>
+  <li>Using <code>FOR UPDATE WAIT</code> to <em>pessimistically</em> lock rows</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">select</span> <span class="n">empno</span><span class="p">,</span> <span class="n">ename</span><span class="p">,</span> <span class="n">sal</span> <span class="k">from</span> <span class="n">emp</span> <span class="k">where</span> <span class="n">empno</span> <span class="o">=</span> <span class="mi">123</span>
+</span><span class="line"><span class="k">for</span> <span class="k">update</span> <span class="n">nowait</span> <span class="c1">--pessimistically locks the rows selected</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="optimistic-locking">Optimistic Locking</h3>
+
+<ul>
+  <li>Optimistic Concurrency Control (OCC) delay the checking of whether a transaction meets the isolation and other integrity rules (e.g., serializability and recoverability) until its end, without blocking any of its (read, write) operations (“…and be optimistic about the rules being met…”), and then abort a transaction to prevent the violation, if the desired rules are to be violated upon its commit. An aborted transaction is immediately restarted and re-executed, which incurs an obvious overhead (versus executing it to the end only once). If not too many transactions are aborted, then being optimistic is usually a good strategy.</li>
+  <li>OCC assumes that multiple transactions can frequently complete without interfering with each other. While running, transactions use data resources without acquiring locks on those resources. Before committing, each transaction verifies that no other transaction has modified the data it has read. If the check reveals conflicting modifications, the committing transaction rolls back and can be restarted.</li>
+  <li>OCC is generally used in environments with low data contention. When conflicts are rare, transactions can complete without the expense of managing locks and without having transactions wait for other transactions’ locks to clear, leading to higher throughput than other concurrency control methods. However, if contention for data resources is frequent, the cost of repeatedly restarting transactions hurts performance significantly; it is commonly thought that other concurrency control methods have better performance under these conditions. However, locking-based (“pessimistic”) methods also can deliver poor performance because locking can drastically limit effective concurrency even when deadlocks are avoided.</li>
+  <li>OCC in Databases
+    <ul>
+      <li><strong>Optimistic locking using a Version Column</strong>
+        <ul>
+          <li>Add column <code>version</code> of type <code>TIMESTAMP</code> in a table</li>
+          <li>When inserting a new record, update <code>version</code> with current timestamp</li>
+          <li>When updating an existing row, check the value <code>version</code> before and after. If they are different, then it means the row values have changed in between.</li>
+        </ul>
+      </li>
+      <li><strong>Optimistic locking using a Checksum</strong>
+        <ul>
+          <li>Add column <code>hash</code> of type <code>VARCHAR</code> in a table</li>
+          <li>When inserting a new record, calculate the hash value of the entire row and update it in <code>hash</code> column</li>
+          <li>When updating an existing row, check the value <code>hash</code> before and after. If they are different, then it means the row values have changed in between.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Usage</strong></p>
+
+<ul>
+  <li>HTTP does provide a form of built-in OCC: The GET method returns an ETag for a resource and subsequent PUTs use the ETag value in the If-Match headers; while the first PUT will succeed, the second will not, as the value in If-Match is based on the first version of the resource</li>
+  <li>MediaWiki’s edit pages use OCC</li>
+  <li>Most implementations of software transactional memory use optimistic locking</li>
+  <li>Java Collections - <em>Compare-and-Swap(CAS)</em> based thread-safe collections like <code>ConcurrentLinkedQueue</code> and <code>ConcurrentSkipListMap</code></li>
+</ul>
+
+<h3 id="semi-optimistic-locking">Semi-optimistic Locking</h3>
+
+<p>Block operations in some situations, if they may cause violation of some rules, and do not block in other situations while delaying rules checking (if needed) to transaction’s end, as done with optimistic.</p>
+
+<h2 id="methods">Methods</h2>
+
+<h3 id="locking">Locking</h3>
+
+<p>(e.g., Two-phase locking - 2PL) - Controlling access to data by locks assigned to the data. Access of a transaction to a data item (DB object) locked by another transaction may be blocked (depending on lock type and access operation type) until lock release.</p>
+
+<p><strong>Two-phase Locking (2PL)</strong></p>
+
+<ul>
+  <li>In databases and transaction processing, two-phase locking (2PL) is a concurrency control method that guarantees serializability.</li>
+  <li>In 2PL protocol locks are applied and removed in two phases:
+    <ul>
+      <li><em>Expanding phase</em>: locks are acquired and no locks are released.</li>
+      <li><em>Shrinking phase</em>: locks are released and no locks are acquired.</li>
+    </ul>
+  </li>
+  <li>Two types of locks are utilized by the basic protocol: <em>Shared</em> and <em>Exclusive</em> locks. Refinements of the basic protocol may utilize more lock types.</li>
+  <li>Using locks that block processes, 2PL may be subject to deadlocks that result from the mutual blocking of two or more transactions.</li>
+</ul>
+
+<p><strong>Strong Strict Two-phase Locking (SS2PL)</strong></p>
+
+<ul>
+  <li>Also named <em>rigourousness</em></li>
+</ul>
+
+<h3 id="mvcc">MVCC</h3>
+
+<ul>
+  <li>Locking mechanism is slow. So MVCC takes a different approach each user connected to the DB sees a snapshot of the DB at a particular instant in time. Any changes made by a writer will not be seen by other users of the DB until the changes have been completed (or, in DB terms: until the transaction has been committed.)</li>
+  <li>When an MVCC DB needs to update an item of data, it will not overwrite the old data with new data, but instead mark the old data as obsolete and add the newer version elsewhere. Thus there are multiple versions stored, but only one is the latest. This allows readers to access the data that was there when they began reading, even if it was modified or deleted part way through by someone else.</li>
+  <li>Requires (generally) the system to periodically sweep through and delete the old, obsolete data objects.</li>
+  <li>For a document-oriented DB it also allows the system to optimize documents by writing entire documents onto contiguous sections of disk—when updated, the entire document can be re-written rather than bits and pieces cut out or maintained in a linked, non-contiguous DB structure.</li>
+  <li>MVCC provides point <strong><em>in time consistent views</em></strong>. Read transactions under MVCC typically use a timestamp or transaction ID to determine what state of the DB to read, and read these versions of the data. Read and write transactions are thus isolated from each other without any need for locking. Writes create a newer version, while concurrent reads access the older version.</li>
+  <li>MVCC is a concurrency control method commonly used
+    <ul>
+      <li>by DB management systems to provide concurrent access to the DB,</li>
+      <li>by source code version control systems like SVN, Git</li>
+      <li>and in programming languages to implement transactional memory.[1]</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="timestamp-ordering-to">Timestamp ordering (TO)</h3>
+
+<ul>
+  <li>Assigning timestamps to transactions, and controlling or checking access to data by timestamp order.</li>
+  <li>a timestamp-based concurrency control algorithm is a non-lock concurrency control method. It is used in some databases to safely handle transactions, using timestamps.</li>
+  <li>HBase does this type of implementation</li>
+  <li>Assumptions
+    <ul>
+      <li>Every timestamp value is unique and accurately represents an instant in time.</li>
+      <li>No two timestamps can be the same.</li>
+      <li>A higher-valued timestamp occurs later in time than a lower-valued timestamp.</li>
+    </ul>
+  </li>
+  <li>Issues
+    <ul>
+      <li>Timestamp Resolution - If the resolution of the timestamp is too large (coarse), the possibility of two or more timestamps being equal is increased and thus enabling some transactions to commit out of correct order.</li>
+      <li>This won’t work in a distributed database where different servers could potentially have incorrect time settings</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="serialization-graph-checking">Serialization graph checking</h3>
+
+<p>(also called Serializability, or Conflict, or Precedence graph checking) - Checking for cycles in the schedule’s graph and breaking them by aborts.</p>
+
+<h3 id="commit-ordering-co">Commit ordering (CO)</h3>
+
+<ul>
+  <li>Controlling or checking transactions’ chronological order of commit events to be compatible with their respective precedence order.</li>
+  <li>Commit ordering is a general serializability technique that achieves distributed serializability effectively on a large scale</li>
+</ul>
+
+<h3 id="index-concurrency-control">Index concurrency control</h3>
+
+<p>Synchronizing access operations to indexes, rather than to user data. Specialized methods provide substantial performance gains.</p>
+
+<h3 id="private-workspace-model">Private workspace model</h3>
+
+<p>(Deferred update) - Each transaction maintains a private workspace for its accessed data, and its changed data become visible outside the transaction only upon its commit (e.g., Weikum and Vossen 2001). This model provides a different concurrency control behavior with benefits in many cases.</p>
+
+<h1 id="transaction-types">Transaction Types</h1>
+
+<h2 id="flat-transactions">Flat Transactions</h2>
+
+<p>A flat transaction is the simplest form of a transaction. It comprises a collection of operations that are bounded by a begin statement and an end statement. Either all of the operations in the bounded collection are executed (committed) or none are (aborted). A transaction may be aborted either by the program executing it or because of an external failure, such as a system crash.</p>
+
+<h2 id="flat-transactions-with-savepoints">Flat Transactions with Savepoints</h2>
+
+<ul>
+  <li>There are cases in which flat transactions are too simple a model to be effective. Consider a travel agent attempting to book a complex itinerary. She may have booked airlines and hotels for several legs but then finds that a booking attempt for the next leg fails. She either must abort the entire transaction and try again or put in a compensating transaction to back out the failed operations. Neither is desirable.</li>
+  <li>It would be much better if she could simply return the current transaction to some previous transaction state that is consistent. This is what savepoints are all about. A <em>save work</em> command saves the current state of the transaction. At any later time, the application can roll back the transaction to any of the transaction savepoints that have been established.</li>
+</ul>
+
+<h2 id="chained-transactions">Chained Transactions</h2>
+
+<p>Chained transactions are a variant of savepoints. However, rather than simply marking a point of consistency to which the transaction can return, the <em>chain work</em> command actually commits the work so far. Therefore, there is no opportunity to roll back any of the previous work. However, the transaction itself survives. Any locks held by the transaction continue to be held as further work is done. Only when the full transaction is committed are its locks released.</p>
+
+<h2 id="nested-transactions">Nested Transactions</h2>
+
+<p>A nested transaction comprises a tree of transactions. The root transaction can spawn sub-transactions which themselves can spawn additional subtransactions. The leaves of the transaction tree are flat transactions. A parent transaction can pass its locks to a child subtransaction. A subtransaction can commit or abort at any time. In this case, any locks owned by the subtransaction are counter-inherited by the parent. Only when the root transaction commits are all locks released.</p>
+
+<h2 id="distributed-transactions">Distributed Transactions</h2>
+
+<ul>
+  <li>Distributed transactions are those that must execute across a network of databases. They are similar to nested transactions. However, the transaction tree for a nested transaction is application-dependent, whereas the tree for a distributed transaction is data-dependent.</li>
+  <li>Distributed transactions are basically flat transactions. However, if data held by a remote database must be updated, a subtransaction is started on that database. The scope of the sub-transaction is the set of operations on the database. At commit time, the parent transaction queries all of its subtransactions to ensure that all of them are prepared to commit before issuing a commit command. If one or more subtransactions cannot commit, the transaction is aborted.</li>
+  <li>Today’s distributed transaction standard for heterogeneous systems is XA from <a href="http://www.opengroup.org/bookstore/catalog/c193.htm">The Open Group</a>.</li>
+</ul>
+
+<h2 id="long-lived-transactions">Long-Lived Transactions</h2>
+
+<ul>
+  <li>Batch transactions are an example of long-lived transactions which can contain millions of updates and last for hours. This can be an intolerable situation.</li>
+  <li>One solution is to break the batch job into mini-batches operating on data with a common attribute, such as a range of keys. This is not a perfect solution since the atomicity of the entire transaction cannot be maintained.</li>
+</ul>
+
+<h1 id="transaction-models">Transaction Models</h1>
+
+<h2 id="local-transactions">Local transactions</h2>
+
+<ul>
+  <li>Txn is not managed by the framework, but by the local resource manager like db or messaging provider.</li>
+  <li>Developer manages connection, not the txn.</li>
+  <li><strong>Pros</strong>
+    <ul>
+      <li>Code is simple code. All you have to do is to turn off auto commit on Connection, and commit/rollback when needed.</li>
+      <li>Works well for simple applications</li>
+    </ul>
+  </li>
+  <li><strong>Cons/limitations</strong>
+    <ul>
+      <li>Error-prone. Plenty of room for developers to make mistakes which could be disastrous.</li>
+      <li>Works only on a single resource. Cannot co-ordinate a txn across global resources like Db and EMS.</li>
+      <li>Say if the txn code is split between different DAOs, the connection needs to be explicitly passed (called as <strong><em>connection passing strategy</em></strong>) which is typically error-prone.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="global-transactions">Global Transactions</h2>
+
+<p><img class="right" src="/technology/global-transaction.png" /></p>
+
+<ul>
+  <li>For any transaction that spans across multiple resources, an application relies on a dedicated component called <em>transaction manager</em>. This component implements a special protocol called <strong>XA</strong>.</li>
+  <li>In this case, a third-party component handles the transactions, so we call such transactions <strong><em>managed transactions</em></strong>.</li>
+  <li>In Java, to perform global transactions using the XA protocol, we need the following:
+    <ul>
+      <li><strong><em>A JTA transaction manager</em></strong> —It implements the Java Transaction API (JTA) specification,
+which requires the implementation of the XA protocol. Such a transaction
+manager is included in a Java EE application server or is available as a
+standalone component.
+<strong><em>XA-aware drivers</em></strong>—The resources must provide XA-compliant drivers so the transaction
+manager can communicate with the resources using the XA protocol. Practically
+speaking, this implies the drivers provide implementations of interfaces like
+javax.sql.XAConnection. Thanks to these interfaces, the JTA transaction manager
+can enlist the resources in distributed transactions, as shown in figure 9.5</li>
+    </ul>
+  </li>
+  <li>All Java EE application servers include a JTA transaction manager (Glassfish, JBoss,
+WebSphere, and so on).</li>
+  <li>Standalone JTA transaction managers: Atomikos, Java Open Transaction Manager (JOTM), and the
+Bitronix Transaction Manager</li>
+</ul>
+
+<blockquote>
+  <p>Warning: Spring doesn’t provide a JTA transaction manager. The Spring <code>JtaTransactionManager</code> class is only a bridge between Spring’s transaction management support and a full-blown JTA transaction manager.</p>
+</blockquote>
+
+<h2 id="programmatic-transactions">Programmatic transactions</h2>
+
+<ul>
+  <li>Leverages JTA API implementation</li>
+  <li>Developer manages txn rather than the connection, using <code>javax.transaction.UserTransaction</code></li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>EJB Example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">UserTransaction</span> <span class="n">txn</span> <span class="o">=</span> <span class="n">sessionCtx</span><span class="o">.</span><span class="na">getUserTransaction</span><span class="o">();</span>
+</span><span class="line"><span class="n">txn</span><span class="o">.</span><span class="na">begin</span><span class="o">();</span>
+</span><span class="line"><span class="k">try</span><span class="o">{</span>
+</span><span class="line">    <span class="n">myDAO</span><span class="o">.</span><span class="na">updateOne</span><span class="o">(...);</span>
+</span><span class="line">    <span class="n">myDAO</span><span class="o">.</span><span class="na">updateTwo</span><span class="o">(...);</span>
+</span><span class="line">    <span class="n">txn</span><span class="o">.</span><span class="na">commit</span><span class="o">();</span>
+</span><span class="line"><span class="o">}</span> <span class="k">catch</span><span class="o">(...){</span>
+</span><span class="line">    <span class="n">txn</span><span class="o">.</span><span class="na">rollback</span><span class="o">();</span>
+</span><span class="line">    <span class="k">throw</span> <span class="n">e</span><span class="o">;</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Spring Example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kn">import</span> <span class="nn">org.springframework.transaction.support.*</span><span class="o">;</span>
+</span><span class="line">
+</span><span class="line"><span class="n">TransactionTemplate</span> <span class="n">transactionTemplate</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">TransactionTemplate</span><span class="o">();</span>
+</span><span class="line">
+</span><span class="line"><span class="n">transactionTemplate</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="k">new</span> <span class="nf">TransactionCallback</span><span class="o">(){</span>
+</span><span class="line">    <span class="kd">public</span> <span class="n">Object</span> <span class="nf">doInTransaction</span><span class="o">(</span><span class="n">TransactionStatus</span> <span class="n">status</span><span class="o">){</span>
+</span><span class="line">      <span class="k">try</span><span class="o">{</span>
+</span><span class="line">          <span class="n">myDAO</span><span class="o">.</span><span class="na">updateOne</span><span class="o">();</span>
+</span><span class="line">      <span class="o">}</span><span class="k">catch</span><span class="o">(...){</span>
+</span><span class="line">          <span class="n">status</span><span class="o">.</span><span class="na">setRollbackOnly</span><span class="o">();</span>
+</span><span class="line">          <span class="k">throw</span> <span class="n">e</span><span class="o">;</span>
+</span><span class="line">      <span class="o">}</span>
+</span><span class="line">    <span class="o">}</span>
+</span><span class="line">  <span class="o">}</span>
+</span><span class="line"><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>In the above EJB example, txn context is propagated to the DAO. Unlike the local txn model, DAO need not manage connections/txns. All it needs to do is get connections from a pool.</li>
+  <li>In the above Spring example, there is no need to explicitly invoke begin() or commit(). Also, the rollback is hinted via the txn status, and not on txn itself.</li>
+  <li>Typically an instance of <code>UserTransaction</code> is obtained via JNDI look up.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">UserTransaction</span> <span class="n">txn</span> <span class="o">=</span> <span class="o">(</span><span class="n">UserTransaction</span><span class="o">)</span><span class="k">new</span> <span class="nf">InitialContext</span><span class="o">().</span><span class="na">lookup</span><span class="o">(</span><span class="s">&quot;javax.transaction.UserTransaction&quot;</span><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>However, the look up string name could be different for app servers. To run the code outside of a container like for unit test cases, TransactionManager interface is used as below.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Load the txn manager factory class</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="c1">//Websphere EJB txn manager example</span>
+</span><span class="line"><span class="n">Class</span> <span class="n">txnClass</span> <span class="o">=</span> <span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">&quot;com.ibm.ejs.jts.jta.TransactionManagerFactory&quot;</span><span class="o">);</span>
+</span><span class="line">
+</span><span class="line"><span class="n">TransactionManager</span> <span class="n">mgr</span> <span class="o">=</span> <span class="o">(</span><span class="n">TransactionManager</span><span class="o">)</span><span class="n">txnClass</span><span class="o">.</span><span class="na">getMethod</span><span class="o">(</span><span class="s">&quot;getTransactionManager&quot;</span><span class="o">,</span> <span class="kc">null</span><span class="o">)</span>
+</span><span class="line">          <span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="kc">null</span><span class="o">);</span>
+</span><span class="line">
+</span><span class="line"><span class="c1">//Start the txn via txn manager</span>
+</span><span class="line"><span class="n">mgr</span><span class="o">.</span><span class="na">begin</span><span class="o">();</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>When to use?
+    <ul>
+      <li>client-initiated transactions</li>
+      <li>Localized JTA transactions - If the process has multiple steps and if a txn is required only during a particular phase, then the only way to achieve this localized JTA txn is via programmatic model.</li>
+      <li>For performance reasons.</li>
+    </ul>
+  </li>
+  <li>Cons
+    <ul>
+      <li>Error-prone - since developer is handling txns, if exceptions are not handled properly in the code, it could be disastrous.</li>
+      <li>Transaction Context Problem: A txn context cannot be passed from a DAO that implements programmatic txn model into another DAO implementing the same txn model. Because, when one of them invoke the other, both will try to begin a new txn on separate threads. This violates the ACID principle since failure in other thread won’t be visible to the other.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="declarative-transactions">Declarative transactions</h2>
+
+<ul>
+  <li>Framework or container manages the txn (which is why it is also called Container Managed Transactions or CMT)</li>
+  <li>Txns are configured through configuration parameters. e.g., XML descriptors in EJB or bean definition file <code>ApplicationContext.xml</code> in Spring.</li>
+  <li>Developer only says when to rollback. In Spring, rollback rules are specified via <code>TransactionAttributeSource</code> interceptor.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>EJB Example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Stateless</span>
+</span><span class="line"><span class="nd">@TransactionManagement</span><span class="o">(</span><span class="n">TransactionManagementType</span><span class="o">.</span><span class="na">CONTAINER</span><span class="o">)</span>
+</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyDAO</span><span class="o">{</span>
+</span><span class="line">   <span class="nd">@TransactionAttribute</span><span class="o">(</span><span class="n">TransactionAttributeType</span><span class="o">.</span><span class="na">REQUIRED</span><span class="o">)</span>
+</span><span class="line">   <span class="kd">public</span> <span class="kt">void</span> <span class="nf">update</span><span class="o">(){</span>
+</span><span class="line">      <span class="k">try</span><span class="o">{</span>
+</span><span class="line">          <span class="n">myDAO</span><span class="o">.</span><span class="na">updateOne</span><span class="o">(...);</span>
+</span><span class="line">          <span class="n">myDAO</span><span class="o">.</span><span class="na">updateTwo</span><span class="o">(...);</span>
+</span><span class="line">      <span class="o">}</span><span class="k">catch</span><span class="o">(...){</span>
+</span><span class="line">          <span class="n">sessionCtx</span><span class="o">.</span><span class="na">setRollbackOnly</span><span class="o">();</span>
+</span><span class="line">          <span class="k">throw</span> <span class="n">e</span><span class="o">;</span>
+</span><span class="line">      <span class="o">}</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>As in the above EJB example, developer invokes only the <code>setRollbackOnly()</code> method. At class level, we specify that it uses declarative transaction through the annotation.</li>
+  <li>In Spring, developer need not call the method explicitly. Instead the rollback rules of when to rollback is specified in the <code>TransactionAttributeSource</code> interceptor. We specify that it uses declarative transaction through <code>TransactionProxyFactoryBean</code> proxy - the txn bean is wrapped with a proxy.</li>
+</ul>
+
+<h3 id="transaction-attributes">Transaction Attributes</h3>
+
+<p>In declarative txn, we must tell the container when to begin a txn, which methods should participate in a txn, etc. There are 6 transaction attributes</p>
+
+<ul>
+  <li>Transaction Attributes
+    <ul>
+      <li>can be specified at method-level and bean-level.</li>
+      <li>bean-level setting applies for all the methods in the class, which can be overridden.</li>
+      <li>even if not specified, default attribute is applied to all the methods.</li>
+    </ul>
+  </li>
+  <li>Spring interface <code>Synchronization</code> provides callback methods for the <code>afterBegin()</code>, <code>beforeCompletion()</code>, and <code>afterCompletion()</code> of a JTA transaction.</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>Attribute Value (For Spring prefix PROPAGATION_ )</th>
+      <th>Txn is needed to execute the method?</th>
+      <th>What if a txn is already open?</th>
+      <th>What if no txn open?</th>
+      <th>When to use?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>REQUIRED</td>
+      <td>Yes</td>
+      <td>Use it</td>
+      <td>Start a new one</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>MANDATORY</td>
+      <td>Yes</td>
+      <td>An open txn must always exist before invoking the method</td>
+      <td>Throws exception. Never starts a new one.</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>REQUIRESNEW</td>
+      <td>Yes. Always start a new txn.</td>
+      <td>Suspend existing txn, start new one and resume the previous one after completing the new one.</td>
+      <td>Start a new one</td>
+      <td>When an activity needs to be committed regardless of the surrounding txn. E.g. audit logging during trading operation</td>
+    </tr>
+    <tr>
+      <td>SUPPORTS</td>
+      <td>No</td>
+      <td>Use it. In fact, any uncommitted change made by the surrounding txn is also visible.</td>
+      <td>It works as it and doesn’t start a new txn.</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>NOTSUPPORTED</td>
+      <td>No</td>
+      <td>Suspend existing txn, complete the method invocation and resume the txn.</td>
+      <td> </td>
+      <td>For example, invoking a stored proc containing a DDL within the context of an XA txn will throw exception. This attribute is useful in such cases.</td>
+    </tr>
+    <tr>
+      <td>NEVER</td>
+      <td>No. Never start a txn.</td>
+      <td>Throws exception</td>
+      <td>N/A</td>
+      <td> </td>
+    </tr>
+  </tbody>
+</table>
+
+<h1 id="transaction-isolation-level">Transaction Isolation Level</h1>
+
+<p>Transaction isolation is a function of db concurrency and db consistency. As we increase the level of txn isolation, we in effect lower the db concurrency but increase the db consistency. (Isolation­­­ &amp; Consistency are inversely proportional to concurrency )</p>
+
+<ul>
+  <li><strong>Data concurrency</strong> means that many users can access data at the same time.</li>
+  <li>
+    <p><strong>Data consistency</strong> means that each user sees a consistent view of the data, including visible changes made by the user’s own transactions and transactions of other users.</p>
+  </li>
+  <li><strong>1. Read Uncommitted</strong>
+    <ul>
+      <li>Allows transactions to read non-committed updates made by other transactions.</li>
+      <li>Lowest level of isolation supported by EJB &amp; Spring.</li>
+    </ul>
+  </li>
+  <li><strong>2. Read Committed</strong>
+    <ul>
+      <li>Allows multiple transactions to access the same data, hiding the non-committed updates from other transactions until they are committed.</li>
+      <li>This is the default isolation setting for most of the databases.</li>
+    </ul>
+  </li>
+  <li><strong>3. Repeatable Read</strong>
+    <ul>
+      <li>Repeatable read is a higher isolation level, that in addition to the guarantees of the read committed level, it also guarantees that any data read cannot change, if the transaction reads the same data again, it will find the previously read data in place, unchanged, and available to read.</li>
+      <li>Ensures that once a set of values are read from the db for a particular txn, that same set of values will be read every time the select statement is executed, unless the txn holding the read and write locks modifies the data.</li>
+    </ul>
+  </li>
+  <li><strong>4. Serializable</strong>
+    <ul>
+      <li>serializable makes an even stronger guarantee: in addition to everything repeatable read guarantees, it also guarantees that no new data can be seen by a subsequent read</li>
+      <li>Interleaving txns are stacked up so that only one txn is allowed access to data at a time.</li>
+      <li>The serializable mode of transaction behavior tries to ensure that transactions run in such a way that they appear to be executed one at a time, or serially, rather than concurrently.</li>
+      <li>Lowest level of isolation supported by Java.</li>
+    </ul>
+  </li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>Dirty Read / Uncommitted Read</th>
+      <th>Read Committed</th>
+      <th>Repeatable Read</th>
+      <th>Serializable</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><img src="/technology/dirty-read.png" /></td>
+      <td><img src="/technology/read-committed.png" /></td>
+      <td><img src="/technology/repeatable-read.png" /></td>
+      <td><img src="/technology/serializable.png" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">BEGIN</span> <span class="n">TRANSACTION</span><span class="p">;</span>
+</span><span class="line"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">T</span><span class="p">;</span>
+</span><span class="line"><span class="n">WAITFOR</span> <span class="n">DELAY</span> <span class="s1">&#39;00:01:00&#39;</span>
+</span><span class="line"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">T</span><span class="p">;</span>
+</span><span class="line"><span class="k">COMMIT</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>That is a simple task that issue two reads from table T, with a delay of 1 minute between them.</p>
+
+<ul>
+  <li>under READ COMITTED, the second SELECT may return <strong><em>any data</em></strong>. A concurrent transaction may update the record, delete it, insert new records. The second select will always see the <strong><em>new data</em></strong>.</li>
+  <li>under REPEATABLE READ, the second SELECT is guaranteed to see the rows that has seen at first select <strong><em>unchanged</em></strong>. New rows may be added by a concurrent transaction in that one minute, but the existing rows cannot be deleted nor changed.</li>
+  <li>
+    <p>under SERIALIZABLE, the second select is guaranteed to see <strong><em>exactly</em></strong> the same rows as the first. No row can change, nor deleted, nor new rows could be inserted by a concurrent transaction.</p>
+  </li>
+  <li><strong>SNAPSHOT</strong>
+    <ul>
+      <li>And finally, there is also the SNAPSHOT isolation level. SNAPSHOT isolation level makes the same guarantees as serializable, but not by requiring that no concurrent transaction can modify the data, but by making every reader see it’s own version of the world (it’s own ‘snapshot’). This makes it very easy to program against, very scalable as it does not block concurrent updates, but of course it has a price, and the price is extra server resource consumption.</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="transaction-read-phenomena">Transaction Read Phenomena</h1>
+
+<p><a href="http://docs.oracle.com/cd/B28359_01/server.111/b28318/consist.htm">Oracle Guide - Data Concurrency and Consistency</a></p>
+
+<p>The ANSI/ISO SQL standard (SQL92) defines 4 levels of transaction isolation with differing degrees of impact on transaction processing throughput. These isolation levels are defined in terms of 3 phenomena that must be prevented between concurrently executing transactions.</p>
+
+<p>The three preventable phenomena are:</p>
+
+<h2 id="dirty-read--uncommitted-read">1. Dirty Read / Uncommitted Read</h2>
+
+<ul>
+  <li>One process (P1) modifies a row, and another process (P2) then reads that row before it is committed by P1. If P1 then rolls back the change, P2 will have read a row that was never committed and that may thus be considered to have never existed.</li>
+  <li>Isolation Level: <code>READ UNCOMMITTED</code></li>
+</ul>
+
+<h2 id="non-repeatable-read">2. Non-Repeatable Read</h2>
+
+<ul>
+  <li>Process P1 reads a row. Process P2 then modifies or deletes that rows and commits the change. If P1 re-reads the row it receives the modified value or discovers the row has been deleted.</li>
+  <li>Isolation Level: <code>READ COMMITTED</code></li>
+</ul>
+
+<h2 id="phantom-read">3. Phantom Read</h2>
+
+<ul>
+  <li>Process P1 reads the set of rows N that satisfy some search condition. Process P2 then executes statements that generate one or more rows that satisfy the search condition. If P1 repeats the query it obtains a different collection of rows.</li>
+  <li>Phantom Vs. Non-repeatable
+    <ul>
+      <li>The Non-Repeatable Read is a phenomena specific to a read of a single record. When data has changed in this record, and the record is read again, the changed data is returned. This is a non-repeatable read.</li>
+      <li>The Phantom Read is a phenomenon that deals with queries that return sets. The thing that’s changing in a phantom read is not the data in the records; it’s the set membership that has changed.</li>
+      <li>For records that have been deleted, if a transaction reads them (or rather fails to read them) it would seem that this is both a non-repeatable read and a phantom read. But for the purposes of the ISO/ANSI standard it is in fact considered a non-repeatable read.</li>
+    </ul>
+  </li>
+</ul>
+
+<table>
+  <tbody>
+    <tr>
+      <td><strong>Isolation Level</strong></td>
+      <td><strong>Dirty Read</strong></td>
+      <td><strong>Nonrepeatable Read</strong></td>
+      <td><strong>Phantom Read</strong></td>
+    </tr>
+    <tr>
+      <td><strong>Read Uncommitted</strong></td>
+      <td>Possible</td>
+      <td>Possible</td>
+      <td>Possible</td>
+    </tr>
+    <tr>
+      <td><strong>Read Committed</strong></td>
+      <td>Not Possible</td>
+      <td>Possible</td>
+      <td>Possible</td>
+    </tr>
+    <tr>
+      <td><strong>Repeatable Read</strong></td>
+      <td>Not Possible</td>
+      <td>Not Possible</td>
+      <td>Possible</td>
+    </tr>
+    <tr>
+      <td><strong>Serializable</strong></td>
+      <td>Not Possible</td>
+      <td>Not Possible</td>
+      <td>Not Possible</td>
+    </tr>
+  </tbody>
+</table>
+
+<h1 id="distributed-transaction-processing">Distributed Transaction Processing</h1>
+
+<p>Distributed txn is a txn that spans over 1 or more resources. It could be between 2 different dbs, or 2 different messaging channels, or db and a messaging queue/topic.</p>
+
+<h2 id="xa-transaction-processing">XA Transaction Processing</h2>
+
+<p><img class="right" src="/technology/xa-transaction.png" /></p>
+
+<ul>
+  <li>The X/Open XA Interface is a bi-directional system-level interface that forms the communication bridge between a transaction manager and 1 or more resource managers.</li>
+  <li>The Transaction Manager manages the lifecycle of a txn, and co-ordinates resources. In JTA, txn manager is abstracted through the <code>javax.transaction.TransactionManager</code> interface and implemented through the underlying transaction service.</li>
+  <li>The Resource Manager controls and manages the actual resource participating in the txn like db or JMS queue.</li>
+  <li>XA txn should only be used when a transaction needs to be coordinated between multiple resources, i.e., databases, queues or topics.</li>
+</ul>
+
+<h3 id="xa-resource">XA Resource</h3>
+
+<ul>
+  <li>Without XA, messages sent to a topic/queue are typically read by receivers immediately. With XA, the message in the queue would not be released until the txn is committed.</li>
+  <li>To perform a XA txn between multiple resources, each participating resource should be an XA resource. (Some vendors support a feature where 1 resource could be a non-XA resource. )</li>
+</ul>
+
+<h2 id="phase-commit-protocol">2-phase commit protocol</h2>
+
+<ul>
+  <li>Mechanism used by XA to coordinate multiple resources during a global transaction.</li>
+  <li>A txn manager coordinates txns between resource managers using a two-phase commit protocol.</li>
+  <li>The two-phase commit protocol provides the ACID properties of transactions across multiple resources.</li>
+  <li>In phase 1,
+    <ul>
+      <li>the transaction manager tells each resource to “prepare” to commit; that is, to perform all operations for a commit and be ready either to make the changes permanent or to undo all changes.</li>
+      <li>Each resource manager responds back with READY, READ_ONLY or NOT_READY.</li>
+    </ul>
+  </li>
+  <li>In phase 2, if all resource managers respond back with READY, the transaction manager tells all resource managers to commit their changes; otherwise, it tells them all to roll back and indicates transaction failure to the application. Participants that respond with a READ_ONLY are removed from the 2nd phase.</li>
+  <li>2-phase commit is possible due to the bi-directional communication capabilities of the XA interface.</li>
+  <li><strong>Last Participant Support</strong> / <strong>Last Resource Commit</strong>
+    <ul>
+      <li>Some commercial containers allow this feature where an non-XA resource to participate in a global txn. The non-XA resource participates only in the phase 1 of the txn.</li>
+    </ul>
+  </li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>2PC Commit Scenario</th>
+      <th>2PC Rollback Scenario</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><img src="/technology/2pc-commit.png" /></td>
+      <td><img src="/technology/2pc-rollback.png" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="heuristic-exceptions">Heuristic Exceptions</h2>
+
+<p>During the 2-phase commit process a Resource Manager may use heuristic decision making and either commit or rollback its work independent of the Txn Mgr. Heuristic decision making is a process that involves making intelligent choices based on various internal and external factors. When a Resource Manager does this it is reported back to the client through Heuristic Exception.</p>
+
+<p>They only occur under XA during the 2-phase commit process, specifically after a participant has responded in phase 1. The most common reason for this is a timeout condition between phase 1 and 2. When communication is lost or delayed, the resource managers might make a decision to commit or rollback its work in order to free up resources.</p>
+
+<h3 id="heuristic-exception-types">Heuristic Exception Types</h3>
+
+<p>The 3 JTA Heuristic exceptions in JTA are</p>
+
+<ul>
+  <li><code>HeuristicRollbackException</code> - between phase 1 and 2, if <em>all the resource mgrs</em> decides to rollback the txn, then upon entering phase 2 of the commit request this exception is thrown back to the caller.</li>
+  <li><code>HeuristicMixedException</code> - same as above, but this is thrown if <em>one of the resource mgrs</em> decides to rollback.</li>
+  <li><code>HeuristicCommitException</code></li>
+</ul>
+
+<h1 id="transaction-strategies">Transaction Strategies</h1>
+
+<p>Two golden rules apply to all of the transaction strategies :</p>
+
+<ul>
+  <li>The method that starts the transaction is designated as the transaction owner</li>
+  <li>Only the transaction owner can roll back the transaction</li>
+</ul>
+
+<h2 id="api-layer-strategy">1. API Layer Strategy</h2>
+
+<p><img class="right" src="/technology/api-txn-strategy.png" /></p>
+
+<ul>
+  <li>Transaction Owner: API Layer - this is where the begin, commit and rollback of a txn occurs</li>
+  <li>When to apply this?
+    <ul>
+      <li>apps with coarse-grained API layer</li>
+      <li>apps with multiple client channels like webservice client, desktop client, web client, etc.</li>
+    </ul>
+  </li>
+  <li>Rules for implementing this strategy
+    <ul>
+      <li>only public methods in the API layer should have txn logic</li>
+      <li>all public write methods are marked with REQUIRED txn attribute</li>
+      <li>all public read method are marked with SUPPORTS</li>
+      <li>all public write methods should handle checked exceptions with a rollback logic</li>
+    </ul>
+  </li>
+  <li>Limitations/Restrictions
+    <ul>
+      <li>When a public write method calls another public write method in a txn, and if an exception occurs, the rollback logic could potentially be handled by the 2nd method instead of the txn owner.</li>
+      <li>Clients cannot make a multiple calls to API layer as a single unit of work.</li>
+      <li>Extra attention needed if the same public method is called by clients that act as a txn owner and clients does not start a txn. (see <a href="http://www.ibm.com/developerworks/java/library/j-ts3/index.html#restrictions">IBM article</a> for more details)</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="client-orchestration-strategy">2. Client Orchestration Strategy</h2>
+
+<ul>
+  <li>Transaction Owner: Client Layer. Though both client &amp; API layer contains the txn logic, only the client layer begins, commits and rolls back the txn. API layer has only  txn attributes marked on the methods.</li>
+  <li>When to apply this?
+    <ul>
+      <li>apps with complex and fine-grained API layer</li>
+      <li>cannot use with clients that cannot propagate txn to API layer, e.g., JMS clients, web service clients, etc.</li>
+    </ul>
+  </li>
+  <li>Rules for implementing this strategy
+    <ul>
+      <li>only client &amp; API layer contains the txn logic. Client layer is the txn owner</li>
+      <li>typically with this strategy, programmatic model is used in client. The exception to this rule is if the client business delegate in the client layer controlling the transaction scope is managed as a Spring bean by the Spring Framework. In this case, you can use the declarative transaction model provided by Spring.</li>
+      <li>all public write methods in API layer are marked as MANDATORY - no rollback logic in them</li>
+      <li>all public read methods in API layer are marked as SUPPORT.</li>
+      <li>If the client layer is making remote calls to the API layer, the client layer must use a protocol and transaction manager that supports the propagation of a transaction context (such as RMI-IIOP).</li>
+    </ul>
+  </li>
+  <li>Limitations/Restrictions
+    <ul>
+      <li>Client layer must be able to start a txn and propagate it to the API layer. This is not possible with JMS client or web service client</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="high-concurrency-strategy">3. High Concurrency Strategy</h2>
+
+<p>…</p>
+
+<h2 id="high-performance-strategy">4. High Performance Strategy</h2>
+
+<p>…</p>
+
+<h1 id="transaction-patterns">Transaction Patterns</h1>
+
+<h2 id="phase-commit-protocol-or-pattern">2 Phase Commit Protocol or Pattern</h2>
+
+<p>Check above for explanation</p>
+
+<p>Global transactions are tricky. They are</p>
+
+<ul>
+  <li>difficult to configure</li>
+  <li>some implementations of transaction managers and XA drivers remain bugy.</li>
+  <li>XA is inherently slower than local transactions because the strong transactional guarantees it provides imply some overhead (the transaction manager and the resources need to maintain precise logs of what they’re doing, for instance)</li>
+</ul>
+
+<p>Depending on the context and resources involved, other techniques are viable alternatives to XA; they involve coding and usually perform better than XA.</p>
+
+<h2 id="shared-resource-transaction-pattern">Shared Resource Transaction Pattern</h2>
+
+<p><img class="right" src="/technology/shared-resource-pattern.png" /></p>
+
+<ul>
+  <li>This pattern works only when two databases are involved</li>
+  <li>Sometimes, the same physical resource backs multiple logical resources. For example, two JDBC <code>DataSource</code>s can point to the same database instance. Using Oracle terminology, we say that you refer to schema B from schema A by using the same connection. You also need to define synonyms in schema A for schema B’s tables. This enables real global transactions using the same mechanism as for local transactions.</li>
+  <li>The overhead is a little more than for true local transactions but less than with XA.</li>
+  <li>Diagram here showsUse the shared resource transaction pattern when a common resource hosts the transactional resources. In this example, two Oracle database schemas exist in the same database instance. The first schema refers to the second schema’s tables using synonyms. This allows the application to use local transactions.</li>
+  <li><strong><em>Spring Batch use-case</em></strong> - Here’s an example of the shared resource transaction pattern applied to Spring Batch. People are sometimes reluctant to host the batch execution metadata in the same database as the business data (they don’t want to mix infrastructure and business concerns, which makes sense). Therefore, Spring Batch must span transactions over two databases for the execution metadata and the business data to ensure proper counts of skipped items, retries, and so on. You can use the shared resource transaction pattern to host batch execution metadata and business data in different databases. The pattern keeps your batch metadata and business data separate and properly synchronized, and you can stick to local transactions.</li>
+</ul>
+
+<h2 id="best-effort-pattern">Best Effort Pattern</h2>
+
+<p><img class="right" src="/technology/best-effort-pattern.png" /></p>
+
+<ul>
+  <li>This pattern works only when a 2 databases or a database and a JMS queue are involved</li>
+  <li>This pattern requires two resources—a JMS queue and a database—and must be transactional. What can go wrong? Let’s look at the two cases:
+    <ul>
+      <li><em>Losing the message</em> — The application receives a message, acknowledges it, but fails to process it. The message is no longer on the queue, and there’s been no processing in the database: the message is lost.</li>
+      <li><em>Receiving and processing the same message twice</em> —The application receives a message and processes it, but the acknowledgment fails. The JMS broker delivers the message again, and the application processes it again. We call this a <em>duplicate message</em>.</li>
+    </ul>
+  </li>
+  <li><strong>Avoid losing messgae with Transcation Synchronization</strong>
+    <ul>
+      <li>To avoid losing messages, Spring synchronizes the local JMS transaction with the database transaction. Spring commits the JMS transaction immediately after the commit of the database transaction. We call this the <em>best effort pattern</em>.</li>
+    </ul>
+  </li>
+  <li><strong>Avoid duplicate messages</strong>
+    <ul>
+      <li>To avoid duplicate messages, the application must programmatically check before processing a message from the JMS queue</li>
+    </ul>
+  </li>
+  <li><strong>Handling duplicate messages with Idempotency</strong>
+    <ul>
+      <li>Idempotency is an interesting property for message processing. It means that we don’t care about duplicate messages! Always think about idempotency when designing a system: idempotent operations can make a system much simpler and more robust. (In Maths, n x 0 = 0)</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="bibliography">Bibliography</h1>
+
+<ul>
+  <li>Books
+    <ul>
+      <li>Java Transaction Design Strategies - Mark Richards</li>
+      <li>Java Transaction Processing: Design and Implementation - Mark Little, Jon Maron, Greg Pavlik</li>
+      <li>Principles of Transaction Processing - Philip A. Bernstein, Eric Newcomer</li>
+    </ul>
+  </li>
+  <li>Websites
+    <ul>
+      <li><a href="http://www.ibm.com/developerworks/views/java/libraryview.jsp?site_id=1&amp;contentarea_by=Java&amp;sort_by=Date&amp;sort_order=1&amp;start=1&amp;end=6&amp;topic_by=&amp;product_by=&amp;type_by=All%20Types&amp;show_abstract=true&amp;search_by=transaction%20strategies:&amp;industry_by=&amp;series_title_by=">IBM - Txn Mgmt Series - Mark Richards</a></li>
+      <li><a href="http://static.springsource.org/spring/docs/3.0.x/reference/transaction.html">Spring Txn Mgmt</a></li>
+      <li>http://www.jboss.org/jbosstm/resources/fundamentals.html</li>
+      <li>http://www.pjug.org/jta-j2ee-pjug-2003-07-22.ppt</li>
+      <li><a href="http://www.subbu.org/articles/transactions/NutsAndBoltsOfTP.html">Nuts And Bolts Of TP</a></li>
+      <li><a href="http://www.javaworld.com/article/2077963/open-source-tools/distributed-transactions-in-spring--with-and-without-xa.html">Distributed transactions in Spring, with and without XA</a></li>
+    </ul>
+  </li>
+</ul>
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/transaction.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/transaction.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

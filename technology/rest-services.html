@@ -1,0 +1,1844 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>RESTful Services - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="RESTful Services Why REST? Basic definitions How REST works? Architectural Principles WADL JAX-RS API @Path Matrix Parameters JAX-RS Injections HTTP &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/rest-services.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">RESTful Services</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#why-rest" id="markdown-toc-why-rest">Why REST?</a></li>
+  <li><a href="#basic-definitions" id="markdown-toc-basic-definitions">Basic definitions</a></li>
+  <li><a href="#how-rest-works" id="markdown-toc-how-rest-works">How REST works?</a></li>
+  <li><a href="#architectural-principles" id="markdown-toc-architectural-principles">Architectural Principles</a></li>
+  <li><a href="#wadl" id="markdown-toc-wadl">WADL</a></li>
+  <li><a href="#jax-rs-api" id="markdown-toc-jax-rs-api">JAX-RS API</a>    <ul>
+      <li><a href="#path" id="markdown-toc-path">@Path</a></li>
+      <li><a href="#matrix-parameters" id="markdown-toc-matrix-parameters">Matrix Parameters</a></li>
+      <li><a href="#jax-rs-injections" id="markdown-toc-jax-rs-injections">JAX-RS Injections</a></li>
+      <li><a href="#http-content-negotiation" id="markdown-toc-http-content-negotiation">HTTP Content Negotiation</a></li>
+      <li><a href="#request--response-management" id="markdown-toc-request--response-management">Request &amp; Response Management</a></li>
+      <li><a href="#asynchronous-jax-rs" id="markdown-toc-asynchronous-jax-rs">Asynchronous JAX-RS</a>        <ul>
+          <li><a href="#client-side-async-api---using-futures" id="markdown-toc-client-side-async-api---using-futures">Client-side Async API - Using Futures</a></li>
+          <li><a href="#client-side-async-api---using-callbacks" id="markdown-toc-client-side-async-api---using-callbacks">Client-side Async API - Using Callbacks</a></li>
+          <li><a href="#server-side-async-api" id="markdown-toc-server-side-async-api">Server-side Async API</a></li>
+        </ul>
+      </li>
+      <li><a href="#exception-handling" id="markdown-toc-exception-handling">Exception Handling</a></li>
+      <li><a href="#conneg-content-negotiation" id="markdown-toc-conneg-content-negotiation">Conneg (Content Negotiation)</a></li>
+    </ul>
+  </li>
+  <li><a href="#pagination" id="markdown-toc-pagination">Pagination</a>    <ul>
+      <li><a href="#page-number-pagination" id="markdown-toc-page-number-pagination">1. Page Number Pagination</a></li>
+      <li><a href="#limit-offset-pagination" id="markdown-toc-limit-offset-pagination">2. Limit Offset Pagination</a></li>
+      <li><a href="#cursor-based-pagination" id="markdown-toc-cursor-based-pagination">3. Cursor-based Pagination</a></li>
+      <li><a href="#time-base-pagination" id="markdown-toc-time-base-pagination">4. Time-base Pagination</a></li>
+      <li><a href="#pagination-data" id="markdown-toc-pagination-data">Pagination Data</a></li>
+    </ul>
+  </li>
+  <li><a href="#scalability" id="markdown-toc-scalability">Scalability</a>    <ul>
+      <li><a href="#caching" id="markdown-toc-caching">Caching</a></li>
+      <li><a href="#http-caching" id="markdown-toc-http-caching">HTTP Caching</a></li>
+      <li><a href="#reverse-proxy" id="markdown-toc-reverse-proxy">Reverse proxy</a></li>
+    </ul>
+  </li>
+  <li><a href="#security" id="markdown-toc-security">Security</a>    <ul>
+      <li><a href="#authentication" id="markdown-toc-authentication">Authentication</a></li>
+      <li><a href="#authorization" id="markdown-toc-authorization">Authorization</a></li>
+    </ul>
+  </li>
+  <li><a href="#versioning" id="markdown-toc-versioning">Versioning</a>    <ul>
+      <li><a href="#uri-versioning" id="markdown-toc-uri-versioning">URI versioning</a></li>
+      <li><a href="#uri-parameter-versioning" id="markdown-toc-uri-parameter-versioning">URI parameter versioning</a></li>
+      <li><a href="#accept-header-versioning" id="markdown-toc-accept-header-versioning">Accept header versioning</a></li>
+      <li><a href="#custom-header-versioning" id="markdown-toc-custom-header-versioning">Custom header versioning</a></li>
+    </ul>
+  </li>
+  <li><a href="#transactions" id="markdown-toc-transactions">Transactions</a></li>
+  <li><a href="#other-rest-frameworks" id="markdown-toc-other-rest-frameworks">Other REST Frameworks</a>    <ul>
+      <li><a href="#servlet-based-web-services" id="markdown-toc-servlet-based-web-services">Servlet based Web Services</a></li>
+      <li><a href="#restlet" id="markdown-toc-restlet">RESTlet</a></li>
+      <li><a href="#jax-ws-api" id="markdown-toc-jax-ws-api">JAX-WS API</a>        <ul>
+          <li><a href="#metro" id="markdown-toc-metro">Metro</a></li>
+          <li><a href="#apache-cxf" id="markdown-toc-apache-cxf">Apache CXF</a></li>
+          <li><a href="#apache-axis2" id="markdown-toc-apache-axis2">Apache Axis2</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#open-questions" id="markdown-toc-open-questions">Open Questions</a></li>
+  <li><a href="#references" id="markdown-toc-references">References</a></li>
+</ul>
+
+<p><a href="https://developer.github.com/v3/">Must read on REST concepts</a></p>
+
+<h1 id="why-rest">Why REST?</h1>
+
+<ul>
+  <li><strong>Ability to leverage commodity caching technologies</strong>
+This API style leverages commodity caching technologies designed specifically with HTTP in mind. If, for example, a client requests a product that hasn’t changed within the past day, and information on that product can be found in a Reverse Proxy, then the cached representation will be returned and service execution can be bypassed. This reduces the load on the Origin Server, especially in cases where the service would have queried a database or performed a CPU- or memory-intensive computation</li>
+</ul>
+
+<h1 id="basic-definitions">Basic definitions</h1>
+
+<ul>
+  <li><strong>What is REST?</strong> Representational State Transfer. The server sends a representation via GET operations describing the state of a resource. The client sends a representation via POST/PUT describing the state it would like the resource to have. That’s representational state transfer.</li>
+  <li>Though REST usually means REST over HTTP, it is actually not protocol-specific. Despite the occurrence of Transport in its name, HTTP acts as an API in RESTful approach and not simply as a transport protocol.</li>
+  <li><strong>What is a Resource?</strong> A resource in the RESTful sense is something that is accessible through HTTP because this thing has a name—URI (Uniform Resource Identifier).</li>
+  <li><strong>What is a Representation?</strong> Whatever document the server sends back through the URL request, we call that document a representation of the resource. A representation can be any machine-readable document containing any information about a resource.</li>
+  <li><strong>What is Addressability?</strong> The principle of addressability just says that every resource should have its own URL. If something is important to your application, it should have a unique name, a URL, so that you and your users can refer to it unambiguously.</li>
+  <li><strong>What is Application State?</strong> Using a browser when you visit a site’s homepage, from there to “About Us” page and from there to “Contact Us” page, the state of the browser is changing. In REST terminology, this is called ‘Application State’ change.</li>
+  <li><strong>What is Resource State?</strong> State of the resources being served via the web service. It can be static or dynamic. PUT and POST methods typically alter the state of the resource.</li>
+  <li><strong>What is Hypermedia?</strong> Hypermedia is the general term for things like HTML links and forms: the techniques a server uses to explain to a client what it can do next. Hypermedia is a way for the server to tell the client what HTTP requests the client might want to make in the future. It’s a menu, provided by the server, from which the client is free to choose.</li>
+  <li><strong>What is a hypermedia control?</strong> HTML <code>&lt;a&gt;</code> tag, HTML <code>&lt;form&gt;</code>, HTML <code>&lt;img&gt;</code>, URI Template, etc.</li>
+  <li><strong>What is HATEOAS?</strong> “Hypermedia as the engine of application state”. To say that hypermedia is the engine of application state is to say that we all navigate the Web by filling out forms and following links.</li>
+  <li><strong>What is a safe method?</strong> GET &amp; HEAD are defined as safe HTTP methods. It’s just a request for information. Sending a GET request to the server should have the same effect on resource state as not sending a GET request—that is, no effect at all. Incidental side effects like logging and rate limiting are OK, but a client should never make a GET request hoping that it will change the resource state.</li>
+  <li><strong>What is Idempotence?</strong> Sending a request twice has the same effect on resource state as sending it once. GET, DELETE and PUT are idempotent. This notion comes from math. Multiplying a number by zero or one is an idempotent operation. Once you multiply a number by zero, you can keep multiplying it by zero indefinitely and get the same result: zero.</li>
+</ul>
+
+<table>
+  <tbody>
+    <tr>
+      <td>GET</td>
+      <td>Cacheable, Safe method (no side effects)</td>
+    </tr>
+    <tr>
+      <td>POST</td>
+      <td>Unsafe operation which can’t be repeated</td>
+    </tr>
+    <tr>
+      <td>PUT</td>
+      <td>Idempotent (same request yields same result)</td>
+    </tr>
+    <tr>
+      <td>DELETE</td>
+      <td>Idempotent (same request yields same result)</td>
+    </tr>
+    <tr>
+      <td>HEAD</td>
+      <td>Safe method (no side effects), No message body</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>URL Vs URI
+    <ul>
+      <li>A URI has two subtypes:
+        <ol>
+          <li>The URL, which specifies a location, and</li>
+          <li>and the URN, which is a symbolic name but not a location.</li>
+        </ol>
+      </li>
+      <li>URI - short string to identify a resource. URI may or may not have a representation. URI is nothing but an identifier. E.g., <code>urn:isbn:9781449358063</code>. It designates a resource: the print edition of a book. Not any particular copy of this book, but the abstract concept of an entire edition.</li>
+      <li>URL - short string to identify a resource. Every URL is a URI. URL always has a representation. URL is an identifier that can be dereferenced (get a representation of a resource using the identifier).</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="how-rest-works">How REST works?</h1>
+
+<p>In the usual case of web service access to a resource, the requester receives a representation of the resource if the request succeeds. It is the representation that transfers
+from the service machine to the requester machine. In a REST-style web service, a client does two things in an HTTP request:</p>
+
+<ul>
+  <li>Names the targeted resource by giving its URI, typically as part of a URL.</li>
+  <li>Specifies a verb (HTTP method), which indicates what the client wishes to do; for example, read an existing resource, create a new resource from scratch, edit an existing resource, or delete an existing resource.</li>
+</ul>
+
+<p>As web-based informational items, resources are pointless unless they have at least one representation. In the Web, representations are MIME typed. The most common type of resource representation is probably still text/html, but nowadays resources tend to have multiple representations.</p>
+
+<p>For the record, RESTful web services are Turing complete; that is, these services are equal in power to any computational system, including a system that consists of SOAP-based web services or DOA stubs and skeletons.</p>
+
+<h1 id="architectural-principles">Architectural Principles</h1>
+
+<ul>
+  <li><strong>Addressable resources</strong> - The key abstraction of information and data in REST is a resource, and each resource must be addressable via a URI (Uniform Resource Identifier).</li>
+  <li><strong>A uniform, constrained interface</strong> - The Uniform, Constrained Interface - The idea behind it is that you stick to the finite set of operations of the application protocol you’re distributing your services upon. This means that you don’t have an “action” parameter in your URI and use only the methods of HTTP for your web services. HTTP has a small, fixed set of operational methods. Use a small set of well-defined methods to manipulate your resources.</li>
+  <li><strong>Representation-oriented</strong> - interact with services using representations of that service. A resource referenced by one URI can have different formats. Different platforms need different formats. For example, browsers need HTML, JavaScript needs JSON (JavaScript Object Notation), and a Java application may need XML.</li>
+  <li><strong>Communicate statelessly</strong> - stateless means that there is no client session data stored on the server. Client should maintain sessions, if required. A service layer that does not have to maintain client sessions is a lot easier to scale, as it has to do a lot fewer expensive replications in a clustered environment. It’s a lot easier to scale up, because all you have to do is add machines.</li>
+  <li><strong>Hypermedia As The Engine Of Application State (HATEOAS)</strong>
+    <ul>
+      <li>Hypermedia is a document-centric approach with the added support for embedding links to other services and information within that document format. The more interesting part of HATEOAS is the “engine.”  Let your data formats drive state transitions in your applications.</li>
+      <li>The architectural principle that describes linking and form submission is called HATEOAS.</li>
+      <li>HATEOAS stands for Hypermedia As The Engine Of Application State.</li>
+      <li>The idea of HATEOAS is that your data format provides extra information on how to change the state of your application. On the Web, HTML links allow you to change the state of your browser. When reading a web page, a link tells you which possible documents (states) you can view next. When you click a link, your browser’s state changes as it visits and renders a new web page. HTML forms, on the other hand, provide a way for you to change the state of a specific resource on your server. When you buy something on the Internet through an HTML form, you are creating two new resources on the server: a credit card transaction and an order entry.</li>
+      <li>When applying HATEOAS to web services, the idea is to embed links within your XML or JSON documents. While this can be as easy as inserting a URL as the value of an element or attribute, most XML-based RESTful applications use syntax from the Atom  Syndication Format as a means to implement HATEOAS.</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="wadl">WADL</h1>
+
+<ul>
+  <li>WADL stands for Web Application Description Language</li>
+  <li>JAX-RS implementations such as Metro do provide a WSDL counterpart, the WADL document that describes a JAX-RS service and can be used to generate client-side code.</li>
+  <li><code>wadl2java</code> utility tool generates Java code from a WADL document.</li>
+  <li>The publisher of JAX-RS service generates the WADL dynamically, although a WADL, like a WSDL, can be edited as needed—or even written from scratch. The syntax for getting the WADL differs slightly among JAX-RS implementations. In the Jersey implementation, the document is available as <code>application.wadl</code>. E.g, if the resource URI is <code>localhost/resourceA/</code> then the Jersey generated WADL can be accessed at <code>localhost/resourceA/application.wadl</code>. If it were CXF, then <code>localhost/resourceA?wadl</code>.</li>
+  <li>The WADL document is language-neutral but its use is confined basically to the Java world. Other languages and frameworks have their counterparts; for example, Rails has the ActiveResource construct that lets a client program interact with a service but without dealing explicitly with documents in XML or JSON.</li>
+  <li>The trade-off in using a tool such as wadl2java to avoid dealing explicitly with XML or similar payloads:
+    <ul>
+      <li>The upside is avoiding an XML or comparable parse.</li>
+      <li>The downside is learning yet another API.</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="jax-rs-api">JAX-RS API</h1>
+
+<p>JAX-RS is a framework that focuses on applying Java annotations to plain Java objects.</p>
+
+<ul>
+  <li>It has annotations to bind specific URI patterns and HTTP operations to individual methods of your Java class. (@Path and @GET, etc.,)</li>
+  <li>It has parameter injection annotations so that you can easily pull in information from the HTTP request. (@PathParam)</li>
+  <li>It has message body readers and writers that allow you to decouple data format marshalling and unmarshalling from your Java data objects.</li>
+  <li>It has exception mappers that can map an application-thrown exception to an HTTP response code and message.</li>
+</ul>
+
+<p>In vanilla JAX-RS, services can either be singletons or per-request objects.</p>
+
+<ul>
+  <li>A singleton means that one and only one Java object services HTTP requests.</li>
+  <li>
+    <p>Per-request means that a Java object is created to process each incoming request and is thrown away at the end of that request. Per-request also implies statelessness, as no service state is held between requests.</p>
+  </li>
+  <li>In JAX-RS, any non-JAX-RS-annotated parameter is considered to be a representation of the HTTP input request’s message body. Only one Java method parameter can represent the HTTP message
+body. This means any other parameters must be annotated with one of the JAX-RS annotations.
+( In JAX-RS, you are also allowed to define a Java interface that contains all your JAX-RS annotation metadata instead of applying all your annotations to your implementation class. This approach isolates the business logic from all the JAX-RS annotations.</li>
+  <li>
+    <p>The JAX-RS specification also allows you to define class and interface hierarchies if you so desire.</p>
+  </li>
+  <li>Implementations include Jersey (RI), JBoss RESTEasy, Apache Wink and Apache CXF, Apache Axis2</li>
+  <li>relies upon Java annotations to advertise the RESTful role that a class and its encapsulated methods play.</li>
+  <li>JAX-RS has APIs for programming RESTful services and clients against such services; the two APIs can be used independently.</li>
+  <li>JAX-RS uses Java annotations heavily but there are no annotations to express hyperlinks</li>
+</ul>
+
+<h2 id="path">@Path</h2>
+
+<p>The <code>@javax.ws.rs.Path</code> annotation in JAX-RS is used to define a URI matching pattern for incoming HTTP requests. It can be placed upon a class or on one or more Java methods. For a Java class to be eligible to receive any HTTP requests, the class must  be annotated with at least the <code>@Path("/")</code> expression. These types of classes are called JAX-RS root resources.</p>
+
+<p><code>@Path</code> can have complex matching expressions so that you can be more specific on what requests get bound to which incoming URIs. <code>@Path</code> can also be used on a Java method as sort of an object factory for subresources of your application.</p>
+
+<p>To receive a request, a Java method must have at least an HTTP method annotation like <code>@javax.ws.rs.GET</code> applied to it. This method may or may not have an <code>@Path</code> annotation on it, though.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>@Path at class level</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Path</span><span class="o">(</span><span class="s">&quot;/orders&quot;</span><span class="o">)</span>
+</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">OrderResource</span> <span class="o">{</span>
+</span><span class="line">    <span class="nd">@GET</span>
+</span><span class="line">    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getUnpaidOrders</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">       <span class="o">...</span>
+</span><span class="line">    <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span><span class="line">
+</span><span class="line"><span class="n">Relative</span> <span class="nl">URI:</span> <span class="o">/</span><span class="n">orders</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>@Path at class and method level</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Path</span><span class="o">(</span><span class="s">&quot;/orders&quot;</span><span class="o">)</span>
+</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">OrderResource</span> <span class="o">{</span>
+</span><span class="line">    <span class="nd">@GET</span>
+</span><span class="line">    <span class="nd">@Path</span><span class="o">(</span><span class="s">&quot;unpaid&quot;</span><span class="o">)</span>
+</span><span class="line">    <span class="kd">public</span> <span class="n">String</span> <span class="nf">getUnpaidOrders</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">       <span class="o">...</span>
+</span><span class="line">    <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span><span class="line"><span class="n">Relative</span> <span class="nl">URI:</span> <span class="o">/</span><span class="n">orders</span><span class="o">/</span><span class="n">unpaid</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>@Path with wildcard expressions</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@GET</span>
+</span><span class="line"><span class="nd">@Path</span><span class="o">(</span><span class="s">&quot;customers/{firstname}-{lastname}&quot;</span><span class="o">)</span>
+</span><span class="line"><span class="kd">public</span> <span class="n">String</span> <span class="nf">getCustomer</span><span class="o">(</span><span class="nd">@PathParam</span><span class="o">(</span><span class="s">&quot;firstname&quot;</span><span class="o">)</span> <span class="n">String</span> <span class="n">first</span><span class="o">,</span> <span class="nd">@PathParam</span><span class="o">(</span><span class="s">&quot;lastname&quot;</span><span class="o">)</span> <span class="n">String</span> <span class="n">last</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">   <span class="o">...</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>@Path with regular expressions</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">Regular</span> <span class="n">expressions</span>
+</span><span class="line"><span class="nd">@GET</span>
+</span><span class="line"><span class="nd">@Path</span><span class="o">(</span><span class="s">&quot;{id : \\d+}&quot;</span><span class="o">)</span>
+</span><span class="line"><span class="kd">public</span> <span class="n">String</span> <span class="nf">getCustomer</span><span class="o">(</span><span class="nd">@PathParam</span><span class="o">(</span><span class="s">&quot;id&quot;</span><span class="o">)</span> <span class="kt">int</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">   <span class="o">...</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="matrix-parameters">Matrix Parameters</h2>
+
+<p>E.g., <code>http://example.cars.com/mercedes/e55;color=black/2006</code></p>
+
+<p>Matrix parameters are name-value pairs associated with a URI. These are different from query parameters. These are more like adjectives and are not included to uniquely identify a resource.</p>
+
+<p><strong>Subresource Locators</strong></p>
+
+<p>Subresource locators are Java methods annotated with <code>@Path</code>, but with no HTTP method annotation, like <code>@GET</code>, applied to them. This type of method returns an object that is, itself, a JAX-RS annotated service that knows how to dispatch the remainder of the request.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Path</span><span class="o">(</span><span class="s">&quot;/item&quot;</span><span class="o">)</span>
+</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ItemResource</span> <span class="o">{</span>
+</span><span class="line">    <span class="nd">@Context</span> <span class="n">UriInfo</span> <span class="n">uriInfo</span><span class="o">;</span>
+</span><span class="line">
+</span><span class="line">    <span class="nd">@Path</span><span class="o">(</span><span class="s">&quot;content&quot;</span><span class="o">)</span>
+</span><span class="line">    <span class="kd">public</span> <span class="n">ItemContentResource</span> <span class="nf">getItemContentResource</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">        <span class="k">return</span> <span class="k">new</span> <span class="nf">ItemContentResource</span><span class="o">();</span>
+</span><span class="line">    <span class="o">}</span>
+</span><span class="line">
+</span><span class="line">    <span class="nd">@GET</span>
+</span><span class="line">    <span class="nd">@Produces</span><span class="o">(</span><span class="s">&quot;application/xml&quot;</span><span class="o">)</span>
+</span><span class="line">        <span class="kd">public</span> <span class="n">Item</span> <span class="nf">get</span><span class="o">()</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+</span><span class="line">    <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ItemContentResource</span> <span class="o">{</span>
+</span><span class="line">    <span class="nd">@GET</span>
+</span><span class="line">    <span class="kd">public</span> <span class="n">Response</span> <span class="nf">get</span><span class="o">()</span> <span class="o">{</span> <span class="o">...</span> <span class="o">}</span>
+</span><span class="line">
+</span><span class="line">    <span class="nd">@PUT</span>
+</span><span class="line">    <span class="nd">@Path</span><span class="o">(</span><span class="s">&quot;{version}&quot;</span><span class="o">)</span>
+</span><span class="line">    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">put</span><span class="o">(</span><span class="nd">@PathParam</span><span class="o">(</span><span class="s">&quot;version&quot;</span><span class="o">)</span> <span class="kt">int</span> <span class="n">version</span><span class="o">,</span> <span class="nd">@Context</span> <span class="n">HttpHeaders</span> <span class="n">headers</span><span class="o">,</span> <span class="kt">byte</span><span class="o">[]</span> <span class="n">in</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">        <span class="o">...</span>
+</span><span class="line">    <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="jax-rs-injections">JAX-RS Injections</h2>
+
+<p>(Request header related annotations)</p>
+
+<p>When the JAX-RS provider receives an HTTP request, it finds a Java method that will service this request. If the Java method has parameters that are annotated with any of these injection annotations, it will extract information from the HTTP request and pass it as a parameter when it invokes the method.</p>
+
+<ol>
+  <li><code>@PathParam</code> - to extract values from URI template parameters.</li>
+  <li><code>@MatrixParam</code> - to extract values from a URI’s matrix parameters.</li>
+  <li><code>@QueryParam</code> - to extract values from a URI’s query parameters.</li>
+  <li><code>@FormParam</code> - to extract values from posted form data.</li>
+  <li><code>@HeaderParam</code> - to extract values from HTTP request headers.</li>
+  <li><code>@CookieParam</code> - to extract values from HTTP cookies set by the client.</li>
+  <li><code>@Context</code> - This class is the all-purpose injection annotation. It allows you to inject various helper and informational objects that are provided by the JAX-RS API.</li>
+</ol>
+
+<h2 id="http-content-negotiation">HTTP Content Negotiation</h2>
+
+<p>There are multiple ways to implement the content negotiation discussed above:</p>
+
+<ul>
+  <li>Each method is responsible for returning response in a specific format.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Produces</span><span class="o">({</span><span class="s">&quot;application/xml&quot;</span><span class="o">})</span>
+</span><span class="line"><span class="kd">public</span> <span class="n">Customer</span> <span class="nf">getCustomerXml</span><span class="o">(</span><span class="nd">@PathParam</span><span class="o">(</span><span class="s">&quot;id&quot;</span><span class="o">)</span> <span class="kt">int</span> <span class="n">id</span><span class="o">)</span> <span class="o">{...}</span>
+</span><span class="line">
+</span><span class="line"><span class="nd">@Produces</span><span class="o">({</span><span class="s">&quot;application/json&quot;</span><span class="o">})</span>
+</span><span class="line"><span class="kd">public</span> <span class="n">Customer</span> <span class="nf">getCustomerJson</span><span class="o">(</span><span class="nd">@PathParam</span><span class="o">(</span><span class="s">&quot;id&quot;</span><span class="o">)</span> <span class="kt">int</span> <span class="n">id</span><span class="o">)</span> <span class="o">{...}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>A single method could be responsible to return responses in either xml or json format. Return type is a Java object which is annotated with JAXB annotations. Based on the information in Header ‘Accept’, either XML or JSON is returned.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Produces</span><span class="o">({</span><span class="s">&quot;application/xml&quot;</span><span class="o">,</span> <span class="s">&quot;application/json&quot;</span><span class="o">})</span>
+</span><span class="line"><span class="kd">public</span> <span class="n">Customer</span> <span class="nf">getCustomer</span><span class="o">(</span><span class="nd">@PathParam</span><span class="o">(</span><span class="s">&quot;id&quot;</span><span class="o">)</span> <span class="kt">int</span> <span class="n">id</span><span class="o">)</span> <span class="o">{...}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>For complex negotiations, where multiple combinations of data formats, languages and encodings need to be dealt, JAX-RS provides classes like <code>HttpHeaders</code>, <code>Variant</code>, <code>VariantBuilder</code>, etc. which could be leveraged.</li>
+  <li>Negotiation by URI patterns: Some client like Firefox browser do not support conneg. In such cases, embed conneg information in URI. E.g.,</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="o">/</span><span class="n">customers</span><span class="o">/</span><span class="n">en</span><span class="o">-</span><span class="n">US</span><span class="o">/</span><span class="n">xml</span><span class="o">/</span><span class="mi">3323</span>
+</span><span class="line"><span class="o">/</span><span class="n">customers</span><span class="o">/</span><span class="mi">3323</span><span class="o">.</span><span class="na">xml</span><span class="o">.</span><span class="na">en</span><span class="o">-</span><span class="n">US</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Custom media types: Example: <code>application/vnd.rht.customers+xml</code>. The convention is to combine a vnd prefix, the name of your new format, and a concrete media type suffix  delimited by the “+” character.</li>
+</ul>
+
+<h2 id="request--response-management">Request &amp; Response Management</h2>
+
+<ul>
+  <li><strong>Service Controller</strong>
+    <ul>
+      <li>Receives requests, evaluate and route requests to procedures (i.e., class methods, request handlers), which implement the desired service behaviors.</li>
+      <li>The rules that define which handlers should be invoked for different requests are provided through annotations known collectively as <strong><em>Routing Expressions</em></strong>.</li>
+      <li>When a web server receives a request, the framework (like JAX-RS) selects and invokes handlers by evaluating various aspects of the request against these expressions.</li>
+      <li><strong>Routing Expression Types</strong>
+        <ul>
+          <li>URI templates - e.g., <code>http://www.acmeCorp.org/products/{ProductId}</code>.</li>
+          <li>Request Method Designators - e.g., <code>@GET</code>, <code>@POST</code>. These handlers could use the same URI template, but different request methods (e.g., <code>GET</code>, <code>PUT</code>, <code>DELETE</code>) to trigger each handler.</li>
+          <li>Media Type Negotiation - e.g., JSON, XML. For the same URI and request method, different clients may want the request and/or responses in different media format.</li>
+        </ul>
+      </li>
+      <li>
+        <p>This pattern also makes it easy to leverage data-binding technologies that automatically deserialize requests and serialize responses. The methods on Service Controllers can be annotated with binding instructions to tell the framework how requests and responses should be handled. The default options include XML and JSON, but developers may also tell the framework to use a custom approach.</p>
+      </li>
+      <li>
+        <p>JAX-RS Service Interface Classes</p>
+
+        <p>define request handlers and routing expressions, but don’t have any implementation. Service Controller implementing these interfaces must implement these methods but can omit the routing expressions. Though the service controller classes can omit the annotations, JAX-RS specification recommendeds to always repeat annotations instead of relying on annotation inheritance.</p>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Request Mapper</strong>
+    <ul>
+      <li>decouple domain logic from the syntactic structure of service request</li>
+    </ul>
+  </li>
+  <li><strong>Response Mapper</strong>
+    <ul>
+      <li>decouple clients from internal representation of domain objects</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="asynchronous-jax-rs">Asynchronous JAX-RS</h2>
+
+<h3 id="client-side-async-api---using-futures">Client-side Async API - Using Futures</h3>
+
+<ul>
+  <li>The client async API allows to spin off a bunch of HTTP requests in the background and then either poll for a response, or register a callback that is invoked when the HTTP response is available</li>
+  <li>To invoke an HTTP request asynchronously on the client, you interact with the <code>javax.ws.rs.client.AsyncInvoker</code> interface or the <code>submit()</code> methods on <code>javax.ws.rs.client.Invocation</code>.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Example 1 - Using Futures</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">Client</span> <span class="n">client</span> <span class="o">=</span> <span class="n">ClientBuilder</span><span class="o">.</span><span class="na">newClient</span><span class="o">();</span>
+</span><span class="line">
+</span><span class="line"><span class="n">Future</span><span class="o">&lt;</span><span class="n">Response</span><span class="o">&gt;</span> <span class="n">future1</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">target</span><span class="o">(</span><span class="s">&quot;http://example.com/customers/123&quot;</span><span class="o">)</span>
+</span><span class="line">                                 <span class="o">.</span><span class="na">request</span><span class="o">()</span>
+</span><span class="line">                                 <span class="o">.</span><span class="na">async</span><span class="o">().</span><span class="na">get</span><span class="o">();</span>
+</span><span class="line">
+</span><span class="line"><span class="n">Future</span><span class="o">&lt;</span><span class="n">Order</span><span class="o">&gt;</span> <span class="n">future2</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="na">target</span><span class="o">(</span><span class="s">&quot;http://foobar.com/orders/456&quot;</span><span class="o">)</span>
+</span><span class="line">                              <span class="o">.</span><span class="na">request</span><span class="o">()</span>
+</span><span class="line">                              <span class="o">.</span><span class="na">async</span><span class="o">().</span><span class="na">get</span><span class="o">(</span><span class="n">Order</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class="line">
+</span><span class="line"><span class="n">Response</span> <span class="n">res1</span> <span class="o">=</span> <span class="n">future1</span><span class="o">.</span><span class="na">get</span><span class="o">();</span> <span class="c1">// block until complete</span>
+</span><span class="line"><span class="k">try</span><span class="o">{</span>
+</span><span class="line">   <span class="n">Customer</span> <span class="n">result1</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="na">readEntity</span><span class="o">(</span><span class="n">Customer</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class="line"><span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Throwable</span> <span class="n">t</span><span class="o">){</span>
+</span><span class="line">  <span class="n">t</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">()</span>
+</span><span class="line"><span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+</span><span class="line">  <span class="n">res1</span><span class="o">.</span><span class="na">close</span><span class="o">();</span> <span class="c1">//IMPORTANT</span>
+</span><span class="line"><span class="o">}</span>
+</span><span class="line">
+</span><span class="line"><span class="k">try</span> <span class="o">{</span>
+</span><span class="line">    <span class="n">Order</span> <span class="n">result2</span> <span class="o">=</span> <span class="n">future2</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">5</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">);</span> <span class="c1">// Wait 5 seconds</span>
+</span><span class="line"><span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">TimeoutException</span> <span class="n">timeout</span> <span class="o">)</span> <span class="o">{</span>
+</span><span class="line">    <span class="o">...</span> <span class="n">handle</span> <span class="n">exception</span> <span class="o">...</span>
+</span><span class="line"><span class="o">}</span> <span class="k">catch</span><span class="o">(</span><span class="n">ExecutionException</span> <span class="n">e</span><span class="o">){</span>
+</span><span class="line">  <span class="n">Throwable</span> <span class="n">cause</span> <span class="o">=</span> <span class="n">ee</span><span class="o">.</span><span class="na">getCause</span><span class="o">();</span>
+</span><span class="line">
+</span><span class="line">  <span class="k">if</span> <span class="o">(</span><span class="n">cause</span> <span class="k">instanceof</span> <span class="n">WebApplicationException</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">    <span class="n">WebApplicationException</span> <span class="n">wae</span> <span class="o">=</span> <span class="o">(</span><span class="n">WebApplicationException</span><span class="o">)</span><span class="n">cause</span><span class="o">;</span>
+</span><span class="line">    <span class="n">wae</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+</span><span class="line">  <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">cause</span> <span class="k">instanceof</span> <span class="n">ResponseProcessingException</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">    <span class="n">ResponseProcessingException</span> <span class="n">rpe</span> <span class="o">=</span> <span class="o">(</span><span class="n">ResponseProcessingException</span><span class="o">)</span><span class="n">cause</span><span class="o">;</span>
+</span><span class="line">    <span class="n">rpe</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+</span><span class="line">  <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">cause</span> <span class="k">instanceof</span> <span class="n">ProcessingException</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">    <span class="c1">// handle processing exception</span>
+</span><span class="line">  <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span><span class="line">    <span class="c1">// unknown</span>
+</span><span class="line">  <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>In <em>Example 1</em>, two separate requests are executed in parallel.</li>
+  <li><em>Blocking call</em>
+    <ul>
+      <li>For request 1, a blocking call is made indefinitely to get the <code>Response</code> object.</li>
+    </ul>
+  </li>
+  <li><em>Blocking call with timeout</em>
+    <ul>
+      <li>For request 2, a blocking call with timeout is made to get the business domain object <em>Order</em> directly unmarshalled from the <code>Response</code>.</li>
+      <li>If the response is something other than <em>200, OK</em>, then the JAX-RS runtime throws one of the exceptions from the JAX-RS error exception hierarchy.</li>
+      <li>If the call takes longer than timeout, then <code>java.util.concurrent.TimeoutException</code> is thrown.</li>
+    </ul>
+  </li>
+  <li>You can also invoke the non-blocking <code>isDone()</code>, <code>isCancelled()</code> methods on the Future.</li>
+</ul>
+
+<blockquote>
+  <p>Always make sure the underlying JAX-RS response is closed, otherwise the OS may exhaust the limit on allowable open connections.</p>
+</blockquote>
+
+<h3 id="client-side-async-api---using-callbacks">Client-side Async API - Using Callbacks</h3>
+
+<ul>
+  <li>Callback style has 2 interfaces: <code>AsyncInvoker</code> &amp; <code>InvocationCallback</code></li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>AsyncInvoker methods</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kn">package</span> <span class="n">javax</span><span class="o">.</span><span class="na">ws</span><span class="o">.</span><span class="na">rs</span><span class="o">.</span><span class="na">client</span><span class="o">;</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">AsyncInvoker</span> <span class="o">{</span>
+</span><span class="line">  <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">Future</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="nf">get</span><span class="o">(</span><span class="n">InvocationCallback</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">callback</span><span class="o">);</span>
+</span><span class="line">  <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">Future</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="nf">post</span><span class="o">(</span><span class="n">Entity</span><span class="o">&lt;?&gt;</span> <span class="n">entity</span><span class="o">,</span> <span class="n">InvocationCallback</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">callback</span><span class="o">);</span>
+</span><span class="line">  <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">Future</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="nf">put</span><span class="o">(</span><span class="n">Entity</span><span class="o">&lt;?&gt;</span> <span class="n">entity</span><span class="o">,</span> <span class="n">InvocationCallback</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">callback</span><span class="o">);</span>
+</span><span class="line">  <span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">Future</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="nf">delete</span><span class="o">(</span><span class="n">Entity</span><span class="o">&lt;?&gt;</span> <span class="n">entity</span><span class="o">,</span> <span class="n">InvocationCallback</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="n">callback</span><span class="o">);</span>
+</span><span class="line">  <span class="o">...</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>InvocationCallback methods</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kn">package</span> <span class="n">javax</span><span class="o">.</span><span class="na">rs</span><span class="o">.</span><span class="na">ws</span><span class="o">.</span><span class="na">client</span><span class="o">;</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">InvocationCallback</span><span class="o">&lt;</span><span class="n">RESPONSE</span><span class="o">&gt;</span> <span class="o">{</span>
+</span><span class="line">  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">completed</span><span class="o">(</span><span class="n">RESPONSE</span> <span class="n">response</span><span class="o">);</span>
+</span><span class="line">  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">failed</span><span class="o">(</span><span class="n">Throwable</span> <span class="n">throwable</span><span class="o">);</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>In the below example, client wants the <code>Response</code> object from callback. If there is an issue sending the request to the server or the JAX-RS runtime is unable to create a <code>Response</code>, then <code>failed()</code> method will be invoked.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Example getting Response from InvocationCallback</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomerCallback</span> <span class="kd">implements</span> <span class="n">InvocationCallback</span><span class="o">&lt;</span><span class="n">Response</span><span class="o">&gt;</span> <span class="o">{</span>
+</span><span class="line">  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">completed</span><span class="o">(</span><span class="n">Response</span> <span class="n">response</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">    <span class="k">if</span> <span class="o">(</span><span class="n">response</span><span class="o">.</span><span class="na">getStatus</span><span class="o">()</span> <span class="o">==</span> <span class="mi">200</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">      <span class="n">Customer</span> <span class="n">cust</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="na">readEntity</span><span class="o">(</span><span class="n">Customer</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class="line">    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span><span class="line">      <span class="n">System</span><span class="o">.</span><span class="na">err</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Request error: &quot;</span> <span class="o">+</span> <span class="n">response</span><span class="o">.</span><span class="na">getStatus</span><span class="o">());</span>
+</span><span class="line">    <span class="o">}</span>
+</span><span class="line">  <span class="o">}</span>
+</span><span class="line">
+</span><span class="line">  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">failed</span><span class="o">(</span><span class="n">Throwable</span> <span class="n">throwable</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">    <span class="n">throwable</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+</span><span class="line">  <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Example getting unmarshalled domain object from InvocationCallback</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">OrderCallback</span> <span class="kd">implements</span> <span class="n">InvocationCallback</span><span class="o">&lt;</span><span class="n">Order</span><span class="o">&gt;</span> <span class="o">{</span>
+</span><span class="line">  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">completed</span><span class="o">(</span><span class="n">Order</span> <span class="n">order</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;We received an order.&quot;</span><span class="o">);</span>
+</span><span class="line">  <span class="o">}</span>
+</span><span class="line">
+</span><span class="line">  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">failed</span><span class="o">(</span><span class="n">Throwable</span> <span class="n">throwable</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">    <span class="k">if</span> <span class="o">(</span><span class="n">throwable</span> <span class="k">instanceof</span> <span class="n">WebApplicationException</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">      <span class="n">WebApplicationException</span> <span class="n">wae</span> <span class="o">=</span> <span class="o">(</span><span class="n">WebApplicationException</span><span class="o">)</span><span class="n">throwable</span><span class="o">;</span>
+</span><span class="line">      <span class="n">System</span><span class="o">.</span><span class="na">err</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Failed with status: &quot;</span> <span class="o">+</span> <span class="n">wae</span><span class="o">.</span><span class="na">getResponse</span><span class="o">().</span><span class="na">getStatus</span><span class="o">());</span>
+</span><span class="line">    <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span> <span class="o">(</span><span class="n">throwable</span> <span class="k">instanceof</span> <span class="n">ResponseProcessingException</span><span class="o">)</span> <span class="o">{</span> <span class="c1">// when there is an issue unmarshalling</span>
+</span><span class="line">      <span class="n">ResponseProcessingException</span> <span class="n">rpe</span> <span class="o">=</span> <span class="o">(</span><span class="n">ResponseProcessingException</span><span class="o">)</span><span class="n">cause</span><span class="o">;</span>
+</span><span class="line">      <span class="n">System</span><span class="o">.</span><span class="na">err</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Failed with status: &quot;</span> <span class="o">+</span> <span class="n">rpe</span><span class="o">.</span><span class="na">getResponse</span><span class="o">().</span><span class="na">getStatus</span><span class="o">());</span>
+</span><span class="line">    <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span><span class="line">      <span class="n">throwable</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+</span><span class="line">    <span class="o">}</span>
+</span><span class="line">  <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Use Futures when there is a need to wait for all requests to complete and perform another task.</li>
+</ul>
+
+<h3 id="server-side-async-api">Server-side Async API</h3>
+
+<ul>
+  <li>For a typical HTTP server, one thread is dedicated to the processing of a request and its HTTP response to the client.</li>
+  <li>The nature of HTTP traffic started to change somewhat as JavaScript clients started to become more prevalent. One problem that popped up often was the need for the server to push events to the client. A typical example is a stock quote application where you need to update a string of clients with the latest stock price. These clients would make an HTTP GET or POST request and just block indefinitely until the server was ready to send back a response. This resulted in a large amount of open, long-running requests that were doing nothing other than idling. Not only were there a lot of open, idle sockets, but there were also a lot of dedicated threads doing nothing at all. Most HTTP servers were designed for short-lived requests with the assumption that one thread could process requests from multiple concurrent users. When you have a very large number of threads, you start to consume a lot of operating system resources. Each thread consumes memory, and context switching between threads starts to get quite expensive when the OS has to deal with a large number of threads. It became really hard to scale these types of server-push applications since the Servlet API, and by association JAX-RS, was a “one thread per connection” model.</li>
+  <li>In 2009, the Servlet 3.0 specification introduced asynchronous HTTP. With the Servlet 3.0 API, you can suspend the current server-side request and have a separate thread, other than the calling thread, handle sending back a response to the client. For a serverpush app, you could then have a small handful of threads manage sending responses back to polling clients and avoid all the overhead of the “one thread per connection” model. JAX-RS 2.0 introduced a similar API.</li>
+  <li>
+    <p>Asynchronous doesn’t necessarily mean automatic scalability. For the typical web app, using server asynchronous response processing will only complicate your code and make it harder
+to maintain. It may even hurt performance.</p>
+  </li>
+  <li>To use server-side processing, <code>AsyncResponse</code> interface is provided.</li>
+  <li>Get access to an <code>AsyncResponse</code> instance by injecting it into a JAX-RS method using <code>@Suspended</code> annotation</li>
+  <li>When you inject an instance of AsyncResponse using the <code>@Suspended</code> annotation, the HTTP request becomes suspended from the current thread of execution.</li>
+  <li>A new background thread is created to send the response back to the client by calling the <code>AsyncResponse.resume()</code> method.</li>
+  <li>When you invoke <code>AsyncResponse.resume(Object)</code>, the response filter and interceptor chains are invoked, and then finally the <code>MessageBodyWriter</code>. If an exception is thrown by any one of these components, then the exception is handled in the same way as its synchronous counterpart with one caveat. Unhandled exceptions are not propagated, but instead the server will return a <em>500, Internal Server Error</em> back to the client.</li>
+  <li>If an <code>AsyncResponse</code> is not resumed or cancelled, it will eventually time out. The default timeout is container-specific. A timeout results in a <em>503, Service Unavailable</em> response code sent back to the client. You can explicitly set the timeout by invoking: <code>response.setTimeout(5, TimeUnit.SECONDS);</code> or register a callback <code>response.setTimeoutHandler(new TimeoutHandler{...});</code></li>
+  <li>Instead of creating threads manually like in below example, thread pools can be used. In case of highly CPU-intensive requests, number of requests can be limited by queueing up those requests in a thread pool that guarantees that onlya few of those expensive operations will happen concurrently.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kn">import</span> <span class="nn">javax.ws.rs.container.AsyncResponse</span><span class="o">;</span>
+</span><span class="line"><span class="kn">import</span> <span class="nn">javax.ws.rs.container.Suspended</span><span class="o">;</span>
+</span><span class="line">
+</span><span class="line"><span class="nd">@Path</span><span class="o">(</span><span class="s">&quot;/orders&quot;</span><span class="o">)</span>
+</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">OrderResource</span> <span class="o">{</span>
+</span><span class="line">  <span class="nd">@POST</span>
+</span><span class="line">  <span class="nd">@Consumes</span><span class="o">(</span><span class="s">&quot;application/json&quot;</span><span class="o">)</span>
+</span><span class="line">  <span class="nd">@Produces</span><span class="o">(</span><span class="s">&quot;application/json&quot;</span><span class="o">)</span>
+</span><span class="line">  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">submit</span><span class="o">(</span><span class="kd">final</span> <span class="n">Order</span> <span class="n">order</span><span class="o">,</span> <span class="kd">final</span> <span class="nd">@Suspended</span> <span class="n">AsyncResponse</span> <span class="n">response</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">     <span class="k">new</span> <span class="nf">Thread</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">       <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">         <span class="n">OrderConfirmation</span> <span class="n">confirmation</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+</span><span class="line">         <span class="k">try</span> <span class="o">{</span>
+</span><span class="line">           <span class="n">confirmation</span> <span class="o">=</span> <span class="n">orderProcessor</span><span class="o">.</span><span class="na">process</span><span class="o">(</span><span class="n">order</span><span class="o">);</span>
+</span><span class="line">         <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">           <span class="n">response</span><span class="o">.</span><span class="na">resume</span><span class="o">(</span><span class="n">ex</span><span class="o">);</span>
+</span><span class="line">           <span class="k">return</span><span class="o">;</span>
+</span><span class="line">         <span class="o">}</span>
+</span><span class="line">         <span class="n">response</span><span class="o">.</span><span class="na">resume</span><span class="o">(</span><span class="n">order</span><span class="o">);</span>
+</span><span class="line">       <span class="o">}</span>
+</span><span class="line">     <span class="o">}.</span><span class="na">start</span><span class="o">();</span>
+</span><span class="line">  <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="exception-handling">Exception Handling</h2>
+
+<p><strong>HTTP Response Codes</strong></p>
+
+<ul>
+  <li>100 to 199 - Informational response codes</li>
+  <li>200 to 299 - successful response codes
+    <ul>
+      <li>200, “OK”</li>
+      <li>204, “No Content”</li>
+    </ul>
+  </li>
+  <li>300 to 399 - Redirection codes</li>
+  <li>400 to 499 - client error codes
+    <ul>
+      <li>404, “Not Found”</li>
+      <li>405, “Method Not Found” - if client invokes an HTTP method on a valid URI to which no JAX-RS resource method is bound. <em>The exception to this rule is the HTTP HEAD and OPTIONS methods. If a JAX-RS resource method isn’t available that can service HEAD requests for that particular URI, but can GET there does exist a method that can handle GET, JAX-RS will invoke the JAX-RS resource method that handles GET and return the response from that minus the request body. If there is no existing method that can handle OPTIONS, the JAX-RS implementation is required to send back some meaningful, automatically generated response along with the Allow header set.</em></li>
+      <li>406, “Not Acceptable” - say, if the client requets a response format that is not supported/implemented</li>
+    </ul>
+  </li>
+  <li>500 to 599 - server error codes</li>
+</ul>
+
+<p><strong>Exception Handling</strong></p>
+
+<ul>
+  <li>Errors can be reported to a client either by creating and returning the appropriate <code>Response</code> object or by throwing an exception.</li>
+  <li>
+    <p>Application code is allowed to throw any checked (classes extending <code>java.lang.Exception</code>) or unchecked (classes extending <code>java.lang.RuntimeException</code>) exceptions they want.</p>
+  </li>
+  <li><strong>Exception Mappers</strong>
+    <ul>
+      <li>Thrown exceptions are handled by the JAX-RS runtime if you have registered an exception mapper.</li>
+      <li>Exception mappers can convert an exception to an HTTP response. If the thrown exception is not handled by a mapper, it is propagated and handled by the container (i.e., servlet) JAX-RS is running within.</li>
+      <li>JAX-RS also provides the <code>javax.ws.rs.WebApplicationException</code>. If the application code throws this exception, JAX-RS can process it without explicitly registering a mapper.</li>
+      <li>Catching and throwing all application exceptions wrapped up in <code>WebApplicationException</code> is tedious. Alternatively, one can implement <code>ExceptionMapper</code> to map an application exception to a <code>Response</code> object</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>ExceptionMapper Interface</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">ExceptionMapper</span><span class="o">&lt;</span><span class="n">E</span> <span class="kd">extends</span> <span class="n">Throwable</span><span class="o">&gt;</span> <span class="o">{</span>
+</span><span class="line">  <span class="n">Response</span> <span class="nf">toResponse</span><span class="o">(</span><span class="n">E</span> <span class="n">exception</span><span class="o">);</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><code>ExceptionMapper</code> implementation must be annotated with <code>@Provider</code> to tell JAX-RS runtime that it is a component.</li>
+  <li>JAX-RS supports exception inheritance as well. When an exception is thrown, JAX-RS will first try to find an ExceptionMapper for that exception’s type. If it cannot find one, it will look for a mapper that can handle the exception’s superclass. It will continue this process until there are no more superclasses to match against.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Example Mapper</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Provider</span>
+</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">EntityNotFoundMapper</span> <span class="kd">implements</span> <span class="n">ExceptionMapper</span><span class="o">&lt;</span><span class="n">EntityNotFoundException</span><span class="o">&gt;</span> <span class="o">{</span>
+</span><span class="line">  <span class="kd">public</span> <span class="n">Response</span> <span class="nf">toResponse</span><span class="o">(</span><span class="n">EntityNotFoundException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">    <span class="k">return</span> <span class="n">Response</span><span class="o">.</span><span class="na">status</span><span class="o">(</span><span class="n">Response</span><span class="o">.</span><span class="na">Status</span><span class="o">.</span><span class="na">NOT_FOUND</span><span class="o">).</span><span class="na">build</span><span class="o">();</span>
+</span><span class="line">  <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="conneg-content-negotiation">Conneg (Content Negotiation)</h2>
+
+<p><a href="/technology/webconcepts.html#http-content-negotiation-conneg">HTTP Conneg Basics</a></p>
+
+<h1 id="pagination">Pagination</h1>
+
+<ul>
+  <li>While designing a REST API capable of returning vast datasets, it is important to limit the amount of data returned for bandwidth and performance reasons.</li>
+  <li>The bandwidth concerns become more important in the case of mobile clients consuming the API.</li>
+  <li>Limiting the data can vastly improve the server’s ability to retrieve data faster from a datastore and the client’s ability to process the data and render the UI. By splitting the data into discrete pages or paging data, REST services allow clients to scroll through and access the entire dataset in manageable chunks.</li>
+</ul>
+
+<p>There are 4 different pagination styles.</p>
+
+<h2 id="page-number-pagination">1. Page Number Pagination</h2>
+
+<ul>
+  <li>The clients specify a page number containing the data they need. For example, a client wanting all the blog posts in page 3 of a blog service, can use the following <code>GET</code> method: <code>http://blog.example.com/posts?page=3</code></li>
+  <li>The REST service in this scenario would respond with a set of posts. The number of posts returned depends on the default page size set in the service.</li>
+  <li>It is possible for the client to override the default page size by passing in a page-size parameter: <code>http://blog.example.com/posts?page=3&amp;size=20</code></li>
+  <li>GitHub’s REST services use this pagination style. By default, the page size is set to 30 but can be overridden using the per page parameter: https://api.github.com/user/repos?page=2&amp;per_page=100</li>
+</ul>
+
+<h2 id="limit-offset-pagination">2. Limit Offset Pagination</h2>
+
+<ul>
+  <li>The clients uses two parameters to retrieve the data that they need.
+    <ul>
+      <li>a <strong>limit</strong> - indicates the maximum number of elements to return</li>
+      <li>an <strong>offset</strong> indicates the starting point for the return data. 
+( For example, to retrieve 10 blog posts starting from the item number 31, a client can use the following request: <code>http://blog.example.com/posts?limit=10&amp;offset=30</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="cursor-based-pagination">3. Cursor-based Pagination</h2>
+
+<ul>
+  <li>The clients make use of a pointer or a cursor to navigate through the data set.</li>
+  <li>A cursor is a service-generated random character string that acts as a marker for an item in the data set.</li>
+  <li>Consider a client making the following request to get blog posts: <code>http://blog.example.com/posts</code>. On receiving the request, the service would send data similar to this:</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="p">{</span>
+</span><span class="line">  <span class="nt">&quot;data&quot;</span> <span class="p">:</span> <span class="p">[</span>
+</span><span class="line">  <span class="err">...</span> <span class="err">Blog</span> <span class="err">data</span>
+</span><span class="line">  <span class="p">],</span>
+</span><span class="line">  <span class="nt">&quot;cursors&quot;</span> <span class="p">:</span> <span class="p">{</span>
+</span><span class="line">    <span class="nt">&quot;prev&quot;</span> <span class="p">:</span> <span class="kc">null</span><span class="p">,</span>
+</span><span class="line">    <span class="nt">&quot;next&quot;</span> <span class="p">:</span> <span class="s2">&quot;123asdf456iamcur&quot;</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>This response contains a set of blogs representing a subset of the total dataset.</li>
+  <li>The cursors that are part of the response contains a <code>prev</code> &amp; <code>next</code> fields to get the previous and next subset of the data. E.g., <code>http://api.example.com/posts?cursor=123asdf456iamcur</code></li>
+  <li>This pagination style is used by applications such as Twitter and Facebook that deal with real-time datasets (tweets and posts) where data changes frequently.</li>
+  <li>The generated cursors typically don’t live forever and should be used for short-term pagination purposes only.</li>
+</ul>
+
+<h2 id="time-base-pagination">4. Time-base Pagination</h2>
+
+<ul>
+  <li>The client specifies a timeframe to retrieve the data in which they are interested.</li>
+  <li>Facebook supports this pagination style and requires time specified as a Unix timestamp. These are two Facebook example requests:
+    <ul>
+      <li><code>https://graph.facebook.com/me/feed?limit=25&amp;until=1364587774</code> - specifies the end of the time range</li>
+      <li><code>https://graph.facebook.com/me/feed?limit=25&amp;since=1364849754</code> - specifies the beginning of the time range</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="pagination-data">Pagination Data</h2>
+
+<ul>
+  <li>All the above pagination styles return only a subset of the data. So, in addition to supplying the requested data, it is also important for the service to communicate pagination-specific information such as total number of records or total number of pages or current page number and page size.</li>
+  <li>The following example shows a response body with pagination information:</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="p">{</span>
+</span><span class="line">  <span class="nt">&quot;data&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class="line">    <span class="err">...</span> <span class="err">Blog</span> <span class="err">Data</span>
+</span><span class="line">  <span class="p">],</span>
+</span><span class="line">  <span class="nt">&quot;totalPages&quot;</span><span class="p">:</span> <span class="mi">9</span><span class="p">,</span>
+</span><span class="line">  <span class="nt">&quot;currentPageNumber&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+</span><span class="line">  <span class="nt">&quot;pageSize&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+</span><span class="line">  <span class="nt">&quot;totalRecords&quot;</span><span class="p">:</span> <span class="mi">90</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Clients can use the pagination information to assess the current state as well as construct URLs to obtain the next or previous datasets.</li>
+  <li>The other technique services employ is to include the pagination information
+in a special <code>Link</code> header. The Link header is defined as part of <a href="http://tools.ietf.org/html/rfc5988">RFC 5988</a>. It typically contains a set of ready-made links to scroll forward and backward.  GitHub uses this approach; here is an example of a Link header value:</li>
+</ul>
+
+<p><code>Link: &lt;https://api.github.com/user/repos?page=3&amp;per_page=100&gt;; rel="next", &lt;https://api.github.com/user/repos?page=50&amp;per_page=100&gt;; rel="last"</code></p>
+
+<h1 id="scalability">Scalability</h1>
+
+<h2 id="caching">Caching</h2>
+
+<ul>
+  <li><strong>Browser Cache</strong> is one of the more important features of the Web. When you visit a website for the first time, your browser stores images and static text in memory and on disk. If you revisit the site within minutes, hours, days, or even months, your browser doesn’t have to reload the data over the network and can instead pick it up locally. This greatly speeds up the rendering of revisited web pages and makes the browsing experience much more fluid. Browser caching not only helps page viewing, it also cuts down on server load and reduced network traffic.</li>
+  <li>
+    <p><strong>Proxy caches</strong> are pseudo–web servers that work as middlemen between browsers and websites. Their sole purpose is to ease the load on master servers by caching static content and serving it to clients directly, bypassing the main servers. Content delivery networks (CDNs) like Akamai have made multimillion-dollar businesses out of this concept. These CDNs provide you with a worldwide network of proxy caches that you can use to publish your website and scale to hundreds of thousand of users.</p>
+  </li>
+  <li>REST services can leverage the browser &amp; proxy cache, if the HTTP constrained interface is followed religiously. Because any service URI that can be reached with an HTTP GET is a candidate for caching, as they are read-only and idempotent.</li>
+</ul>
+
+<h2 id="http-caching">HTTP Caching</h2>
+
+<p>HTTP protocol gives fine-grained control over the caching behavior of both browser and proxy caches.</p>
+
+<p><strong>HTTP 1.0 style Expires Header</strong></p>
+
+<p>In the example below, <em>Expires</em> field in the header tells the browser that the response can be cached until the date &amp; time provided. After expiry, the client should re-fetch the data from server.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>HTTP 1.0 Response</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+</span><span class="line"><span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/xml</span>
+</span><span class="line"><span class="na">Expires</span><span class="o">:</span> <span class="l">Tue, 15 May 2014 16:00 GMT</span>
+</span><span class="line"><span class="err">&lt;customer</span> <span class="l">id=&quot;123&quot;&gt;...&lt;/customers&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>JAX-RS example of setting expires</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Path</span><span class="o">(</span><span class="s">&quot;/customers&quot;</span><span class="o">)</span>
+</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomerResource</span> <span class="o">{</span>
+</span><span class="line">  <span class="nd">@Path</span><span class="o">(</span><span class="s">&quot;{id}&quot;</span><span class="o">)</span>
+</span><span class="line">  <span class="nd">@GET</span>
+</span><span class="line">  <span class="nd">@Produces</span><span class="o">(</span><span class="s">&quot;application/xml&quot;</span><span class="o">)</span>
+</span><span class="line">  <span class="kd">public</span> <span class="n">Response</span> <span class="nf">getCustomer</span><span class="o">(</span><span class="nd">@PathParam</span><span class="o">(</span><span class="s">&quot;id&quot;</span><span class="o">)</span> <span class="kt">int</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">    <span class="n">Customer</span> <span class="n">cust</span> <span class="o">=</span> <span class="n">findCustomer</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
+</span><span class="line">    <span class="n">Date</span> <span class="n">date</span> <span class="o">=</span> <span class="n">Calendar</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="n">TimeZone</span><span class="o">.</span><span class="na">getTimeZone</span><span class="o">(</span><span class="s">&quot;GMT&quot;</span><span class="o">)).</span><span class="na">set</span><span class="o">(</span><span class="mi">2010</span><span class="o">,</span> <span class="mi">5</span><span class="o">,</span> <span class="mi">15</span><span class="o">,</span> <span class="mi">16</span><span class="o">,</span> <span class="mi">0</span><span class="o">);</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">return</span> <span class="n">Response</span><span class="o">.</span><span class="na">ok</span><span class="o">(</span><span class="n">cust</span><span class="o">,</span> <span class="s">&quot;application/xml&quot;</span><span class="o">).</span><span class="na">expires</span><span class="o">(</span><span class="n">date</span><span class="o">).</span><span class="na">build</span><span class="o">();</span>
+</span><span class="line">  <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>HTTP 1.1 style Cache-Control</strong></p>
+
+<p>HTTP 1.1 provides richer feature set over browser and CDN/proxy caches including cache revalidation.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>HTTP 1.1 Response</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+</span><span class="line"><span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/xml</span>
+</span><span class="line"><span class="na">Cache-Control</span><span class="o">:</span> <span class="l">private, no-store, max-age=300</span>
+</span><span class="line"><span class="err">&lt;customers&gt;...&lt;/customers&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>JAX-RS example setting cache-control</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Path</span><span class="o">(</span><span class="s">&quot;/customers&quot;</span><span class="o">)</span>
+</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomerResource</span> <span class="o">{</span>
+</span><span class="line">  <span class="nd">@Path</span><span class="o">(</span><span class="s">&quot;{id}&quot;</span><span class="o">)</span>
+</span><span class="line">  <span class="nd">@GET</span>
+</span><span class="line">  <span class="nd">@Produces</span><span class="o">(</span><span class="s">&quot;application/xml&quot;</span><span class="o">)</span>
+</span><span class="line">  <span class="kd">public</span> <span class="n">Response</span> <span class="nf">getCustomer</span><span class="o">(</span><span class="nd">@PathParam</span><span class="o">(</span><span class="s">&quot;id&quot;</span><span class="o">)</span> <span class="kt">int</span> <span class="n">id</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">    <span class="n">Customer</span> <span class="n">cust</span> <span class="o">=</span> <span class="n">findCustomer</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
+</span><span class="line">    <span class="n">CacheControl</span> <span class="n">cc</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">CacheControl</span><span class="o">();</span>
+</span><span class="line">    <span class="n">cc</span><span class="o">.</span><span class="na">setMaxAge</span><span class="o">(</span><span class="mi">300</span><span class="o">);</span>
+</span><span class="line">    <span class="n">cc</span><span class="o">.</span><span class="na">setPrivate</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+</span><span class="line">    <span class="n">cc</span><span class="o">.</span><span class="na">setNoStore</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+</span><span class="line">
+</span><span class="line">    <span class="k">return</span> <span class="n">Response</span><span class="o">.</span><span class="na">ok</span><span class="o">(</span><span class="n">cust</span><span class="o">,</span> <span class="s">&quot;application/xml&quot;</span><span class="o">).</span><span class="na">cacheControl</span><span class="o">(</span><span class="n">cc</span><span class="o">).</span><span class="na">build</span><span class="o">();</span>
+</span><span class="line">  <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<table>
+  <tbody>
+    <tr>
+      <td>Cache Control Directive</td>
+      <td>Description</td>
+    </tr>
+    <tr>
+      <td><code>private</code></td>
+      <td>The private directive states that no shared intermediary (proxy or CDN) is allowed to cache the response. This is a great way to make sure that the client, and only the client, caches the data.</td>
+    </tr>
+    <tr>
+      <td><code>public</code></td>
+      <td>The public directive is the opposite of private. It indicates that the response may be cached by any entity within the request/response chain.</td>
+    </tr>
+    <tr>
+      <td><code>no-cache</code></td>
+      <td>Usually, this directive simply means that the response should not be cached. If it is cached anyway, the data should not be used to satisfy a request unless it is revalidated with the server (more on revalidation later).</td>
+    </tr>
+    <tr>
+      <td><code>no-store</code></td>
+      <td>A browser will store cacheable responses on disk so that they can be used after a browser restart or computer reboot. You can direct the browser or proxy cache to not store cached data on disk by using the no-store directive.</td>
+    </tr>
+    <tr>
+      <td><code>no-transform</code></td>
+      <td>Some intermediary caches have the option to automatically transform their cached data to save memory or disk space or to simply reduce network traffic. An example is compressing images. For some applications, you might want to disallow this using the no-transform directive.</td>
+    </tr>
+    <tr>
+      <td><code>max-age</code></td>
+      <td>This directive is how long (in seconds) the cache is valid. If both an Expires header and a max-age directive are set in the same response, the max-age always takes precedence.</td>
+    </tr>
+    <tr>
+      <td><code>s-maxage</code></td>
+      <td>The s-maxage directive is the same as the max-age directive, but it specifies the maximum time a shared, intermediary cache (like a proxy) is allowed to hold the data. This directive allows you to have different expiration times than the client.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Revalidation and Conditional GETs</strong></p>
+
+<ul>
+  <li>
+    <p><em>Revalidation</em> - when the cache is stale, the cacher can ask the server if the data it is holding is still valid. To perform revalidation, the server will send back a <code>Last-Modified</code> and/or an <code>ETag</code> (entity tag) header with its initial response to the client.</p>
+  </li>
+  <li>
+    <p><em>Last-Modified</em></p>
+    <ul>
+      <li>represents a timestamp of the data sent by the server.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Response header with Last-Modified</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+</span><span class="line"><span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/xml</span>
+</span><span class="line"><span class="na">Cache-Control</span><span class="o">:</span> <span class="l">max-age=1000</span>
+</span><span class="line"><span class="na">Last-Modified</span><span class="o">:</span> <span class="l">Tue, 15 May 2013 09:56 EST</span>
+</span><span class="line"><span class="err">&lt;customer</span> <span class="l">id=&quot;123&quot;&gt;...&lt;/customer&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<ul>
+  <li>As in example below, after 1000 seconds, client may opt to revalidate its cache data by sending a <em>conditional GET</em> request by passing a request header called <code>If-Modified-Since</code> with the value of the cached <code>Last-Modified</code> header.</li>
+  <li>When a service receives this GET request, it checks to see if its resource has been modified since the date provided within the <code>If-Modified-Since</code> header. If it has been changed since the timestamp provided, the server will send back a <code>200, “OK,”</code> response with the new representation of the resource. If it hasn’t been changed, the server will respond with <code>304, “Not Modified,”</code> and return no representation. In both cases, the server should send an updated <code>Cache-Control</code> and <code>Last-Modified</code> header if appropriate.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="nf">GET</span> <span class="nn">/customers/123</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</span><span class="line"><span class="na">If-Modified-Since</span><span class="o">:</span> <span class="l">Tue, 15 May 2013 09:56 EST</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><em>ETag</em></li>
+</ul>
+
+<p>The ETag header is a pseudounique identifier that represents the version of the data sent back. Its value is any arbitrary quoted string and is usually an MD5 hash. Here’s an example response:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Response header with ETag</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+</span><span class="line"><span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/xml</span>
+</span><span class="line"><span class="na">Cache-Control</span><span class="o">:</span> <span class="l">max-age=1000</span>
+</span><span class="line"><span class="na">ETag</span><span class="o">:</span> <span class="l">&quot;3141271342554322343200&quot;</span>
+</span><span class="line"><span class="err">&lt;customer</span> <span class="l">id=&quot;123&quot;&gt;...&lt;/customer&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>As in example below, after 1000 seconds, client may opt to revalidate by sending a <em>conditional GET</em> request by passing <code>If-None-Match</code> in header with the same has value.</li>
+  <li>If the tags don’t match, the server will send back a <code>200, “OK,”</code> response with the new representation of the resource. If it hasn’t been changed, the server will respond with <code>304, “Not Modified,”</code> and return no representation. In both cases, the server should send an updated <code>Cache-Control</code> and <code>ETag</code> header if appropriate.</li>
+  <li>A <em>strong ETag</em> should change whenever any bit of the resource’s representation changes.</li>
+  <li>A <em>weak ETag</em> changes only on semantically significant events. Weak ETags are identified with a <em>W/</em>prefix. e.g., <code>ETag: W/"3141271342554322343200"</code></li>
+  <li><code>Last-Modified</code> and <code>ETag</code> can be used for concurrency control as well. In other words, when 2 clients are trying to update the same resource, these header values can be used to conditionally update only if the server value hasn’t changed since. (This is called <em>Optimistic Concurrency Control</em>)</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="nf">GET</span> <span class="nn">/customers/123</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</span><span class="line"><span class="na">If-None-Match</span><span class="o">:</span> <span class="l">&quot;3141271342554322343200&quot;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="reverse-proxy">Reverse proxy</h2>
+
+<ul>
+  <li>One of the best way to cache your API is to put a gateway cache (or reverse proxy) in front of it. Some frameworks provide their own reverse proxies, but a very powerful, open-source one is <a href="https://www.varnish-cache.org/">Varnish</a>.</li>
+  <li>When a safe method is used on a resource URL, the reverse proxy should cache the response from the API. It will then use this cached response to answer all subsequent requests for the same resource before they hit the API. When an unsafe method is used on a resource URL, the cache ignores it and passes it to the API. The API is responsible for making sure that the cached resource is invalidated.</li>
+  <li>HTTP has an unofficial <code>PURGE</code> method that is used for purging caches. When an API receives a call with an unsafe method on a resource, it should fire a <code>PURGE</code> request on that resource so that the reverse proxy knows that the cached resource should be expired. Note that you will still have to configure your reverse proxy to actually remove a resource when it receives a request with the PURGE method.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="nf">GET</span> <span class="nn">/article/1234</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</span><span class="line">   <span class="l">- The resource is not cached yet</span>
+</span><span class="line">   <span class="l">- Send request to the API</span>
+</span><span class="line">   <span class="l">- Store response in cache and return</span>
+</span><span class="line">
+</span><span class="line">GET /article/1234 HTTP/1.1
+</span><span class="line">   - The resource is cached
+</span><span class="line">   - Return response from cache
+</span><span class="line">
+</span><span class="line">PUT /article/1234 HTTP/1.1
+</span><span class="line">   - Unsafe method, send to API
+</span><span class="line">
+</span><span class="line">PURGE /article/1234 HTTP/1.1
+</span><span class="line">   - API sends PURGE method to the cache
+</span><span class="line">   - The resources is removed from the cache
+</span><span class="line">
+</span><span class="line">GET /article/1234 HTTP/1.1
+</span><span class="line">   - The resource is not cached yet
+</span><span class="line">   - Send request to the API
+</span><span class="line">   - Store response in cache and return
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h1 id="security">Security</h1>
+
+<p><a href="/technology/security.html">Basics of Security</a></p>
+
+<h2 id="authentication">Authentication</h2>
+
+<ul>
+  <li>To enable authentication, modify the <em>/WEB-INF/web.xml</em> file in the war file deployed.</li>
+  <li>Value of <code>&lt;auth-method&gt;</code> could be <code>BASIC</code>, ‘DIGEST’ or <code>CLIENT_CERT</code></li>
+  <li>The <code>&lt;login-config&gt;</code> element doesn’t turn on authentication. To enforce authentication, you must specify a URL pattern you want to secure. e.g., <code>&lt;url-pattern&gt;/services/customers&lt;/url-pattern&gt;</code></li>
+  <li>The <code>&lt;http-method&gt;</code> element says that we only want to secure POST requests to this URL. If we leave out this element, all HTTP methods are secured.</li>
+  <li><code>&lt;auth-constraint&gt;</code> specifies which roles are allowed to POST to <code>/services/customers</code></li>
+  <li><code>&lt;role-name&gt;</code> - If you set this to <code>*</code> then it means anybody who is able to log in can access the constrained URL. Authentication with a valid user would still be required, though.</li>
+  <li><em>Limitation</em> - When declaring <code>&lt;security-constraints&gt;</code> for JAXRS resources, the <code>&lt;url-pattern&gt;</code> element does not have as rich an expression syntax as JAX-RS <code>@Path</code> annotation values. It supports only simple wildcard matches via the <code>*</code> character. No regular expressions like <code>/*</code>, <code>/foo/*</code> or <code>*.txt</code> are supported.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Sample web.xml file</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="cp">&lt;?xml version=&quot;1.0&quot;?&gt;</span>
+</span><span class="line"><span class="nt">&lt;web-app&gt;</span>
+</span><span class="line">  <span class="nt">&lt;security-constraint&gt;</span>
+</span><span class="line">    <span class="nt">&lt;web-resource-collection&gt;</span>
+</span><span class="line">      <span class="nt">&lt;web-resource-name&gt;</span>customer creation<span class="nt">&lt;/web-resource-name&gt;</span>
+</span><span class="line">      <span class="nt">&lt;url-pattern&gt;</span>/services/customers<span class="nt">&lt;/url-pattern&gt;</span>
+</span><span class="line">      <span class="nt">&lt;http-method&gt;</span>POST<span class="nt">&lt;/http-method&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/web-resource-collection&gt;</span>
+</span><span class="line">    <span class="nt">&lt;auth-constraint&gt;</span>
+</span><span class="line">      <span class="nt">&lt;role-name&gt;</span>admin<span class="nt">&lt;/role-name&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/auth-constraint&gt;</span>
+</span><span class="line">  <span class="nt">&lt;/security-constraint&gt;</span>
+</span><span class="line">  <span class="nt">&lt;login-config&gt;</span>
+</span><span class="line">    <span class="nt">&lt;auth-method&gt;</span>BASIC<span class="nt">&lt;/auth-method&gt;</span>
+</span><span class="line">    <span class="nt">&lt;realm-name&gt;</span>jaxrs<span class="nt">&lt;/realm-name&gt;</span>
+</span><span class="line">  <span class="nt">&lt;/login-config&gt;</span>
+</span><span class="line">  <span class="nt">&lt;security-role&gt;</span>
+</span><span class="line">    <span class="nt">&lt;role-name&gt;</span>admin<span class="nt">&lt;/role-name&gt;</span>
+</span><span class="line">  <span class="nt">&lt;/security-role&gt;</span>
+</span><span class="line"><span class="nt">&lt;/web-app&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><strong>Enforcing Encryptiong (HTTPS)</strong> - To enforce HTTPS access for these constraints, specify a <code>&lt;user-data-constraint&gt;</code> as shown here. If a user tries to access the URL pattern with HTTP, she will be redirected to an HTTPS-based URL</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Enforcing HTTPS</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;security-constraint&gt;</span>
+</span><span class="line">  ...
+</span><span class="line">  <span class="nt">&lt;user-data-constraint&gt;</span>
+</span><span class="line">    <span class="nt">&lt;transport-guarantee&gt;</span>CONFIDENTIAL<span class="nt">&lt;/transport-guarantee&gt;</span>
+</span><span class="line">  <span class="nt">&lt;/user-data-constraint&gt;</span>
+</span><span class="line"><span class="nt">&lt;/security-constraint&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="authorization">Authorization</h2>
+
+<ul>
+  <li>The server and application know the permissions for each user and do not need to share this information over a communication protocol. This is why authorization is the domain of the server and application</li>
+  <li>JAX-RS relies on the servlet and Java EE specifications to define how authorization works. Authorization is performed in Java EE by associating one or more roles with a given user and then assigning permissions based on that role.</li>
+  <li>
+    <p>You do not assign access control on a per-user basis, but rather on a per-role basis.</p>
+  </li>
+  <li>Authorization can be enabled through XML or by applying annotations to JAX-RS resource classes</li>
+</ul>
+
+<p><strong>Authorization Annotations</strong></p>
+
+<ul>
+  <li>Java EE defines a set of following annotations in package <code>javax.annotation.security</code> :
+    <ul>
+      <li><code>@RolesAllowed</code> - defines the roles permitted to execute a specific method or defines the default ACL (Access Control List) for all HTTP operations.</li>
+      <li><code>@DenyAll</code></li>
+      <li><code>@PermitAll</code></li>
+      <li><code>@RunAs</code></li>
+    </ul>
+  </li>
+  <li>Pros
+    <ul>
+      <li>Annotations allow to express fine-grained constraints that are not possible in <em>web.xml</em> because of the limited expression capabilities of <code>&lt;url-pattern&gt;</code></li>
+      <li>Allows to apply constraints at method-level using these annotations.</li>
+    </ul>
+  </li>
+  <li>Cons
+    <ul>
+      <li>Specify security related annotations within business logic code is a leakage of concern. To add or remove role constraints periodically, one has to recompile the whole application.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Path</span><span class="o">(</span><span class="s">&quot;/customers&quot;</span><span class="o">)</span>
+</span><span class="line"><span class="nd">@RolesAllowed</span><span class="o">({</span><span class="s">&quot;ADMIN&quot;</span><span class="o">,</span> <span class="s">&quot;CUSTOMER&quot;</span><span class="o">})</span>
+</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">CustomerResource</span> <span class="o">{</span>
+</span><span class="line">  <span class="nd">@GET</span>
+</span><span class="line">  <span class="nd">@Path</span><span class="o">(</span><span class="s">&quot;{id}&quot;</span><span class="o">)</span>
+</span><span class="line">  <span class="nd">@Produces</span><span class="o">(</span><span class="s">&quot;application/xml&quot;</span><span class="o">)</span>
+</span><span class="line">  <span class="kd">public</span> <span class="n">Customer</span> <span class="nf">getCustomer</span><span class="o">(</span><span class="nd">@PathParam</span><span class="o">(</span><span class="s">&quot;id&quot;</span><span class="o">)</span> <span class="kt">int</span> <span class="n">id</span><span class="o">)</span> <span class="o">{...}</span>
+</span><span class="line">
+</span><span class="line">  <span class="nd">@RolesAllowed</span><span class="o">(</span><span class="s">&quot;ADMIN&quot;</span><span class="o">)</span>
+</span><span class="line">  <span class="nd">@POST</span>
+</span><span class="line">  <span class="nd">@Consumes</span><span class="o">(</span><span class="s">&quot;application/xml&quot;</span><span class="o">)</span>
+</span><span class="line">  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">createCustomer</span><span class="o">(</span><span class="n">Customer</span> <span class="n">cust</span><span class="o">)</span> <span class="o">{...}</span>
+</span><span class="line">
+</span><span class="line">  <span class="nd">@PermitAll</span>
+</span><span class="line">  <span class="nd">@GET</span>
+</span><span class="line">  <span class="nd">@Produces</span><span class="o">(</span><span class="s">&quot;application/xml&quot;</span><span class="o">)</span>
+</span><span class="line">  <span class="kd">public</span> <span class="n">Customer</span><span class="o">[]</span> <span class="nf">getCustomers</span><span class="o">()</span> <span class="o">{}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h1 id="versioning">Versioning</h1>
+
+<p><a href="http://blog.steveklabnik.com/posts/2011-07-03-nobody-understands-rest-or-http">Excellent article - Nobody Understands REST or HTTP</a></p>
+
+<ul>
+  <li>There is no established industry standard for expressing versioning information for REST service contracts. We need to select a convention that works best for our IT enterprise.</li>
+</ul>
+
+<p>4 popular approaches to versioning a REST API.</p>
+
+<ol>
+  <li>URI versioning</li>
+  <li>URI parameter versioning</li>
+  <li>Accept header versioning</li>
+  <li>Custom header versioning</li>
+</ol>
+
+<h2 id="uri-versioning">URI versioning</h2>
+
+<ul>
+  <li>In this approach, version information becomes part of the <strong>Base URI</strong>. For example, http://api.example.org/v1/users and http://api.example.org/v2/users represent two different versions of an application API.</li>
+  <li>It is used by major public APIs such as Twitter, LinkedIn, Yahoo, etc.
+    <ul>
+      <li>LinkedIn: https://api.linkedin.com/v1/people/~</li>
+      <li>Yahoo: https://social.yahooapis.com/v1/user/12345/profile</li>
+      <li>Twitter: https://api.twitter.com/1.1/statuses/user_timeline.json</li>
+      <li>SalesForce: http://na1.salesforce.com/services/data/v26.0</li>
+      <li>Twilio: https://api.twilio.com/2010-04-01/Accounts/{AccountSid}/Calls</li>
+    </ul>
+  </li>
+  <li>Version Type
+    <ul>
+      <li>Twitter and LinkedIn used <code>v</code> notation.</li>
+      <li>Salesforce uses major + minor version</li>
+      <li>Twilio uses datestamp to differentiate</li>
+    </ul>
+  </li>
+  <li>Pros
+    <ul>
+      <li>Clean sweep approach. Replicate the entire code base and maintain parallel code paths for each version.</li>
+      <li>Easy to implement</li>
+    </ul>
+  </li>
+  <li>Cons
+    <ul>
+      <li>If client stores the permalinks locally, then for every upgrade it needs to be updated</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="uri-parameter-versioning">URI parameter versioning</h2>
+
+<ul>
+  <li>Similar to the URI versioning except that the version information is specified as a URI request parameter. E.g., http://api.example.org/users?v=2</li>
+  <li>The version parameter is typically optional and a default version of the API will continue working for requests without version parameter. Most often, the default version is the latest version of the API.</li>
+  <li>
+    <p>Although as not popular as other versioning strategies, a few major public APIs such as Netf lix have used this strategy.</p>
+  </li>
+  <li>Cons
+    <ul>
+      <li>The URI parameter versioning shares the same disadvantages of URI versioning.</li>
+      <li>Some proxies don’t cache resources with a URI parameter, resulting in additional network traffic.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="accept-header-versioning">Accept header versioning</h2>
+
+<ul>
+  <li>This approach uses the <em>Accept</em> header to communicate version information. Because the header contains version information, there will be only one URI for multiple versions of API.</li>
+  <li>To pass additional version information, we need a custom media type. The following convention is popular when creating a custom media type: <code>vnd.product_name.version+suffix</code>
+    <ul>
+      <li>The <strong>vnd</strong> is the starting point of the custom media type and indicates vendor.</li>
+      <li>The <strong>product</strong> or producer name is the name of the product and distinguishes this media type from other custom product media types.</li>
+      <li>The <strong>version</strong> part is represented using strings such as v1 or v2 or v3.</li>
+      <li>Finally, the <strong>suffix</strong> is used to specify the structure of the media type. For example, the <code>+json</code> suffix indicates media type <code>application/json</code>. <a href="https://tools.ietf.org/html/rfc6839">RFC 6389</a> gives a full list of standardized prefixes such as <code>+xml</code>, <code>+json</code>, and <code>+zip</code>.</li>
+    </ul>
+  </li>
+  <li>Using this approach, a client, for example, can send an <code>application/vnd.quickpoll.v2+json</code> accept header to request the second version of the API.</li>
+  <li>GitHub is a popular public API that uses this <em>Accept</em> header strategy. For requests that don’t contain any Accept header, GitHub uses the latest version of the API to fulfill the request.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="err">Accept: application/vnd.company.myapp-v3.0+json</span>
+</span><span class="line"><span class="err">Content-Type: application/vnd.company.myapp-v3.0+json </span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Pros
+    <ul>
+      <li>Only one URI for multiple versions of API</li>
+      <li>The Accept header versioning approach is becoming more and more popular as it allows fine-grained versioning of individual resources without impacting the entire API.</li>
+    </ul>
+  </li>
+  <li>Cons
+    <ul>
+      <li>This approach can make browser testing harder as we have to carefully craft the Accept header.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="custom-header-versioning">Custom header versioning</h2>
+
+<ul>
+  <li>The custom header versioning approach is similar to the Accept header versioning approach except that, instead of the Accept header, a custom header is used.</li>
+  <li>Microsoft Azure takes this approach and uses the custom header <code>x-ms-version</code>. For example, to get the latest version of Azure (at the time of writing this),  your request needs to include a custom header:</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="err">x-ms-version: 2014-02-14</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>This approach shares the same pros and cons as that of the Accept header approach. Because the HTTP specification provides a standard way of accomplishing this via the Accept header, the custom header
+approach hasn’t been widely adopted.</p>
+
+<h1 id="transactions">Transactions</h1>
+
+<p>How do I perform atomic operations using REST? If I would like to execute multiple operations, but have them all appear as an single, atomic transaction, REST seems inappropriate.</p>
+
+<p><strong>Low Granularity Services Approach</strong></p>
+
+<p>REST faces the exact same problem as SOAP-based web services with regards to atomic transactions. There is no stateful connection, and every operation is immediately committed; performing a series of operations means other clients can see interim states.</p>
+
+<p>Unless, of course, you take care of this by design. First, ask yourself: do I have a standard set of atomic operations? This is commonly the case. For example, for a banking operation, removing a sum from one account and adding the same sum to a different account is often a required atomic operation. But rather than exporting just the primitive building blocks, the REST API should provide a single “transfer” operation, which encapsulates the entire process. This provides the desired atomicity, while also making client code much simpler. This approach is known as <em>low granularity services</em>, or <em>high-level batch operations</em>.</p>
+
+<p><strong>Batch Command Pattern</strong></p>
+
+<p>If there is no simple, pre-defined set of desired atomic operation sequences, the problem is more severe. A common solution is the <strong>batch command pattern</strong>. Define one REST method to demarcate the beginning of a transaction, and another to demarcate its end (a ‘commit’ request). Anything sent between these sets of operations is queued by the server but not committed, until the commit request is sent.</p>
+
+<p>This pattern complicates the server significantly – it must maintain a state per client. Normally, the first operation (‘begin transaction’) returns a transaction ID (TID), and all subsequent operations, up to and including the commit, must include this TID as a parameter.</p>
+
+<p>It is a good idea to enforce a timeout on transactions: if too much time has passed since the initial ‘begin transaction’ request, or since the last step, the server has the right to abort the transaction. This prevents a potential DoS attack that causes the server to waste resources by keeping too many transactions open. The client design must keep in mind that each operation must be checked for a timeout response.</p>
+
+<p>It is also a good idea to allow the client to abort a transaction, by providing a ‘rollback’ API.</p>
+
+<p>The usual care required in designing code that uses multiple concurrent transactions applies as usual in this complex design scenario. If at all possible, try to limit the use of transactions, and support high-level batch operations instead.</p>
+
+<h1 id="other-rest-frameworks">Other REST Frameworks</h1>
+
+<p>Java Web Service APIs include:</p>
+
+<ul>
+  <li>HttpServlet and its equivalents (e.g., JSP scripts)</li>
+  <li>JAX-RS (Java API for RESTful services) - Jersey is the reference implementation</li>
+  <li>Restlet, which is similar in style to JAX-RS</li>
+  <li>JAX-WS (Java API for Web Services) which is a relatively low-level API. Metro is the reference implementation.</li>
+</ul>
+
+<h2 id="servlet-based-web-services">Servlet based Web Services</h2>
+
+<p>JAX-RS and Restlet are roughly peers (arguably). Both of these APIs emphasize the use of Java annotations to describe the RESTful access to a particular CRUD operation. Each framework supports the automated generation of XML and JSON payloads. When published with a web server such as Tomcat or Jetty, JAX-RS and Restlet provide servlet interceptors that mediate between the client and the web service.</p>
+
+<h2 id="restlet">RESTlet</h2>
+
+<ul>
+  <li>The Restlet web framework supports RESTful web services, and the API is similar to JAX-RS; indeed, a Restlet application can use JAX-RS annotations such as @Produces instead of or in addition to Restlet annotations.</li>
+  <li>A Restlet web service has three main parts, each of which consists of one or more Java classes:
+    <ul>
+      <li>A programmer-defined class, in this example AdagesApplication, extends the Restlet Application class. The purpose of the extended class is to set up a routing table, which maps request URIs to resources. The resources are named or anonymous Java classes; the current example illustrates both approaches. The spirit of Restlet development is to have very simple resource classes.</li>
+      <li>There are arbitrarily many resource classes, any mix of named or anonymous. In best practices, a resource implementation supports a very small number of operations on the resource—in the current example, only one operation per resource. For example, the adages2 service has seven resources: six of these are named classes that extend the Restlet ServerResource class and the other is an anonymous class that implements the Restlet interface. The named classes are CreateResource, the target of a POST request; UpdateResource, the target of a PUT request; XmlAllResource, the target of a GET request for all Adages in XML; JsonAllResource, the target of a GET request for all Adages in JSON; XmlOneResource, the target of a GET request for a specified Adage; and so on.</li>
+      <li>The backend POJO classes are Adage and Adages, each slightly redefined from the earlier adages web service.</li>
+    </ul>
+  </li>
+  <li>These APIs also mimic the routing idioms that have become so popular because of frameworks such as Rails and Sinatra.</li>
+</ul>
+
+<h2 id="jax-ws-api">JAX-WS API</h2>
+
+<ul>
+  <li>JAW-WS is an API used mostly for SOAP-based services but can be used for REST-style services as well. In the latter case, the <code>@WebServiceProvider</code> annotation is central. The <code>@WebServiceProvider</code> interface is sufficiently flexible that it can be used to annotate either a SOAP-based or a REST-style service; however, JAX-WS provides a related but higher level annotation, <code>@WebService</code>, for SOAP-based services. The <code>@WebServiceProvider</code> API is deliberately lower level than the servlet, JAX-RS, and Restlet APIs, and the <code>@WebServiceProvider</code> API is targeted at XML-based services. For programmers who need a low-level API, Java supports the <code>@WebServiceProvider</code> option. JAX-RS, Restlet, and <code>@WebServiceProvider</code> have both service-side and client-side APIs that can be used independently of one another. For example, a Restlet client could make calls against a JAX-RS service or vice versa.</li>
+  <li>JAX-RS and Restlet are state-of-the-art, high-level APIs for developing RESTful services; by contrast, the JAX-WS API for RESTful services is low-level. Nonetheless, JAX-WS support for RESTful services deserves a look.</li>
+</ul>
+
+<p>Following are the JAX-WS Implementations</p>
+
+<h3 id="metro">Metro</h3>
+
+<ul>
+  <li><a href="http://www.oracle.com/technetwork/java/index-jsp-137051.html">Metro</a> is the reference implementation of JAX-WS API and is part of the GlassFish project. Although JAX-WS technically belongs to enterprise rather than core Java, the core Java JDK (1.6 or greater) includes enough of the Metro distribution to compile and publish RESTful and SOAP-based services.</li>
+  <li>integrated web services stack provided by Oracle Java.</li>
+  <li>Metro stack consisting of JAX-WS, JAXB, and WSIT (Web Services Interoperability Technologies), enable you to create and deploy secure, reliable, transactional, interoperable Web services and clients.</li>
+</ul>
+
+<h3 id="apache-cxf">Apache CXF</h3>
+
+<ul>
+  <li>Apache CXF is an open source services framework. CXF helps you build and develop services using frontend programming APIs, like JAX-WS and JAX-RS. These services can speak a variety of protocols such as SOAP, XML/HTTP, RESTful HTTP, or CORBA and work over a variety of transports such as HTTP, JMS or JBI.</li>
+  <li>Features: Generating WSDL from Java and vice-versa, Spring support, OSGi support, WS-* support, proprietary Aegis Databinding (similar to JAXB), RESTful services</li>
+</ul>
+
+<h3 id="apache-axis2">Apache Axis2</h3>
+
+<ul>
+  <li>a Web Services / SOAP / WSDL engine</li>
+  <li>Features: proprietary ADB Databinding (faster than CXF)</li>
+</ul>
+
+<h1 id="open-questions">Open Questions</h1>
+
+<ul>
+  <li>There are no annotations in JAX-RS to express hyperlinks. You have to design those yourself. what does that mean?</li>
+  <li>URL opacity - http://www.zapthink.com/2012/10/08/the-power-of-opacity-in-rest/</li>
+  <li>REST service - Proxy XJC
+    <ul>
+      <li>WADL &amp; XJC</li>
+      <li>Handling Breaking changes - xsd or wsdl changes</li>
+      <li>Authentication - WS-Policy, WS-Security</li>
+      <li>Things to try using JAX-RS
+        <ul>
+          <li>how to time out a client</li>
+          <li>how to restrict number of clients accessing the service</li>
+          <li>how to implement pagination - Linking Services</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="references">References</h1>
+
+<ul>
+  <li>Books
+    <ul>
+      <li>Building Web Services with Java (2E)</li>
+      <li>Java Web Services - Up &amp; Running - O’Reilly 2013</li>
+      <li>RESTful Java with JAX-RS -2010</li>
+      <li>RESTful Java with JAX-RS 2.0 -2013</li>
+      <li>RESTful Web APIs - O’Reilly 2013</li>
+      <li>Spring REST</li>
+      <li>Web Services Testing with soapUI (2012)</li>
+    </ul>
+  </li>
+</ul>
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/rest-services.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/rest-services.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

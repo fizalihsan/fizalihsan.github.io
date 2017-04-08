@@ -1,0 +1,464 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Web Services - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Web Services Service Design Patterns API Styles 1. RPC API 2. Message API 3. Resource API Client-Service Interactions Request &amp; Response &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/webservices.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Web Services</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#service-design-patterns" id="markdown-toc-service-design-patterns">Service Design Patterns</a>    <ul>
+      <li><a href="#api-styles" id="markdown-toc-api-styles">API Styles</a>        <ul>
+          <li><a href="#rpc-api" id="markdown-toc-rpc-api">1. RPC API</a></li>
+          <li><a href="#message-api" id="markdown-toc-message-api">2. Message API</a></li>
+          <li><a href="#resource-api" id="markdown-toc-resource-api">3. Resource API</a></li>
+        </ul>
+      </li>
+      <li><a href="#client-service-interactions" id="markdown-toc-client-service-interactions">Client-Service Interactions</a></li>
+      <li><a href="#request--response-patterns" id="markdown-toc-request--response-patterns">Request &amp; Response Patterns</a></li>
+      <li><a href="#qos-quality-of-service" id="markdown-toc-qos-quality-of-service">QoS (Quality of Service)</a>        <ul>
+          <li><a href="#how-to-reduce-load-on-the-server" id="markdown-toc-how-to-reduce-load-on-the-server">How to reduce load on the server?</a>            <ul>
+              <li><a href="#service-interceptor-pattern" id="markdown-toc-service-interceptor-pattern">Service Interceptor pattern</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><a href="#design-considerations-for-ws-implementation" id="markdown-toc-design-considerations-for-ws-implementation">Design Considerations for WS Implementation</a></li>
+    </ul>
+  </li>
+  <li><a href="#tools" id="markdown-toc-tools">Tools</a></li>
+  <li><a href="#references" id="markdown-toc-references">References</a></li>
+</ul>
+
+<h1 id="service-design-patterns">Service Design Patterns</h1>
+
+<h2 id="api-styles">API Styles</h2>
+
+<h3 id="rpc-api">1. RPC API</h3>
+
+<p>Request/Response or Request/Acknowledge</p>
+
+<h3 id="message-api">2. Message API</h3>
+<ul>
+  <li><strong>Command Messages</strong> [EIP] are used to ask the receiving system to carry out a specific task (e.g., process loan).</li>
+  <li><strong>Event Messages</strong> [EIP] notify the receiver about interesting events (e.g., inventory was depleted)</li>
+  <li><strong>Document Messages</strong> [EIP] are like business documents (e.g., purchase orders).</li>
+</ul>
+
+<h3 id="resource-api">3. Resource API</h3>
+
+<ul>
+  <li>POSTed requests can’t be cached by intermediaries.</li>
+  <li><strong>Safe operations</strong> are supposed to have no side effects. That is, they should not trigger write operations (i.e., creates, updates, or deletes). E.g., GET, HEAD, and OPTIONS.</li>
+  <li><strong>Idempotence</strong> means that no matter how many times a procedure is invoked with the same data, the same results should occur. GET, HEAD, PUT, DELETE, and OPTIONS are idempotent. POST, on the other hand, is not.</li>
+</ul>
+
+<p><strong>Post-Once-Exactly Pattern</strong>
+For example, if a client sends the same order over and over again, the client shouldn’t have to worry about duplicate orders. This means that the service must differentiate one POST from another. The easiest approach is to have the client insert a unique key (i.e., identifier) into the request that is examined by the service before executing its main logic. If the service finds that it has already processed a request with the identifier, it can reject the new request. The problem is ensuring that these identifiers will indeed be unique. Another approach is to have the client query a service to retrieve a unique URI that may be used exclusively for the subsequent POST. This pattern is known as Post-Once-Exactly.</p>
+
+<h2 id="client-service-interactions">Client-Service Interactions</h2>
+
+<p><strong>1. Request/Response</strong></p>
+
+<p><strong>2. Request/Acknowledge</strong></p>
+
+<p>Steps involved</p>
+
+<ul>
+  <li>i. Receive the request.</li>
+  <li>ii. Authenticate client credentials (optional).</li>
+  <li>iii. Authorize the client for the requested operation (optional).</li>
+  <li>iv. Validate the request (optional).</li>
+  <li>v. Generate a Request Identifier or URI.</li>
+  <li>vi. Store and forward the request.</li>
+  <li>vii. Return an acknowledgment.</li>
+</ul>
+
+<p>a. <strong><em>Request/Acknowledge/Poll</em></strong></p>
+
+<ul>
+  <li>Client polls using the request identifier for the status update.</li>
+  <li>Cons - Client polling too often for status could put excessive load on the server and cause network traffic.</li>
+</ul>
+
+<p>b. <strong><em>Request/Acknowledge/Callbacks</em></strong>
+ Rather than having the client poll a second service for results, a request processor (i.e., background process) pushes information back to the client or forwards it to other parties. For this to happen, the client should have a service running that could be called.</p>
+
+<p>The callback service details could be sent as part of the request or queried from a data store. However, when callback recipients are identified in the request, special precautions must be taken to ensure that they cannot be seen or altered by anyone except the authorized parties. The easiest way to protect the request is through Transport Layer Security (TLS).</p>
+
+<p><em>Cons</em></p>
+
+<ul>
+  <li>Complex to implement</li>
+  <li>This pattern cannot be used if the client is unable to or unwilling to provide a publicly addressable callback service.</li>
+  <li>Callback service could go down in which case the request processor should implement ‘Idempotent Retry’ pattern.</li>
+</ul>
+
+<p><strong>3. Media Type Negotiation</strong></p>
+
+<p><strong>4. Linked Services</strong></p>
+
+<h2 id="request--response-patterns">Request &amp; Response Patterns</h2>
+
+<ul>
+  <li><strong>Service Controller</strong>
+    <ul>
+      <li>Receives requests, evaluate the request’s meaning, and route requests to procedures (i.e., class methods, request handlers), which implement the desired service behaviors.</li>
+      <li>When a web server receives a request, the framework (like JAX-RS) selects and invokes handlers by evaluating various aspects of the request against these expressions. The rules that define which handlers should be invoked for different requests are provided through annotations known collectively as <strong><em>Routing Expressions</em></strong>.</li>
+      <li>This pattern also makes it easy to leverage data-binding technologies that automatically deserialize requests and serialize responses. The methods on Service Controllers can be</li>
+    </ul>
+  </li>
+  <li><strong>Request Mapper</strong>
+    <ul>
+      <li>How can a service process data from requests that are structurally different yet semantically equivalent?</li>
+    </ul>
+  </li>
+  <li><strong>Response Mapper</strong>
+    <ul>
+      <li>How can the logic required to construct a response be reused by multiple services?</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="qos-quality-of-service">QoS (Quality of Service)</h2>
+
+<h3 id="how-to-reduce-load-on-the-server">How to reduce load on the server?</h3>
+
+<h4 id="service-interceptor-pattern">Service Interceptor pattern</h4>
+
+<p>An inbound interceptor may, for example, be configured to check to see if the requested data can be found in a distributed memory cache that is shared across web servers. If the requested information can be found in this cache, then the information may be returned directly from the interceptor, and the request handler will not be called.</p>
+
+<p>Server load can be reduced by configuring Reverse Proxies to cache responses. In this case, the proxy evaluates the client’s criterion against its cache and will return a representation if the criterion is met. Regardless of the caching approach, the service owner must determine how long data may be kept in any cache before it is considered stale.</p>
+
+<h2 id="design-considerations-for-ws-implementation">Design Considerations for WS Implementation</h2>
+
+<p>The following factors should be considered when writing web service code.</p>
+
+<ul>
+  <li><strong>Atomicity</strong>: All web service operations should be atomic. Web services that are exposed to external business partners generally don’t support distributed transactions for reasons relating to security and scalability.</li>
+  <li><strong>State management</strong>: Always prefer stateless webservices. Managing session state of client not only leads to memory management issues, but also scalability issues. If required badly, use a distributed cache to store session data.</li>
+  <li><strong>Service composition</strong>: Avoid invoking other webservices from within a webservice. This is to alleviate issues like network latency, retry attempts when dependant service is down, etc.</li>
+  <li><strong>Service Interceptor</strong>
+    <ul>
+      <li>Security, logging, etc</li>
+      <li>Does Jersey provide any such interceptors?
+        <ul>
+          <li>logging interceptor</li>
+          <li>Exception handler interceptor</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="tools">Tools</h1>
+
+<ul>
+  <li>cUrl</li>
+  <li>soapUI</li>
+</ul>
+
+<h1 id="references">References</h1>
+
+<ul>
+  <li>Books
+    <ul>
+      <li>Building Web Services with Java (2E)</li>
+      <li>Java Web Services - Up &amp; Running - O’Reilly 2013</li>
+      <li>RESTful Java with JAX-RS -2010</li>
+      <li>RESTful Web APIs - O’Reilly 2013</li>
+      <li>Web Services Testing with soapUI (2012)</li>
+      <li>Service Oriented Architecture - Thomas Erl</li>
+    </ul>
+  </li>
+  <li>Sites
+    <ul>
+      <li><a href="http://docs.oracle.com/cd/E19502-01/820-1072/ahiaj/index.html">Oracle - Web Services Interoperability Technologies</a></li>
+      <li><a href="http://www.slideshare.net/rnewton/2013-06q-connycrestfulwebapis">SlideShare - RESTful Web APIs</a></li>
+    </ul>
+  </li>
+</ul>
+
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/webservices.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/webservices.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,649 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Infrastructure as Code - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Infrastructure as Code Containerization Docker Command Reference Vocabulary Configuration Management Vagrant Chef Common Resources Run list &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/infrastructure-as-code.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Infrastructure as Code</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#containerization" id="markdown-toc-containerization">Containerization</a>    <ul>
+      <li><a href="#docker" id="markdown-toc-docker">Docker</a>        <ul>
+          <li><a href="#command-reference" id="markdown-toc-command-reference">Command Reference</a></li>
+          <li><a href="#vocabulary" id="markdown-toc-vocabulary">Vocabulary</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#configuration-management" id="markdown-toc-configuration-management">Configuration Management</a>    <ul>
+      <li><a href="#vagrant" id="markdown-toc-vagrant">Vagrant</a></li>
+      <li><a href="#chef" id="markdown-toc-chef">Chef</a>        <ul>
+          <li><a href="#common-resources" id="markdown-toc-common-resources">Common Resources</a></li>
+          <li><a href="#run-list" id="markdown-toc-run-list">Run list</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#references" id="markdown-toc-references">References</a></li>
+</ul>
+
+<ul>
+  <li>Infrastructure as code means that your infrastructure is versionable, repeatable, testable</li>
+</ul>
+
+<h1 id="containerization">Containerization</h1>
+
+<h2 id="docker">Docker</h2>
+
+<ul>
+  <li><strong>Images</strong>
+    <ul>
+      <li>Images are the basis of the containers - Images are pulled from the registry</li>
+      <li>Base &amp; Child Images
+        <ul>
+          <li><strong><em>Base</em></strong> images are images that have no parent image, usually images with an OS like ubuntu, busybox or debian.</li>
+          <li><strong><em>Child</em></strong> images are images that build on base images and add additional functionality.</li>
+        </ul>
+      </li>
+      <li>Official and User Images
+        <ul>
+          <li><strong><em>Official</em></strong> images are images that are officially maintained and supported by the folks at Docker. These are typically one word long. In the list of images above, the python, ubuntu, busybox and hello-world images are base images.</li>
+          <li><strong><em>User</em></strong> images are images created and shared by users like you and me. They build on base images and add additional functionality. Typically, these are formatted as user/image-name.</li>
+        </ul>
+      </li>
+      <li>Onbuild images</li>
+    </ul>
+  </li>
+  <li><code>Docker File --input---&gt; Docker Client --output--&gt; Docker image</code></li>
+</ul>
+
+<h3 id="command-reference">Command Reference</h3>
+
+<ul>
+  <li><code>docker run hello-world</code></li>
+  <li><code>docker pull busybox</code>
+    <ul>
+      <li>pulls the <code>busybox</code> image from Docker Registry and saves it in the system. Since the <code>TAG</code> name is not provided it pulls the <code>latest</code> by default</li>
+      <li>to pull a particular tag version <code>docker pull ubuntu:12.04</code></li>
+    </ul>
+  </li>
+  <li><code>docker images</code> to view the images</li>
+  <li><code>docker run busybox</code>
+    <ul>
+      <li>Docker client finds the image locally. If not found, pulls from registry</li>
+      <li>loads up the container</li>
+      <li>runs a command in that container (command not provided here)</li>
+      <li>exited</li>
+    </ul>
+  </li>
+  <li><code>docker run busybox echo 'Welcome to Docker'</code></li>
+  <li><code>docker run -it busybox sh</code> - <code>it</code> starts an interactive tty terminal to the container</li>
+  <li><code>docker ps</code> shows all the containers that are running</li>
+  <li><code>docker ps -a</code> shows containers that exited in the past</li>
+  <li><code>docker rm &lt;container_id&gt;</code> clean up the container</li>
+  <li><code>docker rm $(docker ps -a -q -f status=exited)</code> clean up all the exited containers</li>
+  <li><code>docker rmi</code> to delete an image</li>
+  <li><code>docker run -d -P --name &lt;container_name&gt; prakhar1989/static-site</code>
+    <ul>
+      <li><code>-d</code> detaches the container from the terminal from which it was started</li>
+      <li><code>-P</code> publishes all exposed ports to random ports</li>
+      <li><code>--name</code> name of the container</li>
+    </ul>
+  </li>
+  <li><code>docker port &lt;container&gt;</code> - to see the ports</li>
+  <li><code>docker run -p 8888:80 prakhar1989/static-site</code> - to specify custom ports</li>
+  <li><code>docker stop &lt;container_id&gt;</code> - to stop a detached container</li>
+  <li><code>docker search &lt;image&gt;</code> searches the Docker Hub for given image name</li>
+  <li><code>docker login</code> - stores the login credentials to http://hub.docker.com in <code>~/.docker/config.json</code></li>
+  <li><code>docker push &lt;user/image&gt;</code> - publishes your image to Docker hub. Once published, it can be viewed at https://hub.docker.com/r/<user>/<image>/</image></user></li>
+</ul>
+
+<h3 id="vocabulary">Vocabulary</h3>
+
+<ul>
+  <li><strong>Images</strong> - The blueprints of our application which form the basis of containers.</li>
+  <li><strong>Containers</strong> - Created from Docker images and run the actual application.</li>
+  <li><strong>Docker Daemon</strong> - The background service running on the host that manages building, running and distributing Docker containers. The daemon is the process that runs in the operation system to which clients talk to.</li>
+  <li><strong>Docker Client</strong> - The command line tool that allows the user to interact with the daemon. More generally, there can be other forms of clients too - such as <strong><em>Kitematic</em></strong> which provide a GUI to the users.</li>
+  <li><strong>Docker Hub</strong> - A registry of Docker images. You can think of the registry as a directory of all available Docker images. If required, one can host their own Docker registries and can use them for pulling images.</li>
+</ul>
+
+<h1 id="configuration-management">Configuration Management</h1>
+
+<ul>
+  <li>Why Configuration Management?
+    <ul>
+      <li>Consistency</li>
+      <li>Efficient Change Management</li>
+      <li>Automated deployments</li>
+      <li>Quick recovery from a disaster</li>
+    </ul>
+  </li>
+  <li>Well-known softwares: CFEngine, Puppet, Ansible, SaltStack, Chef</li>
+</ul>
+
+<h2 id="vagrant">Vagrant</h2>
+
+<ul>
+  <li>Download : <code>vagrant box add bento/centos-7.2 --provider=virtualbox</code></li>
+  <li>creates a configuration file with CPU, memory, etc.: <code>vagrant init bento/centos-7.2</code></li>
+  <li>Uses the configuration file to create a virtual machine instance: <code>vagrant up</code></li>
+  <li>Connect to the instance: <code>vagrant ssh</code></li>
+  <li>Stop/shutdown an instance: <code>vagrant halt</code></li>
+  <li>Destroy vagrant instance: <code>vagrant destroy --force</code></li>
+</ul>
+
+<h2 id="chef">Chef</h2>
+
+<ul>
+  <li>A recipe is a collection of resources</li>
+  <li>
+    <p>A cookbook is a collection of recipes</p>
+  </li>
+  <li>install Chef DK <code>curl https://omnitruck.chef.io/install.sh | sudo bash -s -- -P chefdk -c stable -v 0.18.30</code></li>
+  <li><code>mkdir ~/chef-repo</code></li>
+  <li><code>cd ~/chef-repo</code></li>
+  <li>Create recipe file</li>
+  <li>Execute recipe file: <code>chef-client --local-mode hello.rb</code></li>
+  <li>create a cookbook: <code>chef generate cookbook cookbooks/learn_chef_httpd</code></li>
+  <li>
+    <p>Run the cookbook: <code>sudo chef-client --local-mode --runlist 'recipe[learn_chef_httpd]'</code></p>
+  </li>
+  <li><strong>Sample recipe to install and start a httpd service</strong></li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="c1"># automatically installs httpd package</span>
+</span><span class="line"><span class="n">package</span> <span class="s1">&#39;httpd&#39;</span>
+</span><span class="line">
+</span><span class="line"><span class="c1"># enable and start the service</span>
+</span><span class="line"><span class="n">service</span> <span class="s1">&#39;httpd&#39;</span> <span class="k">do</span>
+</span><span class="line">    <span class="n">action</span> <span class="o">[</span><span class="ss">:enable</span><span class="p">,</span> <span class="ss">:start</span><span class="o">]</span>
+</span><span class="line"><span class="k">end</span>
+</span><span class="line">
+</span><span class="line"><span class="c1"># configure homepage</span>
+</span><span class="line"><span class="n">file</span> <span class="s1">&#39;/var/www/html/index.html&#39;</span> <span class="k">do</span>
+</span><span class="line">  <span class="n">content</span> <span class="s1">&#39;&lt;html&gt;</span>
+</span><span class="line"><span class="s1">  &lt;body&gt;</span>
+</span><span class="line"><span class="s1">    &lt;h1&gt;hello world&lt;/h1&gt;</span>
+</span><span class="line"><span class="s1">  &lt;/body&gt;</span>
+</span><span class="line"><span class="s1">&lt;/html&gt;&#39;</span>
+</span><span class="line"><span class="k">end</span>
+</span><span class="line">
+</span><span class="line"><span class="c1"># creates a tmp file and sets permissions</span>
+</span><span class="line"><span class="n">file</span> <span class="s1">&#39;/etc/motd&#39;</span> <span class="k">do</span>
+</span><span class="line">  <span class="n">owner</span> <span class="s1">&#39;root&#39;</span>
+</span><span class="line">  <span class="n">group</span> <span class="s1">&#39;root&#39;</span>
+</span><span class="line">  <span class="n">mode</span> <span class="s1">&#39;0755&#39;</span>
+</span><span class="line">  <span class="n">action</span> <span class="ss">:create</span>
+</span><span class="line"><span class="k">end</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="common-resources">Common Resources</h3>
+
+<ul>
+  <li>template, package, service - 3 types of resources built into the Chef DSL
+​* <strong>package</strong>: Installs a package using the appropriate platform-native installer/package manager (yum, apt, pacman, etc.).</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="n">package</span> <span class="s1">&#39;ntp&#39;</span> <span class="k">do</span>
+</span><span class="line">   <span class="n">action</span> <span class="ss">:upgrade</span>
+</span><span class="line"><span class="k">end</span>
+</span><span class="line"><span class="err">​</span><span class="sb">```</span>
+</span><span class="line">
+</span><span class="line"><span class="sb">* __service__: Manages the lifecycle of any daemons/services installed by the package resource.</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>ruby
+service ‘apache2’ do
+   restart_command ‘/etc/init.d/apache2 restart’​
+​end
+​&#8220;`</p>
+
+<ul>
+  <li><strong>​file</strong>
+*​ <strong>cookbook_file</strong>: to transfer cookbook files from /<cookbook>/files/ to the node.</cookbook></li>
+  <li><strong>template</strong>: A variant of the cookbook_file resource that lets you create file content from variables using an Embedded Ruby (ERB) template.</li>
+</ul>
+
+<p>​&#8220;`ruby
+​template /etc/resolv.conf do
+   source ‘my_resolv.conf.erb’
+   owner  ‘root’<br />
+   group  ‘root’<br />
+   mode   ‘0644’
+end</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+</pre></td><td class="code"><pre><code class="ruby"><span class="line"><span class="c1">### Chef Client​</span>
+</span><span class="line">
+</span><span class="line"><span class="err">​</span><span class="o">*</span> <span class="no">Chef</span><span class="o">-</span><span class="n">client</span> <span class="n">operates</span> <span class="k">in</span> <span class="mi">3</span> <span class="n">modes</span> <span class="o">-</span> <span class="n">client</span><span class="p">,</span> <span class="n">local</span>
+</span><span class="line">  <span class="o">*</span> <span class="n">__local__</span>
+</span><span class="line">    <span class="o">*</span> <span class="n">simulates</span> <span class="n">a</span> <span class="n">full</span> <span class="no">Chef</span> <span class="no">Server</span> <span class="n">instance</span> <span class="k">in</span> <span class="n">memory</span><span class="o">.</span> <span class="err">​</span>
+</span><span class="line">    <span class="o">*</span> <span class="no">Any</span> <span class="n">data</span> <span class="n">that</span> <span class="n">would</span> <span class="n">have</span> <span class="n">been</span> <span class="n">saved</span> <span class="n">to</span> <span class="n">a</span> <span class="n">server</span> <span class="n">is</span> <span class="n">written</span> <span class="n">to</span> <span class="n">the</span> <span class="n">local</span> <span class="n">directory</span> <span class="p">(</span><span class="sr">/nodes). </span>
+</span><span class="line"><span class="sr">    * The process of writing server data locally is called _writeback_. </span>
+</span><span class="line"><span class="sr">    * designed to support a rapid Chef recipe development by using Chef Zero, the in-memory, fast-start Chef server</span>
+</span><span class="line"><span class="sr">  * __client__</span>
+</span><span class="line"><span class="sr">    * chef-client is an agent (or service/</span><span class="n">daemon</span><span class="p">)</span> <span class="n">that</span> <span class="n">runs</span> <span class="n">locally</span> <span class="n">on</span> <span class="n">a</span> <span class="n">machine</span> <span class="n">managed</span> <span class="n">by</span> <span class="no">Chef</span><span class="o">.</span>
+</span><span class="line">    <span class="o">*</span> <span class="k">when</span> <span class="n">chef</span><span class="o">-</span><span class="n">client</span> <span class="n">is</span> <span class="n">running</span> <span class="k">in</span> <span class="n">client</span> <span class="n">mode</span><span class="p">,</span> <span class="n">it</span> <span class="n">assumes</span> <span class="n">you</span> <span class="n">have</span> <span class="n">a</span> <span class="no">Chef</span> <span class="no">Server</span> <span class="n">running</span> <span class="n">on</span> <span class="n">some</span> <span class="n">other</span> <span class="nb">system</span> <span class="n">on</span> <span class="n">your</span> <span class="n">network</span><span class="o">.</span>
+</span><span class="line"><span class="o">*</span> <span class="err">​</span><span class="no">Chef</span> <span class="n">client</span> <span class="n">constructs</span> <span class="s1">&#39;node&#39;</span> <span class="n">object</span> <span class="k">in</span> <span class="n">memory</span> <span class="n">providing</span> <span class="n">access</span> <span class="n">to</span> <span class="n">information</span> <span class="n">about</span> <span class="n">the</span> <span class="n">node</span><span class="o">.</span> <span class="no">It</span> <span class="n">runs</span> <span class="sb">`ohai`</span> <span class="n">command</span> <span class="ow">and</span> <span class="n">gathers</span> <span class="n">all</span> <span class="n">the</span> <span class="n">node</span><span class="err">&#39;</span><span class="n">s</span> <span class="n">automatic</span> <span class="n">attributes</span> <span class="n">such</span> <span class="n">as</span> <span class="n">hostname</span><span class="p">,</span> <span class="n">fqdn</span><span class="p">,</span> <span class="n">ip</span><span class="p">,</span> <span class="n">etc</span><span class="o">.</span><span class="err">​</span> <span class="no">Ohai</span> <span class="n">exposes</span> <span class="n">this</span> <span class="n">collection</span> <span class="n">of</span> <span class="n">node</span> <span class="n">information</span> <span class="n">to</span> <span class="no">Chef</span> <span class="n">as</span> <span class="n">a</span> <span class="n">set</span> <span class="n">of</span> <span class="n">automatic</span> <span class="n">attributes</span><span class="o">.</span>
+</span><span class="line">
+</span><span class="line"><span class="c1">### ​Cookbook​</span>
+</span><span class="line">
+</span><span class="line"><span class="o">*</span> <span class="no">To</span> <span class="n">create</span> <span class="n">a</span> <span class="ss">cookbook</span><span class="p">:</span> <span class="sb">`chef generate cookbook &lt;bookname&gt;`</span>
+</span><span class="line"><span class="err">​</span><span class="o">*</span> <span class="no">To</span> <span class="n">create</span> <span class="n">a</span> <span class="n">file</span> <span class="k">in</span> <span class="ss">cookbook</span><span class="p">:</span> <span class="sb">`chef generate ​file &lt;filename&gt;`</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<pre><code>├── Berksfile
+├── chefignore​ &lt;----- list of files to ignore when uploading cookbook to a Chef server.​
+├── .delivery
+│   ├── build_cookbook
+│   │   ├── Berksfile
+│   │   ├── chefignore
+│   │   ├── data_bags
+│   │   │   └── keys
+│   │   │       └── delivery_builder_keys.json
+│   │   ├── .kitchen.yml
+│   │   ├── LICENSE
+│   │   ├── metadata.rb
+│   │   ├── README.md
+│   │   ├── recipes
+│   │   │   ├── default.rb
+│   │   │   ├── deploy.rb
+│   │   │   ├── functional.rb
+│   │   │   ├── lint.rb
+│   │   │   ├── provision.rb
+│   │   │   ├── publish.rb
+│   │   │   ├── quality.rb
+│   │   │   ├── security.rb
+│   │   │   ├── smoke.rb
+│   │   │   ├── syntax.rb
+│   │   │   └── unit.rb
+│   │   ├── secrets
+│   │   │   └── fakey-mcfakerton
+│   │   └── test
+│   │       └── fixtures
+│   │           └── cookbooks
+│   │               └── test
+│   │                   ├── metadata.rb
+│   │                   └── recipes
+│   │                       └── default.rb
+│   ├── config.json
+│   └── project.toml
+├── files​ &lt;---- centralized file store in the cookbook to be distributed to the nodes using 'cookbook_file' resource​
+│   └── default​    &lt;----- controls whether files are copied to particular nodes​
+│       └── motd
+├── .git
+├── .gitignore
+├── .kitchen
+│   └── logs
+│       └── kitchen.log
+├── .kitchen.yml
+├── metadata.rb​    &lt;------ metadata information about the cookbook (name, version, dependencies, etc.)​
+├── README.md
+├── recipes​       &lt;------ custom recipe files go here​
+│   └── default.rb
+├── spec
+│   ├── spec_helper.rb
+│   └── unit
+│       └── recipes
+│           └── default_spec.rb
+└── t​emplates​​  &lt;--- Embedded Ruby template files 
+    └── default
+└── test
+    └── smoke
+        └── default
+            └── default_test.rb ```
+</code></pre>
+
+<h3 id="run-list">Run list</h3>
+
+<ul>
+  <li>A run list contains a list of recipes to execute on the target node.
+​* Real-world chef runs typically involve dozens of cookbooks with possibly hundreds of recipes and associated files. There needs to be a succinct way of referring to all the files in a cookbook. That’s the purpose of a run list.</li>
+  <li>A run list is used to specify the cookbook recipes to be evaluated on a node.</li>
+  <li>A run list specifies recipes in the form <code>recipe['&lt;cookbook_name&gt;::&lt;recipe_name&gt;'];</code> for example, <code>recipe['motd::default']</code> (or <code>recipe['motd']</code> when the Chef code is contained in the <code>recipes/default.rb</code> file).</li>
+  <li>​​Run list is specified in the chef-client command or stored on a Chef server.</li>
+  <li>For each node, Chef evaluates only recipe files that are specified on the node’s run list.​</li>
+</ul>
+
+<h1 id="references">References</h1>
+
+<ul>
+  <li>Books
+    <ul>
+      <li>Chef Cookbook</li>
+      <li>Learning Chef - O’Reilly</li>
+    </ul>
+  </li>
+  <li>Sites
+    <ul>
+      <li>https://learn.chef.io</li>
+    </ul>
+  </li>
+</ul>
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/infrastructure-as-code.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/infrastructure-as-code.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

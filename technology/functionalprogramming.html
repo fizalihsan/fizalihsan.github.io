@@ -1,0 +1,626 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Functional Programming - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Functional Programming Abstraction FP principles &amp; concepts Data Structures Concurrency Principles The Actor Model Software Transactional Model &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/functionalprogramming.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Functional Programming</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#abstraction" id="markdown-toc-abstraction">Abstraction</a></li>
+  <li><a href="#fp-principles--concepts" id="markdown-toc-fp-principles--concepts">FP principles &amp; concepts</a></li>
+  <li><a href="#data-structures" id="markdown-toc-data-structures">Data Structures</a></li>
+  <li><a href="#concurrency-principles" id="markdown-toc-concurrency-principles">Concurrency Principles</a>    <ul>
+      <li><a href="#the-actor-model" id="markdown-toc-the-actor-model">The Actor Model</a></li>
+      <li><a href="#software-transactional-model-stm" id="markdown-toc-software-transactional-model-stm">Software Transactional Model (STM)</a></li>
+    </ul>
+  </li>
+  <li><a href="#lambdas" id="markdown-toc-lambdas">Lambdas</a>    <ul>
+      <li><a href="#java-8-lambda-styles" id="markdown-toc-java-8-lambda-styles">Java 8 Lambda Styles</a></li>
+      <li><a href="#concepts" id="markdown-toc-concepts">Concepts</a>        <ul>
+          <li><a href="#lexical-scoping" id="markdown-toc-lexical-scoping">Lexical Scoping</a></li>
+          <li><a href="#data-type-inference" id="markdown-toc-data-type-inference">Data Type Inference</a></li>
+          <li><a href="#functional-interface" id="markdown-toc-functional-interface">Functional Interface</a></li>
+          <li><a href="#default-methods" id="markdown-toc-default-methods">Default Methods</a></li>
+          <li><a href="#method-references" id="markdown-toc-method-references">Method References</a></li>
+          <li><a href="#streams" id="markdown-toc-streams">Streams</a></li>
+          <li><a href="#data-parallelism" id="markdown-toc-data-parallelism">Data Parallelism</a></li>
+        </ul>
+      </li>
+      <li><a href="#lambdas-and-patterns" id="markdown-toc-lambdas-and-patterns">Lambdas and Patterns</a></li>
+    </ul>
+  </li>
+  <li><a href="#references" id="markdown-toc-references">References</a></li>
+</ul>
+
+<h1 id="abstraction">Abstraction</h1>
+<ul>
+  <li>Object-oriented programming is mostly about abstracting over data, while functional programming is mostly about abstracting over behavior.</li>
+  <li><strong>Declarative vs. Imperative Programming</strong>
+    <ul>
+      <li>Object-oriented programming is primarily imperative, where we tell the computer what to do. E.g., calculating factorial in for loop which involves mutations.</li>
+      <li>Functional programming is primarily declarative, where we define properties and relations, and let the runtime figure out how to compute what we want. E.g., calculating factorial in a recursive method without any mutations.</li>
+      <li>Declarative programming is made easier by lazy evaluation, because laziness gives the runtime the opportunity to “understand” all the properties and relations, then determine the optimal way to compute values on demand. Like lazy evaluation, declarative programming is largely incompatible with mutability and functions with side effects.</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="fp-principles--concepts">FP principles &amp; concepts</h1>
+
+<ul>
+  <li><strong>Avoiding mutable state</strong>
+    <ul>
+      <li>eases concurrent programming. We still need to handle mutations in a thread-safe way. Software Transactional Memory and the Actor Model give us this safety</li>
+    </ul>
+  </li>
+  <li><strong>Functions as First-Class Values</strong>
+    <ul>
+      <li>A method is associated with a class or an object. A function is more general and is not associated with anything.</li>
+      <li>Java only has methods and methods aren’t first-class in Java. You can’t pass a method as an argument to another method, return a method from a method, or assign a method as a value to a variable.</li>
+    </ul>
+  </li>
+  <li><strong>Lambdas and Closures</strong>
+    <ul>
+      <li>A closure is a function that carries an implicit binding to all the variables referenced within it.</li>
+    </ul>
+  </li>
+  <li><strong>Higher-order functions</strong>
+    <ul>
+      <li>Higher-order functions is a special term for functions that take other functions as arguments or return them as results. These are a powerful tool for building abstractions and composing behavior.</li>
+    </ul>
+  </li>
+  <li><strong>Side-Effect-Free Functions</strong>
+    <ul>
+      <li>Functions that mutate state are called side-effects. e.g., setting values of an object’s field or global variables. In mathematics, functions are always side-effect-free.</li>
+      <li>Side-effect-free functions make excellent building blocks for reuse, since they don’t depend on the context in which they run. Compared to functions with side effects, they are also easier to design, comprehend, optimize, and test. Hence, they are less likely to have bugs.</li>
+    </ul>
+  </li>
+  <li><strong>Lazy vs. Eager Evaluation</strong>
+    <ul>
+      <li>Lazy representation of infinite data structures wouldn’t be possible without this feature! Both referential transparency and lazy evaluation require side-effect-free functions and immutable values.</li>
+      <li>Finally, lazy evaluation is useful for deferring expensive operations until needed or never executing them at all.</li>
+      <li>Defer expensive calculation as much later as possible</li>
+      <li>Allows to create infinite collections, which keep delivering elements as long as they keep receiving requests.</li>
+    </ul>
+  </li>
+  <li><strong>Referential Transparency</strong>
+    <ul>
+      <li>A function is considered referentially transparent, if it has the same effect and output on the same input. If not, it is called <em>referentially opaque</em>.</li>
+      <li>If a function can also throw an exception, it isn’t a safe substitute for a value.</li>
+    </ul>
+  </li>
+  <li><strong>Currying</strong>
+    <ul>
+      <li>Both currying and partial application give you the ability to manipulate the number of arguments to functions or methods, typically by supplying one or more default values for some arguments (known as <em>fixing arguments</em>)</li>
+      <li>Currying describes the conversion of a multiargument function into a chain of single-argument functions. It describes the transformation process, not the invocation of the converted function. The caller can decide how many arguments to apply, thereby creating a derived function with that smaller number of arguments.</li>
+      <li>Use currying to construct specific functions from general ones.</li>
+      <li>Currying is a metafunction technique: doing something to the function itself rather than the function results.</li>
+      <li>Currying acts as a factory (pattern) for functions.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Example 1</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">def</span> <span class="n">product</span> <span class="o">=</span> <span class="o">{</span> <span class="n">x</span><span class="o">,</span> <span class="n">y</span> <span class="o">-&gt;</span>
+</span><span class="line">	<span class="n">println</span> <span class="s">&quot;x = $x, y = $y&quot;</span>
+</span><span class="line">	<span class="n">x</span> <span class="o">*</span> <span class="n">y</span>
+</span><span class="line"><span class="o">}</span>
+</span><span class="line">
+</span><span class="line"><span class="n">def</span> <span class="n">quadrate</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">curry</span><span class="o">(</span><span class="mi">4</span><span class="o">)</span>
+</span><span class="line"><span class="n">println</span> <span class="n">quadrate</span><span class="o">.</span><span class="na">call</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span>
+</span><span class="line">
+</span><span class="line"><span class="c1">//x = 4, y = 2</span>
+</span><span class="line"><span class="c1">//8</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Example 2</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">println</span> <span class="n">product</span><span class="o">.</span><span class="na">curry</span><span class="o">(</span><span class="mi">4</span><span class="o">).</span><span class="na">curry</span><span class="o">(</span><span class="mi">2</span><span class="o">).</span><span class="na">call</span><span class="o">()</span> <span class="c1">//same result as above</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Example 3</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">def</span> <span class="n">productWithX</span> <span class="o">=</span> <span class="n">product</span><span class="o">.</span><span class="na">curry</span><span class="o">(</span><span class="mi">4</span><span class="o">)</span>
+</span><span class="line"><span class="n">println</span> <span class="nf">productWithX</span><span class="o">(</span><span class="mi">2</span><span class="o">)</span> <span class="c1">//same result as above</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><strong>Memoization</strong>
+    <ul>
+      <li>The word memoization was coined by Donald Michie, a British artificial-intelligence researcher, to refer to function-level caching for repeating values.</li>
+      <li>In order to memoize a function in Groovy, you define it as a closure, then execute the <code>memoize()</code> method to return a function whose results will be cached.</li>
+      <li>Groovy built memoization into its Closure class; other languages implement it differently.</li>
+      <li>Memoization acts as a flyweight (pattern) for functions.</li>
+    </ul>
+  </li>
+  <li><strong>Command-Query Responsibility Segregation (CQRS)</strong></li>
+</ul>
+
+<h1 id="data-structures">Data Structures</h1>
+
+<ul>
+  <li><strong>Filter</strong>
+    <ul>
+      <li>Create a new collection, keeping only the elements for which a filter method returns true. The size of the new collection will be less than or equal to the size of the original collection.</li>
+    </ul>
+  </li>
+  <li><strong>Map</strong>
+    <ul>
+      <li>Create a new collection where each element from the original collection is transformed into a new value. Both the original collection and the new collection will have the same size.</li>
+    </ul>
+  </li>
+  <li><strong>Fold or Reduce or Inject or Accumulate</strong>
+    <ul>
+      <li>Starting with a “seed” value, traverse through the collection and use each element to build up a new final value where each element from the original collection “contributes” to the final value. An example is summing a list of integers.</li>
+    </ul>
+  </li>
+  <li>Combinators (Filter, map and fold) are modular, composable &amp; reusable.
+    <ul>
+      <li>filter and map, return a new List, while fold can return anything we want.</li>
+      <li>Recursion can be avoided by using combinators.</li>
+      <li>Persistent Data Structures (Software Transactional Memory)</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="concurrency-principles">Concurrency Principles</h1>
+
+<h2 id="the-actor-model">The Actor Model</h2>
+
+<p>The Actor model isn’t really a functional approach to concurrency, but it fits our general goal of managing state mutation in principled ways. In the Actor model of concurrency, work is coordinated by message passing between “actors.” Each actor has a queue, sometimes called a mailbox, for incoming messages. The actor processes each message, one at a time.</p>
+
+<h2 id="software-transactional-model-stm">Software Transactional Model (STM)</h2>
+
+<ul>
+  <li>Software Transactional Memory (STM) brings transactions to locations in memory that are referenced by variables. STM can’t provide durability, because memory isn’t durable (e.g., if the power is lost), but STM can provide the ACI, atomicity, consistency, and isolation in ACID.</li>
+  <li>Persistent Data Structures are exactly what STM needs.</li>
+</ul>
+
+<h1 id="lambdas">Lambdas</h1>
+
+<h2 id="java-8-lambda-styles">Java 8 Lambda Styles</h2>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">Runnable</span> <span class="n">noArguments</span> <span class="o">=</span> <span class="o">()</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Hello World&quot;</span><span class="o">);</span>
+</span><span class="line">
+</span><span class="line"><span class="n">ActionListener</span> <span class="n">oneArgument</span> <span class="o">=</span> <span class="n">event</span> <span class="o">-&gt;</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;button clicked&quot;</span><span class="o">);</span>
+</span><span class="line">
+</span><span class="line"><span class="n">Runnable</span> <span class="n">multiStatement</span> <span class="o">=</span> <span class="o">()</span> <span class="o">-&gt;</span> <span class="o">{</span>
+</span><span class="line">	<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">&quot;Hello&quot;</span><span class="o">);</span>
+</span><span class="line">	<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot; World&quot;</span><span class="o">);</span>
+</span><span class="line"><span class="o">};</span>
+</span><span class="line">
+</span><span class="line"><span class="n">BinaryOperator</span><span class="o">&lt;</span><span class="n">Long</span><span class="o">&gt;</span> <span class="n">add</span> <span class="o">=</span> <span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">y</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="o">;</span>
+</span><span class="line">
+</span><span class="line"><span class="n">BinaryOperator</span><span class="o">&lt;</span><span class="n">Long</span><span class="o">&gt;</span> <span class="n">addExplicit</span> <span class="o">=</span> <span class="o">(</span><span class="n">Long</span> <span class="n">x</span><span class="o">,</span> <span class="n">Long</span> <span class="n">y</span><span class="o">)</span> <span class="o">-&gt;</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="o">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="concepts">Concepts</h2>
+
+<ul>
+  <li>Lambda expression’s type is context dependent and it gets inferred by the compiler.</li>
+  <li>Lambda expressions capture values, not variables.</li>
+</ul>
+
+<h3 id="lexical-scoping">Lexical Scoping</h3>
+<pre><code>public static Predicate&lt;String&gt; checkIfStartsWith(final String letter) {
+	return name -&gt; name.startsWith(letter);
+}
+</code></pre>
+
+<ul>
+  <li>In <code>return name -&gt; name.startsWith(letter)</code>, it’s clear what name is: it’s the parameter passed to this lambda expression. But what’s the variable letter bound to? Since that’s not in the scope of this anonymous function, Java reaches over to the scope of the definition of this lambda expression and finds the variable letter in that scope. This is called lexical scoping. Since this lambda expression closes over the scope of its definition, it’s also referred to as a closure.</li>
+  <li>Local variables referenced from a lambda expression must be final or effectively final.</li>
+</ul>
+
+<h3 id="data-type-inference">Data Type Inference</h3>
+<p>In the following example, data type of the parameters are inferred by the compiler. If the parameters are inferred, then they are NOT final. In general, modifying parameters is in poor taste and leads to errors, so marking them final is a good practice. - E.g., <code>friends.forEach(name -&gt; System.out.println(name));</code></p>
+
+<h3 id="functional-interface">Functional Interface</h3>
+
+<ul>
+  <li>A functional interface is an interface with a single abstract method that is used as the type of a lambda expression.</li>
+  <li>There are some interfaces in Java that have only a single method but aren’t normally meant to be implemented by lambda expressions.For example, they might assume that the object has internal state and be interfaces with a single method only coincidentally. A couple of good examples are <code>java.lang.Comparable</code> and <code>java.io.Closeable</code>. For an object to be Closeable it must hold an open resource, such as a file handle that needs to be closed at some point in time. Again, the interface being called cannot be a pure function because closing a resource is really another example of mutating state.</li>
+  <li>For those reasons, all functional interfaces should annotate with <code>@FunctionalInterface</code>.</li>
+  <li>Some useful functional interfaces</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">Predicate</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">-</span> <span class="n">input</span> <span class="o">=</span> <span class="n">T</span><span class="o">,</span> <span class="n">output</span> <span class="o">=</span> <span class="kt">boolean</span>
+</span><span class="line"><span class="n">Consumer</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">-</span> <span class="n">input</span> <span class="o">=</span> <span class="n">T</span><span class="o">,</span> <span class="n">output</span> <span class="o">=</span> <span class="n">none</span>
+</span><span class="line"><span class="n">Function</span><span class="o">&lt;</span><span class="n">T</span><span class="o">,</span><span class="n">R</span><span class="o">&gt;</span> <span class="o">-</span> <span class="n">input</span> <span class="o">=</span> <span class="n">T</span><span class="o">,</span> <span class="n">output</span> <span class="o">=</span> <span class="n">R</span>
+</span><span class="line"><span class="n">Supplier</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">-</span> <span class="n">input</span> <span class="o">=</span> <span class="n">None</span><span class="o">,</span> <span class="n">output</span> <span class="o">=</span> <span class="n">T</span>
+</span><span class="line"><span class="n">UnaryOperator</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">-</span> <span class="n">input</span> <span class="o">=</span> <span class="n">T1</span><span class="o">,</span> <span class="n">output</span> <span class="o">=</span> <span class="n">T2</span>
+</span><span class="line"><span class="n">BinaryOperator</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">-</span> <span class="n">input</span> <span class="o">=</span> <span class="o">(</span><span class="n">T1</span><span class="o">,</span> <span class="n">T2</span><span class="o">),</span> <span class="n">output</span> <span class="o">=</span> <span class="n">T3</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="default-methods">Default Methods</h3>
+<ul>
+  <li>default methods are designed primarily to allow binary compatible API evolution. It allows API providers to add new methods to interfaces, and clients no longer are forced to implement them.</li>
+  <li>Can be added only in interfaces, functional or not.</li>
+  <li>If a class implements 2 interfaces with default methods by the same name, then a compilation error is thrown.</li>
+  <li>If a class implements an interface with a default method, and extends a class which also implements the same interface but overrides the default method, then invoking the method in the concrete class takes precedence. To resolve this conflict, the new class can override the method and invoke one of the default methods via Interface.super.methodName().</li>
+  <li>Previously, super acted as a reference to the parent class, but by using the InterfaceName.super variant it’s possible to specify a method from an inherited interface.</li>
+  <li>Unlike classes, interfaces don’t have instance fields, so default methods can modify their child classes only by calling methods on them.</li>
+  <li>
+    <p>With default methods, interfaces have now become like abstract classes. The only difference is abstract classes can have state while the interfaces can’t.</p>
+  </li>
+  <li><strong>*Rules of Default Methods</strong></li>
+</ul>
+
+<ol>
+  <li>Any class wins over any interface. So if there’s a method with a body, or an abstract declaration, in the superclass chain, we can ignore the interfaces completely.</li>
+  <li>Subtype wins over supertype. If we have a situation in which two interfaces are competing to provide a default method and one interface extends the other, the subclass wins.</li>
+  <li>No rule 3. If the previous two rules don’t give us the answer, the subclass must either implement the method or declare it abstract.</li>
+</ol>
+
+<h3 id="method-references">Method References</h3>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">artist</span> <span class="o">-&gt;</span> <span class="n">artist</span><span class="o">.</span><span class="na">getName</span><span class="o">()</span> <span class="o">==</span> <span class="nl">Artist:</span><span class="o">:</span><span class="n">getName</span>
+</span><span class="line"><span class="nl">Classname:</span><span class="o">:</span><span class="k">new</span> <span class="o">-</span> <span class="n">is</span> <span class="k">for</span> <span class="n">call</span> <span class="n">constructors</span><span class="o">.</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>The above two statements are one and the same. The standard form is <code>Classname::methodName</code>. Remember that even though it’s a method, you don’t need to use brackets because you’re not actually calling the method. You’re providing the equivalent of a lambda expression that can be called in order to call the method.</li>
+  <li>Method references can refer to static methods, non-static methods and methods with input parameters.</li>
+</ul>
+
+<h3 id="streams">Streams</h3>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">allArtists</span><span class="o">.</span><span class="na">stream</span><span class="o">().</span><span class="na">filter</span><span class="o">(</span><span class="n">artist</span> <span class="o">-&gt;</span> <span class="n">artist</span><span class="o">.</span><span class="na">isFrom</span><span class="o">(</span><span class="s">&quot;London&quot;</span><span class="o">)).</span><span class="na">count</span><span class="o">();</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Methods such as filter that build up the Stream recipe but don’t force a new value to be generated at the end are referred to as lazy. Methods such as count that generate a final value out of the Stream sequence are called eager.</li>
+  <li>It’s very easy to figure out whether an operation is eager or lazy: look at what it returns. If it gives you back a Stream, it’s lazy; if it gives you back another value or void, then it’s eager. This makes sense because the preferred way of using these methods is to form a sequence of lazy operations chained together and then to have a single eager operation at the end that generates your result.</li>
+  <li>This whole approach is somewhat similar to the familiar builder pattern. In the builder pattern, there are a sequence of calls that set up properties or configuration, followed by a single call to a build method. The object being created isn’t created until the call to build occurs.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">collected</span> <span class="o">=</span> <span class="n">Stream</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="s">&quot;a&quot;</span><span class="o">,</span> <span class="s">&quot;b&quot;</span><span class="o">,</span> <span class="s">&quot;hello&quot;</span><span class="o">)</span> <span class="o">.</span><span class="na">map</span><span class="o">(</span><span class="n">string</span> <span class="o">-&gt;</span> <span class="n">string</span><span class="o">.</span><span class="na">toUpperCase</span><span class="o">())</span> <span class="o">.</span><span class="na">collect</span><span class="o">(</span><span class="n">toList</span><span class="o">());</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="data-parallelism">Data Parallelism</h3>
+<ul>
+  <li>Data parallelism is a way to split up work to be done on many cores at the same time. In streams framework, we can utilize data parallelism by calling the parallel or parallelStream methods.</li>
+  <li>Going by horses-pulling-carts analogy, it would be like taking half of the goods inside our cart and putting them into another cart for another horse to pull, with both horses taking an identical route to the destination.</li>
+  <li>Data parallelism works really well when you want to perform the same operation on a lot of data. The problem needs be decomposed in a way that will work on subsections of the data, and then the answers from each subsection can be composed at the end.</li>
+  <li><em>Data parallelism</em> is often contrasted with <em>task parallelism</em>, in which each individual thread of execution can be doing a totally different task. Probably the most commonly encountered task parallelism is a Java EE application container.</li>
+  <li>The five main factors influencing performance are
+    <ul>
+      <li>the data size,</li>
+      <li>the source data structure,</li>
+      <li>whether the values are packed,</li>
+      <li>the number of available cores,</li>
+      <li>and how much processing time is spent on each element.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Libraries</strong></p>
+
+<ul>
+  <li>Java 8 introduces default methods and static methods on interfaces. This change means that methods on interfaces can now have bodies and contain code.</li>
+  <li>As a consequence of these performance overheads, the streams library differentiates between the primitive and boxed versions of some library functions. The mapToLong higher-order function and ToLongFunction, shown in Figure 4-1, are examples of this effort. Only the int, long, and double types have been chosen as the focus of the primitive specialization implementation in Java 8 because the impact is most noticeable in numerical algorithms.</li>
+</ul>
+
+<h2 id="lambdas-and-patterns">Lambdas and Patterns</h2>
+
+<ul>
+  <li>Loan Pattern</li>
+  <li>Execute Around Method - A synchronized block of code, such as synchronized { … }, is a realization of the <em>execute around method</em> pattern.</li>
+  <li>Referential transparency</li>
+  <li>Tail-Call Optimization
+    <ul>
+      <li>The biggest hurdle to using recursion is the risk of stack overflow for problems with large inputs. The brilliant TCO technique can remove that concern. A tail call is a recursive call in which the last operation performed is a call to itself. Java does not directly support TCO at the compiler level, but we can use lambda expressions to implement it in a few lines of code. This is called ‘trampoline calls’ and lets enjoy the power of recursion without the concern of blowing up the stack.</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="references">References</h1>
+
+<ul>
+  <li>Functional Programming for Java Developers - Venkat Subramaniam - Pragmatic Programmers</li>
+  <li>Java 8 Lambdas - O’Reilly</li>
+  <li>Functional Thinking - by Neal Ford - O’Reilly</li>
+</ul>
+
+  
+    <footer>
+      
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

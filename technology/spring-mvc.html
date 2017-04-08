@@ -1,0 +1,1298 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Spring MVC - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Spring MVC Request Lifecycle Components 2 ways to enable Spring MVC Application Contexts DispatcherServlet ContextLoaderListener Controller Request &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/spring-mvc.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Spring MVC</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#request-lifecycle" id="markdown-toc-request-lifecycle">Request Lifecycle</a></li>
+  <li><a href="#components" id="markdown-toc-components">Components</a>    <ul>
+      <li><a href="#ways-to-enable-spring-mvc" id="markdown-toc-ways-to-enable-spring-mvc">2 ways to enable Spring MVC</a></li>
+      <li><a href="#application-contexts" id="markdown-toc-application-contexts">Application Contexts</a></li>
+      <li><a href="#dispatcherservlet" id="markdown-toc-dispatcherservlet">DispatcherServlet</a></li>
+      <li><a href="#contextloaderlistener" id="markdown-toc-contextloaderlistener">ContextLoaderListener</a></li>
+      <li><a href="#controller" id="markdown-toc-controller">Controller</a></li>
+      <li><a href="#request-mapping" id="markdown-toc-request-mapping">Request Mapping</a></li>
+      <li><a href="#user-input" id="markdown-toc-user-input">User input</a></li>
+      <li><a href="#model" id="markdown-toc-model">Model</a></li>
+      <li><a href="#view-resolver" id="markdown-toc-view-resolver">View Resolver</a>        <ul>
+          <li><a href="#beannameviewresolver" id="markdown-toc-beannameviewresolver"><code>BeanNameViewResolver</code></a></li>
+          <li><a href="#internalresourceviewresolver" id="markdown-toc-internalresourceviewresolver"><code>InternalResourceViewResolver</code></a></li>
+        </ul>
+      </li>
+      <li><a href="#view" id="markdown-toc-view">View</a></li>
+    </ul>
+  </li>
+  <li><a href="#web-mvc-application-layer" id="markdown-toc-web-mvc-application-layer">Web MVC Application Layer</a>    <ul>
+      <li><a href="#user-interface-presentation" id="markdown-toc-user-interface-presentation">User Interface (Presentation)</a></li>
+      <li><a href="#web-presentation" id="markdown-toc-web-presentation">Web (Presentation)</a></li>
+      <li><a href="#service-layer" id="markdown-toc-service-layer">Service layer</a></li>
+      <li><a href="#data-access" id="markdown-toc-data-access">Data Access</a></li>
+      <li><a href="#domain" id="markdown-toc-domain">Domain</a></li>
+    </ul>
+  </li>
+  <li><a href="#definitions" id="markdown-toc-definitions">Definitions</a>    <ul>
+      <li><a href="#modelmap" id="markdown-toc-modelmap">ModelMap</a></li>
+      <li><a href="#view-1" id="markdown-toc-view-1">View</a></li>
+      <li><a href="#modelandview" id="markdown-toc-modelandview">ModelAndView</a></li>
+      <li><a href="#controller-1" id="markdown-toc-controller-1">Controller</a>        <ul>
+          <li><a href="#formcontroller" id="markdown-toc-formcontroller">FormController</a></li>
+          <li><a href="#multiactioncontroller" id="markdown-toc-multiactioncontroller">MultiActionController</a></li>
+        </ul>
+      </li>
+      <li><a href="#handlermapping" id="markdown-toc-handlermapping">HandlerMapping</a></li>
+      <li><a href="#handlerinterceptor" id="markdown-toc-handlerinterceptor">HandlerInterceptor</a></li>
+      <li><a href="#handlerexecutionchain" id="markdown-toc-handlerexecutionchain">HandlerExecutionChain</a></li>
+      <li><a href="#handleradapter" id="markdown-toc-handleradapter">HandlerAdapter</a></li>
+      <li><a href="#resolvers" id="markdown-toc-resolvers">Resolvers</a>        <ul>
+          <li><a href="#viewresolver" id="markdown-toc-viewresolver">ViewResolver</a></li>
+          <li><a href="#handlerexceptionresolver" id="markdown-toc-handlerexceptionresolver">HandlerExceptionResolver</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#dispatcherservlet-bootstrapping" id="markdown-toc-dispatcherservlet-bootstrapping">DispatcherServlet Bootstrapping</a>    <ul>
+      <li><a href="#how-to-configure-dispatcherservlet-and-contextloaderlistener-in-java" id="markdown-toc-how-to-configure-dispatcherservlet-and-contextloaderlistener-in-java">How to configure DispatcherServlet and ContextLoaderListener in Java?</a></li>
+      <li><a href="#dispatcherservlet-request-processing-flow" id="markdown-toc-dispatcherservlet-request-processing-flow">DispatcherServlet Request Processing Flow</a></li>
+    </ul>
+  </li>
+</ul>
+
+<p><img class="right" src="/technology/mvc-model.png" /></p>
+
+<h1 id="request-lifecycle">Request Lifecycle</h1>
+
+<ol>
+  <li>HTTP Request reaches Spring’s <code>DispatcherServlet</code>.</li>
+  <li><code>DispatcherServlet</code> uses one or more handler mappings to figure out the controller to the handle the request</li>
+  <li>Controller calls the service classes to perform a business function. Optionally returns a business <em>model</em> class.</li>
+  <li>Controller returns a logical <em>view</em> name</li>
+  <li><code>DispatcherServlet</code> consults a view resolver to map the logical view name to a specific view implementation, which couild be JSP, Apache Tiles, Thymeleaf, etc.</li>
+  <li>View uses the model data to render the output.</li>
+  <li><code>DispatcherServlet</code> sends the output as HTTP response back to client.</li>
+</ol>
+
+<h1 id="components">Components</h1>
+
+<h2 id="ways-to-enable-spring-mvc">2 ways to enable Spring MVC</h2>
+
+<ol>
+  <li>Add <code>&lt;mvc:annotation-driven&gt;</code> element in XML (<em>which XML</em>)</li>
+  <li>Add <code>@EnableWebMvc</code> annotation in configuration class</li>
+</ol>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Configuration</span>
+</span><span class="line"><span class="nd">@EnableWebMvc</span>
+</span><span class="line"><span class="nd">@ComponentScan</span><span class="o">(</span><span class="s">&quot;com.test.web&quot;</span><span class="o">)</span> <span class="c1">// automatically scans controllers from this package</span>
+</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">WebConfig</span> <span class="o">{</span>
+</span><span class="line">
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="application-contexts">Application Contexts</h2>
+
+<blockquote>
+  <p>Spring web applications have 2 application contexts. 
+<code>DispatcherServlet</code> loads beans containing web components such as controllers, view resolvers, handler mappings, etc.
+<code>ContextLoaderListener</code> loads the other beans in the application that are typically used by service and data access layers.</p>
+</blockquote>
+
+<h2 id="dispatcherservlet">DispatcherServlet</h2>
+
+<ul>
+  <li><code>DispatcherServlet</code> is the <code>Front Controller</code> for Spring MVC. This is the single servlet that delegates responsibility to other <em>controllers</em> to perform the actual processing.</li>
+  <li>When <code>DispatcherServlet</code> starts up, it creates a Spring application context and loads it with beans declared in
+    <ul>
+      <li>the configuration file or</li>
+      <li>the classes given via <code>getServletConfigClasses()</code> method in <code>AbstractAnnotationConfigDispatcherServletInitializer</code></li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>4 ways to configure <code>DispatcherServlet</code></strong></p>
+
+<p>1) <em>Via <code>web.xml</code> with XML-based context files</em></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Setting up Spring MVC in web.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+</span><span class="line"><span class="nt">&lt;web-app</span> <span class="na">version=</span><span class="s">&quot;2.5&quot;</span>
+</span><span class="line">	<span class="na">xmlns=</span><span class="s">&quot;http://java.sun.com/xml/ns/javaee&quot;</span>
+</span><span class="line">	<span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+</span><span class="line">	<span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://java.sun.com/xml/ns/javaee</span>
+</span><span class="line"><span class="s">	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">	
+</span><span class="line">	<span class="c">&lt;!-- location of the file that defines the root application context loaded by ContextLoaderListener --&gt;</span>
+</span><span class="line">	<span class="nt">&lt;context-param&gt;</span>
+</span><span class="line">		<span class="nt">&lt;param-name&gt;</span>contextConfigLocation<span class="nt">&lt;/param-name&gt;</span>
+</span><span class="line">		<span class="nt">&lt;param-value&gt;</span>/WEB-INF/spring/root-context.xml<span class="nt">&lt;/param-value&gt;</span>
+</span><span class="line">	<span class="nt">&lt;/context-param&gt;</span>
+</span><span class="line">	
+</span><span class="line">	<span class="nt">&lt;listener&gt;</span>
+</span><span class="line">		<span class="nt">&lt;listener-class&gt;</span>org.springframework.web.context.ContextLoaderListener<span class="nt">&lt;/listener-class&gt;</span>
+</span><span class="line">	<span class="nt">&lt;/listener&gt;</span>
+</span><span class="line">	
+</span><span class="line">	<span class="c">&lt;!-- DispatcherServlet loads its application context with beans defined in a file whose name is based on servlet name. E.g., if servlet name is &#39;blah&#39;, then an XML file /WEB-INF/blah-context.xml --&gt;</span>
+</span><span class="line">	<span class="nt">&lt;servlet&gt;</span>
+</span><span class="line">		<span class="nt">&lt;servlet-name&gt;</span>appServlet<span class="nt">&lt;/servlet-name&gt;</span>
+</span><span class="line">		<span class="nt">&lt;servlet-class&gt;</span>org.springframework.web.servlet.DispatcherServlet<span class="nt">&lt;/servlet-class&gt;</span>
+</span><span class="line">		<span class="nt">&lt;load-on-startup&gt;</span>1<span class="nt">&lt;/load-on-startup&gt;</span>
+</span><span class="line">	<span class="nt">&lt;/servlet&gt;</span>
+</span><span class="line">	
+</span><span class="line">	<span class="nt">&lt;servlet-mapping&gt;</span>
+</span><span class="line">		<span class="nt">&lt;servlet-name&gt;</span>appServlet<span class="nt">&lt;/servlet-name&gt;</span>
+</span><span class="line">		<span class="nt">&lt;url-pattern&gt;</span>/<span class="nt">&lt;/url-pattern&gt;</span>
+</span><span class="line">	<span class="nt">&lt;/servlet-mapping&gt;</span>
+</span><span class="line"><span class="nt">&lt;/web-app&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>If you’d rather specify the location of the <code>DispatcherServlet</code> configuration file,
+you can set a <code>contextConfigLocation</code> initialization parameter on the servlet as follows.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;servlet&gt;</span>
+</span><span class="line">	<span class="nt">&lt;servlet-name&gt;</span>appServlet<span class="nt">&lt;/servlet-name&gt;</span>
+</span><span class="line">	<span class="nt">&lt;servlet-class&gt;</span>org.springframework.web.servlet.DispatcherServlet<span class="nt">&lt;/servlet-class&gt;</span>
+</span><span class="line">	<span class="nt">&lt;init-param&gt;</span>
+</span><span class="line">		<span class="nt">&lt;param-name&gt;</span>contextConfigLocation<span class="nt">&lt;/param-name&gt;</span>
+</span><span class="line">		<span class="nt">&lt;param-value&gt;</span>/WEB-INF/spring/appServlet/servlet-context.xml<span class="nt">&lt;/param-value&gt;</span>
+</span><span class="line">	<span class="nt">&lt;/init-param&gt;</span>
+</span><span class="line">	<span class="nt">&lt;load-on-startup&gt;</span>1<span class="nt">&lt;/load-on-startup&gt;</span>
+</span><span class="line"><span class="nt">&lt;/servlet&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>2) <em>Via <code>web.xml</code> with Java-based context classes annotated with <code>@Configuration</code></em></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+<span class="line-number">39</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+</span><span class="line"><span class="nt">&lt;web-app</span> <span class="na">version=</span><span class="s">&quot;2.5&quot;</span>
+</span><span class="line">	<span class="na">xmlns=</span><span class="s">&quot;http://java.sun.com/xml/ns/javaee&quot;</span>
+</span><span class="line">	<span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+</span><span class="line">	<span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://java.sun.com/xml/ns/javaee</span>
+</span><span class="line"><span class="s">	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">
+</span><span class="line">	<span class="nt">&lt;context-param&gt;</span>
+</span><span class="line">		<span class="nt">&lt;param-name&gt;</span>contextClass<span class="nt">&lt;/param-name&gt;</span>
+</span><span class="line">		<span class="nt">&lt;param-value&gt;</span>	org.springframework.web.context.support.AnnotationConfigWebApplicationContext<span class="nt">&lt;/	param-value&gt;</span>
+</span><span class="line">	<span class="nt">&lt;/context-param&gt;</span>
+</span><span class="line">	<span class="nt">&lt;context-param&gt;</span>
+</span><span class="line">		<span class="nt">&lt;param-name&gt;</span>contextConfigLocation<span class="nt">&lt;/param-name&gt;</span>
+</span><span class="line">		<span class="nt">&lt;param-value&gt;</span>com.habuma.spitter.config.RootConfig<span class="nt">&lt;/param-value&gt;</span>
+</span><span class="line">	<span class="nt">&lt;/context-param&gt;</span>
+</span><span class="line">	
+</span><span class="line">	<span class="nt">&lt;listener&gt;</span>
+</span><span class="line">		<span class="nt">&lt;listener-class&gt;</span>org.springframework.web.context.ContextLoaderListener<span class="nt">&lt;/listener-class&gt;</span>
+</span><span class="line">	<span class="nt">&lt;/listener&gt;</span>
+</span><span class="line">
+</span><span class="line">	<span class="nt">&lt;servlet&gt;</span>
+</span><span class="line">		<span class="nt">&lt;servlet-name&gt;</span>appServlet<span class="nt">&lt;/servlet-name&gt;</span>
+</span><span class="line">		<span class="nt">&lt;servlet-class&gt;</span>org.springframework.web.servlet.DispatcherServlet<span class="nt">&lt;/servlet-class&gt;</span>
+</span><span class="line">		<span class="nt">&lt;init-param&gt;</span>
+</span><span class="line">			<span class="nt">&lt;param-name&gt;</span>contextClass<span class="nt">&lt;/param-name&gt;</span>
+</span><span class="line">			<span class="nt">&lt;param-value&gt;</span>.springframework.web.context.support.AnnotationConfigWebApplicationContext<span class="nt">&lt;/param-value&gt;</span>
+</span><span class="line">		<span class="nt">&lt;/init-param&gt;</span>
+</span><span class="line">		<span class="nt">&lt;init-param&gt;</span>
+</span><span class="line">			<span class="nt">&lt;param-name&gt;</span>contextConfigLocation<span class="nt">&lt;/param-name&gt;</span>
+</span><span class="line">			<span class="nt">&lt;param-value&gt;</span>com.habuma.spitter.config.WebConfigConfig<span class="nt">&lt;/param-value&gt;</span>
+</span><span class="line">		<span class="nt">&lt;/init-param&gt;</span>
+</span><span class="line">		<span class="nt">&lt;load-on-startup&gt;</span>1<span class="nt">&lt;/load-on-startup&gt;</span>
+</span><span class="line">	<span class="nt">&lt;/servlet&gt;</span>
+</span><span class="line">	
+</span><span class="line">	<span class="nt">&lt;servlet-mapping&gt;</span>
+</span><span class="line">		<span class="nt">&lt;servlet-name&gt;</span>appServlet<span class="nt">&lt;/servlet-name&gt;</span>
+</span><span class="line">		<span class="nt">&lt;url-pattern&gt;</span>/<span class="nt">&lt;/url-pattern&gt;</span>
+</span><span class="line">	<span class="nt">&lt;/servlet-mapping&gt;</span>
+</span><span class="line"><span class="nt">&lt;/web-app&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><img src="/technology/spring-mvc-initializer.png" /></p>
+
+<p>3) <em>Implement <code>WebApplicationInitializer</code></em> (From Spring 3.0, container automatically detects an implementation of this interface)</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Manually registering DispatcherServlet</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyServletInitializer</span> <span class="kd">implements</span> <span class="n">WebApplicationInitializer</span> <span class="o">{</span>
+</span><span class="line">	<span class="nd">@Override</span>
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">onStartup</span><span class="o">(</span><span class="n">ServletContext</span> <span class="n">servletContext</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">ServletException</span> <span class="o">{</span>
+</span><span class="line">		<span class="n">Dynamic</span> <span class="n">myServlet</span> <span class="o">=</span> <span class="n">servletContext</span><span class="o">.</span><span class="na">addServlet</span><span class="o">(</span><span class="s">&quot;myServlet&quot;</span><span class="o">,</span> <span class="n">MyServlet</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class="line">		<span class="n">myServlet</span><span class="o">.</span><span class="na">addMapping</span><span class="o">(</span><span class="s">&quot;/custom/**&quot;</span><span class="o">);</span>
+</span><span class="line">
+</span><span class="line">		<span class="n">ServletRegistration</span><span class="o">.</span><span class="na">Dynamic</span> <span class="n">dispatcher</span> <span class="o">=</span> <span class="n">servletContext</span><span class="o">.</span><span class="na">addServlet</span><span class="o">(</span><span class="s">&quot;dispatcher&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="nf">DispatcherServlet</span><span class="o">());</span>
+</span><span class="line">		<span class="n">dispatcher</span><span class="o">.</span><span class="na">addMapping</span><span class="o">(</span><span class="s">&quot;/&quot;</span><span class="o">);</span>
+</span><span class="line">		<span class="n">dispatcher</span><span class="o">.</span><span class="na">setLoadOnStartup</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>4) <em>Extend abstract class <code>AbstractAnnotationConfigDispatcherServletInitializer</code></em> (which implements <code>WebApplicationInitializer</code> and invoked by <code>SpringServletContainerInitializer</code>). It creates both a <code>DispatcherServlet</code> and a <code>ContextLoaderListener</code>. (<em>works only in containers supporting Servlet 3.0</em>)</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Example 1 - Sample WebAppInitializer</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kn">package</span> <span class="n">spittr</span><span class="o">.</span><span class="na">config</span><span class="o">;</span>
+</span><span class="line"><span class="kn">import</span> <span class="nn">org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer</span><span class="o">;</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SpittrWebAppInitializer</span> <span class="kd">extends</span> <span class="n">AbstractAnnotationConfigDispatcherServletInitializer</span> <span class="o">{</span>
+</span><span class="line">	<span class="nd">@Override</span>
+</span><span class="line">	<span class="kd">protected</span> <span class="n">String</span><span class="o">[]</span> <span class="nf">getServletMappings</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">		<span class="k">return</span> <span class="k">new</span> <span class="n">String</span><span class="o">[]</span> <span class="o">{</span> <span class="s">&quot;/&quot;</span> <span class="o">};</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line">
+</span><span class="line">	<span class="c1">// Returns @Configuration beans to load into the DispatcherServletContext</span>
+</span><span class="line">	<span class="nd">@Override</span>
+</span><span class="line">	<span class="kd">protected</span> <span class="n">Class</span><span class="o">&lt;?&gt;[]</span> <span class="n">getServletConfigClasses</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">		<span class="k">return</span> <span class="k">new</span> <span class="n">Class</span><span class="o">&lt;?&gt;[]</span> <span class="o">{</span> <span class="n">WebConfig</span><span class="o">.</span><span class="na">class</span> <span class="o">};</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line">	
+</span><span class="line">	<span class="c1">// Returns @Configuration beans to load into the ContextLoaderListener</span>
+</span><span class="line">	<span class="nd">@Override</span>
+</span><span class="line">	<span class="kd">protected</span> <span class="n">Class</span><span class="o">&lt;?&gt;[]</span> <span class="n">getRootConfigClasses</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">		<span class="k">return</span> <span class="k">new</span> <span class="n">Class</span><span class="o">&lt;?&gt;[]</span> <span class="o">{</span> <span class="n">RootConfig</span><span class="o">.</span><span class="na">class</span> <span class="o">};</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="contextloaderlistener">ContextLoaderListener</h2>
+
+<ul>
+  <li>Spring web applications have 2 application contexts.
+    <ul>
+      <li><code>DispatcherServlet</code> loads beans containing web components such as controllers, view resolvers, handler mappings, etc.</li>
+      <li><code>ContextLoaderListener</code> loads the other beans in the application that are typically used by service and data access layers.</li>
+    </ul>
+  </li>
+  <li>loads the beans for the application (not web related beans)</li>
+</ul>
+
+<h2 id="controller">Controller</h2>
+
+<ul>
+  <li>Just classes annotated with <code>@Controller</code> and methods annotated with <code>@RequestMapping</code></li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Handles requests for / and renders the home page</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Controller</span>
+</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">HomeController</span> <span class="o">{</span>
+</span><span class="line">	<span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span><span class="o">=</span><span class="s">&quot;/&quot;</span><span class="o">,</span> <span class="n">method</span><span class="o">=</span><span class="n">GET</span><span class="o">)</span>
+</span><span class="line">	<span class="kd">public</span> <span class="n">String</span> <span class="nf">home</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">		<span class="k">return</span> <span class="s">&quot;home&quot;</span><span class="o">;</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Various input types to request handler method in controller
+    <ul>
+      <li>No input parameter</li>
+      <li><code>Model</code></li>
+      <li><code>java.util.Map</code></li>
+      <li>Parameters annotated with <code>@RequestParam</code></li>
+      <li>Parameters annotated with <code>@PathVariable</code></li>
+      <li>POJO populated with form parameters</li>
+      <li><code>Errors</code> - used for form validation</li>
+    </ul>
+  </li>
+  <li>Various output/return types from request handler method in controller
+    <ul>
+      <li><code>void</code></li>
+      <li><code>String</code>
+        <ul>
+          <li>logical view name (“car”)</li>
+          <li>physical view name (<code>/WEB-INF/jsp/car.jsp</code>)</li>
+          <li>special view names (<code>redirect:/cars/7</code>)</li>
+          <li>ModelAndView</li>
+        </ul>
+      </li>
+      <li><code>Model</code></li>
+      <li><code>Map</code></li>
+      <li><code>ModelMap</code></li>
+      <li><code>View</code></li>
+      <li><code>@ResponseBody</code></li>
+      <li><code>@ModelAttribute</code></li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>2 ways to configure a <code>Controller</code></strong></p>
+
+<ul>
+  <li>Add <code>@Component</code> to a class</li>
+  <li>Add <code>@Controller</code> to a class. This is just a stereotype annotation and serves only for component-scanning.</li>
+</ul>
+
+<h2 id="request-mapping">Request Mapping</h2>
+
+<ul>
+  <li><code>@RequestMapping</code> can be applied at class-level and method-level.</li>
+  <li><code>@RequestMapping</code> takes an array paths as input as well.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>At class-level and method-level</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Controller</span>
+</span><span class="line"><span class="nd">@RequestMapping</span><span class="o">({</span><span class="s">&quot;/&quot;</span><span class="o">})</span>
+</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">HomeController</span> <span class="o">{</span>
+</span><span class="line">	<span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">method</span><span class="o">=</span><span class="n">GET</span><span class="o">)</span>
+</span><span class="line">	<span class="kd">public</span> <span class="n">String</span> <span class="nf">home</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">		<span class="k">return</span> <span class="s">&quot;home&quot;</span><span class="o">;</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>multiple paths</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Controller</span>
+</span><span class="line"><span class="nd">@RequestMapping</span><span class="o">({</span><span class="s">&quot;/&quot;</span><span class="o">,</span> <span class="s">&quot;/homepage&quot;</span><span class="o">})</span>
+</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">HomeController</span> <span class="o">{</span>
+</span><span class="line">	<span class="o">...</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="user-input">User input</h2>
+
+<p>There are 3 ways to get user input into a controller’s handler method:</p>
+
+<p>1) <strong><em>Query parameters</em></strong></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Access query/request parameters</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">method</span><span class="o">=</span><span class="n">RequestMethod</span><span class="o">.</span><span class="na">GET</span><span class="o">)</span>
+</span><span class="line"><span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Spittle</span><span class="o">&gt;</span> <span class="nf">spittles</span><span class="o">(</span>
+</span><span class="line">		<span class="nd">@RequestParam</span><span class="o">(</span><span class="s">&quot;max&quot;</span><span class="o">)</span> <span class="kt">long</span> <span class="n">max</span><span class="o">,</span>
+</span><span class="line">		<span class="nd">@RequestParam</span><span class="o">(</span><span class="s">&quot;count&quot;</span><span class="o">,</span> <span class="n">defaultValue</span><span class="o">=</span><span class="s">&quot;0&quot;</span><span class="o">)</span> <span class="kt">int</span> <span class="n">count</span>
+</span><span class="line">	<span class="o">)</span> <span class="o">{</span>
+</span><span class="line">	<span class="k">return</span> <span class="n">spittleRepository</span><span class="o">.</span><span class="na">findSpittles</span><span class="o">(</span><span class="n">max</span><span class="o">,</span> <span class="n">count</span><span class="o">);</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>2) <strong><em>Path variables</em></strong></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Accessing path variables</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span><span class="o">=</span><span class="s">&quot;/{spittleId}&quot;</span><span class="o">,</span> <span class="n">method</span><span class="o">=</span><span class="n">RequestMethod</span><span class="o">.</span><span class="na">GET</span><span class="o">)</span>
+</span><span class="line"><span class="kd">public</span> <span class="n">String</span> <span class="nf">spittle</span><span class="o">(</span><span class="nd">@PathVariable</span><span class="o">(</span><span class="s">&quot;spittleId&quot;</span><span class="o">)</span> <span class="kt">long</span> <span class="n">spittleId</span><span class="o">,</span> <span class="n">Model</span> <span class="n">model</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">	<span class="n">model</span><span class="o">.</span><span class="na">addAttribute</span><span class="o">(</span><span class="n">spittleRepository</span><span class="o">.</span><span class="na">findOne</span><span class="o">(</span><span class="n">spittleId</span><span class="o">));</span>
+</span><span class="line">	<span class="k">return</span> <span class="s">&quot;spittle&quot;</span><span class="o">;</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>3) <strong><em>Form parameters</em></strong></p>
+
+<p>Spring MVC binds the form parameters to the fields in the POJO by field name.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Access form parameters</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span><span class="o">=</span><span class="s">&quot;/register&quot;</span><span class="o">,</span> <span class="n">method</span><span class="o">=</span><span class="n">POST</span><span class="o">)</span>
+</span><span class="line"><span class="kd">public</span> <span class="n">String</span> <span class="nf">processRegistration</span><span class="o">(</span><span class="n">Spitter</span> <span class="n">spitter</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">	<span class="n">spitterRepository</span><span class="o">.</span><span class="na">save</span><span class="o">(</span><span class="n">spitter</span><span class="o">);</span>
+</span><span class="line">	<span class="k">return</span> <span class="s">&quot;redirect:/spitter/&quot;</span> <span class="o">+</span> <span class="n">spitter</span><span class="o">.</span><span class="na">getUsername</span><span class="o">();</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<blockquote>
+  <p>When handling a <code>POST</code> request, it’s usually a good idea to send a redirect after the
+<code>POST</code> has completed processing so that a browser refresh won’t accidentally submit the
+form a second time</p>
+</blockquote>
+
+<h2 id="model">Model</h2>
+
+<ul>
+  <li><code>org.springframework.ui.Model</code> is nothing but a Map implementation</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">method</span><span class="o">=</span><span class="n">RequestMethod</span><span class="o">.</span><span class="na">GET</span><span class="o">)</span>
+</span><span class="line"><span class="kd">public</span> <span class="n">String</span> <span class="nf">spittles</span><span class="o">(</span><span class="n">Model</span> <span class="n">model</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">	<span class="n">List</span><span class="o">&lt;</span><span class="n">Spittle</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="n">dao</span><span class="o">.</span><span class="na">findSpittles</span><span class="o">();</span>
+</span><span class="line">	<span class="n">model</span><span class="o">.</span><span class="na">addAttribute</span><span class="o">(</span><span class="s">&quot;spittleList&quot;</span><span class="o">,</span> <span class="n">list</span><span class="o">);</span>
+</span><span class="line">	<span class="k">return</span> <span class="s">&quot;spittles&quot;</span><span class="o">;</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="view-resolver">View Resolver</h2>
+
+<ul>
+  <li>Presenting here some of the commonly used view resolvers</li>
+  <li>Default view resolver is <code>BeanNameViewResolver</code></li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">ViewResolver</span> <span class="o">{</span>
+</span><span class="line">	<span class="n">View</span> <span class="nf">resolveViewName</span><span class="o">(</span><span class="n">String</span> <span class="n">viewName</span><span class="o">,</span> <span class="n">Locale</span> <span class="n">locale</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span><span class="o">;</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="beannameviewresolver"><code>BeanNameViewResolver</code></h3>
+
+<p>Resolves views as beans in the Spring application context whose ID is the same as the view name. The bean has to implement <code>View</code> interface.</p>
+
+<h3 id="internalresourceviewresolver"><code>InternalResourceViewResolver</code></h3>
+
+<p>In the below example, when controller a string say “blah”, the below resolver will resolve it to <code>/WEB-INF/views/blah.jsp</code></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>InternalResourceViewResolver example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Bean</span>
+</span><span class="line"><span class="kd">public</span> <span class="n">ViewResolver</span> <span class="nf">viewResolver</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">	<span class="n">InternalResourceViewResolver</span> <span class="n">resolver</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">InternalResourceViewResolver</span><span class="o">();</span>
+</span><span class="line">	<span class="n">resolver</span><span class="o">.</span><span class="na">setPrefix</span><span class="o">(</span><span class="s">&quot;/WEB-INF/views/&quot;</span><span class="o">);</span>
+</span><span class="line">	<span class="n">resolver</span><span class="o">.</span><span class="na">setSuffix</span><span class="o">(</span><span class="s">&quot;.jsp&quot;</span><span class="o">);</span>
+</span><span class="line">	<span class="n">resolver</span><span class="o">.</span><span class="na">setExposeContextBeansAsAttributes</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+</span><span class="line">	<span class="k">return</span> <span class="n">resolver</span><span class="o">;</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><code>InternalResourceViewResolver</code> also recognizes the following special prefixes</p>
+
+<ul>
+  <li><code>redirect:</code> - e.g., <code>return "redirect:/spitter/" + spitter.getUsername();</code></li>
+  <li><code>forward:</code> - e.g., <code>return "forward:/spitter/" + spitter.getUsername();</code></li>
+</ul>
+
+<h2 id="view">View</h2>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">View</span> <span class="o">{</span>
+</span><span class="line">	<span class="n">String</span> <span class="nf">getContentType</span><span class="o">();</span>
+</span><span class="line">	<span class="kt">void</span> <span class="nf">render</span><span class="o">(</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="o">?&gt;</span> <span class="n">model</span><span class="o">,</span> <span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span><span class="o">;</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<hr />
+
+<h1 id="web-mvc-application-layer">Web MVC Application Layer</h1>
+
+<p>Layering leads to separation of concerns, easy testability, clean architecture.</p>
+
+<h2 id="user-interface-presentation">User Interface (Presentation)</h2>
+
+<ul>
+  <li>presents the application to the user rendering the response as requested by the client. e.g., HTML, XML, PDF, etc.</li>
+  <li>In Spring it is represented by a generic interface ‘View’ and it has no dependencies on a particular view technology like JSP, Velocity, Tiles, etc.</li>
+</ul>
+
+<h2 id="web-presentation">Web (Presentation)</h2>
+<ul>
+  <li>Thin layer; no business logic;</li>
+  <li>In Spring it is represented by ‘Controller’ interface or classes with @Controller annotation.</li>
+  <li>Responsible for (1) page navigation logic via Spring Web Flow, etc. (2) integrating service layer and HTTP.</li>
+  <li>Converts HTTP request into service layer calls, and then transforms result from server into response for the user interface.</li>
+  <li>Contains cookies, HTTP headers, HTTP sessions; responsible to manage these consistently and transparently.</li>
+  <li>2 types of web layer implementations:
+    <ul>
+      <li>(a) request-repsonse frameworks. e.g., Struts and Spring MVC. They operate on ServletRequest and ServletResponse objects and is not hiddent from the users.</li>
+      <li>(b) component-based frameworks. e.g., JSF, Tapestry. Hides the Servlet API from the user and offers a component-based programming model.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="service-layer">Service layer</h2>
+
+<ul>
+  <li>only business logic (transactional boundary, security, etc.).</li>
+  <li>No persistence or presentation logic.</li>
+  <li>Coarse-API layer - funciton should represent a single unit of work that either succeeds of fails. User can user different clients (web, web service, desktop app, JMS) but the business logic is same.</li>
+  <li>Services should be stateless and a good practice to keep it Singleton.</li>
+  <li>Keeping the service layer clean also allows us to reuse the same services for different channels. For example, it enables us to add a web service or JMS-driven solution</li>
+</ul>
+
+<h2 id="data-access">Data Access</h2>
+
+<p>Interface-based layer abstracts persistence framework (JDO, JDBC, JPA, etc.) No business logic.</p>
+
+<h2 id="domain">Domain</h2>
+
+<p>(cuts across all layers) - Domain class names are nouns. Contains both state and behavior. In anemic domain model, it holds only state and no behavior.</p>
+
+<p>Communication should be top-to-bottom except Domain layer. Data access shouldn’t access Service layer. Circular dependencies is a sign of bad design. A rule of thumb is that, if a layer has too many dependencies with other layers, we might want to introduce another layer that incorporates all the dependencies. On the other hand, if we see a single layer throughout different layers, we might want to reconsider this layer and make it an aspect of the application (Spring AOP).</p>
+
+<h1 id="definitions">Definitions</h1>
+
+<h2 id="modelmap">ModelMap</h2>
+
+<h2 id="view-1">View</h2>
+
+<ul>
+  <li>Out-of-the-box - JSP, JSTL, Tiles, Velocity, FreeMaker, etc.</li>
+  <li>Special - redirect: and forward:</li>
+</ul>
+
+<h2 id="modelandview">ModelAndView</h2>
+
+<p>An aggregator/container class which holds both a ModelMap and a View instance.</p>
+
+<h2 id="controller-1">Controller</h2>
+
+<ul>
+  <li>RequestMapping is defined both at class-level and method-level</li>
+  <li>Types of mapping requests
+    <ul>
+      <li>by path - <code>@RequestMapping("/welcome")</code></li>
+      <li>by HTTP method - <code>@RequestMapping("/welcome", method=RequestMethod.GET)</code></li>
+      <li>by presence/value of query parameter - <code>@RequestMapping("find=ByMake", "form")</code></li>
+      <li>by presence/value of request header  - <code>@RequestMapping("/welcome", header="accept=text/*")</code></li>
+    </ul>
+  </li>
+  <li>Types of controller method return types (http://docs.spring.io/spring/docs/3.0.x/spring-framework-reference/html/mvc.html)
+    <ul>
+      <li>void</li>
+      <li>String</li>
+      <li>logical view name (“car”)</li>
+      <li>physical view name (<code>/WEB-INF/jsp/car.jsp</code>)</li>
+      <li>special view names (<code>redirect:/cars/7</code>)</li>
+      <li>ModelAndView</li>
+      <li>Model / Map / ModelMap</li>
+      <li>View</li>
+      <li><code>@ResponseBody</code> / <code>@ModelAttribute</code></li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Sample Controller </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ItemController</span> <span class="kd">implements</span> <span class="n">Controller</span> <span class="o">{</span>
+</span><span class="line"><span class="o">...</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Sample Controller - Declarative Style</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Controller</span>
+</span><span class="line"> <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ItemController</span> <span class="o">{</span>
+</span><span class="line">
+</span><span class="line">     <span class="nd">@RequestMapping</span><span class="o">(</span><span class="n">value</span><span class="o">=</span><span class="s">&quot;viewItem.htm&quot;</span><span class="o">,</span> <span class="n">method</span><span class="o">=</span><span class="n">RequestMethod</span><span class="o">.</span><span class="na">GET</span><span class="o">)</span>
+</span><span class="line">     <span class="kd">public</span> <span class="n">Item</span> <span class="nf">viewItem</span><span class="o">(</span><span class="nd">@RequestParam</span> <span class="n">Long</span> <span class="n">id</span><span class="o">){</span>
+</span><span class="line">         <span class="k">return</span> <span class="n">itemservice</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">id</span><span class="o">);</span>
+</span><span class="line">     <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Additional annotations at controller level
+    <ul>
+      <li><code>@ModelAttribute</code>
+        <ul>
+          <li>method parameter level - maps a model attribute to the specific method parameter</li>
+          <li>method level - provides the reference data to the model</li>
+        </ul>
+      </li>
+      <li><code>@SessionAttributes</code> - class level: list the names or types of model attributes which should be stroed in the session.</li>
+      <li><code>@RequestHeader</code> - method parameter level - maps request header parameters to method parameters</li>
+      <li><code>@CookieValue</code> - method parameter level - gets the JSESSIONID of the cookie</li>
+      <li><code>@RequestBody</code> / <code>@ResponseBody</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="formcontroller">FormController</h3>
+
+<ul>
+  <li>Override onSubmit() method to provide custom handling function</li>
+  <li>Override formBackingObject() method to provide default values when the form is first rendered.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;bean</span> <span class="na">name=</span><span class="s">&quot;/foo.htm&quot;</span> <span class="na">class=</span><span class="s">&quot;com.FooFormController&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;commandName&quot;</span> <span class="na">value=</span><span class="s">&quot;...&quot;</span><span class="nt">/&gt;</span>
+</span><span class="line">    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;commandClass&quot;</span> <span class="na">value=</span><span class="s">&quot;...&quot;</span><span class="nt">/&gt;</span>
+</span><span class="line">    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;validator&quot;</span> <span class="na">value=</span><span class="s">&quot;com.FooValidator&quot;</span><span class="nt">/&gt;</span>
+</span><span class="line">    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;successView&quot;</span> <span class="na">value=</span><span class="s">&quot;baz.html&quot;</span><span class="nt">/&gt;</span>
+</span><span class="line"><span class="nt">&lt;/bean&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Form Controller</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">class</span> <span class="nc">FooFormController</span> <span class="kd">extends</span> <span class="n">SimpleFormController</span><span class="o">{</span>
+</span><span class="line">    <span class="kt">void</span> <span class="nf">onSubmit</span><span class="o">(</span><span class="n">Object</span> <span class="n">obj</span><span class="o">){</span>
+</span><span class="line">        <span class="k">return</span> <span class="k">new</span> <span class="nf">ModelAndView</span><span class="o">(</span><span class="k">new</span> <span class="nf">RedirectView</span><span class="o">(</span><span class="n">getSuccessView</span><span class="o">())));</span>
+</span><span class="line">    <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">class</span> <span class="nc">FooValidator</span> <span class="kd">implements</span> <span class="n">Validator</span><span class="o">{</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="multiactioncontroller">MultiActionController</h3>
+
+<ul>
+  <li>allows multiple request types to be handled by the same class. For example, when mapped *Foo.htm to FooController which extends MultiActionController.</li>
+  <li>Based on the request type, different methods on implementing class will be invoked; which method to invoke is decided by MethodNameResolver implementation which can be injected.</li>
+  <li><code>InternalPathMethodNameResolver</code> - maps file name in url to method name. e.g, requesting addFoo.htm and deleteFoo.htm would invoke methods addFoo() and deleteFoo() respectively.</li>
+  <li><code>PropertiesMethodNameResolver</code> - maps url to method name based on a pre-configured map as follows.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>PropertiesMethodNameResolver </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.springframework.web.servlet.mvc.multiaction.PropertiesMethodNameResolver&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">   <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;mappings&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">      <span class="nt">&lt;value&gt;</span>
+</span><span class="line">         /multiaction/add.dev=add
+</span><span class="line">         /multiaction/remove.dev=remove
+</span><span class="line">         /multiaction/listAll.dev=listAll
+</span><span class="line">      <span class="nt">&lt;/value&gt;</span>
+</span><span class="line">   <span class="nt">&lt;/property&gt;</span>
+</span><span class="line"><span class="nt">&lt;/bean&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><code>ParameterNameMethodNameResolver</code> - maps a request parameter value to method name. e.g., <code>/Foo.html?action=add</code> invokes method add() after configuring ‘action’ as the parameter to look for.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>ParameterNameMethodNameResolver</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.springframework.web.servlet.mvc.multiaction.ParameterMethodNameResolver&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">   <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;paramName&quot;</span> <span class="na">value=</span><span class="s">&quot;action&quot;</span> <span class="nt">/&gt;</span>
+</span><span class="line"><span class="nt">&lt;/bean&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="handlermapping">HandlerMapping</h2>
+
+<ul>
+  <li>Maps incoming request to a handler/controller</li>
+  <li>Default mapping classes
+    <ul>
+      <li><code>BeanNameUrlHandlerMapping</code> - maps url to bean name in app context xml.</li>
+      <li><code>DefaultAnnotationHandlerMapping</code> - maps url to classes with <code>@Controller</code> and <code>@RequestMapping</code> annotations.</li>
+    </ul>
+  </li>
+  <li><code>SimpleUrlHandlerMapping</code> - maps url to a bean name in the app context.</li>
+</ul>
+
+<h2 id="handlerinterceptor">HandlerInterceptor</h2>
+
+<ul>
+  <li>intercepting requests before handed over to handlers to implement special functions like security, monitoring, etc.</li>
+  <li>This interface defines three methods:
+    <ul>
+      <li><code>preHandle()</code> is called before the actual handler is executed;</li>
+      <li><code>postHandle()</code> - is called after the handler is executed;</li>
+      <li><code>afterProcessing()</code> - is called after the complete request has finished.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="handlerexecutionchain">HandlerExecutionChain</h2>
+
+<p>…</p>
+
+<h2 id="handleradapter">HandlerAdapter</h2>
+
+<p>is the glue between the dispatcher servlet and the handler. It removes the actual execution logic from the dispatcher servlet, which makes the dispatcher servlet infinitely extensible. It executes the Handler identified from the HandlerMapping. It takes a Handler as input and returns ModelAndView. If there is no view in the returned ModelAndView, RequestToViewNameTranslator is consulted to generate a view name based on the incoming request.</p>
+
+<h2 id="resolvers">Resolvers</h2>
+
+<h3 id="viewresolver">ViewResolver</h3>
+
+<p>UrlBasedViewResolver - controller returns “cars”, resolver resolves it to “/WEB-INF/jsp/cars.jsp”</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>UrlBasedViewResolver</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;viewResolver&quot;</span> <span class="na">class=</span><span class="s">&quot;org.springframework....UrlBasedViewResolver&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">   <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;viewClass&quot;</span> <span class="na">value=</span><span class="s">&quot;org.springframework...JstlView&quot;</span><span class="nt">/&gt;</span>
+</span><span class="line">   <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;prefix&quot;</span> <span class="na">value=</span><span class="s">&quot;/WEB-INF/jsp&quot;</span><span class="nt">/&gt;</span>
+</span><span class="line">   <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;suffix&quot;</span> <span class="na">value=</span><span class="s">&quot;.jsp&quot;</span><span class="nt">/&gt;</span>
+</span><span class="line"><span class="nt">&lt;/bean&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="handlerexceptionresolver">HandlerExceptionResolver</h3>
+
+<h1 id="dispatcherservlet-bootstrapping">DispatcherServlet Bootstrapping</h1>
+
+<p>4 ways to bootstrap a DispatcherServlet in a ServletContainer like Tomcat</p>
+
+<ol>
+  <li><code>web.xml</code></li>
+  <li><code>web-fragment.xml</code> (since Servlet 3.0 spec)</li>
+  <li><code>javax.servlet.ServletContextInitializer</code> (since Servlet 3.0 spec)</li>
+</ol>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>ServletContainerInitializer </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BookstoreServletContainerInitializer</span> <span class="kd">implements</span> <span class="n">ServletContainerInitializer</span> <span class="o">{</span>
+</span><span class="line">   <span class="nd">@Override</span>
+</span><span class="line">   <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onStartup</span><span class="o">(</span><span class="n">Set</span><span class="o">&lt;</span><span class="n">Class</span><span class="o">&lt;?&gt;&gt;</span> <span class="n">classes</span><span class="o">,</span> <span class="n">ServletContext</span> <span class="n">servletContext</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">ServletException</span> <span class="o">{</span>
+</span><span class="line">      <span class="n">ServletRegistration</span><span class="o">.</span><span class="na">Dynamic</span> <span class="n">registration</span> <span class="o">=</span> <span class="n">servletContext</span><span class="o">.</span><span class="na">addServlet</span><span class="o">(</span><span class="s">&quot;dispatcher&quot;</span><span class="o">,</span> <span class="n">DispatcherServlet</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class="line">      <span class="n">registration</span><span class="o">.</span><span class="na">setLoadOnStartup</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+</span><span class="line">      <span class="n">registration</span><span class="o">.</span><span class="na">addMapping</span><span class="o">(</span><span class="s">&quot;/*&quot;</span><span class="o">);</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ol>
+  <li>Spring’s WebApplicationInitializer</li>
+</ol>
+
+<p>Spring has an in-built implementation of ServletContextInitializer which scans classpath for WebApplicationInitializer implementations and invokes <code>onStartup()</code> on them.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>WebApplicationInitializer</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BookstoreWebApplicationInitializer</span> <span class="kd">implements</span> <span class="n">WebApplicationInitializer</span> <span class="o">{}</span>
+</span><span class="line">   <span class="nd">@Override</span>
+</span><span class="line">   <span class="kd">public</span> <span class="kt">void</span> <span class="nf">onStartup</span><span class="o">(</span><span class="n">ServletContext</span> <span class="n">servletContext</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">ServletException</span> <span class="o">{</span>
+</span><span class="line">      <span class="n">ServletRegistration</span><span class="o">.</span><span class="na">Dynamic</span> <span class="n">registration</span> <span class="o">=</span> <span class="n">servletContext</span><span class="o">.</span><span class="na">addServlet</span><span class="o">(</span><span class="s">&quot;dispatcher&quot;</span><span class="o">,</span> <span class="n">DispatcherServlet</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class="line">      <span class="n">registration</span><span class="o">.</span><span class="na">addMapping</span><span class="o">(</span><span class="s">&quot;/*&quot;</span><span class="o">);</span>
+</span><span class="line">      <span class="n">registration</span><span class="o">.</span><span class="na">setLoadOnStartup</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>By default, the dispatcher servlet loads a file named [servletname]-servlet.xml from the WEB-INF directory.</p>
+
+<h2 id="how-to-configure-dispatcherservlet-and-contextloaderlistener-in-java">How to configure DispatcherServlet and ContextLoaderListener in Java?</h2>
+
+<p>In web, DispatcherServlet and ContextLoaderListener components bootstrap and configure an application context.</p>
+
+<ul>
+  <li>Steps to create <code>DispatcherServlet</code> in Java
+    <ul>
+      <li>Spring 3.0 container automatically detects a FooWebAppInitializer class that extends WebApplicationInitializer.</li>
+      <li>FooWebAppInitializer overrides onStartUp(ServletContext) method.</li>
+      <li>Create new WebApplicationContext - new AnnotationConfigWebApplicationContext();</li>
+      <li>Create new DispatcherServlet - new DispatcherServlet(webappContext);</li>
+      <li>Add dispatcher servlet to ServletContext - servletContext.addServlet(“dispatcher”, dispatcherServlet);</li>
+    </ul>
+  </li>
+  <li>Steps to create <code>ContextLoaderListener</code> in Java
+    <ul>
+      <li>Spring 3.0 container automatically detects a FooWebAppInitializer class that extends WebApplicationInitializer.</li>
+      <li>FooWebAppInitializer overrides onStartUp(ServletContext) method.</li>
+      <li>Create new WebApplicationContext - new AnnotationConfigWebApplicationContext();</li>
+      <li>Create new ContextLoaderListener - new ContextLoaderListener(webappContext);</li>
+      <li>Add listener to ServletContext - servletContext.addListener(contextLoaderListener);</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="dispatcherservlet-request-processing-flow">DispatcherServlet Request Processing Flow</h2>
+
+<p><img class="right" src="/technology/springmvc-flow.png" /></p>
+
+<ul>
+  <li>DispatcherServlet receives request.</li>
+  <li>Before dispatching
+    <ul>
+      <li>Determines and exposes java.util.Locale of the current request using LocaleResolver.</li>
+      <li>Prepares and exposes current request in RequestContextHolder.</li>
+      <li>Constructs FlashMap using FlashMapManager. Map contains attributes from previous request when a redirect is made.</li>
+      <li>Request is checked if it is a multipart HTTP request. If so, request is wrapped in MultipartHttpServletRequest via MultipartResolver.</li>
+    </ul>
+  </li>
+  <li>Dispatching
+    <ul>
+      <li>DispatcherServlet consults 1 or more HandlerMapping implementations to determine the handler to handle the request.</li>
+      <li>Check HandlerMapping
+        <ul>
+          <li>If found, HandlerMapping returns an HandlerExecutionChain which holds references to Handler and HandlerInterceptor<a href="optional"></a>.</li>
+          <li>If no handler found, http 404 response is sent.</li>
+        </ul>
+      </li>
+      <li>Check HandlerApapter
+        <ul>
+          <li>Servlet tries to find a HandlerAdapter,</li>
+          <li>If not found, ServletException is thrown.</li>
+          <li>If found and if 1 or more HandlerInterceptor are defined, preHandle and postHandle methods in the interceptor are executed before and after the Handler execution.</li>
+          <li>If a view is selected, DispatcherServlet checks if the view reference is a String or View.
+            <ul>
+              <li>If a String is found, ViewResolvers are consulted to resolve it to a View implementation.</li>
+              <li>If not resolved, ServletException is thrown.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>Handling Exceptions
+        <ul>
+          <li>If an exception is thrown during request handling, DispatcherServlet consults HandlerExceptionResolver to handle thrown exceptions.</li>
+          <li>It resolves an exception to a view to show to the user.</li>
+          <li>If an exception is unresolved, it is rethrown and handled by the servlet container which throws HTTP 500 error.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>After dispatching
+    <ul>
+      <li>DispatcherServlet uses the event mechanism in the Spring Framework to fire a RequestHandledEvent. ApplicationListener can be to receive and log these events.</li>
+    </ul>
+  </li>
+</ul>
+
+<p># Bibliography</p>
+
+<ul>
+  <li>Pro Spring MVC with WebFlows</li>
+  <li>Spring in Action</li>
+</ul>
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/spring-mvc.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/spring-mvc.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

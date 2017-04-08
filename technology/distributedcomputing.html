@@ -1,0 +1,611 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Distributed Computing - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Distributed Computing Scalability Fault tolerance Design Techniques Partitioning Replication System Models Nodes Communication Links Timing/Order &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/distributedcomputing.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Distributed Computing</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#scalability" id="markdown-toc-scalability">Scalability</a></li>
+  <li><a href="#fault-tolerance" id="markdown-toc-fault-tolerance">Fault tolerance</a></li>
+  <li><a href="#design-techniques" id="markdown-toc-design-techniques">Design Techniques</a>    <ul>
+      <li><a href="#partitioning" id="markdown-toc-partitioning">Partitioning</a></li>
+      <li><a href="#replication" id="markdown-toc-replication">Replication</a></li>
+    </ul>
+  </li>
+  <li><a href="#system-models" id="markdown-toc-system-models">System Models</a>    <ul>
+      <li><a href="#nodes" id="markdown-toc-nodes">Nodes</a></li>
+      <li><a href="#communication-links" id="markdown-toc-communication-links">Communication Links</a></li>
+      <li><a href="#timingorder" id="markdown-toc-timingorder">Timing/Order</a></li>
+    </ul>
+  </li>
+  <li><a href="#cap-theorem" id="markdown-toc-cap-theorem">CAP Theorem</a></li>
+  <li><a href="#consistency-models" id="markdown-toc-consistency-models">Consistency Models</a>    <ul>
+      <li><a href="#strong-consistency-models" id="markdown-toc-strong-consistency-models">Strong consistency models</a></li>
+      <li><a href="#weak-consistency-models" id="markdown-toc-weak-consistency-models">Weak consistency models</a></li>
+    </ul>
+  </li>
+  <li><a href="#references" id="markdown-toc-references">References</a></li>
+</ul>
+
+<h1 id="scalability">Scalability</h1>
+
+<ol>
+  <li><strong>Size scalability</strong>: adding more nodes should make the system linearly faster; growing the dataset should not increase latency</li>
+  <li><strong>Geographic scalability</strong>: it should be possible to use multiple data centers to reduce the time it takes to respond to user queries, while dealing with cross-data center latency in some sensible manner.</li>
+  <li><strong>Administrative scalability</strong>: adding more nodes should not increase the administrative costs of the system (e.g. the administrators-to-machines ratio).</li>
+</ol>
+
+<p>There are 2 aspects to look at in scalability</p>
+
+<p>(i) <strong>Performance (or latency)</strong>
+Depending on the context, this may involve achieving one or more of the following:</p>
+
+<ul>
+  <li>Short response time/low latency for a given piece of work</li>
+  <li>High throughput (rate of processing work)</li>
+  <li>Low utilization of computing resource(s)</li>
+</ul>
+
+<p>(ii) <strong>Availability (and Fault Tolerance)</strong>
+Distributed systems can take a bunch of unreliable components, and build a reliable system on top of them.</p>
+
+<p>Systems that have no redundancy can only be as available as their underlying components. Systems built with redundancy can be tolerant of partial failures and thus be more available.</p>
+
+<pre><code>Availability = uptime / (uptime + downtime)
+
+For example, 
+* less than 4 days downtime per year  = 99% availability
+* less than 9 hours downtime per year = 99.9% availability
+* less than 1 hour downtime per year  = 99.99% availability
+</code></pre>
+
+<p>Availability is in some sense a much wider concept than uptime, since the availability of a service can also be affected by, say, a network outage or the company owning the service going out of business (which would be a factor which is not really relevant to fault tolerance but would still influence the availability of the system). But without knowing every single specific aspect of the system, the best we can do is design for fault tolerance.</p>
+
+<h1 id="fault-tolerance">Fault tolerance</h1>
+
+<ul>
+  <li>ability of a system to behave in a well-defined manner once faults occur.</li>
+  <li>
+    <p>define what faults you expect and then design a system or an algorithm that is tolerant of them.</p>
+
+    <ul>
+      <li><a href="https://en.wikipedia.org/wiki/Byzantine_fault_tolerance">Byzantine fault tolerance</a></li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Constraints</strong></p>
+
+<p>Distributed systems are constrained by two physical factors:</p>
+
+<ol>
+  <li>the number of nodes (which increases with the required storage and computation capacity)</li>
+  <li>the distance between nodes (information travels, at best, at the speed of light)</li>
+</ol>
+
+<p>Working within those constraints:</p>
+
+<ul>
+  <li>a) an increase in the number of independent nodes increases the probability of failure in a system (reducing availability and increasing administrative costs)</li>
+  <li>b) an increase in the number of independent nodes may increase the need for communication between nodes (reducing performance as scale increases)</li>
+  <li>c) an increase in geographic distance increases the minimum latency for communication between distant nodes (reducing performance for certain operations)</li>
+</ul>
+
+<p>Beyond these tendencies - which are a result of the physical constraints - is the world of system design options.</p>
+
+<h1 id="design-techniques">Design Techniques</h1>
+
+<p>There are two basic techniques in which a data set is distributed between multiple nodes: <strong>partition</strong> and <strong>replication</strong>.</p>
+
+<p><img src="http://book.mixu.net/distsys/images/part-repl.png" alt="Partition &amp; Replication" /></p>
+
+<h2 id="partitioning">Partitioning</h2>
+
+<ul>
+  <li>Partitioning is dividing the dataset into smaller distinct independent sets; this is used to reduce the impact of dataset growth since each partition is a subset of the data.</li>
+  <li>improves performance by limiting the amount of data to be examined and by locating related data in the same partition</li>
+  <li>improves availability by allowing partitions to fail independently, increasing the number of nodes that need to fail before availability is sacrificed</li>
+  <li>is also very much application-specific, so it is hard to say much about it without knowing the specifics.</li>
+  <li>is mostly about defining your partitions based on what you think the primary access pattern will be, and dealing with the limitations that come from having independent partitions (e.g. inefficient access across partitions, different rate of growth etc.).</li>
+</ul>
+
+<h2 id="replication">Replication</h2>
+
+<ul>
+  <li>Replication is making copies of the same data on multiple machines; this allows more servers to take part in the computation.</li>
+  <li>It can also be copied or cached on different nodes to reduce the distance between the client and the server and for greater fault tolerance.</li>
+  <li>improves performance by making additional computing power and bandwidth applicable to a new copy of the data</li>
+  <li>improves availability by creating additional copies of the data, increasing the number of nodes that need to fail before availability is sacrificed</li>
+  <li>is also the source of many of the problems, since there are now independent copies of the data that has to be kept in sync on multiple machines - this means ensuring that the replication follows a consistency model.</li>
+  <li><strong><em>Strong consistency</em></strong> allows you to program as-if the underlying data was not replicated. <strong><em>Weaker consistency</em></strong> models can provide lower latency and higher availability.</li>
+</ul>
+
+<h1 id="system-models">System Models</h1>
+
+<p>In a distributed system :</p>
+
+<ul>
+  <li>each node executes a program concurrently</li>
+  <li>knowledge is local: nodes have fast access only to their local state, and any information about global state is potentially out of date</li>
+  <li>nodes can fail and recover from failure independently</li>
+  <li>messages can be delayed or lost (independent of node failure; it is not easy to distinguish network failure and node failure)</li>
+  <li>No shared memory or shared clock. Clocks may not synchronized across nodes (local timestamps do not correspond to the global real time order, which cannot be easily observed)</li>
+</ul>
+
+<blockquote>
+  <p>System Model is a set of assumptions about the environment and facilities on which a distributed system is implemented</p>
+</blockquote>
+
+<p>System models vary in their assumptions about the environment and facilities. These assumptions include:</p>
+
+<ul>
+  <li>what capabilities the nodes have and how they may fail</li>
+  <li>how communication links operate and how they may fail and</li>
+  <li>properties of the overall system, such as assumptions about time and order</li>
+</ul>
+
+<p>A robust system model is one that makes the weakest assumptions: any algorithm written for such a system is very tolerant of different environments, since it makes very few and very weak assumptions.</p>
+
+<p>On the other hand, we can create a system model that is easy to reason about by making strong assumptions. For example, assuming that nodes do not fail means that our algorithm does not need to handle node failures. However, such a system model is unrealistic and hence hard to apply into practice.</p>
+
+<p>There are 3 main factors/properties affecting the Distributed computing</p>
+
+<ol>
+  <li>Nodes</li>
+  <li>Communication Links (between nodes)</li>
+  <li>Time &amp; Order</li>
+</ol>
+
+<h2 id="nodes">Nodes</h2>
+
+<p>Nodes serve as hosts for computation and storage. They have:</p>
+
+<ul>
+  <li>the ability to execute a program</li>
+  <li>the ability to store data into volatile memory (which can be lost upon failure) and into stable state (which can be read after a failure)</li>
+  <li>a clock (which may or may not be assumed to be accurate)</li>
+</ul>
+
+<p>Nodes execute deterministic algorithms: the local computation, the local state after the computation, and the messages sent are determined uniquely by the message received and local state when the message was received.</p>
+
+<h2 id="communication-links">Communication Links</h2>
+
+<ul>
+  <li>Communication links connect individual nodes to each other, and allow messages to be sent in either direction.</li>
+  <li>In general networks are considered to be unreliable and subject to message loss and delays. But some algorithms assume that the network is reliable (that messages are never lost and never delayed indefinitely). This may be a reasonable assumption for some real-world settings.</li>
+  <li>A <strong><em>network partition</em></strong> occurs when the network fails while the nodes themselves remain operational. When this occurs, messages may be lost or delayed until the network partition is repaired. Partitioned nodes may be accessible by some clients, and so must be treated differently from crashed nodes. The diagram below illustrates a node failure vs. a network partition:</li>
+</ul>
+
+<p><img src="http://book.mixu.net/distsys/images/system-of-2.png" alt="enter image description here" /></p>
+
+<h2 id="timingorder">Timing/Order</h2>
+
+<ul>
+  <li>If nodes are at different distances from each other, then any messages sent from one node to the others will arrive at a different time and potentially in a different order at the other nodes.</li>
+</ul>
+
+<p><strong>Timing Assumptions / Timing System Models</strong></p>
+
+<ul>
+  <li><strong><em>Synchronous System Model</em></strong></li>
+  <li>Processes execute in lock-step; there is a known upper bound on message transmission delay; each process has an accurate clock</li>
+  <li><strong><em>Asynchronous System Model</em></strong>
+    <ul>
+      <li>No timing assumptions - e.g. processes execute at independent rates; there is no bound on message transmission delay; useful clocks do not exist</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="cap-theorem">CAP Theorem</h1>
+
+<p>(<em>Proposed by Eric Brewer in 2000, proved by Seth Gilbert and Nancy Lynch of MIT in 2002</em>)</p>
+
+<p>The theorem states that in any distributed system, only 2 of these 3 properties can be satisfied simultaneously:</p>
+
+<ol>
+  <li><strong>Consistency</strong>: all nodes see the same data at the same time.</li>
+  <li><strong>Availability</strong>: node failures do not prevent survivors from continuing to operate.</li>
+  <li><strong>Partition tolerance</strong>: the system continues to operate despite message loss due to network and/or node failure</li>
+</ol>
+
+<table>
+  <tbody>
+    <tr>
+      <td><img src="/technology/cap2.png" /></td>
+      <td><img src="/technology/cap_venn.png" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<p>We get 3 different system types:</p>
+
+<ol>
+  <li><strong>CA (Consistency + Availability)</strong>
+  * All relational DBs are CA.
+  * When a partition occurs, the system blocks.
+  * Examples include <em>full strict quorum protocols</em>, such as <em>two-phase commit</em>.
+  * Strong consistency model; <em>CANNOT</em> tolerate any node failures
+  * A CA system does not distinguish between node failures and network failures, and so the only safe thing is to stop accepting writes everywhere to avoid introducing <strong><em>divergence</em></strong> (or multiple copies).
+  * CA systems are not partition-aware, and often use the two-phase commit algorithm and are common in traditional distributed relational DBs.</li>
+  <li><strong>CP (Consistency + Partition Tolerance)</strong>
+  * Say you have three nodes and one node loses its link with the other two. You can create a rule that a result will be returned only when a majority of nodes agree. So, despite having a partition, the system will return a consistent result. However, since the separated node won’t be able to reach consensus it won’t be available even though it’s up.
+  * Examples include majority quorum protocols in which minority partitions are unavailable such as <em>Paxos</em>.
+  * Strong consistency model; <em>CAN</em> tolerate node failures
+  * CP systems incorporate network partitions into their failure model and distinguish between a majority partition and a minority partition using an algorithm like <a href="http://harry.me/blog/2014/12/27/neat-algorithms-paxos/">Paxos</a>, <a href="https://ramcloud.stanford.edu/raft.pdf">Raft</a> or viewstamped replication. ( <a href="http://harry.me/blog/2013/07/07/id-like-to-have-an-argument-a-primer-on-consensus/">A primer on consensus</a>)
+  * in a non-Byzantine failure model, a CP system can tolerate the failure of a minority <code>n</code> nodes as long as majority <code>n+1</code> stays up in a system with<code>2n+1</code> nodes. 
+  * A CP system prevents divergence (e.g. maintains single-copy consistency) by forcing asymmetric behavior on the two sides of the partition. It only keeps the majority partition around, and requires the minority partition to become unavailable (e.g. stop accepting writes), which retains a degree of availability (the majority partition) and still ensures <em>single-copy consistency</em>.</li>
+  <li><strong>AP (Availability + Partition Tolerance)</strong>
+  * Say you have two nodes and the link between the two is severed. Since both nodes are up, you can design the system to accept requests on each of the nodes, which will make the system available despite the network being partitioned. However, each node will issue its own results, so by providing high availability and partition tolerance you’ll compromise consistency.
+  * The system is still available under partitioning, but some returned data may be inaccurate, e.g., DNS, caches, Master/Slave replication.
+  * Needs a conflict resolution strategy.
+  * Examples include protocols using conflict resolution, such as <em>Dynamo</em>.</li>
+</ol>
+
+<p>In a distributed system, managing consistency(C), availability(A) and partition toleration(P) is important.</p>
+
+<ul>
+  <li>Eric Brewer put forth the CAP theorem which states that in any distributed system we can choose only two of consistency, availability or partition tolerance.</li>
+  <li>Consistency and availability are not really binary choices, unless you limit yourself to strong consistency. But strong consistency is just one consistency model: the one where you, by necessity, need to give up availability in order to prevent more than a single copy of the data from being active.</li>
+  <li>Many NoSQL DBs try to provide options where the developer has choices where they can tune the DB as per their needs.</li>
+</ul>
+
+<p>For example if you consider a distributed DB, there are essentially three variables r, w, n where</p>
+
+<ul>
+  <li><code>r</code> = number of nodes that should respond to a read request before its considered successful.</li>
+  <li><code>w</code> = number of nodes that should respond to a write request before its considered successful.</li>
+  <li><code>n</code> = number of nodes where the data is replicated aka replication factor.</li>
+</ul>
+
+<p>In a cluster with 5 nodes,</p>
+
+<ul>
+  <li>we can tweak the <code>r</code>, <code>w</code>, <code>n</code> values to make the system very consistent by setting <code>r=5</code> and <code>w=5</code> but now we have made the cluster susceptible to network partitions since any write will not be considered successful when any node is not responding.</li>
+  <li>We can make the same cluster highly available for writes or reads by setting <code>r=1</code> and <code>w=1</code>  but now consistency can be compromised since some nodes may not have the latest copy of the data.</li>
+</ul>
+
+<h1 id="consistency-models">Consistency Models</h1>
+
+<blockquote>
+  <p>Consistency Model is a contract between programmer and system, wherein the system guarantees that if the programmer follows some specific rules, the results of operations on the data store will be predictable</p>
+</blockquote>
+
+<p>There are 2 types of consistency models:</p>
+
+<ol>
+  <li><strong>Strong consistency model</strong>:
+    <ul>
+      <li>guarantee that the apparent order and visibility of updates is equivalent to a non-replicated system</li>
+      <li>Strong consistency models allow a programmer to replace a single server with a cluster of distributed nodes and not run into any problems</li>
+    </ul>
+  </li>
+  <li><strong>Weak consistency model</strong>: do not make such guarantees</li>
+</ol>
+
+<blockquote>
+  <p>Below is not an exhaustive list</p>
+</blockquote>
+
+<h2 id="strong-consistency-models">Strong consistency models</h2>
+
+<p>(capable of maintaining a single copy)</p>
+
+<ul>
+  <li>Linearizable consistency</li>
+  <li>Sequential consistency</li>
+</ul>
+
+<h2 id="weak-consistency-models">Weak consistency models</h2>
+
+<p>(not strong)</p>
+
+<ul>
+  <li>Client-centric consistency models</li>
+  <li>Causal consistency: strongest model available</li>
+  <li>Eventual consistency models
+    <ul>
+      <li>Says that if you stop changing values, then after some undefined amount of time all replicas will agree on the same value. It is implied that before that time results between replicas are inconsistent in some undefined manner.</li>
+      <li>how long is “eventually”? It would be useful to have a strict lower bound, or at least some idea of how long it typically takes for the system to converge to the same value.</li>
+      <li>how do the replicas agree on a value? A system that always returns “42” is eventually consistent: all replicas agree on the same value. It just doesn’t converge to a useful value since it just keeps returning the same fixed value. Instead, we’d like to have a better idea of the method. For example, one way to decide is to have the value with the largest timestamp always win.</li>
+      <li>So when vendors say “eventual consistency”, what they mean is some more precise term, such as “eventually last-writer-wins, and read-the-latest-observed-value in the meantime” consistency. The “how?” matters, because a bad method can lead to writes being lost - for example, if the clock on one node is set incorrectly and timestamps are used.</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="references">References</h1>
+
+<ul>
+  <li><a href="http://book.mixu.net/distsys/single-page.html">Distributed Systems for fun and profit</a></li>
+  <li><a href="https://www.somethingsimilar.com/2013/01/14/notes-on-distributed-systems-for-young-bloods/">Notes on Distributed Systems for young bloods</a></li>
+  <li><strong>Blogs</strong>
+    <ul>
+      <li><a href="http://highscalability.com">highscalability.com</a></li>
+      <li><a href="http://allthingsdistributed.com">allthingsdistributed.com</a></li>
+    </ul>
+  </li>
+</ul>
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/distributedcomputing.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/distributedcomputing.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

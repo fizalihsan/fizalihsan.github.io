@@ -1,0 +1,646 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Spring Batch - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Spring Batch Chunk Processing Configuration Job Attributes Components &amp; Interfaces Job Tasklet ItemReader FlatFileItemReader Skipping LineMapper &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/spring-batch.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Spring Batch</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#chunk-processing" id="markdown-toc-chunk-processing">Chunk Processing</a></li>
+  <li><a href="#configuration" id="markdown-toc-configuration">Configuration</a>    <ul>
+      <li><a href="#job-attributes" id="markdown-toc-job-attributes">Job Attributes</a></li>
+    </ul>
+  </li>
+  <li><a href="#components--interfaces" id="markdown-toc-components--interfaces">Components &amp; Interfaces</a>    <ul>
+      <li><a href="#job" id="markdown-toc-job">Job</a></li>
+      <li><a href="#tasklet" id="markdown-toc-tasklet">Tasklet</a></li>
+      <li><a href="#itemreader" id="markdown-toc-itemreader">ItemReader</a>        <ul>
+          <li><a href="#flatfileitemreader" id="markdown-toc-flatfileitemreader">FlatFileItemReader</a></li>
+        </ul>
+      </li>
+      <li><a href="#skipping" id="markdown-toc-skipping">Skipping</a></li>
+      <li><a href="#linemapper" id="markdown-toc-linemapper">LineMapper</a>        <ul>
+          <li><a href="#defaultlinemapper" id="markdown-toc-defaultlinemapper">DefaultLineMapper</a></li>
+        </ul>
+      </li>
+      <li><a href="#itemprocessor" id="markdown-toc-itemprocessor">ItemProcessor</a></li>
+      <li><a href="#itemwriter" id="markdown-toc-itemwriter">ItemWriter</a></li>
+      <li><a href="#filtering" id="markdown-toc-filtering">Filtering</a></li>
+    </ul>
+  </li>
+  <li><a href="#job-flow" id="markdown-toc-job-flow">Job Flow</a>    <ul>
+      <li><a href="#job-parameters" id="markdown-toc-job-parameters">Job Parameters</a></li>
+    </ul>
+  </li>
+  <li><a href="#error-handling" id="markdown-toc-error-handling">Error Handling</a></li>
+  <li><a href="#transaction-management" id="markdown-toc-transaction-management">Transaction Management</a></li>
+  <li><a href="#testing" id="markdown-toc-testing">Testing</a></li>
+  <li><a href="#references" id="markdown-toc-references">References</a></li>
+</ul>
+
+<p><a href="http://www.ontheserverside.com/blog/2014/07/23/horizontal-and-vertical-scaling-strategies-for-batch-applications">Horizontal and Vertical Scaling Strategies for Batch applications</a></p>
+
+<h1 id="chunk-processing">Chunk Processing</h1>
+
+<p><a href="http://www.ontheserverside.com/blog/2014/07/23/horizontal-and-vertical-scaling-strategies-for-batch-applications">Excellent article - Horizontal and Vertical Scaling Strategies for Batch Applications</a></p>
+
+<ul>
+  <li>Spring Batch includes a batch-oriented algorithm to handle the execution flow called
+<em>chunk processing</em>.</li>
+  <li>Spring Batch processes items in chunks. A job reads and writes items in small chunks. Chunk processing allows streaming data instead of loading all the data in memory. By default, chunk processing is single threaded and usually performs well, but has an option to distribute processing on multiple threads or physical nodes as well.</li>
+  <li>Spring Batch collects items one at a time from the <code>ItemReader</code> into a configurable-sized chunk.</li>
+  <li>Spring Batch then sends the chunk to the <code>ItemWriter</code> and goes back to using the <code>ItemReader</code> to create another chunk, and so on, until the input is exhausted.</li>
+  <li>Spring Batch provides an optional processing where a job can process (transform) items before sending them to <code>ItemWriter</code>. It is called <code>ItemProcessor</code>.</li>
+  <li>
+    <p>Spring Batch also handles transactions and errors around read and write operations</p>
+  </li>
+  <li>Chunk size and commit-interval are the same thing</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Application configuration template</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;beans&gt;</span>
+</span><span class="line">	<span class="nt">&lt;job&gt;</span>
+</span><span class="line">		<span class="nt">&lt;step&gt;</span>
+</span><span class="line">			<span class="nt">&lt;tasklet&gt;</span>
+</span><span class="line">				<span class="nt">&lt;chunk</span> <span class="na">reader=</span><span class="s">&quot;&quot;</span> <span class="na">writer=</span><span class="s">&quot;&quot;</span> <span class="na">commit-interval=</span><span class="s">&quot;&quot;</span> <span class="na">skip-limit=</span><span class="s">&quot;&quot;</span><span class="nt">/&gt;</span>
+</span><span class="line">			<span class="nt">&lt;/tasklet&gt;</span>
+</span><span class="line">		<span class="nt">&lt;/step&gt;</span>
+</span><span class="line">	<span class="nt">&lt;/job&gt;</span>
+</span><span class="line"><span class="nt">&lt;/beans&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Spring Batch needs two infrastructure components:</p>
+
+<ul>
+  <li><em>Job repository</em> — To store the state of jobs (finished / failed / currently running)</li>
+  <li><em>Job launcher</em> — To create the state of a job before launching it</li>
+</ul>
+
+<h1 id="configuration">Configuration</h1>
+
+<p><img src="/technology/spring-batch-configuration-hierarchy.png" /></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Sample Job Configuration</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;batch:job</span> <span class="na">id=</span><span class="s">&quot;importProductsJob&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">	
+</span><span class="line">	<span class="nt">&lt;batch:step</span> <span class="na">id=</span><span class="s">&quot;readWriteStep&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">		<span class="nt">&lt;batch:tasklet</span> <span class="na">transaction-manager=</span><span class="s">&quot;transactionManager&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">			<span class="nt">&lt;batch:chunk</span>
+</span><span class="line">				<span class="na">reader=</span><span class="s">&quot;productItemReader&quot;</span>
+</span><span class="line">				<span class="na">processor=</span><span class="s">&quot;productItemProcessor&quot;</span>
+</span><span class="line">				<span class="na">writer=</span><span class="s">&quot;productItemWriter&quot;</span>
+</span><span class="line">				<span class="na">commit-interval=</span><span class="s">&quot;100&quot;</span><span class="nt">/&gt;</span>
+</span><span class="line">		<span class="nt">&lt;/batch:tasklet&gt;</span>
+</span><span class="line">	<span class="nt">&lt;/batch:step&gt;</span>
+</span><span class="line"><span class="nt">&lt;/batch:job&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Sample batch &#8220;infrastructure configuration&#8221;</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+</span><span class="line"><span class="nt">&lt;beans</span>  <span class="err">...</span><span class="nt">&gt;</span>
+</span><span class="line">	<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;dataSource&quot;</span><span class="nt">&gt;</span>...<span class="nt">&lt;/bean&gt;</span>
+</span><span class="line">
+</span><span class="line">	<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;transactionManager&quot;</span>  <span class="na">class=</span><span class="s">&quot;org.springframework.jdbc.datasource.DataSourceTransactionManager&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">		<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;dataSource&quot;</span> <span class="na">ref=</span><span class="s">&quot;dataSource&quot;</span> <span class="nt">/&gt;</span>
+</span><span class="line">	<span class="nt">&lt;/bean&gt;</span>
+</span><span class="line">
+</span><span class="line">	<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;jobRepository&quot;</span> <span class="na">class=</span><span class="s">&quot;org.springframework.batch.core.repository.support.MapJobRepositoryFactoryBean&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">		<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;transactionManager&quot;</span>	<span class="na">ref=</span><span class="s">&quot;transactionManager&quot;</span> <span class="nt">/&gt;</span>
+</span><span class="line">	<span class="nt">&lt;/bean&gt;</span>
+</span><span class="line">	
+</span><span class="line">	<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&quot;jobLauncher&quot;</span> <span class="na">class=</span><span class="s">&quot;org.springframework.batch.core.launch.support.SimpleJobLauncher&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">		<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&quot;jobRepository&quot;</span> <span class="na">ref=</span><span class="s">&quot;jobRepository&quot;</span> <span class="nt">/&gt;</span>
+</span><span class="line">	<span class="nt">&lt;/bean&gt;</span>
+</span><span class="line">	
+</span><span class="line">	<span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">&quot;org.springframework.jdbc.core.JdbcTemplate&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">		<span class="nt">&lt;constructor-arg</span> <span class="na">ref=</span><span class="s">&quot;dataSource&quot;</span> <span class="nt">/&gt;</span>
+</span><span class="line">	<span class="nt">&lt;/bean&gt;</span>
+</span><span class="line"><span class="nt">&lt;/beans&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<blockquote>
+  <p><em>SPLITTING INFRASTRUCTURE AND APPLICATION CONFIGURATION FILES</em> - Always split infrastructure and application configuration files, so that it allows to swap out the infrastructure for different environments (test, development, staging, production) and still reuse the application configuration files.</p>
+</blockquote>
+
+<h2 id="job-attributes">Job Attributes</h2>
+
+<ul>
+  <li><code>id</code> - Identifies the job.</li>
+  <li><code>restartable</code>
+    <ul>
+      <li>Specifies whether Spring Batch can restart the job. The default is <code>true</code>.</li>
+      <li>If <code>false</code>, Spring Batch can’t start the job more than once; if you try, Spring Batch throws the exception <code>JobRestartException</code>.</li>
+    </ul>
+  </li>
+  <li><code>incrementer</code>
+    <ul>
+      <li>Refers to an entity used to set job parameter values. This entity is required when trying to launch a batch job through the startNextInstance method of the <code>JobOperator</code> interface.</li>
+      <li>The <code>incrementer</code> attribute provides a convenient way to create new job parameter values. Note that the JobLauncher doesn’t need this feature because you must provide all parameter values explicitly. When the startNextInstance method of the <code>JobOperator</code> class launches a job, though, the method needs to determine new parameter values and use an instance of the JobParametersIncrementer interface:</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">JobParametersIncrementer</span> <span class="o">{</span>
+</span><span class="line">	<span class="n">JobParameters</span> <span class="nf">getNext</span><span class="o">(</span><span class="n">JobParameters</span> <span class="n">parameters</span><span class="o">);</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><code>abstract</code>
+    <ul>
+      <li>Specifies whether the job definition is abstract. If true, this job is a parent job configuration for other jobs. It doesn’t correspond to a concrete job configuration</li>
+    </ul>
+  </li>
+  <li>parent
+    <ul>
+      <li>Defines the parent of this job.</li>
+    </ul>
+  </li>
+  <li><code>job-repository</code>
+    <ul>
+      <li>Specifies the job repository bean used for the job. Defaults to a <code>jobRepository</code>bean if none specified.</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="components--interfaces">Components &amp; Interfaces</h1>
+
+<h2 id="job">Job</h2>
+
+<h2 id="tasklet">Tasklet</h2>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Tasklet</span><span class="o">{</span>
+</span><span class="line">	<span class="n">RepeatStatus</span> <span class="nf">execute</span><span class="o">(</span><span class="n">StepContribution</span> <span class="n">contribution</span><span class="o">,</span> <span class="n">ChunkContext</span> <span class="n">chunkContext</span><span class="o">);</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="itemreader">ItemReader</h2>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kn">package</span> <span class="n">org</span><span class="o">.</span><span class="na">springframework</span><span class="o">.</span><span class="na">batch</span><span class="o">.</span><span class="na">item</span><span class="o">;</span>
+</span><span class="line"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">ItemReader</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">{</span>
+</span><span class="line">	<span class="n">T</span> <span class="nf">read</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span><span class="o">,</span> <span class="n">UnexpectedInputException</span><span class="o">,</span> <span class="n">ParseException</span><span class="o">,</span> <span class="n">NonTransientResourceException</span><span class="o">;</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="flatfileitemreader">FlatFileItemReader</h3>
+
+<ul>
+  <li>Spring Batch provides this class to read records from a flat file.</li>
+  <li><code>FlatFileItemReader</code> delegates the mapping between an input line from file and a domain object to <code>LineMapper</code> interface</li>
+</ul>
+
+<h2 id="skipping">Skipping</h2>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Line Skipping Example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;job</span> <span class="na">id=</span><span class="s">&quot;importProducts&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">	<span class="nt">&lt;step</span> <span class="na">id=</span><span class="s">&quot;decompress&quot;</span> <span class="na">next=</span><span class="s">&quot;readWriteProducts&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">		<span class="nt">&lt;tasklet</span> <span class="na">ref=</span><span class="s">&quot;decompressTasklet&quot;</span> <span class="nt">/&gt;</span>
+</span><span class="line">	<span class="nt">&lt;/step&gt;</span>
+</span><span class="line">	
+</span><span class="line">	<span class="nt">&lt;step</span> <span class="na">id=</span><span class="s">&quot;readWriteProducts&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">		<span class="nt">&lt;tasklet&gt;</span>
+</span><span class="line">			<span class="nt">&lt;chunk</span> <span class="na">reader=</span><span class="s">&quot;reader&quot;</span> <span class="na">writer=</span><span class="s">&quot;writer&quot;</span> <span class="na">commit-interval=</span><span class="s">&quot;100&quot;</span> <span class="na">skip-limit=</span><span class="s">&quot;5&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">				<span class="nt">&lt;skippable-exception-classes&gt;</span>
+</span><span class="line">					<span class="nt">&lt;include</span> <span class="na">class=</span><span class="s">&quot;org.springframework.batch.item.file.FlatFileParseException&quot;</span> <span class="nt">/&gt;</span>
+</span><span class="line">				<span class="nt">&lt;/skippable-exception-classes&gt;</span>
+</span><span class="line">			<span class="nt">&lt;/chunk&gt;</span>
+</span><span class="line">		<span class="nt">&lt;/tasklet&gt;</span>
+</span><span class="line">	<span class="nt">&lt;/step&gt;</span>
+</span><span class="line"><span class="nt">&lt;/job&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="linemapper">LineMapper</h2>
+
+<h3 id="defaultlinemapper">DefaultLineMapper</h3>
+
+<p><img class="right" src="/technology/flat-file-item-reader.png" /></p>
+
+<ul>
+  <li>Spring Batch provides a handy <code>LineMapper</code> implementation called <code>DefaultLineMapper</code>, which delegates the mapping to other strategy interfaces.</li>
+  <li>It needs
+    <ul>
+      <li>a <code>LineTokenizer</code> to split a line into fields</li>
+      <li>a <code>FieldSetMapper</code> to transform the split line into a domain object.</li>
+    </ul>
+  </li>
+  <li>The <code>FieldSet</code> parameter comes from the <code>LineTokenizer</code>. Think of it as an equivalentto the JDBC ResultSet</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">FieldSetMapper</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">{</span>
+</span><span class="line">	<span class="n">T</span> <span class="nf">mapFieldSet</span><span class="o">(</span><span class="n">FieldSet</span> <span class="n">fieldSet</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BindException</span><span class="o">;</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Example FieldSetMapper</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProductFieldSetMapper</span> <span class="kd">implements</span> <span class="n">FieldSetMapper</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span> <span class="o">{</span>
+</span><span class="line">	<span class="kd">public</span> <span class="n">Product</span> <span class="nf">mapFieldSet</span><span class="o">(</span><span class="n">FieldSet</span> <span class="n">fieldSet</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">BindException</span> <span class="o">{</span>
+</span><span class="line">		<span class="n">Product</span> <span class="n">product</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Product</span><span class="o">();</span>
+</span><span class="line">		<span class="n">product</span><span class="o">.</span><span class="na">setId</span><span class="o">(</span><span class="n">fieldSet</span><span class="o">.</span><span class="na">readString</span><span class="o">(</span><span class="s">&quot;PRODUCT_ID&quot;</span><span class="o">));</span>
+</span><span class="line">		<span class="n">product</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="n">fieldSet</span><span class="o">.</span><span class="na">readString</span><span class="o">(</span><span class="s">&quot;NAME&quot;</span><span class="o">));</span>
+</span><span class="line">		<span class="n">product</span><span class="o">.</span><span class="na">setDescription</span><span class="o">(</span><span class="n">fieldSet</span><span class="o">.</span><span class="na">readString</span><span class="o">(</span><span class="s">&quot;DESCRIPTION&quot;</span><span class="o">));</span>
+</span><span class="line">		<span class="n">product</span><span class="o">.</span><span class="na">setPrice</span><span class="o">(</span><span class="n">fieldSet</span><span class="o">.</span><span class="na">readBigDecimal</span><span class="o">(</span><span class="s">&quot;PRICE&quot;</span><span class="o">));</span>
+</span><span class="line">		<span class="k">return</span> <span class="n">product</span><span class="o">;</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="itemprocessor">ItemProcessor</h2>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">ItemProcessor</span><span class="o">&lt;</span><span class="n">I</span><span class="o">,</span> <span class="n">O</span><span class="o">&gt;</span> <span class="o">{</span>
+</span><span class="line">	<span class="n">O</span> <span class="nf">process</span><span class="o">(</span><span class="n">I</span> <span class="n">item</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span><span class="o">;</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="itemwriter">ItemWriter</h2>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">ItemWriter</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">{</span>
+</span><span class="line">	<span class="kt">void</span> <span class="nf">write</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">T</span><span class="o">&gt;</span> <span class="n">items</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span><span class="o">;</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="filtering">Filtering</h2>
+
+<h1 id="job-flow">Job Flow</h1>
+
+<h2 id="job-parameters">Job Parameters</h2>
+
+<h1 id="error-handling">Error Handling</h1>
+
+<h1 id="transaction-management">Transaction Management</h1>
+
+<h1 id="testing">Testing</h1>
+
+<h1 id="references">References</h1>
+
+<ul>
+  <li>Books
+    <ul>
+      <li>Spring Batch in Action</li>
+      <li>Pro Spring Batch</li>
+    </ul>
+  </li>
+</ul>
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/spring-batch.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/spring-batch.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

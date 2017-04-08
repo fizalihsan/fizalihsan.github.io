@@ -1,0 +1,530 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>SQL - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="SQL Variables FAQs Variables Sybase Local variables denoted as @varname Global variables @@rowcount - Holds the number of rows returned by the last &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/sql.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">SQL</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#variables" id="markdown-toc-variables">Variables</a></li>
+  <li><a href="#faqs" id="markdown-toc-faqs">FAQs</a></li>
+</ul>
+
+<h1 id="variables">Variables</h1>
+
+<ul>
+  <li>Sybase
+    <ul>
+      <li>Local variables denoted as <code>@varname</code></li>
+      <li>Global variables
+        <ul>
+          <li><code>@@rowcount</code> - Holds the number of rows returned by the last Transact-SQL statement. Be careful, almost any statement will set this. Even an “if” statement which checks it’s value. For example:</li>
+          <li><code>@@error</code> - Holds status of last statement executed. Zero is success. Once again almost any statement sets this, so use it’s value immediately (or save it in a local variable).</li>
+          <li><code>@@servername</code> - The name of the Sybase dataserver.</li>
+          <li><code>@@version</code> - What version of the Sybase server you are using</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">pubs</span> <span class="k">where</span> <span class="p">....</span>
+</span><span class="line"><span class="n">if</span> <span class="o">@@</span><span class="n">rowcount</span> <span class="o">=</span> <span class="mi">0</span> <span class="cm">/* set to 1 after this */</span>
+</span><span class="line"><span class="n">print</span> <span class="ss">&quot;no rows returned&quot;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h1 id="faqs">FAQs</h1>
+
+<ul>
+  <li>What’s the difference between DELETE TABLE and TRUNCATE TABLE commands?
+    <ul>
+      <li>DELETE TABLE is a logged operation, so the deletion of each row gets logged in the transaction log, which makes it slow.</li>
+      <li>TRUNCATE TABLE also deletes all the rows in a table, but it won’t log the deletion of each row, instead it logs the de-allocation of the data pages of the table, which makes it faster. Of course, TRUNCATE TABLE can be rolled back.</li>
+    </ul>
+  </li>
+  <li>Co-related subquery? Co-related query is a query in which subquery depends on execution of main query</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">Select</span> <span class="n">DeptNo</span><span class="p">,</span><span class="n">Ename</span><span class="p">,</span><span class="n">Sal</span> <span class="k">From</span> <span class="n">Emp</span> <span class="n">e1</span> <span class="k">Where</span> <span class="n">Sal</span><span class="o">=</span><span class="p">(</span><span class="k">Select</span> <span class="k">Max</span><span class="p">(</span><span class="n">Sal</span><span class="p">)</span> <span class="k">From</span> <span class="n">Emp</span> <span class="n">e2</span> <span class="k">Where</span> <span class="n">e1</span><span class="p">.</span><span class="n">DeptNo</span><span class="o">=</span><span class="n">e2</span><span class="p">.</span><span class="n">DeptNo</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><a href="http://www.xaprb.com/blog/2006/12/07/how-to-select-the-firstleastmax-row-per-group-in-sql">How to select first/last/max per group in SQL?</a></li>
+  <li>SQL query to get 4th or 5th maximum value from a table</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">select</span> <span class="k">max</span><span class="p">(</span><span class="n">id</span><span class="p">)</span> <span class="k">from</span> <span class="n">EMP</span> <span class="n">A</span> <span class="k">where</span> <span class="n">N</span><span class="o">=</span><span class="p">(</span><span class="k">select</span> <span class="k">count</span><span class="p">(</span><span class="n">id</span><span class="p">)</span> <span class="k">From</span> <span class="n">EMP</span> <span class="n">B</span> <span class="k">where</span> <span class="n">B</span><span class="p">.</span><span class="n">ID</span><span class="o">&gt;=</span><span class="n">A</span><span class="p">.</span><span class="n">ID</span><span class="p">)</span>
+</span><span class="line"><span class="k">OR</span>
+</span><span class="line"><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="p">(</span><span class="k">select</span> <span class="n">rownum</span> <span class="n">rn</span><span class="p">,</span><span class="n">id</span> <span class="k">from</span> <span class="p">(</span><span class="k">select</span> <span class="k">distinct</span> <span class="n">id</span> <span class="k">From</span> <span class="n">EMP</span> <span class="k">order</span> <span class="k">by</span> <span class="n">id</span> <span class="k">desc</span><span class="p">))</span> <span class="k">where</span> <span class="n">rn</span> <span class="k">between</span> <span class="n">N</span><span class="o">-</span><span class="mi">1</span> <span class="k">and</span> <span class="n">N</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Difference between <code>USING</code> &amp; <code>ON</code> clause in joins?
+    <ul>
+      <li><code>USING</code> clause allows you to specify the join key by name.</li>
+      <li><code>ON</code> clause allows you to specify the column names for join keys in <em>both tables</em>.</li>
+      <li><code>ON</code> clause preserves the columns from each joined table separately, which the <code>USING</code> clause merges the columns from the joined tables into a single column. <code>USING</code> may not be a good idea when using outer joins where you would want to see unmatched rows from a table.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">select</span> <span class="n">department_name</span><span class="p">,</span> <span class="n">city</span> <span class="k">from</span> <span class="n">departments</span>
+</span><span class="line"><span class="k">JOIN</span> <span class="n">locations</span> <span class="k">USING</span> <span class="p">(</span><span class="n">location_id</span><span class="p">);</span> <span class="c1">-- specify the same column name for both of the tables for the join</span>
+</span><span class="line">
+</span><span class="line"><span class="k">select</span> <span class="n">department_name</span><span class="p">,</span> <span class="n">city</span> <span class="k">from</span> <span class="n">departments</span> <span class="n">dept</span>
+</span><span class="line"><span class="k">join</span> <span class="n">locations</span> <span class="n">loc</span> <span class="k">on</span> <span class="p">(</span><span class="n">d</span><span class="p">.</span><span class="n">location_id</span> <span class="o">=</span> <span class="n">l</span><span class="p">.</span><span class="n">id</span><span class="p">);</span> <span class="c1">-- specify different column name for the tables for the join.</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>When we need to use USING clause in the sql? For example in this below:</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">SELECT</span> <span class="n">emp_name</span><span class="p">,</span> <span class="n">department_name</span><span class="p">,</span> <span class="n">city</span> <span class="k">FROM</span> <span class="n">employees</span> <span class="n">e</span>
+</span><span class="line"><span class="k">JOIN</span> <span class="n">departments</span> <span class="n">d</span> <span class="k">USING</span> <span class="p">(</span><span class="n">department_id</span><span class="p">)</span>
+</span><span class="line"><span class="k">JOIN</span> <span class="n">locations</span> <span class="n">l</span> <span class="k">USING</span> <span class="p">(</span><span class="n">location_id</span><span class="p">)</span> <span class="k">WHERE</span> <span class="n">salary</span> <span class="o">&gt;</span> <span class="mi">10000</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>How to delete duplicate records in a table?</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">DELETE</span> <span class="k">FROM</span> <span class="n">test</span> <span class="n">t1</span> <span class="k">WHERE</span> <span class="k">EXISTS</span> <span class="p">(</span> <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">test</span> <span class="n">t2</span> <span class="k">WHERE</span> <span class="n">t2</span><span class="p">.</span><span class="n">col1</span><span class="o">=</span><span class="n">t1</span><span class="p">.</span><span class="n">col1</span> <span class="k">AND</span> <span class="n">t2</span><span class="p">.</span><span class="n">rowid</span> <span class="o">&lt;&gt;</span> <span class="n">t1</span><span class="p">.</span><span class="n">rowid</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>What will be the output of this query?
+    <ul>
+      <li><code>SELECT 1 FROM DUAL UNION SELECT 'A' FROM DUAL;</code> The query would throw an error. The two data types in the union set should be same. Out here it is a 1 and ‘A’, datatype mismatch and hence the error.</li>
+    </ul>
+  </li>
+  <li>What does <code>UNION</code> do? What is the difference between <code>UNION</code> and <code>UNION ALL</code>?
+    <ul>
+      <li><code>UNION</code> merges the contents of two structurally-compatible tables into a single combined table.</li>
+      <li>The difference between <code>UNION</code> and <code>UNION ALL</code> is that <code>UNION</code> will omit duplicate records whereas <code>UNION ALL</code> will include duplicate records.</li>
+      <li>Performance-wise <code>UNION ALL</code> is typically be better than <code>UNION</code>, since <code>UNION</code> requires the server to do the additional work of removing any duplicates.</li>
+    </ul>
+  </li>
+  <li>What will be the result of the query below? Explain your answer and provide a version that behaves correctly?</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">select</span> <span class="k">case</span> <span class="k">when</span> <span class="k">null</span> <span class="o">=</span> <span class="k">null</span> <span class="k">then</span> <span class="s1">&#39;Yup&#39;</span> <span class="k">else</span> <span class="s1">&#39;Nope&#39;</span> <span class="k">end</span> <span class="k">as</span> <span class="k">Result</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>This query will actually yield “Nope”, seeming to imply that <code>null</code> is not equal to itself! The reason for this is that the proper way to compare a value to <code>null</code> in SQL is with the <code>is</code> operator, not with <code>=</code>.</p>
+
+<ul>
+  <li>What will be the result of the query below?</li>
+</ul>
+
+<p><code>SELECT * FROM runners;</code></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>id</th>
+      <th>name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>John Doe</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>Jane Doe</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>Alice Jones</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>Bobby Louis</td>
+    </tr>
+    <tr>
+      <td>5</td>
+      <td>Lisa Romero</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><code>SELECT * FROM races;</code></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>id</th>
+      <th>event</th>
+      <th>winner_id</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>100 meter dash</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>500 meter dash</td>
+      <td>3</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>cross-country</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>triathalon</td>
+      <td>NULL</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><code>SELECT * FROM runners WHERE id NOT IN (SELECT winner_id FROM races)</code></p>
+
+<p>Answer:
+Surprisingly, given the sample data provided, the result of this query will be an empty set. The reason for this is as follows: <em>If the set being evaluated by the SQL <code>NOT IN</code> condition contains any values that are <code>null</code>, then the outer query here will return an empty set, even if there are many runner ids that match winner_ids in the races table</em>.</p>
+
+<p>Knowing this, a query that avoids this issue would be as follows:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">runners</span> <span class="k">WHERE</span> <span class="n">id</span> <span class="k">NOT</span> <span class="k">IN</span> <span class="p">(</span><span class="k">SELECT</span> <span class="n">winner_id</span> <span class="k">FROM</span> <span class="n">races</span> <span class="k">WHERE</span> <span class="n">winner_id</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">null</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Given a table SALARIES, such as the one below, that has m = male and f = female values. Swap all f and m values (i.e., change all f values to m and vice versa) with a single update query and no intermediate temp table.</li>
+</ul>
+
+<p>Answer:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">UPDATE</span> <span class="n">SALARIES</span> <span class="k">SET</span> <span class="n">sex</span> <span class="o">=</span> <span class="k">CASE</span> <span class="n">sex</span> <span class="k">WHEN</span> <span class="s1">&#39;m&#39;</span> <span class="k">THEN</span> <span class="s1">&#39;f&#39;</span> <span class="k">ELSE</span> <span class="s1">&#39;m&#39;</span> <span class="k">END</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Write a SQL query using <code>UNION ALL</code> (not <code>UNION</code>) that uses the <code>WHERE</code> clause to eliminate duplicates. Why might you want to do this?</li>
+</ul>
+
+<p>Answer:
+You can avoid duplicates using <code>UNION ALL</code> and still run much faster than <code>UNION</code> by running a query like this:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">mytable</span> <span class="k">WHERE</span> <span class="n">a</span><span class="o">=</span><span class="n">X</span> <span class="k">UNION</span> <span class="k">ALL</span> <span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">mytable</span> <span class="k">WHERE</span> <span class="n">b</span><span class="o">=</span><span class="n">Y</span> <span class="k">AND</span> <span class="n">a</span><span class="o">!=</span><span class="n">X</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>The key is the <code>AND a!=X</code> part. This gives you the benefits of the <code>UNION</code> command, while avoiding much of its performance hit.</p>
+
+<ul>
+  <li>What are the <code>NVL</code> and the <code>NVL2</code> functions in SQL? How do they differ?</li>
+</ul>
+
+<p>Both the <code>NVL(exp1, exp2)</code> and <code>NVL2(exp1, exp2, exp3)</code> functions check the value <code>exp1</code> to see if it is null.</p>
+
+<p>With the <code>NVL(exp1, exp2)</code> function, if <code>exp1</code> is not null, then the value of <code>exp1</code> is returned; otherwise, the value of <code>exp2</code> is returned, but case to the same data type as that of <code>exp1</code>.</p>
+
+<p>With the <code>NVL2(exp1, exp2, exp3)</code> function, if <code>exp1</code> is not null, then <code>exp2</code> is returned; otherwise, the value of <code>exp3</code> is returned.</p>
+
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/sql.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/sql.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

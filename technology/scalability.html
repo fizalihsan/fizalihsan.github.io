@@ -1,0 +1,470 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Scalability - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Scalability Sharding Consistent hashing or Hash Ring Black-Box Sharding Relational Sharding Caching Locality of References Distributed memory &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/scalability.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Scalability</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#sharding" id="markdown-toc-sharding">Sharding</a>    <ul>
+      <li><a href="#consistent-hashing-or-hash-ring" id="markdown-toc-consistent-hashing-or-hash-ring">Consistent hashing or Hash Ring</a></li>
+      <li><a href="#black-box-sharding" id="markdown-toc-black-box-sharding">Black-Box Sharding</a></li>
+      <li><a href="#relational-sharding" id="markdown-toc-relational-sharding">Relational Sharding</a></li>
+    </ul>
+  </li>
+  <li><a href="#caching" id="markdown-toc-caching">Caching</a>    <ul>
+      <li><a href="#locality-of-references" id="markdown-toc-locality-of-references">Locality of References</a></li>
+      <li><a href="#distributed-memory-caching" id="markdown-toc-distributed-memory-caching">Distributed memory caching</a></li>
+    </ul>
+  </li>
+  <li><a href="#references" id="markdown-toc-references">References</a></li>
+</ul>
+
+<ul>
+  <li>Scale Up
+    <ul>
+      <li>When volume of data increases, add computing power to a single server or move to a bigger server.</li>
+      <li>Pros: no change in architecture needed.</li>
+      <li>Cons: there are limitation on how big a single host can be.</li>
+    </ul>
+  </li>
+  <li>Scale Out
+    <ul>
+      <li>Processing is handled by more than 1 server. When data volume increases, add more servers to the farm.</li>
+      <li>Pros: Cheaper purchase costs than scale up, High availability</li>
+      <li>Cons: complex data processing stratagies involved.</li>
+      <li>Features: smart-software-dumb-hardware, move-processing-not-data.</li>
+      <li>Challenges: Bottlenecks, increased risk of failure</li>
+    </ul>
+  </li>
+</ul>
+
+<p><a href="http://www.ontheserverside.com/blog/2014/07/23/horizontal-and-vertical-scaling-strategies-for-batch-applications">Horizontal and Vertical Scaling Strategies for Batch applications</a></p>
+
+<p><em>Options for increasing the DB performance</em></p>
+
+<ol>
+  <li>Performance improvements on the existing monolithic DB</li>
+  <li>
+    <p>Vertical Scaling</p>
+
+    <ul>
+      <li><strong>CPU Upgrades</strong> -
+        <ul>
+          <li>typically this is due to slow read queries. Optimizing those offensive queries can most of the times solve the issue.</li>
+          <li>If the CPU is high due to too many users, then typically scaling out is the only option.</li>
+          <li>If the memory is low, CPU usage can be high due to <em>disk swapping</em>.</li>
+        </ul>
+      </li>
+      <li><strong>Memory Upgrades</strong>
+        <ul>
+          <li>Memory is heavily used for caching results, index caching, sorting, aggregation, etc.</li>
+          <li>If the memory runs low, CPU automatically swaps the contents to disk which is typically 100 times slower. Adding more memory generally solves the problem, but there is a limit.</li>
+          <li>Highly inefficient queries also sometimes contribute to high memory usage.</li>
+        </ul>
+      </li>
+      <li><strong>Disk Upgrades</strong>
+        <ul>
+          <li>Full table scan queries or high user/transaction volume lead to high disk usage.</li>
+          <li>Using RAID subsystems or Solid State Drives (SSD) sometimes solve the issue. But upgrading disks rarely solve performance issues.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>Read Scaling</p>
+
+    <ul>
+      <li>Read scaling is a simple technique of creating read-only replicas of the monolithic DB server to reduce the read-only queries on a single DB.</li>
+    </ul>
+  </li>
+  <li>
+    <p>Horizontal Scaling</p>
+
+    <ul>
+      <li>When your application involves heavy data reads/writes and heavy transactional volumes, and if none of the above techniques work, then scaling horizontally is the only option.</li>
+      <li>Partitioning/Sharding data across multiple nodes/servers in a cluster also introduces multiple failure points. DB cluster must be <em>highly available</em> to ensure the interim server failures do not interrupt the live operations.</li>
+    </ul>
+  </li>
+</ol>
+
+<h1 id="sharding">Sharding</h1>
+
+<h2 id="consistent-hashing-or-hash-ring">Consistent hashing or Hash Ring</h2>
+
+<p>is a special kind of hashing such that when a hash table is resized and consistent hashing is used, only <code>K/n</code> keys need to be remapped on average, where <code>K</code> is the number of keys, and <code>n</code> is the number of slots. In contrast, in most traditional hash tables, a change in the number of array slots causes nearly all keys to be remapped.</p>
+
+<p>The advantage of Consistent Hashing with sharding is to reduce the number of rows affected (i.e., that need to be moved) as new physical shard servers are added or removed.</p>
+
+<p><a href="http://michaelnielsen.org/blog/consistent-hashing/">Consistent Hashing Explained</a></p>
+
+<h2 id="black-box-sharding">Black-Box Sharding</h2>
+
+<p>The most common sharding technique in existence is black-box sharding, meaning that the shard distribution logic is controlled internally by the toolkit or product, and not exposed to the application.</p>
+
+<p>The primary drawback for the black-box sharding approach is when you need to obtain related data, such as lists of items that have to do with a particular data element. I often refer to this as a <em>scatter-gather approach</em>: the data is scattered by key across the cluster, and must be gathered into meaningful lists of related data</p>
+
+<h2 id="relational-sharding">Relational Sharding</h2>
+
+<p>With relational sharding, the application or database architect defines the sharding schema along the natural data relationships in the data model. The advantage is that related data is <em>co-located</em> in the same physical server, allowing more application queries to be resolved with a single invocation to a given shard server.</p>
+
+<p>The sharding strategy for the relational approach also uses a hash function to partition the data, again typically using a modulus or consistent hash approach. It is also possible to partition data using a key range scheme, where shard keys are grouped together by a range (such as a date range).</p>
+
+<p>While it is true that relational sharding is easiest to implement with a relational DBMS engine, the advantages of this technique can be applied to other types of DBMS engines as well. It can even be used with an object database, through clever utilization of secondary indexes – particularly if the engine stores sharded data in range-based chunks.</p>
+
+<p>Allows easy join of related data unlike in black-box sharding.</p>
+
+<h1 id="caching">Caching</h1>
+
+<h2 id="locality-of-references">Locality of References</h2>
+
+<ul>
+  <li>Principle of Locality - Programs tend to reuse data and instructions near those they have used recently, or that were recently referenced themselves</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Locality Example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+</span><span class="line">
+</span><span class="line"><span class="k">for</span><span class="o">(</span><span class="kt">int</span> <span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">a</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
+</span><span class="line">	<span class="n">sum</span> <span class="o">+=</span> <span class="n">a</span><span class="o">[</span><span class="n">i</span><span class="o">];</span>
+</span><span class="line"><span class="o">}</span>
+</span><span class="line">
+</span><span class="line"><span class="k">return</span> <span class="n">sum</span><span class="o">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Temporal Locality
+    <ul>
+      <li>The concept that a resource that is referenced at one point in time will be  referenced again sometime in the near future.</li>
+      <li>In code above, referencing <code>sum</code> in each iteration is an example of temporal locality</li>
+    </ul>
+  </li>
+  <li>Spatial Locality
+    <ul>
+      <li>The concept that likelihood of referencing a resource is higher if a resource near it was just referenced.</li>
+      <li>In code above, referencing array elements in succession is an example of spatial locality</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Caching Solutions</strong></p>
+
+<ul>
+  <li>Ehcache</li>
+  <li>Guava Caching library</li>
+  <li>JCache (specification?)</li>
+  <li>Distributed Caches
+    <ul>
+      <li>Aerospike</li>
+      <li>Coherence (Oracle)</li>
+      <li>Gemfire</li>
+      <li>Gigaspaces</li>
+      <li>Hazelcast</li>
+      <li>HBase with BlockCache</li>
+      <li>Memcached</li>
+      <li>Redis</li>
+      <li>Riak (key-value database)</li>
+    </ul>
+  </li>
+</ul>
+
+<p>For the remote cache layer, there are two possibilities:</p>
+
+<ul>
+  <li>A distributed memory caching solution, such as Memcached, to distribute the data across a cluster of nodes.</li>
+  <li>Setting up HBase so that all needed records can be found in the block cache. The block cache keeps data blocks in memory, where they can be quickly accessed.</li>
+</ul>
+
+<h2 id="distributed-memory-caching">Distributed memory caching</h2>
+
+<ul>
+  <li>A distributed memory solution like Memcached or Redis simplifies the work of developing a caching layer. In terms of performance, though, it still requires a network call, which can add a small amount of latency to requests. Request times should be in the 1- to 4-millisecond range. The advantage of this solution over the partitioning solution is that we won’t have downtime when nodes fail, since we can set up the caching solution with multiple replicas of the data.</li>
+  <li>The only downside of the distributed memory caching solution is you need enough memory to hold everything. If you can’t hold everything, you need an additional persistence store backed by disk, which means an additional call when data is not in memory. As we’ll see shortly, if we’re utilizing HBase, there is little reason why you need to also use a distributed caching solution.</li>
+</ul>
+
+<h1 id="references">References</h1>
+
+<ul>
+  <li>Understanding Big Data Scalability - Cory Isaacson</li>
+</ul>
+
+  
+    <footer>
+      
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

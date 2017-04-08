@@ -1,0 +1,564 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Spring - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Spring Overview Scope Profiles JDBC Why Spring JDBC over plain Java JDBC? JdbcTemplate Querying results Overview 3 wiring mechanisms Explicit &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/spring.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Spring</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#overview" id="markdown-toc-overview">Overview</a>    <ul>
+      <li><a href="#scope" id="markdown-toc-scope">Scope</a></li>
+      <li><a href="#profiles" id="markdown-toc-profiles">Profiles</a></li>
+    </ul>
+  </li>
+  <li><a href="#jdbc" id="markdown-toc-jdbc">JDBC</a>    <ul>
+      <li><a href="#why-spring-jdbc-over-plain-java-jdbc" id="markdown-toc-why-spring-jdbc-over-plain-java-jdbc">Why Spring JDBC over plain Java JDBC?</a></li>
+      <li><a href="#jdbctemplate" id="markdown-toc-jdbctemplate">JdbcTemplate</a></li>
+      <li><a href="#querying-results" id="markdown-toc-querying-results">Querying results</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="overview">Overview</h1>
+
+<ul>
+  <li>3 wiring mechanisms
+    <ul>
+      <li>Explicit configuration in XML</li>
+      <li>Explicit configuration in Java</li>
+      <li>Implicit bean discovery and automatic wiring</li>
+    </ul>
+  </li>
+</ul>
+
+<p>Spring attacks automatic wiring from two angles:</p>
+
+<ul>
+  <li><em>Component scanning</em>
+    <ul>
+      <li>Spring automatically discovers beans to be created in the application context.</li>
+      <li>
+        <ul>
+          <li>Enables Spring to scan classpath for classes that are annotated with <code>@Component</code> (or one of the specialized annotations like <code>@Service</code>, <code>@Repository</code>, <code>@Controller</code>, or <code>@Configuration</code>).</li>
+        </ul>
+      </li>
+      <li>Application Context needs to be enabled for component scanning via <code>@ComponentScan</code> annotation.</li>
+    </ul>
+  </li>
+  <li><em>Autowiring</em> — Spring automatically satisfies bean dependencies.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Enabling Component Scanning via Java</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Configuration</span>
+</span><span class="line"><span class="nd">@ComponentScan</span>
+</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ApplicationContextConfiguration</span> <span class="o">{}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Enabling scanning on multiple base packages (Not type safe)</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Configuration</span>
+</span><span class="line"><span class="nd">@ComponentScan</span><span class="o">(</span><span class="n">basePackages</span> <span class="o">=</span> <span class="o">{</span><span class="s">&quot;com.apress.prospringmvc.moneytransfer.scanning&quot;</span><span class="o">,</span><span class="s">&quot;com.apress.prospringmvc.moneytransfer.repository&quot;</span> <span class="o">})</span>
+</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ApplicationContextConfiguration</span> <span class="o">{}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Enabling scanning based on class names (type safe)</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Configuration</span>
+</span><span class="line"><span class="nd">@ComponentScan</span><span class="o">(</span><span class="n">basePackageClasses</span> <span class="o">=</span> <span class="o">{</span><span class="n">CDPlayer</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">DVDPlayer</span><span class="o">.</span><span class="na">class</span><span class="o">})</span>
+</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ApplicationContextConfiguration</span> <span class="o">{}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Enabling Component Scanning via XML</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+</span><span class="line"><span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">&quot;http://www.springframework.org/schema/beans&quot;</span>
+</span><span class="line">	<span class="na">xmlns:xsi=</span><span class="s">&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span>
+</span><span class="line">	<span class="na">xmlns:context=</span><span class="s">&quot;http://www.springframework.org/schema/context&quot;</span>
+</span><span class="line">	<span class="na">xsi:schemaLocation=</span><span class="s">&quot;http://www.springframework.org/schema/beans</span>
+</span><span class="line"><span class="s">	http://www.springframework.org/schema/beans/spring-beans.xsd</span>
+</span><span class="line"><span class="s">	http://www.springframework.org/schema/context</span>
+</span><span class="line"><span class="s">	http://www.springframework.org/schema/context/spring-context.xsd&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">
+</span><span class="line">	<span class="nt">&lt;context:component-scan</span> <span class="na">base-package=</span><span class="s">&quot;soundsystem&quot;</span> <span class="nt">/&gt;</span>
+</span><span class="line">
+</span><span class="line"><span class="nt">&lt;/beans&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Naming a bean is named using <code>@Component</code> or Java Dependency Injection Specification (JSR-330) annotation <code>@Named</code></li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Component</span><span class="o">(</span><span class="s">&quot;lonelyHeartsClub&quot;</span><span class="o">)</span>
+</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SgtPeppers</span> <span class="o">{</span>
+</span><span class="line"><span class="o">...</span>
+</span><span class="line"><span class="o">}</span>
+</span><span class="line">
+</span><span class="line"><span class="kn">import</span> <span class="nn">javax.inject.Named</span><span class="o">;</span>
+</span><span class="line">
+</span><span class="line"><span class="nd">@Named</span><span class="o">(</span><span class="s">&quot;lonelyHeartsClub&quot;</span><span class="o">)</span>
+</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">SgtPeppers</span> <span class="o">{</span>
+</span><span class="line"><span class="o">...</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><code>@Autowired</code> - on a field denotes the bean implementation will injected
+    <ul>
+      <li>Can be used on constructors, setter methods and fields</li>
+      <li>If there are no matching beans, Spring will throw an exception as the application context is being created. To avoid that exception, you can set the <code>required</code> attribute on <code>@Autowired</code> to false</li>
+    </ul>
+  </li>
+  <li>Dependency injection types: Setter-based, Constructor-based and Annotation-based.</li>
+  <li><code>@Inject</code> and <code>@Resource</code>. Last 2 are Java JSR-330 based.</li>
+  <li><code>ApplicationContext</code> - different ways to configure. via XML or Java. Multiple application contexts can be defined in a hierarchy.</li>
+  <li><code>@Configuration</code> - marks the class as config class.
+    <ul>
+      <li>Classes can be abstract but not final.</li>
+      <li>Class with no <code>@Bean</code> annotation is now allowed.</li>
+    </ul>
+  </li>
+  <li><code>@Bean</code> -</li>
+  <li>Resource Loading
+    <ul>
+      <li>Prefixes are classpath:, file: and http:</li>
+      <li>Ant-style wild cards - e.g., classpath:/META-INF/spring/<em>.xml, file:/var/conf/**/</em>.properties</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="scope">Scope</h2>
+<ul>
+  <li>By default, all beans in Spring application context is singleton.</li>
+  <li>singleton -</li>
+  <li>prototype - new instance of bean is created every time</li>
+  <li>thread - new bean created and bound to current thread. Thread dies - bean destroyed.</li>
+  <li>request - new bean created and bound to the current javax.servlet.ServletRequest. Request dies - bean destroyed.</li>
+  <li>session - new bean created and bound to the current javax.servlet.HttpSession. Request dies - bean destroyed.</li>
+  <li>globalSession - new bean is created when needed and stored in the globally available session (which is available in Portlet environments). If no such session is available, the scope reverts to the session scope functionality.</li>
+  <li>application - This scope is very similar to the singleton scope; however, beans with this scope are also registered in javax.servlet.ServletContext.</li>
+</ul>
+
+<h2 id="profiles">Profiles</h2>
+<ul>
+  <li>Enables creating different configuration for different environments like testing, local deployment, cloud deployment, etc.</li>
+  <li>To enable a profile, tell the application context which profiles are activeby setting a system property called ‘spring.profiles.active’ (in a web environment, this can be a servlet initialization parameter or web context parameter).</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Configuration</span>
+</span><span class="line"><span class="nd">@Profile</span><span class="o">(</span><span class="n">value</span> <span class="o">=</span> <span class="s">&quot;test&quot;</span><span class="o">)</span>
+</span><span class="line"><span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">TestContextConfiguration</span> <span class="o">{</span>
+</span><span class="line">   <span class="nd">@Bean</span>
+</span><span class="line">   <span class="kd">public</span> <span class="n">TransactionRepository</span> <span class="nf">transactionRepository</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">      <span class="k">return</span> <span class="k">new</span> <span class="nf">StubTransactionRepository</span><span class="o">();</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>@EnableCaching - Enables support for bean methods with the @Cacheable annotation.</li>
+</ul>
+
+<h1 id="jdbc">JDBC</h1>
+
+<h2 id="why-spring-jdbc-over-plain-java-jdbc">Why Spring JDBC over plain Java JDBC?</h2>
+
+<ul>
+  <li>Java <code>SQLException</code> is a checked exception and doesn’t give much clarity on the error occurred. Spring has defined a wide variety of database-specific exceptions which are unchecked exceptions.</li>
+  <li>Spring JDBCTemplate removes most of boilerplate data access code - no exception handling, no need to close result set and connection</li>
+</ul>
+
+<h2 id="jdbctemplate">JdbcTemplate</h2>
+
+<ul>
+  <li><code>JdbcTemplate</code> — The most basic of Spring’s JDBC templates, this class provides simple access to a database through JDBC and indexed-parameter queries.</li>
+  <li><code>NamedParameterJdbcTemplate</code> — This JDBC template class enables you to perform queries where values are bound to named parameters in SQL, rather than indexed parameters.</li>
+  <li>Instances of the JdbcTemplate class are <em>thread-safe</em> once configured. This is important because it means that you can configure a single instance of a JdbcTemplate and then safely inject this shared reference into multiple DAOs (or repositories).</li>
+  <li>The JdbcTemplate is stateful, in that it maintains a reference to a DataSource, but this state is not conversational state.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Wiring JdbcTemplate</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Bean</span>
+</span><span class="line"><span class="kd">public</span> <span class="n">SpitterRepository</span> <span class="nf">spitterRepository</span><span class="o">(</span><span class="n">JdbcTemplate</span> <span class="n">jdbcTemplate</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">	<span class="k">return</span> <span class="k">new</span> <span class="nf">MyRepository</span><span class="o">(</span><span class="n">jdbcTemplate</span><span class="o">);</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Autowiring JdbcTemplate into JdbcOperations indirectly</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Repository</span>
+</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MyRepository</span> <span class="kd">implements</span> <span class="n">MyRepo</span> <span class="o">{</span>
+</span><span class="line">	<span class="kd">private</span> <span class="n">JdbcOperations</span> <span class="n">jdbcOperations</span><span class="o">;</span>
+</span><span class="line">	
+</span><span class="line">	<span class="nd">@Inject</span>
+</span><span class="line">	<span class="kd">public</span> <span class="nf">JdbcSpitterRepository</span><span class="o">(</span><span class="n">JdbcOperations</span> <span class="n">jdbcOperations</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">		<span class="k">this</span><span class="o">.</span><span class="na">jdbcOperations</span> <span class="o">=</span> <span class="n">jdbcOperations</span><span class="o">;</span>
+</span><span class="line">	<span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Example of Batch Updating</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kt">int</span><span class="o">[]</span> <span class="nf">batchUpdate</span><span class="o">(</span><span class="kd">final</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Actor</span><span class="o">&gt;</span> <span class="n">actors</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">    <span class="kt">int</span><span class="o">[]</span> <span class="n">updateCounts</span> <span class="o">=</span> <span class="n">jdbcTemplate</span><span class="o">.</span><span class="na">batchUpdate</span><span class="o">(</span><span class="s">&quot;update t_actor set first_name = ?, &quot;</span> <span class="o">+</span>
+</span><span class="line">            <span class="s">&quot;last_name = ? where id = ?&quot;</span><span class="o">,</span>
+</span><span class="line">        <span class="k">new</span> <span class="nf">BatchPreparedStatementSetter</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setValues</span><span class="o">(</span><span class="n">PreparedStatement</span> <span class="n">ps</span><span class="o">,</span> <span class="kt">int</span> <span class="n">i</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SQLException</span> <span class="o">{</span>
+</span><span class="line">                    <span class="n">ps</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">actors</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">).</span><span class="na">getFirstName</span><span class="o">());</span>
+</span><span class="line">                    <span class="n">ps</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="n">actors</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">).</span><span class="na">getLastName</span><span class="o">());</span>
+</span><span class="line">                    <span class="n">ps</span><span class="o">.</span><span class="na">setLong</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="n">actors</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">i</span><span class="o">).</span><span class="na">getId</span><span class="o">().</span><span class="na">longValue</span><span class="o">());</span>
+</span><span class="line">                <span class="o">}</span>
+</span><span class="line">
+</span><span class="line">                <span class="kd">public</span> <span class="kt">int</span> <span class="nf">getBatchSize</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">                    <span class="k">return</span> <span class="n">actors</span><span class="o">.</span><span class="na">size</span><span class="o">();</span>
+</span><span class="line">                <span class="o">}</span>
+</span><span class="line">            <span class="o">});</span>
+</span><span class="line">    <span class="k">return</span> <span class="n">updateCounts</span><span class="o">;</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="querying-results">Querying results</h2>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">interface</span> <span class="nc">RowMapper</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">{</span>
+</span><span class="line"><span class="kd">public</span> <span class="n">T</span> <span class="nf">mapRow</span><span class="o">(</span><span class="n">ResultSet</span> <span class="n">rs</span><span class="o">,</span> <span class="kt">int</span> <span class="n">rowNum</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">SQLException</span><span class="o">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/spring.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/spring.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,568 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Networking Basics - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Networking Basics ACLs DHCP (Dynamic Host Configuration Protocol) DNS servers DNS Resolution Steps Record Types CNAME record Subnet Why Subnet? CIDR &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/networking.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Networking Basics</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#acls" id="markdown-toc-acls">ACLs</a></li>
+  <li><a href="#dhcp-dynamic-host-configuration-protocol" id="markdown-toc-dhcp-dynamic-host-configuration-protocol">DHCP (Dynamic Host Configuration Protocol)</a></li>
+  <li><a href="#dns-servers" id="markdown-toc-dns-servers">DNS servers</a>    <ul>
+      <li><a href="#dns-resolution-steps" id="markdown-toc-dns-resolution-steps">DNS Resolution Steps</a></li>
+      <li><a href="#record-types" id="markdown-toc-record-types">Record Types</a></li>
+      <li><a href="#cname-record" id="markdown-toc-cname-record">CNAME record</a></li>
+    </ul>
+  </li>
+  <li><a href="#subnet" id="markdown-toc-subnet">Subnet</a>    <ul>
+      <li><a href="#why-subnet" id="markdown-toc-why-subnet">Why Subnet?</a></li>
+      <li><a href="#cidr-classless-inter-domain-routing" id="markdown-toc-cidr-classless-inter-domain-routing">CIDR (Classless Inter-Domain Routing)</a></li>
+      <li><a href="#nat-network-address-translation" id="markdown-toc-nat-network-address-translation">NAT (Network Address Translation)</a></li>
+    </ul>
+  </li>
+  <li><a href="#network-interfaces" id="markdown-toc-network-interfaces">Network Interfaces</a></li>
+  <li><a href="#ntp-network-time-protocol-servers" id="markdown-toc-ntp-network-time-protocol-servers">NTP (Network Time Protocol) Servers</a></li>
+  <li><a href="#netbios-name-servers" id="markdown-toc-netbios-name-servers">NetBIOS Name Servers</a></li>
+  <li><a href="#references" id="markdown-toc-references">References</a></li>
+</ul>
+
+<h1 id="acls">ACLs</h1>
+
+<h1 id="dhcp-dynamic-host-configuration-protocol">DHCP (Dynamic Host Configuration Protocol)</h1>
+
+<h1 id="dns-servers">DNS servers</h1>
+
+<p><img class="right" src="/technology/aws-dns.jpg" width="500" height="500" /></p>
+
+<ul>
+  <li>DNS is a globally-distributed service used to translate human-readable names (e.g., www.amazon.com) into the IP addresses</li>
+  <li>DNS uses a hierarchical name structure, and different levels in the hierarchy are each separated with a dot (.).</li>
+  <li>Consider the domain names <code>www.amazon.com</code> and <code>aws.amazon.com</code>. <code>com</code> is the Top-Level Domain (TLD) and <code>amazon</code> is the Second-Level Domain (SLD). There can be any number of lower levels (e.g., <code>www</code> and <code>aws</code>) below the SLD.</li>
+  <li><strong>Top-Level Domains (TLDs)</strong>
+    <ul>
+      <li>A TLD is the most general part of the domain. The TLD is the farthest portion to the right (as separated by a dot).</li>
+      <li>Common TLDs are .com, .net, .org, .gov, .edu, and .io.</li>
+      <li>TLDs are at the top of the hierarchy in terms of domain names.</li>
+      <li>Certain parties are given management control over TLDs by the <strong><em>Internet Corporation for Assigned Names and Numbers (ICANN)</em></strong>. These parties can then distribute domain names under the TLD, usually through a domain registrar. These domains are registered with the <strong><em>Network Information Center (InterNIC)</em></strong>, a service of ICANN, which enforces the uniqueness of domain names across the Internet.</li>
+      <li>Each domain name becomes registered in a central database, known as the <strong><em>WhoIS</em></strong> database.</li>
+    </ul>
+  </li>
+  <li><strong>IP Addresses</strong>
+    <ul>
+      <li>IPv4 addresses consist of 4 sets of numbers separated by a dot, with each set having up to three digits.</li>
+      <li>IPv6 has an address space of 128 bits, which allows for 340,282,366,920,938,463,463,374,607,431,768,211,456, or 340 undecillion, unique addresses. For human beings, this number is difficult to imagine, so consider this: If each IPv4 address were one grain of sand, you would have enough addresses to fill approximately one dump truck with sand. If each IPv6 address were one grain of sand, you would have enough sand to equal the approximate size of the sun.</li>
+    </ul>
+  </li>
+  <li><strong>Hosts</strong>
+    <ul>
+      <li>Within a domain, the domain owner can define individual hosts, which refer to separate computers or services accessible through a domain. For instance, API access through an API host <code>api.example.com</code> or FTP access with a host definition <code>ftp.example.com</code>.</li>
+      <li>The host names can be arbitrary if they are unique for the domain.</li>
+    </ul>
+  </li>
+  <li><strong>Fully Qualified Domain Name (FQDN)</strong>
+    <ul>
+      <li>Domain locations in a DNS can be relative to one another and, as such, can be somewhat ambiguous.</li>
+      <li>A FQDN, also referred to as an absolute domain name, specifies a domain’s location in relation to the absolute root of the DNS. This means that the FQDN specifies each parent domain including the TLD.</li>
+      <li>A proper FQDN ends with a dot, indicating the root of the DNS hierarchy. For example, <code>mail.amazon.com.</code> is an FQDN. Sometimes, software that calls for an FQDN does not require the ending dot, but it is required to conform to ICANN standards.</li>
+    </ul>
+  </li>
+  <li><strong>Name Servers</strong>
+    <ul>
+      <li>A name server is a computer designated to translate domain names into IP addresses.</li>
+      <li>Because the total number of domain translations is too much for any one server, each server may redirect requests to other name servers or delegate responsibility for the subset of subdomains for which they are responsible.</li>
+      <li>Name servers can be authoritative, meaning that they give answers to queries about domains under their control. Otherwise, they may point to other servers or serve cached copies of other name servers’ data.</li>
+    </ul>
+  </li>
+  <li><strong>Root Servers</strong>
+    <ul>
+      <li>At the top of the DNS system are root servers.</li>
+      <li>Root servers handle requests for information about TLDs.</li>
+      <li>ICANN delegates the control of these servers to various organizations. (<em>As of this writing, there are 13 root servers in operation</em>).</li>
+      <li>In order to handle the incredible volume of resolutions that happen every day, these root servers are mirrored and replicated. When requests are made to a certain root server, the request will be routed to the nearest mirror of that root server.</li>
+      <li>The root servers won’t actually know where the domain is hosted. They will, however, be able to direct the requester to the name servers that handle the specifically-requested TLD.</li>
+    </ul>
+  </li>
+  <li><strong>Resolving Name Servers</strong>
+    <ul>
+      <li>Resolving Name Server acts as an intermediary for a user, caching previous query results to improve speed and providing the addresses of appropriate root servers to resolve new requests.</li>
+      <li>A user will usually have a few resolving name servers configured on their computer system.</li>
+      <li>The resolving name servers are typically provided by an Internet Service Provider (ISP) or other organization.</li>
+      <li>There are several public resolving DNS servers that you can query. These can be configured in your computer either automatically or manually.</li>
+    </ul>
+  </li>
+  <li><strong>Zone Files</strong>
+    <ul>
+      <li>A zone file is a simple text file that contains the mappings between domain names and IP addresses.</li>
+      <li>Zone files reside in name servers and generally define the resources available under a specific domain, or the place where one can go to get that information.</li>
+      <li>The more zone files that a name server has, the more requests it will be able to answer authoritatively.</li>
+      <li>Most requests to the average name server, however, are for domains that are not in the local zone file.</li>
+      <li>A zone file describes a DNS zone, which is a subset of the entire DNS.</li>
+      <li>Zone files are generally used to configure a single domain, and they can contain a number of records that define where resources are for the domain in question.</li>
+      <li><code>$ORIGIN</code> directive
+        <ul>
+          <li>this parameter defines what authoritative records the zone governs.</li>
+          <li>is a parameter equal to the zone’s highest level of authority by default. If a zone file is used to configure the <code>example.com</code> domain, the <code>$ORIGIN</code> would be set to <code>example.com</code>.</li>
+          <li>is either configured at the top of the zone file or defined in the DNS server’s configuration file that references the zone file.</li>
+        </ul>
+      </li>
+      <li><code>$TTL</code> directive
+        <ul>
+          <li>configures the default Time to Live (TTL) value for resource records in the zone.</li>
+          <li>This value defines the length of time that previously queried results are available to a caching name server before they expire.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>TLD Name Registrars</strong>
+    <ul>
+      <li>Domain name registrars ensure the domain names are unique.</li>
+      <li>A domain name registrar is an organization or commercial entity that manages the reservation of Internet domain names.</li>
+      <li>A domain name registrar must be accredited by a <strong><em>generic TLD (gTLD) registry</em></strong> and/or a <strong><em>country code TLD (ccTLD) registry</em></strong>. The management is done in accordance with the guidelines of the designated domain name registries.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="dns-resolution-steps">DNS Resolution Steps</h2>
+
+<p><img class="right" src="/technology/dnsresolution.png" /></p>
+
+<ul>
+  <li>When you type a domain name into your browser, your computer first checks its <strong><em>host file</em></strong> to see if it has that domain name stored locally.</li>
+  <li>If it does not, it will check its <strong><em>DNS cache</em></strong> to see if you have visited the site before.</li>
+  <li>If it does not, it will contact the <strong><em>Resolution Name Server (RNS)</em></strong> to see if you have visited the site before.</li>
+  <li>If it still does not, it will contact a <strong><em>DNS root server</em></strong>.</li>
+  <li>Root server will check its zone files for a listing that matches the domain name, say <code>www.wikipedia.org</code>, but it will not find one in its records. It will instead find a record for the <code>.org</code> TLD and give the requesting entity (RNS) the address of the <strong><em>name server</em></strong> responsible for <code>.org</code> addresses.</li>
+  <li><em>TLD Servers</em>: After a root server returns the IP address of the appropriate name server that is responsible for the TLD of a request, the requester then sends a new request to that address. The name server searches its zone files for a <code>www.wikipedia.org</code> listing, it will not find one in its records. However, it will find a listing for the IP address of the name server responsible for <code>wikipedia.org</code>. This is getting much closer to the correct IP address.</li>
+  <li><em>Domain-Level Name Servers</em>:
+    <ul>
+      <li>At this point, the requester has the IP address of the name server that is responsible for knowing the actual IP address of the resource.</li>
+      <li>It sends a new request to the name server asking, once again, if it can resolve <code>www.wikipedia.org</code>.</li>
+      <li>The name server checks its zone files, and it finds a zone file associated with <code>wikipedia.org</code>.</li>
+      <li>Inside of this file, there is a record that contains the IP address for the <code>.www</code> host. The name server returns the final address to the requester.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="record-types">Record Types</h2>
+
+<p><img src="/technology/zone-file-format.png" width="500" height="500" />
+<img src="/technology/dns-zone-file-structure.gif" width="500" height="500" /></p>
+
+<ul>
+  <li>Each zone file contains records which is a single mapping between a resource and a name.</li>
+  <li>These can map a domain name to an IP address or define resources for the domain, such as name servers or mail servers.</li>
+  <li><strong>Start of Authority (SOA) Record</strong>
+    <ul>
+      <li>A SOA record is mandatory in all zone files, and it identifies the base DNS information about the domain.</li>
+      <li>Each zone contains a single SOA record.</li>
+      <li>The SOA record stores information about the following:
+        <ul>
+          <li>The name of the DNS server for that zone</li>
+          <li>The administrator of the zone</li>
+          <li>The current version of the data file</li>
+          <li>The number of seconds that a secondary name server should wait
+            <ul>
+              <li>before checking for updates</li>
+              <li>before retrying a failed zone transfer</li>
+            </ul>
+          </li>
+          <li>The maximum number of seconds that a secondary name server can use data before it must either be refreshed or expire</li>
+          <li>The default TTL value (in seconds) for resource records in the zone</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>A and AAAA</strong>
+    <ul>
+      <li>Both types of address records map a host to an IP address.</li>
+      <li>The <em>A</em> record is used to map a host to an IPv4 IP address, while <em>AAAA</em> records are used to map a host to an IPv6 address.</li>
+    </ul>
+  </li>
+  <li><strong>Canonical Name (CNAME)</strong>
+    <ul>
+      <li>A CNAME record is a type of resource record in the DNS that defines an alias for the CNAME for your server (the domain name defined in an A or AAAA record).</li>
+    </ul>
+  </li>
+  <li><strong>Mail Exchange (MX)</strong>
+    <ul>
+      <li>MX records are used to define the mail servers used for a domain and ensure that email messages are routed correctly.</li>
+      <li>The MX record should point to a host defined by an A or AAAA record and not one defined by a CNAME.</li>
+    </ul>
+  </li>
+  <li><strong>Name Server (NS)</strong>
+    <ul>
+      <li>Name Server (NS) records are used by TLD servers to direct traffic to the DNS server that contains the authoritative DNS records.</li>
+    </ul>
+  </li>
+  <li><strong>Pointer (PTR)</strong>
+    <ul>
+      <li>A Pointer (PTR) record is essentially the reverse of an <em>A record</em>.</li>
+      <li>PTR records map an IP address to a DNS name, and they are mainly used to check if the server name is associated with the IP address from where the connection was initiated.</li>
+    </ul>
+  </li>
+  <li><strong>Sender Policy Framework (SPF)</strong>
+    <ul>
+      <li>SPF records are used by mail servers to combat spam.</li>
+      <li>An SPF record tells a mail server what IP addresses are authorized to send an email from your domain name. For example, if you wanted to ensure that only your mail server sends emails from your company’s domain, such as <code>example.com</code>, you would create an SPF record with the IP address of your mail server. That way, an email sent from your domain, such as <code>marketing@example.com</code>, would need to have an originating IP address of your company mail server in order to be accepted. This prevents people from spoofing emails from your domain name.</li>
+    </ul>
+  </li>
+  <li><strong>Text (TXT)</strong>
+    <ul>
+      <li>TXT records are used to hold text information. This record provides the ability to associate some arbitrary and unformatted text with a host or other name, such as human readable information about a server, network, data center, and other accounting information.</li>
+    </ul>
+  </li>
+  <li><strong>Service (SRV)</strong>
+    <ul>
+      <li>A SRV record is a specification of data in the DNS defining the location (the host name and port number) of servers for specified services.</li>
+      <li>The idea behind SRV is that, given a domain name (e.g., example.com) and a service name (e.g., HTTP), a DNS query may be issued to find the host name that provides such a service for the domain, which may or may not be within the domain.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="cname-record">CNAME record</h2>
+
+<p>CNAME stands for Canonical Name. CNAME records can be used to alias one name to another.</p>
+
+<p>For example, if you have a server where you keep all of your documents online, it might normally be accessed through <code>docs.example.com</code>. You may also want to access it through <code>documents.example.com</code>. One way to make this possible is to add a CNAME record that points <code>documents.example.com</code> to <code>docs.example.com</code>. When someone visits <code>documents.example.com</code> they will see the exact same content as <code>docs.example.com</code>.</p>
+
+<h1 id="subnet">Subnet</h1>
+
+<h2 id="why-subnet">Why Subnet?</h2>
+
+<ul>
+  <li>Why not just use separate IP addresses and not worry so much about splitting things into smaller chunks. Unfortunately, we quickly run into problems when an IP address in NY needs to talk to another IP address in Sydney. It’s practically impossible for the Internet routers to maintain an entire table of everyone’s individual IP address; the lookup process would be painfully slow, and the amount of memory needed to maintain such a massive list would be impractical.</li>
+  <li>Instead, most routers have a much smaller table that contains groups of networks, or <em>subnets</em>. These network routing tables provide routers with the information they need to pass the packets along in the right direction.</li>
+  <li>
+    <p><em>Telephone Switch</em>: This is similar to old-school telephone systems. The entire county is split into “area codes,” and we have individual “exchanges” within a single area code. If 212-555-1212 needs to call 305-555-1212, the telephone switches in the 212 area code simply pass the request to the telephone switches in the 305 area code. The 212 phone switches don’t have a list of every possible phone number in the 305 area, and they don’t need to. The 305 phone switches transfer the call to the local 555 exchange, which then can direct the phone call to the local 1212 number.</p>
+  </li>
+  <li>
+    <p>One of the address ranges RFC 1918 provides is <code>10.0.0.0/8</code>, which means practically over a 16 million different IP addresses are available in a single network. It is not practical for any network to manage this, so the network must be split up into smaller chunks called <em>subnets</em></p>
+  </li>
+  <li><strong>Subnet Masks</strong>
+    <ul>
+      <li>A subnet mask of <code>255.255.255.0</code> means 255 IP addresses are available for the private network.</li>
+      <li>Subnet mask <code>255.255.0.0</code> means <code>255 * 255 = 65,025</code> addresses are available.</li>
+      <li>Unlike IP addresses, the subnet mask isn’t transmitted in the traffic flow between devices. The subnet mask is only used by the local computer, and it’s only used to help the computer determine which network it belongs to.</li>
+      <li>In the below example, the combination of our computer’s IP address of 10.25.6.25 with our subnet mask of 255.255.255.0 means that the computer knows to send local network traffic directly to devices in the IP address range of 10.25.6.1 through 10.25.6.255. If the IP address of a destination computer is ever anything different, the computer knows that the traffic needs to leave the local network and it will send the packet to the default gateway of 10.25.6.1. The default gateway is IP address of the local router, and the router has the all of the information it needs to send packets from the local network to other networks (and perhaps the Internet).</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">IP address: 10.25.6.55
+</span><span class="line">Subnet mask: 255.255.255.0
+</span><span class="line">Default gateway: 10.25.6.1</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="cidr-classless-inter-domain-routing">CIDR (Classless Inter-Domain Routing)</h2>
+
+<ul>
+  <li>An IPV4 address is a combination of 4 octets <em>XX.XX.XX.XX</em> where XX is a number between 0 and 255 (2 ^ 8 = 256). A combination 8 x 4 = 32 bits.</li>
+  <li>To express a range of addresses between 10.0.0.0 and 10.0.0.255 in CIDR format is <em>10.0.0.0/24</em>.  This denotes that the first 24 of the 32 bits remain constant, but the last 8 can be incremented.</li>
+  <li>In early days of Internet, subnets were classified as Class A, B and C. This practice has been antiquated since 1993.</li>
+  <li>As the Internet grew, we realized that we would need a more precise way to split our networks apart. Hence the move from class-based addressing to a more flexible addressing scheme called <em>Classless Inter-Domain Routing</em> (pronounced cider)</li>
+  <li>CIDR makes it easy to store IP ranges in routers and DNS servers</li>
+</ul>
+
+<h2 id="nat-network-address-translation">NAT (Network Address Translation)</h2>
+
+<ul>
+  <li>When you get Internet connection for first from your ISP, they provide you with a single IP address.</li>
+  <li>Internally, you can create a private network with multiple private IP addresses. Practically the private network can have as many IPs as they’d like.</li>
+  <li>RFC 1918 provides blocks of private IPs that can be used for internal or private networks. These private IP addresses are not routable over the Internet. Even if you tried, the Internet routers would drop your packets immediately.</li>
+  <li>One of the address ranges RFC 1918 provides is <code>10.0.0.0/8</code>, which means practically over a 16 million different IP addresses are available in a single network. It is not practical</li>
+  <li>NAT is used to translate internal IP addresses to a single public IP address.</li>
+</ul>
+
+<h1 id="network-interfaces">Network Interfaces</h1>
+
+<ul>
+  <li>NIC - Network Interface Card</li>
+</ul>
+
+<h1 id="ntp-network-time-protocol-servers">NTP (Network Time Protocol) Servers</h1>
+
+<h1 id="netbios-name-servers">NetBIOS Name Servers</h1>
+
+<h1 id="references">References</h1>
+
+<ul>
+  <li><a href="http://software77.net/cidr-101.html">CIDR Explained</a></li>
+  <li><a href="http://www.professormesser.com/after-class/whats-with-all-this-subnet-stuff/">What’s with all this Subnet stuff</a></li>
+</ul>
+
+  
+    <footer>
+      
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

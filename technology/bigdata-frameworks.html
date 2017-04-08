@@ -1,0 +1,1285 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Big Data Frameworks - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Big Data Frameworks Apache HCatalog Apache Hive Apache Pig 1. Pig Latin 2) Grunt 3) Piggybank Apache Storm Components Difference between Storm &amp &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/bigdata-frameworks.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Big Data Frameworks</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#apache-hcatalog" id="markdown-toc-apache-hcatalog">Apache HCatalog</a></li>
+  <li><a href="#apache-hive" id="markdown-toc-apache-hive">Apache Hive</a></li>
+  <li><a href="#apache-pig" id="markdown-toc-apache-pig">Apache Pig</a>    <ul>
+      <li><a href="#pig-latin" id="markdown-toc-pig-latin">1. Pig Latin</a></li>
+      <li><a href="#grunt" id="markdown-toc-grunt">2) Grunt</a></li>
+      <li><a href="#piggybank" id="markdown-toc-piggybank">3) Piggybank</a></li>
+    </ul>
+  </li>
+  <li><a href="#apache-storm" id="markdown-toc-apache-storm">Apache Storm</a>    <ul>
+      <li><a href="#components" id="markdown-toc-components">Components</a></li>
+      <li><a href="#difference-between-storm--spark" id="markdown-toc-difference-between-storm--spark">Difference between Storm &amp; Spark</a></li>
+      <li><a href="#example-word-counter" id="markdown-toc-example-word-counter">Example: Word Counter</a>        <ul>
+          <li><a href="#main-program" id="markdown-toc-main-program">Main Program</a></li>
+          <li><a href="#spout" id="markdown-toc-spout">Spout</a></li>
+          <li><a href="#bolt" id="markdown-toc-bolt">Bolt</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#apache-spark" id="markdown-toc-apache-spark">Apache Spark</a></li>
+  <li><a href="#apache-kafka" id="markdown-toc-apache-kafka">Apache Kafka</a>    <ul>
+      <li><a href="#messages" id="markdown-toc-messages">Messages</a></li>
+      <li><a href="#topic--partition" id="markdown-toc-topic--partition">Topic &amp; Partition</a></li>
+      <li><a href="#broker--cluster" id="markdown-toc-broker--cluster">Broker &amp; Cluster</a></li>
+      <li><a href="#zookeeper" id="markdown-toc-zookeeper">Zookeeper</a></li>
+      <li><a href="#producer" id="markdown-toc-producer">Producer</a></li>
+      <li><a href="#consumer" id="markdown-toc-consumer">Consumer</a></li>
+      <li><a href="#clusters" id="markdown-toc-clusters">Clusters</a></li>
+      <li><a href="#design" id="markdown-toc-design">Design</a>        <ul>
+          <li><a href="#message-compression" id="markdown-toc-message-compression">Message Compression</a></li>
+          <li><a href="#replication" id="markdown-toc-replication">Replication</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#apache-zookeeper" id="markdown-toc-apache-zookeeper">Apache Zookeeper</a></li>
+  <li><a href="#bibliography" id="markdown-toc-bibliography">Bibliography</a></li>
+</ul>
+
+<h1 id="apache-hcatalog">Apache HCatalog</h1>
+
+<ul>
+  <li>provides one consistent data model for various Hadoop tools.</li>
+  <li>provides a shared schema.</li>
+  <li>allows users to see when shared data is available.</li>
+  <li>decouples tools like Pig and Hive from data location, data format, etc.</li>
+  <li>Based currently on Hive’s metastore.</li>
+</ul>
+
+<hr />
+
+<h1 id="apache-hive">Apache Hive</h1>
+
+<ul>
+  <li>Hive is a data warehouse system layer build on Hadoop.</li>
+  <li>Allows you to define a structure for your unstructured Big Data.</li>
+  <li>Simplifies analysis and queries with an SQL-like scripting language called HiveQL for adhoc querying on HDFS data.</li>
+  <li>Hive is
+    <ul>
+      <li>not a relational database. It uses a database to store metadata, but the data that Hive processes is stored in HDFS.</li>
+      <li>not designed for online transaction processing. not suited for real-time queries and row-level updates.</li>
+    </ul>
+  </li>
+  <li>Components
+    <ul>
+      <li>CLI, Web interface (Beeswax?), Micrsoft HDInsight</li>
+    </ul>
+  </li>
+  <li>When to use Hive?
+    <ul>
+      <li>for adhoc querying; for analysts with SQL familiarity</li>
+    </ul>
+  </li>
+  <li>HiveQL - SQL-like syntax. based on SQL-92 specification.</li>
+  <li>Hive Table
+    <ul>
+      <li>A Hive Table consists of (1) Data: typically a file or group of files in HDFS (2) Schema: in the form of metadata stored in a database</li>
+      <li>Schema and data are separate</li>
+      <li>A schema can be defined for existing data; Data can be added/removed independently; Before querying data in HDFS using Hive, a schema needs to be defined.</li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h1 id="apache-pig">Apache Pig</h1>
+
+<p>3 components of Pig:</p>
+
+<h2 id="pig-latin">1. Pig Latin</h2>
+<ul>
+  <li>High level scripting language to describe data flow - statements translate into a series of MapReduce jobs - can invoke Java, JRuby or Jython programs and vice versa - User defined functions (UDF) can be written in Java and uploaded as jar.</li>
+  <li>Sample Pig Latin script</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"> a = LOAD 'nyse_stocks' using org.apache.hcatalog.pig.HCatLoader();
+</span><span class="line"> b = filter a by stock_symbol == 'IBM';
+</span><span class="line"> c = group b all;
+</span><span class="line"> d = foreach c generate AVG(b.stock_volume);
+</span><span class="line"> dump d;</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Pig Latin script describes a DAG (directed acyclic graph) - http://vkalavri.com/tag/apachepig/</li>
+  <li>Pig script is not converted to a MapReduce job unless a DUMP/STORE command is invoked.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"> runs = foreach batting generate $0 as playerID, $1 as year, $8 as runs;
+</span><span class="line"> (playerID,yearID,R)
+</span><span class="line"> (john,2008,10)
+</span><span class="line"> (john,2009,22)
+</span><span class="line"> (john,2010,0)
+</span><span class="line"> (adam,2008,58)
+</span><span class="line"> (adam,2009,105)
+</span><span class="line"> (adam,2010,106)
+</span><span class="line"> (adam,2011,118)
+</span><span class="line">
+</span><span class="line"> grp_data = group runs by (year);
+</span><span class="line"> (2008, [(john,2008,10), (adam,2008,58)])
+</span><span class="line"> (2009, [(john,2009,22), (adam,2009,105)])
+</span><span class="line"> (2010, [(john,2010,0),  (adam,2010,106)])
+</span><span class="line"> (2011, [(adam,2011,118)])</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="grunt">2) Grunt</h2>
+<p>Interactive command-line shell</p>
+
+<h2 id="piggybank">3) Piggybank</h2>
+<ul>
+  <li>A repository to store the UDFs</li>
+  <li>When to use Pig?
+    <ul>
+      <li>for ETL purposes; for preparing data for easier analysis; when you have a long series of steps to perform.</li>
+    </ul>
+  </li>
+  <li>Data Model difference b/w Pig and Hive
+    <ul>
+      <li>In Pig, data objects exist and are operated on in the script. They are deleted after the script completes. They can be stored explicitly for later use.</li>
+      <li>In Hive, data objects exist in Hadoop data store. After every line of execution, results are stored in Hadoop which can be useful for debugging.</li>
+    </ul>
+  </li>
+</ul>
+
+<hr />
+
+<h1 id="apache-storm">Apache Storm</h1>
+
+<p><img class="right" src="/technology/storm-overview.png" width="400" height="400" /></p>
+
+<ul>
+  <li>Storm is an open source, distributed, reliable, and fault-tolerant system for processing streams of large volumes of data in real-time. It supports many use cases, such as real-time analytics, online machine learning, continuous computation, and the Extract Transformation Load (ETL) paradigm.</li>
+  <li>Features
+    <ul>
+      <li>Easy to program</li>
+      <li>Supports multiple programming languages</li>
+      <li>Fault-tolerant - The Storm cluster takes care of workers going down,  reassigning tasks when necessary.</li>
+      <li>Scalable</li>
+      <li>Reliable - All messages are guaranteed to be processed at least once. If there are errors, messages might be processed more than once, but you’ll never lose any message.</li>
+      <li>Fast</li>
+      <li>Transactional - You can get exactly once messaging semantics for pretty much any computation.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="components">Components</h2>
+
+<p><img class="right" src="/technology/storm-daemons.png" /></p>
+
+<ul>
+  <li><strong>Spout</strong>:
+    <ul>
+      <li>The input stream of a Storm cluster is handled by a component called a spout.</li>
+      <li>This is a continuous stream of log data.</li>
+    </ul>
+  </li>
+  <li><strong>Bolt</strong>:
+    <ul>
+      <li>The spout passes the data to a component called a bolt, which transforms it in some way. A bolt either persists the data in some sort of storage, or passes it to some other bolt.</li>
+      <li>You can imagine a Storm cluster as a chain of bolt components that each make some kind of transformation on the data exposed by the spout.</li>
+      <li>For example, emitting a stream of trend analysis by processing a stream of tweets.</li>
+    </ul>
+  </li>
+  <li><strong>Topology</strong>
+    <ul>
+      <li>The arrangement of all the components (spouts and bolts) and their connections is called a topology.</li>
+      <li>A topology in Storm runs across many worker nodes on different machines.</li>
+      <li>All topology nodes should be able to run independently with no shared data between processes (i.e., no global or class variables) since these processes may run on different machines.</li>
+    </ul>
+  </li>
+  <li><strong>Node</strong>
+    <ul>
+      <li>In a Storm cluster, nodes are organized into a master node that runs continuously.</li>
+      <li>There are two kind of nodes in a Storm cluster: <em>master node</em> and <em>worker nodes</em></li>
+      <li><strong>Nimbus</strong>: Master node run a daemon called <em>Nimbus</em>, which is responsible for distributing code around the cluster, assigning tasks to each worker node, and monitoring for failures.</li>
+      <li><strong>Supervisor</strong>: Worker nodes run a daemon called <em>Supervisor</em>, which executes a portion of a topology.</li>
+      <li>Since Storm keeps all cluster states either in Zookeeper or on local disk, the daemons are stateless and can fail or restart without affecting the health of the system</li>
+    </ul>
+  </li>
+  <li>Underneath, Storm makes use of zeromq, an advanced, embeddable networking library that provides wonderful features that make Storm possible</li>
+</ul>
+
+<h2 id="difference-between-storm--spark">Difference between Storm &amp; Spark</h2>
+
+<table>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td><strong>Storm</strong></td>
+      <td><strong>Spark</strong></td>
+    </tr>
+    <tr>
+      <td><strong>Type</strong></td>
+      <td>Task parallel Continuous Computation Engine</td>
+      <td>Data Parallel Batch Processing Engine</td>
+    </tr>
+    <tr>
+      <td><strong>Processing Model</strong></td>
+      <td>Microbatching is performed via Trident API, but cannot perform streaming in the strictest sense.</td>
+      <td>Stream processing engine that can do micro-batching. Continuous computation can be performed via Streaming API</td>
+    </tr>
+    <tr>
+      <td><strong>Workflow</strong></td>
+      <td>Workflows as DAGs</td>
+      <td>MapReduce style workflows</td>
+    </tr>
+    <tr>
+      <td><strong>Cluster</strong></td>
+      <td>Zookeeper clustering, Master/minion</td>
+      <td>Has its own master/server processes; supports Hadoop, YARN, Mesos</td>
+    </tr>
+    <tr>
+      <td><strong>File System</strong></td>
+      <td>Can read/write HDFS</td>
+      <td>Requires shared FS like HDFS, S3, NFS</td>
+    </tr>
+    <tr>
+      <td><strong>Message Parsing</strong></td>
+      <td>Netty (default), ZeroMQ</td>
+      <td>Netty &amp; Akka</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="example-word-counter">Example: Word Counter</h2>
+
+<p>A simple topology which reads a file and counts word occurrence.</p>
+
+<p><img class="right" src="/technology/storm-example.png" /></p>
+
+<h3 id="main-program">Main Program</h3>
+
+<ul>
+  <li><code>TopologyBuilder</code> tells Storm how the nodes are arranged and how they exchange data</li>
+  <li>The spout and the bolts are connected using <code>shuffleGroupings</code>. This type of grouping tells Storm to send messages from the source node to target nodes in randomly distributed fashion.</li>
+  <li><code>Config</code> object containing the topology configuration, which is merged with the cluster configuration at run time and sent to all nodes with the <code>prepare</code> method.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Main Program</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">InterruptedException</span> <span class="o">{</span>
+</span><span class="line">	<span class="c1">//Topology definition</span>
+</span><span class="line">	<span class="n">TopologyBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">TopologyBuilder</span><span class="o">();</span>
+</span><span class="line">	<span class="n">builder</span><span class="o">.</span><span class="na">setSpout</span><span class="o">(</span><span class="s">&quot;word-reader&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="nf">WordReader</span><span class="o">());</span>
+</span><span class="line">	<span class="n">builder</span><span class="o">.</span><span class="na">setBolt</span><span class="o">(</span><span class="s">&quot;word-normalizer&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="nf">WordNormalizer</span><span class="o">())</span>
+</span><span class="line">		<span class="o">.</span><span class="na">shuffleGrouping</span><span class="o">(</span><span class="s">&quot;word-reader&quot;</span><span class="o">);</span> <span class="c1">//output of word-reader is fed into this bolt</span>
+</span><span class="line">	<span class="n">builder</span><span class="o">.</span><span class="na">setBolt</span><span class="o">(</span><span class="s">&quot;word-counter&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="nf">WordCounter</span><span class="o">(),</span><span class="mi">2</span><span class="o">)</span>
+</span><span class="line">		<span class="o">.</span><span class="na">fieldsGrouping</span><span class="o">(</span><span class="s">&quot;word-normalizer&quot;</span><span class="o">,</span> <span class="k">new</span> <span class="nf">Fields</span><span class="o">(</span><span class="s">&quot;word&quot;</span><span class="o">));</span> <span class="c1">//output of word-normalizer is fed into this bolt</span>
+</span><span class="line">	
+</span><span class="line">	<span class="c1">//Configuration</span>
+</span><span class="line">	<span class="n">Config</span> <span class="n">conf</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Config</span><span class="o">();</span>
+</span><span class="line">	<span class="n">conf</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">&quot;wordsFile&quot;</span><span class="o">,</span> <span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">]);</span> <span class="c1">//input file to process</span>
+</span><span class="line">	<span class="n">conf</span><span class="o">.</span><span class="na">setDebug</span><span class="o">(</span><span class="kc">false</span><span class="o">);</span> <span class="c1">// should print all messages exchanged between nodes?</span>
+</span><span class="line">	<span class="n">conf</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">Config</span><span class="o">.</span><span class="na">TOPOLOGY_MAX_SPOUT_PENDING</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+</span><span class="line">	
+</span><span class="line">	<span class="c1">//Topology run</span>
+</span><span class="line">	<span class="n">LocalCluster</span> <span class="n">cluster</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">LocalCluster</span><span class="o">();</span> <span class="c1">// since we are running in local mode</span>
+</span><span class="line">	<span class="n">cluster</span><span class="o">.</span><span class="na">submitTopology</span><span class="o">(</span><span class="s">&quot;Getting-Started-Toplogie&quot;</span><span class="o">,</span> <span class="n">conf</span><span class="o">,</span> <span class="n">builder</span><span class="o">.</span><span class="na">createTopology</span><span class="o">());</span>
+</span><span class="line">	<span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">);</span>
+</span><span class="line">	<span class="n">cluster</span><span class="o">.</span><span class="na">shutdown</span><span class="o">();</span> <span class="c1">// in production environment, topology runs continuously</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="spout">Spout</h3>
+
+<ul>
+  <li><code>open</code> method is called first. In the example, it opens a file reader</li>
+  <li><code>nextTuple</code> method is called continuously forever. This method emits values to be processed by bolts. In the example, it emits a value per line from the file.</li>
+  <li>A spout emits a list of defined fields. This architecture allows to have different kinds of bolts reading the same spout stream, which can then define fields for other bolts to consume and so on.</li>
+  <li>A tuple is a named list of values, which can be of any type of Java object (serializable object). By default, Storm can serialize common types like strings, byte arrays, <code>ArrayList</code>, <code>HashMap</code>, and <code>HashSet</code>.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Spout that reads the text file</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+<span class="line-number">39</span>
+<span class="line-number">40</span>
+<span class="line-number">41</span>
+<span class="line-number">42</span>
+<span class="line-number">43</span>
+<span class="line-number">44</span>
+<span class="line-number">45</span>
+<span class="line-number">46</span>
+<span class="line-number">47</span>
+<span class="line-number">48</span>
+<span class="line-number">49</span>
+<span class="line-number">50</span>
+<span class="line-number">51</span>
+<span class="line-number">52</span>
+<span class="line-number">53</span>
+<span class="line-number">54</span>
+<span class="line-number">55</span>
+<span class="line-number">56</span>
+<span class="line-number">57</span>
+<span class="line-number">58</span>
+<span class="line-number">59</span>
+<span class="line-number">60</span>
+<span class="line-number">61</span>
+<span class="line-number">62</span>
+<span class="line-number">63</span>
+<span class="line-number">64</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">WordReader</span> <span class="kd">implements</span> <span class="n">IRichSpout</span> <span class="o">{</span>
+</span><span class="line">	<span class="kd">private</span> <span class="n">SpoutOutputCollector</span> <span class="n">collector</span><span class="o">;</span>
+</span><span class="line">	<span class="kd">private</span> <span class="n">FileReader</span> <span class="n">fileReader</span><span class="o">;</span>
+</span><span class="line">	<span class="kd">private</span> <span class="kt">boolean</span> <span class="n">completed</span> <span class="o">=</span> <span class="kc">false</span><span class="o">;</span>
+</span><span class="line">	<span class="kd">private</span> <span class="n">TopologyContext</span> <span class="n">context</span><span class="o">;</span>
+</span><span class="line">
+</span><span class="line">	<span class="c1">// We will create the file and get the collector object</span>
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">open</span><span class="o">(</span>
+</span><span class="line">			<span class="n">Map</span> <span class="n">conf</span><span class="o">,</span> <span class="c1">// conf object created during topology definition</span>
+</span><span class="line">			<span class="n">TopologyContext</span> <span class="n">context</span><span class="o">,</span> <span class="c1">// contains topology data</span>
+</span><span class="line">			<span class="n">SpoutOutputCollector</span> <span class="n">collector</span> <span class="c1">//enables to emit the data for bolts to process</span>
+</span><span class="line">		<span class="o">)</span> <span class="o">{</span>
+</span><span class="line">		<span class="k">try</span> <span class="o">{</span>
+</span><span class="line">			<span class="k">this</span><span class="o">.</span><span class="na">context</span> <span class="o">=</span> <span class="n">context</span><span class="o">;</span>
+</span><span class="line">			<span class="k">this</span><span class="o">.</span><span class="na">fileReader</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">FileReader</span><span class="o">(</span><span class="n">conf</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&quot;wordsFile&quot;</span><span class="o">).</span><span class="na">toString</span><span class="o">());</span>
+</span><span class="line">		<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">FileNotFoundException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">			<span class="k">throw</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">(</span><span class="s">&quot;Error reading file	[&quot;</span><span class="o">+</span><span class="n">conf</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&quot;wordFile&quot;</span><span class="o">)+</span><span class="s">&quot;]&quot;</span><span class="o">);</span>
+</span><span class="line">		<span class="o">}</span>
+</span><span class="line">		<span class="k">this</span><span class="o">.</span><span class="na">collector</span> <span class="o">=</span> <span class="n">collector</span><span class="o">;</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line">
+</span><span class="line">	<span class="c1">// this method emits a tuple for each line in file</span>
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">nextTuple</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">		<span class="c1">// The nextuple it is called forever, so if we have already completed reading the file ,we will wait and then return</span>
+</span><span class="line">		<span class="k">if</span><span class="o">(</span><span class="n">completed</span><span class="o">){</span>
+</span><span class="line">			<span class="k">try</span> <span class="o">{</span>
+</span><span class="line">				<span class="n">Thread</span><span class="o">.</span><span class="na">sleep</span><span class="o">(</span><span class="mi">1000</span><span class="o">);</span>
+</span><span class="line">			<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">InterruptedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">				<span class="c1">//Do nothing</span>
+</span><span class="line">			<span class="o">}</span>
+</span><span class="line">			<span class="k">return</span><span class="o">;</span>
+</span><span class="line">		<span class="o">}</span>
+</span><span class="line">
+</span><span class="line">		<span class="c1">//Open the reader</span>
+</span><span class="line">		<span class="n">String</span> <span class="n">str</span><span class="o">;</span>
+</span><span class="line">		<span class="n">BufferedReader</span> <span class="n">reader</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">BufferedReader</span><span class="o">(</span><span class="n">fileReader</span><span class="o">);</span>
+</span><span class="line">		<span class="k">try</span><span class="o">{</span>
+</span><span class="line">			<span class="c1">//Read all lines</span>
+</span><span class="line">			<span class="k">while</span><span class="o">((</span><span class="n">str</span> <span class="o">=</span> <span class="n">reader</span><span class="o">.</span><span class="na">readLine</span><span class="o">())</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">){</span>
+</span><span class="line">				<span class="k">this</span><span class="o">.</span><span class="na">collector</span><span class="o">.</span><span class="na">emit</span><span class="o">(</span><span class="k">new</span> <span class="nf">Values</span><span class="o">(</span><span class="n">str</span><span class="o">),</span><span class="n">str</span><span class="o">);</span> <span class="c1">// emit each line from file</span>
+</span><span class="line">			<span class="o">}</span>
+</span><span class="line">		<span class="o">}</span><span class="k">catch</span><span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">){</span>
+</span><span class="line">			<span class="k">throw</span> <span class="k">new</span> <span class="nf">RuntimeException</span><span class="o">(</span><span class="s">&quot;Error reading tuple&quot;</span><span class="o">,</span><span class="n">e</span><span class="o">);</span>
+</span><span class="line">		<span class="o">}</span><span class="k">finally</span><span class="o">{</span>
+</span><span class="line">			<span class="n">completed</span> <span class="o">=</span> <span class="kc">true</span><span class="o">;</span>
+</span><span class="line">		<span class="o">}</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line">
+</span><span class="line">	<span class="c1">// declare the output field </span>
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">declareOutputFields</span><span class="o">(</span><span class="n">OutputFieldsDeclarer</span> <span class="n">declarer</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">		<span class="n">declarer</span><span class="o">.</span><span class="na">declare</span><span class="o">(</span><span class="k">new</span> <span class="nf">Fields</span><span class="o">(</span><span class="s">&quot;line&quot;</span><span class="o">));</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line">
+</span><span class="line">	<span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">isDistributed</span><span class="o">()</span> <span class="o">{</span><span class="k">return</span> <span class="kc">false</span><span class="o">;}</span>
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">close</span><span class="o">()</span> <span class="o">{}</span>
+</span><span class="line">	
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">ack</span><span class="o">(</span><span class="n">Object</span> <span class="n">msgId</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;OK:&quot;</span><span class="o">+</span><span class="n">msgId</span><span class="o">);</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line">
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">fail</span><span class="o">(</span><span class="n">Object</span> <span class="n">msgId</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;FAIL:&quot;</span><span class="o">+</span><span class="n">msgId</span><span class="o">);</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="bolt">Bolt</h3>
+
+<ul>
+  <li>We now have a spout that reads from a file and emits one tuple per line. We need to
+create two bolts to process these tuples</li>
+  <li><code>execute</code> method is called once per typle received. A bolt can emit 0, 1 or many tuples for each tuple received.</li>
+  <li>After each tuple is processed, the collector’s <code>ack()</code> method is called to indicate that processing has completed successfully. If the tuple could not be processed, the collector’s <code>fail()</code> method should be called.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Bolt that normalizes the line</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">WordNormalizer</span> <span class="kd">implements</span> <span class="n">IRichBolt</span> <span class="o">{</span>
+</span><span class="line">	<span class="kd">private</span> <span class="n">OutputCollector</span> <span class="n">collector</span><span class="o">;</span>
+</span><span class="line">
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">execute</span><span class="o">(</span><span class="n">Tuple</span> <span class="n">input</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">		<span class="n">String</span> <span class="n">sentence</span> <span class="o">=</span> <span class="n">input</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+</span><span class="line">		<span class="n">String</span><span class="o">[]</span> <span class="n">words</span> <span class="o">=</span> <span class="n">sentence</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s">&quot; &quot;</span><span class="o">);</span>
+</span><span class="line">		<span class="k">for</span><span class="o">(</span><span class="n">String</span> <span class="n">word</span> <span class="o">:</span> <span class="n">words</span><span class="o">){</span>
+</span><span class="line">			<span class="n">word</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="na">trim</span><span class="o">();</span>
+</span><span class="line">			<span class="k">if</span><span class="o">(!</span><span class="n">word</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()){</span>
+</span><span class="line">				<span class="n">word</span> <span class="o">=</span> <span class="n">word</span><span class="o">.</span><span class="na">toLowerCase</span><span class="o">();</span>
+</span><span class="line">				<span class="n">collector</span><span class="o">.</span><span class="na">emit</span><span class="o">(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="n">input</span><span class="o">),</span><span class="k">new</span> <span class="nf">Values</span><span class="o">(</span><span class="n">word</span><span class="o">));</span>
+</span><span class="line">			<span class="o">}</span>
+</span><span class="line">		<span class="o">}</span>
+</span><span class="line">		<span class="n">collector</span><span class="o">.</span><span class="na">ack</span><span class="o">(</span><span class="n">input</span><span class="o">);</span> <span class="c1">// acknowledgement indicates the tuple is processed successfully</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line">
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">prepare</span><span class="o">(</span><span class="n">Map</span> <span class="n">stormConf</span><span class="o">,</span> <span class="n">TopologyContext</span> <span class="n">context</span><span class="o">,</span> <span class="n">OutputCollector</span> <span class="n">collector</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">		<span class="k">this</span><span class="o">.</span><span class="na">collector</span> <span class="o">=</span> <span class="n">collector</span><span class="o">;</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line">	
+</span><span class="line">	<span class="c1">// The bolt will only emit the field &quot;word&quot;</span>
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">declareOutputFields</span><span class="o">(</span><span class="n">OutputFieldsDeclarer</span> <span class="n">declarer</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">		<span class="n">declarer</span><span class="o">.</span><span class="na">declare</span><span class="o">(</span><span class="k">new</span> <span class="nf">Fields</span><span class="o">(</span><span class="s">&quot;word&quot;</span><span class="o">));</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line">
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">cleanup</span><span class="o">()</span> <span class="o">{}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>The <code>execute</code> method in the next bolt uses a map to collect and count the words.</li>
+  <li>When the topology terminates, the <code>cleanup()</code> method is called and prints out the map. (This is just an example, but normally you should use the <code>cleanup()</code> method to close active connections and other resources when the topology shuts down.)</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Bolt that counts the words</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">WordCounter</span> <span class="kd">implements</span> <span class="n">IRichBolt</span> <span class="o">{</span>
+</span><span class="line">	<span class="n">Integer</span> <span class="n">id</span><span class="o">;</span>
+</span><span class="line">	<span class="n">String</span> <span class="n">name</span><span class="o">;</span>
+</span><span class="line">	<span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;</span> <span class="n">counters</span><span class="o">;</span>
+</span><span class="line">	<span class="kd">private</span> <span class="n">OutputCollector</span> <span class="n">collector</span><span class="o">;</span>
+</span><span class="line">
+</span><span class="line">	<span class="nd">@Override</span>
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">execute</span><span class="o">(</span><span class="n">Tuple</span> <span class="n">input</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">		<span class="n">String</span> <span class="n">str</span> <span class="o">=</span> <span class="n">input</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="mi">0</span><span class="o">);</span>
+</span><span class="line">		<span class="k">if</span><span class="o">(!</span><span class="n">counters</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">str</span><span class="o">)){</span>
+</span><span class="line">			<span class="n">counters</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">str</span><span class="o">,</span> <span class="mi">1</span><span class="o">);</span>
+</span><span class="line">		<span class="o">}</span><span class="k">else</span><span class="o">{</span>
+</span><span class="line">			<span class="n">Integer</span> <span class="n">c</span> <span class="o">=</span> <span class="n">counters</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">str</span><span class="o">)</span> <span class="o">+</span> <span class="mi">1</span><span class="o">;</span>
+</span><span class="line">			<span class="n">counters</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">str</span><span class="o">,</span> <span class="n">c</span><span class="o">);</span>
+</span><span class="line">		<span class="o">}</span>
+</span><span class="line">		<span class="n">collector</span><span class="o">.</span><span class="na">ack</span><span class="o">(</span><span class="n">input</span><span class="o">);</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line">
+</span><span class="line">	<span class="nd">@Override</span>
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">cleanup</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;-- Word Counter [&quot;</span><span class="o">+</span><span class="n">name</span><span class="o">+</span><span class="s">&quot;-&quot;</span><span class="o">+</span><span class="n">id</span><span class="o">+</span><span class="s">&quot;] --&quot;</span><span class="o">);</span>
+</span><span class="line">		<span class="k">for</span><span class="o">(</span><span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;</span> <span class="n">entry</span> <span class="o">:</span> <span class="n">counters</span><span class="o">.</span><span class="na">entrySet</span><span class="o">()){</span>
+</span><span class="line">			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">entry</span><span class="o">.</span><span class="na">getKey</span><span class="o">()+</span><span class="s">&quot;: &quot;</span><span class="o">+</span><span class="n">entry</span><span class="o">.</span><span class="na">getValue</span><span class="o">());</span>
+</span><span class="line">		<span class="o">}</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line">
+</span><span class="line">	<span class="nd">@Override</span>
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">prepare</span><span class="o">(</span><span class="n">Map</span> <span class="n">stormConf</span><span class="o">,</span> <span class="n">TopologyContext</span> <span class="n">context</span><span class="o">,</span> <span class="n">OutputCollector</span> <span class="n">collector</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">		<span class="k">this</span><span class="o">.</span><span class="na">counters</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Integer</span><span class="o">&gt;();</span>
+</span><span class="line">		<span class="k">this</span><span class="o">.</span><span class="na">collector</span> <span class="o">=</span> <span class="n">collector</span><span class="o">;</span>
+</span><span class="line">		<span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getThisComponentId</span><span class="o">();</span>
+</span><span class="line">		<span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">context</span><span class="o">.</span><span class="na">getThisTaskId</span><span class="o">();</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line">
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<hr />
+
+<h1 id="apache-spark">Apache Spark</h1>
+
+<hr />
+
+<h1 id="apache-kafka">Apache Kafka</h1>
+
+<ul>
+  <li>
+    <p>Apache Kafka is a publish/subscribe messaging system - often described as a <em>“distributed commit log”</em>. A filesystem or database commit log is designed to provide a durable record of all transactions so that they can be replayed to consistently build the state of a system. Similarly, data within Kafka is stored durably, in order, and can be read deterministically. In addition, the data can be distributed within the system to provide additional protections against failures, as well as significant opportunities for scaling performance.</p>
+  </li>
+  <li>Due to the overheads associated with JMS and its various implementations and limitations with the scaling architecture, LinkedIn decided to build Kafka to address its need for monitoring activity stream data and operational metrics such as CPU,
+I/O usage, and request timings.</li>
+  <li>an open source, distributed, partitioned, and <em>replicated commit-log-based</em> publish-subscribe messaging system, mainly designed with the following characteristics:</li>
+  <li><strong>Persistent messaging</strong>: To derive the real value from big data, any kind of information loss cannot be afforded. Apache Kafka is designed with <code>O(1)</code> disk structures that provide constant-time performance even with very large volumes of stored messages that are in the order of TBs. With Kafka, messages are persisted on disk as well as replicated within the cluster to prevent data loss.</li>
+  <li><strong>High throughput</strong>: Keeping big data in mind, Kafka is designed to work on commodity hardware and to handle hundreds of MBs of reads and writes per second from large number of clients.</li>
+  <li><strong>Distributed</strong>: Apache Kafka with its cluster-centric design explicitly supports message partitioning over Kafka servers and distributing consumption over a cluster of consumer machines while maintaining per-partition ordering semantics. Kafka cluster can grow elastically and transparently without any downtime.</li>
+  <li><strong>Multiple client support</strong>: The Apache Kafka system supports easy integration of clients from different platforms such as Java, .NET, PHP, Ruby, and Python.</li>
+  <li><strong>Real time</strong>: Messages produced by the producer threads should be immediately visible to consumer threads; this feature is critical to event-based systems such as <strong><em>Complex Event Processing (CEP)</em></strong> systems.</li>
+  <li>
+    <p>Kafka brokers and consumers use Zookeeper to get the state information and to track message offsets, respectively</p>
+  </li>
+  <li><strong>Kafka design facts</strong>
+    <ul>
+      <li>The fundamental backbone of Kafka is message caching and storing on the fiesystem.</li>
+      <li>In Kafka, data is immediately written to the OS kernel page. Caching and flushing of data to the disk are configurable.</li>
+      <li>Kafka provides longer retention of messages even after consumption, allowing consumers to re-consume, if required.</li>
+      <li>Kafka uses a message set to group messages to allow lesser network overhead.</li>
+      <li>Unlike most messaging systems, where metadata of the consumed messages are kept at the server level, in Kafka the state of the consumed messages is maintained at the consumer level. This also addresses issues such as:
+        <ul>
+          <li>Losing messages due to failure</li>
+          <li>Multiple deliveries of the same message</li>
+        </ul>
+      </li>
+      <li>In Kafka, producers and consumers work on the traditional push-and-pull model, where producers push the message to a Kafka broker and consumers pull the message 	from the broker.</li>
+      <li>Kafka does not have any concept of a master and treats all the brokers as peers. This approach facilitates addition and removal of a Kafka broker at any point, as the 	metadata of brokers are maintained in Zookeeper and shared with consumers.</li>
+      <li>Producers also have an option to choose between asynchronous or synchronous mode
+  to send messages to a broker.</li>
+    </ul>
+  </li>
+  <li>
+    <p>Kafka can be compared with Scribe or Flume as it is useful for processing activity stream data; but from the architecture perspective, it is closer to traditional messaging systems such as ActiveMQ or RabitMQ.</p>
+  </li>
+  <li>Use cases:
+    <ul>
+      <li><strong>Log Aggregation</strong>: the process of collecting physical log files from servers and putting them in a central place (a file server or HDFS) for processing.</li>
+      <li><strong>Stream processing</strong>: an example is raw data consumed from topics and enriched or transformed into new Kafka topics for further consumption. Hence, such processing is also called ‘stream processing’.</li>
+      <li><strong>Commit logs</strong>: Kafka can be used to represent external commit logs for any large scale distributed system. Replicated logs over Kafka cluster help failed nodes to recover their states.</li>
+      <li><strong>Click stream tracking</strong>: data such as page views, searches, etc. are published to central topics with one topic per activity type as the volume is very high. These topic are available for subscription by many consumers for a wide range of apps.</li>
+      <li><strong>Messaging</strong>: Message brokers are used for decoupling data processing from data producers. Kafka can replace many popular message brokers as it offers better throughput, built-in partitioning, replication, and fault-tolerance.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="messages">Messages</h2>
+
+<ul>
+  <li>The unit of data within Kafka is called a message.</li>
+  <li>A message is simply an array of bytes, as far as Kafka is concerned, so the data contained within it does not have a specific format or meaning to Kafka.</li>
+  <li><strong>Message Key</strong>:
+    <ul>
+      <li>Messages can have an optional bit of metadata which is referred to as a key. The key is also a byte array, and as with the message, has no specific meaning to Kafka.</li>
+      <li>Keys are used when messages are to be written to partitions in a more controlled manner.</li>
+      <li>The simplest such scheme is to treat partitions as a hash ring, and assure that messages with the same key are always written to the same partition.</li>
+    </ul>
+  </li>
+  <li><strong>Message Batches</strong>
+    <ul>
+      <li>For efficiency, messages are written into Kafka in batches.</li>
+      <li>A batch is just a collection of messages, all of which are being produced to the same topic and partition.</li>
+      <li>Batching, of course, presents a tradeoff between latency and throughput: the larger the batches, the more messages that can be handled per unit of time, but the longer it takes an individual message to propagate.</li>
+    </ul>
+  </li>
+  <li><strong>Message Compression</strong>
+    <ul>
+      <li>Batches can be compressed by producer using either <em>GZIP</em> or <em>Snappy</em> compression protocols, which provides for more efficient data transfer and storage at the cost of some processing power.</li>
+    </ul>
+  </li>
+  <li><strong>Message Schema</strong>
+    <ul>
+      <li>While messages are opaque byte arrays to Kafka itself, it is recommended that additional structure (schema) to be imposed on the message content so that it can be easily understood.</li>
+      <li>Many options available for message schema: JSON, XML. But Kafka users prefer Apache Avro since it provides a compact serialization format, schemas that are separate from the message payloads and that do not require generated code when they change, as well as strong data typing and schema evolution, with both backwards and forwards compatibility.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="topic--partition">Topic &amp; Partition</h2>
+
+<table>
+  <tbody>
+    <tr>
+      <td><img src="/technology/kafka-topic.png" /></td>
+      <td><img src="/technology/kafka-partition.png" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>A topic is a category or feed name to which messages are published by the message producers. In Kafka, topics are partitioned and each partition is represented by the ordered immutable sequence of messages. A Kafka cluster maintains the partitioned log for each topic. Each message in the partition is assigned a unique sequential ID called the <strong>offset</strong>.</li>
+  <li>The term <em>stream</em> is often used when discussing data within systems like Kafka. Most
+often, a stream is considered to be a single topic of data, regardless of the number of partitions. This represents a single stream of data moving from the producers to the consumers.</li>
+  <li>In Kafka topics, every partition is mapped to a logical log file that is represented as a set of segment files of equal sizes. Every partition is an ordered, immutable sequence of messages; each time a message is published to a partition, the broker appends the message to the last segment file.</li>
+  <li>
+    <p>These segment files are flushed to disk after configurable numbers of messages have been published or after a certain amount of time has elapsed. Once the segment file is flushed, messages are made available to the consumers for consumption.</p>
+  </li>
+  <li>Partitions are also the way that Kafka provides redundancy and
+scalability.</li>
+  <li>Each partition can be hosted on a different server, which means that a single topic can be scaled horizontally across multiple servers to provide for performance far beyond the ability of a single server.</li>
+  <li>All the message partitions are assigned a unique sequential number called the <strong><em>offset</em></strong>, which is used to identify each message within the partition. Each partition is optionally replicated across a configurable number of servers for fault tolerance.</li>
+  <li>Each partition available on either of the servers acts as the leader and has zero or more servers acting as followers. Here the leader is responsible for handling all read and write requests for the partition while the followers asynchronously replicate data from the leader. Kafka dynamically maintains a set of <strong><em>in-sync replicas (ISR)</em></strong> that are caught-up to the leader and always persist the latest ISR set to ZooKeeper.</li>
+  <li>If the leader fails, one of the followers (in-sync replicas) will automatically become the new leader.</li>
+  <li>In a Kafka cluster, each server plays a dual role; it acts as a leader for some of its partitions and also a  follower for other partitions. This ensures the load balance within the Kafka cluster.</li>
+</ul>
+
+<h2 id="broker--cluster">Broker &amp; Cluster</h2>
+
+<p><img class="right" src="/technology/kafka-broker.png" /></p>
+
+<ul>
+  <li>A single Kafka server is called a broker.</li>
+  <li>The broker receives messages from producers, assigns offsets to them, and commits the messages to storage on disk. It also services consumers, responding to fetch requests for partitions and responding with the messages that have been committed to disk.</li>
+  <li><em>Throughput</em>: Depending on the specific hardware and its performance characteristics, a single broker can easily handle thousands of partitions and millions of messages per second. Kafka brokers are designed to operate as part of a cluster.</li>
+  <li>Within a cluster of brokers, one will also function as the <strong><em>cluster controller</em></strong> (elected automatically from the live members of the cluster). The controller is responsible for administrative operations, including assigning partitions to brokers and monitoring for broker failures.</li>
+  <li>
+    <p>A partition is owned by a single broker in the cluster, and that broker is called the <strong><em>leader</em></strong> for the partition. A partition may be assigned to multiple brokers, which will result in the partition being replicated. This provides redundancy of messages in the partition, such that another broker can take over leadership if there is a broker failure. However, all consumers and producers operating on that partition must connect to the leader.</p>
+  </li>
+  <li>Brokers are by design <em>stateless</em>. It does not maintain a record of what is consumed by whom. The message state of any consumed message is maintained within the message consumer.</li>
+</ul>
+
+<p><strong>Message Retention</strong></p>
+
+<ul>
+  <li>A key feature of Apache Kafka is that of retention, or the durable storage of messages for some period of time.</li>
+  <li>Kafka brokers are configured with a default retention setting for topics
+    <ul>
+      <li><strong>time-based</strong>: retaining messages for some period of time (e.g. 7 days) or</li>
+      <li><strong>size-based</strong>: until the topic reaches a certain size in bytes (e.g. 1 gigabyte). Once these limits are reached, messages are expired and deleted so that the retention configuration is a minimum amount of data available at any time.</li>
+      <li><strong>log-compact-based</strong>: Topics may also be configured as <strong><em>log compacted</em></strong>, which means that Kafka will retain only the last message produced with a specific key.
+  Log compaction ensures the following:
+        <ul>
+          <li>Ordering of messages is always maintained</li>
+          <li>The messages will have sequential offsets and the offset never changes</li>
+          <li>Reads progressing from offset 0, or the consumer progressing from the start of the log, will see at least the final state of all records in the order they were written</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Individual topics can also be configured with their own retention settings, so messages can be stored for only as long as they are useful.</li>
+  <li>For example, a tracking topic may be retained for several days, while application metrics may be retained for only a few hours.</li>
+</ul>
+
+<h2 id="zookeeper">Zookeeper</h2>
+
+<p><img class="right" src="/technology/kafka-zookeeper.png" /></p>
+
+<ul>
+  <li>Apache Kafka uses Zookeeper to store metadata information about the Kafka cluster,
+as well as consumer client details.</li>
+  <li>ZooKeeper serves as the coordination interface between the Kafka broker and consumers. ZooKeeper allows distributed processes to coordinate with each other through a shared hierarchical name space of data registers (we call these registers znodes), much like a file system.</li>
+  <li>The main differences between ZooKeeper and standard filesystems are that every <em>znode</em> can have data associated with it and znodes are limited to the amount of data that they can have.</li>
+  <li>ZooKeeper was designed to store coordination data: status information, configuration, location information, and so on.</li>
+  <li>While it is possible to run a Zookeeper server using scripts contained within the Kafka distribution, it is trivial to install a full version of Zookeeper from the distribution.</li>
+</ul>
+
+<h2 id="producer">Producer</h2>
+
+<p><img class="right" src="/technology/kafka-producer.png" /></p>
+
+<ul>
+  <li>Producers publish data to the topics by choosing the appropriate partition within the topic. For load balancing, the allocation of messages to the topic partition can be done in a round-robin fashion or using a custom defined function.</li>
+  <li>Example of a producer: Web Application logs, page visits, clicks, social media activities, Web Analytics logs.</li>
+  <li>By default, the producer does not care what partition a specific message is written to and will balance messages over all partitions of a topic evenly. In some cases, the producer will direct messages to specific partitions. This is typically done using the message key and a partitioner that will generate a hash of the key and map it to a specific partition. This assures that all messages produced with a given key will get written to the same partition. The producer could also use a custom partitioner that follows other business rules for mapping messages to partitions</li>
+</ul>
+
+<p><strong>Message Delivery Semantics</strong></p>
+
+<p>There are multiple possible ways to deliver messages, such as:</p>
+
+<ul>
+  <li>Messages are never redelivered but may be lost</li>
+  <li>Messages may be redelivered but never lost</li>
+  <li>
+    <p>Messages are delivered once and only once</p>
+  </li>
+  <li>When publishing, a message is committed to the log. If a producer experiences a network error while publishing, it can never be sure if this error happened before or after the message was committed.</li>
+  <li>
+    <p>Once committed, the message will not be lost as long as either of the brokers that replicate the partition to which this message was written remains available. For guaranteed message publishing, configurations such as getting acknowledgements and the waiting time for messages being committed are provided at the producer’s end.</p>
+  </li>
+  <li>The producer connects to any of the alive nodes and requests metadata about the leaders for the partitions of a topic. This allows the producer to put the message directly to the lead broker for the partition.</li>
+  <li>The Kafka producer API exposes the interface for semantic partitioning by allowing the producer to specify a key to partition by and using this to hash to a partition. Thus, the producer can completely control which partition it publishes messages to</li>
+</ul>
+
+<p><strong>Steps to send a message</strong></p>
+
+<ul>
+  <li>Create a <code>ProducerRecord</code>, which must include
+    <ul>
+      <li>the <strong>topic</strong> to send the record to</li>
+      <li>and a <strong>value/content</strong> being sent</li>
+      <li>optionally specify <strong>a key</strong> and / or <strong>a partition</strong>.</li>
+    </ul>
+  </li>
+  <li>After sending the <code>ProducerRecord</code>, the producer will <strong>serialize</strong> the <em>key</em> and <em>value</em> objects to <code>ByteArray</code>s, so they can be sent over the network.</li>
+  <li>Next, the data is sent to a <strong>partitioner</strong>. If a partition is specified in the <code>ProducerRecord</code>, then it doesn’t do anything and simply returns the partition specified. If not, the <em>partitioner</em> will choose a partition for us, usually based on the <code>ProducerRecord</code> key.</li>
+  <li>Once a partition is selected, the producer knows which topic and partition the record will go to. It then adds the record to a batch of records that will also be sent to the same topic and partition.</li>
+  <li>A separate thread is responsible for sending those batches of records to the appropriate Kafka brokers. When the broker receives the messages, it sends back a response.</li>
+  <li>If the messages were successfully written to Kafka, it will return a <code>RecordMetadata</code> object with the topic, partition and the offset the record in the partition. If the broker failed to write the messages, it will return an error. When the producer receives an error, it may retry sending the message few more times before giving up and returning an error.</li>
+</ul>
+
+<h2 id="consumer">Consumer</h2>
+
+<p><img class="right" src="/technology/kafka-partition-consumer.png" /></p>
+
+<ul>
+  <li>The consumer subscribes to one or more topics and reads the messages in the order they were produced. The consumer keeps track of which messages it has already consumed by keeping track of the offset of messages. The offset is another bit of metadata, an integer value that continually increases, that Kafka adds to each message as it is produced.</li>
+  <li>Each message within a given partition has a unique offset. By storing the offset of the last consumed message for each partition, either in Zookeeper or in Kafka itself, a consumer can stop and restart without losing its place.</li>
+  <li>Consumers work as part of a <strong>consumer group</strong>. This is one or more consumers that work together to consume a topic. The group assures that each partition is only consumed by one member.</li>
+  <li>In the figure here, there are three consumers in a single group consuming a topic. Two of the consumers are working from one partition each, while the third consumer is working from two partitions. The mapping of a consumer to a partition is often called <em>ownership</em> of the partition by the consumer.</li>
+  <li>In this way, consumers can horizontally scale to consume topics with a large number of messages. Additionally, if a single consumer fails, the remaining members of the group will rebalance the partitions being consumed to take over for the missing member.</li>
+  <li>
+    <p>A message within a topic is consumed by a single consumer within the consumer group and, if the requirement is such that a single message is to be consumed by multiple consumers, all these consumers need to be kept in different consumer groups.</p>
+  </li>
+  <li>
+    <p>Consumers always consume messages from a particular partition sequentially and also acknowledge the message offset. This acknowledgement implies that the consumer has consumed all prior messages. Consumers issue an asynchronous pull request containing the offset of the message to be consumed to the broker and get the buffer of bytes.</p>
+  </li>
+  <li><strong>Stateful Consumer</strong>
+    <ul>
+      <li>The message state of any consumed message is maintained within the message consumer.</li>
+      <li>Consumers store the state in Zookeeper but Kafka also allows storing it within other storage systems used for OLTP applications as well.</li>
+      <li>If this is poorly implemented, the consumer ends up in reading the same message multiple times.</li>
+      <li>Message retention policy empowers consumers to deliberately rewind to an old offset and re-consume data although, as with traditional messaging systems, this is a violation of the queuing contract with consumers.</li>
+    </ul>
+  </li>
+  <li><strong>Consumer Types</strong>
+    <ul>
+      <li><em>Offline consumers</em>: that are consuming messages and storing them in Hadoop or traditional data warehouse for offline analysis</li>
+      <li><em>Near real-time consumers</em>:  that are consuming messages and storing them in any NoSQL datastore, such as HBase or Cassandra, for near real-time analytics</li>
+      <li><em>Real-time consumers</em>: such as Spark or Storm, that filter messages in-memory and trigger alert events for related groups</li>
+    </ul>
+  </li>
+  <li>
+    <p>For consumers, Kafka guarantees that the message will be delivered at least once by reading the messages, processing the messages, and finally saving their position. If the consumer process crashes after processing messages but before saving their position, another consumer process takes over the topic partition and may receive the first few messages, which are already processed by crashed consumer.</p>
+  </li>
+  <li>While subscribing, the consumer connects to any of the live nodes and requests metadata about the leaders for the partitions of a topic. This allows the consumer to communicate directly with the lead broker receiving the messages. Kafka topics are divided into a set of ordered partitions and each partition is consumed by one consumer only.</li>
+  <li>
+    <p>Once a partition is consumed, the consumer changes the message offset to the next partition to be consumed. This represents the states about what has been consumed and also provides the flexibility of deliberately rewinding back to an old offset and re-consuming the partition.</p>
+  </li>
+  <li><strong><em>High-level Consumer API</em></strong>
+    <ul>
+      <li>is used when only data is needed and the handling of message offsets is not required.</li>
+      <li>This API hides broker details from the consumer and allows effortless communication with the Kafka cluster by providing an abstraction over the low-level implementation.</li>
+      <li>The high-level consumer stores the last offset (the position within the message partition where the consumer left off consuming the message), read from a specific partition in Zookeeper.</li>
+      <li>This offset is stored based on the consumer group name provided to Kafka at the beginning of the process.</li>
+      <li>does not allow consumers to control interactions with brokers. Also known as <em>simple consumer API</em>.</li>
+    </ul>
+  </li>
+  <li><strong><em>Low-level Consumer API</em></strong>
+    <ul>
+      <li>is stateless and provides fine grained control over the communication between Kafka broker and the consumer.</li>
+      <li>It allows consumers to set the message offset with every request raised to the broker and maintains the metadata at the consumer’s end.</li>
+      <li>This API can be used by both online as well as offline consumers such as Hadoop.</li>
+      <li>These types of consumers can also perform multiple reads for the same message or manage transactions to ensure the message is consumed only once.</li>
+    </ul>
+  </li>
+  <li><strong>Number of Consumers and partitions</strong>  - say <code>c</code> = # of consumers, <code>p</code> = # of partitions</li>
+</ul>
+
+<table>
+  <tbody>
+    <tr>
+      <td>c &lt; p</td>
+      <td>c==p</td>
+      <td>c&gt;p</td>
+    </tr>
+    <tr>
+      <td><img src="/technology/kafka-consumer1.png" /></td>
+      <td><img src="/technology/kafka-consumer2.png" /></td>
+      <td><img src="/technology/kafka-consumer3.png" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>As seen above, if a new consumer is added to the consumer group, Kafka automatically assigns it a partition to consume from.</li>
+  <li>A consumer can read from multiple partitions. However, one partition is not consumed by more than one consumer.</li>
+  <li>In the example above, if we add a new consumer group <code>g2</code> with a single consumer, this consumer will get all the messages in topic <code>t1</code> independently of what <code>g1</code> is doing.</li>
+  <li>If a consumer crashses or leaves the group, the partition it used to consume from is automatically reassigned to another consumer. Same thing happens when a new partition is added to the topic as well. The event in which partition ownership is moved from one consumer to another is called a <strong><em>rebalance</em></strong>. This provides both high availability and scalability.</li>
+</ul>
+
+<h2 id="clusters">Clusters</h2>
+
+<p><strong>Types</strong></p>
+
+<ul>
+  <li>A single node—single broker cluster</li>
+  <li>A single node—multiple broker clusters</li>
+  <li>Multiple nodes—multiple broker clusters</li>
+</ul>
+
+<table>
+  <tbody>
+    <tr>
+      <td>Single node - Singe Broker Cluster</td>
+      <td>Single node - Multiple Broker Cluster</td>
+      <td>Multiple node - Multiple Broker Cluster</td>
+    </tr>
+    <tr>
+      <td><img src="/technology/kafka-1.png" /></td>
+      <td><img src="/technology/kafka-2.png" /></td>
+      <td><img src="/technology/kafka-3.png" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Multiple Clusters</strong></p>
+
+<p><img class="right" src="/technology/kafka-multi-cluster.png" /></p>
+
+<ul>
+  <li>As Kafka deployments grow, it is often advantageous to have multiple clusters for the following reasons:
+    <ul>
+      <li>Segregation of types of data</li>
+      <li>Isolation for security requirements</li>
+      <li>Multiple datacenters (disaster recovery)</li>
+    </ul>
+  </li>
+  <li><em>Mirror Maker</em>
+    <ul>
+      <li>The replication mechanisms within the Kafka clusters are designed only to work within a single cluster, not between multiple clusters. For cross-cluster replication, Kafka provides a tool called <em>Mirror Maker</em>.</li>
+      <li>At it’s core, Mirror Maker is simply a Kafka consumer and producer, linked together with a queue. Messages are consumed from one Kafka cluster and produced to another.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="design">Design</h2>
+
+<h3 id="message-compression">Message Compression</h3>
+
+<ul>
+  <li>The lead broker is responsible for serving the messages for a partition by assigning unique logical offsets to every message before it is appended to the logs. In the case of compressed data, the lead broker has to decompress the message set in order to assign offsets to the messages inside the compressed message set. Once offsets are assigned, the leader again compresses the data and then appends it to the disk. The lead broker follows this process for every compressed message sets it receives, which causes CPU load on a Kafka broker.</li>
+  <li>Message compression techniques are very useful for mirroring data across datacenters using Kafka, where large amounts of data get transferred from active to passive datacenters in the compressed format.</li>
+</ul>
+
+<h3 id="replication">Replication</h3>
+
+<ul>
+  <li>In replication, each partition of a message has <code>n</code> replicas and can afford <code>n-1</code> failures to guarantee message delivery. Out of the n replicas, one replica acts as the lead replica for the rest of the replicas. Zookeeper keeps the information about the lead replica and the current follower <strong>in-sync replicas (ISR)</strong>. The lead replica maintains the list of all in-sync follower replicas</li>
+  <li>Both producers and consumers are replication-aware in Kafka.</li>
+  <li><strong>Replication Modes</strong>
+    <ul>
+      <li>Synchronous replication: In synchronous replication, a producer first identifies the lead replica from ZooKeeper and publishes the message. As soon as the message is published, it is written to the log of the lead replica and all the followers of the lead start pulling the message; by using a single channel, the order of messages is ensured. Each follower replica sends an acknowledgement to the lead replica once the message is written to its respective logs. Once replications are complete and all expected acknowledgements are received, the lead replica sends an acknowledgement to the producer. On the consumer’s side, all the pulling of messages is done from the lead replica.</li>
+      <li><strong>Asynchronous replication</strong>: The only difference in this mode is that, as soon as a lead replica writes the message to its local log, it sends the acknowledgement to the message client and does not wait for acknowledgements from follower replicas. But, as a downside, this mode does not ensure message delivery in case of a broker failure.</li>
+    </ul>
+  </li>
+  <li>Replication in Kafka ensures stronger durability and higher availability. It guarantees that any successfully published message will not be lost and will be consumed, even in the case of broker failures.</li>
+</ul>
+
+<h1 id="apache-zookeeper">Apache Zookeeper</h1>
+
+<ul>
+  <li>
+    <p>A Zookeeper cluster is called an <strong>“ensemble”</strong>. Due to the <em>consensus protocol</em> used, it is recommended that ensembles contain an odd number of servers (e.g. 3, 5, etc.) as a majority of ensemble members (a quorum) must be working for Zookeeper to respond to requests. This means in a 3-node ensemble, you can run with one node missing. With a 5-node ensemble, you can run with two nodes missing.</p>
+  </li>
+  <li>
+    <p>Consider running Zookeeper in a 5-node ensemble. In order to make configuration changes to the ensemble, including swapping a node, you will need to reload nodes one at a time. If your ensemble cannot tolerate more than one node being down, doing maintenance work introduces additional risk. It is also not recommended to run a Zookeeper ensemble larger than 7 nodes, as performance can start to degrade due to the nature of the consensus protocol.</p>
+  </li>
+</ul>
+
+<h1 id="bibliography">Bibliography</h1>
+
+<ul>
+  <li>Kafka
+    <ul>
+      <li>Books
+        <ul>
+          <li>Learning Apache Kafka (2nd Edition) - Nishant Garg</li>
+          <li>Kafka - The Definitive Guide - O’Reilly</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Storm
+    <ul>
+      <li>Books
+        <ul>
+          <li>Getting Started with Storm - O’Reilly</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/bigdata-frameworks.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/bigdata-frameworks.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

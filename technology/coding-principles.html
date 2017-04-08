@@ -1,0 +1,398 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Coding Principles - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Coding Principles Clean Code Naming Function Formatting Object and Data Structures Clean Code
+A Handbook of Agile Software Craftmanship - Bob Martin &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/coding-principles.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Coding Principles</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#clean-code" id="markdown-toc-clean-code">Clean Code</a>    <ul>
+      <li><a href="#naming" id="markdown-toc-naming">Naming</a></li>
+      <li><a href="#function" id="markdown-toc-function">Function</a></li>
+      <li><a href="#formatting" id="markdown-toc-formatting">Formatting</a></li>
+      <li><a href="#object-and-data-structures" id="markdown-toc-object-and-data-structures">Object and Data Structures</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="clean-code">Clean Code</h1>
+<p><strong><em>A Handbook of Agile Software Craftmanship - Bob Martin</em></strong></p>
+
+<h2 id="naming">Naming</h2>
+<ul>
+  <li>Don’t reveal implementation detail in variables. e.g., declare <code>accounts</code> instead <code>accountList</code></li>
+  <li>Use single letter variables only as a local variable</li>
+  <li>No need for prefix on variables and class names. e.g., <code>ICustomer</code> interface</li>
+  <li>Class name should NOT be a verb. Avoid words like <code>Manager</code>, <code>Processor</code>, <code>Data</code> or <code>Info</code></li>
+  <li>Use a common word per concept across method names and class names. e.g., <code>fetch(), get(), retrieve()</code>. Stick to one.</li>
+</ul>
+
+<h2 id="function">Function</h2>
+<ul>
+  <li>Function should do one thing only. One level of abstraction per function.</li>
+  <li>Switch statement - tolerated if it appears only once at very low level. Hide it with ‘AbstractFactory’ and polymorphism.</li>
+  <li>Function arguments
+    <ul>
+      <li>Number of arguments
+        <ul>
+          <li>Niladic (zero args) - Best</li>
+          <li>Monadic (1) - Better</li>
+          <li>Dyadic (2) - Good</li>
+          <li>Polyadic (multiple) - Needs good justification</li>
+        </ul>
+      </li>
+      <li>Avoid functions with output arguments. e.g., <code>public boolean foo(String input, String output);</code></li>
+      <li>Passing flags as arguments is ugly. Based on the flag value, the function might perform one or more things. .e.g., <code>render(boolean isSuite)</code>. Split the logic into <code>renderForSuite()</code> and <code>renderForSingleTest()</code> to make it explicit.</li>
+      <li>Ambiguity issue with dyadic or polyadic functions with same type of arguments. e.g, <code>assertEquals(int expected, int actual)</code>. Make function explicit as <code>assertExpectedEqualsActual(int, int)</code>.</li>
+      <li>Fix for polyadic functions
+        <ul>
+          <li>Club the different arguments into an object and pass that object as input argument</li>
+          <li>Or, make those arguments are field variables. (only for private functions)</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Side effects</strong>
+    <ul>
+      <li>A function promises to do one thing, but it also does other hidden things. e.g., <code>checkPassword(String user, String password)</code> method which authenticates and initializes a user session. Session initialization part is hidden from user.</li>
+      <li>Side effects create temporal couplings and order dependencies. <em>Temporal couplings</em> mean that the function can only be invoked at certain times. In the above example, if it is called out of order the current session data might be destroyed.</li>
+    </ul>
+  </li>
+  <li><strong>Double take</strong> - Any line of code within function that forces you to look at the function signature, then it is called “double take”.</li>
+  <li><strong>Prefer exceptions to return error codes</strong> - Function should do one thing. Error handling is another thing. Extract try..catch in a separate function.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"> <span class="k">if</span> <span class="o">(</span><span class="n">delete</span><span class="o">(</span><span class="n">page</span><span class="o">)</span> <span class="o">==</span> <span class="n">OK</span><span class="o">){</span>
+</span><span class="line">       <span class="o">....</span>
+</span><span class="line"> <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span><span class="line">       <span class="n">Error</span> <span class="n">out</span>
+</span><span class="line"> <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="k">try</span><span class="o">{</span>
+</span><span class="line">   <span class="o">...</span>
+</span><span class="line"> <span class="o">}</span> <span class="k">catch</span> <span class="o">(...){</span>
+</span><span class="line">    <span class="c1">//Error processing is separated from the happy path</span>
+</span><span class="line"> <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<ul>
+  <li><strong>Command Query Separation</strong>: Functions should either do something or return something, but not both.
+    <ul>
+      <li>http://martinfowler.com/bliki/CommandQuerySeparation.html</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="formatting">Formatting</h2>
+<ul>
+  <li><strong>Vertical Openness</strong> - Each group of lines should represent a thought. e.g., <code>given</code>, <code>when</code> &amp; <code>then</code> blocks in unit testing</li>
+  <li><strong>Vertical density</strong> implies close association of those lines</li>
+  <li><strong>Vertical distance</strong> - concepts that are closely related should be kept close to each other. e.g.,
+    <ul>
+      <li>local variable declarations should right before its usage.</li>
+      <li>Instance variables should be at the top of the file, not bottom.</li>
+      <li>Dependent functions should be closer to each other.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="object-and-data-structures">Object and Data Structures</h2>
+<ul>
+  <li>Getters &amp; Setters - Think before adding them. Blindly adding on every variable beats the purpose of abstraction.</li>
+  <li><strong>Law of Demeter</strong> - method chaining on data structure method is ok.</li>
+</ul>
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/coding-principles.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/coding-principles.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

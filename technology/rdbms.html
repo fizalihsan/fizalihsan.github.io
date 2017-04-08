@@ -1,0 +1,787 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>RDBMS Concepts - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="RDBMS Concepts Keys Integrity Constraints Table Types Views Cursors Disadvantages of cursors Triggers Joins Join Algorithms Nested Loop Join Merge &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/rdbms.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">RDBMS Concepts</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#keys" id="markdown-toc-keys">Keys</a></li>
+  <li><a href="#integrity" id="markdown-toc-integrity">Integrity</a>    <ul>
+      <li><a href="#constraints" id="markdown-toc-constraints">Constraints</a></li>
+    </ul>
+  </li>
+  <li><a href="#table-types" id="markdown-toc-table-types">Table Types</a></li>
+  <li><a href="#views" id="markdown-toc-views">Views</a></li>
+  <li><a href="#cursors" id="markdown-toc-cursors">Cursors</a>    <ul>
+      <li><a href="#disadvantages-of-cursors" id="markdown-toc-disadvantages-of-cursors">Disadvantages of cursors</a></li>
+    </ul>
+  </li>
+  <li><a href="#triggers" id="markdown-toc-triggers">Triggers</a></li>
+  <li><a href="#joins" id="markdown-toc-joins">Joins</a>    <ul>
+      <li><a href="#join-algorithms" id="markdown-toc-join-algorithms">Join Algorithms</a>        <ul>
+          <li><a href="#nested-loop-join" id="markdown-toc-nested-loop-join">Nested Loop Join</a></li>
+          <li><a href="#merge-join--sort-merge-join" id="markdown-toc-merge-join--sort-merge-join">Merge Join / Sort-Merge Join</a></li>
+          <li><a href="#hash-join" id="markdown-toc-hash-join">Hash Join</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#administration-concepts" id="markdown-toc-administration-concepts">Administration Concepts</a>    <ul>
+      <li><a href="#tablespaces" id="markdown-toc-tablespaces">Tablespaces</a>        <ul>
+          <li><a href="#default-tablespaces" id="markdown-toc-default-tablespaces">Default Tablespaces</a></li>
+        </ul>
+      </li>
+      <li><a href="#buffer-pools" id="markdown-toc-buffer-pools">Buffer Pools</a></li>
+    </ul>
+  </li>
+  <li><a href="#operational-commands" id="markdown-toc-operational-commands">Operational Commands</a>    <ul>
+      <li><a href="#db2" id="markdown-toc-db2">DB2</a></li>
+    </ul>
+  </li>
+  <li><a href="#bibliography" id="markdown-toc-bibliography">Bibliography</a></li>
+</ul>
+
+<h1 id="keys">Keys</h1>
+
+<blockquote>
+  <p>Refer to SQL Tips and Techniques-2002</p>
+</blockquote>
+
+<ul>
+  <li><strong>Primary Key</strong>
+    <ul>
+      <li>PK is an attribute or a set of attributes that uniquely identify a specific instance of an entity.</li>
+      <li>PKs enforce entity integrity by uniquely identifying entity instances.</li>
+    </ul>
+  </li>
+  <li><strong>Candidate Key</strong> - an entity can have more than one attribute that can serve as a primary key. Any key or minimum set of keys that could be a primary key is called a candidate key. (Eg. EmpId, SSN, Name of an Employee entity)</li>
+  <li><strong>Alternate Key</strong> - Rest of the non-primary keys are called alternate keys</li>
+  <li><strong>Composite Key</strong> - A primary key made up of more than one attribute is known as a composite key</li>
+  <li><strong>Foreign Key</strong>
+    <ul>
+      <li>is an attribute that completes a relationship by identifying the parent entity.</li>
+      <li>Foreign keys provide a method for maintaining integrity in the data (called referential integrity) and for navigating between different instances of an entity.</li>
+    </ul>
+  </li>
+  <li><strong>Surrogate Key</strong> - system generated unique identifier. Not derived from application data.
+    <ul>
+      <li>UUID or GUID or Object Id (as in Mongo)</li>
+      <li>Sybase identity column <code>IDENTITY</code></li>
+      <li>Oracle <code>SEQUENCE</code> or <code>GENERATED AS IDENTITY</code></li>
+      <li>DB2 <code>AS IDENTITY GENERATED BY DEFAULT</code></li>
+      <li>MySQL <code>AUTO_INCREMENT</code></li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Difference between a primary key and a unique key?</strong>
+Both primary key and unique enforce uniqueness of the column on which they are defined. But by default primary key creates a clustered index on the column, whereas unique key creates a nonclustered index by default. Another major difference is that, primary key doesn’t allow NULLs, but unique key allows one NULL only. Identity columns &amp; default values</p>
+
+<h1 id="integrity">Integrity</h1>
+
+<ul>
+  <li><strong>Data integrity</strong> - means, in part, that you can correctly and consistently navigate and manipulate the tables in the database. There are two basic rules to ensure data integrity; entity integrity and referential integrity.
+    <ul>
+      <li><strong>Entity Integrity</strong>- Entity integrity rule states that for every instance of an entity, the value of the primary key must exist, be unique, and cannot be null.</li>
+      <li><strong>Referential Integrity</strong>- rule states that every foreign key value must match a primary key value in an associated table. Referential integrity ensures that we can correctly navigate between related entities. FKs can have nulls.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="constraints">Constraints</h2>
+
+<ul>
+  <li>Constraints enable the RDBMS enforce the integrity of the database automatically, without needing you to create triggers, rule or defaults.</li>
+  <li><strong>Types of constraints</strong>: <code>NOT NULL</code>, <code>CHECK</code>, <code>UNIQUE</code>, <code>PRIMARY KEY</code>, <code>FOREIGN KEY</code></li>
+  <li><strong>Check Constraints</strong>
+    <ul>
+      <li>A check constraint is a type of integrity constraint in SQL which specifies a requirement that must be met by each row in a database table. The constraint must be a predicate. It can refer to a single or multiple columns of the table. The result of the predicate can be either <code>TRUE</code>, <code>FALSE</code>, or <code>UNKNOWN</code>, depending on the presence of <code>NULLs</code>.</li>
+      <li>If the predicate evaluates to <code>UNKNOWN</code>, then the constraint is not violated and the row can be inserted or updated in the table. This is contrary to predicates in <code>WHERE</code> clauses in <code>SELECT</code> or <code>UPDATE</code> statements.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Example check constraint</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="k">table_name</span> <span class="k">ADD</span> <span class="k">CONSTRAINT</span> <span class="k">constraint_name</span> <span class="k">CHECK</span> <span class="p">(</span> <span class="n">predicate</span> <span class="p">);</span>
+</span><span class="line">
+</span><span class="line"><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="k">table_name</span> <span class="k">ADD</span> <span class="k">CONSTRAINT</span> <span class="k">constraint_name</span> <span class="k">CHECK</span> <span class="p">(</span> <span class="n">PRICE</span> <span class="o">&gt;</span> <span class="mi">100</span> <span class="k">AND</span> <span class="n">DATE_INSERTED</span> <span class="o">&gt;</span> <span class="k">CURRENT_DATE</span> <span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h1 id="table-types">Table Types</h1>
+
+<ul>
+  <li><strong>Heap-organized table</strong>
+    <ul>
+      <li>A heap-organized table is a table with rows stored in no particular order. This is a standard Oracle table; the term “heap” is used to differentiate it from an <em>index-organized table</em> or <em>external table</em>.</li>
+      <li>If a row is moved within a heap-organized table, the row’s ROWID will also change</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">t1</span> <span class="p">(</span><span class="n">c1</span> <span class="nb">NUMBER</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span> <span class="n">c2</span> <span class="n">VARCHAR2</span><span class="p">(</span><span class="mi">30</span><span class="p">))</span> <span class="n">ORGANIZATION</span> <span class="n">HEAP</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><strong>Index-organized Table (IOT) or Index-Only Table</strong>
+    <ul>
+      <li>If the rows in a table are not too long, it may be desirable to copy all the columns into an index to make SELECTs faster. If the index has all the data, then a table is not needed.</li>
+      <li>An index-organized table (IOT) is a type of table that stores data in a <em>B-Tree</em> index structure.</li>
+      <li>IOTs store rows in a B-tree index structure that is logically sorted in primary key order.</li>
+      <li>Unlike normal primary key indexes, which store only the columns included in its definition, IOT indexes store all the columns of the table</li>
+      <li>Pros
+        <ul>
+          <li>As an IOT has the structure of an index and stores all the columns of the row, accesses via primary key conditions are faster as they don’t need to access the table to get additional column values.</li>
+          <li>As an IOT has the structure of an index and is thus sorted in the order of the primary key, accesses of a range of primary key values are also faster.</li>
+          <li>As the index and the table are in the same segment, less storage space is needed.</li>
+          <li>In addition, as rows are stored in the primary key order, you can further reduce space with key compression.</li>
+          <li>As all indexes on an IOT uses logical rowids, they will not become unusable if the table is reorganized.</li>
+        </ul>
+      </li>
+      <li>Cons
+        <ul>
+          <li>IOT tables don’t support distribution, replication and partitioning</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">my_iot</span> <span class="p">(</span><span class="n">id</span> <span class="nb">INTEGER</span> <span class="k">PRIMARY</span> <span class="k">KEY</span><span class="p">,</span> <span class="n">value</span> <span class="n">VARCHAR2</span><span class="p">(</span><span class="mi">50</span><span class="p">))</span> <span class="n">ORGANIZATION</span> <span class="k">INDEX</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><strong>External Table</strong>
+    <ul>
+      <li>An external table is a table that is NOT stored within the Oracle database. Data is loaded from a file via an access driver (normally ORACLE_LOADER) when the table is accessed.</li>
+      <li>One can think of an external table as a view that allows running SQL queries against files on a filesystem without the need to first loaded the data into the database.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">CREATE</span> <span class="k">OR</span> <span class="k">REPLACE</span> <span class="n">DIRECTORY</span> <span class="n">my_data_dir</span> <span class="k">as</span> <span class="s1">&#39;/my/data/dir/&#39;</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>
+    <p><strong>Materialized Query Tables (MQT)</strong></p>
+  </li>
+  <li>
+    <p><strong>Multi-Dimensional Clustering Tables (MDC)</strong></p>
+    <ul>
+      <li>MDC tables can be used to improve performance in many cases.</li>
+      <li>With clustered index you can only cluster data in one dimension. With MDC you can cluster data in multiple dimensions.</li>
+      <li>The other difference between MDC and clustered index is that MDC does not require reorgs as the data is automatically clustered.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="n">CAR</span><span class="p">(</span>
+</span><span class="line">  <span class="n">ID</span> <span class="nb">INT</span><span class="p">,</span>
+</span><span class="line">  <span class="n">MAKE</span> <span class="nb">CHAR</span><span class="p">(</span><span class="mi">30</span><span class="p">),</span>
+</span><span class="line">  <span class="n">MODEL</span> <span class="nb">CHAR</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+</span><span class="line"><span class="p">)</span>
+</span><span class="line"><span class="n">ORGANIZE</span> <span class="k">BY</span> <span class="p">(</span><span class="n">MAKE</span><span class="p">,</span><span class="n">MODEL</span><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><em>CELL</em>: Every unique combination of dimensions form a cell. A cell can have one or more blocks.</li>
+  <li>
+    <p><em>BLOCK</em>: It is a block of pages that contain a unique combination.Its size(blocking factor) is equal to the extent size defined.</p>
+  </li>
+  <li><strong>Temporary Tables</strong>
+    <ul>
+      <li><strong>Global temporary tables (DB2)</strong> - with or without logging - http://www.ibm.com/developerworks/data/library/techarticle/dm-0912globaltemptable/</li>
+      <li><strong>tempdb (Sybase)</strong> - The <code>tempdb</code> database is a special Sybase supplied database that comes in each server. Data in tempdb is not permanent. The tempdb database is cleared each time the server reboots. Any queries which do any sort of sort operation implicitly use tempdb. These queries include select statments with group by’s or order by’s. Be careful, if you select a large set of rows and use an order by or group by clause, you query may fail because tempdb isn’t big enough. The system administrator can extend the size of tempdb</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="views">Views</h1>
+
+<ul>
+  <li>A view is an alternate way of representing data that exists in one or more tables.</li>
+  <li>A view can include some or all of the columns from one or more tables. It can also be based on other views.</li>
+  <li>A view is the result of a query on one or more tables. A view looks like a real table, but is actually just a representation of the data from one or more tables.</li>
+  <li>A view is a logical or virtual table that does not exist in physical storage.</li>
+  <li>It is an efficient way of representing data without needing to maintain it. When the data shown in a view changes, those changes were a result of changes made to the data in the tables themselves.</li>
+  <li>Views are used to see different presentations of the same data. Views are a way to control access to sensitive data. Different users can have access to different columns and rows based on their needs.</li>
+  <li>When the column of a view is directly derived from the column of a base table, that view column inherits any constraints that apply to the base table column. For example, if a view includes a foreign key of its base table, insert and update operations using that view are subject to the same referential constraints as is the base table.</li>
+  <li>Also, if the base table of a view is a parent table, delete and update operations using that view are subject to the same rules as are delete and update operations on the base table.</li>
+  <li>A view can derive the data type of each column from the result table, or base the types on the attributes of a user-defined structured type. This is called a <strong>typed view</strong>. Similar to a typed table, a typed view can be part of a view hierarchy.</li>
+  <li>A subview inherits columns from its superview. The term subview applies to a typed view and to all typed views that are below it in the view hierarchy. A proper subview of a view V is a view below V in the typed view hierarchy.</li>
+  <li>A view can become inoperative (for example, if the base table is dropped); if this occurs, the view is no longer available for SQL operations.</li>
+  <li>Views CAN contain the following: Aggregate functions and groupings, Joins Other views, distinct clause</li>
+  <li>
+    <p>Views CANNOT contain the following: select into, compute clause, union, order by.</p>
+  </li>
+  <li>View Types
+    <ul>
+      <li><strong>Horizontal view</strong> - Slices the source table horizontally to create the view. All of the columns of the source table participate in the view, but only some of its rows are visible through the view. Horizontal views are appropriate when the source table contains data that relates to various organizations or users. They provide a “private table” for each user, composed only of the rows needed by that user.</li>
+      <li><strong>Vertical view</strong>
+        <ul>
+          <li>A vertical view cuts the source tables vertically so that only selected columns participate in the view. Useful when certain columns like compensation should be hidden.</li>
+        </ul>
+      </li>
+      <li><strong>Indexed views</strong>
+        <ul>
+          <li>The down side to views is that when you query them, you’re still reading data from all of the underlying tables. This can result in large amounts of I/O, depending on the number and size of tables. However, you can create a unique clustered index on the view – referred to as an <em>indexed view</em> – to persist the data on disk. This index can then be used for reads, reducing the amount of I/O.</li>
+          <li><strong>Pros</strong>
+            <ul>
+              <li>The view definition can reference one or more tables in the same database.</li>
+              <li>Once the unique clustered index is created, additional nonclustered indexes can be created against the view.</li>
+              <li>You can update the data in the underlying tables – including inserts, updates, deletes, and even truncates.</li>
+            </ul>
+          </li>
+          <li><strong>Cons</strong>
+            <ul>
+              <li>The view definition can’t reference other views, or tables in other databases.</li>
+              <li>It can’t contain COUNT, MIN, MAX, TOP, outer joins, or a few other keywords or elements.</li>
+              <li>You can’t modify the underlying tables and columns. The view is created with the WITH SCHEMABINDING option.</li>
+              <li>You can’t always predict what the query optimizer will do.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="cursors">Cursors</h1>
+
+<ul>
+  <li><strong>Static Cursor</strong> - Specifies that cursor will use a temporary copy of the data instead of base tables. This cursor does not allow modifications and modifications made to base tables are not reflected in the data returned by fetches made to this cursor. (Kind of like <a href="technology/java-collections.html#fail-safe-iterators">snapshot iterators</a> in Java)</li>
+  <li><strong>Dynamic Cursor</strong>
+    <ul>
+      <li>Dynamic cursors are the opposite of static cursors.</li>
+      <li>Dynamic cursors reflect all changes made to the rows in their result set when scrolling through the cursor. The data values, order, and membership of the rows in the result set can change on each fetch. All UPDATE, INSERT, and DELETE statements made by all users are visible through the cursor.  (Kind of like <a href="technology/java-collections.html#fail-safe-iterators">weakly consistent iterators</a> in Java)</li>
+      <li>Updates are visible immediately if they are made through the cursor.</li>
+      <li>Updates made outside the cursor are not visible until they are committed, unless the cursor transaction isolation level is set to read uncommitted.</li>
+    </ul>
+  </li>
+  <li><strong>Forward-ONLY Cursor</strong> - Specifies that cursor can only fetch data sequentially from the first to the last row. FETCH NEXT is the only fetch option supported.</li>
+  <li><strong>KeySet Cursor</strong> -
+    <ul>
+      <li>Specifies that cursor uses the set of keys that uniquely identify the cursor’s rows (keyset), so that the membership and order of rows in the cursor are fixed when the cursor is opened. SQL Server uses a table in tempdb to store keyset.</li>
+      <li>The KEYSET cursor allows updates nonkey values from being made through this cursor, but inserts made by other users are not visible.</li>
+      <li>Updates non-key values made by other users are visible as the owner scrolls around the cursor, but updates key values made by other users are not visible. If a row is deleted, an attempt to fetch the row returns an <code>@@FETCH_STATUS</code> of <code>-2</code></li>
+    </ul>
+  </li>
+  <li><strong>Ref Cursors</strong> - Cursor variables are like pointers to result sets. You use them when you want to perform a query in one subprogram, and process the results in a different subprogram (possibly one written in a different language). A cursor variable has datatype REF CURSOR, and you might see them referred to informally as REF CURSORs.</li>
+  <li><strong>Implicit &amp; Explicit cursors</strong>
+    <ul>
+      <li>An implicit cursor is one created <em>automatically</em> for you by Oracle when you execute a query.</li>
+      <li>An explicit cursor is one you create yourself. It takes more code, but gives more control - for example, you can just open-fetch-close if you only want the first record and don’t care if there are others.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Implicit cursor example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">SELECT</span> <span class="n">col</span> <span class="k">INTO</span> <span class="n">var</span> <span class="k">FROM</span> <span class="k">table</span> <span class="k">WHERE</span> <span class="n">something</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Explicit cursor example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">DECLARE</span>
+</span><span class="line">  <span class="k">CURSOR</span> <span class="n">cur</span> <span class="k">IS</span> <span class="k">SELECT</span> <span class="n">col</span> <span class="k">FROM</span> <span class="k">table</span> <span class="k">WHERE</span> <span class="n">something</span><span class="p">;</span>
+</span><span class="line"><span class="k">BEGIN</span>
+</span><span class="line">  <span class="k">OPEN</span> <span class="n">cur</span><span class="p">;</span>
+</span><span class="line">  <span class="k">FETCH</span> <span class="n">cur</span> <span class="k">INTO</span> <span class="n">var</span><span class="p">;</span>
+</span><span class="line">  <span class="k">CLOSE</span> <span class="n">cur</span><span class="p">;</span>
+</span><span class="line"><span class="k">END</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="disadvantages-of-cursors">Disadvantages of cursors</h2>
+
+<p>Each time you fetch a row from the cursor,it results in a network round trip, where as a normal SELECT query makes only one round trip, however large the resultset is. Further, there are restrictions on the SELECT statements that can be used with some types of cursors.</p>
+
+<h1 id="triggers">Triggers</h1>
+
+<p>Triggers are special kind of stored procedures that get executed automatically when an INSERT, UPDATE or DELETE operation takes place on a table. Triggers can’t be invoked on demand. They get triggered only when an associated action (INSERT, UPDATE, DELETE) happens on the table on which they are defined.</p>
+
+<h1 id="joins">Joins</h1>
+
+<p><img class="right" src="/technology/visual_sql_joins.jpg" width="500" height="500" /></p>
+
+<ul>
+  <li><a href="http://www.codinghorror.com/blog/2007/10/a-visual-explanation-of-sql-joins.html">A Visual Explanation of SQL Joins - Coding Horror</a></li>
+  <li>
+    <p>http://publib.boulder.ibm.com/infocenter/iseries/v5r4/index.jsp?topic=%2Fsqlp%2Frbafyjoin.htm</p>
+  </li>
+  <li><strong>Inner Join</strong> (<em>ANSI supported</em>)
+    <ul>
+      <li>Records in both table A and table B where the given condition matches. e.g, <code>SELECT * FROM TableA INNER JOIN TableB ON TableA.name = TableB.name</code></li>
+    </ul>
+  </li>
+  <li><strong>Cross Join</strong> (<em>ANSI supported</em>)
+    <ul>
+      <li>Every possible pair of rows from both the tables. Basically a cartesian product</li>
+      <li>If no condition is provided in Inner join, then it becomes a cross join. e.g., <code>SELECT * FROM TableA CROSS JOIN TableB</code></li>
+    </ul>
+  </li>
+  <li><strong>Left Outer Join</strong> (<em>ANSI supported</em>)
+    <ul>
+      <li>produces a complete set of records from Table A, with the matching records (where available) in Table B. If there is no match, the right side will contain null.</li>
+      <li>e.g., <code>SELECT * FROM TableA LEFT OUTER JOIN TableB ON TableA.name = TableB.name</code></li>
+    </ul>
+  </li>
+  <li><strong>Right Outer Join</strong> (<em>ANSI supported</em>)
+    <ul>
+      <li>e.g., <code>SELECT * FROM TableA RIGHT OUTER JOIN TableB ON TableA.name = TableB.name</code></li>
+    </ul>
+  </li>
+  <li><strong>Full Outer Join</strong>  (<em>ANSI supported</em>)
+    <ul>
+      <li>Full Outer Join = Left Outer + Right Outer. e.g., <code>SELECT * FROM TableA FULL OUTER JOIN TableB ON TableA.name = TableB.name</code></li>
+    </ul>
+  </li>
+  <li><strong>Outer Join</strong>
+    <ul>
+      <li>Records NOT in table A and table B where the given condition matches. e.g, <code>SELECT * FROM TableA FULL OUTER JOIN TableB ON TableA.name = TableB.name WHERE TableA.id IS null OR TableB.id IS null </code></li>
+    </ul>
+  </li>
+  <li><strong>Exception join</strong> - A left exception join returns only the rows from the first table that do not have a match in the second table.</li>
+  <li><strong>Equijoin</strong> -</li>
+  <li><strong>Natural Join</strong>- is an equijoin with redundant columns removed.</li>
+  <li><strong>Self Join</strong> -</li>
+  <li><strong>Projection</strong> - The project operator retrieves a subset of columns from a table, removing duplicate rows from the result.</li>
+</ul>
+
+<h2 id="join-algorithms">Join Algorithms</h2>
+
+<h3 id="nested-loop-join">Nested Loop Join</h3>
+
+<p><img class="right" src="/technology/nested-loop-join.gif" width="300" height="300" /></p>
+
+<ul>
+  <li><em>when one table is small, and other table is large</em></li>
+  <li><strong>What is?</strong> The nested loops join, also called nested iteration, uses one join input as the outer input table and one as the inner input table. The outer loop consumes the outer input table row by row. For every outer row, the inner loop searches for matching rows in the inner input table.</li>
+  <li>In the simplest case, the search scans an entire table or index; this is called a <strong>naive nested loops join</strong>.</li>
+  <li>If the search exploits an index, it is called an <strong>index nested loops join</strong>.</li>
+  <li>If the index is built as part of the query plan (and destroyed upon completion of the query), it is called a <strong>temporary index nested loops join</strong>. (All these variants are considered by the query optimizer.)</li>
+  <li><strong>When is it effective?</strong> A nested loops join is particularly effective if the outer input is small and the inner input is preindexed and large. In many small transactions, such as those affecting only a small set of rows, index nested loops joins are superior to both merge joins and hash joins. In large queries, however, nested loops joins are often not the optimal choice.</li>
+  <li>Block nested loop join…</li>
+</ul>
+
+<h3 id="merge-join--sort-merge-join">Merge Join / Sort-Merge Join</h3>
+
+<p><img class="right" src="/technology/merge-join.gif" width="300" height="300" /></p>
+
+<ul>
+  <li><em>when both the tables involved in the join are large</em></li>
+  <li>The merge join requires both inputs to be sorted on the merge columns, which are defined by the equality <code>ON</code> clauses of the join predicate. The query optimizer typically scans an index, if one exists on the proper set of columns, or it places a sort operator below the merge join. In rare cases, there may be multiple equality clauses, but the merge columns are taken from only some of the available equality clauses.</li>
+  <li>Because each input is sorted, the Merge Join operator gets a row from each input and compares them. For example, for inner join operations, the rows are returned if they are equal. If they are not equal, the lower-value row is discarded and another row is obtained from that input. This process repeats until all rows have been processed.</li>
+  <li>The merge join operation may be either a regular or a many-to-many operation. A many-to-many merge join uses a temporary table to store rows. If there are duplicate values from each input, one of the inputs will have to rewind to the start of the duplicates as each duplicate from the other input is processed.</li>
+  <li>If a residual predicate is present, all rows that satisfy the merge predicate evaluate the residual predicate, and only those rows that satisfy it are returned.</li>
+  <li>Merge join itself is very fast, but it can be an expensive choice if sort operations are required. However, if the data volume is large and the desired data can be obtained presorted from existing B-tree indexes, merge join is often the fastest available join algorithm.</li>
+</ul>
+
+<h3 id="hash-join">Hash Join</h3>
+
+<ul>
+  <li><em>when the data set is large but the result set expected is small</em></li>
+  <li>This algorithm also has a startup penalty by forcing you to build a hash table of one of the input sets before the actual join can start.</li>
+  <li>Performance
+    <ul>
+      <li>Compared to the sort merge join this is easier as it involves only one sweep through the data and therefore the computational complexity is <code>O(n)</code> while sorting won’t be better than <code>O(n log n)</code>. So in general you can build the hash faster than you would be able to do the sorting.</li>
+      <li>The hash also needs to be computed for only one input set and this could be the smaller one.</li>
+      <li>This makes the hash join often the preferred choice over the sort merge join.</li>
+    </ul>
+  </li>
+  <li>Generally speaking the hash join wins when you expect a large result set and the nested loop join wins when you expect a small result set. One of the most dominant problems in this area is the planner getting the estimates wrong and taking the other path.</li>
+  <li>The hash join can only be used if you use equality as join relation.</li>
+  <li>Building the hash needs temporary space and increasing work_mem sometimes helps.</li>
+  <li>
+    <p>The hash join is also a good candidate for parallel processing.</p>
+  </li>
+  <li><a href="http://etutorials.org/Misc/advanced+dba+certification+guide+and+reference/Chapter+6.+The+DB2+Optimizer/Joining+in+DB2+UDB/">Joining in DB2</a></li>
+  <li><a href="http://pic.dhe.ibm.com/infocenter/db2luw/v9r7/index.jsp?topic=%2Fcom.ibm.db2.luw.admin.perf.doc%2Fdoc%2Fc0005311.html">Join Methods and Strategies</a></li>
+  <li><a href="http://www3.software.ibm.com/ibmdl/pub/software/dw/dm/db2/0208zubiri/0208zubiri.pdf">Getting the Most from Hash Joins</a></li>
+</ul>
+
+<h1 id="administration-concepts">Administration Concepts</h1>
+
+<h2 id="tablespaces">Tablespaces</h2>
+
+<p>Table spaces are logical objects used as a layer between logical tables and physical containers. Containers are where the data is physically stored in files, directories, or raw devices. When you create a table space, you can associate it to a specific buffer pool (database cache) and to specific containers.</p>
+
+<h3 id="default-tablespaces">Default Tablespaces</h3>
+
+<p>There are 3 table spaces created automatically when a database is created:</p>
+
+<ol>
+  <li><strong>Catalog (SYSCATSPACE)</strong>: The catalog and the system temporary space can be considered system structures, as they are needed for the normal operation of your database. The catalog contains metadata (data about your database objects) and must exist at all times. 
+* <strong>System temporary space (TEMPSPACE1)</strong>: is the work area for the database manager to perform operations, like joins and overflowed sorts. There must be at least one system temporary table space in each database. 
+* <strong>Default user table space (USERSPACE1)</strong>: This is created by default, but you can delete it. 
+To create a table in a given table space, use the CREATE TABLE statement with the IN table_space_name clause. If a table space is not specified in this statement, the table will be created in the first user created table space. If you have not yet created a table space, the table will be created in the USERSPACE1 table space.</li>
+</ol>
+
+<p><strong>Types</strong></p>
+
+<ol>
+  <li><strong>System-managed space (SMS)</strong>: This type of table space is managed by the operating system and requires minimal administration. This is the default table space type.</li>
+  <li><strong>Database-managed space (DMS)</strong>: This type of table space is managed by the DB2 database manager, and it requires some administration</li>
+</ol>
+
+<h2 id="buffer-pools">Buffer Pools</h2>
+
+<p>A buffer pool is an area in physical memory that caches the database information most recently used. Without buffer pools, every single piece of data has to be retrieved from disk, which is very slow. Buffer pools are associated to tables and indexes through a table space. A buffer pool is an area in memory where all index and data pages other than LOBs are processed.DB2 retrieves LOBs directly from disk. Buffer pools are one of the most important objects to tune for database performance.</p>
+
+<h1 id="operational-commands">Operational Commands</h1>
+
+<h2 id="db2">DB2</h2>
+
+<ul>
+  <li>Enter command prompt by typing ‘db2’</li>
+  <li>To take input from a file and output to a file: <code>db2 -tvf db2input.txt &gt; db2output.txt &amp;</code></li>
+  <li>To connect to database: <code>CONNECT to NYCMRDI4 USER cmdrinfr USING s0mepassw0rd</code></li>
+  <li>Command to list the databases: <code>list db directory</code></li>
+  <li>Command to list the tables: <code>list db tables</code></li>
+  <li>Read input from file: <code>db2 -tvf filename</code></li>
+  <li><code>Db2advis</code> - command to advice indexes on sql</li>
+  <li>
+    <p>Reorg</p>
+  </li>
+  <li>Check transaction log usage : <code>call sp.xlogfull()</code></li>
+  <li>Row count on table without full table scan</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">SELECT</span> <span class="n">tabname</span> <span class="n">TableName</span><span class="p">,</span> <span class="n">card</span> <span class="n">RowCount</span> <span class="k">FROM</span> <span class="n">syscat</span><span class="p">.</span><span class="n">tables</span> <span class="k">WHERE</span> <span class="n">TABNAME</span><span class="o">=</span><span class="s1">&#39;tableName&#39;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Truncate a table without transaction logging</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">LOAD</span> <span class="k">FROM</span> <span class="o">/</span><span class="n">dev</span><span class="o">/</span><span class="k">null</span> <span class="k">of</span> <span class="n">del</span> <span class="k">REPLACE</span> <span class="k">INTO</span> <span class="n">YourTable</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>This operation is fully recoverable. Note that on Windows systems, you have to replace <code>/dev/null</code> by <code>NUL</code>.</p>
+
+<p>OR</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="n">YourTable</span> <span class="n">ACTIVATE</span> <span class="k">NOT</span> <span class="n">LOGGED</span> <span class="k">INITIALLY</span> <span class="k">WITH</span> <span class="n">EMPTY</span> <span class="k">TABLE</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Causes all data currently in table to be removed. Once the data has been removed, it cannot be recovered except through use of the RESTORE facility. If the unit of work in which this alter statement was issued is rolled back, the table data will not be returned to its original state. 
+When this action is requested, no DELETE triggers defined on the affected table are fired. Any indexes that exist on the table are also deleted.</p>
+
+<ul>
+  <li>Dummy select</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">select</span> <span class="k">current</span> <span class="k">timestamp</span> <span class="k">from</span> <span class="n">sysibm</span><span class="p">.</span><span class="n">sysdummy1</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h1 id="bibliography">Bibliography</h1>
+
+<ul>
+  <li>Physical Database Design - The Database Professional’s Guide to Exploiting Indexes, Views, Storage, and More</li>
+  <li>Refactoring Databases</li>
+  <li>SQL Anti-patterns</li>
+  <li>http://www.geekinterview.com/articles/sql-interview-questions-with-answers.html</li>
+</ul>
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/rdbms.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/rdbms.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

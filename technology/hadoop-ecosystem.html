@@ -1,0 +1,844 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Hadoop Ecosystem - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Hadoop Ecosystem Basics HDFS Concepts HDFS Federation HDFS High Availability MapReduce Mapper Reducer Combiner MapReducer Job Hadoop Streaming YARN &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/hadoop-ecosystem.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Hadoop Ecosystem</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#basics" id="markdown-toc-basics">Basics</a></li>
+  <li><a href="#hdfs" id="markdown-toc-hdfs">HDFS</a>    <ul>
+      <li><a href="#concepts" id="markdown-toc-concepts">Concepts</a></li>
+      <li><a href="#hdfs-federation" id="markdown-toc-hdfs-federation">HDFS Federation</a></li>
+      <li><a href="#hdfs-high-availability" id="markdown-toc-hdfs-high-availability">HDFS High Availability</a></li>
+    </ul>
+  </li>
+  <li><a href="#mapreduce" id="markdown-toc-mapreduce">MapReduce</a>    <ul>
+      <li><a href="#mapper" id="markdown-toc-mapper">Mapper</a></li>
+      <li><a href="#reducer" id="markdown-toc-reducer">Reducer</a></li>
+      <li><a href="#combiner" id="markdown-toc-combiner">Combiner</a></li>
+      <li><a href="#mapreducer-job" id="markdown-toc-mapreducer-job">MapReducer Job</a></li>
+      <li><a href="#hadoop-streaming" id="markdown-toc-hadoop-streaming">Hadoop Streaming</a></li>
+    </ul>
+  </li>
+  <li><a href="#yarn" id="markdown-toc-yarn">YARN</a></li>
+  <li><a href="#references" id="markdown-toc-references">References</a></li>
+</ul>
+
+<h1 id="basics">Basics</h1>
+
+<ul>
+  <li>Hadoop is an open source platform that provides implementations of both the MapReduce and GFS (Google File System) technologies and allows the processing of very large data sets across clusters of low-cost commodity hardware.</li>
+  <li>Host Vs. Node
+    <ul>
+      <li>The terms <em>host</em> or <em>server</em> refer to the physical hardware hosting Hadoop’s various components.</li>
+      <li>The term <em>node</em> will refer to the software component comprising a part of the cluster.</li>
+    </ul>
+  </li>
+  <li>Features
+    <ul>
+      <li>Hadoop is not a good
+        <ul>
+          <li>for low-latency queries like websites, real time systems, etc. (HBase on top of Hadoop serves low-latency queries)</li>
+          <li>smaller data sets.</li>
+          <li>Hadoop tries to co-locate the data with the compute nodes, so data access is fast because it is local. This feature, known as <strong>data locality</strong>, is at the heart of data processing in Hadoop and is the reason for its good performance.</li>
+          <li>MapReduce is able to do this because it is a <strong>shared-nothing architecture</strong>, meaning that tasks have no dependence on one other</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Processing Patterns that work with Hadoop
+    <ul>
+      <li><strong>Interactive SQL</strong> - By dispensing with MapReduce and using a distributed query engine that uses dedicated “always on” daemons (like Impala) or container reuse (like Hive on Tez), it’s possible to achieve low-latency responses for SQL queries on Hadoop while still scaling up to large dataset sizes.</li>
+      <li><strong>Iterative processing</strong> - Many algorithms—such as those in machine learning are iterative in nature, so it’s much more efficient to hold each intermediate working set in memory, compared to loading from disk on each iteration. The architecture of MapReduce does not allow this, but it’s straightforward with Spark, for example, and it enables a highly exploratory style of working with datasets.</li>
+      <li><strong>Stream processing</strong> - Streaming systems like Storm, Spark Streaming, or Samza make it possible to run real-time, distributed computations on unbounded streams of data and emit results to Hadoop storage or external systems.</li>
+      <li><strong>Search</strong> - The Solr search platform can run on a Hadoop cluster, indexing documents as they are added to HDFS, and serving search queries from indexes stored in HDFS.</li>
+    </ul>
+  </li>
+  <li><strong>Hadoop Components</strong>
+    <ul>
+      <li>Hadoop installation consists of four types of nodes
+        <ul>
+          <li><strong>NameNode</strong> + <strong>DataNodes</strong> - HDFS nodes provide a distributed filesystem</li>
+          <li><strong>JobTracker</strong> - manages the jobs</li>
+          <li><strong>TaskTracker</strong> - run tasks that perform parts of the job</li>
+        </ul>
+      </li>
+      <li>Users submit MapReduce jobs to the JobTracker, which runs each of the Map and Reduce parts of the initial job in TaskTrackers, collects results, and finally emits the results.</li>
+    </ul>
+  </li>
+</ul>
+
+<table>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td>Traditional RDBMS</td>
+      <td>MapReduce</td>
+    </tr>
+    <tr>
+      <td>Data size</td>
+      <td>Gigabytes</td>
+      <td>Petabytes</td>
+    </tr>
+    <tr>
+      <td>Access</td>
+      <td>Interactive and batch</td>
+      <td>Batch</td>
+    </tr>
+    <tr>
+      <td>Updates</td>
+      <td>Read and write many times</td>
+      <td>Write once, read many times</td>
+    </tr>
+    <tr>
+      <td>Transactions</td>
+      <td>ACID</td>
+      <td>None</td>
+    </tr>
+    <tr>
+      <td>Structure</td>
+      <td>Schema-on-write</td>
+      <td>Schema-on-read</td>
+    </tr>
+    <tr>
+      <td>Integrity</td>
+      <td>High</td>
+      <td>Low</td>
+    </tr>
+    <tr>
+      <td>Scaling</td>
+      <td>Nonlinear</td>
+      <td>Linear</td>
+    </tr>
+  </tbody>
+</table>
+
+<h1 id="hdfs">HDFS</h1>
+
+<ul>
+  <li>distributed filesystem designed to store very large data sets by scaling out across a cluster of hosts.</li>
+  <li>optimized for high throughput instead of latency. It achieves high availability through replication instead of redundancy.</li>
+  <li>similar to any other linux file system like <em>ext3</em> - but cannot be mounted - and requires applications to be specially built for it.</li>
+  <li>Block size in old file systems are typically 4KB or 8KB of size. In HDFS, it is 64MB to 1GB.</li>
+  <li>Replicates each block to multiple machines (default 3) in the cluster. Should the number of copies of a block drop below the configured replication factor, the filesystem automatically makes a new copy from one of the remaining replicas.</li>
+  <li>Due to replicated data, failures are easily tolerated.</li>
+  <li>not a POSIX-compliant filesystem.</li>
+  <li>HDFS is optimized for throughput over latency; it is very efficient at streaming read requests for large files but poor at seek requests for many small ones.</li>
+  <li><strong>Pros</strong>
+    <ul>
+      <li><em>Very larges files</em> - can store files in gigabytes or terabytes in size. A single file can be larger than the size of the disk in a single node.</li>
+      <li><em>Streaming Data Access</em> - HDFS is built around the idea that the most efficient data processing pattern is a write-once, read-many-times pattern.</li>
+    </ul>
+  </li>
+  <li><strong>Cons</strong>
+    <ul>
+      <li>Not meant for low-latency applications</li>
+      <li>Files in HDFS may be written to by a single writer.</li>
+      <li>Writes are always made at the end of the file, in append-only fashion. There is no support for multiple writers or for modifications at arbitrary offsets in the file</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img class="right" src="/technology/hadoop-server-roles.png" /></p>
+
+<h2 id="concepts">Concepts</h2>
+
+<p><strong>Blocks</strong></p>
+
+<ul>
+  <li>Disk blocks are normally 512 byets. Filesystem blocks are typically few kilobytes. HDFS block is 128MB by default. The blocks are large in HDFS to minimize the cost of disk seeks.</li>
+  <li>Unlike in regular filesystem, in HDFS, a 1 MB file stored with a block size of 128 MB uses 1 MB of disk space, not 128 MB</li>
+  <li>Why HDFS or a block abstraction for a distributed filesystem?
+    <ul>
+      <li>a file can be larger than any single disk in the network can be stored in multiple nodes seamlessly.</li>
+      <li>Fault tolerance and availability is easier. If a block becomes unavailable, a copy can be read from another location in a way that is transparent to the client.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>List the blocks that make up each file in the filesystem</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="nv">$ </span>hdfs fsck / -files -blocks
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p><strong>Namenode</strong></p>
+
+<ul>
+  <li>Namenode
+    <ul>
+      <li>manages the filesystem namespace.</li>
+      <li>maintains the filesystem tree and the metadata for all the files and directories in the tree.</li>
+      <li>knows the datanodes on which all the blocks for a given file are located; however, it does not store block locations persistently, because this information is reconstructed from datanodes when the system starts.</li>
+      <li>This information is stored persistently on the local disk in the form of two files: the <em>namespace image</em> and the <em>edit log</em>.</li>
+    </ul>
+  </li>
+  <li>Without the namenode, the filesystem cannot be used. In fact, if the machine running the namenode were obliterated, all the files on the filesystem would be lost since there would be no way of knowing how to reconstruct the files from the blocks on the datanodes.</li>
+  <li>Each of the blocks comprising a file is stored on multiple nodes within the cluster, and the HDFS NameNode constantly monitors reports sent by each DataNode to ensure that failures have not dropped any block below the desired replication factor. If this does happen, it schedules the addition of another copy within the cluster. (include archictecture diagram from internet)</li>
+  <li>To make the namenode resilient to failure, Hadoop provides 2 mechanisms:
+    <ul>
+      <li><strong>Back up</strong>
+        <ul>
+          <li>back up the files that make up the persistent state of the filesystem metadata.</li>
+          <li>Hadoop can be configured so that the namenode writes its persistent state to multiple filesystems.</li>
+          <li>These writes are <em>synchronous</em> and <em>atomic</em>.</li>
+          <li>The usual configuration choice is to write to local disk as well as a remote NFS mount</li>
+        </ul>
+      </li>
+      <li><strong>Secondary namenode</strong>
+        <ul>
+          <li>Its main role is to periodically merge the namespace image with the edit log to prevent the edit log from becoming too large.</li>
+          <li>usually runs on a separate physical machine because it requires plenty of CPU and as much memory as the namenode to perform the merge. It keeps a copy of the merged namespace image, which can be used in the event of the namenode failing. However, the state of the secondary namenode lags that of the primary, so in the event of total failure of the primary, data loss is almost certain.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Datanodes</strong></p>
+
+<ul>
+  <li>store and retrieve blocks when they are told to (by clients or the namenode), and they report back to the namenode periodically with lists of blocks that they are storing.</li>
+</ul>
+
+<p><strong>Block caching</strong></p>
+
+<ul>
+  <li>The blocks from frequently accessed files may be explicitly cached in the datanode’s memory, in an off-heap <em>block cache</em>.</li>
+  <li>By default, a block is cached in only one datanode’s memory (<em>configurable on a per-file basis</em>)</li>
+  <li>Job schedulers (for MapReduce, Spark, etc.) can take advantage of cached blocks by running tasks on the datanode where a block is cached, for increased read performance.</li>
+  <li>Users or applications instruct the namenode which files to cache (and for how long) by adding a <em>cache directive</em> to a <em>cache pool</em></li>
+</ul>
+
+<h2 id="hdfs-federation">HDFS Federation</h2>
+
+<ul>
+  <li>Since NameNodes keep all the metadata in memory, there is inherent limitation up to which it can scale up. Scaling out with multiple namenodes is called <em>namenode federation</em></li>
+  <li>HDFS federation allows a cluster to scale by adding namenodes, each of which manages a portion of the filesystem namespace. For example, one namenode might manage all the files rooted under <code>/user</code>, say, and a second namenode might handle files under <code>/share</code>.</li>
+  <li>To access a federated HDFS cluster, clients use client-side mount tables to map file paths to namenodes. This is managed in configuration using <code>ViewFileSystem</code> and the <code>viewfs://</code> URIs.</li>
+</ul>
+
+<h2 id="hdfs-high-availability">HDFS High Availability</h2>
+
+<ul>
+  <li>The combination of replicating namenode metadata on multiple filesystems and using the secondary namenode to create checkpoints protects against data loss, but it does not provide high availability of the filesystem. The namenode is still a <em>single point of failure (SPOF)</em>.</li>
+  <li><em>Failure &amp; Recovery</em>
+    <ul>
+      <li>If it did fail, all clients—including MapReduce jobs—would be unable to read, write, or list files, because the namenode is the sole repository of the metadata and the file-to-block mapping. In such an event, the whole Hadoop system would  effectively be out of service until a new namenode could be brought online.</li>
+      <li>To recover from a failed namenode in this situation, an administrator starts a new primary namenode with one of the filesystem metadata replicas and configures datanodes and clients to use this new namenode. The new namenode is not able to serve requests until it has
+        <ul>
+          <li>i) loaded its namespace image into memory,</li>
+          <li>ii) replayed its edit log, and</li>
+          <li>iii) received enough block reports from the datanodes to leave safe mode.</li>
+        </ul>
+      </li>
+      <li>On large clusters with many files and blocks, the time it takes for a namenode to start from cold can be 30 minutes or more.</li>
+    </ul>
+  </li>
+  <li>Hadoop 2 supports HDFS HA. There are a pair of namenodes in an <em>active-standby</em> configuration. In the event of the failure of the active namenode, the standby takes over its duties to continue servicing client requests without a significant interruption.</li>
+  <li><strong>Quorum Journal Manager</strong>
+    <ul>
+      <li>The QJM is designed for the sole purpose of providing a highly available edit log, and is the recommended choice for most HDFS installations. (<em>is a dedicated HDFS implementation</em>)</li>
+      <li>The QJM runs as a group of journal nodes, and each edit must be written to a majority of the journal nodes. Typically, there are three journal nodes, so the system can tolerate the loss of one of them.</li>
+      <li>This arrangement is similar to the way ZooKeeper works, although it is important to realize that the QJM implementation does not use ZooKeeper. HDFS HA does use ZooKeeper for electing the active namenode.</li>
+      <li>If the active namenode fails, the standby can take over very quickly (in a few tens of seconds) because it has the latest state available in memory: both the latest edit log entries and an up-to-date block mapping.</li>
+    </ul>
+  </li>
+  <li><strong>Failover Controller</strong>
+    <ul>
+      <li>The transition from the active namenode to the standby is managed by a new entity in the system called the <em>failover controller</em>.</li>
+      <li>There are various failover controllers, but the default implementation uses ZooKeeper to ensure that only one namenode is active.</li>
+      <li>Each namenode runs a lightweight failover controller process whose job it is to monitor its namenode for failures (using a simple heartbeating mechanism) and trigger a failover should a namenode fail.</li>
+    </ul>
+  </li>
+  <li><strong>Graceful Failover</strong>: Failover may also be initiated manually by an administrator, for example, in the case of routine maintenance. This is known as a graceful failover, since the failover controller arranges an orderly transition for both namenodes to switch roles.</li>
+  <li><strong>Fencing</strong>
+    <ul>
+      <li>In the case of an ungraceful failover, however, it is impossible to be sure that the failed namenode has stopped running. For example, a slow network or a network partition can trigger a failover transition, even though the previously active namenode is still running and thinks it is still the active namenode. The HA implementation goes to great lengths to ensure that the previously active namenode is prevented from doing any damage and causing corruption—a method known as <strong>fencing</strong>.</li>
+      <li>The QJM only allows one namenode to write to the edit log at one time; however, it is still possible for the previously active namenode to serve stale read requests to clients, so setting up an SSH fencing command that will kill the namenode’s process is a good idea.</li>
+      <li>Stronger fencing methods are required when using an NFS filer for the shared edit log, since it is not possible to only allow one namenode to write at a time (this is why QJM is recommended).</li>
+      <li><strong>Fencing Mechanisms</strong>
+        <ul>
+          <li>includes revoking the namenode’s access to the shared storage directory</li>
+          <li>disabling its network port via a remote management command.</li>
+          <li>As a last resort, the previously active namenode can be fenced with a technique rather graphically known as <strong>STONITH</strong>, or <em>“shoot the other node in the head,”</em> which uses a specialized power distribution unit to forcibly power down the host machine.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>HDFS interface</strong></p>
+
+<ul>
+  <li>HDFS shell</li>
+  <li>Java API</li>
+  <li>REST API - WebHDFS, HttpFS(standalone RESTful HDFS proxy service)</li>
+</ul>
+
+<h1 id="mapreduce">MapReduce</h1>
+
+<ul>
+  <li>MapReduce works by breaking the processing into two phases: the <strong>map phase</strong> and the <strong>reduce phase</strong>. Each phase has key-value pairs as input and output, the types of which may be chosen by the programmer. (<em>Reduce is optional</em>)</li>
+  <li>Concepts
+    <ul>
+      <li>concepts of functions called map and reduce come straight from functional programming languages where they were applied to lists of input data.</li>
+      <li><em>divide and conquer</em> - a single problem is broken into multiple individual subtasks. This approach becomes even more powerful when the subtasks are executed in parallel;</li>
+    </ul>
+  </li>
+  <li>Unlike traditional relational databases that require structured data with well-defined schemas, MapReduce and Hadoop work best on semi-structured or unstructured data.</li>
+  <li>Hadoop Basic Data Types
+    <ul>
+      <li>Rather than using built-in Java types, Hadoop provides its own set of basic types that are optimized for network serialization.</li>
+      <li>These are found in <code>org.apache.hadoop.io</code>
+        <ul>
+          <li><code>Long</code> –&gt; <code>LongWritable</code></li>
+          <li><code>Integer</code> –&gt; <code>IntWritable</code></li>
+          <li><code>String</code> –&gt; <code>Text</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="mapper">Mapper</h2>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Mapper Interface</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Mapper</span><span class="o">&lt;</span><span class="n">INPUTKEY</span><span class="o">,</span> <span class="n">INPUTVALUE</span><span class="o">,</span> <span class="n">OUTPUTKEY</span><span class="o">,</span> <span class="n">OUTPUTVALUE</span><span class="o">&gt;{</span>
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setup</span><span class="o">(</span><span class="n">Context</span><span class="o">);</span>
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">map</span><span class="o">(</span><span class="n">INPUTKEY</span><span class="o">,</span> <span class="n">INPUTVALUE</span><span class="o">,</span> <span class="n">Context</span><span class="o">);</span>
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">cleanup</span><span class="o">(</span><span class="n">Context</span><span class="o">);</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Mapper Example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MaxTemperatureMapper</span> <span class="kd">extends</span> <span class="n">Mapper</span><span class="o">&lt;</span><span class="n">LongWritable</span><span class="o">,</span> <span class="n">Text</span><span class="o">,</span> <span class="n">Text</span><span class="o">,</span> <span class="n">IntWritable</span><span class="o">&gt;</span> <span class="o">{</span>
+</span><span class="line">	<span class="nd">@Override</span>
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">map</span><span class="o">(</span><span class="n">LongWritable</span> <span class="n">key</span><span class="o">,</span> <span class="n">Text</span> <span class="n">value</span><span class="o">,</span> <span class="n">Context</span> <span class="n">context</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">InterruptedException</span> <span class="o">{</span>
+</span><span class="line">		<span class="n">String</span> <span class="n">line</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+</span><span class="line">		<span class="n">String</span> <span class="n">year</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="mi">15</span><span class="o">,</span> <span class="mi">19</span><span class="o">);</span>
+</span><span class="line">		<span class="kt">int</span> <span class="n">airTemperature</span> <span class="o">=</span> <span class="n">Integer</span><span class="o">.</span><span class="na">parseInt</span><span class="o">(</span><span class="n">line</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="mi">88</span><span class="o">,</span> <span class="mi">92</span><span class="o">));</span>
+</span><span class="line">		
+</span><span class="line">		<span class="n">context</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="k">new</span> <span class="nf">Text</span><span class="o">(</span><span class="n">year</span><span class="o">),</span> <span class="k">new</span> <span class="nf">IntWritable</span><span class="o">(</span><span class="n">airTemperature</span><span class="o">));</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><img class="right" src="/technology/hadoop-node-rack-datacenter.png" /></p>
+
+<ul>
+  <li><strong>Input Splits</strong>
+    <ul>
+      <li>Hadoop divides the input to a MapReduce job into fixed-size pieces called <strong>input splits</strong> or just <strong>splits</strong>.</li>
+      <li>Hadoop creates <em>one map task</em> for each <em>split</em>, which runs the map function for each record in the split.</li>
+      <li>A good split size tends to be the size of an HDFS block (128MB).
+        <ul>
+          <li>If the spilt size is too small, the overhead of managing the splits and map task creation is high</li>
+          <li>If the split size is too large, then the desirable load balancing will be missing.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Data Locality Optimization</strong>
+    <ul>
+      <li>Hadoop does its best to run the map task on a node where the input data resides in HDFS, because it doesn’t use valuable cluster bandwidth. This is called <em>Data Locality Optimization</em>.</li>
+      <li>Sometimes, however, all the nodes hosting the HDFS block needed for the map task are running other tasks, so the job scheduler will look for a free map slot on a node in the same rack or an off-rack node and copies the data over.</li>
+    </ul>
+  </li>
+  <li>The output of map tasks are written to the local disk, not to HDFS. Because Map output is intermediate output: it’s processed by reduce tasks to produce the final output, and once the job is complete, the map output can be thrown away. So, storing it in HDFS with replication would be overkill. If the node running the map task fails before the map output has been consumed by the reduce task, then Hadoop will automatically rerun the map task on another node to re-create the map output.</li>
+</ul>
+
+<h2 id="reducer">Reducer</h2>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Reducer Interface</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Reducer</span><span class="o">&lt;</span><span class="n">INPUTKEY</span><span class="o">,</span> <span class="n">INPUTVALUE</span><span class="o">,</span> <span class="n">OUTPUTKEY</span><span class="o">,</span> <span class="n">OUTPUTVALUE</span><span class="o">&gt;{</span>
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setup</span><span class="o">(</span><span class="n">Context</span><span class="o">);</span>
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">reduce</span><span class="o">(</span><span class="n">INPUTKEY</span><span class="o">,</span> <span class="n">Iterable</span><span class="o">&lt;</span><span class="n">INPUTVALUE</span><span class="o">&gt;,</span> <span class="n">Context</span><span class="o">);</span>
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">cleanup</span><span class="o">(</span><span class="n">Context</span><span class="o">);</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Reducer Example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MaxTemperatureReducer</span> <span class="kd">extends</span> <span class="n">Reducer</span><span class="o">&lt;</span><span class="n">Text</span><span class="o">,</span> <span class="n">IntWritable</span><span class="o">,</span> <span class="n">Text</span><span class="o">,</span> <span class="n">IntWritable</span><span class="o">&gt;</span> <span class="o">{</span>
+</span><span class="line">	<span class="nd">@Override</span>
+</span><span class="line">	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">reduce</span><span class="o">(</span><span class="n">Text</span> <span class="n">key</span><span class="o">,</span> <span class="n">Iterable</span><span class="o">&lt;</span><span class="n">IntWritable</span><span class="o">&gt;</span> <span class="n">values</span><span class="o">,</span> <span class="n">Context</span> <span class="n">context</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">InterruptedException</span> <span class="o">{</span>
+</span><span class="line">		<span class="kt">int</span> <span class="n">maxValue</span> <span class="o">=</span> <span class="n">Integer</span><span class="o">.</span><span class="na">MIN_VALUE</span><span class="o">;</span>
+</span><span class="line">		<span class="k">for</span> <span class="o">(</span><span class="n">IntWritable</span> <span class="n">value</span> <span class="o">:</span> <span class="n">values</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">			<span class="n">maxValue</span> <span class="o">=</span> <span class="n">Math</span><span class="o">.</span><span class="na">max</span><span class="o">(</span><span class="n">maxValue</span><span class="o">,</span> <span class="n">value</span><span class="o">.</span><span class="na">get</span><span class="o">());</span>
+</span><span class="line">		<span class="o">}</span>
+</span><span class="line">		<span class="n">context</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="k">new</span> <span class="nf">IntWritable</span><span class="o">(</span><span class="n">maxValue</span><span class="o">));</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Reducer is an optional function. A MapReducer job can have zero or more reducer functions.</li>
+  <li>The input types of the reduce function must match the output types of the map function</li>
+  <li><strong>Data Locality Optimization</strong>
+    <ul>
+      <li>Reduce tasks don’t have the advantage of data locality; the input to a single reduce task is normally the output from all mappers.</li>
+      <li>In the present example, we have a single reduce task that is fed by all of the map tasks. Therefore, the sorted map outputs have to be transferred across the network to the node where the reduce task is running, where they are merged and then passed to the user-defined reduce function.</li>
+    </ul>
+  </li>
+  <li>The output of the reduce is normally stored in HDFS for reliability.</li>
+  <li>The <strong>number of reduce tasks</strong> is not governed by the size of the input, but instead is specified independently. When there are multiple reducers, the map tasks partition their output, each creating one partition for each reduce task. There can be many keys (and their associated values) in each partition, but the records for any given key are all in a single partition. The partitioning can be controlled by a user-defined partitioning function, but normally the default partitioner—which buckets keys using a hash function—works very well.</li>
+</ul>
+
+<table>
+  <tbody>
+    <tr>
+      <td>MapReduce data flow with single reduce task</td>
+      <td>MapReduce data flow with multiple reduce tasks</td>
+    </tr>
+    <tr>
+      <td><img class="right half" src="/technology/mapreduce-dataflow.png" /></td>
+      <td><img class="right half" src="/technology/mapreduce-dataflow-multiple-reduce.png" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="combiner">Combiner</h2>
+
+<ul>
+  <li>A Combiner function helps cut down the amount of data shuffled between the mappers and reducers. But it is a not a replacement for reducer.</li>
+  <li>For example, if the reduce function is meant to calculate the max temperature per year, then</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="mi">1</span><span class="n">st</span> <span class="n">map</span> <span class="nf">output</span>
+</span><span class="line">    <span class="o">(</span><span class="mi">1950</span><span class="o">,</span> <span class="mi">0</span><span class="o">)</span>
+</span><span class="line">	<span class="o">(</span><span class="mi">1950</span><span class="o">,</span> <span class="mi">20</span><span class="o">)</span>
+</span><span class="line">    <span class="o">(</span><span class="mi">1950</span><span class="o">,</span> <span class="mi">10</span><span class="o">)</span>
+</span><span class="line"><span class="mi">2</span><span class="n">nd</span> <span class="n">map</span> <span class="nf">output</span>
+</span><span class="line">    <span class="o">(</span><span class="mi">1950</span><span class="o">,</span> <span class="mi">25</span><span class="o">)</span>
+</span><span class="line">    <span class="o">(</span><span class="mi">1950</span><span class="o">,</span> <span class="mi">15</span><span class="o">)</span>
+</span><span class="line"><span class="n">Reduce</span> <span class="nf">input</span>
+</span><span class="line">	<span class="o">(</span><span class="mi">1950</span><span class="o">,</span> <span class="o">[</span><span class="mi">0</span><span class="o">,</span> <span class="mi">20</span><span class="o">,</span> <span class="mi">10</span><span class="o">,</span> <span class="mi">25</span><span class="o">,</span> <span class="mi">15</span><span class="o">])</span>
+</span><span class="line"><span class="n">Reduce</span> <span class="nf">output</span>
+</span><span class="line">	<span class="o">(</span><span class="mi">1950</span><span class="o">,</span> <span class="mi">25</span><span class="o">)</span>
+</span><span class="line">
+</span><span class="line"><span class="mi">1</span><span class="n">st</span> <span class="n">combiner</span> <span class="nf">output</span>
+</span><span class="line">	<span class="o">(</span><span class="mi">1950</span><span class="o">,</span> <span class="mi">20</span><span class="o">)</span>
+</span><span class="line"><span class="mi">2</span><span class="n">nd</span> <span class="n">combiner</span> <span class="nf">output</span>
+</span><span class="line">    <span class="o">(</span><span class="mi">1950</span><span class="o">,</span> <span class="mi">25</span><span class="o">)</span>
+</span><span class="line"><span class="n">Reduce</span> <span class="nf">input</span>
+</span><span class="line">	<span class="o">(</span><span class="mi">1950</span><span class="o">,</span> <span class="o">[</span><span class="mi">20</span><span class="o">,</span> <span class="mi">25</span><span class="o">])</span>
+</span><span class="line"><span class="n">Reduce</span> <span class="nf">output</span>
+</span><span class="line">	<span class="o">(</span><span class="mi">1950</span><span class="o">,</span> <span class="mi">25</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>The above data can be expressed as <em>max(0, 20, 10, 25, 15) = max(max(0, 20, 10), max(25, 15)) = max(20, 25) = 25</em></li>
+  <li>Only functions with <em>commutative</em> and <em>associative</em> properties can be represented as combiners.</li>
+  <li>Because the combiner function is an optimization, Hadoop does not provide a guarantee of how many times it will call it for a particular map output record, if at all.</li>
+  <li>In other words, calling the combiner function zero, one, or many times should produce the same output from the reducer</li>
+</ul>
+
+<h2 id="mapreducer-job">MapReducer Job</h2>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Example MapReduce job</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MaxTemperature</span> <span class="o">{</span>
+</span><span class="line">	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span><span class="line">		<span class="k">if</span> <span class="o">(</span><span class="n">args</span><span class="o">.</span><span class="na">length</span> <span class="o">!=</span> <span class="mi">2</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">			<span class="n">System</span><span class="o">.</span><span class="na">err</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Usage: MaxTemperature &lt;input path&gt; &lt;output path&gt;&quot;</span><span class="o">);</span>
+</span><span class="line">			<span class="n">System</span><span class="o">.</span><span class="na">exit</span><span class="o">(-</span><span class="mi">1</span><span class="o">);</span>
+</span><span class="line">		<span class="o">}</span>
+</span><span class="line">
+</span><span class="line">		<span class="n">Job</span> <span class="n">job</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Job</span><span class="o">();</span>
+</span><span class="line">		<span class="n">job</span><span class="o">.</span><span class="na">setJarByClass</span><span class="o">(</span><span class="n">MaxTemperature</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class="line">		<span class="n">job</span><span class="o">.</span><span class="na">setJobName</span><span class="o">(</span><span class="s">&quot;Max temperature&quot;</span><span class="o">);</span>
+</span><span class="line">		
+</span><span class="line">		<span class="n">FileInputFormat</span><span class="o">.</span><span class="na">addInputPath</span><span class="o">(</span><span class="n">job</span><span class="o">,</span> <span class="k">new</span> <span class="nf">Path</span><span class="o">(</span><span class="n">args</span><span class="o">[</span><span class="mi">0</span><span class="o">]));</span> <span class="c1">//input file</span>
+</span><span class="line">		<span class="n">FileOutputFormat</span><span class="o">.</span><span class="na">setOutputPath</span><span class="o">(</span><span class="n">job</span><span class="o">,</span> <span class="k">new</span> <span class="nf">Path</span><span class="o">(</span><span class="n">args</span><span class="o">[</span><span class="mi">1</span><span class="o">]));</span> <span class="c1">//output file</span>
+</span><span class="line">		<span class="n">job</span><span class="o">.</span><span class="na">setMapperClass</span><span class="o">(</span><span class="n">MaxTemperatureMapper</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class="line">		<span class="n">job</span><span class="o">.</span><span class="na">setReducerClass</span><span class="o">(</span><span class="n">MaxTemperatureReducer</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class="line">		<span class="n">job</span><span class="o">.</span><span class="na">setOutputKeyClass</span><span class="o">(</span><span class="n">Text</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class="line">		<span class="n">job</span><span class="o">.</span><span class="na">setOutputValueClass</span><span class="o">(</span><span class="n">IntWritable</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span><span class="line">		
+</span><span class="line">		<span class="n">System</span><span class="o">.</span><span class="na">exit</span><span class="o">(</span><span class="n">job</span><span class="o">.</span><span class="na">waitForCompletion</span><span class="o">(</span><span class="kc">true</span><span class="o">)</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="mi">1</span><span class="o">);</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>To execute</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">% <span class="nb">export </span><span class="nv">HADOOP_CLASSPATH</span><span class="o">=</span>hadoop-examples.jar
+</span><span class="line">% hadoop MaxTemperature input/ncdc/sample.txt output
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="hadoop-streaming">Hadoop Streaming</h2>
+
+<ul>
+  <li>
+    <ul>
+      <li><em>Hadoop Streaming</em> is a mechanism allowing scripting languages to be used to write map-reduce tasks</li>
+    </ul>
+  </li>
+  <li>Both Map and Reduce tasks take input from STDIN and writes output to STDOUT</li>
+  <li>Push vs Pull model of MapReduce</li>
+</ul>
+
+<h1 id="yarn">YARN</h1>
+
+<ul>
+  <li>Yet Another Resource Negotiator</li>
+</ul>
+
+<h1 id="references">References</h1>
+
+<ul>
+  <li>Books
+    <ul>
+      <li>Hadoop: The Definitive Guide by Tom White</li>
+      <li>Hadoop Application Architectures</li>
+      <li><em>The Architecture of Open Source Applications: Elegance, Evolution, and a Few Fearless Hacks</em> by Amy Brown and Greg Wilson (Chapter 9)</li>
+    </ul>
+  </li>
+</ul>
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/hadoop-ecosystem.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/hadoop-ecosystem.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

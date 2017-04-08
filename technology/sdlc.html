@@ -1,0 +1,572 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>SDLC - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="SDLC Build Automation Tools Gradle Dependency Management Task Management Task dependencies Continuous Integration Code Analysis Code Metrics &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/sdlc.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">SDLC</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#build-automation-tools" id="markdown-toc-build-automation-tools">Build Automation Tools</a>    <ul>
+      <li><a href="#gradle" id="markdown-toc-gradle">Gradle</a>        <ul>
+          <li><a href="#dependency-management" id="markdown-toc-dependency-management">Dependency Management</a></li>
+          <li><a href="#task-management" id="markdown-toc-task-management">Task Management</a></li>
+          <li><a href="#task-dependencies" id="markdown-toc-task-dependencies">Task dependencies</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#continuous-integration" id="markdown-toc-continuous-integration">Continuous Integration</a></li>
+  <li><a href="#code-analysis" id="markdown-toc-code-analysis">Code Analysis</a></li>
+  <li><a href="#code-metrics" id="markdown-toc-code-metrics">Code Metrics</a></li>
+  <li><a href="#development-methodologies" id="markdown-toc-development-methodologies">Development Methodologies</a>    <ul>
+      <li><a href="#agile" id="markdown-toc-agile">Agile</a></li>
+      <li><a href="#xp" id="markdown-toc-xp">XP</a></li>
+      <li><a href="#scrum" id="markdown-toc-scrum">Scrum</a></li>
+      <li><a href="#kanban" id="markdown-toc-kanban">KanBan</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="build-automation-tools">Build Automation Tools</h1>
+
+<h2 id="gradle">Gradle</h2>
+
+<h3 id="dependency-management">Dependency Management</h3>
+
+<ul>
+  <li>Dependency scope or Gradle Configuration
+    <ul>
+      <li>compile</li>
+      <li>testCompile</li>
+      <li>runtime</li>
+      <li>testRuntime</li>
+      <li>archives</li>
+      <li>default</li>
+    </ul>
+  </li>
+</ul>
+
+<p>New scopes/configurations could be introduced by plug-ins. E.g, ‘groovy’ plugin introduces ‘groovy’ configuration.</p>
+
+<h3 id="task-management">Task Management</h3>
+
+<ol>
+  <li><code>task myTask //declaration only without configuration or action</code></li>
+  <li><code>task myTask { configure closure }</code></li>
+  <li><code>task myType &lt;&lt; { task action }</code></li>
+  <li><code>task myTask(type: SomeType)</code></li>
+  <li><code>task myTask(type: SomeType) { configure closure }</code></li>
+</ol>
+
+<ul>
+  <li>How to create a simple task?</li>
+</ul>
+
+<p><code>task task1 &lt;&lt; { println 'I'm a simple task}</code></p>
+
+<p>Executing <code>gradle task1</code> prints <code>Hello, world</code></p>
+
+<ul>
+  <li>How to create a simple task with additive blocks</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"><span class="n">task</span> <span class="n">task2</span> <span class="c1">// task declaration only</span>
+</span><span class="line"><span class="n">task2</span> <span class="o">&lt;&lt;</span> <span class="o">{</span> <span class="n">println</span> <span class="s1">&#39;Hello,&#39;</span><span class="o">}</span>
+</span><span class="line"><span class="n">task2</span> <span class="o">&lt;&lt;</span> <span class="o">{</span> <span class="n">println</span> <span class="s1">&#39; world&#39;</span><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Executing <code>gradle -q task2</code> prints <code>Hello, world</code></p>
+
+<ul>
+  <li>How to create a simple task with configuration?</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"><span class="n">task</span> <span class="n">task3</span>
+</span><span class="line"><span class="n">task3</span> <span class="o">&lt;&lt;</span> <span class="o">{</span> <span class="n">println</span> <span class="s1">&#39;Hello,&#39;</span><span class="o">}</span>
+</span><span class="line"><span class="n">task3</span> <span class="o">&lt;&lt;</span> <span class="o">{</span> <span class="n">println</span> <span class="s1">&#39; world&#39;</span><span class="o">}</span>
+</span><span class="line"><span class="n">task3</span> <span class="o">{</span> <span class="n">println</span> <span class="s1">&#39;Closure with &lt;&lt; is configuration for a task which is run during configuration lifecycle phase which runs before execution phase&#39;</span><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Executing: <code>gradle -q task4</code> prints</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"><span class="n">Closure</span> <span class="n">with</span> <span class="o">&lt;&lt;</span> <span class="n">is</span> <span class="n">configuration</span> <span class="k">for</span> <span class="n">a</span> <span class="n">task</span> <span class="n">which</span> <span class="n">is</span> <span class="n">run</span> <span class="n">during</span> <span class="n">configuration</span> <span class="n">lifecycle</span> <span class="n">phase</span> <span class="n">which</span> <span class="n">runs</span> <span class="n">before</span> <span class="n">execution</span> <span class="n">phase</span>
+</span><span class="line"><span class="o">:</span><span class="n">task3</span>
+</span><span class="line"><span class="n">Hello</span><span class="o">,</span> <span class="n">world</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>How to create a simple task with additive configuration blocks?</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"><span class="n">task</span> <span class="n">task4</span>
+</span><span class="line"><span class="n">task4</span> <span class="o">&lt;&lt;</span> <span class="o">{</span> <span class="n">println</span> <span class="s1">&#39;Hello,&#39;</span><span class="o">}</span>
+</span><span class="line"><span class="n">task4</span> <span class="o">&lt;&lt;</span> <span class="o">{</span> <span class="n">println</span> <span class="s1">&#39; world&#39;</span><span class="o">}</span>
+</span><span class="line"><span class="n">task4</span> <span class="o">{</span> <span class="n">println</span> <span class="s1">&#39;Config1&#39;</span><span class="o">}</span>
+</span><span class="line"><span class="n">task4</span> <span class="o">{</span> <span class="n">println</span> <span class="s1">&#39;Config2&#39;</span><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Executing <code>gradle task4</code> prints</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"><span class="n">Config1</span>
+</span><span class="line"><span class="n">Config2</span>
+</span><span class="line"><span class="o">:</span><span class="n">task4</span>
+</span><span class="line"><span class="n">Hello</span><span class="o">,</span>
+</span><span class="line"> <span class="n">world</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="task-dependencies">Task dependencies</h3>
+
+<ul>
+  <li>If doFirst() and doLast() methods are defined in a task, then it is executed before and after the task execution.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"><span class="n">task</span> <span class="n">task4</span>
+</span><span class="line"><span class="n">task4</span> <span class="o">&lt;&lt;</span> <span class="o">{</span> <span class="n">println</span> <span class="s1">&#39;world&#39;</span><span class="o">}</span>
+</span><span class="line"><span class="n">task4</span><span class="o">.</span><span class="na">doFirst</span> <span class="o">{</span> <span class="n">print</span> <span class="s1">&#39;Hello, &#39;</span><span class="o">}</span>
+</span><span class="line"><span class="n">task4</span><span class="o">.</span><span class="na">doFirst</span> <span class="o">{</span> <span class="n">println</span> <span class="s1">&#39;Good morning&#39;</span><span class="o">}</span> <span class="c1">//repeated calls to doFirst() is additive</span>
+</span><span class="line"><span class="n">task4</span><span class="o">.</span><span class="na">doLast</span> <span class="o">{</span><span class="n">println</span> <span class="s1">&#39;Good bye&#39;</span><span class="o">}</span>
+</span><span class="line"><span class="n">task4</span><span class="o">.</span><span class="na">doLast</span> <span class="o">{</span><span class="n">println</span> <span class="s1">&#39;Shutting down&#39;</span><span class="o">}</span> <span class="c1">//repeated calls to doLast() is additive</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Result:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"><span class="o">:</span><span class="n">task4</span>
+</span><span class="line"><span class="n">Good</span> <span class="n">morning</span>
+</span><span class="line"><span class="n">Hello</span><span class="o">,</span> <span class="n">world</span>
+</span><span class="line"><span class="n">Good</span> <span class="n">bye</span>
+</span><span class="line"><span class="n">Shutting</span> <span class="n">down</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Calling doFirst() and doLast() methods from configuration block</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"><span class="n">task</span> <span class="n">task4</span>
+</span><span class="line"><span class="n">task4</span> <span class="o">&lt;&lt;</span> <span class="o">{</span> <span class="n">println</span> <span class="s1">&#39;world&#39;</span><span class="o">}</span>
+</span><span class="line"><span class="n">task4</span> <span class="o">{</span>
+</span><span class="line">	<span class="n">doFirst</span> <span class="o">{</span>
+</span><span class="line">		<span class="n">println</span> <span class="s1">&#39;Good morning&#39;</span>
+</span><span class="line">		<span class="n">print</span> <span class="s1">&#39;Hello, &#39;</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line">	<span class="n">doLast</span> <span class="o">{</span>
+</span><span class="line">		<span class="n">println</span> <span class="s1">&#39;Good bye&#39;</span>
+</span><span class="line">		<span class="n">println</span> <span class="s1">&#39;Shutting down&#39;</span>
+</span><span class="line">	<span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Result:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"><span class="o">:</span><span class="n">task4</span>
+</span><span class="line"><span class="n">Good</span> <span class="n">morning</span>
+</span><span class="line"><span class="n">Hello</span><span class="o">,</span> <span class="n">world</span>
+</span><span class="line"><span class="n">Good</span> <span class="n">bye</span>
+</span><span class="line"><span class="n">Shutting</span> <span class="n">down</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>How to disable a task? - <code>task4.enabled = false</code></li>
+  <li>How to find the path of a task?
+  <code>task mytask &lt;&lt; { println "Path of this task is ${path}" }</code>
+  Results: <code>Prints Path of this task is :mytask</code></li>
+</ul>
+
+<h1 id="continuous-integration">Continuous Integration</h1>
+<ul>
+  <li>Hudson / Jenkins</li>
+  <li>TeamCity</li>
+  <li>CruiseControl</li>
+  <li>Ivy</li>
+</ul>
+
+<h1 id="code-analysis">Code Analysis</h1>
+<ul>
+  <li>Emma</li>
+  <li>Corbetura/Clover</li>
+  <li>Fortify</li>
+  <li>JDepend</li>
+  <li>FindBugs</li>
+  <li>SONAR</li>
+</ul>
+
+<h1 id="code-metrics">Code Metrics</h1>
+
+<ul>
+  <li>Novel way to visualize whole project, package structure &amp; lines of code - http://redotheweb.com/CodeFlower/</li>
+  <li>Cyclomatic Complexity -
+    <ul>
+      <li>http://www.onjava.com/lpt/a/4917</li>
+      <li>http://c2.com/cgi/wiki?CyclomaticComplexityMetric</li>
+      <li>http://www.guru99.com/cyclomatic-complexity.html</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="development-methodologies">Development Methodologies</h1>
+<p>http://en.wikipedia.org/wiki/List_of_software_development_philosophies</p>
+
+<h2 id="agile">Agile</h2>
+
+<h2 id="xp">XP</h2>
+
+<h2 id="scrum">Scrum</h2>
+
+<ul>
+  <li>Product Backlogs</li>
+  <li>Spring Backlogs</li>
+  <li>2 week sprints</li>
+  <li>Meetings
+    <ul>
+      <li>Biweekly Sprint Planning</li>
+      <li>Daily Scrum calls (max 15 mins)</li>
+      <li>Sprint review meeting</li>
+      <li>Retrospectives (at the end of the sprint)</li>
+      <li>Backlog refinement (when needed)</li>
+    </ul>
+  </li>
+  <li>Roles
+    <ul>
+      <li>Product Owner</li>
+      <li>Scrum Master</li>
+      <li>Scrum Team</li>
+    </ul>
+  </li>
+  <li>Charts
+    <ul>
+      <li>Burndown chart @ sprint-level</li>
+      <li>Burndown chart @ release and product-level</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="kanban">KanBan</h2>
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/sdlc.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/sdlc.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

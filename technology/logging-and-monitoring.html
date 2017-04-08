@@ -1,0 +1,509 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Logging & Monitoring - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Logging & Monitoring Monitoring Components Monitoring Tools Splunk Components Queries Analytics Java Logging slf4j logback What is write-ahead &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/logging-and-monitoring.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Logging & Monitoring</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#monitoring-components" id="markdown-toc-monitoring-components">Monitoring Components</a></li>
+  <li><a href="#monitoring-tools" id="markdown-toc-monitoring-tools">Monitoring Tools</a>    <ul>
+      <li><a href="#splunk" id="markdown-toc-splunk">Splunk</a>        <ul>
+          <li><a href="#components" id="markdown-toc-components">Components</a></li>
+          <li><a href="#queries" id="markdown-toc-queries">Queries</a></li>
+          <li><a href="#analytics" id="markdown-toc-analytics">Analytics</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#java-logging" id="markdown-toc-java-logging">Java Logging</a>    <ul>
+      <li><a href="#slf4j" id="markdown-toc-slf4j">slf4j</a></li>
+      <li><a href="#logback" id="markdown-toc-logback">logback</a></li>
+    </ul>
+  </li>
+</ul>
+
+<ul>
+  <li>What is write-ahead logging? Used in HBase.</li>
+  <li>Metric identity name: k-tuple</li>
+  <li>Metrics values
+    <ul>
+      <li>counters, gauges, percentiles, nominal, ordinal, interval, ratio, derived</li>
+    </ul>
+  </li>
+  <li>How can we monitor?
+    <ul>
+      <li>Resolution: how frequent to collect the metrics? every 6-10secs?</li>
+      <li>Latency: how long before we act on them?</li>
+      <li>Diversity: are we collecting different metrics?</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="monitoring-components">Monitoring Components</h1>
+
+<p>https://www.usenix.org/sites/default/files/conference/protected-files/dickson.pdf</p>
+
+<ol>
+  <li>Sensing/Measurement: Creation of metrics
+  * various systems gather data at various speeds.
+  * various systems have various concepts of a unit of a metric identity
+  * no consistent interface
+  * e.g., <code>top</code>, <code>np</code>, <code>netstats</code>, <code>sar</code>, <code>nagios</code>.
+* Storage
+* Collection
+* Analysis
+* Alerting/Escalation
+* Visualization - should be actionable items. Avoid pie charts for disk usage metrics. Think of visual graphs which can predict the disk size after 6 months.
+* Configuration
+* Configuration and Storage are cross-cutting concerns.</li>
+</ol>
+
+<h1 id="monitoring-tools">Monitoring Tools</h1>
+
+<ol>
+  <li>sar
+* trace
+* <a href="http://oss.oetiker.ch/mrtg/">MRTG</a>
+  * acronym for Multi Router Traffic Grapher
+  * free software for monitoring and measuring the traffic load on network links.
+  * gets its data via SNMP agents every few minutes
+  * results are plotted in graphs
+  * has alerting mechanism
+* <a href="http://oss.oetiker.ch/rrdtool/">RRDTool</a>
+  * acronym for Round-Robin Database Tool 
+  * aims to handle time-series data like n/w bandwidth, CPU load, etc. 
+  * The data are stored in a round-robin circular buffer/database, thus the system storage footprint remains constant over time. 
+  * It has tools to display the data in graphical format.
+* <a href="http://www.nagios.com/">Nagios</a>
+* <a href="http://ganglia.info/">Ganglia</a>
+  * a scalable distributed system monitor tool for high performance computing systems such as clusters and grids.
+  * typically used with Nagios. 
+* <a href="http://www.cacti.net/">Cacti</a> (mrtg++) 
+  * Network Graphing solution designed to harness the power of RRDTool’s storage and graph functionality
+* <a href="http://www.sensuapp.org/">Sensu</a> 
+  * open source monitoring framework
+* LogStash
+  * Redis for storage
+  * RabbitMQ, grok
+  * Typical implementation: logstash + redis + elasticsearch
+* Splunk
+* <a href="http://www.fluentd.org/">FluentD</a>
+  * an open-source tool to collect events and logs and store as JSON
+  * built on CRuby.
+  * plugins enables to store the massive data for Log Search (like ElasticSearch), Analytics and Archiving (MongoDB, S3, Hadoop)
+* <a href="http://www.graylog2.com/">GrayLog2</a>
+  * an open source data analytics system 
+  * search logs, create charts, create alerts
+  * leverages Java and ElasticSearch. Communication via REST API
+* <a href="http://opentsdb.net/">OpenTSDB</a>
+  * pure storage solution
+  * a free distributed time-series database written on top of HBase.
+  * was written to store, index and serve metrics collected at a large scale, and make it easily accessible and graphable.
+* D3.js - Pure visualization solution
+* <a href="https://github.com/etsy/statsd/">Statsd</a>
+  * listens to anything and everything
+  * written in node.js. There are alternative implementations in groovy, C, etc.
+  * listens to statistics (counters and timers) and sends aggregates to backend services like Graphite
+* <a href="http://graphite.wikidot.com/">Graphite</a>
+  * this open-source tool written on Python does 2 things: store numeric time-series data and render graphs of this data on demand
+  * does not collect data.
+  * 3 components
+    <ul>
+      <li>carbon - a <a href="https://twistedmatrix.com/trac/">Twisted</a> daemon that listens for time-series data</li>
+      <li>whisper - a simple database library for storing time-series data</li>
+      <li>graphite-webapp - A <a href="https://www.djangoproject.com/">Django</a> webapp that renders graphs on-demand using <a href="http://www.cairographics.com/">Cairo</a>.
+    * <a href="http://www.shinken-monitoring.org/">Shinken</a>
+      * open-source Nagios like tool, redesigned and rewritten from scratch.
+      * Nagios + Graphite + Configuration
+    * <a href="http://www.elasticsearch.org/overview/kibana/">Kibana</a>
+      * web interface for viewing logstash records stored in elasticsearch
+    * <a href="http://www.elasticsearch.org/">ElasticSearch</a>
+    * Zenoss
+    * Shippers
+      * lumberjack
+      * beaver
+      * syslog
+      * woodchuck
+    * AppDynamics
+    * New Relic
+    * Other tools
+      * monigusto
+      * collectd
+      * jmxtrans
+      * tasseo
+      * gdash
+      * librato</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="splunk">Splunk</h2>
+
+<ul>
+  <li>is a time-series indexer - a product that takes care of the three Vs very well.</li>
+  <li>3 main functionalities
+    <ul>
+      <li><strong>Data collection</strong>
+        <ul>
+          <li>from static source</li>
+          <li>from real-time source</li>
+          <li>from log files, rolling log files</li>
+          <li>from databases</li>
+        </ul>
+      </li>
+      <li>from script results</li>
+      <li><strong>Data indexing</strong> - index of above data</li>
+      <li><strong>Search and Analysis</strong> - Using Splunk Processing Language to search and extract results in the form of charts, events, etc.</li>
+    </ul>
+  </li>
+  <li>Splunk breaks down log file entries into different events based on the associated timestamp. If no timestamp is found, then all the lines in the log file is considered as a single event.</li>
+</ul>
+
+<h3 id="components">Components</h3>
+
+<ol>
+  <li>Search Head</li>
+  <li>Forwarders</li>
+</ol>
+
+<h3 id="queries">Queries</h3>
+
+<ul>
+  <li>Top browsers: <code>sourcetype="access_combined_wcookie" | top useragent</code></li>
+  <li>Bottom 3 browsers: <code>sourcetype=access_combined_wcookie | rare useragent limit=3</code></li>
+  <li>Top 5 IP address: <code>sourcetype="access_combined_wcookie" | top clientip limit=5</code></li>
+  <li>Top Referers without percent field: <code>sourcetype=access_combined_wcookie referer != *MyGizmo* | top referer | fields - percent</code></li>
+  <li>Count of 404 errors grouped by <code>source: sourcetype=access_combined_wcookie status=404 | stats count by source</code></li>
+  <li>Top purchases by product: <code>sourcetype=access* | timechart count(eval(action="purchase")) by productId usenull=f</code></li>
+  <li>Pages views and purchases: <code>sourcetype=access_* | timechart per_hour(eval(method="GET")) AS Views, per_hour(eval(action="purchase")) AS Purchases</code></li>
+  <li>Geo location of IPs (Google Maps): <code>sourcetype=access* | geoip clientip</code></li>
+</ul>
+
+<h3 id="analytics">Analytics</h3>
+
+<ul>
+  <li>also known as Business Intelligence / Data Mining / OLAP</li>
+  <li>Traditional analytics are based on ‘Early Structure Binding’, where you need to know beforehand what questions are going to be asked of the data.
+    <ul>
+      <li>The typical development steps can be summarized as follows:
+        <ul>
+          <li>Decide what questions to ask</li>
+          <li>Design the data schema</li>
+          <li>Normalize the data</li>
+          <li>Write database insertion code</li>
+          <li>Create the queries</li>
+          <li>Feed the results into an analytics tool</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Late Structure Binding, which has these simple steps:
+    <ul>
+      <li>Write data (or events) to log files</li>
+      <li>Collect the log files</li>
+      <li>Create searches, graphs, and reports using Splunk</li>
+    </ul>
+  </li>
+  <li>Operational Intelligence refers to the information collected and processed</li>
+  <li>Semantic logging as data or events that are written to log files explicitly for the purpose of gathering analytics.</li>
+</ul>
+
+<h1 id="java-logging">Java Logging</h1>
+
+<h2 id="slf4j">slf4j</h2>
+
+<ul>
+  <li>Meta logging Frameworks - http://www.slf4j.org</li>
+  <li>NDC, MDC statements - http://stackoverflow.com/questions/7404435/conditional-logging-with-log4j?</li>
+  <li>What are the classloader issues that plague JCL?</li>
+  <li>what is meant by ‘static binding approach’ in sl4j?</li>
+  <li>Marker objects</li>
+  <li>NOPLogger?</li>
+</ul>
+
+<h2 id="logback">logback</h2>
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/logging-and-monitoring.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/logging-and-monitoring.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

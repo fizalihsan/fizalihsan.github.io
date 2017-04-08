@@ -1,0 +1,732 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Java Web Technologies - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Java Web Technologies Servlets Servlet Life Cycle Servlet Key/Value Stores ServletConfig ServletContext HttpRequest HttpSession Listeners Redirect &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/java-web.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Java Web Technologies</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#servlets" id="markdown-toc-servlets">Servlets</a>    <ul>
+      <li><a href="#servlet-life-cycle" id="markdown-toc-servlet-life-cycle">Servlet Life Cycle</a></li>
+      <li><a href="#servlet-keyvalue-stores" id="markdown-toc-servlet-keyvalue-stores">Servlet Key/Value Stores</a>        <ul>
+          <li><a href="#servletconfig" id="markdown-toc-servletconfig">ServletConfig</a></li>
+          <li><a href="#servletcontext" id="markdown-toc-servletcontext">ServletContext</a></li>
+          <li><a href="#httprequest" id="markdown-toc-httprequest">HttpRequest</a></li>
+          <li><a href="#httpsession" id="markdown-toc-httpsession">HttpSession</a></li>
+        </ul>
+      </li>
+      <li><a href="#listeners" id="markdown-toc-listeners">Listeners</a></li>
+      <li><a href="#redirect-vs-forwarding--request-dispatch" id="markdown-toc-redirect-vs-forwarding--request-dispatch">Redirect Vs Forwarding / Request Dispatch</a>        <ul>
+          <li><a href="#request-redirect" id="markdown-toc-request-redirect">Request Redirect</a></li>
+          <li><a href="#request-forwarding--request-dispatch" id="markdown-toc-request-forwarding--request-dispatch">Request Forwarding / Request Dispatch</a></li>
+        </ul>
+      </li>
+      <li><a href="#deployment-descriptor-webxml" id="markdown-toc-deployment-descriptor-webxml">Deployment Descriptor (web.xml)</a></li>
+      <li><a href="#servlet-chaining--inter-servlet-communication" id="markdown-toc-servlet-chaining--inter-servlet-communication">Servlet chaining / inter-servlet communication</a></li>
+    </ul>
+  </li>
+  <li><a href="#jsp" id="markdown-toc-jsp">JSP</a>    <ul>
+      <li><a href="#el---expression-language" id="markdown-toc-el---expression-language">EL - Expression Language</a></li>
+      <li><a href="#lifecycle-methods-of-jsp" id="markdown-toc-lifecycle-methods-of-jsp">Lifecycle methods of JSP</a></li>
+      <li><a href="#custom-tags" id="markdown-toc-custom-tags">Custom Tags</a>        <ul>
+          <li><a href="#include-directive" id="markdown-toc-include-directive">Include directive</a></li>
+          <li><a href="#include-action" id="markdown-toc-include-action">Include Action</a></li>
+        </ul>
+      </li>
+      <li><a href="#custom-tag-libs" id="markdown-toc-custom-tag-libs">Custom tag libs</a></li>
+      <li><a href="#filters" id="markdown-toc-filters">Filters</a></li>
+      <li><a href="#wrappers" id="markdown-toc-wrappers">Wrappers</a></li>
+    </ul>
+  </li>
+  <li><a href="#spring-mvc" id="markdown-toc-spring-mvc">Spring MVC</a>    <ul>
+      <li><a href="#mvc-model-1--2" id="markdown-toc-mvc-model-1--2">MVC Model 1 &amp; 2</a></li>
+    </ul>
+  </li>
+  <li><a href="#bibliography" id="markdown-toc-bibliography">Bibliography</a></li>
+</ul>
+
+<h1 id="servlets">Servlets</h1>
+
+<p><img class="right" src="/technology/servlet-class-diagram.png" /></p>
+
+<h2 id="servlet-life-cycle">Servlet Life Cycle</h2>
+
+<ul>
+  <li>Load the servlet class</li>
+  <li><code>GenericServlet.init()</code> - invoked only once in servlet’s lifecycle</li>
+  <li><code>GenericServlet.service()</code> - for each request, this method is invoked in a separate thread</li>
+  <li><code>GenericServlet.destroy()</code> - invoked only once in servlet’s lifecycle</li>
+</ul>
+
+<h2 id="servlet-keyvalue-stores">Servlet Key/Value Stores</h2>
+
+<h3 id="servletconfig">ServletConfig</h3>
+
+<ul>
+  <li>used to access deploy-time configurations from web.xml.</li>
+  <li>1 per servlet.</li>
+  <li>Key and value should be strings</li>
+  <li>How to access: <code>this.getServletConfig();</code></li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Servlet Config</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;web-app&gt;</span>
+</span><span class="line">   <span class="nt">&lt;servlet&gt;</span>
+</span><span class="line">       ...
+</span><span class="line">       <span class="nt">&lt;init-param&gt;</span>
+</span><span class="line">          <span class="nt">&lt;param-name&gt;</span>key<span class="nt">&lt;/param-name&gt;</span>
+</span><span class="line">          <span class="nt">&lt;param-value&gt;</span>value<span class="nt">&lt;/param-value&gt;</span>
+</span><span class="line">       <span class="nt">&lt;/init-param&gt;</span>
+</span><span class="line">   <span class="nt">&lt;/servlet&gt;</span>
+</span><span class="line"><span class="nt">&lt;/web-app&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="servletcontext">ServletContext</h3>
+
+<ul>
+  <li>used to access deploy-time configurations from web.xml</li>
+  <li>1 per web app</li>
+  <li>Key and value should be strings</li>
+  <li>How to access: <code>this.getServletConfig().getServletContext();</code></li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Servlet Context</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;web-app&gt;</span>
+</span><span class="line">   <span class="nt">&lt;servlet&gt;</span>
+</span><span class="line">       ...
+</span><span class="line">   <span class="nt">&lt;/servlet&gt;</span>
+</span><span class="line">
+</span><span class="line">   <span class="nt">&lt;context-param&gt;</span>
+</span><span class="line">      <span class="nt">&lt;param-name&gt;</span>key<span class="nt">&lt;/param-name&gt;</span>
+</span><span class="line">      <span class="nt">&lt;param-value&gt;</span>value<span class="nt">&lt;/param-value&gt;</span>
+</span><span class="line">   <span class="nt">&lt;/context-param&gt;</span>
+</span><span class="line"><span class="nt">&lt;/web-app&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="httprequest">HttpRequest</h3>
+
+<ul>
+  <li>Parameters (thread-safe)
+    <ul>
+      <li>set by client request.</li>
+      <li>servlet can set new parameters</li>
+    </ul>
+  </li>
+  <li>Attributes (thread-safe)
+    <ul>
+      <li>used by servlet to set additional key-value pairs before forwarding the request.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="httpsession">HttpSession</h3>
+
+<ul>
+  <li>Parameters</li>
+  <li>Attributes</li>
+  <li>sessionId is set by the servlet on cookie in a response</li>
+</ul>
+
+<h2 id="listeners">Listeners</h2>
+
+<ul>
+  <li><code>ServletContextListener</code> - callback interface that is invoked after the ServletContext is initialized.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;listener&gt;</span>
+</span><span class="line">     <span class="nt">&lt;listener-class&gt;</span>com.test.Foo<span class="nt">&lt;listener-class&gt;</span>
+</span><span class="line"><span class="nt">&lt;/listener&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><code>ServletContextAttributeListener</code></li>
+  <li><code>ServletRequestAttributeListener</code></li>
+  <li><code>HttpSessionListener</code></li>
+  <li><code>HttpSessionBindingListener</code></li>
+  <li><code>HttpSessionActivationListener</code></li>
+</ul>
+
+<h2 id="redirect-vs-forwarding--request-dispatch">Redirect Vs Forwarding / Request Dispatch</h2>
+
+<h3 id="request-redirect">Request Redirect</h3>
+
+<ul>
+  <li>client requests url1 to server -&gt; server redirects to a new url -&gt; request makes a round trip back to client -&gt; browser sends a new request to the new url</li>
+  <li>url in the client browser is changed to the new url</li>
+  <li>redirect is visible to the client</li>
+</ul>
+
+<h3 id="request-forwarding--request-dispatch">Request Forwarding / Request Dispatch</h3>
+
+<ul>
+  <li>client request url1 to server -&gt; server redirects to a new url directly without round trip</li>
+  <li>url in the client browser is not changed</li>
+  <li>redirect is not visible to the client</li>
+</ul>
+
+<h2 id="deployment-descriptor-webxml">Deployment Descriptor (web.xml)</h2>
+
+<p>3 names of a servlet</p>
+
+<ul>
+  <li>File path name: path to an actual class file. e.g., /classes/registration/SignUpServlet.class</li>
+  <li>Deployment name: a logical internal name that doesn’t have to be the same as the class name. e.g., EnrollServlet</li>
+  <li>Public URL name: the name the client knows about from HTML link.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>web.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"> <span class="nt">&lt;servlet&gt;</span>
+</span><span class="line"> <span class="c">&lt;!-- end user nevers sees the 2 names below --&gt;</span>
+</span><span class="line"> <span class="nt">&lt;servlet-name&gt;</span>Internal Name<span class="nt">&lt;/servlet-name&gt;</span>
+</span><span class="line"> <span class="nt">&lt;servlet-class&gt;</span>com.mfi.Servlet1<span class="nt">&lt;/servlet-class&gt;</span>
+</span><span class="line"> <span class="c">&lt;!-- loads and initializes the servlet when the server starts. If multiple servlets are configured, they are loaded as per the number priority number provided --&gt;</span>
+</span><span class="line"> <span class="nt">&lt;load-on-startup&gt;</span>1<span class="nt">&lt;/load-on-startup&gt;</span>
+</span><span class="line"> <span class="nt">&lt;/servlet&gt;</span>
+</span><span class="line">
+</span><span class="line"> <span class="nt">&lt;servlet-mapping&gt;</span>
+</span><span class="line"> <span class="nt">&lt;servlet-name&gt;</span>Internal Name<span class="nt">&lt;/servlet-name&gt;</span>
+</span><span class="line"> <span class="c">&lt;!-- this is the name the client sees.--&gt;</span>
+</span><span class="line"> <span class="nt">&lt;url-pattern&gt;</span>/public1<span class="nt">&lt;/url-pattern&gt;</span>
+</span><span class="line"> <span class="nt">&lt;/servlet-mapping&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="servlet-chaining--inter-servlet-communication">Servlet chaining / inter-servlet communication</h2>
+
+<p>Calling another servlet from inside a servlet. Achieved by using RequestDispatcher.forward(req, res) and RequestDispatcher.include(req, res).</p>
+
+<h1 id="jsp">JSP</h1>
+
+<p>JSP</p>
+
+<ul>
+  <li>Scriplets - <code>&lt;% %&gt;</code>. <code>&lt;% out.println("Hello"); %&gt;</code></li>
+  <li>Expressions - <code>&lt;%= %&gt;</code> - no semicolons needed. <code>&lt;%= Counter.getCount()%&gt;</code></li>
+  <li>Comments
+    <ul>
+      <li><code>&lt;%-- JSP comment: visible only to developer --%&gt;</code></li>
+      <li><code>&lt;!-- HTML comment: visible to client --&gt;</code></li>
+    </ul>
+  </li>
+  <li>Declarations - <code>&lt;%! %&gt;</code> - to declare methods and instance variables</li>
+  <li>Directives
+    <ul>
+      <li>Directives give special instructions to the container on page translation time.</li>
+      <li>Types
+        <ul>
+          <li>page directives - <code>&lt;%@ page import="java.util.Date, java.util.List" %&gt;</code></li>
+          <li>include directives - To include external JSP/HTML files into another JSP. <code>&lt;%@ include file="x.html" %&gt;</code></li>
+          <li>taglib directives - to include custom tag libraries. <code>&lt;%@ taglib tagdir="/WEB-INF/lib" prefix="c" %&gt;</code></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Implicit Objects
+    <ul>
+      <li><code>out - JspWriter</code></li>
+      <li><code>request - HttpServletRequest</code></li>
+      <li><code>response - HttpServletResponse</code></li>
+      <li><code>session - HttpSession</code></li>
+      <li><code>application - ServletContext</code></li>
+      <li><code>config - ServletConfig</code></li>
+      <li><code>exception - JspException</code></li>
+      <li><code>pageContext - PageContext</code></li>
+      <li><code>page - Object</code></li>
+    </ul>
+  </li>
+  <li>Scopes
+    <ul>
+      <li><code>app</code> - application</li>
+      <li><code>request</code> - request</li>
+      <li><code>session</code> - session</li>
+      <li><code>page</code> - pageContext</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="el---expression-language">EL - Expression Language</h2>
+
+<ul>
+  <li>EL was introduced non-Java web developers</li>
+  <li><code>${applicationScope.mail}</code> is equivalent to <code>&lt;%= application.getAttribute("mail")%&gt;</code></li>
+  <li>To enable or disable scripting. <code>&lt;scripting-invalid&gt;true/false&lt;/scripting-invalid&gt;</code> in web.xml</li>
+  <li>To enable or disable EL. <code>&lt;el-ignored&gt;true/false&lt;/el-ignored&gt;</code> in web.xml or using page directive <code>&lt;%@ page isELIgnore="true" %&gt;</code></li>
+</ul>
+
+<h2 id="lifecycle-methods-of-jsp">Lifecycle methods of JSP</h2>
+
+<ul>
+  <li>JSP page (extends) <code>javax.servlet.jsp.HttpJspPage</code> extends <code>javax.servlet.jsp.JspPage</code> extends <code>javax.servlet.Servlet</code></li>
+  <li>The generated servlet class thus implements all the methods of these three interfaces.</li>
+  <li>The <code>JspPage</code> interface declares only two methods - <code>jspInit()</code> and <code>jspDestroy()</code> that must be implemented by all JSP pages regardless of the client-server protocol. However the JSP specification has provided the <code>HttpJspPage</code> interface specifically for the JSP pages serving HTTP requests. This interface declares one method <code>_jspService()</code>.</li>
+  <li>The <code>jspInit()</code> - The container calls the jspInit() to initialize the servlet instance.It is called before any other method, and is called only once for a servlet instance.</li>
+  <li>The <code>_jspservice()</code> - The container calls the _jspservice() for each request, passing it the request and the response objects. Should not be overridden.</li>
+  <li>The <code>jspDestroy()</code> - The container calls this when it decides take the instance out of service. It is the last method called n the servlet instance.</li>
+</ul>
+
+<h2 id="custom-tags">Custom Tags</h2>
+
+<p>Include Action Element - <jsp:include page="x.html"></jsp:include></p>
+
+<p>Difference between include directive and include custom tag?</p>
+
+<h3 id="include-directive">Include directive</h3>
+
+<ul>
+  <li>At JSP page translation time, the content of the file given in the include directive is ‘pasted’ as it is, in the place where the JSP include directive is used. Then the source JSP page is converted into a java servlet class. The included file can be a static resource or a JSP page. Generally JSP include directive is used to include header banners and footers. The JSP compilation procedure is that, the source JSP page gets compiled only if that page has changed. If there is a change in the included JSP file, the source JSP file will not be compiled and therefore the modification will not get reflected in the output.</li>
+  <li>Only one servlet is executed at run time.</li>
+  <li>Scriptlet variables declared in the parent page can be accessed in the included page (remember, they are the same page).</li>
+  <li>The included page does not need to able to be compiled as a standalone JSP. It can be a code fragment or plain text. The included page will never be compiled as a standalone. The included page can also have any extension, though .jspf has become a conventionally used extension.</li>
+  <li>One drawback on older containers is that changes to the include pages may not take effect until the parent page is updated. Recent versions of Tomcat will check the include pages for updates and force a recompile of the parent if they’re updated.</li>
+</ul>
+
+<h3 id="include-action">Include Action</h3>
+
+<ul>
+  <li>The <code>jsp:include</code> action element is like a function call. At runtime, the included file will be ‘executed’ and the result content will be included with the soure JSP page. When the included JSP page is called, both the request and response objects are passed as parameters. If there is a need to pass additional parameters, then jsp:param element can be used. If the resource is static, its content is inserted into the calling JSP file, since there is no processing needed.</li>
+  <li>Each included page is executed as a separate servlet at run time.</li>
+  <li>Pages can conditionally be included at run time. This is often useful for templating frameworks that build pages out of includes. The parent page can determine which page, if any, to include according to some run-time condition.</li>
+  <li>The values of scriptlet variables need to be explicitly passed to the include page.</li>
+  <li>The included page must be able to be run on its own.</li>
+  <li><code>Request.getSession()</code>
+    <ul>
+      <li><code>request.getSession(true)</code> - only creates a session if one does not exist.</li>
+      <li><code>request.getSession(false)</code> retrieves a session only if it already exists.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="custom-tag-libs">Custom tag libs</h2>
+
+<ul>
+  <li>Your tag class should implement <code>Tag</code> interface or extend from <code>TagSupport</code> or <code>BodyTagSupport</code> class.</li>
+  <li>Implement <code>doStartTag()</code> method - If your tag does not have a body, then this method should return SKIP_BODY constant. Otherwise return EVAL_BODY_INCLUDE which in turn would call ‘doEndTag()’ method.</li>
+  <li>To make use of what’s inside the body of the tag, implement <code>doEndTag()</code>. After processing the body content, if you want to continue processing the rest of the page, return EVAL_PAGE, else SKIP_PAGE.</li>
+  <li>If your tag has an attribute ‘attr1’, then add the method <code>setAttr1()</code> to your tag class.</li>
+  <li>To evaluate the contents of the body, your class should extend from <code>BodyTagSupport</code> class, and override ‘doAfterBody()’ method. This method normally returns SKIP_BODY meaning that no further body processing should be performed, else it returns EVAL_BODY_TAG to evaluate and handle the body again.</li>
+</ul>
+
+<h2 id="filters">Filters</h2>
+
+<ul>
+  <li>Filter - can intercept and process requests before and after servlet execution. e.g., of <strong>Intercepting Filter pattern</strong>. Filters can be chained.</li>
+  <li>Request Filters can
+    <ul>
+      <li>perform security checks</li>
+      <li>reformat request headers or bodies</li>
+      <li>audit or log requests</li>
+    </ul>
+  </li>
+  <li>Response Filters can
+    <ul>
+      <li>compress the response stream</li>
+      <li>append or alter the response</li>
+      <li>create a different response altogether</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Filter interface</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Filter</span> <span class="o">{</span>
+</span><span class="line">   <span class="kd">public</span> <span class="kt">void</span> <span class="nf">init</span><span class="o">(</span><span class="n">FilterConfig</span> <span class="n">config</span><span class="o">);</span>
+</span><span class="line">   <span class="kd">public</span> <span class="kt">void</span> <span class="nf">doFilter</span><span class="o">(</span><span class="n">ServletRequest</span> <span class="n">req</span><span class="o">,</span> <span class="n">ServletResponse</span> <span class="n">resp</span><span class="o">,</span> <span class="n">FilterChain</span> <span class="n">chain</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">ServletException</span><span class="o">,</span> <span class="n">IOException</span><span class="o">;</span>
+</span><span class="line">   <span class="kd">public</span> <span class="kt">void</span> <span class="nf">destroy</span><span class="o">();</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Filter settings in web.xml</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;filter&gt;</span>
+</span><span class="line">   <span class="nt">&lt;filter-name&gt;</span>FilterName<span class="nt">&lt;/filter-name&gt;</span>
+</span><span class="line">   <span class="nt">&lt;filter-class&gt;</span>com.test.Foo<span class="nt">&lt;filter-class&gt;</span>
+</span><span class="line">   <span class="nt">&lt;init-param&gt;</span>
+</span><span class="line">      <span class="nt">&lt;param-name&gt;</span>name<span class="nt">&lt;/param-name&gt;</span>
+</span><span class="line">      <span class="nt">&lt;param-value&gt;</span>value<span class="nt">&lt;/param-value&gt;</span>
+</span><span class="line">   <span class="nt">&lt;init-param&gt;</span>
+</span><span class="line"><span class="nt">&lt;/filter&gt;</span>
+</span><span class="line">
+</span><span class="line"><span class="nt">&lt;filter-mapping&gt;</span>
+</span><span class="line">   <span class="nt">&lt;filter-name&gt;</span>FilterName<span class="nt">&lt;/filter-name&gt;</span>
+</span><span class="line">   <span class="nt">&lt;servlet-name&gt;</span>YourServletName<span class="nt">&lt;servlet-name&gt;</span> or <span class="nt">&lt;url-mapping&gt;</span>/*.do<span class="nt">&lt;/url-mapping&gt;</span>
+</span><span class="line"><span class="nt">&lt;/filter-mapping&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Starting Servlet 2.4 version, filters can be applied to request dispatchers - forwards and redirects.</li>
+</ul>
+
+<h2 id="wrappers">Wrappers</h2>
+
+<p>Wrapper classes in Servlet API</p>
+
+<ul>
+  <li>ServletRequestWrapper</li>
+  <li>HttpServletRequestWrapper</li>
+  <li>ServletResponseWrapper</li>
+  <li>HttpServletResponseWrapper</li>
+</ul>
+
+<p>Whenever you want to create a custom request or response object, just subclass one of the convenience request or response “wrapper” classes</p>
+
+<h1 id="spring-mvc">Spring MVC</h1>
+
+<p><img class="right" src="/technology/mvc-model.png" /></p>
+
+<h2 id="mvc-model-1--2">MVC Model 1 &amp; 2</h2>
+
+<ul>
+  <li>MVC Model 1 works well for GUI apps, whereas MVC Model 2 works well for web apps.</li>
+  <li>
+    <p>Front Controller is the extra thing in Model 2.</p>
+
+    <p>–(incoming request)–&gt; Front Controller
+ Front Controller –(delegates request)–&gt; Controller
+ Controller –(handles request, creates model)–&gt; Front Controller
+ Front Controller –(model)–&gt; View Template
+ View Template –(renders response, returns control)–&gt; Front Controller –(returns response)–&gt;</p>
+  </li>
+  <li>Front Controller is implemented as
+    <ul>
+      <li><code>javax.servlet.Servlet</code></li>
+      <li><code>ActionServlet</code> in Struts</li>
+      <li><code>FacesServlet</code> in JSF</li>
+      <li><code>DispatcherServlet</code> in Spring MVC</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="bibliography">Bibliography</h1>
+
+<ul>
+  <li>Pro Spring MVC with WebFlows</li>
+</ul>
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/java-web.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/java-web.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

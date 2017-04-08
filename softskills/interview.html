@@ -1,0 +1,599 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Interview Preparation - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Interview Preparation Topics to cover Data Structures &amp; Algorithms General Tech Questions Behavioral Questions Questions to the interviewer &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/softskills/interview.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Interview Preparation</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#topics-to-cover" id="markdown-toc-topics-to-cover">Topics to cover</a></li>
+  <li><a href="#data-structures--algorithms" id="markdown-toc-data-structures--algorithms">Data Structures &amp; Algorithms</a></li>
+  <li><a href="#general-tech-questions" id="markdown-toc-general-tech-questions">General Tech Questions</a></li>
+  <li><a href="#behavioral-questions" id="markdown-toc-behavioral-questions">Behavioral Questions</a></li>
+  <li><a href="#questions-to-the-interviewer" id="markdown-toc-questions-to-the-interviewer">Questions to the interviewer</a></li>
+  <li><a href="#useful-links" id="markdown-toc-useful-links">Useful links</a></li>
+  <li><a href="#recruiters" id="markdown-toc-recruiters">Recruiters</a></li>
+  <li><a href="#references" id="markdown-toc-references">References</a></li>
+</ul>
+
+<h1 id="topics-to-cover">Topics to cover</h1>
+
+<ul>
+  <li>Java
+    <ul>
+      <li>GC - serial, parallel, CMS, G1</li>
+      <li>Reference Types - soft, weak, phantom</li>
+      <li>Collections
+        <ul>
+          <li>Covariance, invariance, contravariance</li>
+          <li>Latest concurrent collections uses techniques like: <em>copy-on-write, compare-and-swap, Lock interface</em></li>
+          <li>Iterators: <em>Fail-fast &amp; Fail-safe (snapshot &amp; weakly consistent)</em></li>
+          <li>Map:
+            <ul>
+              <li>general maps use equals(or hashCode)</li>
+              <li>IdentityHashMap use identity</li>
+              <li>SortedMap (TreeMap &amp; ConcurrentSkipListMap) use Comparable or Comparator</li>
+            </ul>
+          </li>
+          <li>Comparable vs. Comparator</li>
+        </ul>
+      </li>
+      <li>Concurrency
+        <ul>
+          <li>Atomicity (check-then-act, read-modify-write), 64-bit read/write is not atomic</li>
+          <li>Visibility (synchronized &amp; volatile force to cross memory barrier)</li>
+          <li>Synchronization models (mutex, read-write locks, condition, semaphore)</li>
+          <li>Monitor (No shared object, No Lock)</li>
+          <li>Volatile (cross memory barrier, prevent reordering, guarantee atomic 64-bit read/writes, arrays)</li>
+          <li>Problems (race condition, lock-ordering deadlock, thread starvation deadlock, starvation, livelocks)</li>
+          <li>Future, Timer, TimerTask, ScheduledThreadPool</li>
+          <li>Synchronizers (FutureTask, Semaphore, Latches, CyclicBarrier, Exchanger)</li>
+          <li>Fork-Join pool (work-stealing)</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Database
+    <ul>
+      <li>PK, FK, PK &amp; Unique key diff</li>
+      <li>Cursors (implicit, explicit, forward, refcursor data type, static, dynamic)</li>
+      <li>Joins (full outer join, exception join)</li>
+      <li>Join Algos
+        <ul>
+          <li>nested loop join - when one table is small and other is large with an index on joined columns</li>
+          <li>merge join or sort-merge join - when both tables are large. Faster when data being joined is already sorted by an index</li>
+          <li>hash join - when table is large but data needed is small.</li>
+        </ul>
+      </li>
+      <li>Normalization</li>
+      <li>Indexes - types, properties (visibility, usability, unique/non-unique, composite)</li>
+      <li>Views - horizontal, vertical, indexed</li>
+      <li>MDC table</li>
+    </ul>
+  </li>
+  <li>Design Patterns - adapter, builder, chain of responsibility, command, decorator, facade, factory, mediator, observer, singleton, strategy, template, visitor</li>
+  <li>SOA
+    <ul>
+      <li>Safe operations, Idempotent operations, post-once-exactly-pattern, request-response, request-acknowledge-poll, request-acknowledge-callback, routing expressions, reduce load by service interceptor or reverse proxies</li>
+      <li>REST
+        <ul>
+          <li>Principles - addressable resources, uniform &amp; constrained interface, representation-oriented, stateless communication, hateoas</li>
+          <li>async request - client-side api future &amp; callback, server-side api AsyncResponse</li>
+          <li>exception mappers, jaxb, security, versioning</li>
+          <li>scalability - browser &amp; proxy caches, http caching(expires, cache-control), revalidation(last-modified, etag)</li>
+        </ul>
+      </li>
+      <li>JMS - MEPs</li>
+    </ul>
+  </li>
+  <li>Spring
+    <ul>
+      <li>Core - Autowiring, profiles</li>
+      <li>JDBC - JdbcTemplate, RowMapper, RowCallback</li>
+      <li>MVC - lifecycle</li>
+    </ul>
+  </li>
+  <li>Transaction -
+    <ul>
+      <li>acid, base,</li>
+      <li>txn models(local, programmatic, declarative)</li>
+      <li>txn types (flat, with save point, chained, nested, distributed, long-lived)</li>
+      <li>4 isolation levels (read uncommitted, read committed, repeatable read, serializable, snapshot)</li>
+      <li>read phenomena - dirty read, non-repeatable read, phantom read</li>
+      <li>2PC protocol, heuristic exceptions</li>
+      <li>Concurrency control - 2-Phase Locking, MVCC, Optimistic Concurrency Control,</li>
+    </ul>
+  </li>
+  <li>Distributed computing - CAP, strong vs weak consistency</li>
+  <li>Data Structures &amp; Algorithms
+    <ul>
+      <li>Arrays &amp; Strings</li>
+      <li>Tree - Traversals, BST, 2-3 tree, Red-Black Tree</li>
+      <li>Queue - Queue using stack(s)</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="data-structures--algorithms">Data Structures &amp; Algorithms</h1>
+
+<ul>
+  <li>Algorithm basics and approach (Ref GIB03 ch03)</li>
+  <li>Arrays and Strings  - (Ref GIB03 ch06)</li>
+  <li>String - http://tekmarathon.wordpress.com/2013/05/14/algorithm-to-find-substring-in-a-string-kmp-algorithm/</li>
+  <li>Linked List  - (Ref GIB03, GIB01 ch03, GIB03 ch04)</li>
+  <li>Trees  - (Ref GIB03 ch05, GIB04, )</li>
+  <li>Graphs  - (Ref GIB03 ch05,)</li>
+  <li>Recursion  - (Ref GIB03 ch07, GIB01 ch04)</li>
+  <li>Sorting  - (Ref GIB03 ch08)</li>
+  <li>Bit Manipulation - (Ref GIB02, GIB01 ch04, GIB03 ch13,)</li>
+  <li>Graphical and Spatial puzzles  - (Ref GIB03)</li>
+  <li>Counting, Measuring and Ordering puzzles  - (Ref GIB03)</li>
+  <li>System Design and Memory Limits - (Ref GIB02)</li>
+  <li>General programs - (Ref GIB01)
+    <ul>
+      <li>Base M to N conversion</li>
+      <li>Replace blanks in a string - Ref GIB01 Pg45,</li>
+      <li>Write a generic program to take an nxn array and print</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="general-tech-questions">General Tech Questions</h1>
+
+<ul>
+  <li>What are some of the challenges you faced in your project?
+    <ul>
+      <li>Multi-instance model for scalability, risk management. Managing s/w versions across those instances.</li>
+      <li>Reverse engineer business logic from mainframe statements working closing with business</li>
+      <li>Global team presence in 5 different time zones.</li>
+    </ul>
+  </li>
+  <li>Why are you leaving the current job?</li>
+  <li>What are your strengths and weaknesses?
+    <ul>
+      <li>Strengths: Technical knowledge, Communication and presentation skills, Well-organized</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="behavioral-questions">Behavioral Questions</h1>
+
+<ul>
+  <li>What do you enjoy about going to work?</li>
+  <li>What do you dislike about being a developer?</li>
+  <li>Why are you leaving your current job?</li>
+  <li>If you could change one thing about your current team what would it be?</li>
+  <li>What does a good team good like?</li>
+  <li>What makes a good developer?</li>
+  <li>Tell me about a time you had a conflict at work. How did you deal with it?
+    <ul>
+      <li>War on naming conventions, checked vs. unchecked exceptions</li>
+    </ul>
+  </li>
+  <li>Tell me about the biggest mistake you made at work?</li>
+  <li>What are your strenths and weaknesses?</li>
+  <li>What motivates you?</li>
+  <li>What makes you the ideal candidate for this job?</li>
+  <li>Demonstrate your leadership, teamwork, ability to overcome obstacles and challenges</li>
+  <li>What bothers you most about other people?
+    <ul>
+      <li>No response to emails. Lack of accountability</li>
+      <li>Email communication - lack of punctuations</li>
+    </ul>
+  </li>
+  <li>Tell me about a day when everything went wrong</li>
+  <li>Tell me about a colleague you really got along with and why you think you did
+    <ul>
+      <li>(Don’t make it too formal. Keep it humorous)</li>
+    </ul>
+  </li>
+  <li>What’s something that you can teach me?</li>
+  <li>(Test for patience, body language, communication skills)</li>
+  <li>Tell me about someone you admire and why you do</li>
+  <li>(Tests if interviewee is a people person) Kal &amp; Nik - vision, tech savviness</li>
+  <li>What’s one thing you’re really proud of and why? What is your biggest accomplishment to date?</li>
+  <li>(Give credit to others like family, friends, colleagues) Perseverance and consistency</li>
+  <li>What project or task have you recently completed that you are proud of?</li>
+  <li>If you ran your own company, what kinds of people would you hire and why?</li>
+  <li>2 qualities I look - strength and trustworthy</li>
+  <li>Test for personal fashion - Can you tell me a goal that you have outside of work and family?  What do you do for fun?</li>
+  <li>Test for initiative hunger - Tell me about something you’ve started?</li>
+  <li>Book club within and outside of work</li>
+  <li>Test for honesty - Tell me about time you’ve bent the rules?</li>
+  <li>Test for motivation and priority - who in your life would you least want to disappoint?</li>
+  <li>Test for drive and passion - Where do you want to see yourself in 5 yrs?</li>
+  <li>What’s the last awesome thing you learned?</li>
+  <li>What did you not like about your last job?</li>
+  <li>What is your biggest pet peeve?</li>
+  <li>What is the best mistake that you have ever made?</li>
+  <li>What did you want to be when you were a kid?  Why?</li>
+  <li>What event in your life has taught you the most about yourself?</li>
+  <li>Have you ever had a job that you hated?  What did you hate about it?</li>
+  <li>Describe a challenge you have faced and how you overcame that?</li>
+  <li>In hindsight, what steps would you have taken to avoid that challenge?</li>
+  <li>If given a new project that you were unfamiliar with, what would be your strategy to kick-start the project?</li>
+  <li>About the company
+    <ul>
+      <li>What is the vision of the company</li>
+      <li>What do you know about the culture of our company</li>
+      <li>Company’s stock price last time you checked</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="questions-to-the-interviewer">Questions to the interviewer</h1>
+
+<ul>
+  <li>Please can you tell me a bit more about the team? What size is it? What experience levels?</li>
+  <li>Is the team based in one region or geographically split?</li>
+  <li>How does the team work? Do you use agile?</li>
+  <li>What’s your biggest frustration in your current job?</li>
+  <li>What’s your favorite part of working at the company and in the team?</li>
+  <li>What does an average day look like?</li>
+  <li>How hard is it to use new technologies in your company?</li>
+  <li>What training exists?</li>
+</ul>
+
+<h1 id="useful-links">Useful links</h1>
+
+<ul>
+  <li><em>Resume</em>
+    <ul>
+      <li>http://jobs.rubynow.com/create-a-great-rails-resume</li>
+      <li><a href="https://www.jobscan.co/">JobScan.co - CV Optimization</a></li>
+      <li><a href="http://idesignow.com/template-2/40-great-html-cv-resume-templates.html#.Uj-C3oZ02Sp">HTML CV Templates</a></li>
+      <li><a href="http://www.corejavainterviewquestions.com/podcast5">Sarah Sellers’ podcast on resume writing</a></li>
+    </ul>
+  </li>
+  <li><em>Technical Interview Questions</em>
+    <ul>
+      <li><a href="http://www.algorithmist.com">algorithmist.com</a></li>
+      <li><a href="http://www.codechef.com">codechef.com</a></li>
+      <li><a href="http://blog.gainlo.co/index.php/index/">Gainlo.co</a> - Mock interviews with employees from Google, Amazon, Twitter, etc.</li>
+      <li><a href="http://www.geeksforgeeks.org">geeksforgeeks.org</a></li>
+      <li><a href="http://www.hackerrank.com">hackerrank.com</a></li>
+      <li><a href="http://www.hiredintech.com">hiredintech.com</a>
+        <ul>
+          <li><a href="http://intearview.com/">intearview.com</a></li>
+        </ul>
+      </li>
+      <li><a href="https://www.interviewbit.com">interviewbit.com</a></li>
+      <li><a href="http://www.interviewcake.com">interviewcake.com</a>
+        <ul>
+          <li><a href="http://katemats.com/interview-questions/">katemats.com</a></li>
+        </ul>
+      </li>
+      <li><a href="http://www.leetcode.com">leetcode.com</a></li>
+      <li><a href="http://www.simplicable.com">simplicable.com</a></li>
+      <li><a href="http://www.spoj.com">spoj.com</a></li>
+      <li><a href="http://www.topcoder.com">topcoder.com</a></li>
+    </ul>
+  </li>
+  <li><em>Background check</em>
+    <ul>
+      <li><a href="https://pipl.com/">Background check</a></li>
+    </ul>
+  </li>
+  <li><em>Behavioral Questions</em>
+    <ul>
+      <li><a href="https://hackpad.com/Interview-questions-to-test-cultural-fit-PS3ytaage0O">Cultural Fit Questions</a></li>
+      <li><a href="https://www.mockquestions.com">mockquestions.com</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="recruiters">Recruiters</h1>
+
+<ul>
+  <li>Tech Company Recruiters
+    <ul>
+      <li>Google - Technical Lead/Manager - https://www.google.com/about/careers/search#!t=jo&amp;jid=34165&amp;</li>
+      <li>https://underdog.io - Start up recruiters</li>
+      <li>Bamboo Talent</li>
+      <li>Clutch Talent</li>
+      <li>NACE Partners</li>
+      <li>http://www.msearchllc.com</li>
+      <li><a href="http://www.ingenium.agency">ingenium.agency</a></li>
+    </ul>
+  </li>
+  <li>FinTech Recruiters
+    <ul>
+      <li><a href="http://www.ikasinternational.com">ikasinternational.com</a></li>
+      <li><a href="http://www.bahpartners.com/">bahpartners.com</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="references">References</h1>
+
+<ul>
+  <li>[GIB01] Coding Interviews</li>
+  <li>[GIB02] Cracking the coding interview</li>
+  <li>[GIB03] Programming Interview Exposed, Algorithms (Robert Sedgewick)</li>
+  <li>[GIB04] An Introduction to the Analysis of Algorithms</li>
+  <li>[GIB05] 101 Great Answers to the Toughest Interview Questions</li>
+</ul>
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/softskills/interview.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/softskills/interview.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,437 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Architecture - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Architecture Enterprise Architecture Enterprise Integration Approaches Architecture Patterns Domain Driven Design Domain Model Value Objects Data &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/architecture.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Architecture</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#enterprise-architecture" id="markdown-toc-enterprise-architecture">Enterprise Architecture</a>    <ul>
+      <li><a href="#enterprise-integration-approaches" id="markdown-toc-enterprise-integration-approaches">Enterprise Integration Approaches</a></li>
+    </ul>
+  </li>
+  <li><a href="#architecture-patterns" id="markdown-toc-architecture-patterns">Architecture Patterns</a>    <ul>
+      <li><a href="#domain-driven-design" id="markdown-toc-domain-driven-design">Domain Driven Design</a>        <ul>
+          <li><a href="#domain-model" id="markdown-toc-domain-model">Domain Model</a></li>
+          <li><a href="#value-objects" id="markdown-toc-value-objects">Value Objects</a></li>
+          <li><a href="#data-transfer-object" id="markdown-toc-data-transfer-object">Data Transfer Object</a></li>
+          <li><a href="#service-layer" id="markdown-toc-service-layer">Service Layer</a></li>
+          <li><a href="#anemic-domain-model-anti-pattern" id="markdown-toc-anemic-domain-model-anti-pattern">Anemic Domain Model (Anti-pattern)</a></li>
+        </ul>
+      </li>
+      <li><a href="#domain-specific-language-dsl" id="markdown-toc-domain-specific-language-dsl">Domain Specific Language (DSL)</a></li>
+      <li><a href="#naked-objects-pattern" id="markdown-toc-naked-objects-pattern">Naked Objects Pattern</a></li>
+    </ul>
+  </li>
+  <li><a href="#agile-software-architecture" id="markdown-toc-agile-software-architecture">Agile Software Architecture</a></li>
+  <li><a href="#software-architecture-documentation" id="markdown-toc-software-architecture-documentation">Software Architecture Documentation</a>    <ul>
+      <li><a href="#rationale-unified-processs-41-views" id="markdown-toc-rationale-unified-processs-41-views">Rationale Unified Process’s 4+1 Views</a></li>
+    </ul>
+  </li>
+  <li><a href="#bibliography" id="markdown-toc-bibliography">Bibliography</a></li>
+</ul>
+
+<h1 id="enterprise-architecture">Enterprise Architecture</h1>
+
+<h2 id="enterprise-integration-approaches">Enterprise Integration Approaches</h2>
+
+<p>There have historically been four approaches to integration: file transfer, sharing a database, leveraging services, and asynchronous messaging. One way to look at these approaches is how they affect coupling in your architecture. Broadly, there are three types of coupling:</p>
+
+<ol>
+  <li><strong>Spatial coupling (communication)</strong>: Spatial coupling describes the requirement of a producer to know how to communicate with another and how to overcome error scenarios in the communication. A server side fault in an RPC operation, for example, is an example of spatial coupling.</li>
+  <li><strong>Temporal coupling (buffering)</strong>: Temporal coupling describes the requirement of a producer to be aware of, and available for, a consumer to share data. A decoupled system uses buffering so that a message may be sent, even if the consumer isn’t available to receive it.</li>
+  <li><strong>Logical coupling (routing)</strong>: Logical coupling describes the requirement of a producer to know how to connect with the consumer. One way to fix this is to introduce a central, shared location where both parties exchange data. Then, if a producer decides to move (change IP, put up a firewall, and so on) or decides to add extra steps before publishing messages, the client remains</li>
+</ol>
+
+<h1 id="architecture-patterns">Architecture Patterns</h1>
+
+<h2 id="domain-driven-design">Domain Driven Design</h2>
+
+<p><strong>Tutorial</strong></p>
+
+<ul>
+  <li><a href="http://blog.fedecarg.com/2009/03/11/domain-driven-design-and-mvc-architectures/">Part 1: Domain-Driven Design and MVC Architectures</a></li>
+  <li><a href="http://blog.fedecarg.com/2009/03/12/domain-driven-design-and-data-access-strategies/">Part 2: Domain-Driven Design: Data Access Strategies</a></li>
+  <li><a href="http://blog.fedecarg.com/2009/03/15/domain-driven-design-the-repository/">Part 3: Domain-Driven Design: The Repository</a></li>
+  <li><a href="http://blog.fedecarg.com/2009/03/22/domain-driven-design-sample-application/">Part 4: Sample Application</a></li>
+</ul>
+
+<h3 id="domain-model">Domain Model</h3>
+
+<ul>
+  <li>Responsible only represent the concepts of the business, information about business situations and business rules</li>
+  <li>Named after the nouns in domain space</li>
+  <li>Should have both data and behaviour (basic idea of object oriented design)</li>
+  <li>well connected with other domain objects with relationship and structure</li>
+  <li>Examples of behaviour - validations, calculations, business rules</li>
+  <li>Only business logic - no persistence or presentation logic</li>
+  <li>Completely persistance ignorant (Mithra domain model breaks this)</li>
+</ul>
+
+<h3 id="value-objects">Value Objects</h3>
+
+<ul>
+  <li>2 value objects are equal if all their fields are equal. Although all fields are equal, you don’t need to compare all fields if a subset is unique - for example currency codes for currency objects are enough to test equality</li>
+  <li>Should be immutable</li>
+  <li>A value object should always override .equals() &amp; .hashCode() in Java</li>
+  <li><a href="http://c2.com/cgi/wiki?ValueObject">ValueObject</a></li>
+  <li>Diff between Value objects and Domain objects?</li>
+</ul>
+
+<h3 id="data-transfer-object">Data Transfer Object</h3>
+
+<ul>
+  <li>Simply contain for a set of aggregated data that needs to be transfered across process or network boundary</li>
+  <li>holds only data - no business logic</li>
+  <li>Needs to be serializable to work with remote interfaces</li>
+  <li>Usually an assembler is used to transfer data between DTOs and Domain objects</li>
+</ul>
+
+<h3 id="service-layer">Service Layer</h3>
+
+<ul>
+  <li>Service layer on top of ‘Behaviourally rich domain model’ is recommended</li>
+  <li>Should be a thin layer</li>
+</ul>
+
+<h3 id="anemic-domain-model-anti-pattern">Anemic Domain Model (Anti-pattern)</h3>
+
+<ul>
+  <li>Objects which has only data but no business logic.</li>
+  <li>All the business logic is implemented in a separate ‘Service Layer’ - Domain model is used only for data</li>
+  <li>Incurs all the cost of domain model - No benefits</li>
+  <li>Cost related to mapping to database</li>
+</ul>
+
+<p>Martin Fowler - Service Layer, Model Layer
+Eric Evans - Application Layer, Domain Layer</p>
+
+<h2 id="domain-specific-language-dsl">Domain Specific Language (DSL)</h2>
+
+<ul>
+  <li>http://blog.jooq.org/2012/01/05/the-java-fluent-api-designer-crash-course/</li>
+  <li>http://www.infoq.com/articles/internal-dsls-java</li>
+  <li>http://weblogs.java.net/blog/carcassi/archive/2010/02/04/building-fluent-api-internal-dsl-java</li>
+</ul>
+
+<h2 id="naked-objects-pattern">Naked Objects Pattern</h2>
+
+<h1 id="agile-software-architecture">Agile Software Architecture</h1>
+
+<ul>
+  <li>Agile-centric or plan-centric development. Architecture before or refactoring later?</li>
+  <li>(-) academic style of writing.</li>
+  <li>attribute-driven design (ADD) method</li>
+  <li>business architecture process and organization</li>
+  <li>the Rationale Unified Process’s 4+1 Views</li>
+  <li>Siemens’ 4 Views</li>
+  <li>architectural separation of concerns</li>
+</ul>
+
+<h1 id="software-architecture-documentation">Software Architecture Documentation</h1>
+
+<h2 id="rationale-unified-processs-41-views">Rationale Unified Process’s 4+1 Views</h2>
+
+<p>The 4+1 view model intends to describe an architecture using five concurrent views. Each of them addresses a specific set of concerns.</p>
+
+<ol>
+  <li><em>Logical view</em> denotes the partitions of the functional requirements onto the logical entities in an architecture. This view illustrates a design’s object model in an object-oriented design approach.</li>
+  <li><em>Process view</em> is used to represent some types of ASRs, such as concurrency and performance. This view can be described at several levels of abstraction, each of which addresses an individual issue.</li>
+  <li><em>Development view</em> illustrates the organization of the actual software modules in the software development environment. This view also represents internal properties, such as reusability, ease of development, testability, and commonality. It is usually made up of subsystems, which are organized in a hierarchy of layers. This view also supports allocation of requirements and work division, cost assessment, planning, progress monitoring, and reasoning about reuse, portability and security.</li>
+  <li><em>Physical view</em> represents the mapping of the architectural elements captured in the logical, process, and development views onto networks of computers. This view takes into consideration the NFRs (e.g., availability, reliability (fault tolerance), performance (throughput), and scalability).</li>
+  <li><em>Scenarios</em> are used to demonstrate that the elements of other views can work together seamlessly.</li>
+</ol>
+
+<h1 id="bibliography">Bibliography</h1>
+
+<ul>
+  <li>Patterns of Enterprise Application Architecture - Martin Fowler</li>
+  <li>Agile Software Architecture</li>
+  <li>http://martinfowler.com/bliki/ValueObject.html</li>
+  <li>http://martinfowler.com/eaaCatalog/dataTransferObject.html</li>
+  <li>http://java.sun.com/blueprints/patterns/TransferObject.html</li>
+</ul>
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/architecture.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/architecture.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

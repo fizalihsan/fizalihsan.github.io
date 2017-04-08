@@ -1,0 +1,873 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Java I/O - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Java I/O Basics Stream Classes Input Stream OutputStream Character classes Streams Byte Streams Data Streams Object Streams Character Streams &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/java-io.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Java I/O</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#basics" id="markdown-toc-basics">Basics</a></li>
+  <li><a href="#stream-classes" id="markdown-toc-stream-classes">Stream Classes</a>    <ul>
+      <li><a href="#input-stream" id="markdown-toc-input-stream">Input Stream</a></li>
+    </ul>
+  </li>
+  <li><a href="#outputstream" id="markdown-toc-outputstream">OutputStream</a></li>
+  <li><a href="#character-classes" id="markdown-toc-character-classes">Character classes</a></li>
+  <li><a href="#streams" id="markdown-toc-streams">Streams</a>    <ul>
+      <li><a href="#byte-streams" id="markdown-toc-byte-streams">Byte Streams</a></li>
+      <li><a href="#data-streams" id="markdown-toc-data-streams">Data Streams</a></li>
+      <li><a href="#object-streams" id="markdown-toc-object-streams">Object Streams</a></li>
+      <li><a href="#character-streams" id="markdown-toc-character-streams">Character Streams</a></li>
+      <li><a href="#buffered-streams" id="markdown-toc-buffered-streams">Buffered Streams</a></li>
+    </ul>
+  </li>
+  <li><a href="#scanner" id="markdown-toc-scanner">Scanner</a></li>
+  <li><a href="#serialization" id="markdown-toc-serialization">Serialization</a>    <ul>
+      <li><a href="#customize-default-serialization-protocol" id="markdown-toc-customize-default-serialization-protocol">Customize default serialization protocol</a></li>
+      <li><a href="#customize-your-own-protocol" id="markdown-toc-customize-your-own-protocol">Customize your own protocol</a></li>
+      <li><a href="#caching-objects-in-the-stream" id="markdown-toc-caching-objects-in-the-stream">Caching objects in the stream</a></li>
+    </ul>
+  </li>
+  <li><a href="#java-nio" id="markdown-toc-java-nio">Java NIO</a>    <ul>
+      <li><a href="#why-nio" id="markdown-toc-why-nio">Why NIO?</a></li>
+      <li><a href="#buffers-channels-selectors" id="markdown-toc-buffers-channels-selectors">Buffers, Channels, Selectors</a></li>
+      <li><a href="#file-watcher-service" id="markdown-toc-file-watcher-service">File Watcher Service</a></li>
+    </ul>
+  </li>
+  <li><a href="#character-sets" id="markdown-toc-character-sets">Character Sets</a>    <ul>
+      <li><a href="#ascii" id="markdown-toc-ascii">ASCII</a></li>
+      <li><a href="#iso-latin-1" id="markdown-toc-iso-latin-1">ISO Latin-1</a></li>
+      <li><a href="#unicode" id="markdown-toc-unicode">Unicode</a></li>
+      <li><a href="#utf-8" id="markdown-toc-utf-8">UTF-8</a></li>
+      <li><a href="#character-set-in-java" id="markdown-toc-character-set-in-java">Character set in Java</a></li>
+    </ul>
+  </li>
+  <li><a href="#miscellaneous" id="markdown-toc-miscellaneous">Miscellaneous</a></li>
+  <li><a href="#bibliography" id="markdown-toc-bibliography">Bibliography</a></li>
+</ul>
+
+<h1 id="basics">Basics</h1>
+
+<ul>
+  <li>I/O in Java is divided into two types:
+    <ul>
+      <li><strong>byte- and number-oriented I/O</strong>, which is handled by input and output streams; and</li>
+      <li><strong>character and text I/O</strong>, which is handled by readers and writers.</li>
+    </ul>
+  </li>
+  <li>Java Communications API (<code>javax.comm</code>),which provides the ability to do low-level I/O through a computer’s serial and parallel ports.</li>
+  <li>Streams classes read and write bytes. <code>Reader</code> classes read characters and <code>Writer</code> classes write characters.</li>
+  <li>Numeric data
+    <ul>
+      <li><code>int</code> - Fundamental integer data type in Java is ‘int’, a 4-byte, big endian, two’s complement integers</li>
+      <li><code>long</code> - 8-byte, big endian, two’s complement integers</li>
+      <li><code>short</code> - 2-byte, big endian, two’s complement integers (rarely used)</li>
+      <li><code>byte</code> - 1-byte, big endian, two’s complement integer from -128 to 127 (heavily used in I/O)</li>
+    </ul>
+  </li>
+  <li>There are no short or byte literals in Java.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kt">byte</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">42</span><span class="o">;</span> <span class="c1">//though 42 is an int, compiler specially converts them to narrower type </span>
+</span><span class="line"><span class="kt">short</span> <span class="n">s</span> <span class="o">=</span> <span class="mi">24000</span><span class="o">;</span> <span class="c1">//same as above</span>
+</span><span class="line"><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">42</span><span class="o">;</span> <span class="c1">// not allowed</span>
+</span><span class="line"><span class="kt">short</span> <span class="n">s</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span> <span class="c1">//assigning from int variables to shorts or bytes is not allowed without explicit cast.</span>
+</span><span class="line"><span class="kt">byte</span> <span class="n">b</span> <span class="o">=</span> <span class="n">i</span><span class="o">;</span> <span class="c1">// not allowed</span>
+</span><span class="line"><span class="kt">byte</span> <span class="n">b</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">2</span><span class="o">;</span> <span class="c1">// not allowed</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h1 id="stream-classes">Stream Classes</h1>
+
+<ul>
+  <li>A stream is an ordered sequence of bytes of undetermined length.</li>
+  <li>The two main classes are <code>java.io.InputStream</code> and <code>java.io.OutputStream</code>.</li>
+  <li>The <code>java.util.zip</code> package contains four input stream classes that read data in a compressed format and return it in uncompressed format and four output stream classes that read data in uncompressed format and write in compressed format.</li>
+  <li>The <code>java.util.jar</code> package includes two stream classes for reading files from JAR archives.</li>
+  <li>The <code>java.security</code> package includes a couple of stream classes used for calculating message digests.</li>
+  <li>The Java Cryptography Extension (JCE) adds two classes for encryption and decryption.</li>
+</ul>
+
+<h2 id="input-stream">Input Stream</h2>
+
+<p><code>public abstract int read() throws IOException</code></p>
+
+<p>Though <code>read()</code> returns stream of bytes, it is declared as <code>int</code>. This <code>int</code> is not a Java byte with a value between -128 and 127 but a more general unsigned byte with a value between 0 and 255. Hence, <code>-1</code> can easily be distinguished from valid data values read from the stream.</p>
+
+<h1 id="outputstream">OutputStream</h1>
+
+<p><code>public abstract void write(int byte) throws IOException</code></p>
+
+<p>This int is intended to be an unsigned byte value between and 255. However, there’s nothing to stop a careless programmer from passing in an int value outside that range. In this case, the eight low-order bits are written and the top 24 high-order bits are ignored.</p>
+
+<h1 id="character-classes">Character classes</h1>
+
+<ul>
+  <li>Character Data type - In Java, a <code>char</code> is a two-byte, unsigned integer, the only unsigned type in Java.</li>
+  <li>The <code>java.io.Reader</code> and <code>java.io.Writer</code> classes are abstract superclasses for classes that read and write character-based data. The subclasses are notable for handling the conversion between different character sets.</li>
+  <li>For the most part, these classes have methods that are extremely similar to the equivalent stream classes. Often the only difference is that a byte in the signature of a stream method is replaced by a char in the signature of the matching reader or writer method.</li>
+</ul>
+
+<h1 id="streams">Streams</h1>
+
+<h2 id="byte-streams">Byte Streams</h2>
+
+<p>Byte streams for reading and writing are called input streams and output streams, respectively (represented by the abstract classes <code>InputStream</code> and <code>OutputStream</code>).</p>
+
+<p>Programs use byte streams to perform input and output of 8-bit bytes. It should only be used for the most primitive I/O.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">private</span> <span class="kt">void</span> <span class="nf">byteStreams</span><span class="o">(){</span>
+</span><span class="line">   <span class="kt">byte</span><span class="o">[]</span> <span class="n">magicalJavaClassSignature</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">byte</span><span class="o">[]{(</span><span class="kt">byte</span><span class="o">)</span><span class="mh">0xCA</span><span class="o">,</span> <span class="o">(</span><span class="kt">byte</span><span class="o">)</span><span class="mh">0xFE</span><span class="o">,</span> <span class="o">(</span><span class="kt">byte</span><span class="o">)</span><span class="mh">0xBA</span><span class="o">,</span> <span class="o">(</span><span class="kt">byte</span><span class="o">)</span><span class="mh">0xBE</span><span class="o">,</span> <span class="o">};</span>
+</span><span class="line">   <span class="n">String</span> <span class="n">filename</span> <span class="o">=</span> <span class="s">&quot;C:/temp/bytestream.data&quot;</span><span class="o">;</span>
+</span><span class="line">
+</span><span class="line">   <span class="k">try</span><span class="o">(</span><span class="n">FileOutputStream</span> <span class="n">fos</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">FileOutputStream</span><span class="o">(</span><span class="n">filename</span><span class="o">)){</span>
+</span><span class="line">      <span class="n">fos</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">magicalJavaClassSignature</span><span class="o">);</span>
+</span><span class="line">   <span class="o">}</span><span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">){</span>
+</span><span class="line">      <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line">
+</span><span class="line">   <span class="k">try</span><span class="o">(</span><span class="n">FileInputStream</span> <span class="n">fis</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">FileInputStream</span><span class="o">(</span><span class="n">filename</span><span class="o">)){</span>
+</span><span class="line">      <span class="kt">byte</span><span class="o">[]</span> <span class="n">bytes</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">byte</span><span class="o">[</span><span class="mi">4</span><span class="o">];</span>
+</span><span class="line">      <span class="n">fis</span><span class="o">.</span><span class="na">read</span><span class="o">(</span><span class="n">bytes</span><span class="o">);</span>
+</span><span class="line">      <span class="k">if</span><span class="o">(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">magicalJavaClassSignature</span><span class="o">,</span> <span class="n">bytes</span><span class="o">)){</span>
+</span><span class="line">         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Matching...&quot;</span><span class="o">);</span>
+</span><span class="line">      <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span><span class="line">         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Not matching...&quot;</span><span class="o">);</span>
+</span><span class="line">      <span class="o">}</span>
+</span><span class="line">   <span class="o">}</span><span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">){</span>
+</span><span class="line">      <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="data-streams">Data Streams</h2>
+
+<ul>
+  <li>Data streams support binary I/O of primitive data type values (`boolean, char, byte, short, int, long, float, and double) as well as String values.</li>
+  <li>All data streams implement either the DataInput interface or the DataOutput interface.</li>
+  <li>Also notice that each specialized write in DataStreams is exactly matched by the corresponding specialized read. It is up to the programmer to make sure that output types and input types are matched in this way: The input stream consists of simple binary data, with nothing to indicate the type of individual values, or where they begin in the stream.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">private</span> <span class="kt">void</span> <span class="nf">dataStreams</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">   <span class="n">String</span> <span class="n">filename</span> <span class="o">=</span> <span class="s">&quot;C:/temp/datastream.data&quot;</span><span class="o">;</span>
+</span><span class="line">   <span class="k">try</span> <span class="o">(</span><span class="n">DataOutputStream</span> <span class="n">dos</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">DataOutputStream</span><span class="o">(</span><span class="k">new</span> <span class="nf">FileOutputStream</span><span class="o">(</span><span class="n">filename</span><span class="o">)))</span> <span class="o">{</span>
+</span><span class="line">      <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+</span><span class="line">         <span class="n">dos</span><span class="o">.</span><span class="na">writeByte</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+</span><span class="line">         <span class="n">dos</span><span class="o">.</span><span class="na">writeShort</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+</span><span class="line">         <span class="n">dos</span><span class="o">.</span><span class="na">writeInt</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+</span><span class="line">         <span class="n">dos</span><span class="o">.</span><span class="na">writeLong</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+</span><span class="line">         <span class="n">dos</span><span class="o">.</span><span class="na">writeFloat</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+</span><span class="line">         <span class="n">dos</span><span class="o">.</span><span class="na">writeDouble</span><span class="o">(</span><span class="n">i</span><span class="o">);</span>
+</span><span class="line">      <span class="o">}</span>
+</span><span class="line">   <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">      <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line">
+</span><span class="line">   <span class="k">try</span> <span class="o">(</span><span class="n">DataInputStream</span> <span class="n">dis</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">DataInputStream</span><span class="o">(</span><span class="k">new</span> <span class="nf">FileInputStream</span><span class="o">(</span><span class="n">filename</span><span class="o">)))</span> <span class="o">{</span>
+</span><span class="line">      <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+</span><span class="line">         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">printf</span><span class="o">(</span><span class="s">&quot;%d %d %d %d %g %g %n&quot;</span><span class="o">,</span>
+</span><span class="line">            <span class="n">dis</span><span class="o">.</span><span class="na">readByte</span><span class="o">(),</span>
+</span><span class="line">            <span class="n">dis</span><span class="o">.</span><span class="na">readShort</span><span class="o">(),</span>
+</span><span class="line">            <span class="n">dis</span><span class="o">.</span><span class="na">readInt</span><span class="o">(),</span>
+</span><span class="line">            <span class="n">dis</span><span class="o">.</span><span class="na">readLong</span><span class="o">(),</span>
+</span><span class="line">            <span class="n">dis</span><span class="o">.</span><span class="na">readFloat</span><span class="o">(),</span>
+</span><span class="line">            <span class="n">dis</span><span class="o">.</span><span class="na">readDouble</span><span class="o">());</span>
+</span><span class="line">      <span class="o">}</span>
+</span><span class="line">   <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">      <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="object-streams">Object Streams</h2>
+
+<p>The object stream classes are <code>ObjectInputStream</code> and <code>ObjectOutputStream</code>. These classes implement <code>ObjectInput</code> and <code>ObjectOutput</code>, which are subinterfaces of <code>DataInput</code> and <code>DataOutput</code>. That means that all the primitive data I/O methods covered in Data Streams are also implemented in object streams. So an object stream can contain a mixture of primitive and object values.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">private</span> <span class="kt">void</span> <span class="nf">objectStreams</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">   <span class="n">String</span> <span class="n">filename</span> <span class="o">=</span> <span class="s">&quot;C:/temp/objectstream.data&quot;</span><span class="o">;</span>
+</span><span class="line">   <span class="k">try</span> <span class="o">(</span><span class="n">ObjectOutputStream</span> <span class="n">oos</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">ObjectOutputStream</span><span class="o">(</span><span class="k">new</span> <span class="nf">FileOutputStream</span><span class="o">(</span><span class="n">filename</span><span class="o">)))</span> <span class="o">{</span>
+</span><span class="line">  <span class="n">oos</span><span class="o">.</span><span class="na">writeObject</span><span class="o">(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="s">&quot;hello&quot;</span><span class="o">,</span> <span class="s">&quot;how&quot;</span><span class="o">,</span> <span class="s">&quot;are&quot;</span><span class="o">,</span> <span class="s">&quot;you&quot;</span><span class="o">));</span> <span class="c1">//write object to stream</span>
+</span><span class="line">   <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">  <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line">
+</span><span class="line">
+</span><span class="line">   <span class="k">try</span> <span class="o">(</span><span class="n">ObjectInputStream</span> <span class="n">ois</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">ObjectInputStream</span><span class="o">(</span><span class="k">new</span> <span class="nf">FileInputStream</span><span class="o">(</span><span class="n">filename</span><span class="o">)))</span> <span class="o">{</span>
+</span><span class="line">  <span class="n">Object</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">ois</span><span class="o">.</span><span class="na">readObject</span><span class="o">();</span> <span class="c1">//read object from stream</span>
+</span><span class="line">  <span class="k">if</span> <span class="o">(</span><span class="n">obj</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">obj</span> <span class="k">instanceof</span> <span class="n">List</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">     <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">obj</span><span class="o">);</span>
+</span><span class="line">  <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span><span class="line">     <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Object is null or not a Map&quot;</span><span class="o">);</span>
+</span><span class="line">  <span class="o">}</span>
+</span><span class="line">   <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">  <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="character-streams">Character Streams</h2>
+
+<ul>
+  <li>are often “wrappers” for byte streams. Byte stream is used to perform the physical I/O, while the character stream handles translation between characters and bytes.</li>
+  <li>represented by the abstract classes <code>Reader</code> and <code>Writer</code></li>
+  <li>The Java platform stores character values using Unicode conventions. Character stream I/O automatically translates this internal format to and from the local character set. In Western locales, the local character set is usually an 8-bit superset of ASCII.</li>
+  <li>For most applications, I/O with character streams is no more complicated than I/O with byte streams. Input and output done with stream classes automatically translates to and from the local character set. A program that uses character streams in place of byte streams automatically adapts to the local character set and is ready for internationalization — all without extra effort by the programmer.</li>
+  <li>If internationalization isn’t a priority, you can simply use the character stream classes without paying much attention to character set issues. Later, if internationalization becomes a priority, your program can be adapted without extensive recoding.</li>
+  <li>There are two general-purpose byte-to-character “bridge” streams: <code>InputStreamReader</code> and <code>OutputStreamWriter</code>. Use them to create character streams when there are no prepackaged character stream classes that meet your needs.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">private</span> <span class="kt">void</span> <span class="nf">characterStreams</span><span class="o">(){</span>
+</span><span class="line">   <span class="n">String</span> <span class="n">filename</span> <span class="o">=</span> <span class="s">&quot;C:/temp/charactstream.data&quot;</span><span class="o">;</span>
+</span><span class="line">   <span class="k">try</span> <span class="o">(</span><span class="n">FileWriter</span> <span class="n">fw</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">FileWriter</span><span class="o">(</span><span class="n">filename</span><span class="o">))</span> <span class="o">{</span>
+</span><span class="line">      <span class="n">fw</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="s">&quot;What do you want to do today?&quot;</span><span class="o">);</span>
+</span><span class="line">      <span class="n">fw</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;\nhello&quot;</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="s">&quot;world&quot;</span><span class="o">);</span>
+</span><span class="line">      <span class="n">fw</span><span class="o">.</span><span class="na">flush</span><span class="o">();</span>
+</span><span class="line">   <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">      <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line">
+</span><span class="line">
+</span><span class="line">   <span class="k">try</span> <span class="o">(</span><span class="n">FileReader</span> <span class="n">fr</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">FileReader</span><span class="o">(</span><span class="n">filename</span><span class="o">))</span> <span class="o">{</span>
+</span><span class="line">      <span class="kt">char</span><span class="o">[]</span> <span class="n">chars</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">char</span><span class="o">[</span><span class="mi">100</span><span class="o">];</span>
+</span><span class="line">      <span class="n">fr</span><span class="o">.</span><span class="na">read</span><span class="o">(</span><span class="n">chars</span><span class="o">);</span>
+</span><span class="line">      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Char stream read: &quot;</span> <span class="o">+</span> <span class="k">new</span> <span class="nf">String</span><span class="o">(</span><span class="n">chars</span><span class="o">));</span>
+</span><span class="line">   <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">      <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="buffered-streams">Buffered Streams</h2>
+
+<ul>
+  <li>This means each read or write request is handled directly by the underlying OS. This can make a program much less efficient, since each such request often triggers disk access, network activity, or some other operation that is relatively expensive.</li>
+  <li>To reduce this kind of overhead, the Java platform implements buffered I/O streams. Buffered input streams read data from a memory area known as a buffer; the native input API is called only when the buffer is empty. Similarly, buffered output streams write data to a buffer, and the native output API is called only when the buffer is full.</li>
+  <li>Invoking readLine returns a line of text with the line. CopyLines outputs each line using println, which appends the line terminator for the current operating system. This might not be the same line terminator that was used in the input file.</li>
+  <li>There are four buffered stream classes used to wrap unbuffered streams: <code>BufferedInputStream</code> and <code>BufferedOutputStream</code> create buffered byte streams, while <code>BufferedReader</code> and <code>BufferedWriter</code> create buffered character streams.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Buffered Byte Streams</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">private</span> <span class="kt">void</span> <span class="nf">bufferedByteStreams</span><span class="o">(){</span>
+</span><span class="line">   <span class="n">String</span> <span class="n">filename</span> <span class="o">=</span> <span class="s">&quot;C:/temp/bufferedbytestream.data&quot;</span><span class="o">;</span>
+</span><span class="line">   <span class="k">try</span> <span class="o">(</span><span class="n">BufferedOutputStream</span> <span class="n">bos</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">BufferedOutputStream</span><span class="o">(</span><span class="k">new</span> <span class="nf">FileOutputStream</span><span class="o">(</span><span class="n">filename</span><span class="o">)))</span> <span class="o">{</span>
+</span><span class="line">      <span class="n">bos</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="s">&quot;hello world \n What do you want to do today?&quot;</span><span class="o">.</span><span class="na">getBytes</span><span class="o">());</span>
+</span><span class="line">   <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">      <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line">
+</span><span class="line">   <span class="k">try</span> <span class="o">(</span><span class="n">BufferedInputStream</span> <span class="n">bis</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">BufferedInputStream</span><span class="o">(</span><span class="k">new</span>    <span class="nf">FileInputStream</span><span class="o">(</span><span class="n">filename</span><span class="o">)))</span> <span class="o">{</span>
+</span><span class="line">      <span class="kt">byte</span><span class="o">[]</span> <span class="n">bytes</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">byte</span><span class="o">[</span><span class="mi">100</span><span class="o">];</span>
+</span><span class="line">      <span class="n">bis</span><span class="o">.</span><span class="na">read</span><span class="o">(</span><span class="n">bytes</span><span class="o">);</span>
+</span><span class="line">      <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="k">new</span> <span class="nf">String</span><span class="o">(</span><span class="n">bytes</span><span class="o">));</span>
+</span><span class="line">   <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">      <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Buffered Character Streams</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">private</span> <span class="kt">void</span> <span class="nf">bufferedCharacterStreams</span><span class="o">(){</span>
+</span><span class="line">   <span class="n">String</span> <span class="n">filename</span> <span class="o">=</span> <span class="s">&quot;C:/temp/bufferedcharstream.data&quot;</span><span class="o">;</span>
+</span><span class="line">   <span class="k">try</span> <span class="o">(</span><span class="n">BufferedWriter</span> <span class="n">bw</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">BufferedWriter</span><span class="o">(</span><span class="k">new</span> <span class="nf">FileWriter</span><span class="o">(</span><span class="n">filename</span><span class="o">)))</span> <span class="o">{</span>
+</span><span class="line">      <span class="n">bw</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="s">&quot;hello world&quot;</span><span class="o">);</span>
+</span><span class="line">      <span class="n">bw</span><span class="o">.</span><span class="na">newLine</span><span class="o">();</span>
+</span><span class="line">      <span class="n">bw</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="s">&quot;What do you want to do today?&quot;</span><span class="o">);</span>
+</span><span class="line">   <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">      <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line">
+</span><span class="line">   <span class="k">try</span> <span class="o">(</span><span class="n">BufferedReader</span> <span class="n">br</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">BufferedReader</span><span class="o">(</span><span class="k">new</span> <span class="nf">FileReader</span><span class="o">(</span><span class="n">filename</span><span class="o">)))</span> <span class="o">{</span>
+</span><span class="line">      <span class="n">String</span> <span class="n">input</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+</span><span class="line">      <span class="k">while</span><span class="o">(</span> <span class="o">(</span><span class="n">input</span> <span class="o">=</span> <span class="n">br</span><span class="o">.</span><span class="na">readLine</span><span class="o">())</span> <span class="o">!=</span><span class="kc">null</span><span class="o">){</span>
+</span><span class="line">         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">input</span><span class="o">);</span>
+</span><span class="line">      <span class="o">}</span>
+</span><span class="line">   <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">      <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h1 id="scanner">Scanner</h1>
+
+<p>Objects of type <code>Scanner</code> are useful for breaking down formatted input into tokens and translating individual tokens according to their data type.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">private</span> <span class="kt">void</span> <span class="nf">scanner</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">   <span class="n">Scanner</span> <span class="n">scanner</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Scanner</span><span class="o">(</span><span class="s">&quot;Hello/1/2.3/&quot;</span><span class="o">);</span>
+</span><span class="line">   <span class="n">scanner</span> <span class="o">=</span> <span class="n">scanner</span><span class="o">.</span><span class="na">useDelimiter</span><span class="o">(</span><span class="n">Pattern</span><span class="o">.</span><span class="na">compile</span><span class="o">(</span><span class="s">&quot;/&quot;</span><span class="o">));</span>
+</span><span class="line">   <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">scanner</span><span class="o">.</span><span class="na">next</span><span class="o">());</span>
+</span><span class="line">   <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">scanner</span><span class="o">.</span><span class="na">nextInt</span><span class="o">());</span>
+</span><span class="line">   <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">scanner</span><span class="o">.</span><span class="na">nextFloat</span><span class="o">());</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h1 id="serialization">Serialization</h1>
+
+<h2 id="customize-default-serialization-protocol">Customize default serialization protocol</h2>
+
+<p>Implement following methods to custom read/write objects. Notice that both methods are (and must be) declared <code>private</code>, proving that neither method is inherited and overridden or overloaded. The trick here is that the virtual machine will automatically check to see if either method is declared during the corresponding method call. If your super class implements <code>Serializable</code> and if you don’t want your class to be serialized, then implement these 2 methods to throw <code>NotSerializableException</code>.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">private</span> <span class="kt">void</span> <span class="nf">writeObject</span><span class="o">(</span><span class="n">ObjectOutputStream</span> <span class="n">out</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">;</span>
+</span><span class="line"><span class="kd">private</span> <span class="kt">void</span> <span class="nf">readObject</span><span class="o">(</span><span class="n">ObjectInputStream</span> <span class="n">in</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">ClassNotFoundException</span><span class="o">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="customize-your-own-protocol">Customize your own protocol</h2>
+
+<p>If you dont want to use the default java serialization technique, you can define your own technique by implementing <code>Externalizable</code> instead of <code>Serializable</code>. Following 2 methods needs to be implemented by your class which would contain the algorithm to persist your object.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">writeExternal</span><span class="o">(</span><span class="n">ObjectOutput</span> <span class="n">out</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">;</span>
+</span><span class="line"><span class="kd">public</span> <span class="kt">void</span> <span class="nf">readExternal</span><span class="o">(</span><span class="n">ObjectInput</span> <span class="n">in</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">ClassNotFoundException</span><span class="o">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="caching-objects-in-the-stream">Caching objects in the stream</h2>
+
+<p>By default, an <code>ObjectOutputStream</code> will maintain a reference to an object written to it. That means that if the state of the written object is written and then written again, the new state will not be saved!</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">ObjectOutputStream</span> <span class="n">out</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">ObjectOutputStream</span><span class="o">(...);</span>
+</span><span class="line"><span class="n">MyObject</span> <span class="n">obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">MyObject</span><span class="o">();</span> <span class="c1">// must be Serializable </span>
+</span><span class="line"><span class="n">obj</span><span class="o">.</span><span class="na">setState</span><span class="o">(</span><span class="mi">100</span><span class="o">);</span>
+</span><span class="line"><span class="n">out</span><span class="o">.</span><span class="na">writeObject</span><span class="o">(</span><span class="n">obj</span><span class="o">);</span> <span class="c1">// &lt;--------saves object with state = 100 </span>
+</span><span class="line"><span class="n">obj</span><span class="o">.</span><span class="na">setState</span><span class="o">(</span><span class="mi">200</span><span class="o">);</span>
+</span><span class="line"><span class="n">out</span><span class="o">.</span><span class="na">writeObject</span><span class="o">(</span><span class="n">obj</span><span class="o">);</span> <span class="c1">// &lt;--------does not save new object state </span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>To avoid the situation, do either one of the below : 
+* 1. Close and open the stream again, or 
+* 2. call stream.reset()</p>
+
+<p>Changes to a class that can hurt de-serialization : 
+* 1. deleting an instance variable 
+* 2. change</p>
+
+<h1 id="java-nio">Java NIO</h1>
+
+<h2 id="why-nio">Why NIO?</h2>
+
+<ul>
+  <li>The <code>File</code> class lacked the significant functionality required to implement even commonly used functionality. For instance, it lacked a <code>copy()</code> method to copy a file/directory.</li>
+  <li>The <code>File</code> class defined many methods that returned a <code>Boolean</code> value. Thus, in case of an error, false was returned, rather than throwing an exception, so the developer had no way of knowing why that call failed.</li>
+  <li>The <code>File</code> class did not provide good support for handling symbolic links.</li>
+  <li>The <code>File</code> class handled directories and paths in an inefficient way (it did not scale well).</li>
+  <li>The <code>File</code> class provided access to a very limited set of file attributes, which was insufficient in many situations.</li>
+</ul>
+
+<h2 id="buffers-channels-selectors">Buffers, Channels, Selectors</h2>
+
+<p>…</p>
+
+<h2 id="file-watcher-service">File Watcher Service</h2>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>File Watcher Service</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"> <span class="kd">private</span> <span class="kt">void</span> <span class="nf">fileWatcherService</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span><span class="o">{</span>
+</span><span class="line">   <span class="n">Path</span> <span class="n">path</span> <span class="o">=</span> <span class="n">Paths</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&quot;C:/temp&quot;</span><span class="o">);</span>
+</span><span class="line">   <span class="n">WatchService</span> <span class="n">watchService</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="na">getFileSystem</span><span class="o">().</span><span class="na">newWatchService</span><span class="o">();</span>
+</span><span class="line">   <span class="n">path</span><span class="o">.</span><span class="na">register</span><span class="o">(</span><span class="n">watchService</span><span class="o">,</span> <span class="n">StandardWatchEventKinds</span><span class="o">.</span><span class="na">ENTRY_MODIFY</span><span class="o">);</span> <span class="c1">//only event can be registered per watch service</span>
+</span><span class="line">
+</span><span class="line">   <span class="k">for</span><span class="o">(;;){</span>
+</span><span class="line">      <span class="kd">final</span> <span class="n">WatchKey</span> <span class="n">watchKey</span> <span class="o">=</span> <span class="n">watchService</span><span class="o">.</span><span class="na">take</span><span class="o">();</span>
+</span><span class="line">      <span class="k">for</span> <span class="o">(</span><span class="n">WatchEvent</span><span class="o">&lt;?&gt;</span> <span class="n">watchEvent</span> <span class="o">:</span> <span class="n">watchKey</span><span class="o">.</span><span class="na">pollEvents</span><span class="o">())</span> <span class="o">{</span>
+</span><span class="line">         <span class="kd">final</span> <span class="n">Path</span> <span class="n">context</span> <span class="o">=</span> <span class="o">(</span><span class="n">Path</span><span class="o">)</span> <span class="n">watchEvent</span><span class="o">.</span><span class="na">context</span><span class="o">();</span>
+</span><span class="line">         <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Event kind: &quot;</span> <span class="o">+</span> <span class="n">watchEvent</span><span class="o">.</span><span class="na">kind</span><span class="o">().</span><span class="na">name</span><span class="o">()</span> <span class="o">+</span> <span class="s">&quot; - &quot;</span> <span class="o">+</span> <span class="n">context</span><span class="o">.</span><span class="na">getFileName</span><span class="o">());</span>
+</span><span class="line">      <span class="o">}</span>
+</span><span class="line">      <span class="n">watchKey</span><span class="o">.</span><span class="na">reset</span><span class="o">();</span> <span class="c1">//resetting the key is important to receive subsequent notifications</span>
+</span><span class="line">    <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h1 id="character-sets">Character Sets</h1>
+
+<p><a href="http://www.joelonsoftware.com/articles/Unicode.html">The Absolute Minimum Every Software Developer Absolutely, Positively Must Know About Unicode and Character Sets (No Excuses!) by Joel Spolsky</a></p>
+
+<h2 id="ascii">ASCII</h2>
+
+<p><img class="right" src="/technology/ascii-table.gif" />
+* the American Standard Code for Information Interchange, is a 7-bit character set. Thus it defines 27 or 128 different characters whose numeric values range from to 127.
+* All Java programs can be expressed in pure ASCII. Non-ASCII Unicode characters are encoded as Unicode escapes; that is, written as a backslash ( ), followed by a u, followed by four hexadecimal digits; for example, \u00A9.</p>
+
+<h2 id="iso-latin-1">ISO Latin-1</h2>
+
+<p>ISO Latin-1 is an eight-bit character set that’s a strict super-set of ASCII. It defines 28 or 256 different characters whose numeric values range from to 255. The first 128 characters—that is, those numbers with the high-order bit equal to zero—correspond exactly to the ASCII character set. Thus 65 is ASCII A and ISO Latin-1 A; 66 is ASCII B and ISO Latin-1 B; and so on. Where ISO Latin-1 and ASCII diverge is in the characters between 128 and 255 (characters with high bit equal to one). ASCII does not define these characters. ISO Latin-1 uses them for various accented letters like ü needed for non-English languages written in a Roman script, additional punctuation marks and symbols like ©, and additional control characters.</p>
+
+<h2 id="unicode">Unicode</h2>
+
+<ul>
+  <li>Unicode is a 2-byte, 16-bit character set with 216 or 65,536 different possible characters. (Only about 40,000 are used in practice, the rest being reserved for future expansion.) Unicode can handle most of the world’s living languages and a number of dead ones as well.</li>
+  <li>Java streams do not do a good job of reading Unicode text. (This is why readers and writers were added in Java 1.1.) Streams generally read a byte at a time, but each Unicode character occupies two bytes. Thus, to read a Unicode character, you multiply the first byte read by 256, add it to the second byte read, and cast the result to a char. For example:</li>
+</ul>
+
+<p><code>java
+ int b1 = in.read();
+ int b2 = in.read();
+ char c = (char) (b1*256 + b2);
+</code></p>
+
+<h2 id="utf-8">UTF-8</h2>
+
+<ul>
+  <li>Unicode is a relatively inefficient encoding when most of your text consists of ASCII characters. Every character requires the same number of bytes—two—even though some characters are used much more frequently than others. A more efficient encoding would use fewer bits for the more common characters. This is what UTF-8 does.</li>
+  <li>In UTF-8 the ASCII alphabet is encoded using a single byte, just as in ASCII. The next 1,919 characters are encoded in two bytes. The remaining Unicode characters are encoded in three bytes. However, since these three-byte characters are relatively uncommon, especially in English text, the savings achieved by encoding ASCII in a single byte more than makes up for it.</li>
+  <li>Java’s .class files use UTF-8 internally to store string literals. Data input streams and data output streams also read and write strings in UTF-8. However, this is all hidden from direct view of the programmer, unless perhaps you’re trying to write a Java compiler or parse output of a data stream without using the DataInputStream class.</li>
+</ul>
+
+<h2 id="character-set-in-java">Character set in Java</h2>
+
+<p>Java understands several dozen different character sets for a variety of languages, ranging from ASCII to the Shift Japanese Input System (SJIS) to Unicode. Internally, Java uses the Unicode character set. Unicode is a two-byte extension of the one-byte ISO Latin-1 character set, which in turn is an eight-bit superset of the seven-bit ASCII character set.</p>
+
+<h1 id="miscellaneous">Miscellaneous</h1>
+<ul>
+  <li>http://www.ashishpaliwal.com/blog/2008/10/nio-frameworks-in-java/</li>
+  <li>Apache MINA</li>
+  <li>xSockets</li>
+  <li>Grizzly</li>
+  <li>Netty Non-blocking I/O Framework: http://www.manning.com/maurer/netty_meap_ch1.pdf</li>
+</ul>
+
+<h1 id="bibliography">Bibliography</h1>
+<ul>
+  <li>Oracle Certified Professional Java SE 7 (Chapter 8 &amp; 9)</li>
+  <li>OReilly - Java IO</li>
+  <li>OReilly - Java NIO</li>
+  <li>Apress - Pro Java 7 NIO.2</li>
+  <li>http://docs.oracle.com/javase/tutorial/essential/io/</li>
+</ul>
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/java-io.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/java-io.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

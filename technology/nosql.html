@@ -1,0 +1,1026 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>NoSQL - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="NoSQL Key-Value Stores Riak Architecture Clustering Downsides/Limitations/Trade-offs Redis Column-oriented Databases Overview HBase Why use HBase? &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/nosql.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">NoSQL</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#key-value-stores" id="markdown-toc-key-value-stores">Key-Value Stores</a>    <ul>
+      <li><a href="#riak" id="markdown-toc-riak">Riak</a>        <ul>
+          <li><a href="#architecture" id="markdown-toc-architecture">Architecture</a></li>
+          <li><a href="#clustering" id="markdown-toc-clustering">Clustering</a></li>
+          <li><a href="#downsideslimitationstrade-offs" id="markdown-toc-downsideslimitationstrade-offs">Downsides/Limitations/Trade-offs</a></li>
+        </ul>
+      </li>
+      <li><a href="#redis" id="markdown-toc-redis">Redis</a></li>
+    </ul>
+  </li>
+  <li><a href="#column-oriented-databases" id="markdown-toc-column-oriented-databases">Column-oriented Databases</a>    <ul>
+      <li><a href="#overview" id="markdown-toc-overview">Overview</a></li>
+      <li><a href="#hbase" id="markdown-toc-hbase">HBase</a>        <ul>
+          <li><a href="#why-use-hbase" id="markdown-toc-why-use-hbase">Why use HBase?</a></li>
+          <li><a href="#where-to-use" id="markdown-toc-where-to-use">Where to use?</a></li>
+          <li><a href="#architecture-1" id="markdown-toc-architecture-1">Architecture</a></li>
+          <li><a href="#downsides" id="markdown-toc-downsides">Downsides</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#document-oriented-databases" id="markdown-toc-document-oriented-databases">Document-oriented Databases</a>    <ul>
+      <li><a href="#mongodb" id="markdown-toc-mongodb">MongoDB</a>        <ul>
+          <li><a href="#index" id="markdown-toc-index">Index</a>            <ul>
+              <li><a href="#index-types" id="markdown-toc-index-types">Index Types</a></li>
+              <li><a href="#rules-of-index-design" id="markdown-toc-rules-of-index-design">Rules of Index Design</a></li>
+            </ul>
+          </li>
+          <li><a href="#profiling" id="markdown-toc-profiling">Profiling</a></li>
+          <li><a href="#data-modelling" id="markdown-toc-data-modelling">Data modelling</a>            <ul>
+              <li><a href="#embedded-document-model" id="markdown-toc-embedded-document-model">Embedded document model</a></li>
+              <li><a href="#referenced-document-model" id="markdown-toc-referenced-document-model">Referenced document model</a></li>
+            </ul>
+          </li>
+          <li><a href="#transaction-management" id="markdown-toc-transaction-management">Transaction Management</a>            <ul>
+              <li><a href="#why-no-transactions" id="markdown-toc-why-no-transactions">Why no transactions?</a></li>
+              <li><a href="#write-concern" id="markdown-toc-write-concern">Write concern</a></li>
+            </ul>
+          </li>
+          <li><a href="#aggregation-framework" id="markdown-toc-aggregation-framework">Aggregation Framework</a></li>
+          <li><a href="#sharding" id="markdown-toc-sharding">Sharding</a>            <ul>
+              <li><a href="#setup" id="markdown-toc-setup">Setup</a></li>
+              <li><a href="#shard-keys" id="markdown-toc-shard-keys">Shard Keys</a></li>
+              <li><a href="#sharding-concerns" id="markdown-toc-sharding-concerns">Sharding concerns</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><a href="#couchdb" id="markdown-toc-couchdb">CouchDb</a>        <ul>
+          <li><a href="#admin-ui" id="markdown-toc-admin-ui">Admin UI</a></li>
+          <li><a href="#how-to-access-couchdb-programmatically" id="markdown-toc-how-to-access-couchdb-programmatically">How to access CouchDB programmatically?</a></li>
+          <li><a href="#other-administration-tasks" id="markdown-toc-other-administration-tasks">Other Administration Tasks</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#graph-databases" id="markdown-toc-graph-databases">Graph Databases</a>    <ul>
+      <li><a href="#concepts" id="markdown-toc-concepts">Concepts</a>        <ul>
+          <li><a href="#types-of-technologies-in-graph-space" id="markdown-toc-types-of-technologies-in-graph-space">Types of technologies in Graph space</a></li>
+          <li><a href="#advantages-of-graph-databases" id="markdown-toc-advantages-of-graph-databases">Advantages of Graph Databases</a></li>
+          <li><a href="#graph-data-models" id="markdown-toc-graph-data-models">Graph Data Models</a></li>
+        </ul>
+      </li>
+      <li><a href="#neo4j" id="markdown-toc-neo4j">Neo4j</a></li>
+    </ul>
+  </li>
+  <li><a href="#bibliography" id="markdown-toc-bibliography">Bibliography</a></li>
+</ul>
+
+<h1 id="key-value-stores">Key-Value Stores</h1>
+
+<ul>
+  <li>Known databases: Riak, Redis, memcached, memcachedb, membase, Voldemort</li>
+  <li>Not performant for complex queries and aggregate operations</li>
+</ul>
+
+<h2 id="riak">Riak</h2>
+
+<ul>
+  <li>Riak is a distributed key-value database where values can be anything—from plain text, JSON, or XML to images or video clips—all accessible through a simple HTTP interface</li>
+  <li>is a distributed, datareplicating, enhanced key-value store without a single point of failure</li>
+  <li>Implementation of Amazon’s Dynamo</li>
+  <li>Embraces web constructs of HTTP and REST from ground up</li>
+  <li>supports advanced querying via mapreduce.</li>
+  <li>Riak is a great choice for datacenters like Amazon that must serve many requests with low latency. If every millisecond spent waiting is a potential customer loss, Riak is hard to beat.</li>
+  <li>Riak breaks up classes of keys into buckets to avoid key collisions.</li>
+  <li>Riak stores everything as a binary-encoded value.</li>
+  <li>Links are metadata that associate one key to other keys. Links are uni-directional. What makes Links special in Riak is link walking (and a more powerful variant, linked mapreduce queries)</li>
+  <li>URL Pattern: <code>http://SERVER:PORT/riak/BUCKET/KEY</code>.</li>
+</ul>
+
+<h3 id="architecture">Architecture</h3>
+<ul>
+  <li>Riak server architecture removes single points of failure (all nodes are peers) and allows you to grow or shrink the cluster at will. This is important when dealing with large-scale deployments, since it allows your database to remain available even if several nodes fail or are otherwise unresponsive.</li>
+  <li>Riak takes advantage of this fact by allowing you to trade availability for consistency on a per-request basis.</li>
+  <li><strong>Riak Ring</strong> - Riak divides its server configuration into partitions denoted by a 160-bit number (that’s 2^160). The Riak team likes to represent this massive integer as a circle, which they call the ring. When a key is hashed to a partition, the ring helps direct which Riak servers store the value.</li>
+</ul>
+
+<h3 id="clustering">Clustering</h3>
+<ul>
+  <li>Riak allows us to control reads and writes into the cluster by altering three values:
+    <ul>
+      <li><code>N</code> is the number of nodes a write ultimately replicates to, in other words, the number of copies in the cluster.</li>
+      <li><code>W</code> is the number of nodes that must be successfully written to before a successful response. If <code>W</code> is less than <code>N</code>, a write will be considered successful even while Riak is still copying the value in background.</li>
+      <li><code>R</code> is the number of nodes required to read a value successfully. If <code>R</code> is greater than the number of copies available, the request will fail. If <code>R=1</code>, there is a potential chance to read stale values. If <code>R=N</code>, then if any of those <code>N</code> nodes become unavailable, read requests would fail.</li>
+    </ul>
+  </li>
+  <li><strong>Conflict Resolution</strong>
+    <ul>
+      <li>Riak uses vector clocks. A vector clock is a token that distributed systems like Riak use to keep the order of conflicting key-value updates intact. Timestamps cannot be used since the clocks across servers may not be synchronized.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="downsideslimitationstrade-offs">Downsides/Limitations/Trade-offs</h3>
+<ul>
+  <li>lacks robust support for ad hoc queries, and key-value stores, by design, have trouble linking values together (in other words, they have no foreign keys).</li>
+  <li>If you require simple queryability, complex data structures, or a rigid schema or if you have no need to scale horizontally with your servers, Riak is probably not your best choice.</li>
+</ul>
+
+<h2 id="redis">Redis</h2>
+
+<ul>
+  <li>provides for complex datatypes like sorted sets and hashes, as well as basic message patterns like publish-subscribe and blocking queues.</li>
+  <li>by caching writes in memory before committing to disk, Redis gains amazing performance in exchange for increased risk of data loss in the case of a hardware failure. good fit for caching noncritical data and for acting as a message broker.</li>
+</ul>
+
+<h1 id="column-oriented-databases">Column-oriented Databases</h1>
+
+<h2 id="overview">Overview</h2>
+
+<ul>
+  <li>Known databases: HBase, Cassandra, Hypertable</li>
+  <li>Large data stored across machines, less data relationships</li>
+  <li>adding columns is quite inexpensive</li>
+  <li>Each row can have a different set of columns, or none at all, allowing tables to remain sparse without incurring a storage cost for null values.</li>
+</ul>
+
+<h2 id="hbase">HBase</h2>
+
+<ul>
+  <li>Using Google’s BigTable paper as a blueprint, HBase is built on Hadoop (a mapreduce engine) and designed for scaling horizontally on clusters of commodity hardware.</li>
+  <li>supports versioning and compression.</li>
+  <li>HBase is a column-oriented database that prides itself on consistency and scaling out.</li>
+  <li>A table in HBase is basically a big map. Well, more accurately, it’s a map of maps.</li>
+  <li>Unlike a relational database, in HBase a column is specific to the row that contains it. When we start adding rows, we’ll add columns to store data at the same time.</li>
+  <li>HBase stores an integer timestamp for all data values, representing time in milliseconds since the epoch (00:00:00 UTC on January 1, 1970). When a new value is written to the same cell, the old value hangs around, indexed by its timestamp. This is a pretty awesome feature. Most databases require you to specifically handle historical data yourself, but in HBase, versioning is baked right in!</li>
+  <li>A Bloom filter is a really cool data structure that efficiently answers the question, “Have I ever seen this thing before?”. HBase supports using Bloom filters to determine whether a particular column exists for a given row key (BLOOMFILTER=&gt;’ROWCOL’) or just whether a given row key exists at all (BLOOMFILTER=&gt;’ROW’). The number of columns within a column family and the number of rows are both potentially unbounded. Bloom filters offer a fast way of determining whether data exists before incurring an expensive disk read.</li>
+  <li>In HBase, rows are kept in order, sorted by the row key. A region is a chunk of rows, identified by the starting key (inclusive) and ending key (exclusive). Regions never overlap, and each is assigned to a specific region server in the cluster.</li>
+</ul>
+
+<h3 id="why-use-hbase">Why use HBase?</h3>
+<p>Scalability, built-in features like versioning, compression, garbage collection of expired data, in-memory tables. Strong consistency guarantees makes it easier to transition from relational world.</p>
+
+<h3 id="where-to-use">Where to use?</h3>
+<ul>
+  <li>Best used for online analytical processing systems - though individual queries are slower compared to other dbs, it works really well with enormous datasets. Big companies use this to back logging and search systems. Used by Facebook a principal component of its new messaging infrastructure. Twitter uses HBase extensively, ranging from data generation (for applications such as people search) to storing monitoring/performance data</li>
+</ul>
+
+<h3 id="architecture-1">Architecture</h3>
+<ul>
+  <li>HBase is designed to be fault tolerant. Hardware failures may be uncommon for individual machines, but in a large cluster, node failure is the norm. By using write-ahead logging and distributed configuration, HBase can quickly recover from individual server failures.</li>
+  <li>HBase supports three running modes:
+    <ul>
+      <li>Stand-alone mode is a single machine acting alone.</li>
+      <li>Pseudodistributed mode is a single node pretending to be a cluster.</li>
+      <li>Fully distributed mode is a cluster of nodes working together.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="downsides">Downsides</h3>
+<ul>
+  <li>Although HBase is designed to scale out, it doesn’t scale down.</li>
+  <li>Solving small problems isn’t what HBase is about, and nonexpert documentation is tough to come by, which steepens the learning curve.</li>
+  <li>HBase is almost never deployed alone. Rather, it’s part of an ecosystem of scale-ready pieces. These include Hadoop (an implementation of Google’s MapReduce), the Hadoop distributed file system (HDFS), and Zookeeper (a headless service that aids internode coordination). This ecosystem is both a strength and a weakness; it simultaneously affords a great deal of architectural sturdiness but also encumbers the administrator with the burden of maintaining it.</li>
+  <li>One noteworthy characteristic of HBase is that it doesn’t offer any sorting or indexing capabilities aside from the row keys. Rows are kept in sorted order by their row keys, but no such sorting is done on any other field, such as column names and values. So, if you want to find rows by something other than their key, you need to scan the table or maintain your own index.</li>
+  <li>There is no concept of data types. Everything is an uninterrupted array of bytes</li>
+</ul>
+
+<h1 id="document-oriented-databases">Document-oriented Databases</h1>
+
+<h2 id="mongodb">MongoDB</h2>
+<p><img class="right" src="/technology/mongo-datatypes.png" width="500" height="500" /></p>
+
+<ul>
+  <li>supports consistency. Supports ACID properties at single-document level only.</li>
+  <li>offers atomic read-write operations such as incrementing a value and deep querying of nested document structures.</li>
+  <li>Using JavaScript for its query language, MongoDB supports both simple queries and complex mapreduce jobs.</li>
+  <li>It is a document database, which allows data to persist in a nested state, and importantly, it can query that nested data in an ad hoc fashion. It enforces no schema.</li>
+  <li>Mongo is a JSON document database (though technically data is stored in a binary form of JSON known as BSON).</li>
+  <li>Every object/document has a unique incrementing numeric primary key called ObjectId. The ObjectId is always 12 bytes, composed of a timestamp, client machine ID, client process ID, and a 3-byte incremented counter.</li>
+  <li>In Mongo you can construct ad hoc queries by field values, ranges, or a combination of criteria.</li>
+  <li>MongoDB provides several of the best data structures for indexing, such as the classic B-tree, and other additions such as two-dimensional and spherical GeoSpatial indexes.</li>
+  <li>What makes Mongo special in the realm of document stores is its ability to scale across several servers, by replicating (copying data to other servers) or sharding collections (splitting a collection into pieces) and performing queries in parallel. Both promote availability.</li>
+  <li>A Namespace in Mongo is a combination of database name and collection name. e.g., <code>db.plans</code></li>
+  <li>GridFS</li>
+</ul>
+
+<h3 id="index">Index</h3>
+
+<ul>
+  <li>By default, MongoDB creates an index on the document’s _id primary key field.</li>
+  <li>All user-defined indexes are secondary indexes. Any field can be used for a secondary index, including fields within
+arrays</li>
+  <li>Order of columns on the compound index matters</li>
+  <li>Use <code>explain()</code> to analyze the performance of a query. <code>db.plans.find({"clientId" : "014222"}).explain()</code></li>
+  <li>Use the <code>hint()</code> method to tell Mongo which index to use.</li>
+</ul>
+
+<h4 id="index-types">Index Types</h4>
+
+<ul>
+  <li><strong>Unique indexes</strong></li>
+  <li><strong>Array indexes</strong> - For fields that contain an array, each array value is stored as a separate index entry. There is no special syntax for array indexes though.</li>
+  <li><strong>Sparse Indexes</strong> - Sparse indexes only contain entries for documents that contain the specified field. Because MongoDB’s allows the data model to vary from one document to another, it is common for some fields to be present only in a subset of all documents. Sparse indexes allow for smaller, more efficient indexes when fields are not present in all documents.</li>
+  <li><strong>Hash Indexes</strong> - Hash indexes compute a hash of the value of a field and index the hashed value. The primary use of this index is to enable hash-based sharding, a simple and uniform distribution of documents across shards</li>
+  <li><strong>Capped collection</strong> - max size of the collection is defined at the time of creation and cannot be altered; an existing regular collection can be converted to capped collection, but not vice versa. It behaves like a circular queue and maintains the insertion order; cannot be sharded.</li>
+  <li><strong>Tailable cursors</strong> - like <code>tail -f</code> command, tailable cursors can be defined on capped collections.</li>
+  <li><strong>TTL indexes</strong> - Time-to-Live indexes are customizable capped collections where time-out for each document is defined by the user. A common use is in applications that maintain a rolling window of history (e.g., most recent 100 days) for user actions such as clickstreams.</li>
+  <li><strong>Full-text indexes</strong> - give you the ability to search text quickly, as well as provide built-in support for multi-language stemming and stop words; only index string data; allows searching multiple fields with custom weightage specified (from default 1 to 1 billion); You can create a full-text index on all string fields in a document by creating an index on <code>$**</code></li>
+  <li><strong>Geo-spatial indexes</strong>
+    <ul>
+      <li>Types of Geospatial queries : <em>intersection</em>, <em>within</em>, and <em>nearness</em>; Geospatial queries using <em>intersection</em> and <em>within</em> functions do not require an index, whereas <em>near</em> function does.</li>
+      <li><strong><em>2dsphere index</em></strong> - for surface-of-the-earth-type maps; allows you to specify points, lines, and polygons in GeoJSON format. A point is given by a two-element array, representing [longitude, latitude]; A line by an array of Points; A polygon in the same way as lines but with different ‘type’; Sample queries: restaurants in given coordinates, restaurants near given coordinates.</li>
+      <li><strong><em>2d index</em></strong> - for flat maps, video game maps and time series data; “2d” indexes assume a perfectly flat surface, instead of a sphere; can only store points;</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="rules-of-index-design">Rules of Index Design</h4>
+
+<ul>
+  <li>Any fields that will be queried by <em>equality</em> should occur first in the index definition.</li>
+  <li>Fields used to sort should occur next in the index definition. If multiple fields are being sorted (such as (last_name, first_name), then they should occur in the same order in the index definition.</li>
+  <li>Fields that are queried by range should occur last in the index definition.</li>
+</ul>
+
+<h3 id="profiling">Profiling</h3>
+
+<ul>
+  <li>MongoDB provides a range of logging and monitoring tools to ensure collections are appropriately indexed and queries are tuned.</li>
+  <li>The MongoDB Database Profiler is most commonly used during load testing and debugging, logging all database operations or only those events whose duration exceeds a configurable threshold (the default is 100ms).</li>
+  <li>Profiling data is stored in a capped collection</li>
+</ul>
+
+<h3 id="data-modelling">Data modelling</h3>
+
+<p><strong>Tips</strong></p>
+
+<ul>
+  <li>Embed for speed, reference for integrity</li>
+  <li>Embed “point-in-time” data. E.g., the address fields in an order document. You don’t want a user’s past orders to change if he updates his profile.</li>
+  <li>Do not embed fields that have unbound growth. e.g, comments on a blog article.</li>
+  <li>Store embedded information in arrays for anonymous access. Subdocument should be used only when you know and will always know the name of the field that you are accessing.</li>
+</ul>
+
+<h4 id="embedded-document-model">Embedded document model</h4>
+
+<ul>
+  <li><strong>Pros</strong>
+    <ul>
+      <li>Locality. Less disk seeks and hence faster.</li>
+      <li>Atomicity &amp; Isolation during mutant operations.</li>
+    </ul>
+  </li>
+  <li><strong>Cons</strong>
+    <ul>
+      <li>Querying for all sub-documents with a matching condition would return the sub-document along with parent as well. Major drawback of this approach is that we get back much more data than we actually need.</li>
+      <li>For example, in a document like below, querying for all the comments by John would return all the books where John has commented, not just the comments. Also it is not possible to sort or limit the comments returned.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="p">{</span>
+</span><span class="line">  <span class="nt">&quot;book&quot;</span><span class="p">:</span> <span class="s2">&quot;Head First Java&quot;</span><span class="p">,</span>
+</span><span class="line">  <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;This is a book&quot;</span><span class="p">,</span>
+</span><span class="line">  <span class="nt">&quot;comments&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class="line">    <span class="p">{</span><span class="nt">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;John&quot;</span><span class="p">,</span> <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">},</span>
+</span><span class="line">    <span class="p">{</span><span class="nt">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;Jack&quot;</span><span class="p">,</span> <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">},</span>
+</span><span class="line">    <span class="p">{</span><span class="nt">&quot;author&quot;</span><span class="p">:</span> <span class="s2">&quot;John&quot;</span><span class="p">,</span> <span class="nt">&quot;text&quot;</span><span class="p">:</span> <span class="s2">&quot;...&quot;</span><span class="p">},</span>
+</span><span class="line">  <span class="p">]</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Embedding carries significant penalties with it:
+    <ul>
+      <li>The larger a document is, the more RAM it uses.</li>
+      <li>Growing documents must eventually be copied to larger spaces. As you append to the large document, eventually MongoDB is  going to need to move the document to an area with more space available. This movement, when it happens, significantly  slows update performance</li>
+      <li>MongoDB documents have a hard size limit of 16 MB.</li>
+    </ul>
+  </li>
+  <li>When to use
+    <ul>
+      <li>If your application’s query pattern is well-known and data tends to be accessed in only one way, an embedded approach works well.</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="referenced-document-model">Referenced document model</h4>
+
+<ul>
+  <li>Pros
+    <ul>
+      <li>Flexibility</li>
+      <li>Best fit for many-to-many relationships.</li>
+    </ul>
+  </li>
+  <li>Cons
+    <ul>
+      <li>No joins hence needs multiple network calls to retrieve complete data.</li>
+      <li>There is no multi-document transaction in Mongodb. In other words, unlike SQL you cannot edit/delete multiple documents in a single transaction. If a business entity spans across multiple collections, you cannot alter that entity from different collections atomically.</li>
+    </ul>
+  </li>
+  <li>When to use
+    <ul>
+      <li>If your application may query data in many different ways, or you are not able to anticipate the patterns in which data may be queried, a more “normalized” approach may be better.</li>
+      <li>Another factor that may weigh in favor of a more normalized model using document references is when you have one-to-many relationships with very high or unpredictable <em>arity</em>.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="transaction-management">Transaction Management</h3>
+
+<ul>
+  <li>MongoDB write operations are atomic at the document level – including the ability to update embedded arrays and sub-documents atomically</li>
+  <li>Document-level atomicity in MongoDB ensures complete isolation as a document is updated</li>
+  <li>Multi-document transaction
+    <ul>
+      <li><code>findAndModify()</code> command that allows a document to be updated atomically and returned in the same round trip. Will this work for multiple documents?</li>
+      <li>For situations that require multi-document transactions, you can implement two-phase commit in your application to provide support for these kinds of multi-document updates. Using <a href="https://docs.mongodb.com/manual/tutorial/perform-two-phase-commits/">2 Phase Commit</a> ensures that data is consistent and, in case of an error, the state that preceded the transaction is recoverable. During the procedure, however, documents can represent pending data and states.</li>
+    </ul>
+  </li>
+  <li>Maintaining Strong Consistency - By default, MongoDB directs all read operations to primary servers, ensuring strong consistency. Also, by default any reads from secondary servers within a MongoDB replica set will be eventually consistent – much like master / slave replication in relational databases.</li>
+  <li>Write concerns - The write concern is configured in the driver and is highly granular – it can be set per-operation, per-collection or for the entire database.</li>
+  <li>Journals
+    <ul>
+      <li>Before applying a change to the database – whether it is a write operation or an index modification – MongoDB writes the change operation to the journal. If a server failure occurs or MongoDB encounters an error before it can write the changes from the journal to the database, the journaled operation can be reapplied, thereby maintaining a consistent state when the server is recovered.</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="why-no-transactions">Why no transactions?</h4>
+
+<ul>
+  <li>MongoDB was designed from the ground up to be easy to scale to multiple distributed servers. Two of the biggest problems in distributed database design are distributed join operations and distributed transactions.</li>
+  <li>Both of these operations are complex to implement, and can yield poor performance or even downtime in the event that a server becomes unreachable. By “punting” on these problems and not supporting</li>
+</ul>
+
+<h4 id="write-concern">Write concern</h4>
+
+<ul>
+  <li>MongoDB has a configurable write concern. This capability allows you to balance the importance of guaranteeing that all writes are fully recorded in the database with the speed of the insert.</li>
+  <li>For example, if you issue writes to MongoDB and do not require that the database issue any response, the write operations will return very fast (since the application needs to wait for a response from the database) but you cannot be certain that all writes succeeded. Conversely, if you require that MongoDB acknowledge every write operation, the database will not return as quickly but you can be certain that every item will be present in the database.</li>
+  <li>The proper write concern is often an application-specific decision, and depends on the reporting requirements and uses of your analytics application.</li>
+</ul>
+
+<p><strong>Insert acknowledgement</strong></p>
+
+<p>By setting w=0, you do not require that MongoDB acknowledge receipt of the insert. <code>db.events.insert(event, w=0)</code></p>
+
+<p><strong>Journal write acknowledgement</strong>
+If you want to ensure that MongoDB not only acknowledges receipt of a write operation but also commits the write operation to the on-disk journal before returning successfully to the application, you can use the j=True option: <code>db.events.insert(event, j=True)</code>.</p>
+
+<p>MongoDB uses an on-disk journal file to persist data before writing the updates back to the “regular” data files. Since journal writes are significantly slower than in-memory updates (which are, in turn, much slower than “regular” data file updates), MongoDB batches up journal writes into “group commits” that occur every 100 ms unless overridden in your server settings. What this means for the application developer is that, on average, any individual writes with j=True will take around 50 ms to complete, which is generally even more time than it would take to replicate the data to another server.</p>
+
+<p><strong>Replication acknowledgement</strong>
+To acknowledge that the data has replicated to two members of the replica set before returning: <code>db.events.insert(event, w=2)</code>.</p>
+
+<h3 id="aggregation-framework">Aggregation Framework</h3>
+<ul>
+  <li>a pipeline that processes a stream of documents through several building blocks: filtering, projecting, grouping, sorting, limiting, and skipping.</li>
+  <li><code>aggregate()</code> function returns an array of result documents; cannot write to a collection;</li>
+  <li><strong>Pipeline Operations</strong> - Each operator receives a stream of documents, does some type of transformation on these documents, and then passes on the results of the transformation. If it is the last pipeline operator, these results are returned to the client. Otherwise, the results are streamed to the next operator as input.</li>
+</ul>
+
+<h3 id="sharding">Sharding</h3>
+
+<ul>
+  <li>One of the central reasons for Mongo to exist is to safely and quickly handle very large datasets. The clearest method of achieving this is through horizontal sharding by value ranges—or just sharding for brevity. Rather than a single server hosting all values in a collection, some range of values are split (or in other words, sharded) onto other servers. For example, in our phone numbers collection, we may put all phone numbers less than 1-500-000-0000 onto Mongo server A and put numbers greater than or equal to 1-500-000-0001 onto a server B. Mongo makes this easier by autosharding, managing this division for you.</li>
+  <li>Diff b/w sharding and replication? Replication copies the exact copy of a data in multiple servers. Sharding stores different subset of data across multiple servers.</li>
+  <li>Shard - server participating in a sharded cluster.</li>
+  <li>mongos - routing process which sits in front of all the shards. Apps connect to this process.</li>
+  <li>Sharding is enabled at database level.</li>
+  <li>
+    <p>Shard key - when you enable sharding you choose a field or two that MongoDb uses to break up data. To even create a shard key, the field(s) must be indexed. Before sharding, the collection is essentially a single chunk. Sharding splits this into smaller chunks based on the shard key</p>
+  </li>
+  <li>Shard
+    <ul>
+      <li>A shard is one or more servers in a cluster that are responsible for some subset of the data. For instance, if we had a cluster that contained 1,000,000 documents representing a website’s users, one shard might contain information about 200,000 of the users.</li>
+      <li>A shard can consist of many servers. If there is more than one server in a shard, each server has an identical copy of the subset of data (Figure 2-1). In production, a shard will usually be a replica set.</li>
+      <li>Single range shards will lead to cascade effect and lot of data movement when rebalancing is required. Mongo uses multi-range shards to avoid this.</li>
+    </ul>
+  </li>
+  <li>Chunk
+    <ul>
+      <li>A range of data is called a <strong>chunk</strong>. When we split a chunk’s range into two ranges, it becomes two chunks.</li>
+      <li>200MB is the max size of a chunk by default. This is because moving data is expensive: it takes a lot of time, uses system resources, and can add a significant amount of network traffic.</li>
+    </ul>
+  </li>
+  <li>Shard Key
+    <ul>
+      <li>You also cannot change the value of a shard key (with, for example, a $set). The only way to give a document a new shard key is to remove the document, change the shard key’s value on the client side, and reinsert it.</li>
+      <li>A document belongs in a chunk if and only if its shard key value is in that chunk’s range.</li>
+    </ul>
+  </li>
+  <li>mongos
+    <ul>
+      <li><code>mongos</code> is a special routing process that sits in front of your cluster and looks like an ordinary <code>mongod</code> server to anything that connects to it. It forwards requests to the correct server or servers in the cluster, then assembles their responses and sends them back to the client. This makes it so that, in general, a client does not need to know that they’re talking to a cluster rather than a single server.</li>
+      <li><em>Targeted Query</em> - While querying, if the query has the shard key, mongos determines which shard/shards contains the data and hits those directly. This is called a targeted query.</li>
+      <li><em>Spewed Query</em> - If the shard key is absent in the query, mongos must send the query to all of the shards. This can be less efficient than targeted queries, but not necessarily. A “spewed” query that accesses a few indexed documents in RAM will perform much better than a targeted query that has to access data from disk across many shards (a targeted query could hit every shard, too)</li>
+    </ul>
+  </li>
+  <li>Anatomy of a cluster
+    <ul>
+      <li>A MongoDB cluster basically consists of three types of processes:
+        <ul>
+          <li>the shards for actually storing data,</li>
+          <li>the mongos processes for routing requests to the correct data, and</li>
+          <li>the config servers, for keeping track of the cluster’s state</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Replica Sets
+    <ul>
+      <li>Mongo was built to scale out, not to run stand-alone. It was built for data consistency and partition tolerance, but sharding data has a cost: if one part of a collection is lost, the whole thing is compromised. What good is querying against a collection of countries that contains only the western hemisphere? Mongo deals with this implicit sharding weakness in a simple manner: duplication. You should rarely run a single Mongo instance in production but rather replicate the stored data across multiple services.</li>
+    </ul>
+  </li>
+  <li>Partition</li>
+  <li>Cluster has 1 or more shards</li>
+  <li>Shard has 1 or more servers</li>
+  <li>Shard has 1 or more chunks</li>
+  <li>Chunk has 1 range</li>
+  <li>Replica set</li>
+</ul>
+
+<h4 id="setup">Setup</h4>
+
+<ul>
+  <li>To add configuration servers to router - <code>$mongos --configdb cfg-server1,cfg-server2,cfg-server3</code>
+    <ul>
+      <li>All administration on a cluster is done through mongos</li>
+      <li>Configuration servers can be 1, 2 or 3 max. They only have configuration information and no data.</li>
+    </ul>
+  </li>
+  <li>To add a shard - <code>db.runCommand({"addShard" : "server:port", "name": "shardName"})</code>
+    <ul>
+      <li>Run this from the admin db</li>
+    </ul>
+  </li>
+  <li>To enable sharding at database level - <code>db.adminCommand({"enableSharding" : "dbname"})</code></li>
+  <li>To enable sharding at collection level - <code>db.adminCommand({"shardCollection" : "dbname.collectionName", key : {"field1" : 1, "field2" : 1}}</code>
+    <ul>
+      <li>If we are sharding a collection with data in it, the data must have an index on the shard key.</li>
+      <li>All documents must have a value for the shard key, too (and the value cannot be null). After you’ve sharded the collection, you can insert documents with a null shard key value.</li>
+    </ul>
+  </li>
+  <li>To remove a shard out of the cluster - <code>db.runCommand({removeShard : "shardName"})</code>
+    <ul>
+      <li>Moves all of the information that was on this shard to other shards before it can remove this shard.</li>
+      <li>Moving data from shard to shard is pretty slow.</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="shard-keys">Shard Keys</h4>
+
+<ul>
+  <li>Bad shard keys
+    <ul>
+      <li>Low cardinality keys
+        <ul>
+          <li>e.g., by continent names, by country names, etc.</li>
+          <li>When the volume increases in one of these shards, there is no way to horizontally scale because there are only limited number of key values.</li>
+          <li>If you are tempted to use low-cardinality shard key because you query on that field a lot, use a compound shard key (a shard key with two fields) and make sure that the second field has lots of different values MongoDB can use for splitting.</li>
+          <li>If a key has N values in a collection, you can only have N chunks and, therefore, N shards.</li>
+        </ul>
+      </li>
+      <li>Ascending Shard key
+        <ul>
+          <li>e.g., timestamps, ObjectIds, auto-incrementing primary keys</li>
+          <li>Everything will always be added to the “last” chunk, meaning everything will be added to one shard. This shard key gives you a single, undistributable hot spot.</li>
+          <li>If the key’s values trend towards infinity, you will have this problem.</li>
+        </ul>
+      </li>
+      <li>Random Shard Key</li>
+    </ul>
+  </li>
+  <li>Good shard keys - Ideally, your shard key should have two characteristics:
+    <ul>
+      <li>Insertions are <em>balanced</em> between shards</li>
+      <li>Most queries can be <em>routed</em> to a subset of the shards to be satisfied</li>
+    </ul>
+  </li>
+</ul>
+
+<h4 id="sharding-concerns">Sharding concerns</h4>
+
+<p>In a sharded environment, the limitations on the maximum insertion rate are:</p>
+
+<ul>
+  <li>The number of shards in the cluster</li>
+  <li>
+    <p>The shard key you choose</p>
+  </li>
+  <li>Limitations
+    <ul>
+      <li>Cannot guarantee uniqueness on any key other than the shard key</li>
+      <li>count of collection may return incorrect numbers</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="couchdb">CouchDb</h2>
+
+<ul>
+  <li>Written in Erlang</li>
+  <li>With nearly incorruptible data files, CouchDB remains highly available even in the face of intermittent connectivity loss or hardware failure.</li>
+  <li>Like Mongo, CouchDB’s native query language is JavaScript.</li>
+  <li>Storage data format: JSON</li>
+</ul>
+
+<h3 id="admin-ui">Admin UI</h3>
+
+<ul>
+  <li>Futon is a web-based interface to work with CouchDB and it provides support for editing the configuration information, creating databases, documents, design documents, etc.</li>
+  <li>URI: http://localhost:5984/_utils/index.html</li>
+  <li>How to create our first database? * Futon -&gt; Overview -&gt; Create database* . Multiple such databases can be created in this single instance of CouchDb.</li>
+</ul>
+
+<h3 id="how-to-access-couchdb-programmatically">How to access CouchDB programmatically?</h3>
+
+<p>via HTTP REST Interface
+ Note: If the db is password protected, send requests with credentials as follows: <code>http://username:pass@remotehost:5984/dbname</code></p>
+
+<ul>
+  <li>To check if the CouchDb is up and running: <code>curl http://localhost:5984</code></li>
+  <li>To create a db:
+    <ul>
+      <li>Request: <code>curl -X PUT http://localhost:5984/dbname</code></li>
+      <li>Response: <code>{"ok":true}</code></li>
+    </ul>
+  </li>
+  <li>To delete a db:
+    <ul>
+      <li>Request: <code>curl -X DELETE http://localhost:5984/dbname</code></li>
+      <li>Response: <code>{"ok":true}</code></li>
+    </ul>
+  </li>
+  <li>To retrieve db information:
+    <ul>
+      <li>Request: <code>curl -X GET http://localhost:5984/dbname</code></li>
+      <li>Response: <code>{"db_name":"dbname","doc_count":0,"doc_del_count":0,"update_seq":0,"purge_seq":0,"compact_running":false,"disk_size":79,"data_size":0,"instance_start_time":"1386975670043000","disk_format_version":6,"committed_update_seq":0}</code></li>
+    </ul>
+  </li>
+  <li>To create a new document:
+    <ul>
+      <li>Request: <code>curl -H "Content-type: application/json" -X POST http://localhost:5984/dbname -d "{\"title\": \"Lasagne\"}"</code></li>
+      <li>Response: <code>{"ok":true,"id":"d02bdee238b26628d1ce28f1c80313bb","rev":"1-f07d272c69ca1ba91b94544ec8eda1b6"}</code></li>
+      <li>Comments: ‘id’ is a unique document identifier and “rev” is the revision id of the document automatically generated.</li>
+    </ul>
+  </li>
+  <li>To create a document with custom document id:
+    <ul>
+      <li>Request: <code>curl -H "Content-type: application/json" -X PUT http://localhost:5984/dbname/pasat -d "{\"title\": \"Pasat\"}"</code></li>
+      <li>Response: <code>{"ok":true,"id":"pasat","rev":"1-91b034b589017f930d12f7fec23be727"}</code></li>
+      <li>Comments: PUT method is used instead of POST. Custom document id is passed in the url.</li>
+    </ul>
+  </li>
+  <li>To retrieve a document:
+    <ul>
+      <li>Request: <code>curl -X GET http://localhost:5984/dbname/d02bdee238b26628d1ce28f1c80313bb</code></li>
+      <li>Response: <code>{"_id":"d02bdee238b26628d1ce28f1c80313bb","_rev":"1-f07d272c69ca1ba91b94544ec8eda1b6","title":"Lasagne"}</code></li>
+      <li>Comments: Document ID is passed in the request.</li>
+    </ul>
+  </li>
+  <li>To update a document:
+    <ul>
+      <li>Request: <code>curl -H "Content-type: application/json" -X PUT http://localhost:5984/dbname/pasat -d "{\"title\": \"Fizal\", \"dob\": \"01/01/1980\", \"_rev\": \"1-91b034b589017f930d12f7fec23be727\"}"</code></li>
+      <li>Response: <code>{"ok":true,"id":"pasat","rev":"2-a294dbbe4a308e8586be9acdc527e6dc"}</code></li>
+      <li>Comments: Both doc id and rev id is needed to update a document. Updating the document means updating the entire document. You cannot add a field to an existing document. You can only write an entirely new version of the document into the database with the same document ID.</li>
+    </ul>
+  </li>
+  <li>To delete a document:
+    <ul>
+      <li>Request: <code>curl -H "Content-type: application/json" -X DELETE http://localhost:5984/dbname/pasat?rev=2-a294dbbe4a308e8586be9acdc527e6dc</code></li>
+      <li>Response: <code>{"ok":true,"id":"pasat","rev":"3-fc5a45ddd7178ee92532095c38d66489"}</code></li>
+      <li>Comments: Both doc id and rev id is needed to delete a document. Note that a new revision is created after deleting the document for replication purposes.</li>
+    </ul>
+  </li>
+  <li>To upload attachments to a document:
+    <ul>
+      <li>Request:</li>
+    </ul>
+  </li>
+  <li>To make a copy of a document:
+    <ul>
+      <li>Request: <code>curl -X COPY ...</code></li>
+    </ul>
+  </li>
+  <li>To request a UUID:
+    <ul>
+      <li>Request: <code>curl -X GET http://localhost:5984/_uuids</code></li>
+      <li>Response: <code>{"uuids":["d02bdee238b26628d1ce28f1c803304f"]}</code></li>
+    </ul>
+  </li>
+  <li>To compact a database:</li>
+</ul>
+
+<h3 id="other-administration-tasks">Other Administration Tasks</h3>
+
+<ul>
+  <li>UI Set up
+    <ul>
+      <li>To make Futon accessible outside of the localhost: Futon -&gt; configurations -&gt; Bind_Address - change the value to 0.0.0.0</li>
+    </ul>
+  </li>
+  <li>User Set up
+    <ul>
+      <li>After set up, CouchDb runs in ‘Admin Party Mode’ (anyone accessing has full admin rights). To create an admin user and password, click on ‘Fix me’ link at the bottom right corner in Futon. The new admin user id should be visible under http://localhost:5984/_utils/database.html?_users.</li>
+      <li>About Authentication: Couch has a pluggable authentication mechanism. Futon exposes a user friendly cookie-auth which handles login and logout.</li>
+    </ul>
+  </li>
+  <li>Database Set up
+    <ul>
+      <li>How to create our first database? Futon -&gt; Overview -&gt; Create database</li>
+    </ul>
+  </li>
+  <li>Replication Set up
+    <ul>
+      <li>How to replicate contents from DbX to DbY? Futon -&gt; Tools -&gt; Replicator -&gt; Select from and to databases, and check the ‘Continuous’ checkbox. If the target db requires authentication, specify the url as http://username:pass@remotehost:5984/DbY.</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="graph-databases">Graph Databases</h1>
+
+<h2 id="concepts">Concepts</h2>
+
+<h3 id="types-of-technologies-in-graph-space">Types of technologies in Graph space</h3>
+<ol>
+  <li><strong>Graph Databases</strong> - Technologies used primarily for transactional online graph persistence, typically accessed directly in real time from an application. They are the equivalent of “normal” OLTP databases in the relational world.
+  * Available Graph Dbs: Dex, FlockDB (Twitter), HyperGraphDb, InfiniteGraph, Neo4j, OrientDB, Titan, Microsoft Trinity.</li>
+  <li><strong>Graph Compute Engines</strong> - Technologies used primarily for offline graph analytics, typically performed as a series of batch steps. They are lik eother technologies for analysis of data in bulk, such as data mining and OLAP.
+  * Available Graph Compute Engines:
+    <ul>
+      <li>In-memory/Single machine: Cassovary</li>
+      <li>Distributed: Pegasus, Giraph</li>
+    </ul>
+  </li>
+</ol>
+
+<p>Graph databases either use a native graph storage or a non-native storage back-end (say a relational db). The benefit of a native graph storage is that its purpose-built stack is engineered for performance and scalability. The benefit of a non-native graph storage is the ease of use in production by the operation teams.</p>
+
+<h3 id="advantages-of-graph-databases">Advantages of Graph Databases</h3>
+<ul>
+  <li>Performance - In relation dbs, join across multiple tables is complex and tend to slow down with higher volume. In graph db, it is pretty much remains constant.</li>
+  <li>Flexible data model: Adding new nodes, subgraphs and relations is lot easier and less intrusive than in relational model. No need to change the schema or the existing queries.</li>
+  <li>Schemas are both rigid and brittle. Modifying schema often for business requirements is not an easy change. Creating a generic schema would end up with sparsely populated tables with many nullable columns. Vertical schemas add computational complexity in querying.</li>
+  <li>Recursive questions such as <em>“which customers bought this product who also bought that product?”</em> is easy to write in graph model compared to relational.</li>
+  <li>Pattern matching queries - e.g.?</li>
+  <li>Geospatial queries - e.g.,?</li>
+</ul>
+
+<h3 id="graph-data-models">Graph Data Models</h3>
+<ol>
+  <li>Property graph model
+  * A property graph has the following characteristics:
+  * It contains nodes and relationships
+  * Nodes contain properties (key-value pairs)
+  * Relationships are named and directed, and always have a start and end node
+  * Relationships can also contain properties
+* 2. RDF Triples - http://en.wikipedia.org/wiki/Resource_Description_Framework
+* 3. Hypergraphs
+  * Graph Query Languages: Cypher (Neo4j), SPARQL (RDF query language), Gremlin (Imperative, path-based language)</li>
+</ol>
+
+<ul>
+  <li>Graph Db Applications</li>
+  <li>Recommendation Engines - e.g.,?</li>
+  <li>Geospatial apps - e.g.,? Datastructure behind geospatial processing is R-tree. http://en.wikipedia.org/wiki/R-tree</li>
+</ul>
+
+<h2 id="neo4j">Neo4j</h2>
+
+<p>http://nosql.mypopescu.com/tagged/neo4j</p>
+
+<p>RDBMS is optimized for aggregated data. Neo4j is optimized for highly connected data.</p>
+
+<ul>
+  <li>Cypher
+    <ul>
+      <li>Get all node names –&gt;  <code>START n=node(*) RETURN n;</code></li>
+      <li>Get all nodes with rels –&gt; <code>START n=node(*) MATCH n-[r?]-() RETURN n, r;</code></li>
+      <li>Delete all nodes –&gt; <code>START n=node(*) MATCH n-[r?]-() DELETE n, r;</code></li>
+      <li>Query index –&gt; <code>START n=node:TASK_NAME('TASK_NAME:("Task1", "Task2", "Task3")') RETURN n;</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="bibliography">Bibliography</h1>
+
+<ul>
+  <li>Seven Databases in Seven Weeks</li>
+  <li>Graph Databases - O’Reilly</li>
+  <li><a href="http://nosql.findthebest.com/">http://nosql.findthebest.com/</a></li>
+  <li><a href="http://www.slideshare.net/samof76/distributed-keyvalue-stores-featuring-riak">http://www.slideshare.net/samof76/distributed-keyvalue-stores-featuring-riak</a></li>
+  <li>MongoDb
+    <ul>
+      <li>MongoDb - The Definitive Guide</li>
+      <li>MongoDB Applied Design Patterns</li>
+      <li>Scaling Mondodb</li>
+      <li>50 Tips &amp; Tricks for MongoDb Developers</li>
+    </ul>
+  </li>
+  <li>CouchDb
+    <ul>
+      <li>Getting Started with CouchDb</li>
+      <li><a href="http://www.couchbase.com/press-releases/couchbase-and-spring-data-make-it-easier-developers-build-next-generation-enterprise">http://www.couchbase.com/press-releases/couchbase-and-spring-data-make-it-easier-developers-build-next-generation-enterprise</a></li>
+      <li><a href="http://projects.spring.io/spring-data-couchbase/">http://projects.spring.io/spring-data-couchbase/</a></li>
+    </ul>
+  </li>
+</ul>
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/nosql.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/nosql.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

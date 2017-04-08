@@ -1,0 +1,490 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Cloud Computing - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Cloud Computing Benefits &amp; Risks Deployment Models Service Models Infrastructure-as–a-Service (IaaS) Platform-as-a-Service (PaaS) Software-as-a- &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/cloud-computing.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Cloud Computing</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#benefits--risks" id="markdown-toc-benefits--risks">Benefits &amp; Risks</a></li>
+  <li><a href="#deployment-models" id="markdown-toc-deployment-models">Deployment Models</a></li>
+  <li><a href="#service-models" id="markdown-toc-service-models">Service Models</a>    <ul>
+      <li><a href="#infrastructure-asa-service-iaas" id="markdown-toc-infrastructure-asa-service-iaas">Infrastructure-as–a-Service (IaaS)</a></li>
+      <li><a href="#platform-as-a-service-paas" id="markdown-toc-platform-as-a-service-paas">Platform-as-a-Service (PaaS)</a></li>
+      <li><a href="#software-as-a-service-saas" id="markdown-toc-software-as-a-service-saas">Software-as-a-Service (SaaS)</a></li>
+      <li><a href="#anything-as-a-service-xaas" id="markdown-toc-anything-as-a-service-xaas">Anything-as-a-Service (XaaS)</a></li>
+    </ul>
+  </li>
+  <li><a href="#characteristics" id="markdown-toc-characteristics">Characteristics</a></li>
+  <li><a href="#vms-vs-containers" id="markdown-toc-vms-vs-containers">VMs Vs Containers</a>    <ul>
+      <li><a href="#hypervisor" id="markdown-toc-hypervisor">Hypervisor</a></li>
+      <li><a href="#vms" id="markdown-toc-vms">VMs</a></li>
+      <li><a href="#containers" id="markdown-toc-containers">Containers</a></li>
+    </ul>
+  </li>
+  <li><a href="#faqs" id="markdown-toc-faqs">FAQs</a></li>
+  <li><a href="#tools" id="markdown-toc-tools">Tools</a></li>
+</ul>
+
+<h1 id="benefits--risks">Benefits &amp; Risks</h1>
+
+<ul>
+  <li><strong>Benefits</strong>
+    <ul>
+      <li>Cost effective</li>
+      <li>No software installation required</li>
+      <li>High efficiency, reliability &amp; flexibility</li>
+      <li>On-demand self-service</li>
+      <li>Online development &amp; deployment</li>
+    </ul>
+  </li>
+  <li><strong>Risks</strong>
+    <ul>
+      <li><em>Security &amp; Privacy</em> - any security breach may compromise sensitive customer data</li>
+      <li><em>Lock-In</em> - difficult for clients to switch from one Cloud Service Provider (CSP) to another</li>
+      <li><em>Isolation Failure</em> - failure of isolation mechanism that separates storage, memory, and routing between the different tenants.</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="deployment-models">Deployment Models</h1>
+
+<ul>
+  <li><strong>Public Cloud</strong>
+    <ul>
+      <li>The public cloud allows systems and services to be easily accessible to the general public. Public cloud may be less secure because of its openness.</li>
+    </ul>
+  </li>
+  <li><strong>Private Cloud</strong>
+    <ul>
+      <li>The private cloud allows systems and services to be accessible within an organization. It is more secured because of its private nature.</li>
+    </ul>
+  </li>
+  <li><strong>Community Cloud</strong>
+    <ul>
+      <li>The community cloud allows systems and services to be accessible by a group of organizations.</li>
+    </ul>
+  </li>
+  <li><strong>Hybrid Cloud</strong>
+    <ul>
+      <li>The hybrid cloud is a mixture of public and private cloud, in which the critical activities are performed using private cloud while the non-critical activities are performed using public cloud.</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="service-models">Service Models</h1>
+
+<p><img class="right" src="/technology/cloud-computing-service-models.jpg" /></p>
+
+<h2 id="infrastructure-asa-service-iaas">Infrastructure-as–a-Service (IaaS)</h2>
+
+<ul>
+  <li>IaaS is the most basic level of service. Each of the service models inherit the security and management mechanism from the underlying model, as shown in the following diagram</li>
+  <li>E.g., physical machines, virtual machines, virtual storage, etc.</li>
+</ul>
+
+<h2 id="platform-as-a-service-paas">Platform-as-a-Service (PaaS)</h2>
+
+<ul>
+  <li>PaaS provides the runtime environment for applications, development and deployment tools, etc.</li>
+</ul>
+
+<h2 id="software-as-a-service-saas">Software-as-a-Service (SaaS)</h2>
+
+<ul>
+  <li>SaaS model allows to use software applications as a service to end-users.</li>
+  <li>E.g., Gmail, Google Docs</li>
+  <li>Modes of SaaS
+    <ul>
+      <li>Software as a Service provides cloud application platform on which user can create application with the tools provided.</li>
+      <li>The modes of software as a service are defined as:
+        <ul>
+          <li><strong>Simple multi-tenancy</strong>: in this each user has its own resources that are different from other users. It is an inefficient mode where the user has to put more time and money to add more infrastructure if the demand rises in less time to deliver.</li>
+          <li><strong>Fine grain multi-tenancy</strong>: in this the functionality remains the same that the resources can be shared to many. But it is more efficient as the resources are shared not the data and permission within an application.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="anything-as-a-service-xaas">Anything-as-a-Service (XaaS)</h2>
+
+<p>Anything-as-a-Service (XaaS) is yet another service model, which includes <em>Network-as-a-Service</em>, <em>Business-as-a-Service</em>, <em>Identity-as-a-Service</em>, <em>Database-as-a-Service</em> or <em>Strategy-as-a-Service</em>.</p>
+
+<h1 id="characteristics">Characteristics</h1>
+
+<ul>
+  <li><strong>On Demand Self Service</strong>
+    <ul>
+      <li>Cloud Computing allows the users to use web services and resources on demand. One can logon to a website at any time and use them.</li>
+    </ul>
+  </li>
+  <li><strong>Broad Network Access</strong>
+    <ul>
+      <li>Since cloud computing is completely web based, it can be accessed from anywhere and at any time.</li>
+    </ul>
+  </li>
+  <li><strong>Resource Pooling</strong>
+    <ul>
+      <li>Cloud computing allows multiple tenants to share a pool of resources. One can share single physical instance of hardware, database and basic infrastructure.</li>
+    </ul>
+  </li>
+  <li><strong>Rapid Elasticity</strong>
+    <ul>
+      <li>It is very easy to scale the resources vertically or horizontally at any time. Scaling of resources means the ability of resources to deal with increasing or decreasing demand.</li>
+      <li>The resources being used by customers at any given point of time are automatically monitored.</li>
+    </ul>
+  </li>
+  <li><strong>Measured Service</strong>
+    <ul>
+      <li>In this service cloud provider controls and monitors all the aspects of cloud service. Resource optimization, billing, and capacity planning etc. depend on it.</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="vms-vs-containers">VMs Vs Containers</h1>
+
+<h2 id="hypervisor">Hypervisor</h2>
+
+<ul>
+  <li>The hypervisor sits in between the physical machine and virtual machines and provides virtualization services to the virtual machines. It intercepts the guest operating system operations on the virtual machines and emulates the operation on the host machine’s operating system.</li>
+  <li>The hypervisor handles creating the virtual environment on which the guest virtual machines operate.</li>
+  <li>It supervises the guest systems and makes sure that resources are allocated to the guests as necessary.</li>
+  <li>The rapid development of virtualization technologies has driven the use of virtualization further by allowing multiple virtual servers to be created on a single physical server with the help of hypervisors, such as Xen, VMware Player, KVM, etc., and incorporation of hardware support in commodity processors, such as Intel VT and AMD-V.</li>
+</ul>
+
+<p><img class="right" src="/technology/vm-vs-container.jpg" /></p>
+
+<p>Virtualization improves system utilization, decoupling applications from the underlying hardware, and enhancing workload mobility and protection.</p>
+
+<p>Hypervisors and VMs are just one approach to virtual workload deployment. Container virtualization is quickly emerging as an efficient and reliable alternative to traditional virtualization, providing new features and new concerns for data center professionals.</p>
+
+<h2 id="vms">VMs</h2>
+
+<ul>
+  <li>VMs is primarily in the location of the virtualization layer and the way that OS resources are used.</li>
+  <li>VMs rely on a hypervisor which is normally installed atop the actual <em>bare metal</em> system hardware. This has led to hypervisors being perceived as operating systems in their own right. Once the hypervisor layer is installed, VM instances can be provisioned from the system’s available computing resources. Each VM can then receive its own unique operating system and workload (application).</li>
+  <li><em>Isolation</em> - A full virtualized system gets its own set of resources allocated to it, and does minimal sharing. You get more isolation, but it is much heavier (requires more resources). VMs are fully isolated from one another – no VM is aware of (or relies on) the presence of another VM on the same system – and malware, application crashes and other problems impact only the affected VM.</li>
+  <li>VMs can be migrated from one virtualized system to another without regard for the system’s hardware or operating systems.</li>
+</ul>
+
+<h2 id="containers">Containers</h2>
+
+<ul>
+  <li>With containers, a host operating system is installed on the system first, and then a container layer (such as LXC or libcontainer) is installed atop the host OS which is usually a Linux variant.</li>
+  <li>Once the container layer is installed, container instances can be provisioned from the system’s available computing resources and enterprise applications can be deployed within the containers. However, every containerized application shares the same underlying operating system (the single host OS).</li>
+  <li><em>Isolation</em> - With containers (like Docker using LXC) you get less isolation, but they are more lightweight and require less resources. So you could easily run 1000’s on a host, and it doesn’t even blink.</li>
+  <li>Containers are regarded as more resource-efficient than VMs because the additional resources needed for each OS is eliminated – the resulting instances are smaller and faster to create or migrate. This means a single system can potentially host far more containers than VMs. Cloud providers are particularly enthusiastic about containers because far more container instances can be deployed across the same hardware investment. However, the single OS presents a single point of failure for all of the containers that use it. For example, a malware attack or crash of the host OS can disable or impact all of the containers. In addition, containers are easy to migrate, but can only be migrated to other servers with compatible operating system kernels (potentially limiting migration options).</li>
+</ul>
+
+<h1 id="faqs">FAQs</h1>
+
+<ul>
+  <li>Difference between scalability and elasticity?
+    <ul>
+      <li>Scalability is a characteristic of cloud computing through which increasing workload can be handled by increasing in proportion the amount of resource capacity. It allows the architecture to provide on demand resources if the requirement is being raised by the traffic.</li>
+      <li>Whereas, elasticity is being one of the characteristic provide the concept of commissioning and decommissioning of large amount of resource capacity dynamically. It is measured by the speed by which the resources are coming on demand and the usage of the resources. Elasticity is reversible scability</li>
+    </ul>
+  </li>
+  <li>Cloudbursting
+    <ul>
+      <li>A hybrid approach where many compute resources are kept private internally but when additional demand is needed, a public cloud is called upon to provide those temporary resources. This is called “Cloudbursting”</li>
+    </ul>
+  </li>
+  <li>What are the things to do to migrate an application to cloud? or How do you design an application to be cloud-native?</li>
+</ul>
+
+<h1 id="tools">Tools</h1>
+
+<ul>
+  <li><a href="http://techblog.netflix.com/2011/07/netflix-simian-army.html">Simian Army</a>
+    <ul>
+      <li><a href="http://techblog.netflix.com/2012/07/chaos-monkey-released-into-wild.html">Chaos monkey</a> - Self-healing system</li>
+    </ul>
+  </li>
+</ul>
+
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/cloud-computing.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/cloud-computing.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

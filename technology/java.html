@@ -1,0 +1,714 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Java Fundamentals - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Java Fundamentals Fundamentals Data Types Floating Point Arithmetic Cloning Date Finalization Mutability UUID OOPS Concepts Access Modifiers &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/java.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Java Fundamentals</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#fundamentals" id="markdown-toc-fundamentals">Fundamentals</a>    <ul>
+      <li><a href="#data-types" id="markdown-toc-data-types">Data Types</a>        <ul>
+          <li><a href="#floating-point-arithmetic" id="markdown-toc-floating-point-arithmetic">Floating Point Arithmetic</a></li>
+        </ul>
+      </li>
+      <li><a href="#cloning" id="markdown-toc-cloning">Cloning</a></li>
+      <li><a href="#date" id="markdown-toc-date">Date</a></li>
+      <li><a href="#finalization" id="markdown-toc-finalization">Finalization</a></li>
+      <li><a href="#mutability" id="markdown-toc-mutability">Mutability</a></li>
+      <li><a href="#uuid" id="markdown-toc-uuid">UUID</a></li>
+    </ul>
+  </li>
+  <li><a href="#oops-concepts" id="markdown-toc-oops-concepts">OOPS Concepts</a>    <ul>
+      <li><a href="#access-modifiers" id="markdown-toc-access-modifiers">Access Modifiers</a></li>
+      <li><a href="#overloading" id="markdown-toc-overloading">Overloading</a></li>
+      <li><a href="#overriding" id="markdown-toc-overriding">Overriding</a></li>
+      <li><a href="#final-keyword" id="markdown-toc-final-keyword">final keyword</a></li>
+      <li><a href="#static-keyword" id="markdown-toc-static-keyword">static keyword</a></li>
+      <li><a href="#nested-classes" id="markdown-toc-nested-classes">Nested classes</a></li>
+      <li><a href="#enums" id="markdown-toc-enums">Enums</a></li>
+      <li><a href="#interfaces" id="markdown-toc-interfaces">Interfaces</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="fundamentals">Fundamentals</h1>
+
+<h2 id="data-types">Data Types</h2>
+
+<h3 id="floating-point-arithmetic">Floating Point Arithmetic</h3>
+
+<ul>
+  <li>Java follows Binary Floating-point arithmetic standard
+    <ul>
+      <li>“float” - 4 bytes of storage, and have 23 binary digits of precision</li>
+      <li>“double” - 8 bytes of storage, and have 52 binary digits of precision.</li>
+    </ul>
+  </li>
+  <li><code>float f = 3.0f;</code> &lt;– single precision floating-point number constant</li>
+  <li><code>double d = 3.0d;</code>&lt;– double precision floating-point number constant</li>
+  <li>Not A Number(NaN) is produced if a floating point operation has some input parameters that cause the operation to produce some undefined result. Example, <code>0.0 / 0.0</code>, <code>Math.sqrt(-2.0)</code></li>
+  <li>
+    <p><code>float pi=3.14f;</code> &lt;– suffix ‘f’ is required, since in Java real constants are by default double.</p>
+  </li>
+  <li>Default Values
+    <ul>
+      <li><strong>Instance Variables</strong>
+        <ul>
+          <li>Objects = null</li>
+          <li>numbers = 0</li>
+          <li>char = ‘’</li>
+          <li>boolean = false</li>
+          <li>Arrays = null</li>
+        </ul>
+      </li>
+      <li><strong>Local Variables</strong>
+        <ul>
+          <li>Local variables are not initialized with any value; not even null. Uninitialized usage throws compilation error</li>
+          <li>Arrays = null</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Where primitives are stored?
+    <ul>
+      <li>Local variables -&gt; stack.</li>
+      <li>Instance and static variables -&gt; heap.</li>
+      <li>Don’t forget that for reference type variables, the value of a variable is a reference, not the object. (Arrays are reference types too - so if you have an int[], the values will be on the heap.)</li>
+      <li>Since Java 6, a smart VM may be able to detect if a particular reference type variable refers to an object which can never “escape” the current method. If that’s the case, it could potentially inline the whole object on the stack. (Read more on Escape Analysis)</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="cloning">Cloning</h2>
+
+<ul>
+  <li>Deep copy &amp; shallow copy</li>
+  <li>Cloneable interface</li>
+  <li>Pitfalls of Cloning
+    <ul>
+      <li>Implementation can get really complex, but still leading to unsuccessful copying</li>
+      <li><strong>Cloning does not call constructor to make a copy</strong>: As a result, it is your responsibility, as a writer of the clone method, to make sure all the members have been properly set. Here is an example of where things could go wrong. Consider a class keeping track of the total number of objects of that type, using a static int member. In the constructors you would increase the count. However, if you clone the object, since no constructor is called, the count will not truly reflect the number of objects!</li>
+      <li><strong>Problem involving <code>final</code> objects</strong>: In the below example, both the copies of ‘Dog’ will have all the 3 names, though it is not intended. The problem here is that, clone() is shallow copy, and the same List<String> is used for both objects</String></li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Dog</span> <span class="kd">implements</span> <span class="n">Cloneable</span> <span class="o">{</span>
+</span><span class="line">   <span class="kd">public</span> <span class="kd">final</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">names</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;();</span>
+</span><span class="line">   <span class="kd">public</span> <span class="kt">int</span> <span class="n">age</span><span class="o">;</span>
+</span><span class="line">   <span class="kd">public</span> <span class="kt">int</span> <span class="n">weight</span><span class="o">;</span>
+</span><span class="line">   <span class="kd">public</span> <span class="n">Dog</span> <span class="nf">clone</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">       <span class="k">try</span> <span class="o">{</span>
+</span><span class="line">           <span class="k">return</span> <span class="o">(</span><span class="n">Dog</span><span class="o">)</span> <span class="kd">super</span><span class="o">.</span><span class="na">clone</span><span class="o">();</span>
+</span><span class="line">       <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">CloneNotSupportedException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">           <span class="k">throw</span> <span class="k">new</span> <span class="nf">Error</span><span class="o">(</span><span class="s">&quot;Is too&quot;</span><span class="o">);</span>
+</span><span class="line">       <span class="o">}</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line">   <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(){</span>
+</span><span class="line">      <span class="n">Dog</span> <span class="n">bowser</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Dog</span><span class="o">();</span>
+</span><span class="line">      <span class="n">bowser</span><span class="o">.</span><span class="na">names</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">&quot;Fido&quot;</span><span class="o">);</span>
+</span><span class="line">      <span class="n">Dog</span> <span class="n">bobBarker</span> <span class="o">=</span> <span class="n">bowser</span><span class="o">.</span><span class="na">clone</span><span class="o">();</span>
+</span><span class="line">      <span class="n">bowser</span><span class="o">.</span><span class="na">names</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">&quot;Bowser&quot;</span><span class="o">);</span>
+</span><span class="line">      <span class="n">bobBarker</span><span class="o">.</span><span class="na">names</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">&quot;Bob Barker&quot;</span><span class="o">);</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="date">Date</h2>
+
+<ul>
+  <li>Java date – timezone – database timezone support?</li>
+  <li>http://www.date4j.net/</li>
+  <li><a href="http://martinfowler.com/bliki/TimeZoneUncertainty.html">TimeZone uncertainity</a></li>
+  <li>http://c2.com/cgi/wiki/wiki?JavaUtilDate</li>
+  <li>Date &amp; Time - GregorianCalendar, TimeZone</li>
+  <li>Issues with Java Date API</li>
+</ul>
+
+<h2 id="finalization">Finalization</h2>
+<p><code>java.lang.System.runFinalization()</code> - Runs the finalization methods of any objects pending finalization. Calling this method suggests that the Java Virtual Machine expend effort toward running the finalize methods of objects that have been found to be discarded but whose finalize methods have not yet been run. When control returns from the method call, the Java Virtual Machine has made a best effort to complete all outstanding finalizations.</p>
+
+<h2 id="mutability">Mutability</h2>
+<p>An immutable object is one whose externally visible state cannot change after it is instantiated.eg., String, Integer, BigDecimal, etc. For all immutable objects, it’s better to hide constructors and use factories.</p>
+
+<ul>
+  <li>Why Hashtable keys needs to be immutable objects?
+    <ul>
+      <li>If you use mutable object as Hashtable key and if the object’s state changes, then the Hashtable implementation wouldn’t be able return the object it contains since the hashcode is different now. This would lead to memory leak.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="uuid">UUID</h2>
+
+<p>…</p>
+
+<h1 id="oops-concepts">OOPS Concepts</h1>
+
+<h2 id="access-modifiers">Access Modifiers</h2>
+
+<ul>
+  <li><strong>public</strong>
+    <ul>
+      <li>can be applied to class (both inner &amp; outer), method, field.</li>
+      <li>A public method in a class is accessible to the outside world only if the class is declared as public. If the class does not specify any access modifier, then the public method is accessible only within the containing package.</li>
+    </ul>
+  </li>
+  <li><strong>private</strong>
+    <ul>
+      <li>can only be applied inner class, method and field.</li>
+    </ul>
+  </li>
+  <li><strong>protected</strong>
+    <ul>
+      <li>can be applied to inner class, method, field.</li>
+    </ul>
+  </li>
+  <li><strong>default</strong>
+    <ul>
+      <li>can be applied to class(both inner &amp; outer), method, field.</li>
+      <li>One significant difference between these two access modifiers arises when we talk about a subclass belonging to another package than its superclass. In this case, protected members are accessible in the subclass, whereas default members are not.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="overloading">Overloading</h2>
+
+<ul>
+  <li>The signature of a method is made up of the method name, number of arguments, and types of arguments. You can overload methods with same name but with different signatures.</li>
+  <li>Overloading is an example of static polymorphism - meaning different forms of the method is resolved at compile-time.</li>
+  <li>Method &amp; Constructor Overloading</li>
+  <li><strong>Overload resolution</strong> - set of rules used by compiler to resolve which method to call. For resolving a method call, it first looks for the exact match—the method definition with exactly same number of parameters and types of parameters. If it can’t find an exact match, it looks for the closest match by using upcasts. The compiler throws error if there are no matches or ambiguous matches.</li>
+</ul>
+
+<h2 id="overriding">Overriding</h2>
+
+<ul>
+  <li>You can invoke methods from the base class reference; however, the actual method invocation depends on the dynamic type of the object pointed to by the base class reference. The type of the base class reference is known as the <strong>static type</strong> of the object and the actual object pointed by the reference at runtime is known as the <strong>dynamic type</strong> of the object.</li>
+  <li>When the compiler sees the invocation of a method from a base class reference and if the method is an overridable method (a non-static and non-final method), the compiler defers determining the exact method to be called to runtime (late binding). At runtime, based on the actual dynamic type of the object, an appropriate method is invoked. This mechanism is known as <strong>dynamic method resolution</strong> or <strong>dynamic method invocation</strong>.</li>
+  <li>A static method is resolved statically. Inside the static method, a virtual method is invoked, which is resolved dynamically.</li>
+  <li>Things to watch while overriding
+    <ul>
+      <li>Should have the same argument list types (or compatible types) as the base version.</li>
+      <li>Should have the same return type. But from Java 5 onwards, the return type can be a subclass–covariant return types.</li>
+      <li>Should not have a more restrictive access modifier than the base version. But it may have a less restrictive access modifier.</li>
+      <li>Should not throw new or broader checked exceptions. But it may throw fewer or narrower checked exceptions, or any unchecked exception.</li>
+    </ul>
+  </li>
+  <li><strong>Covariant Return Types</strong> - copy() method is overridden in line 8 returning Shape, due to which explicit downcasting is needed on line 13. Since Java 5, overridden methods can return a sub-class covariant type to avoid this (returning Circle in this case).</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">abstract</span> <span class="kd">class</span> <span class="nc">Shape</span> <span class="o">{</span>
+</span><span class="line">	<span class="c1">// other methods...</span>
+</span><span class="line">	<span class="kd">public</span> <span class="kd">abstract</span> <span class="n">Shape</span> <span class="nf">copy</span><span class="o">();</span>
+</span><span class="line"><span class="o">}</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">class</span> <span class="nc">Circle</span> <span class="kd">extends</span> <span class="n">Shape</span> <span class="o">{</span>
+</span><span class="line">	<span class="c1">// other methods...</span>
+</span><span class="line">	<span class="kd">public</span> <span class="nf">Circle</span><span class="o">(</span><span class="kt">int</span> <span class="n">x</span><span class="o">,</span> <span class="kt">int</span> <span class="n">y</span><span class="o">,</span> <span class="kt">int</span> <span class="n">radius</span><span class="o">)</span> <span class="o">{</span> <span class="cm">/* initialize fields here */</span> <span class="o">}</span>
+</span><span class="line">
+</span><span class="line">	<span class="kd">public</span> <span class="n">Shape</span> <span class="nf">copy</span><span class="o">()</span> <span class="o">{</span> <span class="cm">/* return a copy of this object */</span> <span class="o">}</span>
+</span><span class="line">
+</span><span class="line">	<span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
+</span><span class="line">		<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span> <span class="o">[]</span><span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">		<span class="n">Circle</span> <span class="n">c1</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Circle</span><span class="o">(</span><span class="mi">10</span><span class="o">,</span> <span class="mi">20</span><span class="o">,</span> <span class="mi">30</span><span class="o">);</span>
+</span><span class="line">		<span class="n">Circle</span> <span class="n">c2</span> <span class="o">=</span> <span class="o">(</span><span class="n">Circle</span><span class="o">)</span><span class="n">c1</span><span class="o">.</span><span class="na">copy</span><span class="o">();</span>
+</span><span class="line">	<span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><code>@Override</code> - In order to overcome the subtle problems of overloading, Java 5 introduced @Override annotation. This explicitly expresses to the Java compiler the intention of the programmer to use method overriding. In case the compiler is not satisfied with your overridden method, it will issue a complaint. Also, the annotation makes you understand that you are overriding a method.</li>
+</ul>
+
+<h2 id="final-keyword">final keyword</h2>
+
+<ul>
+  <li>Final class - is a non-inheritable class.</li>
+  <li>In general, OOP suggests that a class should be open for extension but closed for modification (Open/Closed Principle). However, it is useful for important reasons</li>
+  <li>To prevent a behavior change by subclassing. e.g. java.lang.System, java.lang.String</li>
+  <li>Improved performance (moderate)- All method calls of a final class can be resolved at compile time itself. As there is no possibility of overriding the methods, it is not necessary to resolve the actual call at runtime for final classes, which translates to improved performance. For the same reason, final classes encourage the inlining of methods. If the calls are to be resolved at runtime, they cannot be inlined.</li>
+  <li>Final methods are non-overrideable</li>
+  <li>Final variables are constants - The value of a final parameter cannot be changed once assigned. Here, it is important to note that the “value” is implicitly understood for primitive types. However, the “value” for an object refers to the object reference, not its state. Therefore, you can change the internal state of the passed final object, but you cannot change the reference itself.</li>
+</ul>
+
+<h2 id="static-keyword">static keyword</h2>
+<ul>
+  <li>static variable
+    <ul>
+      <li>is called class variable since it is associated with its class rather than the object.</li>
+      <li>is initialized when the class is loaded first.</li>
+      <li>A local variable (within a block or method) cannot be declared as static.</li>
+    </ul>
+  </li>
+  <li>static method
+    <ul>
+      <li>invoked by using class names. It is not recommended to use instance variables to call a static method.</li>
+      <li>cannot access instance variables and methods. It can only access static variables and can call only static methods. In contrast, an instance method (non-static) may call a static method or access a static variable.</li>
+      <li>cannot use the this keyword in its body since it is associated with a class and not an instance. Only instance methods have an implicit reference associated with them; hence class methods do not have a this reference associated with them.</li>
+      <li>cannot be overridden. Because, based on the instance type, the method call is resolved with runtime polymorphism. Since static methods are associated with a class (and not with an instance), you cannot override static methods, and runtime polymorphism is not possible with static methods.</li>
+      <li>cannot use the super keyword in its body. Why? You use the super keyword for invoking the base class method from the overriding method in the derived class. Since you cannot override static methods, you cannot use the super keyword in its body.</li>
+    </ul>
+  </li>
+  <li>static block
+    <ul>
+      <li>will be executed by JVM when it loads the class into memory.</li>
+    </ul>
+  </li>
+  <li>static class - only an inner class can be defined static.</li>
+</ul>
+
+<h2 id="nested-classes">Nested classes</h2>
+
+<ul>
+  <li>Nested class is a class defined inside the body of another class (or interface).</li>
+  <li>Types
+    <ul>
+      <li>Static nested classes
+        <ul>
+          <li>can access static members on the outer class.</li>
+          <li>The outer class can also access the members (even private members) of the nested class through an object of nested class. If you don’t declare an instance of the nested class, the outer class cannot access nested class elements directly.</li>
+          <li>A class or an interface defined inside an interface is implicitly static.</li>
+        </ul>
+      </li>
+      <li>Inner classes
+        <ul>
+          <li>Every inner class is associated with an instance of the outer class.</li>
+          <li>The accessibility (public, protected, etc.) of the inner class is defined by the outer class.</li>
+          <li>Outer &amp; inner classes can access members of each other regardless of the access specifiers.</li>
+          <li>You can access members of an outer class within an inner class without creating an instance; but this is not the case with an outer class.</li>
+          <li>Limitation: cannot declare static members in an inner class.</li>
+        </ul>
+      </li>
+      <li>Local inner classes
+        <ul>
+          <li>Unlike static nested classes and inner classes, local inner classes are not members of an outer class; they are just local to the method or code in which they are defined.</li>
+          <li>Since you cannot declare a local variable static, you also cannot declare a local class static.</li>
+          <li>Since you cannot define methods in interfaces, you cannot have local classes or interfaces inside an interface. Nor can you create local interfaces</li>
+          <li>can acces the method arguments and all the variables defined in the body of the code only if they are declared final.</li>
+        </ul>
+      </li>
+      <li>Anonymous classes
+        <ul>
+          <li>Same as local inner class without a name.</li>
+          <li>cannot have explicit constructors since there is no name.</li>
+          <li>can acces the method arguments and all the variables defined in the body of the code only if they are declared final.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<table>
+	<thead>
+		<tr>
+			<th>           </th>
+			<th> Static </th>
+			<th> Non-static </th>
+			<th> Anonymous </th>
+		</tr>
+		</thead>
+		<tbody>
+		<tr>
+			<td> <strong>Non-local</strong> </td>
+			<td style="vertical-align: top"> Static nested class
+<pre>
+class Outer{
+   static class Inner{}
+}
+
+class Outer{
+   static interface Inner{}
+}
+
+interface Outer{
+   static class Inner{}
+}
+
+interface Outer{
+   static interface Inner{}
+}
+</pre>
+			</td>
+			<td style="vertical-align: top"> Inner class 
+<pre>
+class Outer{
+   class InnerClass{
+   }
+}
+
+class Outer{
+   interface Inner{}
+}
+</pre>
+			</td>
+			<td> Not possible </td>
+		</tr>
+		<tr>
+			<td> <strong>Local</strong>     </td>
+			<td> Not possible        </td>
+			<td style="vertical-align: top"> Local inner class 
+<pre>
+class Outer{
+   void foo(final Object arg){
+      class LocalInner{
+      }
+   }
+}
+</pre>
+			</td>
+			<td style="vertical-align: top"> Anonymous inner class 
+<pre>
+class Outer{
+   Object foo(){
+      return new Object(){ 
+         public String toString(){ 
+            return "anonymous";
+         }
+      }
+   }
+}
+</pre>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<h2 id="enums">Enums</h2>
+
+<ul>
+  <li>A constructor in an enum class can only be specified as <code>private</code>.</li>
+  <li>are implicitly declared <code>public</code>, <code>static</code>, and <code>final</code>, which means you cannot extend them.</li>
+  <li>An enum implicitly inherits from java.lang.Enum and get converted internally to classes. Further, enum constants are instances of the enumeration class for which the constant is declared as a member.</li>
+  <li>cannot use the new operator on enum data types, even inside the enum class.</li>
+  <li>Enumeration constants cannot be cloned.</li>
+</ul>
+
+<h2 id="interfaces">Interfaces</h2>
+
+<ul>
+  <li>cannot declare static methods.</li>
+  <li>All fields are implicitly considered to be declared as <code>public</code>, <code>static</code> &amp; <code>final</code>.</li>
+  <li>only public methods and variables are allowed in an interface. No <code>protected</code> or <code>private</code>.</li>
+  <li>All methods declared in an interface are implicitly considered to be <code>abstract</code>. You can also explicitly use the <code>abstract</code> qualifier for the method.</li>
+</ul>
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/java.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/java.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

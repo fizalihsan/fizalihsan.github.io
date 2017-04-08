@@ -1,0 +1,511 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Apache Camel - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Apache Camel Messaging Model Messages Exchanges Components Bibliography Camel is an integration framework, not an ESB. Camel is a routing engine &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/camel.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Apache Camel</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#messaging-model" id="markdown-toc-messaging-model">Messaging Model</a>    <ul>
+      <li><a href="#messages" id="markdown-toc-messages">Messages</a></li>
+      <li><a href="#exchanges" id="markdown-toc-exchanges">Exchanges</a></li>
+    </ul>
+  </li>
+  <li><a href="#components" id="markdown-toc-components">Components</a></li>
+  <li><a href="#bibliography" id="markdown-toc-bibliography">Bibliography</a></li>
+</ul>
+
+<ul>
+  <li>Camel is an integration framework, not an ESB.</li>
+  <li>Camel is a routing engine builder</li>
+  <li>Camel is based on patterns defined in <a href="http://www.enterpriseintegrationpatterns.com">Enterprise Integration Patterns</a> by Gregor Hohpe and Bobby Wolf</li>
+</ul>
+
+<h1 id="messaging-model">Messaging Model</h1>
+
+<ul>
+  <li><code>org.apache.camel.Message</code> —The fundamental entity containing the data being carried and routed in Camel</li>
+  <li><code>org.apache.camel.Exchange</code> — The Camel abstraction for an exchange of messages. This exchange of messages has an “in” message and as a reply, an “out” message</li>
+</ul>
+
+<h2 id="messages">Messages</h2>
+
+<p><img class="right" src="/technology/camel-message-structure.PNG" /></p>
+
+<ul>
+  <li>Messages are the entities used by systems to communicate with each other when using messaging channels.</li>
+  <li>Messages flow in one direction from a sender to a receiver</li>
+  <li>Messages have a body (a payload), headers, and optional attachments</li>
+  <li>Messages are uniquely identified with an identifier of type <code>java.lang.String</code>. The identifier’s uniqueness is enforced and guaranteed by the message creator, it’s protocol dependent, and it doesn’t have a guaranteed format. For protocols that don’t define a unique message identification scheme, Camel uses its own UID generator.</li>
+  <li>
+    <p>During routing, messages are contained in an exchange.</p>
+  </li>
+  <li>Headers and Attachments
+    <ul>
+      <li>Headers are values associated with the message, such as sender identifiers, hints about content encoding, authentication information, and so on.</li>
+      <li>Headers are name-value pairs; the name is a unique, case-insensitive string, and the value is of type <code>java.lang.Object</code>. Headers are stored as a map within the message.</li>
+      <li>A message can also have optional attachments, which are typically used for the web service and email components.</li>
+    </ul>
+  </li>
+  <li>Body
+    <ul>
+      <li>The body is of type <code>java.lang.Object</code>, and can store any kind of content.</li>
+      <li>When the sender and receiver use different body formats, Camel provides a number of mechanisms to transform the data into an acceptable format, and in many cases the conversion happens automatically with type converters, behind the scenes.</li>
+    </ul>
+  </li>
+  <li>Fault Flag
+    <ul>
+      <li>Messages also have a fault flag. Some protocols and specifications, such as WSDL and JBI, distinguish between output and fault messages. They’re both valid responses to invoking an operation, but the latter indicates an unsuccessful outcome. In general, faults aren’t handled by the integration infrastructure. They’re part of the contract between the client and the server and are handled at the application level.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="exchanges">Exchanges</h2>
+
+<p><img class="right" src="/technology/camel-exchange-structure.PNG" /></p>
+
+<ul>
+  <li>An exchange is the message’s container during routing.</li>
+  <li>Message Exchange Patterns (MEPs)
+    <ul>
+      <li>A pattern that denotes whether you’re using the InOnly or InOut messaging style.</li>
+      <li>MEPs are used to differentiate between <em>one-way</em> and <em>request-response</em> messaging styles.</li>
+      <li><strong>InOnly</strong> — A one-way message (also known as an <em>Event</em> message). For example,  JMS messaging is often one-way messaging.</li>
+      <li><strong>InOut</strong> — A request-response message. For example, HTTP-based transports are often request reply, where a client requests to retrieve a web page, waiting for the reply from the server.</li>
+    </ul>
+  </li>
+  <li>Exchange ID
+    <ul>
+      <li>A unique ID that identifies the exchange.</li>
+      <li>If not provided explicitly it will be auto-generated by default.</li>
+    </ul>
+  </li>
+  <li>Exception</li>
+  <li>Properties
+    <ul>
+      <li>Similar to message headers, but they last for the duration of the entire exchange.</li>
+      <li>Used to contain global-level information, whereas message headers are specific to a particular message.</li>
+      <li>Camel itself adds various properties to the exchange during routing. Developer can store and retrieve properties at any point during the lifetime of an exchange.</li>
+    </ul>
+  </li>
+  <li>In message
+    <ul>
+      <li>This is the input message, which is mandatory. The in message contains the request message.</li>
+    </ul>
+  </li>
+  <li>Out message
+    <ul>
+      <li>This is an optional message that only exists if the MEP is InOut. The out message contains the reply message.</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="components">Components</h1>
+
+<table>
+  <tbody>
+    <tr>
+      <td><img src="/technology/camel-architecture.PNG" /></td>
+      <td><img src="/technology/camel-components.PNG" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>Routing Engine
+    <ul>
+      <li>is what actually moves messages under the hood</li>
+      <li>uses routes as specifications for where messages are routed.</li>
+      <li>Routes are defined using one of Camel’s domain-specific languages (DSLs).</li>
+    </ul>
+  </li>
+  <li>Routes
+    <ul>
+      <li>Simplest way to define a route is as a chain of processors.</li>
+      <li>Each route has a unique identifier that’s used for logging, debugging, monitoring, and starting and stopping routes.</li>
+      <li>Routes also have exactly one input source for messages, so they’re effectively tied to an input endpoint.</li>
+      <li>To define a route, a DSL is used</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Example Route in Java DSL</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">from</span><span class="o">(</span><span class="s">&quot;file:data/inbox&quot;</span><span class="o">)</span>
+</span><span class="line">	<span class="o">.</span><span class="na">filter</span><span class="o">().</span><span class="na">xpath</span><span class="o">(</span><span class="s">&quot;/order[not(@test)]&quot;</span><span class="o">)</span>
+</span><span class="line">	<span class="o">.</span><span class="na">to</span><span class="o">(</span><span class="s">&quot;jms:queue:order&quot;</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Endpoints
+    <ul>
+      <li>In Camel, endpoints are configured using URIs. e.g., <code>file:data/inbox?delay=5000</code>.
+        <ul>
+          <li><code>file</code> denotes which Camel component handles that type of endpoint. In this case, the scheme of file selects the <code>FileComponent</code>. The FileComponent then works as a factory creating the FileEndpoint based on the remaining parts of the URI.</li>
+          <li>The context path tells the <code>FileComponent</code> that the starting folder is <code>data/inbox</code>.</li>
+          <li>The option, <code>delay=5000</code> indicates that files should be polled at a 5 second interval.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<table>
+  <tbody>
+    <tr>
+      <td><img src="/technology/camel-endpoint.PNG" /></td>
+      <td><img src="/technology/camel-endpoint-uri.PNG" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>Processors
+    <ul>
+      <li>used to transform and manipulate messages during routing and also to implement all the EIP patterns.</li>
+      <li>The processor represents a node capable of using, creating, or modifying an incoming exchange.</li>
+      <li>During routing, exchanges flow from one processor to another; as such, you can think of a route as a graph having specialized processors as the nodes, and lines that connect the output of one processor to the input of another.</li>
+    </ul>
+  </li>
+  <li>Components
+    <ul>
+      <li>are the extension points in Camel for adding connectivity to other systems. To expose these systems to the rest of Camel, components provide an endpoint interface.</li>
+      <li>There are over 80 components in the Camel ecosystem that range in function from data transports, to DSLs, data formats, etc.</li>
+      <li>Components are associated with a name that’s used in a URI, and they act as a factory of endpoints. E.g., a <code>FileComponent</code> is referred to by file in a URI, and it creates <code>FileEndpoints</code>.</li>
+    </ul>
+  </li>
+  <li>Producers
+    <ul>
+      <li>an entity capable of creating and sending a message to an endpoint.</li>
+      <li>When a message needs to be sent to an endpoint, the producer will create an exchange and populate it with data compatible with that particular endpoint. For example,
+        <ul>
+          <li>a <code>FileProducer</code> will write the message body to a file.</li>
+          <li>A <code>JmsProducer</code>, on the other hand, will map the Camel message to a <code>javax.jms.Message</code> before sending it to a JMS destination.</li>
+        </ul>
+      </li>
+      <li>It hides the complexity of interacting with particular transports. All you need to do is route a message to an endpoint, and the producer does the heavy lifting.</li>
+    </ul>
+  </li>
+  <li>Consumers
+    <ul>
+      <li>A consumer is the service that receives messages produced by a producer, wraps them in an exchange, and sends them to be processed.</li>
+      <li>Consumers are the source of the exchanges being routed in Camel.</li>
+      <li>To create a new exchange, a consumer will use the endpoint that wraps the payload being consumed.</li>
+      <li>A processor is then used to initiate the routing of the exchange in Camel using the routing engine.</li>
+      <li>Consumer Types
+        <ul>
+          <li><strong>Event-driven consumer</strong></li>
+          <li><strong>Polling consumer</strong></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<table>
+  <tbody>
+    <tr>
+      <td><strong>Event-driven consumer</strong></td>
+      <td><strong>Polling consumer</strong></td>
+    </tr>
+    <tr>
+      <td><img src="/technology/camel-event-driven-consumer.PNG" /></td>
+      <td><img src="/technology/camel-polling-consumer.PNG" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<h1 id="bibliography">Bibliography</h1>
+
+<ul>
+  <li>Books
+    <ul>
+      <li>Camel in Action by Claus Ibsen, Jonathan</li>
+    </ul>
+  </li>
+</ul>
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/camel.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/camel.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

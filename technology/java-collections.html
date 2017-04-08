@@ -1,0 +1,1097 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Java Collections - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Java Collections Generics Types The Get and Put Principle Subtyping Principle Variance Type Erasure Collections Framework Concurrent Collections &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/java-collections.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Java Collections</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#generics" id="markdown-toc-generics">Generics</a>    <ul>
+      <li><a href="#types" id="markdown-toc-types">Types</a></li>
+      <li><a href="#the-get-and-put-principle" id="markdown-toc-the-get-and-put-principle">The Get and Put Principle</a></li>
+      <li><a href="#subtyping-principle" id="markdown-toc-subtyping-principle">Subtyping Principle</a></li>
+      <li><a href="#variance" id="markdown-toc-variance">Variance</a></li>
+      <li><a href="#type-erasure" id="markdown-toc-type-erasure">Type Erasure</a></li>
+    </ul>
+  </li>
+  <li><a href="#collections-framework" id="markdown-toc-collections-framework">Collections Framework</a>    <ul>
+      <li><a href="#concurrent-collections" id="markdown-toc-concurrent-collections">Concurrent Collections</a></li>
+      <li><a href="#iterators" id="markdown-toc-iterators">Iterators</a>        <ul>
+          <li><a href="#fail-fast-iterators" id="markdown-toc-fail-fast-iterators">Fail-fast iterators</a></li>
+          <li><a href="#fail-safe-iterators" id="markdown-toc-fail-safe-iterators">Fail-safe iterators</a></li>
+          <li><a href="#listiterator" id="markdown-toc-listiterator">ListIterator</a></li>
+        </ul>
+      </li>
+      <li><a href="#lists" id="markdown-toc-lists">Lists</a>        <ul>
+          <li><a href="#arraylist" id="markdown-toc-arraylist">ArrayList</a></li>
+          <li><a href="#linkedlist" id="markdown-toc-linkedlist">LinkedList</a></li>
+          <li><a href="#copyonwritearraylist" id="markdown-toc-copyonwritearraylist">CopyOnWriteArrayList</a></li>
+        </ul>
+      </li>
+      <li><a href="#queues-and-deques" id="markdown-toc-queues-and-deques">Queues and Deques</a>        <ul>
+          <li><a href="#arraydeque" id="markdown-toc-arraydeque">ArrayDeque</a></li>
+          <li><a href="#stack" id="markdown-toc-stack">Stack</a></li>
+          <li><a href="#priorityqueue" id="markdown-toc-priorityqueue">PriorityQueue</a></li>
+          <li><a href="#arrayblockingqueue" id="markdown-toc-arrayblockingqueue">ArrayBlockingQueue</a></li>
+          <li><a href="#concurrentlinkedqueue--concurrentlinkeddeque" id="markdown-toc-concurrentlinkedqueue--concurrentlinkeddeque">ConcurrentLinkedQueue / ConcurrentLinkedDeque</a></li>
+          <li><a href="#delaydeque" id="markdown-toc-delaydeque">DelayDeque</a></li>
+          <li><a href="#linkedblockingqueue--linkedblockingdeque" id="markdown-toc-linkedblockingqueue--linkedblockingdeque">LinkedBlockingQueue / LinkedBlockingDeque</a></li>
+          <li><a href="#linkedtransferqueue" id="markdown-toc-linkedtransferqueue">LinkedTransferQueue</a></li>
+          <li><a href="#priorityblockingqueue" id="markdown-toc-priorityblockingqueue">PriorityBlockingQueue</a></li>
+          <li><a href="#synchronousqueue" id="markdown-toc-synchronousqueue">SynchronousQueue</a></li>
+          <li><a href="#queues-summary" id="markdown-toc-queues-summary">Queues Summary</a></li>
+        </ul>
+      </li>
+      <li><a href="#sets" id="markdown-toc-sets">Sets</a>        <ul>
+          <li><a href="#hashset" id="markdown-toc-hashset">HashSet</a></li>
+          <li><a href="#bitset" id="markdown-toc-bitset">BitSet</a></li>
+          <li><a href="#enumset" id="markdown-toc-enumset">EnumSet</a></li>
+          <li><a href="#linkedhashset" id="markdown-toc-linkedhashset">LinkedHashSet</a></li>
+          <li><a href="#treeset" id="markdown-toc-treeset">TreeSet</a></li>
+          <li><a href="#concurrentskiplistset" id="markdown-toc-concurrentskiplistset">ConcurrentSkipListSet</a></li>
+          <li><a href="#copyonwritearrayset" id="markdown-toc-copyonwritearrayset">CopyOnWriteArraySet</a></li>
+          <li><a href="#sets-summary" id="markdown-toc-sets-summary">Sets Summary</a></li>
+        </ul>
+      </li>
+      <li><a href="#maps" id="markdown-toc-maps">Maps</a>        <ul>
+          <li><a href="#hashmap" id="markdown-toc-hashmap">HashMap</a></li>
+          <li><a href="#enummap" id="markdown-toc-enummap">EnumMap</a></li>
+          <li><a href="#identityhashmap" id="markdown-toc-identityhashmap">IdentityHashMap</a></li>
+          <li><a href="#linkedhashmap" id="markdown-toc-linkedhashmap">LinkedHashMap</a></li>
+          <li><a href="#treemap" id="markdown-toc-treemap">TreeMap</a></li>
+          <li><a href="#weakhashmap" id="markdown-toc-weakhashmap">WeakHashMap</a></li>
+          <li><a href="#concurrenthashmap" id="markdown-toc-concurrenthashmap">ConcurrentHashMap</a></li>
+          <li><a href="#concurrentskiplistmap" id="markdown-toc-concurrentskiplistmap">ConcurrentSkipListMap</a></li>
+          <li><a href="#maps-summary" id="markdown-toc-maps-summary">Maps Summary</a></li>
+        </ul>
+      </li>
+      <li><a href="#arrays--collections" id="markdown-toc-arrays--collections">Arrays &amp; Collections</a>        <ul>
+          <li><a href="#arrays" id="markdown-toc-arrays">Arrays</a></li>
+        </ul>
+      </li>
+      <li><a href="#comparable--comparator" id="markdown-toc-comparable--comparator">Comparable &amp; Comparator</a></li>
+    </ul>
+  </li>
+  <li><a href="#bibliography" id="markdown-toc-bibliography">Bibliography</a></li>
+</ul>
+
+<h1 id="generics">Generics</h1>
+
+<h2 id="types">Types</h2>
+
+<table>
+  <tbody>
+    <tr>
+      <td>Type Parameters</td>
+      <td>Description</td>
+    </tr>
+    <tr>
+      <td><T></T></td>
+      <td>Unbounded type; same as <T extends="" Object=""></T></td>
+    </tr>
+    <tr>
+      <td>&lt;T,P&gt;</td>
+      <td>Unbounded types; <T extends="" Object=""> and &lt;P extends Object&gt;</T></td>
+    </tr>
+    <tr>
+      <td><T extends="" P=""></T></td>
+      <td>Upper bounded type; a specific type T that is a subtype of type P</td>
+    </tr>
+    <tr>
+      <td>&lt;T extends P &amp; S&gt;</td>
+      <td>Upper bounded type; a specific type T that is a subtype of type P and that implements type S</td>
+    </tr>
+    <tr>
+      <td><T super="" P=""></T></td>
+      <td>Lower bounded type; a specific type T that is a supertype of type P</td>
+    </tr>
+    <tr>
+      <td>&lt;?&gt;</td>
+      <td>Unbounded wildcard; any object type, same as &lt;? extends Object&gt;</td>
+    </tr>
+    <tr>
+      <td>&lt;? extends P&gt;</td>
+      <td>Bounded wildcard; some unknown type that is a subtype of type P</td>
+    </tr>
+    <tr>
+      <td>&lt;? extends P &amp; S&gt;</td>
+      <td>Bounded wildcard; some unknown type that is a subtype of type P and that implements type S</td>
+    </tr>
+    <tr>
+      <td>&lt;? super P&gt;</td>
+      <td>Lower bounded wildcard; some unknown type that is a supertype of type P</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="the-get-and-put-principle">The Get and Put Principle</h2>
+
+<p>The <em>Get and Put Principle</em> details the best usage of <code>extends</code> and <code>super</code> wildcards.</p>
+
+<ul>
+  <li>Use an <code>extends</code> wildcard when you <strong>get</strong> only values out of a structure.</li>
+  <li>Use a <code>super</code> wildcard when you <strong>put</strong> only values into a structure.</li>
+  <li>Do not use a wildcard when you place both <strong>get</strong> and <strong>put</strong> values into a structure.</li>
+</ul>
+
+<blockquote>
+  <p>Note: When wildcard is used, only get operation is allowed - no mutable operations like add/put.</p>
+</blockquote>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>#1 - Only get is allowed. </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">List</span><span class="o">&lt;?&gt;</span> <span class="n">nums</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;();</span>
+</span><span class="line"><span class="n">nums</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span> <span class="c1">//not allowed </span>
+</span><span class="line"><span class="n">nums</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span> <span class="c1">//allowed. This is an exceptional case</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>#2 - Only get of any subtype of T is allowed </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">List</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">Number</span><span class="o">&gt;</span> <span class="n">nums</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;();</span>
+</span><span class="line"><span class="n">nums</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span> <span class="c1">//not allowed</span>
+</span><span class="line"><span class="n">nums</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="kc">null</span><span class="o">);</span> <span class="c1">//allowed. This is an exceptional case</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>#3 - </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">List</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">Integer</span><span class="o">&gt;</span> <span class="n">ints</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">,</span><span class="mi">4</span><span class="o">);</span>
+</span><span class="line"><span class="n">Integer</span> <span class="n">i</span> <span class="o">=</span> <span class="n">ints</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span> <span class="c1">//not allowed </span>
+</span><span class="line"><span class="n">Object</span> <span class="n">o</span> <span class="o">=</span> <span class="n">ints</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span> <span class="c1">//allowed</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="subtyping-principle">Subtyping Principle</h2>
+
+<ul>
+  <li>Integer is a subtype of Number</li>
+  <li>Integer[] is a subtype of Number[]</li>
+  <li>List<E> is a subtype of Collection<E></E></E></li>
+  <li>List<Integer> is NOT a subtype of List<Number></Number></Integer></li>
+</ul>
+
+<h2 id="variance">Variance</h2>
+
+<ul>
+  <li>Types
+    <ul>
+      <li><strong>Covariant</strong>: a <code>Cat[]</code> is an <code>Animal[]</code>. Java arrays are covariant.</li>
+      <li><strong>Contravariant</strong>: an <code>Animal[]</code> is a <code>Cat[]</code></li>
+      <li><strong>Invariant</strong>: an <code>Animal[]</code> is not a <code>Cat[]</code> and a <code>Cat[]</code> is not an <code>Animal[]</code>?. Java generics are invariant.</li>
+    </ul>
+  </li>
+  <li><strong>Covariant</strong> - Java arrays are covariant, meaning that type <code>S[]</code> is considered to be a subtype of <code>T[]</code> whenever <code>S</code> is a subtype of <code>T</code>. Due to this nature, the following code throws exception at runtime. When an array is allocated (as on the first line), it is tagged with its reified type (a run-time representation of its component type, in this case, Integer), and every time an array is assigned into (as on the third line), an <code>ArrayStoreException</code> is raised if the reified type is not compatible with the assigned value (in this case, a double cannot be stored into an array of Integer).</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">Integer</span><span class="o">[]</span> <span class="n">ints</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Integer</span><span class="o">[]</span> <span class="o">{</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">};</span>
+</span><span class="line"><span class="n">Number</span><span class="o">[]</span> <span class="n">nums</span> <span class="o">=</span> <span class="n">ints</span><span class="o">;</span>
+</span><span class="line"><span class="n">nums</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="o">=</span> <span class="mf">3.14</span><span class="o">;</span> <span class="c1">//ArrayStoreException at runtime since double is being assigned to an int</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><strong>Invariant</strong> - Java Generics are invariant, meaning that type <code>List&lt;S&gt;</code> is not considered to be a subtype of <code>List&lt;T&gt;</code>, except in the trivial case where <code>S</code> and <code>T</code> are identical.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">List</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">ints</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">);</span>
+</span><span class="line"><span class="n">List</span><span class="o">&lt;</span><span class="n">Number</span><span class="o">&gt;</span> <span class="n">nums</span> <span class="o">=</span> <span class="n">ints</span><span class="o">;</span> <span class="c1">// compile-time error</span>
+</span><span class="line"><span class="n">nums</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="mf">3.14</span><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><strong>Contravariant</strong> - Wildcards also introduce contravariant subtyping for generics, in that type <code>List&lt;S&gt;</code> is considered to be a subtype of <code>List&lt;? super T&gt;</code> when <code>S</code> is a supertype of <code>T</code> (as opposed to a subtype). Arrays do not support contravariant subtyping.</li>
+</ul>
+
+<p><strong>Points to remember</strong></p>
+
+<ul>
+  <li>Avoid mixing raw type and generic type.</li>
+  <li><code>(T t = new T(); //not allowed, where T is a generic type</code></li>
+  <li>Do not mix generics and varargs - http://www.javaspecialists.eu/archive/Issue140.html</li>
+</ul>
+
+<h2 id="type-erasure">Type Erasure</h2>
+
+<ul>
+  <li>Example 1 is implemented using generics and #2 is not. However, the bytecode for both the programs are exactly the same. Java internally converts the generic representation into a code that looks like Example #2, by erasing the type details and adding casts. This is called <strong><em>type erasure</em></strong>.</li>
+  <li>The reason behind such implementation is for backward compatibilty.</li>
+  <li>Java has <em>typed erased generics</em> which loses type information at runtime. JetBrains’ Kotlin language has <em>reified generics</em> which retains the type information at runtime.</li>
+  <li><strong>Reification</strong> means <em>preserving type information at runtime</em>. Java Generics are <strong>non-reifed.</strong></li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Example 1</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">List</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">words</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;();</span>
+</span><span class="line"><span class="n">words</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">&quot;Hello &quot;</span><span class="o">);</span>
+</span><span class="line"><span class="n">words</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">&quot;world!&quot;</span><span class="o">);</span>
+</span><span class="line"><span class="n">String</span> <span class="n">s</span> <span class="o">=</span> <span class="n">words</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">)+</span><span class="n">words</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">1</span><span class="o">);</span>
+</span><span class="line"><span class="k">assert</span> <span class="n">s</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="s">&quot;Hello world!&quot;</span><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Example 2</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">List</span> <span class="n">words</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">ArrayList</span><span class="o">();</span>
+</span><span class="line"><span class="n">words</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">&quot;Hello &quot;</span><span class="o">);</span>
+</span><span class="line"><span class="n">words</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">&quot;world!&quot;</span><span class="o">);</span>
+</span><span class="line"><span class="n">String</span> <span class="n">s</span> <span class="o">=</span> <span class="o">((</span><span class="n">String</span><span class="o">)</span><span class="n">words</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">0</span><span class="o">))+((</span><span class="n">String</span><span class="o">)</span><span class="n">words</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="mi">1</span><span class="o">));</span>
+</span><span class="line"><span class="k">assert</span> <span class="n">s</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="s">&quot;Hello world!&quot;</span><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h1 id="collections-framework">Collections Framework</h1>
+
+<h2 id="concurrent-collections">Concurrent Collections</h2>
+
+<p>The latest concurrent collections achieve thread-safety by different mechanisms.</p>
+
+<ul>
+  <li><strong>1. Copy-On-Write</strong>
+    <ul>
+      <li>Classes that use copy-on-write store their values in an internal array, which is effectively immutable; any change to the value of the collection results in a new array being created to represent the new values.</li>
+      <li>Synchronization is used by these classes, though only briefly, during the creation of a new array; because read operations do not need to be synchronized, copy-on-write collections perform well in the situations for which they are designed—those in which reads greatly predominate over writes.</li>
+      <li>Used by : <code>CopyOnWriteArrayList</code>, <code>CopyOnWriteArraySet</code>.</li>
+    </ul>
+  </li>
+  <li><strong>2. Compare-and-Swap (CAS)</strong>
+    <ul>
+      <li>A 2nd group of thread-safe collections relies on compare-and-swap (CAS), a fundamental improvement on traditional synchronization. To see how it works, consider a computation in which the value of a single variable is used as input to a long-running calculation whose eventual result is used to update the variable. Traditional synchronization makes the whole computation atomic, excluding any other thread from concurrently accessing the variable. This reduces opportunities for parallel execution and hurts throughput.</li>
+      <li>An algorithm based on CAS behaves differently: it makes a local copy of the variable and performs the calculation without getting exclusive access. Only when it is ready to update the variable does it call CAS, which in one atomic operation compares the variable’s value with its value at the start and, if they are the same, updates it with the new value. If they are not the same, the variable must have been modified by another thread; in this situation, the CAS thread can try the whole computation again using the new value, or give up, or—in some algorithms— continue, because the interference will have actually done its work for it!</li>
+      <li>This technique is caled <a href="/technology/transaction.html#optimistic"><em>Optimistic Concurrency Control</em></a> and is widely used in databases and HTTP protocol.</li>
+      <li>Used by: <code>ConcurrentLinkedQueue</code>, <code>ConcurrentSkipListMap</code>.</li>
+    </ul>
+  </li>
+  <li><strong>3. Lock interface</strong>:
+    <ul>
+      <li>The 3rd group uses implementations of <code>java.util.concurrent.locks.Lock</code> interface. Some of the collection classes in this group make use of these facilities to divide the collection into parts that can be separately locked, giving improved concurrency.</li>
+      <li>For example, <code>LinkedBlockingQueue</code> has separate locks for the head and tail ends of the queue, so that elements can be added and removed in parallel.</li>
+      <li>Other collections using these locks include <code>ConcurrentHashMap</code> and most of the implementations of <code>BlockingQueue</code>.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="iterators">Iterators</h2>
+
+<ul>
+  <li>The purpose of iterators is to provide a uniform way of accessing collection elements sequentially</li>
+  <li>Any class that implements <code>java.lang.Iterable</code> can be used in foreach statement. <code>Collection implements Iterable</code>.</li>
+</ul>
+
+<h3 id="fail-fast-iterators">Fail-fast iterators</h3>
+
+<ul>
+  <li>Iterators throw <code>ConcurrentModificationException</code> whenever they detect that the collection from which they were derived has been structurally changed (i.e., elements have been added or removed).</li>
+  <li>Iterators are implemented as a view of their underlying collection so, if that collection is structurally changed, the iterator may well not be able to continue operating correctly when it reaches the changed part of the collection.</li>
+  <li>Instead of allowing the manifestation of failure to be delayed, making diagnosis difficult, the general-purpose Collections Framework iterators are fail-fast. The methods of a fail-fast iterator check that the underlying collection has not been structurally changed (by another iterator, or by the methods of the collection itself) since the last iterator method call. If they detect a change, they throw <code>ConcurrentModificationException</code>.</li>
+</ul>
+
+<h3 id="fail-safe-iterators">Fail-safe iterators</h3>
+
+<ul>
+  <li><strong>Snapshot iterators</strong>
+    <ul>
+      <li>Copy-on-write collections have snapshot iterators. These collections are backed by arrays which, once created, are never changed; if a value in the collection needs to be changed, a new array is created. So an iterator can read the values in one of these arrays (but never modify them) without danger of them being changed by another thread. Snapshot iterators do not throw <code>ConcurrentModificationException</code>.</li>
+    </ul>
+  </li>
+  <li><strong>Weakly consistent iterators</strong>
+    <ul>
+      <li>Collections which rely on CAS have weakly consistent iterators, which reflect some but not necessarily all of the changes that have been made to their backing collection since they were created. For example, if elements in the collection have been modified or removed before the iterator reaches them, it definitely will reflect these changes, but no such guarantee is made for insertions. Weakly consistent iterators also do not throw <code>ConcurrentModificationException</code>.</li>
+      <li>can tolerate concurrent modiﬁcation, traverses elements as they existed when the iterator was constructed, and may (but is not guaranteed to) reﬂect modiﬁcations to the collection after the construction of the iterator. <code>ConcurrentHashMap</code> and other concurrent collections create such iterators.</li>
+      <li>Collections implemented using <code>Lock</code> interface also have weakly consistent iterators. In Java 6 this includes <code>DelayQueue</code> and <code>PriorityBlockingQueue</code>, which in Java 5 had fail-fast iterators. This means that you cannot iterate over the Java 5 version of these queues unless they are quiescent, at a time when no elements are being added or inserted; at other times you have to copy their elements into an array using <code>toArray()</code> and iterate over that instead.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="listiterator">ListIterator</h3>
+
+<p><code>ListIterator</code> offers the following benefits over a regular Iterator. (<em>There is no <code>SetIterator</code>, since <code>Set</code> does not have the concept of a ‘given point’.</em>)</p>
+
+<ul>
+  <li>iterate backwards</li>
+  <li>modify the list safely while iterating</li>
+</ul>
+
+<h2 id="lists">Lists</h2>
+
+<blockquote>
+  <p><a href="http://static.karambelkar.info/static/java_collections/Java-Collections_API-List-ImageMap.html">Class Diagram</a></p>
+</blockquote>
+
+<p><img src="/technology/list-types.png" /></p>
+
+<h3 id="arraylist">ArrayList</h3>
+
+<ul>
+  <li>Backed up array and an integer pointing to the next empty slot</li>
+  <li>By default, an arraylist is created with initial capacity as 10. The capacity grows as and when needed (as per Sun’s implementation it grows by the order of <code>int newCapacity = (oldCapacity * 3)/2 + 1;</code> ).</li>
+  <li>An application can call <code>ArrayList.trimToSize()</code> method to trim the capacity of the ArrayList instance to be the list’s current size to minimize the storage of an ArrayList instance.</li>
+  <li>BigO cost
+    <ul>
+      <li>Access elements has constant time</li>
+      <li>Insert/update/delete at the tail is cheap - constant complexity</li>
+      <li>Insert/update/delete  at the head is expensive - linear complexity (everything to the right from the update position must be moved to the right for insertions and to the left for removals)</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="linkedlist">LinkedList</h3>
+
+<ul>
+  <li>Deque implementation – doubly-linked list.</li>
+  <li>BigO cost
+    <ul>
+      <li>Accessing elements has linear complexity</li>
+      <li>Updating an element has linear complexity (due to an optimization, these methods do not traverse more than a half of the list, so the most expensive elements are located in the middle of the list).</li>
+      <li>Insert/Delete elements - at head/tail - constant time</li>
+    </ul>
+  </li>
+  <li>You need to use ListIterators if you want to try to write fast LinkedList code. If you want a Queue/Deque implementation (you need to access only first and last elements) – consider using ArrayDeque instead.</li>
+</ul>
+
+<h3 id="copyonwritearraylist">CopyOnWriteArrayList</h3>
+
+<ul>
+  <li>A thread-safe variant of <code>ArrayList</code> in which all mutative operations (<code>add</code>, <code>set</code>, and so on) are implemented by making a fresh copy of the underlying array.</li>
+  <li>Copying is an expensive operation, so this class should be used only when traversals seriously outnumber updates. The usual use case for this collection is listeners/observers collection.</li>
+  <li>Element-changing operations on iterators themselves (<code>remove</code>, <code>set</code>, and <code>add</code>) are not supported. These methods throw <code>UnsupportedOperationException</code>.</li>
+  <li>Returns snapshot-style fail-safe iterator</li>
+</ul>
+
+<h2 id="queues-and-deques">Queues and Deques</h2>
+
+<blockquote>
+  <p><a href="http://static.karambelkar.info/static/java_collections/Java-Collections_API-Queue-ImageMap.html">Class Diagram</a></p>
+</blockquote>
+
+<p><img src="/technology/queue-types.png" /></p>
+
+<h3 id="arraydeque">ArrayDeque</h3>
+
+<ul>
+  <li>Backed Data Structure: Deque implementation based on the array (circular buffer) with head/tail pointers. Unlike LinkedList, this class does not implement List interface, which means that you can not access anything except the first and the last elements.</li>
+  <li>BigO cost:
+    <ul>
+      <li>Most operations run in amortized constant time (except remove(), contains(), removeFirstOccurrence(), removeLastOccurrence())</li>
+      <li>Bulk operations run in linear time</li>
+    </ul>
+  </li>
+  <li>Use case: This class is generally preferable to LinkedList for queues/deques due to a limited amount of garbage it generates (old array will be discarded on the extensions).</li>
+</ul>
+
+<h3 id="stack">Stack</h3>
+
+<p>a LIFO queue. DO NOT use it in the production code. Use any Deque implementation instead (ArrayDeque is preferable).</p>
+
+<h3 id="priorityqueue">PriorityQueue</h3>
+
+<ul>
+  <li>Backed Data Structure: a queue based on the priority heap.</li>
+  <li>Uses either natural ordering or a provided Comparator. Its main property – poll/peek/remove/element methods always return the smallest remaining element in the queue. Despite that, this queue implements Iterable which does not iterate this queue in a sorted order (or any other particular order).</li>
+  <li>BigO cost
+    <ul>
+      <li>Enque and Dequeing method run in logarthmic time</li>
+      <li>remove(e) and contains(e) run in linear time</li>
+      <li>retrieval methods (peek, element, size) run in constant time.</li>
+    </ul>
+  </li>
+  <li>Use Case: This queue is generally preferable to other sorted collections, like TreeSet if all you need is a smallest element in the queue.</li>
+</ul>
+
+<h3 id="arrayblockingqueue">ArrayBlockingQueue</h3>
+
+<p>a bounded blocking queue backed by an array. Can not be resized, so when you will try to add an element to a full queue, a method call will block until another thread will extract an element from the queue.</p>
+
+<p>This class supports an optional fairness policy for ordering waiting producer and consumer threads. By default, this ordering is not guaranteed. However, a queue constructed with fairness set to true grants threads access in FIFO order. Fairness generally decreases throughput but reduces variability and avoids starvation.</p>
+
+<h3 id="concurrentlinkedqueue--concurrentlinkeddeque">ConcurrentLinkedQueue / ConcurrentLinkedDeque</h3>
+
+<ul>
+  <li>an unbounded deque/queue based on the linked list.</li>
+  <li>Adding elements to this queue does not block, but this has an unfortunate requirement that a consumer for this collection must work at least as fast as a producer, otherwise you will run out of memory. Heavily relies on CAS (compare-and-set) operations.</li>
+  <li>This implementation employs an efficient “wait-free” algorithm based on one described in <a href="http://www.cs.rochester.edu/~scott/papers/1996_PODC_queues.pdf">Simple, Fast, and Practical Non-Blocking and Blocking Concurrent Queue Algorithms by Maged M. Michael and Michael L. Scott</a>.</li>
+  <li>Iterators are weakly-consistent.</li>
+  <li>BigO cost
+    <ul>
+      <li>size() is NOT a constant-time operation. Because of the asynchronous nature of these queues, determining the current number of elements requires a traversal of the elements, and so may report inaccurate results if this collection is modified during traversal.</li>
+      <li>Bulk operations addAll, removeAll, retainAll, containsAll, equals, and toArray are not guaranteed to be performed atomically.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="delaydeque">DelayDeque</h3>
+
+<ul>
+  <li>an unbounded blocking queue of Delayed elements. An element could be taken from a queue only after its delay has expired. The head of the queue is the element with the smallest remaining delay (including negative values – delay has already expired).</li>
+  <li>Use case: This queue could be useful, for example, when you want to implement a queue of delayed tasks (do not implement such queue manually – use ScheduledThreadPoolExecutor instead).</li>
+  <li>size() returns the count of both expired and unexpired elements</li>
+</ul>
+
+<h3 id="linkedblockingqueue--linkedblockingdeque">LinkedBlockingQueue / LinkedBlockingDeque</h3>
+
+<ul>
+  <li>optionally bounded (could be created with specified maximal capacity or without it) queue/deque based on the linked list.</li>
+  <li>It uses ReentrantLocks for empty/full conditions.</li>
+  <li>BigO cost - Linked queues typically have higher throughput than array-based queues but less predictable performance in most concurrent applications.</li>
+</ul>
+
+<h3 id="linkedtransferqueue">LinkedTransferQueue</h3>
+
+<ul>
+  <li>an unbounded queue based on the linked list. Besides ordinary queue operations, it has a group of transfer methods, which allow a producer to send a message straight to the waiting consumer, thus removing the need to store an element into a queue. This is a lock-free collection based on CAS(compare-and-swap) operations.</li>
+  <li>BigO cost
+    <ul>
+      <li>size is NOT a constant time operation</li>
+      <li>bulk operations are not atomic</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="priorityblockingqueue">PriorityBlockingQueue</h3>
+
+<p>an unbounded blocking queue version of PriorityQueue.</p>
+
+<h3 id="synchronousqueue">SynchronousQueue</h3>
+
+<ul>
+  <li>A blocking queue in which each insert operation must wait for a corresponding remove operation by another thread, and vice versa. A synchronous queue does not have any internal capacity, not even a capacity of one.</li>
+  <li>You cannot peek at a synchronous queue because an element is only present when you try to remove it; you cannot insert an element (using any method) unless another thread is trying to remove it; you cannot iterate as there is nothing to iterate.</li>
+  <li>If you don’t need a Queue interface, then the same functionality could be achieved via Exchanger class.</li>
+  <li>Use case:
+    <ul>
+      <li>They are well suited for handoff designs, in which an object running in one thread must sync up with an object running in another thread in order to hand it some information, event, or task.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="queues-summary">Queues Summary</h3>
+
+<ul>
+  <li>Queue - Class Diagram
+    <ul>
+      <li>Methods react in 2 ways in case of a failure</li>
+      <li>Throws exception - add, remove, element</li>
+      <li>Special value - offer, poll, peek</li>
+      <li>JavaDoc “Queue implementations generally do not define element-based versions of methods equals and hashCode but instead inherit the identity based versions from class Object, because element-based equality is not always well-defined for queues with the same elements but different ordering properties.” - it means that queues do not really care about what is inside them.</li>
+    </ul>
+  </li>
+  <li>BlockingQueue
+    <ul>
+      <li>useful for producer-consumer problems</li>
+      <li>Blocking methods - put(e), take()</li>
+      <li>Time methods - offer(e, time, unit), poll(time, unit)</li>
+      <li>All queuing methods achieve their effects atomically using internal locks or other forms of concurrency control. However, the bulk Collection operations addAll, containsAll, retainAll and removeAll are not necessarily performed atomically unless specified otherwise in an implementation. So it is possible, for example, for addAll(c) to fail (throwing an exception) after adding only some of the elements in c.</li>
+      <li>Memory consistency effects: As with other concurrent collections, actions in a thread prior to placing an object into a BlockingQueue <a href="http://docs.oracle.com/javase/7/docs/api/java/util/concurrent/package-summary.html#MemoryVisibility">happen-before</a> actions subsequent to the access or removal of that element from the BlockingQueue in another thread. happen-before</li>
+    </ul>
+  </li>
+  <li>TransferQueue
+    <ul>
+      <li>A BlockingQueue in which producers may wait for consumers to receive elements. A TransferQueue may be useful for example in message passing applications in which producers sometimes (using method transfer(E)) await receipt of elements by consumers invoking take or poll, while at other times enqueue elements (via method put) without waiting for receipt. Non-blocking and time-out versions of tryTransfer are also available. A TransferQueue may also be queried, via hasWaitingConsumer(), whether there are any threads waiting for items, which is a converse analogy to a peek operation.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="sets">Sets</h2>
+
+<blockquote>
+  <p><a href="http://static.karambelkar.info/static/java_collections/Java-Collections_API-Set-ImageMap.html">Class Diagram</a></p>
+</blockquote>
+
+<p><img src="/technology/set-types.png" /></p>
+
+<h3 id="hashset">HashSet</h3>
+
+<ul>
+  <li>a set implementation based on a HashMap with dummy values (same Object is used for every value). Has the same properties as a HashMap. Due to such implementation, consumes more memory than actually required for this data structure.</li>
+  <li>BigO cost
+    <ul>
+      <li>constant time for add, remove, contains and size operations</li>
+      <li>For better iteration performance, never set initial capacity too high and load factor too low</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="bitset">BitSet</h3>
+
+<ul>
+  <li>This class implements a vector of bits that grows as needed. Each component of the bit set has a boolean value. The bits of a BitSet are indexed by nonnegative integers. Individual indexed bits can be examined, set, or cleared. One BitSet may be used to modify the contents of another BitSet through logical AND, logical inclusive OR, and logical exclusive OR operations.</li>
+  <li>By default, all bits in the set initially have the value false.</li>
+  <li>same as using <code>&amp; | ^</code> etc. with a primitive numeric type.</li>
+</ul>
+
+<h3 id="enumset">EnumSet</h3>
+
+<ul>
+  <li>Enum sets are represented internally as bit vectors. This representation is extremely compact and efficient. The space and time performance of this class should be good enough to allow its use as a high-quality, typesafe alternative to traditional int-based “bit flags”</li>
+  <li>There are 2 private implementations –
+    <ul>
+      <li><code>RegularEnumSet</code> backed up by a single long for enum types with 64 or fewer enum constants (which covers 99.9% use cases)</li>
+      <li><code>JumboEnumSet</code> backed by a long[] for enum types with more than 64 enum constants.</li>
+    </ul>
+  </li>
+  <li>Iterator is weakly-consistent; will never throw <code>ConcurrentModificationException</code></li>
+  <li>BigO cost
+    <ul>
+      <li>All basic operations operate in constant time</li>
+      <li>Likely (not guaranteed) to be faster than HashMap</li>
+      <li>Bulk operations are constant time if input is also EnumSet</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="linkedhashset">LinkedHashSet</h3>
+
+<ul>
+  <li>backed by LinkedHashMap.</li>
+  <li>This is the only set which keeps its elements in the insertion order.</li>
+  <li>BigO cost
+    <ul>
+      <li>O(1) - add, remove, contains</li>
+      <li>Generally slower than HashSet exception the iteration</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="treeset">TreeSet</h3>
+
+<ul>
+  <li>backed up a TreeMap instance.</li>
+  <li>Only non-thread-safe sorted set using their natural ordering or by a <code>Comparator</code> provided</li>
+  <li>Typically Set interface is defined in terms of the equals operation, but a TreeSet instance performs all element comparisons using its <code>compareTo</code> (or <code>compare</code>) method, so two elements that are deemed equal by this method are, from the standpoint of the set, equal.</li>
+  <li>BigO cost
+    <ul>
+      <li>O(1) - add, remove, contains</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="concurrentskiplistset">ConcurrentSkipListSet</h3>
+
+<ul>
+  <li>backed by ConcurrentSkipListMap for storage.</li>
+  <li>Only thread-safe sorted set using their natural ordering or by a Comparator provided</li>
+  <li>iterators are weakly-consistent; never throws ConcurrentModificationException</li>
+  <li>Use case: when you need an thread-safe order set</li>
+  <li>BigO cost
+    <ul>
+      <li>O(log n) - add, remove, contains</li>
+      <li>Ascending ordered views and their iterators are faster than descending ones.</li>
+      <li>size() is not a constant time operation</li>
+      <li>bulk operations aren’t atomic</li>
+    </ul>
+  </li>
+  <li>Both the concurrent sets are based on <a href="http://www.research.ibm.com/people/m/michael/spaa-2002.pdf">High Performance Dynamic Lock-Free Hash Tables and List-Based Sets by Maged Michael</a> from IBM</li>
+  <li>There’s currently no <a href="http://en.wikipedia.org/wiki/Red%E2%80%93black_tree">Red-Black tree</a> based concurrent Map/Set implementation in Java. I looked through the literature a bit and found a couple papers that showed concurrent RB trees outperforming skip lists, but a lot of these tests were done with <a href="http://en.wikipedia.org/wiki/Transactional_memory">transactional memory</a>, which isn’t supported in hardware on any major architectures at the moment.</li>
+</ul>
+
+<h3 id="copyonwritearrayset">CopyOnWriteArraySet</h3>
+
+<p>backed up a <code>CopyOnWriteArrayList</code> and shares its properties</p>
+
+<h3 id="sets-summary">Sets Summary</h3>
+
+<ul>
+  <li>Uses equals() method to check for duplication</li>
+  <li>Great care must be exercised if mutable objects are used as set elements. The behavior of a set is not specified if the value of an object is changed in a manner that affects equals comparisons while the object is an element in the set. A special case of this prohibition is that it is not permissible for a set to contain itself as an element.</li>
+  <li>SortedSet - TreeSet, ConcurrentSkipListSet</li>
+  <li>NavigableSet - TreeSet, ConcurrentSkipListSet</li>
+  <li>Creating a ConcurrentHashSet - <code>Collections.newSetFromMap(new ConcurrentHashMap&lt;String, Boolean&gt;);</code></li>
+</ul>
+
+<h2 id="maps">Maps</h2>
+
+<blockquote>
+  <p><a href="http://static.karambelkar.info/static/java_collections/Java-Collections_Map-API-ImageMap.html">Class Diagram</a></p>
+</blockquote>
+
+<p><img src="/technology/map-types.png" /></p>
+
+<h3 id="hashmap">HashMap</h3>
+
+<ul>
+  <li>backed up chaining Hash table;</li>
+  <li>Collection view methods (keySet and values) retun fail-fast iterators</li>
+  <li>BigO Cost
+    <ul>
+      <li>O(1) - get and put; assuming the hash function disperses the elements properly among the buckets</li>
+      <li>Iteration: Iteration over collection views requires time proportional to the “capacity” of the HashMap instance (the number of buckets) plus its size (the number of key-value mappings). Thus, it’s very important not to set the initial capacity too high (or the load factor too low) if iteration performance is important.</li>
+      <li>Iteration using entrySet is better in performance</li>
+      <li>The capacity is the number of buckets in the hash table, and the initial capacity is simply the capacity at the time the hash table is created.</li>
+      <li>The load factor is a measure of how full the hash table is allowed to get before its capacity is automatically increased. When the number of entries in the hash table exceeds the product of the load factor and the current capacity, the hash table is rehashed (that is, internal data structures are rebuilt) so that the hash table has approximately twice the number of buckets.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="enummap">EnumMap</h3>
+
+<ul>
+  <li>Enum maps are maintained in the natural order of their keys (the order in which the enum constants are declared). This is reflected in the iterators returned by the collections views (keySet(), entrySet(), and values()).</li>
+  <li>weakly-consistent iterators</li>
+  <li>BigO Cost
+    <ul>
+      <li>O(1) - all basic operations</li>
+      <li>Generally works faster than a HashMap due to a known maximal number of keys and built-in enum to int mapping (it is a fixed size array of values).</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="identityhashmap">IdentityHashMap</h3>
+
+<ul>
+  <li>backed up simple linear-probe hash table;</li>
+  <li>a very special version of a Map, violating the Map general contract: it compares references using reference-equality (==) instead of object-equality (Object.equals). In other words, in an IdentityHashMap, two keys k1 and k2 are considered equal if and only if (k1==k2). (In normal Map implementations (like HashMap) two keys k1 and k2 are considered equal if and only if (k1==null ? k2==null : k1.equals(k2)</li>
+  <li>Iterators are fail-fast</li>
+  <li>Use case: useful for various graph traversal algorithms – you may easily store already processed nodes in the IdentityHashMap along with some node-related data.</li>
+  <li>BigO Cost
+    <ul>
+      <li>O(1) - get and put; assuming the system identity hash function (System.identityHashCode(Object)) disperses elements properly among the buckets</li>
+      <li>iteration over collection views requires time proportional to the number of buckets in the hash table</li>
+      <li>one tuning parameter (which affects performance but not semantics): expected maximum size. This parameter is the maximum number of key-value mappings that the map is expected to hold. Internally, this parameter is used to determine the number of buckets initially comprising the hash table. The precise relationship between the expected maximum size and the number of buckets is unspecified.</li>
+      <li>this class will yield better performance than HashMap (which uses <a href="http://www.cs.rmit.edu.au/online/blackboard/chapter/05/documents/contribute/chapter/05/chaining.html">chaining hash table</a> rather than <a href="https://www.cs.auckland.ac.nz/software/AlgAnim/hash_tables.html">linear-probing</a>)
+        <ul>
+          <li><strong>Linear-probing</strong>: A simple re-hashing scheme in which the next slot in the table is checked on a collision.</li>
+          <li>chaining: uses a linked list to store the values. all the collision and retrieval functions are handled on the list.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="linkedhashmap">LinkedHashMap</h3>
+
+<ul>
+  <li>backed by a combination of a HashMap and a LinkedList</li>
+  <li>insertion order of all elements is stored inside a LinkedList. That’s why LinkedHashMap entries, keys and values are always iterated in the insertion order.</li>
+  <li>Use case: well-suited for LRU/FIFO caches by overriding removeEldestEntry; a simple FIFO cache.
+    <ul>
+      <li><code>return size() &gt; maximumCapacity) or LRU cache (return size() &gt; maximumCapacity;</code></li>
+    </ul>
+  </li>
+  <li>fail-fast iterators</li>
+  <li>A structural modification is any operation that adds or deletes one or more mappings or, in the case of access-ordered linked hash maps, affects iteration order. In insertion-ordered linked hash maps, merely changing the value associated with a key that is already contained in the map is not a structural modification. In access-ordered linked hash maps, merely querying the map with get is a structural modification.</li>
+  <li>BigO Cost
+    <ul>
+      <li>O(1) - add, contains, remove</li>
+      <li>This is the most expensive JDK collection in terms of memory consumption per element.</li>
+      <li>Performance is likely to be just slightly below that of HashMap, due to the added expense of maintaining the linked list, with one exception: Iteration over the collection-views of a LinkedHashMap requires time proportional to the size of the map, regardless of its capacity</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="treemap">TreeMap</h3>
+
+<ul>
+  <li>a red-black tree based sorted navigable Map.</li>
+  <li>It sorts all entries based on the natural order or a given Comparator of keys.</li>
+  <li>This map requires that implementation of equals and Comparable/Comparator.compareTo to be consistent.</li>
+  <li>implements a NavigableMap interface: it allows getting a map of all entries less than/more than given key; getting a prev/next entry (based on the key ordering); getting a map with a given range of keys (which roughly corresponds to SQL BETWEEN operator) and many variations of these methods.</li>
+  <li>Map interface is defined in terms of the equals operation, but a sorted map performs all key comparisons using its compareTo (or compare) method, so two keys that are deemed equal by this method are, from the standpoint of the sorted map, equal. The behavior of a sorted map is well-defined even if its ordering is inconsistent with equals; it just fails to obey the general contract of the Map interface.</li>
+  <li>fail-fast iterators</li>
+  <li>BigO Cost
+    <ul>
+      <li>O(log n) - guaranteed for containsKey, get, put and remove operations. (Algorithms are adaptations of those in Cormen, Leiserson, and Rivest’s Introduction to Algorithms.)</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="weakhashmap">WeakHashMap</h3>
+
+<ul>
+  <li>hash table based implementation with weak keys.</li>
+  <li>Use case: generally used in data cache implementations.</li>
+  <li>It keeps all its keys with WeakReference, which means that these keys may be garbage collected if there are no strong references to the key objects. Values, on the other hand, are stored using strong references. Because of this, you should either ensure that there are no references from values to keys, or keep values inside weak references too: <code>m.put(key, new WeakReference(value))</code>.</li>
+  <li>fail-fast iterator</li>
+  <li>BigO Cost: same as HashMap
+    <ul>
+      <li>For the visual representation: How to write a simple yet “bullet-proof” object cache using WeakHashMap</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="concurrenthashmap">ConcurrentHashMap</h3>
+
+<ul>
+  <li>a hash table with full concurrency for get operations and configurable level of concurrency for put operations. This level is adjusted via concurrencyLevel constructor parameter (default 16), which defines a number of partitions inside this map. Only an updated partition is locked during put operation.</li>
+  <li>Remember that this map is not a thread-safe replacement for HashMap algorithms – any compound actions like “get-then-put” sequences of method calls on this map (or any other concurrent collection) should be externally synchronized.</li>
+  <li>Retrieval operations (like get) do not block;</li>
+  <li>iterators are fail-safe; but designed to be used only by one thread at a time.</li>
+  <li>The one feature offered by the synchronizedMap implementations but not by ConcurrentHashMap is the ability to lock the map for exclusive access. With Hashtable and synchronizedMap, acquiring the Map lock prevents any other thread from accessing it. This might be necessary in unusual cases such as adding several mappings atomically, or iterating the Map several times and needing to see the same elements in the same order.</li>
+</ul>
+
+<h3 id="concurrentskiplistmap">ConcurrentSkipListMap</h3>
+
+<p><img class="right" src="/technology/lock-contention.png" width="300" height="300" /></p>
+
+<ul>
+  <li>based on skip lists; this could serve as a thread-safe replacement for TreeMap.</li>
+  <li>Only thread-safe sorted Map using their natural ordering or by a Comparator provided</li>
+  <li>Insertion, removal, update, and access operations safely execute concurrently by multiple threads.</li>
+  <li>iterators are weakly-consistent; never throws ConcurrentModificationException</li>
+  <li>Use case: when you need an thread-safe ordered map</li>
+  <li>BigO cost
+    <ul>
+      <li>expected average log(n) time cost for the containsKey, get, put and remove operations and their variants.</li>
+      <li>size() is not a constant time operation</li>
+      <li>bulk operations aren’t atomic</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="maps-summary">Maps Summary</h3>
+
+<ul>
+  <li><code>System.identityHashCode(Object);</code></li>
+  <li>SortedMap - TreeMap, ConcurrentSkipListMap</li>
+  <li>NavigableMap (extends SortedMap) - allows range searches</li>
+  <li>Great care must be exercised if mutable objects are used as map keys. The behavior of a map is not specified if the value of an object is changed in a manner that affects equals comparisons while the object is a key in the map. A special case of this prohibition is that it is not permissible for a map to contain itself as a key. While it is permissible for a map to contain itself as a value, extreme caution is advised: the equals and hashCode methods are no longer well defined on such a map.</li>
+  <li>Many methods in Collections Framework interfaces are defined in terms of the equals method. For example, the specification for the containsKey(Object key) method says: “returns true if and only if this map contains a mapping for a key k such that (key==null ? k==null : key.equals(k)).” This specification should not be construed to imply that invoking Map.containsKey with a non-null argument key will cause key.equals(k) to be invoked for any key k. Implementations are free to implement optimizations whereby the equals invocation is avoided, for example, by first comparing the hash codes of the two keys. (The Object.hashCode() specification guarantees that two objects with unequal hash codes cannot be equal.) More generally, implementations of the various Collections Framework interfaces are free to take advantage of the specified behavior of underlying Object methods wherever the implementor deems it appropriate.</li>
+  <li><a href="http://vanillajava.blogspot.com/2013/10/unique-hashcodes-is-not-enough-to-avoid.html">Unique hashCodes is not enough to avoid collisions</a></li>
+  <li><strong>Best way to iterate a Map</strong> - 2 ways of iterating a Map via the entry set or the key set. In terms of performance, it seems to me that the approach of iterating over the entry set should be much faster. The iteration is O(n). However, if the HashMap is well balanced, then we should get O(1) performance on the lookup call to get(), thus the complexity of the two approaches is the same. There might be a small difference, but they both should scale linearly. This is not true with other types of maps, such as the TreeMap. The lookup complexity is O(log n), thus the complexity of the second loop would be O(n x log n).</li>
+  <li>SortedMap
+    <ul>
+      <li>All keys inserted into a sorted map must implement the Comparable interface (or be accepted by the specified comparator). Furthermore, all such keys must be mutually comparable: k1.compareTo(k2) (or comparator.compare(k1, k2)) must not throw a ClassCastException for any keys k1 and k2 in the sorted map. Attempts to violate this restriction will cause the offending method or constructor invocation to throw a ClassCastException.</li>
+      <li>Note that the ordering maintained by a sorted map (whether or not an explicit comparator is provided) must be consistent with equals if the sorted map is to correctly implement the Map interface. (See the Comparable interface or Comparator interface for a precise definition of consistent with equals.) This is so because the Map interface is defined in terms of the equals operation, but a sorted map performs all key comparisons using its compareTo (or compare) method, so two keys that are deemed equal by this method are, from the standpoint of the sorted map, equal. The behavior of a tree map is well-defined even if its ordering is inconsistent with equals; it just fails to obey the general contract of the Map interface.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="arrays--collections">Arrays &amp; Collections</h2>
+
+<h3 id="arrays">Arrays</h3>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>resulting list is modifiable, but not resizable</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">List</span><span class="o">&lt;</span><span class="n">X</span><span class="o">&gt;</span> <span class="n">list</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="k">new</span> <span class="n">X</span><span class="o">[</span><span class="n">desiredSize</span><span class="o">]);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="comparable--comparator">Comparable &amp; Comparator</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Comparable interface</th>
+      <th>Comparator interface</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>Used when the objects need to be compared in their natural order.</td>
+      <td>Used when the objects need to be compared in custom user-defined order (other than the natural order).</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>You do not create a separate class just to implement the Comparable interface.</td>
+      <td>You create a separate class just to implement the Comparator interface.</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>For a given class type, you have only that class (and that class alone) implementing the Comparable interface.</td>
+      <td>You can have many separate (i.e., independent) classes implementing the Comparator interface, with each class defining different ways to compare objects.</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>The method in the Comparable interface is declared as <code>int compareTo(ClassType type);</code></td>
+      <td>The method in the Comparator interface is declared as <code>int compare(ClassType type1, ClassType type2);</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h1 id="bibliography">Bibliography</h1>
+<ul>
+  <li>Oracle Certified Professional, Java SE 7 Programmer</li>
+  <li>Java Generics and Collection</li>
+</ul>
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/java-collections.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/java-collections.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

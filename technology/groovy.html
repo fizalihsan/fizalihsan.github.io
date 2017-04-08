@@ -1,0 +1,1003 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Groovy - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Groovy Overview Fundamentals Control Structure Boolean Evaluation Operators Looping methods Static imports Exceptions OOPS Optional Parameters Named &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/groovy.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Groovy</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#overview" id="markdown-toc-overview">Overview</a></li>
+  <li><a href="#fundamentals" id="markdown-toc-fundamentals">Fundamentals</a>    <ul>
+      <li><a href="#control-structure" id="markdown-toc-control-structure">Control Structure</a>        <ul>
+          <li><a href="#boolean-evaluation" id="markdown-toc-boolean-evaluation">Boolean Evaluation</a></li>
+          <li><a href="#operators" id="markdown-toc-operators">Operators</a></li>
+          <li><a href="#looping-methods" id="markdown-toc-looping-methods">Looping methods</a></li>
+          <li><a href="#static-imports" id="markdown-toc-static-imports">Static imports</a></li>
+        </ul>
+      </li>
+      <li><a href="#exceptions" id="markdown-toc-exceptions">Exceptions</a></li>
+      <li><a href="#oops" id="markdown-toc-oops">OOPS</a>        <ul>
+          <li><a href="#optional-parameters" id="markdown-toc-optional-parameters">Optional Parameters</a></li>
+          <li><a href="#named-arguments-in-method-calls" id="markdown-toc-named-arguments-in-method-calls">Named arguments in method calls</a></li>
+          <li><a href="#multiple-assignments" id="markdown-toc-multiple-assignments">Multiple Assignments</a></li>
+          <li><a href="#implementing-interface" id="markdown-toc-implementing-interface">Implementing Interface</a></li>
+          <li><a href="#operator-overloading" id="markdown-toc-operator-overloading">Operator Overloading</a></li>
+          <li><a href="#duck-typing" id="markdown-toc-duck-typing">Duck typing</a></li>
+          <li><a href="#coercion" id="markdown-toc-coercion">Coercion</a></li>
+          <li><a href="#strings" id="markdown-toc-strings">Strings</a></li>
+        </ul>
+      </li>
+      <li><a href="#pogos" id="markdown-toc-pogos">POGOs</a></li>
+      <li><a href="#arrays-and-collection" id="markdown-toc-arrays-and-collection">Arrays and Collection</a>        <ul>
+          <li><a href="#arrays" id="markdown-toc-arrays">Arrays</a></li>
+          <li><a href="#ranges" id="markdown-toc-ranges">Ranges</a></li>
+          <li><a href="#list" id="markdown-toc-list">List</a></li>
+        </ul>
+      </li>
+      <li><a href="#annotations--ast-abstract-syntax-tree-transformations" id="markdown-toc-annotations--ast-abstract-syntax-tree-transformations">Annotations / AST (Abstract Syntax Tree) Transformations</a></li>
+      <li><a href="#closures" id="markdown-toc-closures">Closures</a></li>
+    </ul>
+  </li>
+  <li><a href="#groovy-metaprogramming" id="markdown-toc-groovy-metaprogramming">Groovy Metaprogramming</a></li>
+  <li><a href="#concurrency" id="markdown-toc-concurrency">Concurrency</a></li>
+  <li><a href="#dsl" id="markdown-toc-dsl">DSL</a>    <ul>
+      <li><a href="#questions" id="markdown-toc-questions">Questions</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="overview">Overview</h1>
+
+<ul>
+  <li>Use Groovy for flexibility and readability. Use Java for performance</li>
+  <li>Runs on JVM - Groovy is nothing but a new way of creating Java classes - Java code can be called from Groovy and vice-versa</li>
+  <li>Every Groovy type is a subtype of <code>java.lang.Object</code> - Every Groovy object is an instance of a type in the normal way</li>
+  <li>Groovy class IS A Java class</li>
+  <li>Groovy supports dynamic typing</li>
+  <li>To compile a Groovy script - <code>groovyc –d classes Foo.groovy</code></li>
+  <li>To run a compiled Groovy class in Java - <code>java -cp $GROOVY_HOME/embeddable/groovy-all-1.0.jar:classes Foo</code></li>
+  <li>To run a Groovy script - <code>groovy Foo.groovy</code></li>
+  <li>Behind the scenes it compiles to a Java class and executes</li>
+  <li>Any Groovy code can be executed this way as long as it can be run; that is, it is either a script, a class with a main method, a <code>Runnable</code>, or a <code>GroovyTestCase</code>.</li>
+  <li>Groovy automatically imports following packages: <code>groovy.lang.*, groovy.util.*, java.lang.*, java.util.*, java.net.*, and java.io.*</code> as well as the classes <code>java.math.BigInteger</code> and <code>BigDecimal</code>.</li>
+  <li>Say there is a Groovy class called Foo, we can use Foo objects without explicitly compiling the Book class as long as Foo.groovy is on the classpath.</li>
+  <li>A Groovy script can also have a class definition inside them.</li>
+</ul>
+
+<h1 id="fundamentals">Fundamentals</h1>
+
+<h2 id="control-structure">Control Structure</h2>
+
+<h3 id="boolean-evaluation">Boolean Evaluation</h3>
+
+<ul>
+  <li>Groovy’s <code>==</code> Is Equal to Java’s <code>equals()</code> only if the class does not implement the <code>Comparable</code> interface. If it does, then it maps to the class’s <code>compareTo()</code> method.</li>
+  <li>Reference comparison is done via <code>is()</code> method. Custom truth conventions can be added by implementing <code>asBoolean()</code> method.</li>
+  <li><strong>Groovy Truth</strong> - Following evaluate to true : non-null references, non-empty strings or collections, non-zero numbers, and the boolean literal true.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"><span class="n">str</span> <span class="o">=</span> <span class="s1">&#39;Hello&#39;</span>
+</span><span class="line"><span class="k">if</span><span class="o">(</span><span class="n">str</span><span class="o">)</span> <span class="n">println</span> <span class="n">str</span> <span class="o">+</span> <span class="s1">&#39;World&#39;</span> <span class="c1">//Groovy checks if the object reference is null</span>
+</span><span class="line"><span class="n">list</span> <span class="o">=</span> <span class="o">[</span><span class="mi">1</span><span class="o">]</span>
+</span><span class="line"><span class="k">if</span><span class="o">(</span><span class="n">list</span><span class="o">)</span> <span class="n">println</span> <span class="n">list</span> <span class="c1">//Groovy checks if list is not-null and not empty</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="operators">Operators</h3>
+
+<p><strong>Elvis operator / Safe-navigation operator (?.)</strong></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Elvis operator</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"><span class="kt">def</span> <span class="nf">foo</span><span class="o">(</span><span class="n">str</span><span class="o">)</span> <span class="o">{</span> <span class="k">if</span> <span class="o">(</span><span class="n">str</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span> <span class="n">str</span><span class="o">.</span><span class="na">reverse</span><span class="o">()</span> <span class="o">}</span> <span class="o">}</span> <span class="c1">//Before</span>
+</span><span class="line"><span class="kt">def</span> <span class="nf">foo</span><span class="o">(</span><span class="n">str</span><span class="o">)</span> <span class="o">{</span> <span class="n">str</span><span class="o">?.</span><span class="na">reverse</span><span class="o">()</span> <span class="o">}</span> <span class="c1">//After</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Spread-dot operator</strong></p>
+
+<p>Example: <code>collections*.size()</code> - returns the size of each element in the collection</p>
+
+<p><strong>Spaceship</strong></p>
+
+<p><code>obj1 &lt;=&gt; obj2</code> compares obj1 and obj2 through <code>compareTo()</code> method</p>
+
+<h3 id="looping-methods">Looping methods</h3>
+
+<ul>
+  <li>Using Ranges: <code>for(i in 0..5){println i}  //prints 0,1,2,3,4</code></li>
+  <li>Using times function: <code>5.times { println "$it" } //prints 0,1,2,3,4</code></li>
+  <li>Using upto function: <code>0.upto(5) { println "$it" } //prints 0,1,2,3,4</code></li>
+  <li>Using step function: <code>0.step(5, 2) { println "$it" } //prints 0,2,4</code></li>
+</ul>
+
+<h3 id="static-imports">Static imports</h3>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"><span class="kn">import</span> <span class="nn">static</span> <span class="n">Math</span><span class="o">.</span><span class="na">random</span> <span class="k">as</span> <span class="n">rand</span>
+</span><span class="line"><span class="kt">double</span> <span class="n">value</span> <span class="o">=</span> <span class="n">rand</span><span class="o">()</span> <span class="c1">// alias name is used here to avoid confusion among static imports</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="exceptions">Exceptions</h2>
+
+<ul>
+  <li>Not forced to catch exceptions we don’t care. Any exception we don’t handle is automatically passed on to a higher level.</li>
+  <li>Catching all exceptions that may be thrown. (not <code>Throwables</code> or <code>Errors</code>) e.g., <code>try{...} catch(ex){...}</code></li>
+</ul>
+
+<hr />
+
+<h2 id="oops">OOPS</h2>
+
+<ul>
+  <li>Groovy is purely object-oriented
+    <ul>
+      <li>everything is an object. E.g <code>2*3</code>, though they look like primitives, they are actually java.lang.Integer objects</li>
+      <li>every operator is a method call. E.g. <code>a+b</code> //logic for the + operator is implemented in method plus() on the object</li>
+    </ul>
+  </li>
+  <li>Scope
+    <ul>
+      <li>All methods and classes are <em>public</em> scoped by default.</li>
+      <li>Fields are <em>private</em> scoped by default.</li>
+    </ul>
+  </li>
+  <li>Getters and setters are automatically created by Groovy. No setters created for final fields. To prevent non-final fields from modification, implement setter method manually and throw an error.</li>
+  <li><code>"hello".class.name</code> instead of <code>"hello".getClass().getName()</code>. This class property has special meaning in Map and Builders so it won’t work.</li>
+  <li>We can use ‘this’ within static methods to refer to the Class object.</li>
+</ul>
+
+<h3 id="optional-parameters">Optional Parameters</h3>
+
+<ul>
+  <li>With Default value</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"><span class="kt">def</span> <span class="nf">log</span><span class="o">(</span><span class="n">x</span><span class="o">,</span> <span class="n">base</span><span class="o">=</span><span class="mi">10</span><span class="o">)</span> <span class="o">{</span> <span class="n">Math</span><span class="o">.</span><span class="na">log</span><span class="o">(</span><span class="n">x</span><span class="o">)</span> <span class="s">/ Math.log(base) }</span>
+</span><span class="line"><span class="s">log(1024) /</span><span class="o">/</span><span class="k">default</span> <span class="n">base</span> <span class="mi">10</span> <span class="n">is</span> <span class="n">used</span>
+</span><span class="line"><span class="n">log</span><span class="o">(</span><span class="mi">1024</span><span class="o">,</span> <span class="mi">2</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Trailing array parameter as optional. Much like Java varargs.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"><span class="kt">def</span> <span class="nf">task</span><span class="o">(</span><span class="n">name</span><span class="o">,</span> <span class="n">String</span><span class="o">[]</span> <span class="n">details</span><span class="o">)</span> <span class="o">{</span> <span class="n">println</span> <span class="s2">&quot;$name - $details&quot;</span> <span class="o">}</span>
+</span><span class="line"><span class="n">task</span> <span class="s1">&#39;name1&#39;</span>
+</span><span class="line"><span class="n">task</span> <span class="s1">&#39;name2&#39;</span><span class="o">,</span> <span class="s1">&#39;blah..&#39;</span>
+</span><span class="line"><span class="n">task</span> <span class="s1">&#39;name3&#39;</span><span class="o">,</span> <span class="s1">&#39;blah..blah..&#39;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="named-arguments-in-method-calls">Named arguments in method calls</h3>
+
+<ul>
+  <li>Class with no-argument constructor</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"><span class="kd">class</span> <span class="nc">Robot</span> <span class="o">{</span> <span class="kt">def</span> <span class="n">type</span><span class="o">,</span> <span class="n">height</span><span class="o">,</span> <span class="n">width</span> <span class="o">}</span>
+</span><span class="line"><span class="n">robot</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Robot</span><span class="o">(</span><span class="nl">type:</span> <span class="s1">&#39;arm&#39;</span><span class="o">,</span> <span class="nl">width:</span> <span class="mi">10</span><span class="o">,</span> <span class="nl">height:</span> <span class="mi">40</span><span class="o">)</span>
+</span><span class="line"><span class="n">println</span> <span class="s2">&quot;$robot.type, $robot.height, $robot.width&quot;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Excess Parameters as Map - If the number of arguments sent is more than what the method parameters, and if the excess arguments are in name-value pair, then Groovy treats the name-value pairs as a Map.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"><span class="kd">class</span> <span class="nc">Robot</span> <span class="o">{</span>
+</span><span class="line">  <span class="kt">def</span> <span class="nf">access</span><span class="o">(</span><span class="n">Map</span> <span class="n">location</span><span class="o">,</span> <span class="n">weight</span><span class="o">,</span> <span class="n">fragile</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">    <span class="n">println</span> <span class="s2">&quot;Received fragile? $fragile, weight: $weight, loc: $location&quot;</span>
+</span><span class="line">  <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span><span class="line"><span class="k">new</span> <span class="nf">Robot</span><span class="o">().</span><span class="na">access</span><span class="o">(</span><span class="nl">x:</span> <span class="mi">30</span><span class="o">,</span> <span class="nl">y:</span> <span class="mi">20</span><span class="o">,</span> <span class="nl">z:</span> <span class="mi">10</span><span class="o">,</span> <span class="mi">50</span><span class="o">,</span> <span class="kc">true</span><span class="o">)</span>
+</span><span class="line"><span class="c1">//You can change the order</span>
+</span><span class="line"><span class="k">new</span> <span class="nf">Robot</span><span class="o">().</span><span class="na">access</span><span class="o">(</span><span class="mi">50</span><span class="o">,</span> <span class="kc">true</span><span class="o">,</span> <span class="nl">x:</span> <span class="mi">30</span><span class="o">,</span> <span class="nl">y:</span> <span class="mi">20</span><span class="o">,</span> <span class="nl">z:</span> <span class="mi">10</span><span class="o">,</span> <span class="nl">a:</span><span class="mi">5</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="multiple-assignments">Multiple Assignments</h3>
+
+<ul>
+  <li>Method returning an array is assigned to multiple variables</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"><span class="kt">def</span> <span class="nf">splitName</span><span class="o">(</span><span class="n">fullName</span><span class="o">)</span> <span class="o">{</span> <span class="n">fullName</span><span class="o">.</span><span class="na">split</span><span class="o">(</span><span class="s1">&#39; &#39;</span><span class="o">)</span> <span class="o">}</span>
+</span><span class="line"><span class="kt">def</span> <span class="o">(</span><span class="n">firstName</span><span class="o">,</span> <span class="n">lastName</span><span class="o">)</span> <span class="o">=</span> <span class="n">splitName</span><span class="o">(</span><span class="s1">&#39;James Bond&#39;</span><span class="o">)</span>
+</span><span class="line"><span class="n">println</span> <span class="s2">&quot;$lastName, $firstName $lastName&quot;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Swapping two variables without a temporary variable using above technique</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"><span class="kt">def</span> <span class="o">(</span><span class="n">first</span><span class="o">,</span> <span class="n">last</span><span class="o">)</span> <span class="o">=</span> <span class="o">[</span><span class="s2">&quot;James&quot;</span><span class="o">,</span> <span class="s2">&quot;Bond&quot;</span><span class="o">]</span>
+</span><span class="line"><span class="o">(</span><span class="n">first</span><span class="o">,</span> <span class="n">last</span><span class="o">)</span> <span class="o">=</span> <span class="o">[</span><span class="n">last</span><span class="o">,</span> <span class="n">first</span><span class="o">]</span>
+</span><span class="line"><span class="n">println</span> <span class="s2">&quot;$first $last&quot;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="implementing-interface">Implementing Interface</h3>
+
+<ul>
+  <li>Block of code morphed as the implementation of an interface</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"><span class="kd">interface</span> <span class="nc">Greeting</span> <span class="o">{</span> <span class="kt">void</span> <span class="n">greet</span><span class="o">(</span><span class="n">greeting</span><span class="o">)</span> <span class="o">}</span>
+</span><span class="line"><span class="kd">interface</span> <span class="nc">WellWisher</span> <span class="o">{</span> <span class="kt">void</span> <span class="n">wish</span><span class="o">(</span><span class="n">wish</span><span class="o">)</span> <span class="o">}</span>
+</span><span class="line"><span class="kt">void</span> <span class="nf">greeter</span><span class="o">(</span><span class="n">Greeting</span> <span class="n">greeting</span><span class="o">){</span> <span class="n">greeting</span><span class="o">.</span><span class="na">greet</span><span class="o">()}</span>
+</span><span class="line"><span class="kt">void</span> <span class="nf">wellwisher</span><span class="o">(</span><span class="n">WellWisher</span> <span class="n">wellwisher</span><span class="o">){</span> <span class="n">wellwisher</span><span class="o">.</span><span class="na">wish</span><span class="o">()}</span>
+</span><span class="line">
+</span><span class="line"><span class="n">greeter</span><span class="o">(</span><span class="k">new</span> <span class="n">Greeting</span><span class="o">(){</span> <span class="kt">void</span> <span class="n">greet</span><span class="o">(</span><span class="n">greeting</span><span class="o">){</span><span class="n">println</span> <span class="s1">&#39;Java style&#39;</span><span class="o">}})</span>
+</span><span class="line"><span class="n">groovyStyle</span> <span class="o">=</span> <span class="o">{</span><span class="n">println</span> <span class="s1">&#39;Groovy style&#39;</span><span class="o">}</span>
+</span><span class="line"><span class="n">greeter</span><span class="o">(</span><span class="n">groovyStyle</span> <span class="k">as</span> <span class="n">Greeting</span><span class="o">)</span>
+</span><span class="line"><span class="c1">//block of code is morphed into an implementation of the</span>
+</span><span class="line"><span class="c1">// interface via &#39;as&#39; operator</span>
+</span><span class="line"><span class="n">wellwisher</span><span class="o">(</span><span class="n">groovyStyle</span> <span class="k">as</span> <span class="n">WellWisher</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Groovy does not force us to implement all the methods in an interface. Very useful while mocking for unit testing.</li>
+  <li>Implementation of multi-method interface as a Map</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"><span class="kd">interface</span> <span class="nc">Greeting</span> <span class="o">{</span> <span class="kt">void</span> <span class="n">greet</span><span class="o">(</span><span class="n">greeting</span><span class="o">);</span> <span class="kt">void</span> <span class="n">wish</span><span class="o">(</span><span class="n">wish</span><span class="o">);</span> <span class="kt">void</span> <span class="n">regard</span><span class="o">(</span><span class="n">regard</span><span class="o">);</span> <span class="o">}</span>
+</span><span class="line"><span class="kt">void</span> <span class="nf">callMe</span><span class="o">(</span><span class="n">Greeting</span> <span class="n">greeting</span><span class="o">){</span> <span class="n">greeting</span><span class="o">.</span><span class="na">greet</span><span class="o">();</span> <span class="n">greeting</span><span class="o">.</span><span class="na">wish</span><span class="o">()}</span>
+</span><span class="line"><span class="c1">//method name as key, implementation as value. Not all methods are implemented</span>
+</span><span class="line"><span class="n">greetingsMap</span> <span class="o">=</span> <span class="o">[</span> <span class="nl">greet:</span> <span class="o">{</span><span class="n">println</span> <span class="s1">&#39;Greet Hello World&#39;</span><span class="o">},</span> <span class="nl">wish:</span> <span class="o">{</span><span class="n">println</span> <span class="s1">&#39;Wish Hello World&#39;</span><span class="o">}</span> <span class="o">]</span>
+</span><span class="line"><span class="n">callMe</span><span class="o">(</span><span class="n">greetingsMap</span> <span class="k">as</span> <span class="n">Greeting</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="operator-overloading">Operator Overloading</h3>
+
+<ul>
+  <li>Each operator has a standard mapping to methods.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"><span class="o">==</span> <span class="n">equals</span>
+</span><span class="line"><span class="o">+</span> <span class="n">plus</span>
+</span><span class="line"><span class="o">-</span> <span class="n">minus</span>
+</span><span class="line"><span class="o">++</span> <span class="n">next</span>
+</span><span class="line"><span class="o">..</span> <span class="n">next</span> <span class="o">(</span><span class="k">for</span><span class="o">-</span><span class="n">each</span> <span class="n">syntax</span><span class="o">)</span>
+</span><span class="line"><span class="o">--</span> <span class="n">previous</span>
+</span><span class="line"><span class="o">&lt;&lt;</span> <span class="n">leftShift</span>
+</span><span class="line"><span class="o">&lt;=&gt;</span> <span class="n">compareTo</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Example 1. <code>for (int ch = 'a'; ch &lt; 'c'; ch++) { println ch }</code> –&gt; <code>++</code> operator in <code>String</code> is overloaded by Groovy here mapping to <code>next()</code> method</li>
+  <li>Example 2. <code>for (ch in 'a'..'c') { println ch }</code> –&gt; same as above</li>
+  <li>Example 3. <code>lst = ['hello']; lst &lt;&lt; 'there'; println lst</code> –&gt; <code>&lt;&lt;</code> is overloaded to <code>leftShift()</code> in <code>Collection</code></li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Custom operator overloading</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"><span class="kd">class</span> <span class="nc">Name</span><span class="o">{</span>
+</span><span class="line">  <span class="kt">def</span> <span class="n">name</span><span class="o">;</span>
+</span><span class="line">  <span class="kt">def</span> <span class="nf">plus</span><span class="o">(</span><span class="n">other</span><span class="o">){</span>
+</span><span class="line">    <span class="k">new</span> <span class="nf">Name</span><span class="o">(</span><span class="nl">name:</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;~~&quot;</span> <span class="o">+</span> <span class="n">other</span><span class="o">.</span><span class="na">name</span><span class="o">)</span>
+</span><span class="line">  <span class="o">}</span>
+</span><span class="line">  <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span> <span class="s2">&quot;name: &quot;</span> <span class="o">+</span> <span class="n">name</span><span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span><span class="line"><span class="kt">def</span> <span class="n">name1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Name</span><span class="o">(</span><span class="nl">name:</span> <span class="s2">&quot;Hello&quot;</span><span class="o">)</span>
+</span><span class="line"><span class="kt">def</span> <span class="n">name2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Name</span><span class="o">(</span><span class="nl">name:</span> <span class="s2">&quot;World&quot;</span><span class="o">)</span>
+</span><span class="line"><span class="n">println</span> <span class="n">name1</span> <span class="o">+</span> <span class="n">name2</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="duck-typing">Duck typing</h3>
+
+<ul>
+  <li>A static reference can only be assigned to an object of that type or one of its subclasses, or a class that implements that interface if the reference is of interface type. e.g., <code>Car car = </code></li>
+  <li>In a dynamically typed language, however, we can have any classes stand in for another, as long as they implement the methods we need. e.g., in the below case, as long as the objects implement the method size() it will work.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"><span class="c1">//Duck typing example</span>
+</span><span class="line"><span class="kt">def</span> <span class="n">collection</span> <span class="o">=</span>
+</span><span class="line"><span class="n">println</span> <span class="n">collection</span><span class="o">.</span><span class="na">size</span><span class="o">()</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>if it walks like a duck, and quacks like a duck, then it is a duck.</li>
+</ul>
+
+<h3 id="coercion">Coercion</h3>
+
+<ul>
+  <li>Implementing operators is straightforward when both operands are of the same type. Things get more complex with a mixture of types, say 1 + 1.0. One of the two arguments needs to be promoted to the more general type, and this is called <strong>coercion</strong>.</li>
+  <li>Closure Coersion - e.g. <code>Collections.sort(list, { ... } as Comparator)</code>
+    <ul>
+      <li>closure here is coerced to implement interface Comparator</li>
+      <li>if the interface has more than one methods, then pass different closure implementations as map</li>
+    </ul>
+  </li>
+  <li>
+    <p>Double dispatch</p>
+  </li>
+  <li>Examples</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"><span class="o">==</span> <span class="n">equals</span>
+</span><span class="line"><span class="o">+</span> <span class="n">plus</span>
+</span><span class="line"><span class="o">-</span> <span class="n">minus</span>
+</span><span class="line"><span class="o">++</span> <span class="n">next</span>
+</span><span class="line"><span class="o">--</span> <span class="n">previous</span>
+</span><span class="line"><span class="o">&lt;=&gt;</span> <span class="n">compareTo</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="strings">Strings</h3>
+
+<ul>
+  <li>Plain strings (instance of java.lang.String)</li>
+  <li>GStrings (instance of groovy.lang.GString)</li>
+  <li>GStrings allow placeholder expressions to be resolved and evaluated at runtime. ( Also called String interpolation ) Placeholders may appear in a full <code>${expression}</code> syntax or an abbreviated $reference syntax.</li>
+</ul>
+
+<h2 id="pogos">POGOs</h2>
+
+<ul>
+  <li><code>object.property</code> - though this looks like accessing a private properties on the object, Groovy goes through the getter and setter methods provided in the class when it looks like properties are being accessed or assigned.</li>
+  <li>Map-based constructors
+    <ul>
+      <li><code>def faith = new Person(name:'Faith',id:1)</code> - By default, Groovy creates this map-based constructor. (Map is not used behind the implementation though)</li>
+      <li><code>def willow = [name:'Willow',id:2] as Person</code> - a map is coerced into an object</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="arrays-and-collection">Arrays and Collection</h2>
+
+<ul>
+  <li>Groovy supports collections at language level</li>
+  <li>Groovy supports generics but favors dynamic behavior. Compile-time type checking is turned off by default.</li>
+</ul>
+
+<h3 id="arrays">Arrays</h3>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"><span class="o">[</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">]</span> <span class="c1">//Groovy treats this as list. </span>
+</span><span class="line"><span class="o">[</span><span class="mi">1</span><span class="o">,</span><span class="mi">2</span><span class="o">,</span><span class="mi">3</span><span class="o">]</span> <span class="k">as</span> <span class="kt">int</span><span class="o">[]</span> <span class="c1">//Now the list is converted to an array here</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="ranges">Ranges</h3>
+
+<p>For loops and conditionals are not objects, cannot be reused, and cannot be passed around, but ranges can. Ranges let you focus on what the code does, rather than how it does it. This is a pure declaration of your intent, as opposed to fiddling with indexes and boundary conditions.</p>
+
+<p>Custom Range - Any datatype can be used with ranges, provided that both of the following are true:</p>
+
+<ol>
+  <li>The type implements next and previous; that is, it overrides the ++ and – operators.</li>
+  <li>The type implements java.lang.Comparable; that is, it implements compareTo, effectively overriding the <code>&lt;=&gt;</code> spaceship operator.</li>
+</ol>
+
+<h3 id="list">List</h3>
+
+<ul>
+  <li>The sequence can be empty to declare an empty list.</li>
+  <li>Lists are by default of type <code>java.util.ArrayList</code> and can also be declared explicitly by calling the respective constructor. The resulting list can still be used with the subscript operator. In fact, this works with any type of list, as we show here with type <code>java.util.LinkedList</code>.</li>
+  <li>Lists can be created and initialized at the same time by calling <code>toList</code> on ranges.</li>
+</ul>
+
+<h2 id="annotations--ast-abstract-syntax-tree-transformations">Annotations / AST (Abstract Syntax Tree) Transformations</h2>
+
+<ul>
+  <li>groovyc ignores @Override</li>
+  <li><code>@Canonical</code> - auto-generates <code>toString()</code> implementation as comma-separated field values</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"> <span class="kn">import</span> <span class="nn">groovy.transform.*</span>
+</span><span class="line"> <span class="nd">@Canonical</span><span class="o">(</span><span class="n">excludes</span><span class="o">=</span><span class="s2">&quot;age, password&quot;</span><span class="o">)</span>
+</span><span class="line"> <span class="kd">class</span> <span class="nc">Person</span> <span class="o">{</span>
+</span><span class="line"> <span class="n">String</span> <span class="n">firstName</span><span class="o">,</span> <span class="n">lastName</span><span class="o">,</span> <span class="n">password</span>
+</span><span class="line"> <span class="kt">int</span> <span class="n">age</span>
+</span><span class="line"> <span class="o">}</span>
+</span><span class="line"> <span class="kt">def</span> <span class="n">sara</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Person</span><span class="o">(</span><span class="nl">firstName:</span> <span class="s2">&quot;Sara&quot;</span><span class="o">,</span> <span class="nl">lastName:</span> <span class="s2">&quot;Walker&quot;</span><span class="o">,</span> <span class="nl">age:</span> <span class="mi">49</span><span class="o">,</span> <span class="nl">password:</span> <span class="s2">&quot;passw0rd&quot;</span><span class="o">)</span>
+</span><span class="line"> <span class="n">println</span> <span class="n">sara</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><code>@Delegate</code></li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"><span class="kn">import</span> <span class="nn">groovy.transform.*</span>
+</span><span class="line"><span class="kd">class</span> <span class="nc">Worker</span> <span class="o">{</span>
+</span><span class="line"> <span class="kt">def</span> <span class="nf">work</span><span class="o">()</span> <span class="o">{</span> <span class="n">println</span> <span class="s1">&#39;get work done&#39;</span> <span class="o">}</span>
+</span><span class="line"> <span class="kt">def</span> <span class="nf">analyze</span><span class="o">()</span> <span class="o">{</span> <span class="n">println</span> <span class="s1">&#39;analyze...&#39;</span> <span class="o">}</span>
+</span><span class="line"> <span class="kt">def</span> <span class="nf">writeReport</span><span class="o">()</span> <span class="o">{</span> <span class="n">println</span> <span class="s1">&#39;get report written&#39;</span> <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span><span class="line"><span class="kd">class</span> <span class="nc">Expert</span> <span class="o">{</span>
+</span><span class="line"> <span class="kt">def</span> <span class="nf">analyze</span><span class="o">()</span> <span class="o">{</span> <span class="n">println</span> <span class="s2">&quot;expert analysis...&quot;</span> <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span><span class="line"><span class="kd">class</span> <span class="nc">Manager</span> <span class="o">{</span>
+</span><span class="line"> <span class="c1">//At compile time, Groovy examines the Manager class and brings </span>
+</span><span class="line"> <span class="c1">// in methods from the delegated classes only if those methods </span>
+</span><span class="line"> <span class="c1">// don’t already exist</span>
+</span><span class="line"> <span class="nd">@Delegate</span> <span class="n">Expert</span> <span class="n">expert</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Expert</span><span class="o">()</span>
+</span><span class="line"> <span class="c1">//only work() and writeReport() methods are brought here</span>
+</span><span class="line"> <span class="nd">@Delegate</span> <span class="n">Worker</span> <span class="n">worker</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Worker</span><span class="o">()</span>
+</span><span class="line"><span class="o">}</span>
+</span><span class="line"><span class="kt">def</span> <span class="n">bernie</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Manager</span><span class="o">()</span>
+</span><span class="line"><span class="n">bernie</span><span class="o">.</span><span class="na">analyze</span><span class="o">()</span>      <span class="c1">//invokes Expert.analyze()</span>
+</span><span class="line"><span class="n">bernie</span><span class="o">.</span><span class="na">work</span><span class="o">()</span>         <span class="c1">//invokes Worker.work()</span>
+</span><span class="line"><span class="n">bernie</span><span class="o">.</span><span class="na">writeReport</span><span class="o">()</span>  <span class="c1">//invokes Worker.writeReport</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><code>@Immutable</code> - Groovy adds the hashCode(), equals(), and toString() methods</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"> <span class="kn">import</span> <span class="nn">groovy.transform.*</span>
+</span><span class="line"> <span class="nd">@Immutable</span>
+</span><span class="line"> <span class="kd">class</span> <span class="nc">CreditCard</span> <span class="o">{</span> <span class="n">String</span> <span class="n">cardNumber</span><span class="o">;</span> <span class="kt">int</span> <span class="n">creditLimit</span> <span class="o">}</span>
+</span><span class="line"> <span class="n">println</span> <span class="k">new</span> <span class="nf">CreditCard</span><span class="o">(</span><span class="s2">&quot;4000-1111-2222-3333&quot;</span><span class="o">,</span> <span class="mi">1000</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><code>@Lazy</code> - provides a painless way to implement the virtual proxy pattern with thread safety as a bonus</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"> <span class="kd">class</span> <span class="nc">AsNeeded</span> <span class="o">{</span>
+</span><span class="line"> <span class="kt">def</span> <span class="n">value</span>
+</span><span class="line"> <span class="c1">//heavy1 and heavy2 are lazy-initialized only at the time of invocation</span>
+</span><span class="line"> <span class="nd">@Lazy</span> <span class="n">Heavy</span> <span class="n">heavy1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Heavy</span><span class="o">()</span>
+</span><span class="line"> <span class="nd">@Lazy</span> <span class="n">Heavy</span> <span class="n">heavy2</span> <span class="o">=</span> <span class="o">{</span> <span class="k">new</span> <span class="n">Heavy</span><span class="o">(</span><span class="nl">size:</span> <span class="n">value</span><span class="o">)</span> <span class="o">}()</span>
+</span><span class="line"> <span class="n">AsNeeded</span><span class="o">()</span> <span class="o">{</span> <span class="n">println</span> <span class="s2">&quot;Created AsNeeded&quot;</span> <span class="o">}</span>
+</span><span class="line"> <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><code>@Newify</code> - Create objects via Ruby-like and Python-like constructors without using ‘new Foo()’ style. Comes handy in DSL creation.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"><span class="nd">@Newify</span><span class="o">([</span><span class="n">CreditCard</span><span class="o">,</span> <span class="n">Person</span><span class="o">])</span> <span class="c1">//specify the list of types here. </span>
+</span><span class="line"><span class="kt">def</span> <span class="nf">fluentCreate</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line"> <span class="n">println</span> <span class="nf">CreditCard</span><span class="o">(</span><span class="s2">&quot;1234-5678-1234-5678&quot;</span><span class="o">,</span> <span class="mi">2000</span><span class="o">)</span> <span class="c1">//Python-like constructor invocation with new keyword</span>
+</span><span class="line"> <span class="n">println</span> <span class="n">Person</span><span class="o">.</span><span class="na">new</span><span class="o">(</span><span class="s2">&quot;John&quot;</span><span class="o">,</span> <span class="s2">&quot;Doe&quot;</span><span class="o">)</span> <span class="c1">//Ruby-like constructor invocation where new() is a method</span>
+</span><span class="line"><span class="o">}</span>
+</span><span class="line"><span class="n">fluentCreate</span><span class="o">()</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><code>@Singleton</code></li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"> <span class="nd">@Singleton</span><span class="o">(</span><span class="n">lazy</span> <span class="o">=</span> <span class="kc">true</span><span class="o">)</span>
+</span><span class="line"> <span class="kd">class</span> <span class="nc">TheUnique</span> <span class="o">{</span>
+</span><span class="line">  <span class="kd">private</span> <span class="nf">TheUnique</span><span class="o">()</span> <span class="o">{</span> <span class="n">println</span> <span class="s1">&#39;Instance created&#39;</span> <span class="o">}</span>
+</span><span class="line"> <span class="kt">def</span> <span class="nf">hello</span><span class="o">()</span> <span class="o">{</span> <span class="n">println</span> <span class="s1">&#39;hello&#39;</span> <span class="o">}</span>
+</span><span class="line"> <span class="o">}</span>
+</span><span class="line"> <span class="n">TheUnique</span><span class="o">.</span><span class="na">instance</span><span class="o">.</span><span class="na">hello</span><span class="o">()</span>
+</span><span class="line"> <span class="n">TheUnique</span><span class="o">.</span><span class="na">instance</span><span class="o">.</span><span class="na">hello</span><span class="o">()</span>
+</span><span class="line"> <span class="k">new</span> <span class="nf">TheUnique</span><span class="o">().</span><span class="na">hello</span><span class="o">()</span> <span class="c1">//Caveat: since Groovy does not honor private methods, clients can still do this.</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><code>@InheritConstructors</code></li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"> <span class="nd">@Canonical</span>
+</span><span class="line"> <span class="kd">class</span> <span class="nc">Car</span> <span class="o">{</span>
+</span><span class="line"> <span class="kt">def</span> <span class="n">make</span><span class="o">,</span> <span class="n">model</span><span class="o">,</span> <span class="n">year</span>
+</span><span class="line"> <span class="n">Car</span><span class="o">(</span><span class="n">make</span><span class="o">,</span> <span class="n">model</span><span class="o">){</span> <span class="k">this</span><span class="o">.</span><span class="na">make</span> <span class="o">=</span> <span class="n">make</span><span class="o">;</span> <span class="k">this</span><span class="o">.</span><span class="na">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">;</span> <span class="k">this</span><span class="o">.</span><span class="na">year</span> <span class="o">=</span> <span class="mi">2000</span><span class="o">;</span> <span class="o">}</span>
+</span><span class="line"> <span class="n">Car</span><span class="o">(</span><span class="n">make</span><span class="o">,</span> <span class="n">model</span><span class="o">,</span> <span class="n">year</span><span class="o">){</span> <span class="k">this</span><span class="o">.</span><span class="na">make</span> <span class="o">=</span> <span class="n">make</span><span class="o">;</span> <span class="k">this</span><span class="o">.</span><span class="na">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">;</span> <span class="k">this</span><span class="o">.</span><span class="na">year</span> <span class="o">=</span> <span class="n">year</span><span class="o">;</span> <span class="o">}</span>
+</span><span class="line"> <span class="o">}</span>
+</span><span class="line"> <span class="nd">@InheritConstructors</span>
+</span><span class="line"> <span class="kd">class</span> <span class="nc">Honda</span> <span class="kd">extends</span> <span class="n">Car</span><span class="o">{</span>
+</span><span class="line"> <span class="c1">//no need to explicitly override all the constructors here</span>
+</span><span class="line"> <span class="o">}</span>
+</span><span class="line"> <span class="n">println</span> <span class="k">new</span> <span class="nf">Car</span><span class="o">(</span><span class="s2">&quot;Honda&quot;</span><span class="o">,</span> <span class="s2">&quot;Accord&quot;</span><span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<hr />
+
+<h2 id="closures">Closures</h2>
+
+<p>In OO languages, the Method-Object pattern has often been used to simulate the same kind of behavior by defining types whose sole purpose is to implement an appropriate single-method interface so that instances of those types can be passed as arguments to methods, which then invoke the method on the interface. e.g., <code>java.io.File.list(FilenameFilter)</code> where FilenameFilter interface specifies a single method, and its only purpose is to allow the list of files returned from the list method to be filtered while it’s being generated.</p>
+
+<h1 id="groovy-metaprogramming">Groovy Metaprogramming</h1>
+
+<p>In Groovy every class has a metaclass. A metaclass is another class that manages the actual invocation process. If you invoke a method on a class that doesn’t exist, the call is ultimately intercepted by a method in the metaclass called <code>methodMissing</code>. Likewise, accessing a property that doesn’t exist eventually calls <code>propertyMissing</code> in the metaclass. Customizing the behavior of <code>methodMissing</code> and <code>propertyMissing</code> is the heart of Groovy runtime metaprogramming.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>&#8220;Example of meta-programming in Groovy&#8221;</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+</pre></td><td class="code"><pre><code class="groovy"><span class="line"><span class="cm">/* Every closure has a delegate property. </span>
+</span><span class="line"><span class="cm">By default the delegate points to the object that the closure was invoked on.</span>
+</span><span class="line"><span class="cm">*/</span>
+</span><span class="line">
+</span><span class="line"><span class="n">Complex</span><span class="o">.</span><span class="na">metaClass</span><span class="o">.</span><span class="na">plus</span> <span class="o">=</span> <span class="o">{</span> <span class="n">Complex</span> <span class="n">c</span> <span class="o">-&gt;</span> <span class="n">delegate</span><span class="o">.</span><span class="na">add</span> <span class="n">c</span> <span class="o">}</span>
+</span><span class="line"><span class="n">Complex</span><span class="o">.</span><span class="na">metaClass</span><span class="o">.</span><span class="na">minus</span> <span class="o">=</span> <span class="o">{</span> <span class="n">Complex</span> <span class="n">c</span> <span class="o">-&gt;</span> <span class="n">delegate</span><span class="o">.</span><span class="na">subtract</span> <span class="n">c</span> <span class="o">}</span>
+</span><span class="line">
+</span><span class="line"><span class="kt">def</span> <span class="n">c1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Complex</span><span class="o">(</span><span class="nl">real:</span> <span class="mi">1</span><span class="o">,</span> <span class="nl">imaginary:</span> <span class="mi">2</span><span class="o">)</span>
+</span><span class="line"><span class="kt">def</span> <span class="n">c2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Complex</span><span class="o">(</span><span class="nl">real:</span> <span class="mi">3</span><span class="o">,</span> <span class="nl">imaginary:</span> <span class="mi">4</span><span class="o">)</span>
+</span><span class="line"><span class="kt">def</span> <span class="n">c3</span> <span class="o">=</span> <span class="n">c1</span> <span class="o">+</span> <span class="n">c2</span>
+</span><span class="line">
+</span><span class="line"><span class="n">println</span> <span class="n">c3</span> <span class="o">==</span> <span class="k">new</span> <span class="n">Complex</span><span class="o">(</span><span class="nl">real:</span> <span class="mi">4</span><span class="o">,</span> <span class="nl">imaginary:</span> <span class="mi">6</span><span class="o">)</span>
+</span><span class="line">
+</span><span class="line"><span class="nd">@EqualsAndHashCode</span>
+</span><span class="line"><span class="kd">class</span> <span class="nc">Complex</span><span class="o">{</span>
+</span><span class="line">    <span class="kt">def</span> <span class="n">real</span><span class="o">,</span> <span class="n">imaginary</span>
+</span><span class="line">
+</span><span class="line">    <span class="n">Complex</span> <span class="nf">add</span><span class="o">(</span><span class="n">Complex</span> <span class="n">c</span><span class="o">){</span>
+</span><span class="line">        <span class="k">this</span><span class="o">.</span><span class="na">real</span> <span class="o">+=</span> <span class="n">c</span><span class="o">.</span><span class="na">real</span>
+</span><span class="line">        <span class="k">this</span><span class="o">.</span><span class="na">imaginary</span> <span class="o">+=</span> <span class="n">c</span><span class="o">.</span><span class="na">imaginary</span>
+</span><span class="line">        <span class="k">this</span>
+</span><span class="line">    <span class="o">}</span>
+</span><span class="line">
+</span><span class="line">    <span class="n">Complex</span> <span class="nf">subtract</span><span class="o">(</span><span class="n">Complex</span> <span class="n">c</span><span class="o">){</span>
+</span><span class="line">        <span class="k">this</span><span class="o">.</span><span class="na">real</span> <span class="o">-=</span> <span class="n">c</span><span class="o">.</span><span class="na">real</span>
+</span><span class="line">        <span class="k">this</span><span class="o">.</span><span class="na">imaginary</span> <span class="o">-=</span> <span class="n">c</span><span class="o">.</span><span class="na">imaginary</span>
+</span><span class="line">        <span class="k">this</span>
+</span><span class="line">    <span class="o">}</span>
+</span><span class="line">
+</span><span class="line">    <span class="nd">@Override</span>
+</span><span class="line">    <span class="kd">public</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">        <span class="k">return</span> <span class="s2">&quot;($real + ${imaginary}i)&quot;</span>
+</span><span class="line">    <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h1 id="concurrency">Concurrency</h1>
+
+<p>…</p>
+
+<h1 id="dsl">DSL</h1>
+
+<p>…</p>
+
+<h2 id="questions">Questions</h2>
+
+<ul>
+  <li>What is the difference between a Groovy script and a Groovy class?</li>
+  <li>What is relaying and how dynamic typing enables to achieve it?</li>
+  <li>How to write new AST annotations?</li>
+  <li>Spring + Groovy</li>
+  <li>‘Liquid Heart’ technique by Dierk Koenig, lead author of Groovy in Action [Manning, 2007]</li>
+  <li>Groovy iteration patterns</li>
+  <li>JMX 2</li>
+  <li>Closure delegation</li>
+  <li>Meta object protocol</li>
+</ul>
+
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/groovy.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/groovy.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

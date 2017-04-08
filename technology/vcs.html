@@ -1,0 +1,803 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>VCS - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="VCS Overview Git How Git works? Workflow models Advantages Basic concepts Concepts Git Command Reference Frequent actions Advanced Concepts Content- &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/vcs.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">VCS</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#overview" id="markdown-toc-overview">Overview</a></li>
+  <li><a href="#git" id="markdown-toc-git">Git</a>    <ul>
+      <li><a href="#how-git-works" id="markdown-toc-how-git-works">How Git works?</a></li>
+      <li><a href="#workflow-models" id="markdown-toc-workflow-models">Workflow models</a></li>
+      <li><a href="#advantages" id="markdown-toc-advantages">Advantages</a></li>
+      <li><a href="#basic-concepts" id="markdown-toc-basic-concepts">Basic concepts</a></li>
+      <li><a href="#concepts" id="markdown-toc-concepts">Concepts</a></li>
+      <li><a href="#git-command-reference" id="markdown-toc-git-command-reference">Git Command Reference</a></li>
+      <li><a href="#frequent-actions" id="markdown-toc-frequent-actions">Frequent actions</a></li>
+      <li><a href="#advanced-concepts" id="markdown-toc-advanced-concepts">Advanced Concepts</a>        <ul>
+          <li><a href="#content-addressable-names" id="markdown-toc-content-addressable-names">Content-Addressable Names</a></li>
+          <li><a href="#pack-files" id="markdown-toc-pack-files">Pack files</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="overview">Overview</h1>
+
+<ul>
+  <li>Difference between VCS and DVCS.</li>
+  <li>What is the advantage of having a distributed VCS?
+    <ul>
+      <li>no single point of failure in the event of a crash or corruption</li>
+    </ul>
+  </li>
+  <li>Principles and best practices when it comes to branching</li>
+</ul>
+
+<h1 id="git">Git</h1>
+
+<h2 id="how-git-works">How Git works?</h2>
+
+<p><img src="/technology/git-local-remote.png" /></p>
+
+<h2 id="workflow-models">Workflow models</h2>
+
+<ul>
+  <li><strong>SVN-style centralized workflow</strong>
+    <ul>
+      <li>A very common Git workflow, especially from people transitioning from a centralized system. Git will not allow you to push if someone has pushed since the last time you fetched, so a centralized model where all developers push to the same server works just fine.</li>
+    </ul>
+  </li>
+  <li><strong>Integration Workflow / The open-source Workflow / Fork &amp; Pull Requests</strong>
+    <ul>
+      <li>a single person who commits to the ‘blessed’ repository, and then a number of developers who clone from that repository, push to their own independent repositories and ask the integrator to pull in their changes. This is the type of development model you often see with open source or GitHub repositories.</li>
+    </ul>
+  </li>
+  <li><strong>Dictator and Lieutenants Workflow</strong>
+    <ul>
+      <li>For more massive projects, you can setup your developers similar to the way the Linux kernel is run, where people are in charge of a specific subsystem of the project (‘lieutenants’) and merge in all changes that have to do with that subsystem. Then another integrator (the ‘dictator’) can pull changes from only his/her lieutenants and push those to the ‘blessed’ repository that everyone then clones from again.</li>
+    </ul>
+  </li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>Centralized workflow</th>
+      <th>Integration Workflow</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><img src="/technology/git-centralized-workflow.png" /></td>
+      <td><img src="/technology/git-integration-workflow.png" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="advantages">Advantages</h2>
+
+<ul>
+  <li>Distributed, not centralized:
+    <ul>
+      <li>With Git, you have a local copy/clone of the entire repository which could be used offline. Due to this, there is no single point of failure in case of a crash or corruption. Every developer has his own copy of the repository.</li>
+    </ul>
+  </li>
+  <li>Smaller &amp; Faster - To save space and transfer time, the data is stored after applying compression.</li>
+  <li>Branching and merging is easier</li>
+  <li>Atomic transactions: Like SVN, transactions are atomic - ensures that the version control database is not left in a partially changed or corrupted state while an update or commit of number of unrelated changes is happening.</li>
+  <li>Content-Addressable file store - SHA1 hash value is generated out of the file contents to identify a file.</li>
+</ul>
+
+<h2 id="basic-concepts">Basic concepts</h2>
+
+<ul>
+  <li>Checkout vs clone, Commit Vs Push</li>
+  <li>Branching vs Forking
+    <ul>
+      <li>Branches are light-weight and merging is easy.</li>
+      <li>In SVN, each file &amp; folder can come from a different revision or branch. This leads to confusion in case of a failure.</li>
+    </ul>
+  </li>
+  <li>Workflows
+    <ul>
+      <li>Unlike other VCS systems, Git does not impose any particular workflow.</li>
+      <li>Well-suited for open source community development.</li>
+      <li>Git-SVN Bridge - The central repository is a Subversion repo, but developers locally work with Git and the bridge then pushes their changes to SVN.</li>
+    </ul>
+  </li>
+  <li>Unlike SVN which creates .svn directories in every single folder, Git only creates a single .git folder.</li>
+  <li>Sparse checkouts.</li>
+  <li>Git tracks content rather than file - renaming a file, moving it to a different location</li>
+  <li>version control outside of source code</li>
+</ul>
+
+<p>https://git.wiki.kernel.org/index.php/GitSvnComparsion</p>
+
+<h2 id="concepts">Concepts</h2>
+
+<p><strong>HEAD</strong>
+In Git,the HEAD points to the latest commit in a branch</p>
+
+<p><strong>Base Commit</strong>
+In Git, the last common commit between two branches is called ‘base commit’</p>
+
+<p><strong>Conflicts</strong>
+When Git merges the two branches, it looks at the changes in each branch since the base commit. When there are unambiguous differences—like changes to different files, and sometimes different parts of the same file—the changes are applied. However, if there are changes to the same parts of the same file, and Git can’t determine which changes to keep, it raises a conflict.</p>
+
+<p><strong>Branching</strong></p>
+
+<p>When we merge branches and there are no conflicts, such as above, only the branch pathway is changed and the HEAD of the branch is updated. This is called the <strong>fast forward type</strong> of merge.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">git checkout master
+</span><span class="line">git merge new_feature</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>The alternate way of merging branches is the no fast forward merge, by postfixing <code>--no-ff</code> to the merge command. In this way, a new commit is created on the base branch with the changes from the other branch.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">git merge --no-ff new_feature</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="git-command-reference">Git Command Reference</h2>
+
+<ul>
+  <li><code>gitk</code> - build-in git GUI</li>
+  <li><code>git add</code>
+    <ul>
+      <li><code>git add &lt;file_name&gt;</code> - tells Git start tracking a new file or it could mean to stage the changes in an existing file</li>
+      <li><code>git add .</code> - tells Git to start tracking current directory and sub-directories</li>
+      <li><code>git ls-files --deleted | xargs git rm</code> - stage locally deleted files for committing</li>
+    </ul>
+  </li>
+  <li><code>git bisect</code> - performs a binary search through commits</li>
+  <li><code>git blame &lt;file_name&gt;</code> - gives detailed information about each line in the file.</li>
+  <li><code>git branch</code>
+    <ul>
+      <li><code>git branch</code> - lists only local branch names</li>
+      <li><code>git branch -a</code> - lists all branch names, both local and remote</li>
+      <li><code>git branch -r</code> - lists only remote branch names</li>
+      <li><code>git branch &lt;branch_name&gt;</code> - Creates a branch off of latest commit, but doesn’t switch the local to it</li>
+      <li><code>git branch -b &lt;branch_name&gt;</code> - Creates a branch off of latest commit and switches to it</li>
+      <li><code>git branch -b &lt;branch_name&gt; &lt;commit_id&gt;</code> - Creates a branch off of given commit id</li>
+      <li><code>git branch -m &lt;branch_name&gt;</code> - Rename current branch</li>
+      <li><code>git branch -D &lt;branch_name&gt;</code> - deletes the branch without warning of any uncommitted files</li>
+      <li><code>git branch -d &lt;branch_name&gt;</code> - deletes the branch with warning of any uncommitted files. To delete the remote branch, <code>git push &lt;remote_name&gt; &lt;branch_name&gt;</code></li>
+    </ul>
+  </li>
+  <li><code>git checkout</code>
+    <ul>
+      <li><code>git checkout</code> - change the status of files to a different branch</li>
+      <li><code>git checkout &lt;filename&gt;</code> - revert the given file to the state during the last commit.</li>
+      <li><code>git checkout -b &lt;branch_name&gt;</code> - create a new branch named  and switch to it</li>
+      <li><code>git checkout -b &lt;branch_name&gt; upstream/&lt;branch_name&gt;</code> - create a new branch &lt;branch_name&gt; and associates it with <code>upstream/branch_name</code>.</li>
+      <li><code>git checkout &lt;branch_name&gt;</code> - switch to a given branch</li>
+      <li><code>git checkout -</code> - takes back to the previous branch (like <code>cd -</code>)</li>
+      <li><code>git checkout -- &lt;filename&gt;</code> - replace changes in your working tree with the latest content in HEAD</li>
+      <li><code>git checkout -b &lt;branch_name&gt; &lt;tag_name&gt;</code> - create a branch locally and checkout to a given tag</li>
+    </ul>
+  </li>
+  <li><code>git clone</code>
+    <ul>
+      <li>If you clone a repository, the source from which you cloned from is designated as the <code>origin</code> remote by default. You may modify the remote using the <em>git remote</em> command.</li>
+    </ul>
+  </li>
+  <li><code>git commit</code>
+    <ul>
+      <li><code>git commit --amend -m 'new message'</code> - change the commit message of the last commit</li>
+    </ul>
+  </li>
+  <li><code>git config</code>
+    <ul>
+      <li><code>git config --list --show-origin</code> - lists configurations and their origin files</li>
+    </ul>
+  </li>
+  <li><code>git describe</code>
+    <ul>
+      <li><code>git describe --tags --abbrev=0</code></li>
+      <li><code>git describe --tags --abbrev=0 --match="beta2_ddl_*"</code></li>
+    </ul>
+  </li>
+  <li><code>git diff</code>
+    <ul>
+      <li><code>git diff &lt;source_branch&gt; &lt;target_branch&gt;</code></li>
+    </ul>
+  </li>
+  <li><code>git fetch</code>
+    <ul>
+      <li><code>git fetch</code> - updates the branches of the local repository from the remote <em>origin</em>. Fast-forwarding by default</li>
+      <li><code>git fetch &lt;remote_name&gt;</code> - updates the branches of the local repository from remote.  (Following a fetch, to update your local branch you need to merge it with appropriate branch from the remote. E.g., <code>git merge &lt;remote_name&gt;/&lt;branch_name&gt;</code>)</li>
+      <li><code>git fetch upstream refs/pull/&lt;pull#&gt;head:pull_&lt;pull#&gt;</code> - https://coderwall.com/p/z5rkga/github-checkout-a-pull-request-as-a-branch</li>
+    </ul>
+  </li>
+  <li><code>git fsck</code>
+    <ul>
+      <li><code>git fsck --lost-found</code> - search for commits that aren’t part of any branch</li>
+    </ul>
+  </li>
+  <li><code>git log</code>
+    <ul>
+      <li><code>git log</code></li>
+      <li><code>git log -n 2</code> or <code>git log -2</code> - view last 2 commits only</li>
+      <li><code>git log --all</code> - view commits in all branches</li>
+      <li><code>git log --all --decorate --oneline</code> - decorate and one liner logs</li>
+      <li><code>git log --all --decorate --oneline --graph</code> - graphical view</li>
+      <li><code>git log --tags --simplify-by-decoration --pretty="format:%ci %d" -n5</code> - displays the last 5 tags created</li>
+      <li><code>git log --after='2015-3-1' --before='2015-5-1'</code></li>
+      <li><code>git log --follow &lt;file_name&gt;</code> - trace changes in a single file.  <code>blame</code> enables you to check only the current contents of a file. The <code>log --follow</code> command, on the other hand, lists the changes the file has gone through since Git started tracking the file.</li>
+      <li><code>git log --author='fizal'</code></li>
+      <li><code>git log --grep='search_text'</code> - search commit messages</li>
+    </ul>
+  </li>
+  <li><code>git merge</code>
+    <ul>
+      <li><code>git merge &lt;remote_name&gt;/&lt;branch_name&gt;</code> - Following a fetch, to update your local branch you need to merge it with appropriate branch from the remote. This is basically merging the branch &lt;remote_name&gt;/&lt;branch_name&gt; with your current active branch.</li>
+      <li><code>git merge --abort</code> - after initiating a merge that’s resulted in conflicts, if you’re overwhelmed and want to go back to the pre-merge state</li>
+      <li><code>git merge --rebase master</code></li>
+    </ul>
+  </li>
+  <li><code>git push</code>
+    <ul>
+      <li><code>git push</code>
+        <ul>
+          <li>pushes the code in the current branch to the <code>origin</code> remote branch of the same name.</li>
+          <li>A branch is created if the branch with the same name as the current local branch doesn’t exist on the origin.</li>
+          <li>Push is rejected with an error <em>it is non-fast-forward</em> if the remote branch has been updated since your last synchronization.</li>
+        </ul>
+      </li>
+      <li><code>git push &lt;remote_branch&gt;</code> - pushes the code in the current branch to the <em>remote_branch</em>. A branch is created if the branch with the same name as the current local branch doesn’t exist on the remote.</li>
+      <li><code>git push &lt;remote_name&gt; &lt;branch_name&gt;</code> - <em>remote_name</em> is origin/upstream</li>
+      <li><code>git push -f origin &lt;branch_name&gt;</code> - forcefully pushes. Typically you need this after changes like squash</li>
+      <li><code>git push &lt;remote_name&gt; --tags</code> - push by default doesn’t push the tags to the remote. Adding <code>--tags</code> does that.</li>
+      <li><code>git push &lt;remote_name&gt; &lt;tag_name&gt;</code> - to specifically push a tag to a remote</li>
+    </ul>
+  </li>
+  <li><code>git pull</code>
+    <ul>
+      <li><code>git pull</code> = <code>git fetch + git merge</code>. Downloads the code from the <em>master</em> branch of the <em>origin</em> remote branch and then merges the code with the current active branch. Pulls are fast-forwarding by default.</li>
+      <li><code>git pull &lt;remote_name&gt; &lt;branch_name&gt;</code> -</li>
+      <li><code>git pull --rebase &lt;remote_name&gt; &lt;branch_name&gt;</code></li>
+    </ul>
+  </li>
+  <li><code>git rebase</code> - merging mechanism that avoids loops in the project history.
+    <ul>
+      <li><code>git rebase -i</code> - lists down all the local commits and gives you the option to <em>pick/reword/edit/squash/fixup/exec/drop</em> a commit</li>
+      <li><code>git rebase master</code> - If you’re rebasing a <em>master</em> into <em>new_feature</em>, the new commits in <em>master</em> are put before the new commits in <em>new_feature</em> that are not common to <em>master</em>. Run this command from <em>new_feature</em> branch.</li>
+      <li><code>git rebase --abort</code></li>
+    </ul>
+  </li>
+  <li><code>git reflog</code> - log of refs
+    <ul>
+      <li>A <strong>ref</strong>, short for a reference, is a way of referencing a commit. In other words, the hash is a name, whereas a ref is a pointer.</li>
+      <li>Special refs - <code>HEAD</code>, <code>ORIG_HEAD</code>, <code>MERGE_HEAD</code>, <code>FETCH_HEAD</code></li>
+      <li>The <em>reflog</em> command stores the records for each action you perform in your repository. When you push the changes, this data isn’t synced with the server. Using the <em>reflog</em> command is necessary if you want to review changes to your local repository. It could also be used to recover lost commits.</li>
+      <li>If you make a hard reset and lose a commit or two, you can safely go back to any commit you made earlier. For instance, you can run the <em>reflog</em> command, which would have a record corresponding to the time when the commit was created, mentioning the commit hash. When you know the hash, you can start a new branch based on that commit to go back to the state of that commit.</li>
+      <li><code>git reflog expire --expire=never</code> - The reflog command only tracks back changes for a certain amount of time. Git is responsible for cleaning up the reflog data periodically, which by default is 90 days. This command sets the reflog to never expire.</li>
+    </ul>
+  </li>
+  <li><code>git remote</code>
+    <ul>
+      <li><code>git remote -v</code> - List the current configured remote repository for your fork.</li>
+      <li><code>git remote add upstream</code>
+        <ul>
+          <li>https://help.github.com/articles/configuring-a-remote-for-a-fork/</li>
+          <li>http://www.eqqon.com/index.php/Collaborative_Github_Workflow</li>
+          <li>http://blog.scottlowe.org/2015/01/27/using-fork-branch-git-workflow/</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><code>git reset</code>
+    <ul>
+      <li><code>git reset HEAD &lt;file_name&gt;</code> - unstage changes and reset a file to the state where the HEAD points to</li>
+      <li><code>git reset --soft HEAD~1</code> - to rollback a commit</li>
+      <li><code>git reset --hard &lt;remote_name&gt;/&lt;branch_name&gt;</code> - Throws away local changes and makes the working tree and index same as the remote version</li>
+    </ul>
+  </li>
+  <li><code>git rev-parse HEAD</code></li>
+  <li><code>git rm</code>
+    <ul>
+      <li><code>git rm --cached &lt;file_name&gt;</code> - untracks a file without deleting from local file system</li>
+      <li><code>git rm --cached -f &lt;file_name&gt;</code> - untracks a file and forcefully deletes from local file system</li>
+    </ul>
+  </li>
+  <li><code>git shortlog</code> - shows the authors who have contributed to the repository and their commits</li>
+  <li><code>git show</code>
+    <ul>
+      <li><code>git show &lt;commit_id&gt;</code> - shows information about a commit. Even partial commit ids are accepted</li>
+      <li><code>git show 'git describe' --pretty=fuller</code></li>
+    </ul>
+  </li>
+  <li><code>git stash</code>
+    <ul>
+      <li><code>git stash</code> - to stash uncommitted changes</li>
+      <li><code>git stash list</code> - list out the stashes in the local repository</li>
+      <li><code>git stash apply</code> - to apply the changes that were stored in the last stash</li>
+      <li><code>git stash apply stash@{1}</code> - to restore an old stash</li>
+    </ul>
+  </li>
+  <li><code>git status</code></li>
+  <li><code>git tag</code>
+    <ul>
+      <li><code>git tag</code> - lists all the tags. There are two types of tags—<em>lightweight</em> and <em>annotated</em>. <em>Lightweight tags</em> contain only the tag name and point to a commit. <em>Annotated tags</em> contain the tag name, information about the tagger, and a message associated with the tag.</li>
+      <li><code>git tag &lt;tag_name&gt;</code> - create lightweight tag associated with the latest commit</li>
+      <li><code>git tag -a &lt;tag_name&gt; -m &lt;commit_message&gt;</code> - create annotated tag</li>
+      <li><code>git tag 1.0.0 1b2e1d63ff</code> - the 1b2e1d63ff stands for the first 10 characters of the commit id you want to reference with your tag</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="frequent-actions">Frequent actions</h2>
+
+<p><strong>Undo tracking operation</strong></p>
+
+<p>Below command asks Git to untrack the file, but let it remain in the file system. Same command can be used to remove a file from the repository, but a commit is needed after this to take effect.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">git rm --cached &lt;file_name&gt;</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Undo stage operation</strong></p>
+
+<p>You make changes to a tracked file and then run <code>git add</code> to stage it for commit. To unstage the changes, run below command to reset a file to the state where the HEAD or the last commit points to.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">git reset HEAD &lt;file_name&gt;</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Revert back to an older commit</strong>
+To revert back local changes and go back to the state during the last commit.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">git checkout &lt;file_name&gt;</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Undo commit operation</strong></p>
+
+<p>To rollback a commit. The <code>--soft</code> option undoes a commit, but lets the changes you made in that commit remain staged for you to review. The <code>HEAD~1</code> means that you want to go back one commit from where your current <code>HEAD</code> points.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">git reset --soft HEAD~1</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>The process of committing involves three steps:
+  * making changes in a file,
+  * staging it for a commit, and
+  * performing a commit operation.</p>
+
+<ul>
+  <li>The <code>--soft</code> option takes us back to just before the commit, when the changes are staged.</li>
+  <li>The <code>--mixed</code> option takes us back to just before the staging of the files, where the files have just been changed.</li>
+  <li>The <code>--hard</code> option takes us to a state even before you changed the files.</li>
+</ul>
+
+<p>The <code>reset</code> command changes the history of the project, but <code>revert</code> undoes the changes made by the faulty commit by creating a new commit that reverses the changes.</p>
+
+<p><strong>Undo push operation</strong></p>
+
+<p>To revert the changes pushed to the central repository</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">git revert HEAD~1
+</span><span class="line">git push origin master</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>However, if you also want the other commit(s) to vanish from the remote repository, you first need to go for a <code>reset</code> command—deleting the unwanted commit—and then push the changes to the remote. If you perform a normal <code>git push</code>, the push will be rejected—because the origin HEAD is at a more advanced position than your local branch. Therefore, you need to force the change with a postfix, <code>-f</code>, which forces the push on the remote origin:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">git reset --hard HEAD~2
+</span><span class="line">git push -f origin master</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Merging Branches</strong></p>
+
+<p>To merge branch <code>new_feature</code> with branch <code>master</code></p>
+
+<table>
+  <tbody>
+    <tr>
+      <td><img src="/technology/git-merge-1.jpeg" /></td>
+      <td><img src="/technology/git-merge-2.jpeg" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">git checkout master
+</span><span class="line">git merge new_feature</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>To merge branch <code>another_feature</code> with branch <code>new_feature</code></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">git checkout new_feature
+</span><span class="line">git merge another_feature</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<table>
+  <tbody>
+    <tr>
+      <td>Merge</td>
+      <td>Rebase</td>
+    </tr>
+    <tr>
+      <td><img src="/technology/git-merge-3.jpeg" title="" /></td>
+      <td><img class="right" src="/technology/git-rebase.jpeg" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Hard fetch</strong></p>
+
+<p>To drop all your local changes and commits, fetch the latest history from the server and point your local master branch at it like this</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">git fetch origin
+</span><span class="line">git reset --hard &lt;branch&gt;</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Rebase</strong></p>
+
+<p><code>git rebase master</code> - If you’re rebasing a <em>master</em> into <em>new_feature</em>, the new commits in <em>master</em> are put before the new commits in <em>new_feature</em> that are not common to master. To do so, run the following command from the <em>new_feature</em> branch</p>
+
+<p><code>git merge --rebase master</code> - If you’re working in a team, you should first checkout to <em>master</em>, pull from the upstream branch to update your <em>master</em> with the latest commits, and then switch back to <em>new_feature</em> before running the above command.</p>
+
+<p><img src="/technology/git-rebase2.jpeg" /></p>
+
+<p><img src="/technology/git-merge-vs-rebase.jpeg" /></p>
+
+<p><code>git pull --rebase origin master</code> - When you’re pulling changes, you can use rebase too. It essentially puts the new commits in the master of the remote in your history, and then superimposes your commits on them.</p>
+
+<p><code>git rebase -i</code> or <code>git rebase --interactive</code></p>
+
+<p>A squash operation changes the history of your branch. If you need to push your changes after a squash operation, you need to use the -f option, or your push will be rejected.</p>
+
+<p>When you have multiple commits in your PR, run rebase so that the change is merged as a single commit.</p>
+
+<p>Here are the steps to do it:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">git commit -m "commmit 1"
+</span><span class="line">git commit -m "commmit 2"
+</span><span class="line">git commit -m "commmit 3"
+</span><span class="line">git push origin develop
+</span><span class="line">git fetch upstream develop # fetch the latest changes from upstream
+</span><span class="line"># in editor, mark 1st commit as 'pick' and rest as 'squash'. This squashes all the above commits into a single commit
+</span><span class="line">git rebase -i upstream/develop
+</span><span class="line">git push origin develop -f</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>To cancel a rebase in progress before pushing: <code>git rebase abort</code></p>
+
+<p><strong>Cherry picking</strong></p>
+
+<p>create a branch based off of a commit</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">git fetch upstream
+</span><span class="line">git log
+</span><span class="line">git checkout -b &lt;new_branch_name&gt; &lt;remote_branch_name&gt;
+</span><span class="line">git cherry-pick &lt;commit_id&gt;
+</span><span class="line">Go to mmohamed17/kyccore -&gt; Compare &amp; Pull request</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Diff</strong></p>
+
+<ul>
+  <li>Show unpushed commits: <code>git log origin/develop..HEAD</code></li>
+  <li>To list the files modified between ‘origin/develop’ and my current branch: <code>git log --stat origin/develop..HEAD</code></li>
+  <li>To list the files modified between 2 branches: <code>git log --stat origin/develop..origin/feature/JIRA-123</code></li>
+</ul>
+
+<h2 id="advanced-concepts">Advanced Concepts</h2>
+
+<h3 id="content-addressable-names">Content-Addressable Names</h3>
+
+<p>The Git object store is organized and implemented as a content-addressable storage system. Specifically, each object in the object store has a unique name produced by applying SHA1 to the contents of the object, yielding an SHA1 hash value. Because the complete contents of an object contribute to the hash value and the hash value is believed to be effectively unique to that particular content, the SHA1 hash is a sufficient index or name for that object in the object database. Any tiny change to a file causes the SHA1 hash to change, causing the new version of the file to be indexed separately. SHA1 values are 160-bit values that are usually represented as a 40-digit hexadecimal number, such as 9da581d910c9c4ac93557ca4859e767f5caf5169. Sometimes, during display, SHA1 values are abbreviated to a smaller, unique prefix. Git users speak of SHA1, hash code, and sometimes object ID interchangeably.</p>
+
+<p>An important characteristic of the SHA1 hash computation is that it always computes the same ID for identical content, regardless of where that content is. In other words, the same file content in different directories and even on different machines yields the exact same SHA1 hash ID. Thus, the SHA1 hash ID of a file is an effective globally unique identifier. A powerful corollary is that files or blobs of arbitrary size can be compared for equality across the Internet by merely comparing their SHA1 identifiers.</p>
+
+<h3 id="pack-files">Pack files</h3>
+
+<p>Efficient file storage mechanism. If you were to just change or add one line to a file, Git might store the complete, newer version and then take note of the one line change as a delta and store that in the pack too.</p>
+
+<p>The main points I like about DVCS are those :</p>
+
+<p>You can commit broken things. It doesn’t matter because other peoples won’t see them until you publish. Publish time is different of commit time.
+Because of this you can commit more often.
+You can merge complete functionality. This functionality will have its own branch. All commits of this branch will be related to this functionality. You can do it with a CVCS however with DVCS its the default.
+You can search your history (find when a function changed )
+You can undo a pull if someone screw up the main repository, you don’t need to fix the errors. Just clear the merge.
+When you need a source control in any directory do : <code>git init</code> . and you can commit, undoing changes, etc…
+It’s fast (even on Windows )</p>
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/vcs.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/vcs.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

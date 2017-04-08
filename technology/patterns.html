@@ -1,0 +1,1251 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Patterns - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Patterns Design Patterns Adapter Bridge Builder Chain of Responsibility Circular Buffer Command Composite Decorator Facade Factory Factory Idiom - &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/patterns.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Patterns</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#design-patterns" id="markdown-toc-design-patterns">Design Patterns</a>    <ul>
+      <li><a href="#adapter" id="markdown-toc-adapter">Adapter</a></li>
+      <li><a href="#bridge" id="markdown-toc-bridge">Bridge</a></li>
+      <li><a href="#builder" id="markdown-toc-builder">Builder</a></li>
+      <li><a href="#chain-of-responsibility" id="markdown-toc-chain-of-responsibility">Chain of Responsibility</a></li>
+      <li><a href="#circular-buffer" id="markdown-toc-circular-buffer">Circular Buffer</a></li>
+      <li><a href="#command" id="markdown-toc-command">Command</a></li>
+      <li><a href="#composite" id="markdown-toc-composite">Composite</a></li>
+      <li><a href="#decorator" id="markdown-toc-decorator">Decorator</a></li>
+      <li><a href="#facade" id="markdown-toc-facade">Facade</a></li>
+      <li><a href="#factory" id="markdown-toc-factory">Factory</a>        <ul>
+          <li><a href="#factory-idiom---not-a-pattern" id="markdown-toc-factory-idiom---not-a-pattern">Factory Idiom - Not a pattern</a></li>
+          <li><a href="#static-factory-method" id="markdown-toc-static-factory-method">Static Factory Method</a></li>
+          <li><a href="#factory-method" id="markdown-toc-factory-method">Factory Method</a></li>
+          <li><a href="#abstract-factory" id="markdown-toc-abstract-factory">Abstract Factory</a></li>
+        </ul>
+      </li>
+      <li><a href="#flyweight" id="markdown-toc-flyweight">Flyweight</a></li>
+      <li><a href="#interpretor" id="markdown-toc-interpretor">Interpretor</a></li>
+      <li><a href="#iterator" id="markdown-toc-iterator">Iterator</a></li>
+      <li><a href="#mediator" id="markdown-toc-mediator">Mediator</a></li>
+      <li><a href="#memento" id="markdown-toc-memento">Memento</a></li>
+      <li><a href="#observer" id="markdown-toc-observer">Observer</a></li>
+      <li><a href="#prototype" id="markdown-toc-prototype">Prototype</a></li>
+      <li><a href="#proxy" id="markdown-toc-proxy">Proxy</a>        <ul>
+          <li><a href="#dynamic-proxy" id="markdown-toc-dynamic-proxy">Dynamic Proxy</a>            <ul>
+              <li><a href="#virtual-proxy" id="markdown-toc-virtual-proxy">Virtual Proxy</a></li>
+              <li><a href="#counting-proxy" id="markdown-toc-counting-proxy">Counting Proxy</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><a href="#singleton" id="markdown-toc-singleton">Singleton</a></li>
+      <li><a href="#state" id="markdown-toc-state">State</a></li>
+      <li><a href="#strategy" id="markdown-toc-strategy">Strategy</a></li>
+      <li><a href="#reactor" id="markdown-toc-reactor">Reactor</a></li>
+      <li><a href="#recycle-bin" id="markdown-toc-recycle-bin">Recycle Bin</a></li>
+      <li><a href="#template-method" id="markdown-toc-template-method">Template Method</a></li>
+      <li><a href="#transferobject" id="markdown-toc-transferobject">TransferObject</a></li>
+      <li><a href="#valueobject" id="markdown-toc-valueobject">ValueObject</a></li>
+      <li><a href="#visitor" id="markdown-toc-visitor">Visitor</a></li>
+    </ul>
+  </li>
+  <li><a href="#anti-patterns" id="markdown-toc-anti-patterns">Anti Patterns</a></li>
+  <li><a href="#concurrency-patterns" id="markdown-toc-concurrency-patterns">Concurrency Patterns</a>    <ul>
+      <li><a href="#active-object" id="markdown-toc-active-object">Active Object</a></li>
+      <li><a href="#balking-pattern" id="markdown-toc-balking-pattern">Balking Pattern</a></li>
+      <li><a href="#barrier" id="markdown-toc-barrier">Barrier</a></li>
+      <li><a href="#consistent-lock-order" id="markdown-toc-consistent-lock-order">Consistent Lock Order</a></li>
+      <li><a href="#critical-section" id="markdown-toc-critical-section">Critical Section</a></li>
+      <li><a href="#disruptor" id="markdown-toc-disruptor">Disruptor</a></li>
+      <li><a href="#guarded-suspension" id="markdown-toc-guarded-suspension">Guarded Suspension</a></li>
+      <li><a href="#monitor-object" id="markdown-toc-monitor-object">Monitor Object</a></li>
+      <li><a href="#producerconsumer-pattern" id="markdown-toc-producerconsumer-pattern">Producer/Consumer pattern</a></li>
+      <li><a href="#read-write-lock" id="markdown-toc-read-write-lock">Read-Write Lock</a></li>
+    </ul>
+  </li>
+  <li><a href="#architectural-patterns" id="markdown-toc-architectural-patterns">Architectural Patterns</a>    <ul>
+      <li><a href="#active-record" id="markdown-toc-active-record">Active Record</a></li>
+      <li><a href="#business-delegate" id="markdown-toc-business-delegate">Business Delegate</a></li>
+      <li><a href="#data-access-object-dao" id="markdown-toc-data-access-object-dao">Data Access Object (DAO)</a></li>
+      <li><a href="#dependency-injection-or-ioc" id="markdown-toc-dependency-injection-or-ioc">Dependency Injection or IOC</a></li>
+      <li><a href="#facade-1" id="markdown-toc-facade-1">Facade</a>        <ul>
+          <li><a href="#session-facade" id="markdown-toc-session-facade">Session Facade</a></li>
+          <li><a href="#wrapper-facade" id="markdown-toc-wrapper-facade">Wrapper Facade</a></li>
+        </ul>
+      </li>
+      <li><a href="#front-controller" id="markdown-toc-front-controller">Front Controller</a></li>
+      <li><a href="#interceptor" id="markdown-toc-interceptor">Interceptor</a></li>
+      <li><a href="#mock-object" id="markdown-toc-mock-object">Mock object</a></li>
+      <li><a href="#model-view-controller" id="markdown-toc-model-view-controller">Model View Controller</a></li>
+      <li><a href="#naked-objects" id="markdown-toc-naked-objects">Naked objects</a></li>
+      <li><a href="#null-object" id="markdown-toc-null-object">Null object</a></li>
+      <li><a href="#service-locator" id="markdown-toc-service-locator">Service Locator</a></li>
+      <li><a href="#token-synchronization" id="markdown-toc-token-synchronization">Token Synchronization</a></li>
+    </ul>
+  </li>
+  <li><a href="#bibliography" id="markdown-toc-bibliography">Bibliography</a></li>
+</ul>
+
+<h1 id="design-patterns">Design Patterns</h1>
+
+<h2 id="adapter">Adapter</h2>
+
+<ul>
+  <li>Also called ‘Wrapper’ pattern</li>
+  <li>converts the interface of a class into another interface the clients expect. Adapter lets classes work together that couldn’t otherwise because of incompatible interfaces.</li>
+  <li>OO Principle followed: composition over inheritance</li>
+</ul>
+
+<table>
+  <tbody>
+    <tr>
+      <td><img src="/technology/adapter.png" /></td>
+      <td><img src="/technology/adapter_example.png" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">MallardDuck</span> <span class="n">duck</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">MallardDuck</span><span class="o">();</span>
+</span><span class="line"><span class="n">WildTurkey</span> <span class="n">turkey</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">WildTurkey</span><span class="o">();</span>
+</span><span class="line">
+</span><span class="line"><span class="n">Duck</span> <span class="n">adapter</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">TurkeyAdapter</span><span class="o">(</span><span class="n">turkey</span><span class="o">);</span>
+</span><span class="line"><span class="n">adapter</span><span class="o">.</span><span class="na">quack</span><span class="o">();</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="bridge">Bridge</h2>
+
+<h2 id="builder">Builder</h2>
+
+<p><strong>Benefits</strong></p>
+
+<ul>
+  <li>Encapsulates the way a complex object is constructed</li>
+  <li>Allows objects to be constructed in a multistep and varying process as opposed to one step factories. Used in building fluent APIs.</li>
+  <li>Product implementations can be swapped in and out because the client only sees an abstract interface.</li>
+  <li>Prevents telescoping constructor problem</li>
+</ul>
+
+<h2 id="chain-of-responsibility">Chain of Responsibility</h2>
+
+<ul>
+  <li>Use this pattern when you want to give more than one object a chance to handle a request</li>
+</ul>
+
+<p><strong>Benefits</strong></p>
+
+<ul>
+  <li>Decouples the sender of the request and its receivers</li>
+  <li>Simplifies your object because it doesn’t have to know the chain’s structure and keep direct references to its members.</li>
+  <li>Allows you to add or remove responsibilities dynamically by changing the members or order of the chain.</li>
+  <li>Used in applying filters in servlet request processing, logging a message to multiple channels, etc.</li>
+</ul>
+
+<p><strong>Drawbacks</strong></p>
+
+<ul>
+  <li>Execution of the request isn’t guaranteed; it may fall off the end of the chain if no object handles it. This can be an advantage or a disadvantage. One can always implement a catch-all handler.</li>
+  <li>Can be hard to observe and debug at runtime</li>
+</ul>
+
+<table>
+  <tbody>
+    <tr>
+      <td><img src="/technology/Chain_of_responsibility.png" /></td>
+      <td><img src="/technology/Chain_of_responsibility_example.png" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">ManagerPurchasePower</span> <span class="n">manager</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">ManagerPurchasePower</span><span class="o">();</span>
+</span><span class="line"><span class="n">VPPurchasePower</span> <span class="n">vp</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">VPPurchasePower</span><span class="o">();</span>
+</span><span class="line"><span class="n">CEOPurchasePower</span> <span class="n">ceo</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">CEOPurchasePower</span><span class="o">();</span>
+</span><span class="line"><span class="n">manager</span><span class="o">.</span><span class="na">setSuccessor</span><span class="o">(</span><span class="n">vp</span><span class="o">);</span>
+</span><span class="line"><span class="n">vp</span><span class="o">.</span><span class="na">setSuccessor</span><span class="o">(</span><span class="n">ceo</span><span class="o">);</span>
+</span><span class="line">
+</span><span class="line"><span class="n">manager</span><span class="o">.</span><span class="na">approve</span><span class="o">(</span><span class="n">request</span><span class="o">);</span> <span class="c1">// if manager is not authorized to approve the request, it will be delegated VP. </span>
+</span><span class="line">
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="circular-buffer">Circular Buffer</h2>
+
+<h2 id="command">Command</h2>
+
+<ul>
+  <li>encapsulates a request as an object, thereby letting you parameterize other objects
+with different requests, queue or log requests, and support undoable operations.</li>
+  <li><code>Executor</code> framework in Java is an example of Command pattern</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Command</span> <span class="o">{</span>
+</span><span class="line">   <span class="kd">public</span> <span class="kt">void</span> <span class="nf">execute</span><span class="o">();</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="composite">Composite</h2>
+
+<h2 id="decorator">Decorator</h2>
+
+<ul>
+  <li>Attach additional responsibilities to an object dynamically.</li>
+  <li>Decorators provide a flexible alternative to subclassing for extending functionality</li>
+  <li>OO Principle followed: open-closed principle - classes should be open for extension, closed for modification</li>
+</ul>
+
+<table>
+  <tbody>
+    <tr>
+      <td><img src="/technology/decorator.png" /></td>
+      <td><img src="/technology/decorator_example.png" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">InputStream</span> <span class="n">in</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">LineNumberInputStream</span><span class="o">(</span>
+</span><span class="line">                    <span class="k">new</span> <span class="nf">BufferedInputStream</span><span class="o">(</span>
+</span><span class="line">                        <span class="k">new</span> <span class="nf">FileInputStream</span><span class="o">(</span><span class="s">&quot;test.txt&quot;</span><span class="o">)</span>
+</span><span class="line">                    <span class="o">)</span>
+</span><span class="line">                <span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="facade">Facade</h2>
+
+<ul>
+  <li>Provides a unified interrace to a set of interfaces in a subsystem.</li>
+  <li>Facade defines a higher level interface that makes the subsystems easier to use</li>
+  <li>Not only does it simplify an interface, it also decouples a client from a subsystem of components</li>
+  <li>OO Principle followed: Principle of least knowledge - talk only to your immediate friends.</li>
+</ul>
+
+<p><img src="/technology/facade.png" /></p>
+
+<h2 id="factory">Factory</h2>
+
+<p>Beware of the ambiguity in the names - Static Factory Method (in Effective Java) is not the same as Factory Method (in GoF)</p>
+
+<h3 id="factory-idiom---not-a-pattern">Factory Idiom - Not a pattern</h3>
+
+<ul>
+  <li>(+) Dynamically creates objects based on some input parameters. Client refers to the product via common interface.</li>
+  <li>(+) Creates objects without exposing the instantiation logic to the client.</li>
+  <li>(+) Since client refers to the product via a common interface, factory can change the product implementation anytime after go-live.</li>
+</ul>
+
+<p><strong>Type 1: Parameterized Factory Method</strong></p>
+
+<p>Classical switch-case/if-condition based factory method that takes a parameter to decide the type of product to return</p>
+
+<ul>
+  <li>(+) New products can be added without changing the client code.</li>
+  <li>(-) Tight coupling between factory and product implementations. In other words, Factory class needs to change for every new product. It violates the Open Close Principle.</li>
+  <li>(-) Sub-classing means replacing all the factory class references everywhere in the code.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Factory</span><span class="o">{</span>
+</span><span class="line">   <span class="kd">public</span> <span class="n">Product</span> <span class="nf">getProduct</span><span class="o">(</span><span class="n">String</span> <span class="n">type</span><span class="o">){</span>
+</span><span class="line">      <span class="k">if</span><span class="o">(</span><span class="n">type</span><span class="o">==</span><span class="mi">1</span><span class="o">){</span>
+</span><span class="line">          <span class="k">return</span> <span class="k">new</span> <span class="nf">Product1</span><span class="o">();</span>
+</span><span class="line">      <span class="o">}</span> <span class="k">else</span> <span class="nf">if</span><span class="o">(</span><span class="n">type</span><span class="o">==</span><span class="mi">2</span><span class="o">){</span>
+</span><span class="line">          <span class="k">return</span> <span class="k">new</span> <span class="nf">Product2</span><span class="o">();</span>
+</span><span class="line">      <span class="o">}</span> <span class="o">....</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Type 2: Dynamic Class Registration</strong></p>
+
+<p>Keep the map of key and product type away from the factory. It could be a properties file or statically registered in common registry class. Factory can dynamically create an instance of the product either by Class.forName() or using reflection.</p>
+
+<ul>
+  <li>(+) Factory class is not changed every time a product is added</li>
+  <li>(-) Using reflection impacts the performance</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Factory</span><span class="o">{</span>
+</span><span class="line">   <span class="kd">private</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Class</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;&gt;</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;&gt;();</span>
+</span><span class="line">
+</span><span class="line">   <span class="kd">public</span> <span class="kt">void</span> <span class="nf">register</span><span class="o">(</span><span class="n">String</span> <span class="n">type</span><span class="o">,</span> <span class="n">Class</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span> <span class="n">klass</span><span class="o">){</span>
+</span><span class="line">      <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">type</span><span class="o">,</span> <span class="n">klass</span><span class="o">);</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line">
+</span><span class="line">   <span class="kd">public</span> <span class="n">Product</span> <span class="nf">getProduct</span><span class="o">(</span><span class="n">String</span> <span class="n">type</span><span class="o">){</span>
+</span><span class="line">      <span class="n">Class</span><span class="o">&lt;</span><span class="n">Product</span><span class="o">&gt;</span> <span class="n">klass</span> <span class="o">=</span> <span class="n">map</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">type</span><span class="o">);</span>
+</span><span class="line">
+</span><span class="line">      <span class="c1">//Class.forName() or Reflection</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="static-factory-method">Static Factory Method</h3>
+
+<ul>
+  <li>Creates objects without exposing the instantiation logic to the client. Client refers to the product via common interface.</li>
+  <li>
+    <p>The ability of static factory methods to return the same instance from repeated invocations allows classes to maintain strict control over what instances exist at any time. Such classes are called <em>Instance-controlled classes</em>.</p>
+  </li>
+  <li>(+) Overloaded constructors with similar parameter list can be replaced with static factory methods with meaningful names. E.g., <code>BigInteger.probablePrime(int, int, Random)</code> is better than <code>new BigInteger(int, int, Random)</code></li>
+  <li>(+) Unlike constructors, there is no need to create a new object every time the method is invoked. E.g.,<code>public static Boolean valueOf(boolean b) {return b ? Boolean.TRUE : Boolean.FALSE;}</code></li>
+  <li>(+) Unlike constructors, they can return objects of any sub-type of their return type. Helps hiding implementation classes and exposing only the interface. E.g., Non-instantiable class <code>java.util.Collections</code> hides 32 different implementations of <code>Collection</code> interface.</li>
+  <li>(+) It will also enhance the software maintainability and performance since the class of the returned object can be varied from release to release.</li>
+  <li>(+) Reduces the verbosity of creating parameterized type instances. e.g., <code>Map&lt;String, List&lt;Integer&gt;&gt; m = HashMap.newInstance();</code> (Generic Type Inference)</li>
+  <li>(+) Used in building internal-DSLs along with method chaining</li>
+  <li>(-) Classes without public/protected constructors cannot be sub-classed</li>
+  <li>(-) Static Factory methods are not easily distinguishable from other static methods</li>
+</ul>
+
+<h3 id="factory-method">Factory Method</h3>
+
+<p>Defines an interface for creating an object, but lets subclasses decide which class to instantiate. Factory Method lets a class defer instantiation to subclasses.</p>
+
+<ul>
+  <li>(+) Creates objects without exposing the instantiation logic to the client.</li>
+  <li>(+) Since client refers to the product via a common interface, factory can change the product implementation anytime after go-live.</li>
+  <li>(+) Used in builder pattern using which internal-DSLs are possible</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><img src="/technology/FactoryMethod.png" /></td>
+      <td><img src="/technology/FactoryMethodExample.png" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="abstract-factory">Abstract Factory</h3>
+
+<ul>
+  <li>Nothing but an additional layer of abstract on top of Factory method pattern</li>
+  <li>Provide an interface for creating families of related or dependent objects without specifying their concrete classes.</li>
+  <li>Unlike in Factory method pattern, Factory class in this pattern can have one or more factory methods.</li>
+  <li>Type of Factory class is not known to client at compile-time.</li>
+  <li><strong>Difference b/w Factory and Abstract Factory</strong>
+    <ul>
+      <li>factory design pattern creates the requested type of object on demand. By contrast, the abstract factory is basically a factory of factories. In other words, the abstract factory design pattern introduces one more indirection to create a specified object. A client of the abstract factory design pattern first requests a proper factory from the abstract factory object, and then it requests an appropriate object from the factory object.</li>
+      <li>when you have only one type of object to be created, you can use a factory design pattern; when you have a family of objects to be created, you can use an abstract factory design pattern.</li>
+    </ul>
+  </li>
+  <li>(+) Addresses the concerns in both the factory method implementations.</li>
+  <li>(-) Factory cannot be a singleton</li>
+  <li>(-) Relatively difficult to implement</li>
+  <li>(-) A new factory has to be created for every new product</li>
+</ul>
+
+<p><img src="/technology/AbstractFactory.png" /></p>
+
+<h2 id="flyweight">Flyweight</h2>
+
+<p>The Flyweight Pattern can be a useful pattern in situations where you have several objects, and many may represent the same value. In these instances, it can be possible to share the values as long as the objects are immutable.</p>
+
+<p>In Java, <code>Integer.valueOf(int)</code> method implements this pattern to cache values between <em>-128</em> to <em>127</em>. It checks the value of the given parameter, and if it is a precached value, the method returns the pre-constructed instance rather than creating a new copy. The cache is initialized in a static block, and so is created the first time an <code>Integer</code> is referenced in a running JVM.</p>
+
+<p>This property only holds because <code>Integer</code> objects are immutable. If you are ever creating Integer objects, always use the valueOf method to take advantage of the Flyweight Pattern. If you call new, then new instances will always be created,
+even if they are within the threshold of the cached values.</p>
+
+<p>Another implementation of the Flyweight Pattern is called the <em>Null Object Pattern</em>. This pattern uses a flyweight object to represent null.</p>
+
+<h2 id="interpretor">Interpretor</h2>
+
+<h2 id="iterator">Iterator</h2>
+
+<h2 id="mediator">Mediator</h2>
+
+<ul>
+  <li>Use this pattern to centralize complex communications and control between related objects.</li>
+</ul>
+
+<p><strong>Benefits</strong></p>
+
+<ul>
+  <li>Increases the reusability of the objects supported by the mediator by decoupling them from the system</li>
+  <li>Simplifies maintenance of the system by centralizing control logic.</li>
+  <li>Simplifies and reduces the variety of messages sent between objects in the system.</li>
+</ul>
+
+<p><strong>Drawbacks</strong></p>
+
+<ul>
+  <li>Without proper design, the Mediator object itself can become overly complex.</li>
+</ul>
+
+<h2 id="memento">Memento</h2>
+
+<ul>
+  <li>Use this pattern when you need to be able to return an object to one of its
+previous states; for instance, if your user requests an undo.</li>
+</ul>
+
+<h2 id="observer">Observer</h2>
+
+<ul>
+  <li>defines a one-to-many dependency between objects so that when one object changes state, all of its dependents are notified and updated automatically.</li>
+  <li>Java provides out-of-the-box <code>Observer</code> interface and <code>Observable</code> class in <code>java.util</code> package. However, <code>Observable</code> is a class and does not implement any interface. It has other shortcomings as well.</li>
+  <li>OO Principle followed: Strive for loosely coupled designs between objects that interact.</li>
+</ul>
+
+<p><img src="/technology/observer.png" /></p>
+
+<h2 id="prototype">Prototype</h2>
+
+<h2 id="proxy">Proxy</h2>
+
+<h3 id="dynamic-proxy">Dynamic Proxy</h3>
+
+<p>Mockito, Spring container</p>
+
+<h4 id="virtual-proxy">Virtual Proxy</h4>
+
+<h4 id="counting-proxy">Counting Proxy</h4>
+
+<h2 id="singleton">Singleton</h2>
+
+<ul>
+  <li>Why Singleton? Can I not achieve the same in a public static class &amp; method?</li>
+  <li>All-static method class CANNOT implement an interface.</li>
+  <li>All-static method class makes itself extendable. Singleton class DOESN’T allow that.</li>
+  <li>Lazy loading singletons - http://crazybob.org/2007/01/lazy-loading-singletons.html</li>
+</ul>
+
+<p><strong>Implementation Variations</strong></p>
+
+<ul>
+  <li><strong>Early initialization</strong>
+    <ul>
+      <li>Type 1 - public static final field – Not serializable until all the instance fields are transient and override readResolve() method to return the singleton instance.</li>
+      <li>Type 2 - private static final field &amp; factory method – Same issues as above. At least gives flexibility to decide whether the class should be singleton or not.</li>
+      <li>Type 3 - Enum – No serialization and reflection issues.</li>
+    </ul>
+  </li>
+  <li><strong>Lazy initialization</strong>
+    <ul>
+      <li>public static synchronized getInstance() – Performance impact due to acquiring lock for every call</li>
+      <li>DCL (Double-checked locking) – Broken except for 2 conditions
+        <ul>
+          <li>Instance field is declared volatile – Works only from JDK 1.5 and above</li>
+          <li>Class is immutable – All fields are final. Reading &amp; Writing references to immutable objects are atomic.</li>
+        </ul>
+      </li>
+      <li>Use external container like Spring/Guice or custom factory to manage the number of instances created</li>
+    </ul>
+  </li>
+  <li><strong>Issues with Singleton</strong>
+    <ul>
+      <li>Single threaded environment
+        <ul>
+          <li>Hard to unit test the class – especially when it holds state like counter, etc.
+            <ul>
+              <li>Work around: package protect constructor and reset state</li>
+            </ul>
+          </li>
+          <li>Potentially allows multiple version - Via Serialization or Reflection
+            <ul>
+              <li>Work around: override readResolve() or use enum model</li>
+            </ul>
+          </li>
+          <li>Violates SRP (Single Responsibility Principle)
+            <ul>
+              <li>Work around: Use external container like Spring or some kind of registry/factory to manage the number of instances created</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>Multi threaded environment
+        <ul>
+          <li>Double-checked locking anti-pattern
+            <ul>
+              <li>Work around: use volatile field or make class immutable</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Type 1 - Early init with public static final field</strong></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Singleton</span><span class="o">{</span>
+</span><span class="line">   <span class="kd">public</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Singleton</span> <span class="n">INSTANCE</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Singleton</span><span class="o">();</span>
+</span><span class="line">   <span class="kd">private</span> <span class="nf">Singleton</span><span class="o">(){}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Type 2 - Early init with private static field &amp; factory method</strong></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Singleton</span><span class="o">{</span>
+</span><span class="line">   <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Singleton</span> <span class="n">INSTANCE</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Singleton</span><span class="o">();</span>
+</span><span class="line">   <span class="kd">private</span> <span class="nf">Singleton</span><span class="o">(){}</span>
+</span><span class="line">
+</span><span class="line">   <span class="c1">//static factory method</span>
+</span><span class="line">   <span class="kd">public</span> <span class="kd">static</span> <span class="n">Singleton</span> <span class="nf">getInstance</span><span class="o">(){</span>
+</span><span class="line">     <span class="k">return</span> <span class="n">INSTANCE</span><span class="o">;</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Type 3 - Early init via Enum</strong></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"> <span class="kd">public</span> <span class="kd">enum</span> <span class="n">Singleton</span><span class="o">{</span>
+</span><span class="line">    <span class="n">INSTANCE</span><span class="o">;</span> <span class="c1">//By default, public static final</span>
+</span><span class="line"> <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Type 4 - Lazy init - not thread-safe</strong></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Singleton</span><span class="o">{</span>
+</span><span class="line">   <span class="kd">private</span> <span class="kd">static</span> <span class="n">Singleton</span> <span class="n">instance</span><span class="o">;</span>
+</span><span class="line">   <span class="kd">private</span> <span class="nf">Singleton</span><span class="o">(){}</span>
+</span><span class="line">
+</span><span class="line">   <span class="c1">//static factory method</span>
+</span><span class="line">   <span class="kd">public</span> <span class="kd">static</span> <span class="n">Singleton</span> <span class="nf">getInstance</span><span class="o">(){</span>
+</span><span class="line">     <span class="k">if</span><span class="o">(</span><span class="n">instance</span><span class="o">==</span><span class="kc">null</span><span class="o">){</span>
+</span><span class="line">        <span class="n">instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Singleton</span><span class="o">();</span>
+</span><span class="line">     <span class="o">}</span>
+</span><span class="line">     <span class="k">return</span> <span class="n">instance</span><span class="o">;</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Type 5 - Lazy init - Thread-safe but worst performing</strong></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"> <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Singleton</span><span class="o">{</span>
+</span><span class="line">   <span class="kd">private</span> <span class="kd">static</span> <span class="n">Singleton</span> <span class="n">instance</span><span class="o">;</span>
+</span><span class="line">   <span class="kd">private</span> <span class="nf">Singleton</span><span class="o">(){}</span>
+</span><span class="line">
+</span><span class="line">   <span class="c1">//static factory method</span>
+</span><span class="line">   <span class="kd">public</span> <span class="kd">synchronized</span> <span class="kd">static</span> <span class="n">Singleton</span> <span class="nf">getInstance</span><span class="o">(){</span>
+</span><span class="line">     <span class="k">if</span><span class="o">(</span><span class="n">instance</span><span class="o">==</span><span class="kc">null</span><span class="o">){</span>
+</span><span class="line">        <span class="n">instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Singleton</span><span class="o">();</span>
+</span><span class="line">     <span class="o">}</span>
+</span><span class="line">     <span class="k">return</span> <span class="n">instance</span><span class="o">;</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Type 6 - Lazy init - Thread-safe via Double-checked lock (BROKEN)</strong></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"> <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Singleton</span><span class="o">{</span>
+</span><span class="line">   <span class="kd">private</span> <span class="kd">static</span> <span class="n">Singleton</span> <span class="n">instance</span><span class="o">;</span>
+</span><span class="line">   <span class="kd">private</span> <span class="nf">Singleton</span><span class="o">(){}</span>
+</span><span class="line">
+</span><span class="line">   <span class="kd">public</span> <span class="kd">static</span> <span class="n">Singleton</span> <span class="nf">getInstance</span><span class="o">(){</span>
+</span><span class="line">     <span class="k">if</span><span class="o">(</span><span class="n">instance</span><span class="o">==</span><span class="kc">null</span><span class="o">){</span> <span class="c1">//check</span>
+</span><span class="line">        <span class="kd">synchronized</span><span class="o">(</span><span class="n">Singleton</span><span class="o">.</span><span class="na">class</span><span class="o">){</span> <span class="c1">//lock</span>
+</span><span class="line">           <span class="k">if</span><span class="o">(</span><span class="n">instance</span><span class="o">==</span><span class="kc">null</span><span class="o">){</span><span class="c1">//check</span>
+</span><span class="line">              <span class="n">instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Singleton</span><span class="o">();</span>
+</span><span class="line">           <span class="o">}</span>
+</span><span class="line">        <span class="o">}</span>
+</span><span class="line">     <span class="o">}</span>
+</span><span class="line">     <span class="k">return</span> <span class="n">instance</span><span class="o">;</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Type 7 - Lazy init - Thread-safe via DCL and volatile instance (works in Java 5+)</strong></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Singleton</span><span class="o">{</span>
+</span><span class="line">   <span class="kd">private</span> <span class="kd">static</span> <span class="kd">volatile</span> <span class="n">Singleton</span> <span class="n">instance</span><span class="o">;</span>
+</span><span class="line">   <span class="kd">private</span> <span class="nf">Singleton</span><span class="o">(){}</span>
+</span><span class="line">
+</span><span class="line">   <span class="kd">public</span> <span class="kd">static</span> <span class="n">Singleton</span> <span class="nf">getInstance</span><span class="o">(){</span>
+</span><span class="line">     <span class="k">if</span><span class="o">(</span><span class="n">instance</span><span class="o">==</span><span class="kc">null</span><span class="o">){</span> <span class="c1">//check</span>
+</span><span class="line">        <span class="kd">synchronized</span><span class="o">(</span><span class="n">Singleton</span><span class="o">.</span><span class="na">class</span><span class="o">){</span> <span class="c1">//lock</span>
+</span><span class="line">           <span class="k">if</span><span class="o">(</span><span class="n">instance</span><span class="o">==</span><span class="kc">null</span><span class="o">){</span><span class="c1">//check</span>
+</span><span class="line">              <span class="n">instance</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">Singleton</span><span class="o">();</span>
+</span><span class="line">           <span class="o">}</span>
+</span><span class="line">        <span class="o">}</span>
+</span><span class="line">     <span class="o">}</span>
+</span><span class="line">     <span class="k">return</span> <span class="n">instance</span><span class="o">;</span>
+</span><span class="line">   <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="state">State</h2>
+
+<h2 id="strategy">Strategy</h2>
+
+<ul>
+  <li>enables an algorithm’s behavior to be selected at runtime.</li>
+  <li>OO Principle followed: Open-Closed principle</li>
+</ul>
+
+<p><img src="/technology/strategy.png" /></p>
+
+<h2 id="reactor">Reactor</h2>
+
+<h2 id="recycle-bin">Recycle Bin</h2>
+
+<p>http://c2.com/cgi/wiki?RecycleBin
+You can also find recycle bins in Java, such as in the thread pooling that you can configure using classes like ScheduledThreadPoolExecutor and ThreadPoolExecutor.</p>
+
+<h2 id="template-method">Template Method</h2>
+
+<ul>
+  <li>Defines the skeleton of an algorithm in a method, deferring some steps to
+subclasses to provide the implementation.</li>
+  <li>Lets subclasses redefine certain steps of an algorithm without changing the algorithm structure</li>
+  <li>OO Principle followed: Hollywood principle - Don’t call us, we’ll call you</li>
+</ul>
+
+<p><img src="/technology/template.png" /></p>
+
+<h2 id="transferobject">TransferObject</h2>
+
+<h2 id="valueobject">ValueObject</h2>
+
+<h2 id="visitor">Visitor</h2>
+
+<p><a href="http://stackoverflow.com/a/2604798/1732171">Visitor Pattern Explained</a></p>
+
+<table>
+  <tbody>
+    <tr>
+      <td><img src="/technology/visitor.png" /></td>
+      <td><img src="/technology/visitor_example.png" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+<span class="line-number">39</span>
+<span class="line-number">40</span>
+<span class="line-number">41</span>
+<span class="line-number">42</span>
+<span class="line-number">43</span>
+<span class="line-number">44</span>
+<span class="line-number">45</span>
+<span class="line-number">46</span>
+<span class="line-number">47</span>
+<span class="line-number">48</span>
+<span class="line-number">49</span>
+<span class="line-number">50</span>
+<span class="line-number">51</span>
+<span class="line-number">52</span>
+<span class="line-number">53</span>
+<span class="line-number">54</span>
+<span class="line-number">55</span>
+<span class="line-number">56</span>
+<span class="line-number">57</span>
+<span class="line-number">58</span>
+<span class="line-number">59</span>
+<span class="line-number">60</span>
+<span class="line-number">61</span>
+<span class="line-number">62</span>
+<span class="line-number">63</span>
+<span class="line-number">64</span>
+<span class="line-number">65</span>
+<span class="line-number">66</span>
+<span class="line-number">67</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Main</span> <span class="o">{</span>
+</span><span class="line">    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">        <span class="n">List</span><span class="o">&lt;</span><span class="n">Fruit</span><span class="o">&gt;</span> <span class="n">fruits</span> <span class="o">=</span> <span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="k">new</span> <span class="nf">Apple</span><span class="o">(),</span> <span class="k">new</span> <span class="nf">Orange</span><span class="o">(),</span> <span class="k">new</span> <span class="nf">Orange</span><span class="o">(),</span> <span class="k">new</span> <span class="nf">Apple</span><span class="o">());</span>
+</span><span class="line">
+</span><span class="line">        <span class="kd">final</span> <span class="n">FruitVisitor</span> <span class="n">partitionVisitor</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">FruitPartitionVisitor</span><span class="o">();</span>
+</span><span class="line">        <span class="kd">final</span> <span class="n">FruitVisitor</span> <span class="n">priceVisitor</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">FruitPriceVisitor</span><span class="o">();</span>
+</span><span class="line">        <span class="k">for</span> <span class="o">(</span><span class="n">Fruit</span> <span class="n">fruit</span> <span class="o">:</span> <span class="n">fruits</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">            <span class="n">fruit</span><span class="o">.</span><span class="na">accept</span><span class="o">(</span><span class="n">partitionVisitor</span><span class="o">);</span>
+</span><span class="line">            <span class="n">fruit</span><span class="o">.</span><span class="na">accept</span><span class="o">(</span><span class="n">priceVisitor</span><span class="o">);</span>
+</span><span class="line">        <span class="o">}</span>
+</span><span class="line">    <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span><span class="line">
+</span><span class="line"><span class="o">-------------------------------------------------------------------------------------------------------</span>
+</span><span class="line"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Fruit</span> <span class="o">{</span>
+</span><span class="line">    <span class="kt">void</span> <span class="nf">accept</span><span class="o">(</span><span class="n">FruitVisitor</span> <span class="n">visitor</span><span class="o">);</span>
+</span><span class="line"><span class="o">}</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Apple</span> <span class="kd">implements</span> <span class="n">Fruit</span> <span class="o">{</span>
+</span><span class="line">
+</span><span class="line">    <span class="nd">@Override</span>
+</span><span class="line">    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">accept</span><span class="o">(</span><span class="n">FruitVisitor</span> <span class="n">visitor</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">        <span class="n">visitor</span><span class="o">.</span><span class="na">visit</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+</span><span class="line">    <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Orange</span> <span class="kd">implements</span> <span class="n">Fruit</span><span class="o">{</span>
+</span><span class="line">
+</span><span class="line">    <span class="nd">@Override</span>
+</span><span class="line">    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">accept</span><span class="o">(</span><span class="n">FruitVisitor</span> <span class="n">visitor</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">        <span class="n">visitor</span><span class="o">.</span><span class="na">visit</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
+</span><span class="line">    <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span><span class="line"><span class="o">-------------------------------------------------------------------------------------------------------</span>
+</span><span class="line"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">FruitVisitor</span> <span class="o">{</span>
+</span><span class="line">    <span class="kt">void</span> <span class="nf">visit</span><span class="o">(</span><span class="n">Apple</span> <span class="n">apple</span><span class="o">);</span>
+</span><span class="line">    <span class="kt">void</span> <span class="nf">visit</span><span class="o">(</span><span class="n">Orange</span> <span class="n">orange</span><span class="o">);</span>
+</span><span class="line"><span class="o">}</span>
+</span><span class="line">
+</span><span class="line">
+</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">FruitPriceVisitor</span> <span class="kd">implements</span> <span class="n">FruitVisitor</span> <span class="o">{</span>
+</span><span class="line">
+</span><span class="line">    <span class="nd">@Override</span>
+</span><span class="line">    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">visit</span><span class="o">(</span><span class="n">Apple</span> <span class="n">apple</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Apple price is $5/kg&quot;</span><span class="o">);</span>
+</span><span class="line">    <span class="o">}</span>
+</span><span class="line">
+</span><span class="line">    <span class="nd">@Override</span>
+</span><span class="line">    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">visit</span><span class="o">(</span><span class="n">Orange</span> <span class="n">orange</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;Apple price is $3/kg&quot;</span><span class="o">);</span>
+</span><span class="line">    <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span><span class="line">
+</span><span class="line">
+</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">FruitPartitionVisitor</span> <span class="kd">implements</span> <span class="n">FruitVisitor</span> <span class="o">{</span>
+</span><span class="line">
+</span><span class="line">    <span class="nd">@Override</span>
+</span><span class="line">    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">visit</span><span class="o">(</span><span class="n">Apple</span> <span class="n">apple</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;This is an apple&quot;</span><span class="o">);</span>
+</span><span class="line">    <span class="o">}</span>
+</span><span class="line">
+</span><span class="line">    <span class="nd">@Override</span>
+</span><span class="line">    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">visit</span><span class="o">(</span><span class="n">Orange</span> <span class="n">orange</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&quot;This is an orange&quot;</span><span class="o">);</span>
+</span><span class="line">    <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span><span class="line"><span class="o">-------------------------------------------------------------------------------------------------------</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h1 id="anti-patterns">Anti Patterns</h1>
+
+<blockquote>
+  <p>Excerpts from book ‘Refactoring: Improving the Design of Existing Code’)</p>
+</blockquote>
+
+<ul>
+  <li>Large class</li>
+  <li>Long parameter list</li>
+  <li>Divergent Change
+    <ul>
+      <li>Occurs when one class is commonly changed in different ways for different reasons. If you look at a class and say, “I have to change these four methods every time there is a new financial instrument,” you likely have a situation in which two objects are better than one. That way each object is changed only as a result of one kind of change. Any change to handle a variation should change a single class, and all the typing in the new class should express the variation. To clean this up you identify everything that changes for a particular cause and use <code>Extract Class</code> to put them all together.</li>
+    </ul>
+  </li>
+  <li>Shotgun Surgery
+    <ul>
+      <li>Similar to divergent change but is the opposite. You whiff this when every time you make a kind of change, you have to make a lot of little changes to a lot of different classes. When the changes are all over the place, they are hard to find, and it’s easy to miss an important change. In this case you want to use <code>Move Method</code> and <code>Move Field</code> to put all the changes into a single class. If no current class looks like a good candidate, create one. Divergent change is one class that suffers many kinds of changes, and shotgun surgery is one change that alters many classes.</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="concurrency-patterns">Concurrency Patterns</h1>
+
+<blockquote>
+  <p>Refer “Software Architecture Design Patterns” book</p>
+</blockquote>
+
+<h2 id="active-object">Active Object</h2>
+
+<h2 id="balking-pattern">Balking Pattern</h2>
+
+<h2 id="barrier">Barrier</h2>
+
+<h2 id="consistent-lock-order">Consistent Lock Order</h2>
+
+<h2 id="critical-section">Critical Section</h2>
+
+<h2 id="disruptor">Disruptor</h2>
+
+<h2 id="guarded-suspension">Guarded Suspension</h2>
+
+<h2 id="monitor-object">Monitor Object</h2>
+
+<h2 id="producerconsumer-pattern">Producer/Consumer pattern</h2>
+
+<h2 id="read-write-lock">Read-Write Lock</h2>
+
+<h1 id="architectural-patterns">Architectural Patterns</h1>
+
+<h2 id="active-record">Active Record</h2>
+
+<h2 id="business-delegate">Business Delegate</h2>
+
+<h2 id="data-access-object-dao">Data Access Object (DAO)</h2>
+
+<h2 id="dependency-injection-or-ioc">Dependency Injection or IOC</h2>
+
+<p>(http://www.martinfowler.com/articles/injection.html) Decoupling the implementation dependencies from the application class to a plug-in model.</p>
+
+<p>Types of Dependency injections</p>
+
+<ul>
+  <li>Constructor injection</li>
+  <li>Setter injection</li>
+  <li>Interface injection</li>
+</ul>
+
+<h2 id="facade-1">Facade</h2>
+
+<h3 id="session-facade">Session Facade</h3>
+
+<h3 id="wrapper-facade">Wrapper Facade</h3>
+
+<h2 id="front-controller">Front Controller</h2>
+
+<h2 id="interceptor">Interceptor</h2>
+
+<h2 id="mock-object">Mock object</h2>
+
+<h2 id="model-view-controller">Model View Controller</h2>
+
+<p>MVC &amp; MVC2</p>
+
+<h2 id="naked-objects">Naked objects</h2>
+
+<h2 id="null-object">Null object</h2>
+
+<h2 id="service-locator">Service Locator</h2>
+
+<h2 id="token-synchronization">Token Synchronization</h2>
+
+<h1 id="bibliography">Bibliography</h1>
+
+<ul>
+  <li>Design Patterns
+    <ul>
+      <li>http://c2.com/cgi/wiki?ExecuteAroundMethod</li>
+      <li>http://c2.com/cgi/wiki?CodeSmell</li>
+      <li>http://c2.com/cgi/wiki?LawOfDemeter</li>
+      <li>http://c2.com/cgi/wiki?TooManyParameters</li>
+      <li>http://c2.com/cgi/wiki?FeatureEnvySmell</li>
+      <li>http://www.techjava.de/topics/2008/01/java-class-loading/</li>
+    </ul>
+  </li>
+</ul>
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/patterns.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/patterns.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

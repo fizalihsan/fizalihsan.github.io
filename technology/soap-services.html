@@ -1,0 +1,449 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>SOAP Services - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="SOAP Services SOAP Concepts Downsides of SOAP services Difference between REST and SOAP WSDL Data Binding Tools JAX-B Jackson GSON JSON XStream &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/soap-services.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">SOAP Services</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#soap-concepts" id="markdown-toc-soap-concepts">SOAP Concepts</a>    <ul>
+      <li><a href="#downsides-of-soap-services" id="markdown-toc-downsides-of-soap-services">Downsides of SOAP services</a></li>
+      <li><a href="#difference-between-rest-and-soap" id="markdown-toc-difference-between-rest-and-soap">Difference between REST and SOAP</a></li>
+    </ul>
+  </li>
+  <li><a href="#wsdl" id="markdown-toc-wsdl">WSDL</a></li>
+  <li><a href="#data-binding-tools" id="markdown-toc-data-binding-tools">Data Binding Tools</a>    <ul>
+      <li><a href="#jax-b" id="markdown-toc-jax-b">JAX-B</a></li>
+      <li><a href="#jackson" id="markdown-toc-jackson">Jackson</a></li>
+      <li><a href="#gson" id="markdown-toc-gson">GSON</a></li>
+      <li><a href="#json" id="markdown-toc-json">JSON</a></li>
+      <li><a href="#xstream" id="markdown-toc-xstream">XStream</a></li>
+    </ul>
+  </li>
+  <li><a href="#references" id="markdown-toc-references">References</a></li>
+</ul>
+
+<h1 id="soap-concepts">SOAP Concepts</h1>
+
+<p>2 ways of developing SOAP web services:</p>
+
+<ol>
+  <li>Contract-first approach - the web service definition or the WSDL is created initially and the service implementation is done after that.</li>
+  <li>Code-first approach - the service implementation classes are developed at the beginning and usually the WSDL is automatically generated by the service container in which the web service is deployed.</li>
+</ol>
+
+<h2 id="downsides-of-soap-services">Downsides of SOAP services</h2>
+
+<ul>
+  <li>Performance degradation due to heavy XML processing</li>
+  <li>Complexities associated with the usage of various WS-* specifications are two of the most common disadvantages of the SOAP messaging model.</li>
+</ul>
+
+<h2 id="difference-between-rest-and-soap">Difference between REST and SOAP</h2>
+
+<ul>
+  <li>SOAP is a messaging protocol in which the messages are XML documents, whereas REST is a style of software architecture for distributed hypermedia systems, or systems in which text, graphics, audio, and other media are stored across a network and interconnected through hyperlinks.</li>
+  <li>In the Web, HTTP is both a transport protocol and a messaging system because HTTP requests and responses are messages. The payloads of HTTP messages can be typed using the MIME (Multipurpose Internet Mail Extension) type system. MIME has types such as <code>text/html</code>, <code>application/octet-stream</code>, and <code>audio/mpeg3</code>.</li>
+  <li>A RESTful request targets a resource, but the resource itself typically is created on the service machine and remains there. A resource may be persisted in a data store such as a database system.</li>
+</ul>
+
+<h1 id="wsdl">WSDL</h1>
+
+<ul>
+  <li>stands for Web Service Description Language</li>
+  <li>WSDL documents can describe either category of web service, SOAP-based or REST-style, but there seems to be little interest in WSDLs and WSDL-based tools for RESTful services.</li>
+</ul>
+
+<h1 id="data-binding-tools">Data Binding Tools</h1>
+
+<h2 id="jax-b">JAX-B</h2>
+
+<p><img class="right" src="/technology/jaxb-overview.gif" /></p>
+
+<ul>
+  <li>Java Architecture for XML Binding (JAXB) provides a way to bind XML schemas and Java representations, making it easy to incorporate XML data and processing functions in Java applications. e.g., <code>java.lang.String</code> is translated to an XML Schema type (or equivalent) <code>xsd:string</code></li>
+  <li>JAXB provides methods for unmarshalling (reading) XML instance documents into Java content trees, and then marshalling (writing) Java content trees back into XML instance documents.</li>
+  <li>JAXB also provides a way to generate XML schema from Java objects.</li>
+  <li>A JAXB implementation consists of the following architectural components:
+    <ul>
+      <li><strong>Schema compiler</strong>:
+        <ul>
+          <li>Binds a source XML schema to Java classes. The binding is described by an XML-based binding language.</li>
+          <li><code>xjc</code> is another core JDK utility, that works in the other direction. Given an XML Schema, xjc can generate Java classes to represent the XML types in the schema.</li>
+        </ul>
+      </li>
+      <li><strong>Schema generator</strong>:
+        <ul>
+          <li>Maps a set of existing Java classes to a derived schema. The mapping is described by program annotations.</li>
+          <li><code>schemagen</code> is a core Java JDK utility that generates an XML schema from a POJO source file. The utility can be invoked from the command: <code>$schemagen Test.java</code></li>
+        </ul>
+      </li>
+      <li><strong>Binding runtime framework</strong>: Provides unmarshalling (reading) and marshalling (writing) operations for accessing, manipulating, and validating XML content using either schema-derived or existing program elements.
+        <ul>
+          <li><em>Unmarshalling</em> - to convert XML data into JAXB-derived Java objects.</li>
+          <li><em>Marshalling</em> - to convert a JAXB-derived Java object tree into XML data.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>How to do in-memory transformations from Object to XML and vice versa</li>
+</ul>
+
+<p><strong>JAXB data binding process</strong></p>
+
+<p>The general steps in the JAXB data binding process are:</p>
+
+<p><img class="right" src="/technology/jaxb-dataBindingProcess.gif" /></p>
+
+<ol>
+  <li><em>Generate classes</em>: An XML schema is used as input to the JAXB binding compiler to generate JAXB classes based on that schema.</li>
+  <li><em>Compile classes</em>: All of the generated classes, source files, and application code must be compiled.</li>
+  <li><em>Unmarshal</em>: XML documents written according to the constraints in the source schema are unmarshalled by the JAXB binding framework. Note that JAXB also supports unmarshalling XML data from sources other than files and documents, such as DOM nodes, string buffers, SAX sources, and so forth.</li>
+  <li><em>Generate content tree</em>: The unmarshalling process generates a content tree of data objects instantiated from the generated JAXB classes; this content tree represents the structure and content of the source XML documents.</li>
+  <li><em>Validate (optional)</em>: The unmarshalling process involves validation of the source XML documents before generating the content tree. Note that if you modify the content tree in Step 6, you can also use the JAXB Validate operation to validate the changes before marshalling the content back to an XML document.</li>
+  <li><em>Process content</em>: The client application can modify the XML data represented by the Java content tree by using interfaces generated by the binding compiler.</li>
+  <li><em>Marshal</em>: The processed content tree is marshalled out to one or more XML output documents. The content may be validated before marshalling.</li>
+</ol>
+
+<h2 id="jackson">Jackson</h2>
+
+<ul>
+  <li>Created by FasterXML.</li>
+  <li>Jackson is an XML/json parser and data binder.</li>
+  <li>Jackson is a:
+    <ul>
+      <li>FAST (measured to be faster than any other Java json parser and data binder)</li>
+      <li>Streaming (reading, writing)</li>
+      <li>Zero-dependency (does not rely on other packages beyond JDK)</li>
+      <li>Powerful (full data binding for common JDK classes as well as any Java bean class, Collection, Map or Enum), Configurable</li>
+      <li>Open Source (Apache License – or, until 2.1, alternatively LGPL)</li>
+      <li>JSON processor. It provides JSON parser/JSON generator as foundational building block; and adds a powerful Databinder (JSON&lt;-&gt;POJO) and Tree Model as optional add-on blocks.</li>
+      <li>This means that you can read and write JSON either as stream of tokens (Streaming API), as Plain Old Java Objects (POJOs, databind) or as Trees (Tree Model).</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="gson">GSON</h2>
+
+<p>Created by Google</p>
+
+<h2 id="json">JSON</h2>
+
+<ul>
+  <li>http://json-schema.org/</li>
+  <li>JSON-P format - P stands for with padding.</li>
+  <li>JSONP originally signified a way to work around the traditional same domain policy that prevents a page downloaded from a domain such as server.foo.org from communicating with a domain other than foo.org; JSONP still serves this purpose. The JSONP workaround involves script elements in a page, as these elements allow code to be downloaded from anywhere; the downloaded code can then perform arbitrary processing, which includes communicating with servers in arbitrary domains. JSONP works nicely with web services.</li>
+  <li>JSONP brings an event-driven API to client-side processing. Using JSONP, the programmer can do the following:
+    <ul>
+      <li>Provide a URL to a data source.</li>
+      <li>Specify a callback function to be executed, in browser context, once the data from the specified source arrives.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="xstream">XStream</h2>
+
+<ul>
+  <li>Created by ThoughtWorks</li>
+  <li>XStream includes a persistence API and has extensions in support of the Hibernate ORM (Object Relation Mapper). Among the more interesting features of XStream is that its API does not center on the get/set methods that define Java properties. XStream can serialize into XML an instance of a Java class that has nothing but private fields.</li>
+  <li>XStream also supports selective or fine-grained serialization and deserialization.</li>
+  <li>The core XStream library also supports the conversion of Java objects to and from JSON. There are various JSON drivers available in this library, the simplest of which is the JsonHierarchicalStreamDriver. This driver supports the serialization of Java objects to JSON but not the inverse operation. If deserialization from JSON to Java is needed, then a driver such as Jettison is a good choice because it interoperates cleanly with XStream.</li>
+  <li>XStream supports customized JSON serialization.</li>
+  <li>The XStream API is remarkably low fuss but likewise powerful. This API has gained steadily in popularity among Java developers who are looking for quick and easy ways to convert between Java objects on the one side and either XML or JSON documents on the other side.</li>
+</ul>
+
+<h1 id="references">References</h1>
+
+<ul>
+  <li>Books
+    <ul>
+      <li>Building Web Services with Java (2E)</li>
+      <li>Java Web Services - Up &amp; Running - O’Reilly 2013</li>
+      <li>Web Services Testing with soapUI (2012)</li>
+    </ul>
+  </li>
+</ul>
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/soap-services.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/soap-services.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

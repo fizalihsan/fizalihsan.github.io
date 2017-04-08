@@ -1,0 +1,484 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Design Principles - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Design Principles Design Idioms API Design - Best Practices Interface Interface Types Properties of an Interface Class Design Principles SOLID &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/design-principles.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Design Principles</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#design-idioms" id="markdown-toc-design-idioms">Design Idioms</a></li>
+  <li><a href="#api-design---best-practices" id="markdown-toc-api-design---best-practices">API Design - Best Practices</a></li>
+  <li><a href="#interface" id="markdown-toc-interface">Interface</a>    <ul>
+      <li><a href="#interface-types" id="markdown-toc-interface-types">Interface Types</a></li>
+      <li><a href="#properties-of-an-interface" id="markdown-toc-properties-of-an-interface">Properties of an Interface</a></li>
+    </ul>
+  </li>
+  <li><a href="#class-design-principles" id="markdown-toc-class-design-principles">Class Design Principles</a>    <ul>
+      <li><a href="#solid-principles" id="markdown-toc-solid-principles">SOLID principles</a></li>
+      <li><a href="#law-of-demeter" id="markdown-toc-law-of-demeter">Law of Demeter</a></li>
+    </ul>
+  </li>
+  <li><a href="#principles-of-package-design" id="markdown-toc-principles-of-package-design">6 principles of package design</a>    <ul>
+      <li><a href="#principles-of-package-cohesion" id="markdown-toc-principles-of-package-cohesion">3 principles of package cohesion</a></li>
+      <li><a href="#principles-of-package-coupling" id="markdown-toc-principles-of-package-coupling">3 principles of package coupling</a></li>
+    </ul>
+  </li>
+  <li><a href="#object-calisthenics" id="markdown-toc-object-calisthenics">Object Calisthenics</a></li>
+</ul>
+
+<h1 id="design-idioms">Design Idioms</h1>
+
+<ul>
+  <li>http://www.slideshare.net/nadeembtech/code-craftsmanship</li>
+  <li>Technical debt</li>
+  <li>Code smell</li>
+  <li>Orthogonal concerns (design &amp; architecture)</li>
+  <li>RIA technolgies?</li>
+  <li>Data extraction patterns</li>
+  <li>Backward Compatibility (Refer to <em>Practical API Design - Confessions of a Java Framework Architect</em>)
+    <ul>
+      <li>Source Compatibility</li>
+      <li>Binary Compatibility</li>
+      <li>Functional Compatibility</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="api-design---best-practices">API Design - Best Practices</h1>
+
+<ul>
+  <li>Do not expose more than you want
+    <ul>
+      <li>A method is better than a field</li>
+      <li>A Factory is better than a constructor</li>
+      <li>Make Everything final</li>
+      <li>Do not put setters where they do not belong</li>
+      <li>Give the creator of an object more rights</li>
+      <li>Do not expose deep hierarchies</li>
+    </ul>
+  </li>
+  <li>Code against Interfaces, not Implementations
+    <ul>
+      <li>Removing a method or a field</li>
+      <li>Removing or Adding a Class or an Interface</li>
+      <li>Inserting an Interface or a Class into an Existing Hierarchy</li>
+      <li>Adding a Method or a Field</li>
+      <li>Comparing Java Interfaces and Classes</li>
+      <li>Are Abstract Classes Useful?</li>
+    </ul>
+  </li>
+  <li>Use Modular Architecture
+    <ul>
+      <li>Cyclic dependencies</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="interface">Interface</h1>
+
+<h2 id="interface-types">Interface Types</h2>
+
+<p>(Refer to <em>Interface Oriented Design</em>)</p>
+
+<ul>
+  <li>Data Interfaces &amp; Service Interfaces</li>
+  <li>Data Access Interface Structures
+    <ul>
+      <li>Sequential Vs. Random retrieval</li>
+      <li>Push &amp; Pull Interfaces</li>
+      <li>Alternative Interfaces</li>
+    </ul>
+  </li>
+  <li>Stateless Vs. Stateful Interfaces</li>
+</ul>
+
+<h2 id="properties-of-an-interface">Properties of an Interface</h2>
+
+<ul>
+  <li>Cohesiveness</li>
+  <li>Printer interface</li>
+  <li>Coupling</li>
+  <li>Minimal Vs. Complete</li>
+  <li>Complete Vs. Simple</li>
+</ul>
+
+<h1 id="class-design-principles">Class Design Principles</h1>
+
+<h2 id="solid-principles">SOLID principles</h2>
+
+<ol>
+  <li><strong>SRP</strong> - The Single Responsibility Principle
+  * A class should have one, and only one, reason to change.</li>
+  <li><strong>OCP</strong> - The Open Closed Principle 
+  * Open for extension, closed for modification. You should be able to extend a classes behavior, without modifying it.
+  * It means that you can add new features through inheritance but should not change the existing classes (other than bug fixes). 
+  * The reason is that if you modify a class, you’ll likely break the API/Contract of the class which means that the classes that depend on it might fail when you do so. If you instead inherit the class to add new features, the base contract is untouched and it’s unlikely that dependent classes will fail.</li>
+  <li><strong>LSP</strong> - The Liskov Substitution Principle
+  * Derived classes must be substitutable for their base classes.
+  * any method that takes class X as a parameter must be able to work with any subclasses of X.</li>
+  <li><strong>ISP</strong> - The Interface Segregation Principle
+  * Make fine grained interfaces that are client specific.
+  * ISP states that interfaces that have become “fat” (like <a href="https://en.wikipedia.org/wiki/God_object">God classes</a>) should be split into several interfaces. Large interfaces makes it harder to extend smaller parts of the system.</li>
+  <li><strong>DIP</strong> - The Dependency Inversion Principle
+  * Depend on abstractions, not on concretions.
+  * The principle which is easiest to understand. DIP states that you should let the caller create the dependencies instead of letting the class itself create the dependencies. Hence inverting the dependency control.
+  * Also called ‘<em>Hollywood principle - Don’t call us, we’ll call you</em>’</li>
+</ol>
+
+<h2 id="law-of-demeter">Law of Demeter</h2>
+
+<ul>
+  <li>Also called as <em>Principle of Least Knowledge</em> or <em>Don’t talk to strangers</em> or <em>Talk only to your immediate friends</em></li>
+  <li>The Law of Demeter for functions requires that a method M of an object O may only invoke the methods of the following kinds of objects:
+    <ul>
+      <li>O itself</li>
+      <li>M’s parameters</li>
+      <li>Any objects created/instantiated within M</li>
+      <li>O’s direct component objects</li>
+      <li>A global variable, accessible by O, in the scope of M</li>
+    </ul>
+  </li>
+  <li>Don’t do this <code>objectA.getObjectB().getObjectC().doSomething();</code> except on data structure methods.</li>
+</ul>
+
+<h1 id="principles-of-package-design">6 principles of package design</h1>
+
+<p>The next six principles are about packages. In this context a package is a binary deliverable like a .jar file, or a dll as opposed to a namespace like a java package or a C++ namespace.</p>
+
+<h2 id="principles-of-package-cohesion">3 principles of package cohesion</h2>
+
+<p>These principles are about package cohesion, they tell us what to put inside packages:</p>
+
+<ol>
+  <li><strong>REP</strong> <a href="http://docs.google.com/a/cleancoder.com/viewer?a=v&amp;pid=explorer&amp;chrome=true&amp;srcid=0BwhCYaYDn8EgOGM2ZGFhNmYtNmE4ZS00OGY5LWFkZTYtMjE0ZGNjODQ0MjEx&amp;hl=en">The Release Reuse Equivalency Principle</a> - The granule of reuse is the granule of release.</li>
+  <li><strong>CCP</strong> <a href="http://docs.google.com/a/cleancoder.com/viewer?a=v&amp;pid=explorer&amp;chrome=true&amp;srcid=0BwhCYaYDn8EgOGM2ZGFhNmYtNmE4ZS00OGY5LWFkZTYtMjE0ZGNjODQ0MjEx&amp;hl=en">The Common Closure Principle</a> - Classes that change together are packaged together.</li>
+  <li><strong>CRP</strong> <a href="http://docs.google.com/a/cleancoder.com/viewer?a=v&amp;pid=explorer&amp;chrome=true&amp;srcid=0BwhCYaYDn8EgOGM2ZGFhNmYtNmE4ZS00OGY5LWFkZTYtMjE0ZGNjODQ0MjEx&amp;hl=en">The Common Reuse Principle</a> - Classes that are used together are packaged together.</li>
+</ol>
+
+<h2 id="principles-of-package-coupling">3 principles of package coupling</h2>
+
+<p>These principles are about the couplings between packages, and talk about metrics that evaluate the package structure of a system.</p>
+
+<ol>
+  <li><strong>ADP</strong> <a href="http://docs.google.com/a/cleancoder.com/viewer?a=v&amp;pid=explorer&amp;chrome=true&amp;srcid=0BwhCYaYDn8EgOGM2ZGFhNmYtNmE4ZS00OGY5LWFkZTYtMjE0ZGNjODQ0MjEx&amp;hl=en">The Acyclic Dependencies Principle</a> - The dependency graph of packages must have no cycles.</li>
+  <li><strong>SDP</strong> <a href="http://docs.google.com/a/cleancoder.com/viewer?a=v&amp;pid=explorer&amp;chrome=true&amp;srcid=0BwhCYaYDn8EgZjI3OTU4ZTAtYmM4Mi00MWMyLTgxN2YtMzk5YTY1NTViNTBh&amp;hl=en">The Stable Dependencies Principle</a> - Depend in the direction of stability.</li>
+  <li><strong>SAP</strong> <a href="http://docs.google.com/a/cleancoder.com/viewer?a=v&amp;pid=explorer&amp;chrome=true&amp;srcid=0BwhCYaYDn8EgZjI3OTU4ZTAtYmM4Mi00MWMyLTgxN2YtMzk5YTY1NTViNTBh&amp;hl=en">The Stable Abstractions Principle</a> - Abstractness increases with stability.</li>
+</ol>
+
+<h1 id="object-calisthenics">Object Calisthenics</h1>
+
+<ul>
+  <li>http://williamdurand.fr/2013/06/03/object-calisthenics/</li>
+  <li>http://www.slideshare.net/rdohms/bettercode-phpbenelux212alternate</li>
+  <li>
+    <p>https://github.com/TheLadders/object-calisthenics</p>
+  </li>
+  <li><strong>Rule 1</strong>: One level of indentation per method
+    <ul>
+      <li>Each method should do exactly one thing.</li>
+      <li>How to fix it: Use the ‘Extract Method’ to pull out behaviors until your methods only have 1 level of indentation.</li>
+    </ul>
+  </li>
+  <li><strong>Rule 2</strong>: Don’t use the ELSE keyword
+    <ul>
+      <li>Every conditional branch creates confusion.</li>
+      <li>How to fix it: Use polymorphism; Use the Null Object pattern.</li>
+    </ul>
+  </li>
+  <li><strong>Rule 3</strong>: Wrap all primitives and Strings
+    <ul>
+      <li>If the variable of your primitive type has a behaviors, you MUST encapsulate it. And this is especially true for Domain Driven Design. DDD describes Value Objects like Money, or Hour for instance which expresses the intent explicitly.</li>
+    </ul>
+  </li>
+  <li><strong>Rule 4</strong>: First class collections</li>
+  <li><strong>Rule 5</strong>: One dot per line</li>
+  <li><strong>Rule 6</strong>: Don’t abbreviate</li>
+  <li><strong>Rule 7</strong>: Keep all entities small</li>
+  <li><strong>Rule 8</strong>: No classes with more than two instance variables</li>
+  <li><strong>Rule 9</strong>: No getters/setters/properties</li>
+</ul>
+
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/design-principles.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/design-principles.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

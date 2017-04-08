@@ -1,0 +1,579 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Security - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Security Overview Core Concepts 1. Authentication Basic Authentication Unauthorized request Response with authorization details Digest &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/security.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Security</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#overview" id="markdown-toc-overview">Overview</a>    <ul>
+      <li><a href="#core-concepts" id="markdown-toc-core-concepts">Core Concepts</a></li>
+    </ul>
+  </li>
+  <li><a href="#authentication" id="markdown-toc-authentication">1. Authentication</a>    <ul>
+      <li><a href="#basic-authentication" id="markdown-toc-basic-authentication">Basic Authentication</a>        <ul>
+          <li><a href="#unauthorized-request" id="markdown-toc-unauthorized-request">Unauthorized request</a></li>
+          <li><a href="#response-with-authorization-details" id="markdown-toc-response-with-authorization-details">Response with authorization details</a></li>
+        </ul>
+      </li>
+      <li><a href="#digest-authentication" id="markdown-toc-digest-authentication">Digest Authentication</a>        <ul>
+          <li><a href="#pros" id="markdown-toc-pros">Pros</a></li>
+          <li><a href="#cons" id="markdown-toc-cons">Cons</a></li>
+        </ul>
+      </li>
+      <li><a href="#x509-certificates" id="markdown-toc-x509-certificates">X.509 certificates</a>        <ul>
+          <li><a href="#pros-1" id="markdown-toc-pros-1">Pros</a></li>
+          <li><a href="#cons-1" id="markdown-toc-cons-1">Cons</a></li>
+        </ul>
+      </li>
+      <li><a href="#openauth-openid" id="markdown-toc-openauth-openid">OpenAuth (OpenID)</a></li>
+    </ul>
+  </li>
+  <li><a href="#authorization" id="markdown-toc-authorization">2. Authorization</a>    <ul>
+      <li><a href="#simple-access-control-list-acl" id="markdown-toc-simple-access-control-list-acl">Simple Access Control List (ACL)</a></li>
+      <li><a href="#json-web-tokens" id="markdown-toc-json-web-tokens">JSON Web Tokens</a></li>
+      <li><a href="#saml" id="markdown-toc-saml">SAML</a></li>
+    </ul>
+  </li>
+  <li><a href="#cryptography" id="markdown-toc-cryptography">3. Cryptography</a>    <ul>
+      <li><a href="#hashing-aka-message-digest" id="markdown-toc-hashing-aka-message-digest">Hashing (a.k.a Message Digest)</a></li>
+      <li><a href="#cipher" id="markdown-toc-cipher">Cipher</a></li>
+      <li><a href="#miscellaneous" id="markdown-toc-miscellaneous">Miscellaneous</a></li>
+    </ul>
+  </li>
+  <li><a href="#session-management" id="markdown-toc-session-management">4. Session Management</a></li>
+  <li><a href="#bibliography" id="markdown-toc-bibliography">Bibliography</a></li>
+</ul>
+
+<h1 id="overview">Overview</h1>
+
+<p>Application Security has 4 aspects:</p>
+
+<ul>
+  <li>Authentication - proving user identity, often called user ‘login’.</li>
+  <li>Authorization - access control</li>
+  <li>Cryptography - protecting or hiding data from prying eyes</li>
+  <li>Session Management - per-user time-sensitive state</li>
+</ul>
+
+<h2 id="core-concepts">Core Concepts</h2>
+
+<p><img class="right" src="/technology/shiro-basics.png" /></p>
+
+<p>3 Main concepts in security</p>
+
+<ol>
+  <li>Subject - “the currently executing user”. It could be more than a human user. e.g., daemon apps, 3rd party apps, etc.</li>
+  <li>SecurityManager - manages security operations for all users</li>
+  <li>Realm - acts the bridge/connector between the security provider and your application’s security data like user accounts, access controls, etc.</li>
+</ol>
+
+<h1 id="authentication">1. Authentication</h1>
+
+<ul>
+  <li>Process of verifying a user’s identity. Also called ‘login’ process.</li>
+  <li><code>Authentication Token = Principal(username) + Credential(password)</code></li>
+  <li>If the submitted credentials match what the system expects for that user identity (principal), the user is considered authenticated.</li>
+</ul>
+
+<h2 id="basic-authentication">Basic Authentication</h2>
+
+<p>Basic authentication is the simplest protocol available for performing authentication over HTTP. It involves sending a Base64-encoded username and password within a request header to the server. With Basic authentication (with and without SSL), your name and password do get automatically Base64- encoded.</p>
+
+<p>The server checks to see if the username exists within its system and verifies the sent password. The client needs to send this Authorization header with each and every request it makes to the server.</p>
+
+<h3 id="unauthorized-request">Unauthorized request</h3>
+
+<ul>
+  <li>The 401 response tells the client that it is not authorized to access the URI it tried to invoke on.</li>
+  <li>The <strong>WWW-Authenticate</strong> header specifies which authentication protocol the client should use.</li>
+  <li>In this case, <strong>Basic</strong> means basic authentication should be used. The realm attribute identifies a collection of secured resources on a website.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Response to an unauthorized request</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="err"> </span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">401</span> <span class="ne">Unauthorized</span>
+</span><span class="line"> <span class="l">WWW-Authenticate: Basic realm=&quot;CustomerDB Realm&quot;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="response-with-authorization-details">Response with authorization details</h3>
+
+<ul>
+  <li>To perform authentication, the client must send a request with the Authorization header set to a Base64-encoded string of our username and a colon character, followed by the password. If our username is bburke and our password geheim, the Base64-encoded string of bburke:geheim will be <code>YmJ1cmtlOmdlaGVpbQ==</code>.</li>
+  <li>The client needs to send this Authorization header with each and every request it makes to the server.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Request with authorization details</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="nf">GET</span> <span class="nn">/customers/333</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</span><span class="line"><span class="na">Authorization</span><span class="o">:</span> <span class="l">Basic YmJ1cmtlOmdlaGVpbQ==</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Downside</strong>: The problem with this approach is that if this request is intercepted by a hostile entity on the network, the hacker can easily obtain the username and password and use it to invoke its own requests. Using an encrypted HTTP connection, HTTPS, solves this problem. With an encrypted connection, a rogue programmer on the network will be unable to decode the transmission and get at the Authorization header. Still, security-paranoid network administrators are very squeamish about sending passwords over the network, even if they are encrypted within SSL packets.</p>
+
+<h2 id="digest-authentication">Digest Authentication</h2>
+
+<p>Digest authentication was invented so that clients would not have to send clear text passwords over HTTP. It involves exchanging a set of secure MD5 hashes of the username, password, operation, URI, and optionally the hash of the message body itself. It is a hash value generated with the following pseudocode:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Unauthorized request</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="err"> </span><span class="nf">GET</span> <span class="nn">/dir/index.html</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.0</span>
+</span><span class="line"> <span class="l">Host: localhost</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Response to an unauthorized request</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="err"> </span><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">401</span> <span class="ne">Unauthorized</span>
+</span><span class="line"><span class="na">WWW-Authenticate</span><span class="o">:</span> <span class="l">Digest realm=&quot;CustomerDB Realm&quot;,</span>
+</span><span class="line"><span class="err">qop=&quot;auth,auth-int&quot;,</span>
+</span><span class="line">nonce=&quot;12dcde223152321ab99cd&quot;,
+</span><span class="line">opaque=&quot;aa9321534253bcd00121&quot;
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>The <strong>nonce</strong> and <strong>opaque</strong> attributes are special server-generated keys that will be used to build the subsequent authenticated request.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Hash calculating algorithm</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="err">H1 = md5(&quot;username:realm:password&quot;)</span>
+</span><span class="line"><span class="err">H2 = md5(&quot;httpmethod:uri&quot;)</span>
+</span><span class="line"><span class="err">response = md5(&quot;H1:nonce:nc:cnonce:qop:H2&quot;)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>The <strong>nonce</strong> and <strong>opaque</strong> attributes are a copy of the values sent with the earlier WWWAuthenticate header.</li>
+  <li>The <strong>uri</strong> attribute is the base URI you are invoking on.</li>
+  <li>The <strong>nc</strong> attribute is a request counter that should be incremented by the client with each request. This prevents hostile clients from replaying a request.</li>
+  <li>The <strong>cnonce</strong> attribute is a unique key generated by the client and can be anything the client wants.</li>
+  <li>
+    <p>The <strong>response</strong> attribute is where all the meat is. It is a hash value generated with the following pseudocode:</p>
+  </li>
+  <li>When the server receives this request, it builds its own version of the <strong>response</strong> hash using its stored, secret values of the username and password. If the hashes match, the user and its credentials are valid.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Request with Authorization details</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="nf">GET</span> <span class="nn">/customers/333</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</span><span class="line"><span class="na">Authorization</span><span class="o">:</span> <span class="l">Digest username=&quot;bburke&quot;,</span>
+</span><span class="line"><span class="err">realm=&quot;CustomerDB</span> <span class="l">Realm&quot;,</span>
+</span><span class="line"><span class="err">nonce=&quot;12dcde223152321ab99cd&quot;,</span>
+</span><span class="line">uri=&quot;/customer/333&quot;,
+</span><span class="line">qop=&quot;auth&quot;,
+</span><span class="line">nc=00000001,
+</span><span class="line">cnonce=&quot;43fea&quot;,
+</span><span class="line">response=&quot;11132fffdeab993421&quot;,
+</span><span class="line">opaque=&quot;aa9321534253bcd00121&quot;
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="pros">Pros</h3>
+
+<ul>
+  <li>The password is never used directly by the protocol. For example, the server doesn’t even need to store clear text passwords. It can instead initialize its authorization store with pre-hashed values.</li>
+  <li>Also, since request hashes are built with a nonce value, the server can expire these nonce values over time. This, combined with a request counter, can greatly reduce replay attacks.
+When the server receives this request, it builds its own version of the response hash using its stored, secret values of the username and password. If the hashes match, the user and its credentials are valid.</li>
+</ul>
+
+<h3 id="cons">Cons</h3>
+
+<p>This approach is that unless you use HTTPS, you are still vulnerable to man-in-the-middle attacks, where the middleman can tell a client to use Basic authentication to obtain a password.</p>
+
+<h2 id="x509-certificates">X.509 certificates</h2>
+
+<p><img class="right" src="/technology/security-certs.gif" /></p>
+
+<ul>
+  <li>HTTPS is not only an encryption mechanism - it can also be used for authentication.</li>
+  <li>When you first interact with a secure website, your browser receives a digitally signed certificate from the server that identifies it.</li>
+  <li>Your browser verifies this certificate with a central authority like VeriSign. This is how you guarantee the identity of the server you are interacting with and make</li>
+  <li>sure you’re not dealing with some man-in-the-middle security breach.</li>
+  <li>HTTPS can also perform two-way authentication. In addition to the client receiving a signed digital certificate representing the server, the server can receive a certificate that represents and identifies the client.</li>
+  <li>When a client initially connects to a server, it exchanges its certificate and the server matches it against its internal store.</li>
+  <li>Once this link is established, there is no further need for user authentication, since the certificate has already positively identified the user.</li>
+</ul>
+
+<blockquote>
+  <p>SSL, or Secure Socket Layer, is a technology which allows web browsers and web servers to communicate over a secured connection. This means that the data being sent is encrypted by one side, transmitted, then decrypted by the other side before processing. This is a two-way process, meaning that both the server AND the browser encrypt all traffic before sending out data.</p>
+</blockquote>
+
+<blockquote>
+  <p>Another important aspect of the SSL protocol is Authentication. This means that during your initial attempt to communicate with a web server over a secure connection, that server will present your web browser with a set of credentials, in the form of a “Certificate”, as proof the site is who and what it claims to be. In certain cases, the server may also request a Certificate from your web browser, asking for proof that you are who you claim to be. This is known as “Client Authentication,” although in practice this is used more for business-to-business (B2B) transactions than with individual users. Most SSL-enabled web servers do not request Client Authentication.</p>
+</blockquote>
+
+<h3 id="pros-1">Pros</h3>
+
+<p>Most secure way to perform authentication on web.</p>
+
+<h3 id="cons-1">Cons</h3>
+
+<p>Managing of the certificates is painful. The server must create a unique certificate for each client that wants to connect to the service. From the browser/human perspective, this can be a pain, as the user has to do some extra configuration to interact with the server.</p>
+
+<h2 id="openauth-openid">OpenAuth (OpenID)</h2>
+
+<p>…</p>
+
+<h1 id="authorization">2. Authorization</h1>
+
+<p>Authorization is essentially access control - controlling what your users can access in your application, such as resources, web pages, etc.</p>
+
+<h2 id="simple-access-control-list-acl">Simple Access Control List (ACL)</h2>
+
+<ul>
+  <li>Roles/Users assigned with access to certain features. Users are assigned to roles. This model is not flexible since roles cannot be added dynamically</li>
+  <li>Permissions are defined for features. Users are assigned permissions. This model allows dynamic addition of users.</li>
+</ul>
+
+<h2 id="json-web-tokens">JSON Web Tokens</h2>
+
+<h2 id="saml">SAML</h2>
+
+<h1 id="cryptography">3. Cryptography</h1>
+
+<p>Cryptography is the process of hiding or obfuscating data so prying eyes can’t understand it.</p>
+
+<p>When a client is interacting with a RESTful web service, it is possible for hostile individuals to intercept network packets and read requests and responses if your HTTP connection is not secure.</p>
+
+<p>Sensitive data should be protected with cryptographic services like SSL. The Web defines the HTTPS protocol to leverage SSL and encryption.</p>
+
+<h2 id="hashing-aka-message-digest">Hashing (a.k.a Message Digest)</h2>
+
+<ul>
+  <li>Hashing/Message digests are secure one-way hash functions that take arbitrary-sized data and output a fixed-length hash value.</li>
+  <li><code>java.security.MessageDigest</code> class supports MD5 and SHA digests.</li>
+  <li>Shiro supports hex-encode and Base64 encoding.</li>
+</ul>
+
+<h2 id="cipher">Cipher</h2>
+
+<p>Ciphers are cryptographic algorithms that can reversibly transform data using a key. We use them to keep data safe, especially when transferring or storing data, times when data is particularly susceptible to prying eyes.</p>
+
+<p><strong>Types</strong></p>
+
+<ul>
+  <li>Public-Private key cipher</li>
+  <li>AES 257-bit cipher</li>
+</ul>
+
+<h2 id="miscellaneous">Miscellaneous</h2>
+
+<ul>
+  <li>Kerberos - how it works</li>
+  <li>PGP/GPG</li>
+  <li>How to secure passwords - http://www.youtube.com/watch?v=6bR110r-RfY&amp;list=WL08D7E897CDBD47CB (Salt, Bcrypt, Ascrypt, Blowfish algo, AES 256)</li>
+</ul>
+
+<h1 id="session-management">4. Session Management</h1>
+
+<p>Apache Shiro enables a Session programming paradigm for any application - from small daemon standalone applications to the largest clustered web applications. This means that application developers who wish to use sessions are no longer forced to use Servlet or EJB containers if they don’t need them otherwise.</p>
+
+<h1 id="bibliography">Bibliography</h1>
+
+<ul>
+  <li>Books
+    <ul>
+      <li>RESTful Java with JAX-RS - Chapter 12 - Securing JAX-RS</li>
+      <li>REST in practice - Chapter 9 - Web Security</li>
+    </ul>
+  </li>
+  <li>Links
+    <ul>
+      <li><a href="http://www.infoq.com/articles/apache-shiro">Application Security With Apache Shiro</a></li>
+      <li>Java EE Security - http://docs.oracle.com/javaee/6/tutorial/doc/gijrp.html</li>
+      <li>Encyclopedia of Security - http://www.microsoft.com/mspress/books/sampchap/6429.aspx</li>
+    </ul>
+  </li>
+</ul>
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/security.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/security.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -1,0 +1,401 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Knowledge Shop - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Knowledge Shop Technical Architecture Overview Cloud Computing Coding Principles Design Principles Lambda Architecture Logging &amp; Monitoring &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Knowledge Shop</h1>
+    
+  </header>
+  
+  <h2 id="technical">Technical</h2>
+<ul>
+  <li>Architecture
+    <ul>
+      <li><a href="/technology/architecture.html">Overview</a></li>
+      <li><a href="/technology/cloud-computing.html">Cloud Computing</a></li>
+      <li><a href="/technology/coding-principles.html">Coding Principles</a></li>
+      <li><a href="/technology/design-principles.html">Design Principles</a></li>
+      <li><a href="/technology/lambda-architecture.html">Lambda Architecture</a></li>
+      <li><a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a></li>
+      <li><a href="/technology/patterns.html">Patterns</a></li>
+      <li><a href="/technology/sdlc.html">SDLC</a></li>
+      <li><a href="/technology/scalability.html">Scalability</a></li>
+      <li><a href="/technology/security.html">Security</a></li>
+      <li><a href="/technology/transaction.html">Transactions</a></li>
+    </ul>
+  </li>
+  <li>BigData
+    <ul>
+      <li><a href="/technology/bigdata.html">Concepts</a></li>
+      <li><a href="/technology/distributedcomputing.html">Distributed Computing</a></li>
+      <li><a href="/technology/elasticsearch.html">ElasticSearch</a></li>
+      <li><a href="/technology/bigdata-frameworks.html">Frameworks</a></li>
+      <li><a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a></li>
+      <li><a href="/technology/nosql.html">NoSQL</a></li>
+      <li><a href="/technology/concurrency-parallelism.html">Parallel Computing</a></li>
+    </ul>
+  </li>
+  <li>Database
+    <ul>
+      <li><a href="/technology/rdbms.html">Concepts</a></li>
+      <li><a href="/technology/db-design.html">Design</a></li>
+      <li><a href="/technology/db-performance.html">Performance</a></li>
+      <li><a href="/technology/sql.html">SQL</a></li>
+    </ul>
+  </li>
+  <li>Functional Programming
+    <ul>
+      <li><a href="/technology/functionalprogramming.html">Concepts</a></li>
+      <li><a href="/technology/groovy.html">Groovy</a></li>
+      <li><a href="/technology/scala.html">Scala</a></li>
+    </ul>
+  </li>
+  <li>Java
+    <ul>
+      <li><a href="/technology/java.html">Core Concepts</a></li>
+      <li><a href="/technology/java-collections.html">Collections</a></li>
+      <li><a href="/technology/java-concurrency.html">Concurrency</a></li>
+      <li><a href="/technology/java-database.html">Database</a></li>
+      <li><a href="/technology/java-io.html">I/O</a></li>
+      <li><a href="/technology/java-jmx.html">JMX</a></li>
+      <li><a href="/technology/java-jndi.html">JNDI</a></li>
+      <li><a href="/technology/java-performance.html">Performance</a></li>
+      <li><a href="/technology/java-testing.html">Testing</a></li>
+      <li><a href="/technology/java-web.html">Web</a></li>
+      <li><a href="/technology/java-newsletters.html">Java Specialist Newsletters</a></li>
+    </ul>
+  </li>
+  <li>SOA
+    <ul>
+      <li><a href="/technology/soa.html">Concepts</a></li>
+      <li><a href="/technology/camel.html">Camel</a></li>
+      <li><a href="/technology/messaging.html">Messaging</a></li>
+      <li><a href="/technology/rest-services.html">REST</a></li>
+      <li><a href="/technology/soap-services.html">SOAP</a></li>
+      <li><a href="/technology/webservices.html">Web Services</a></li>
+      <li><a href="/technology/xml.html">XML</a></li>
+    </ul>
+  </li>
+  <li>Spring
+    <ul>
+      <li><a href="/technology/spring-batch.html">Batch</a></li>
+      <li><a href="/technology/spring.html">Core</a></li>
+      <li><a href="/technology/spring-mvc.html">MVC</a></li>
+    </ul>
+  </li>
+  <li>Web Programming
+    <ul>
+      <li><a href="/technology/webconcepts.html">Concepts</a></li>
+      <li><a href="/technology/js-ecosystem.html">JS Ecosystem</a></li>
+    </ul>
+  </li>
+  <li>General Concepts
+    <ul>
+      <li><a href="/technology/algorithms.html">Algorithms</a></li>
+      <li><a href="/softskills/brain-teasers.html">Brain Teasers</a></li>
+      <li><a href="/technology/datastructures.html">Data Structures</a></li>
+      <li><a href="/technology/design-faqs.html">Design FAQs</a></li>
+      <li><a href="/technology/oops.html">OOPS</a></li>
+      <li><a href="/technology/os.html">Operating Systems</a></li>
+      <li><a href="/technology/vcs.html">VCS</a></li>
+      <li><a href="/technology/coding_bibliography.html">Coding Bibliography</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="non-techninal">Non-Techninal</h2>
+<ul>
+  <li>Data Science
+    <ul>
+      <li><a href="/datascience/datascience.html">Overview</a></li>
+      <li><a href="/datascience/statistics.html">Statistics</a></li>
+      <li><a href="/datascience/r.html">R</a></li>
+    </ul>
+  </li>
+  <li>Domain Knowledge
+    <ul>
+      <li><a href="/domain/retirement.html">Retirement</a></li>
+    </ul>
+  </li>
+  <li>Soft Skills
+    <ul>
+      <li><a href="/softskills/presentation.html">Presentation</a></li>
+      <li><a href="/softskills/productivity.html">Productivity</a></li>
+      <li><a href="/softskills/written.html">Written Communication</a></li>
+    </ul>
+  </li>
+</ul>
+
+
+  
+    <footer>
+      
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

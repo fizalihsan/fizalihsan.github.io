@@ -1,0 +1,677 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>R Programming - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="R Programming Data Types Basic Data Types Complex Data Types Vectors Factors Data Frames Basics Statistic Functions Graphs Appendix Command &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/datascience/r.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">R Programming</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#data-types" id="markdown-toc-data-types">Data Types</a>    <ul>
+      <li><a href="#basic-data-types" id="markdown-toc-basic-data-types">Basic Data Types</a></li>
+      <li><a href="#complex-data-types" id="markdown-toc-complex-data-types">Complex Data Types</a>        <ul>
+          <li><a href="#vectors" id="markdown-toc-vectors">Vectors</a></li>
+          <li><a href="#factors" id="markdown-toc-factors">Factors</a></li>
+          <li><a href="#data-frames" id="markdown-toc-data-frames">Data Frames</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#basics-statistic-functions" id="markdown-toc-basics-statistic-functions">Basics Statistic Functions</a></li>
+  <li><a href="#graphs" id="markdown-toc-graphs">Graphs</a></li>
+  <li><a href="#appendix" id="markdown-toc-appendix">Appendix</a>    <ul>
+      <li><a href="#command-reference" id="markdown-toc-command-reference">Command Reference</a></li>
+      <li><a href="#packages" id="markdown-toc-packages">Packages</a></li>
+      <li><a href="#help" id="markdown-toc-help">Help</a></li>
+    </ul>
+  </li>
+  <li><a href="#bibliography" id="markdown-toc-bibliography">Bibliography</a></li>
+</ul>
+
+<h2 id="data-types">Data Types</h2>
+
+<h3 id="basic-data-types">Basic Data Types</h3>
+<p>R has five basic or “atomic” classes of objects:</p>
+
+<ol>
+  <li><strong>character</strong>
+* <strong>numeric</strong> (real numbers) 
+  * Numbers in R as numeric objects by default. (<em>Double precision real numbers</em>)
+  * <code>Inf</code> represents infinity. 
+  * <code>NA</code> &amp; <code>NaN</code> represents an undefined value and not a number.
+    <ul>
+      <li><code>is.na()</code> and <code>is.nan()</code> are used to test objects.</li>
+      <li><code>NA</code> values have a class also, so there are integer <code>NA</code>, character <code>NA</code>, etc.</li>
+      <li>A <code>NaN</code> value is also <code>NA</code> but the converse is not true.
+      * Attributes of an object like length and other metadata can be access using the <code>attributes()</code> function.
+    * <strong>integer</strong> -
+ <code>1</code> is a numeric object. <code>1L</code> is an integer.
+    * <strong>complex</strong>
+    * <strong>logical</strong> (True/False)</li>
+    </ul>
+  </li>
+</ol>
+
+<h3 id="complex-data-types">Complex Data Types</h3>
+
+<h4 id="vectors">Vectors</h4>
+<p>The most basic object is a vector. 
+*  A vector can only contain objects of the same class.
+* BUT: The one exception is a list, which is represented as a vector but can contain objects of
+different classes (indeed, that’s usually why we use them)
+* Empty vectors can be created with the <code>vector()</code> function.
+* Vector examples</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">&gt; x &lt;- c(0.5, 0.6) ## numeric
+</span><span class="line">&gt; x &lt;- c(TRUE, FALSE) ## logical
+</span><span class="line">&gt; x &lt;- c(T, F) ## logical
+</span><span class="line">&gt; x &lt;- c("a", "b", "c") ## character
+</span><span class="line">&gt; x &lt;- 9:29 ## integer
+</span><span class="line">&gt; x &lt;- c(1+0i, 2+4i) ## complex</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Lists are a special type of vector that can contain elements of different classes.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">&gt; x &lt;- list(1, "a", TRUE, 1 + 4i) 
+</span><span class="line">&gt; # mixed types allowed, lists are recursive, lists are vectors
+</span><span class="line">&gt; alist &lt;- list(c("a", "b", "c"), c(1,2,3,4), c(8e6, 5.2e9, -9.3e7))
+</span><span class="line">&gt; alist[[1]] # return one column
+</span><span class="line">&gt; alist[1] # extracts a list
+</span><span class="line">&gt; alist[[3:2]] # gets 2nd element from 3rd vector of the list (5.2e9)
+</span><span class="line">&gt; is.list(alist) #TRUE
+</span><span class="line">&gt; is.vector(alist) #TRUE</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><strong>Mixing Objects</strong><br />
+When different objects are mixed in a vector, <em>coercion</em> occurs so that every element in the vector is
+of the same class.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">&gt; y &lt;- c(1.7, "a") ## character
+</span><span class="line">&gt; y &lt;- c(TRUE, 2) ## numeric
+</span><span class="line">&gt; y &lt;- c("a", TRUE) ## character</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><strong>Explicit Coercion</strong><br />
+Objects can be explicitly coerced from one class to another using the <code>as.*()</code> functions, if available.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">&gt; x &lt;- 0:6
+</span><span class="line">&gt; class(x)
+</span><span class="line">[1] "integer"
+</span><span class="line">&gt; as.numeric(x)
+</span><span class="line">[1] 0 1 2 3 4 5 6
+</span><span class="line">&gt; as.logical(x)
+</span><span class="line">[1] FALSE TRUE TRUE TRUE TRUE TRUE TRUE
+</span><span class="line">&gt; as.character(x)
+</span><span class="line">[1] "0" "1" "2" "3" "4" "5" "6"</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><strong>Nonsensical coercion results in NAs</strong></li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">&gt; x &lt;- c("a", "b", "c")
+</span><span class="line">&gt; as.numeric(x)
+</span><span class="line">[1] NA NA NA
+</span><span class="line">Warning message:
+</span><span class="line">NAs introduced by coercion
+</span><span class="line">&gt; as.logical(x)
+</span><span class="line">[1] NA NA NA
+</span><span class="line">&gt; as.complex(x)
+</span><span class="line">[1] 0+0i 1+0i 2+0i 3+0i 4+0i 5+0i 6+0i
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><strong>Matrices</strong>
+Matrices are vectors with a <em>dimension</em> attribute. The dimension attribute is itself an integer vector of
+length 2 (nrow, ncol).</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">&gt; m &lt;- matrix(nrow = 2, ncol = 3) 
+</span><span class="line">&gt; m
+</span><span class="line"> [,1] [,2] [,3]
+</span><span class="line">[1,] NA NA NA
+</span><span class="line">[2,] NA NA NA
+</span><span class="line">&gt; dim(m)
+</span><span class="line">[1] 2 3
+</span><span class="line">&gt; attributes(m)
+</span><span class="line">$dim
+</span><span class="line">[1] 2 3</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><strong>cbind-ing and rbind-ing</strong>
+Matrices can be created by column-binding or row-binding with <code>cbind()</code> and <code>rbind()</code>.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">&gt; x &lt;- 1:3
+</span><span class="line">&gt; y &lt;- 10:12
+</span><span class="line">&gt; cbind(x, y)
+</span><span class="line"> x y 
+</span><span class="line">[1,] 1 10
+</span><span class="line">[2,] 2 11
+</span><span class="line">[3,] 3 12
+</span><span class="line">&gt; rbind(x, y) 
+</span><span class="line"> [,1] [,2] [,3]
+</span><span class="line">x 1 2 3
+</span><span class="line">y 10 11 12</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h4 id="factors">Factors</h4>
+<ul>
+  <li>Factors are nothing but enumeration data types used to represent categorical data.</li>
+  <li>Can be ordered or unordered.</li>
+  <li>Factor can be thought of as an integer vector where each integer has a <em>label</em>.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">&gt; x &lt;- factor(c("yes", "yes", "no", "yes", "no")) 
+</span><span class="line">&gt; x
+</span><span class="line">[1] yes yes no yes no
+</span><span class="line">Levels: no yes
+</span><span class="line">&gt; table(x) 
+</span><span class="line">x
+</span><span class="line">no yes 
+</span><span class="line">2 3
+</span><span class="line">&gt; unclass(x)
+</span><span class="line">[1] 2 2 1 2 1
+</span><span class="line">attr(,"levels")
+</span><span class="line">[1] "no" "yes"</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h4 id="data-frames">Data Frames</h4>
+<ul>
+  <li>A special type of list where every list is of same length.</li>
+  <li>All columns in data frame must have names</li>
+  <li>
+    <ul>
+      <li>Unlike matrices, data frames can store different classes of objects in each column.</li>
+    </ul>
+  </li>
+  <li>To create - <code>read.table()</code> or <code>read.csv()</code></li>
+  <li>To convert to a matrix - <code>data.matrix()</code></li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">&gt; read.table() # space is the default delimiter
+</span><span class="line">&gt; read.csv() # by default expects a file header
+</span><span class="line">&gt; read.csv2()
+</span><span class="line">&gt; read.delim()
+</span><span class="line">&gt; read.delim2()
+</span><span class="line">&gt; x &lt;- data.frame(foo = 1:4, bar = c(T, T, F, F)) 
+</span><span class="line">&gt; x
+</span><span class="line"> foo bar
+</span><span class="line">1 1 TRUE
+</span><span class="line">2 2 TRUE
+</span><span class="line">3 3 FALSE
+</span><span class="line">4 4 FALSE
+</span><span class="line">&gt; nrow(x)
+</span><span class="line">[1] 4
+</span><span class="line">&gt; ncol(x)
+</span><span class="line">[1] 2</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><code>data.frame()</code> # create data frame or table e.g., <code>test.data.frame&lt;-data.frame(id=c(1,2,3,4,5),name=c("a","b","c","d","e"))</code></li>
+  <li><code>edit(framename)</code> # edit the content of the table</li>
+  <li><code>str(frame)</code> # prints the structure and data types of the data frame</li>
+  <li><code>names(framename)</code> – prints the column names</li>
+  <li><code>dataframe[index.ROW, index.COLUMN]</code></li>
+  <li><code>dataframe[[1]]</code> # returns the first column as a vector</li>
+  <li><code>dataframe[1]</code> # returns the first column wrapped in a data frame</li>
+  <li><code>dataframe[c(1,3)]</code> # returns the 1st and 3rd column wrapped in a data frame</li>
+  <li><code>dataframe[1:3,]</code> # displays all columns but first 1-3 rows only</li>
+  <li><code>is.data.frame(framename)</code> #checks if an object is a data frame</li>
+</ul>
+
+<h2 id="basics-statistic-functions">Basics Statistic Functions</h2>
+<ul>
+  <li><code>mean(x)</code> # x is a vector</li>
+  <li><code>median(x)</code></li>
+  <li><code>sd(x)</code></li>
+  <li><code>var(x)</code></li>
+  <li><code>cor(x,y)</code></li>
+  <li><code>cov(x,y)</code></li>
+  <li><code>lapply(dataframe, function)</code> # Apply function like mean/median over a list/dataframe</li>
+</ul>
+
+<h2 id="graphs">Graphs</h2>
+<ul>
+  <li><code>plot(x,y)</code> # Scatter plot. Only numeric vectors or dataframes are allowed.</li>
+  <li><code>barplot()</code> - Bar Chart</li>
+  <li><code>boxplot()</code> - Box Plot. Provides a quick visual summary of a dataset. Thick line in middle is the median. Box identifies the 1st(bottom) and 3rd(top) quartiles.</li>
+  <li><code>hist(x)</code> -	Histogram. Groups data into bins</li>
+</ul>
+
+<h2 id="appendix">Appendix</h2>
+
+<h3 id="command-reference">Command Reference</h3>
+<ul>
+  <li><code>ls()</code> or <code>ls(all.names = TRUE)</code> # Lists all variables/objects defined in the * session</li>
+  <li><code>setwd(“c:/xyz”)</code> # sets working directory</li>
+  <li><code>getwd()</code> # Gets working directory</li>
+  <li><code>runif(8)</code> # generates 8 random numbers</li>
+  <li><code>x &lt;- 9</code> # assigns 9 to object x in workspace</li>
+  <li><code>x</code> # prints the value of x</li>
+  <li><code>rm(x)</code> # removes the object x</li>
+  <li><code>rm(list=ls())</code> # removes all objects in workspace</li>
+  <li>Save &amp; Load (Binary)
+    <ul>
+      <li><code>save()</code> # saves all objects to default file .RData. Objects still exist in * <code>memory</code> (binary format)</li>
+      <li><code>save(obj1, obj2, file=”filename”)</code></li>
+      <li><code>load(“filename”)</code> # loads from file to memory</li>
+    </ul>
+  </li>
+  <li>Save &amp; Load (Text)
+    <ul>
+      <li><code>write.table(obj1, file=”filename”)</code> # only 1 obj at a time</li>
+      <li><code>load.table()</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="packages">Packages</h3>
+<ul>
+  <li><code>install.packages(c("ggplot2", "devtools", "KernSmooth")</code> # install the collection of packages from CRAN</li>
+  <li><code>library()</code>        #list all available packages</li>
+  <li><code>library(package)</code> # loads package on to memory</li>
+  <li><code>require(package)</code> # loads package on to memory. Used in scripts. Returns loading status as boolean.</li>
+  <li><code>detach(package:name)</code> # unloads package from memory.</li>
+</ul>
+
+<h3 id="help">Help</h3>
+<ul>
+  <li><code>?func</code>           # open help page on function ‘func’</li>
+  <li><code>help(func)</code>      # same as above</li>
+  <li><code>apropos("foo")</code>  # list all functions containing string foo</li>
+  <li><code>example(foo)</code>    # show an example of function foo</li>
+  <li><code>vignette()</code>      # show available vignettes on installed packages</li>
+  <li><code>vignette("foo")</code> # show specific vignette</li>
+</ul>
+
+<h1 id="bibliography">Bibliography</h1>
+
+<ul>
+  <li>R Inferno</li>
+  <li>Software for Data Analysis - Programming with R (http://www.springer.com/statistics/computational+statistics/book/978-0-387-75935-7)</li>
+  <li>The R book (http://www.wiley.com/WileyCDA/WileyTitle/productCd-0470973927.html)</li>
+  <li>The Art of R Programming</li>
+  <li>R in Action</li>
+  <li>Ref Cards
+    <ul>
+      <li>http://cran.r-project.org/doc/contrib/Short-refcard.pdf</li>
+      <li>http://www.statmethods.net/interface/help.html</li>
+    </ul>
+  </li>
+  <li>Tutorials
+    <ul>
+      <li>http://www.johndcook.com/R_language_for_programmers.html</li>
+      <li>http://cran.r-project.org/doc/manuals/R-intro.pdf</li>
+      <li>http://www.decisionsciencenews.com/?p=261</li>
+      <li>http://www.r-tutor.com/r-introduction/data-frame</li>
+      <li>http://tryr.codeschool.com/levels/2/challenges/1</li>
+    </ul>
+  </li>
+</ul>
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/datascience/r.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/datascience/r.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

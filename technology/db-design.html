@@ -1,0 +1,690 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>DB Design - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="DB Design Physical Database Design Normalization Concept of Time in Database Temporal Data Types Kinds of Time Temporal Table Types Time-Series &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/db-design.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">DB Design</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#physical-database-design" id="markdown-toc-physical-database-design">Physical Database Design</a>    <ul>
+      <li><a href="#normalization" id="markdown-toc-normalization">Normalization</a></li>
+      <li><a href="#concept-of-time-in-database" id="markdown-toc-concept-of-time-in-database">Concept of Time in Database</a>        <ul>
+          <li><a href="#temporal-data-types" id="markdown-toc-temporal-data-types">Temporal Data Types</a></li>
+          <li><a href="#kinds-of-time" id="markdown-toc-kinds-of-time">Kinds of Time</a></li>
+          <li><a href="#temporal-table-types" id="markdown-toc-temporal-table-types">Temporal Table Types</a></li>
+        </ul>
+      </li>
+      <li><a href="#time-series-databases" id="markdown-toc-time-series-databases">Time-Series Databases</a></li>
+    </ul>
+  </li>
+  <li><a href="#patterns" id="markdown-toc-patterns">Patterns</a>    <ul>
+      <li><a href="#schema-patterns" id="markdown-toc-schema-patterns">Schema Patterns</a></li>
+    </ul>
+  </li>
+  <li><a href="#anti-patterns" id="markdown-toc-anti-patterns">Anti-Patterns</a>    <ul>
+      <li><a href="#logical-database-anti-patterns" id="markdown-toc-logical-database-anti-patterns">Logical Database Anti-patterns</a>        <ul>
+          <li><a href="#comma-separated-lists-jaywalking" id="markdown-toc-comma-separated-lists-jaywalking">Comma separated lists (Jaywalking)</a></li>
+          <li><a href="#multi-column-attributes" id="markdown-toc-multi-column-attributes">Multi-column attributes</a></li>
+          <li><a href="#entity-attribute-value" id="markdown-toc-entity-attribute-value">Entity attribute value</a></li>
+          <li><a href="#metadata-tribbles" id="markdown-toc-metadata-tribbles">Metadata tribbles</a></li>
+          <li><a href="#adjacency-list" id="markdown-toc-adjacency-list">Adjacency List</a></li>
+        </ul>
+      </li>
+      <li><a href="#physical-database-anti-patterns" id="markdown-toc-physical-database-anti-patterns">Physical Database Anti-patterns</a></li>
+      <li><a href="#query-anti-patterns" id="markdown-toc-query-anti-patterns">Query Anti-patterns</a></li>
+      <li><a href="#application-anti-patterns" id="markdown-toc-application-anti-patterns">Application Anti-patterns</a></li>
+    </ul>
+  </li>
+  <li><a href="#references" id="markdown-toc-references">References</a></li>
+</ul>
+
+<h1 id="physical-database-design">Physical Database Design</h1>
+
+<ul>
+  <li>Data compression techniques</li>
+  <li>Data Striping (RAID)
+    <ul>
+      <li>What is RAID and what are different types of RAID configurations?</li>
+      <li>RAID stands for Redundant Array of Inexpensive Disks, used to provide fault tolerance to database servers. There are six RAID levels 0 through 5 offering different levels of performance, fault-tolerance.</li>
+    </ul>
+  </li>
+  <li>Mirroring</li>
+  <li>Security
+    <ul>
+      <li>Permissioning - Users &amp; Groups</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="normalization">Normalization</h2>
+
+<ul>
+  <li><a href="http://dev.mysql.com/tech-resources/articles/intro-to-normalization.html">Intro to Normalization</a></li>
+  <li>
+    <p>http://www.bkent.net/Doc/simple5.htm</p>
+  </li>
+  <li><strong>What is Normalization?</strong>
+    <ul>
+      <li>process to eliminate data redundancy, and to remove potential update inconsistencies which arise from inserting, modifying, and deleting data.</li>
+      <li>The goal of normalization is to create a set of relational tables that are free of redundant data and that can be consistently and correctly modified. This means that all tables in a relational database should be in the third normal form (3NF).</li>
+    </ul>
+  </li>
+  <li><strong>1st Normal Form</strong></li>
+</ul>
+
+<p><img src="/technology/1NF.png" /></p>
+
+<pre><code>* *No multi-value columns*
+* A relational table, by definition, is in first normal form. 
+* 1NF requires all values of the columns to be atomic. That is, they contain no repeating values like comma-separated names. 
+* Table in 1NF contains redundancy of data. Redundancy causes what is called as **Update anomalies**
+</code></pre>
+
+<ul>
+  <li><strong>2nd Normal Form</strong></li>
+</ul>
+
+<p><img src="/technology/2NF.png" /></p>
+
+<pre><code>* *No partial dependencies*
+* any non-key columns must depend on the entire primary key. In the case of a composite primary key, this means that a non-key column cannot depend on only part of the composite key.
+</code></pre>
+
+<ul>
+  <li><strong>3rd Normal Form</strong></li>
+</ul>
+
+<p><img src="/technology/3NF.png" /></p>
+
+<pre><code>* *No transitive dependencies*
+* 3NF requires that every non-prime attribute must be dependent on primary key. 
+* Tables violate the 3NF when one column depends on another column, which in turn depends on the primary key (**a transitive dependency**). One way to identify transitive dependencies is to look at your table and see if any columns would require updating if another column in the table was updated. If such a column exists, it probably violates 3NF. 
+* A relational table is in 3NF if and only if all non-key columns are 
+	* (a) mutually independent (means that no non-key column is dependent upon any combination of the other columns.)
+	* (b) fully dependent upon the primary key.  
+* The first two normal forms are intermediate steps to achieve the goal of having all tables in 3NF. In order to better understand the 2NF and higher forms, it is necessary to understand the concepts of functional dependencies and lossless decomposition.
+</code></pre>
+
+<ul>
+  <li>
+    <p><strong>4th Normal Form</strong>: Every non-trivial multivalued dependency in the table is a dependency on a superkey.</p>
+  </li>
+  <li>
+    <p><strong>5th Normal Form</strong>: Every non-trivial join dependency in the table is implied by the superkeys of the table.</p>
+  </li>
+  <li>
+    <p>Denormalization</p>
+  </li>
+</ul>
+
+<p><a href="http://www.ibm.com/support/knowledgecenter/SSEPEK_10.0.0/com.ibm.db2z10.doc.intro/src/tpc/db2z_denormalizationforperformance.htm">Denormalization for performance</a></p>
+
+<h2 id="concept-of-time-in-database">Concept of Time in Database</h2>
+
+<h3 id="temporal-data-types">Temporal Data Types</h3>
+
+<ul>
+  <li>Instant: something happened at an instant of time. (e.g., now)</li>
+  <li>Interval
+    <ul>
+      <li>a length of time (e.g., three months)</li>
+      <li>The individual units (months, hours, microseconds, etc.) are termed <em>granules</em></li>
+      <li>An interval is relative; an instant is absolute</li>
+      <li>An interval can be added to an instant, yielding another instant</li>
+      <li>The distance between two instants is an interval</li>
+      <li>Unlike instants, intervals have direction. e.g., -7 days</li>
+      <li><strong><em>Year-Month Intervals</em></strong> - store only year, or only month or year-month.</li>
+      <li><strong><em>Day-Time Intervals</em></strong></li>
+      <li>SQL Data types
+        <ul>
+          <li>DATE</li>
+          <li>TIME</li>
+          <li>TIME WITH TIME ZONE</li>
+          <li>TIMESTAMP - date + time</li>
+          <li>TIMESTAMP WITH TIME ZONE - includes date, time and an explicit offset from UTC. e.g., <code>11:08:27.123456-07:00</code>, where <code>-07:00</code> indicates 7 hours behind UTC</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Period: an anchored duration of time (e.g., the fall semester, Aug 24 through
+Dec 18, 1998)</li>
+</ul>
+
+<blockquote>
+  <p>SQL-92 supports instance and intervals only</p>
+</blockquote>
+
+<h3 id="kinds-of-time">Kinds of Time</h3>
+
+<ul>
+  <li>(1) User-defined time: an uninterpreted time value</li>
+  <li>(2) Valid time: when a fact was true in the modeled reality (VALID_FROM, VALID_TO)</li>
+  <li>
+    <p>(3) Transaction time: when a fact was stored in the database (CREATION_TIME, UPDATE_TIME)</p>
+  </li>
+  <li>These kinds of time are orthogonal: a table can be associated with none, one, two,
+or even all three kinds of time. Understanding each kind of time and determining
+which is present in an application is absolutely critical.</li>
+</ul>
+
+<blockquote>
+  <p>SQL-92 supports only ‘user-defined time’</p>
+</blockquote>
+
+<ul>
+  <li>Temporal Statements
+    <ul>
+      <li>Current: now (<em>what is now?</em>)</li>
+      <li>Sequenced: at each instant of time (<em>what was, and when?</em>)</li>
+      <li>Nonsequenced: ignoring time (<em>what was, at any time?</em>)</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="temporal-table-types">Temporal Table Types</h3>
+
+<ul>
+  <li>Valid-Time State tables
+    <ul>
+      <li>Valid-time tables capture a history of validity</li>
+      <li>contains <code>FROM_DATE</code> &amp; <code>TO_DATE</code></li>
+      <li>To indicate an active record <code>TO_DATE</code> is set to <code>null</code> or end-of-time <code>9999-12-31</code></li>
+      <li>The first consequence of adding valid-time support to a table is that the primary key of such tables needs to take the timestamp into consideration, so that the record is unique <em>at any point in time</em>.</li>
+    </ul>
+  </li>
+  <li>Transcation-Time State tables
+    <ul>
+      <li>Transaction-time tables capture a history of the changing state of a table.</li>
+      <li>contains information when a record was created and last updated.</li>
+      <li>one of these pairs is used
+        <ul>
+          <li><code>START_DATE</code> &amp; <code>END_DATE</code></li>
+          <li><code>IN_Z</code> &amp; <code>OUT_Z</code></li>
+          <li><code>CR_TIME</code> &amp; <code>UPD_TIME</code></li>
+        </ul>
+      </li>
+      <li><code>END_DATE = '9999-12-31'</code> indicates an active record</li>
+      <li>rows are <em>logically</em> deleted, because physically deleting old rows would prevent past states from being reconstructed. A table that can be reconstructed as of a previous date is termed a <strong>transaction-time state</strong> table, as it captures the transactions applied to the table.</li>
+    </ul>
+  </li>
+  <li>Bi-Temporal Tables
+    <ul>
+      <li>captures both validity and transaction time of a record</li>
+      <li>MarkLogic NoSQL database has a native support for bitemporal collections</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>Temporal Tables have also been called <em>historical tables</em> but this implies that they record information only about the past. However, ‘valid-time’ tables often store information about future.</p>
+</blockquote>
+
+<blockquote>
+  <p>The presence of a <code>DATE</code> column will not render the database as a temporal database; rather, the database must record the time-varying nature of the information managed by the enterprise.</p>
+</blockquote>
+
+<h2 id="time-series-databases">Time-Series Databases</h2>
+
+<p>…</p>
+
+<h1 id="patterns">Patterns</h1>
+
+<ul>
+  <li>How do you implement 1-to-1, 1-to-many and many-to-many relationships while designing tables?
+    <ul>
+      <li>1-to-1 relationship can be implemented as a single table and rarely as two tables with primary and foreign key relationships.</li>
+      <li>1-to-Many relationships are implemented by splitting the data into two tables with primary key and foreign key relationships.</li>
+      <li>Many-to-Many relationships are implemented using a junction table with the keys from both the tables forming the composite primary key of the junction table.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="schema-patterns">Schema Patterns</h2>
+
+<ul>
+  <li>Data Warehouse schema types - http://datawarehouse4u.info/Data-Warehouse-Schema-Architecture.html</li>
+  <li>Star schema</li>
+</ul>
+
+<h1 id="anti-patterns">Anti-Patterns</h1>
+
+<h2 id="logical-database-anti-patterns">Logical Database Anti-patterns</h2>
+
+<h3 id="comma-separated-lists-jaywalking">Comma separated lists (Jaywalking)</h3>
+
+<ul>
+  <li>Storing composite values in a single columns. Typically comma separated values.</li>
+  <li>Cons
+    <ul>
+      <li>DB cannot ensure referential integrity on this column.</li>
+      <li>VARCHAR column will run into length limit issues.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="multi-column-attributes">Multi-column attributes</h3>
+
+<h3 id="entity-attribute-value">Entity attribute value</h3>
+
+<h3 id="metadata-tribbles">Metadata tribbles</h3>
+
+<h3 id="adjacency-list">Adjacency List</h3>
+
+<p>Storing multi-level hierarchical data like organization chart, threaded discussion and comments, directory structure, etc.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="k">Comment</span> <span class="p">(</span>
+</span><span class="line">	<span class="n">id</span> <span class="nb">INT</span> <span class="k">PRIMARY</span> <span class="k">KEY</span>
+</span><span class="line">	<span class="n">parent_id</span> <span class="nb">INT</span><span class="p">,</span>
+</span><span class="line">	<span class="p">....</span>
+</span><span class="line">	<span class="k">FOREIGN</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">parent_id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="k">Comment</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span>
+</span><span class="line"><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Pros</strong></p>
+
+<ul>
+  <li>Good for use cases where the depth is not more than 2 or 3 and is fixed.</li>
+</ul>
+
+<p><strong>Cons</strong></p>
+
+<ul>
+  <li>It is easy to query one or two levels of the hierarchy by self joins. However, in order to extend the query to any depth, it becomes impossible, since the number of joins in SQL must be fixed.</li>
+  <li>Copying the entire hierarchy from database to application for tree creation is highly inefficient.</li>
+  <li>Inserting a node in a sub-tree is easy, however deleting a node or an entire sub-tree is difficult. ON DELETE CASCADE modifier can be used.</li>
+  <li>If the non-leaf node should be deleted without deleting the children, then all the parent_id needs to be modified.</li>
+  <li>Some databases support <code>WITH</code> keyword to recursively query hierarchical data.</li>
+</ul>
+
+<p><em>Alternatives</em></p>
+
+<ul>
+  <li><em>Path Enumeration</em>
+    <ul>
+      <li>Instead of storing parent_id, store the path to each node in unix file path like format in varchar column. E.g., 1/2/4/5.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="k">Comment</span> <span class="p">(</span>
+</span><span class="line">	<span class="n">id</span> <span class="nb">INT</span> <span class="k">PRIMARY</span> <span class="k">KEY</span>
+</span><span class="line">	<span class="n">path</span> <span class="nb">VARCHAR</span><span class="p">(</span><span class="mi">1000</span><span class="p">),</span> <span class="o">&lt;</span><span class="c1">------</span>
+</span><span class="line">	<span class="p">....</span>
+</span><span class="line">	<span class="k">FOREIGN</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">parent_id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="k">Comment</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span>
+</span><span class="line"><span class="p">)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p><strong>Pros</strong></p>
+
+<ul>
+  <li>Querying ancestors and children is easy. E.g., <code>SELECT * FROM Comment c WHERE c.path like '1/4/'</code></li>
+</ul>
+
+<p><strong>Cons</strong></p>
+
+<ul>
+  <li>
+    <p>Same problem as the Jaywalking antipattern.</p>
+  </li>
+  <li>
+    <p><em>Nested Sets</em></p>
+
+    <ul>
+      <li>Assigning a number to each node’s left and right children. Kind of like balanced binary tree.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Cons</strong></p>
+
+<ul>
+  <li>Not easily understandable</li>
+  <li>Does not support referential integrity</li>
+  <li>Useful only when the tree is queried frequently, than modified</li>
+</ul>
+
+<p><em>Closure Table</em></p>
+
+<p>Creating a separate table to store the relationship of nodes. By far the versatile design for storing tree structures.</p>
+
+<p><strong>Cons</strong></p>
+
+<p>Requires additional table and hence increasing space consumption.</p>
+
+<h2 id="physical-database-anti-patterns">Physical Database Anti-patterns</h2>
+
+<ul>
+  <li>ID Required</li>
+  <li>Phantom Files</li>
+  <li>FLOAT Antipattern</li>
+  <li>ENUM Antipattern</li>
+  <li>Readable Passwords</li>
+</ul>
+
+<h2 id="query-anti-patterns">Query Anti-patterns</h2>
+
+<ul>
+  <li>Ambiguous GROUP BY</li>
+  <li>HAVING antipattern</li>
+  <li>Poor Man’s Search Engine</li>
+  <li>Implicit columns in SELECT and INSERT</li>
+</ul>
+
+<h2 id="application-anti-patterns">Application Anti-patterns</h2>
+
+<ul>
+  <li>User-supplied SQL</li>
+  <li>SQL Injection</li>
+  <li>Parameter Façade</li>
+  <li>Pseudokey Neat Freak</li>
+  <li>Session Coupling</li>
+  <li>Phantom Side Effects</li>
+</ul>
+
+<h1 id="references">References</h1>
+
+<ul>
+  <li>Books
+    <ul>
+      <li>Refactoring Databases</li>
+      <li>SQL Anti-Patterns</li>
+      <li>Developing time-oriented database applications in SQL</li>
+      <li>Sybase Performance and Tuning Guide</li>
+    </ul>
+  </li>
+</ul>
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/db-design.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/db-design.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

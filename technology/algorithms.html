@@ -1,0 +1,657 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Algorithms - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Algorithms Concepts Big-O Notation How to find Big-O in interviews? Data Structures Arrays Strings Linked Lists Trees Stacks Queues Algorithms &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/algorithms.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Algorithms</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#concepts" id="markdown-toc-concepts">Concepts</a>    <ul>
+      <li><a href="#big-o-notation" id="markdown-toc-big-o-notation">Big-O Notation</a>        <ul>
+          <li><a href="#how-to-find-big-o-in-interviews" id="markdown-toc-how-to-find-big-o-in-interviews">How to find Big-O in interviews?</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#data-structures" id="markdown-toc-data-structures">Data Structures</a>    <ul>
+      <li><a href="#arrays" id="markdown-toc-arrays">Arrays</a></li>
+      <li><a href="#strings" id="markdown-toc-strings">Strings</a></li>
+      <li><a href="#linked-lists" id="markdown-toc-linked-lists">Linked Lists</a></li>
+      <li><a href="#trees" id="markdown-toc-trees">Trees</a></li>
+      <li><a href="#stacks" id="markdown-toc-stacks">Stacks</a></li>
+      <li><a href="#queues" id="markdown-toc-queues">Queues</a></li>
+    </ul>
+  </li>
+  <li><a href="#algorithms" id="markdown-toc-algorithms">Algorithms</a>    <ul>
+      <li><a href="#searching" id="markdown-toc-searching">Searching</a></li>
+      <li><a href="#sorting" id="markdown-toc-sorting">Sorting</a></li>
+      <li><a href="#backtracking" id="markdown-toc-backtracking">Backtracking</a></li>
+    </ul>
+  </li>
+  <li><a href="#bitwise-operations" id="markdown-toc-bitwise-operations">Bitwise Operations</a></li>
+  <li><a href="#searching-1" id="markdown-toc-searching-1">Searching</a>    <ul>
+      <li><a href="#hashing" id="markdown-toc-hashing">Hashing</a></li>
+    </ul>
+  </li>
+  <li><a href="#dynamic-programming" id="markdown-toc-dynamic-programming">Dynamic Programming</a></li>
+  <li><a href="#greedy-algorithms" id="markdown-toc-greedy-algorithms">Greedy Algorithms</a></li>
+  <li><a href="#reference" id="markdown-toc-reference">Reference</a></li>
+</ul>
+
+<p>Grokking Algorithms - <a href="http://adit.io/">http://adit.io/</a></p>
+
+<h1 id="concepts">Concepts</h1>
+
+<h2 id="big-o-notation">Big-O Notation</h2>
+
+<p><img class="right" src="/technology/big-o-complexity.png" width="600" height="600" /></p>
+
+<ul>
+  <li><strong>O(1)/Constant Complexity</strong>:
+    <ul>
+      <li>Constant.  Irrespective of the size of the data set the algorithm will always take a constant time.</li>
+      <li>Example: <code>HashMap.get()</code> operation</li>
+    </ul>
+  </li>
+  <li><strong>O(log n)/Logarithmic Complexity</strong>:
+    <ul>
+      <li>Not as good as constant, but still pretty good.  The time taken increases with the size of the data set, but not proportionately so. This means the algorithm takes longer per item on smaller datasets relative to larger ones.   1 item takes 1 second, 10 items takes 2 seconds, 100 items takes 3 seconds. This makes log n algorithms very scalable.</li>
+      <li>Example: Binary search</li>
+    </ul>
+  </li>
+  <li><strong>O(n)/Linear Complexity</strong>:
+    <ul>
+      <li>The larger the data set, the time taken grows proportionately.  1 item takes 1 second, 10 items takes 10 seconds, 100 items takes 100 seconds.</li>
+      <li>Example: To find an element T which is the last item in the <code>LinkedList</code></li>
+    </ul>
+  </li>
+  <li><strong>O(n log n)/Linearithmetic Complexity</strong>:
+    <ul>
+      <li>A nice combination of the previous two.  Normally there’s 2 parts to the sort, the first loop is O(n), the second is O(log n), combining to form O(n log n) 1 item takes 2 seconds, 10 items takes 12 seconds, 100 items takes 103 seconds.
+<img class="right" src="/technology/merge-sort-example.gif" /></li>
+      <li><em>Example</em>: MergeSort. To explain why this is <code>O(n log n)</code> is a bit more complex.  In the below example of 8 numbers, we have 3 levels of sorting:
+        <ul>
+          <li>4 list sorts when the list sizes are 2</li>
+          <li>2 list sorts when the list sizes are 4</li>
+          <li>1 list sort when the list size is 8
+Now consider if I were to double the number of elements to 16: this would only require one more level of sorting. This is a <code>log n</code> scale. However, on each level of sorting a total of <code>n</code> operations takes place (look at the red boxes in the diagram above).  this results in <code>(n * log n)</code> operations.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>O(n^2)/Polynomial or Quadratic Complexity</strong>:
+    <ul>
+      <li>Things are getting extra slow. 1 item takes 1 second, 10 items takes 100, 100 items takes 10000.</li>
+      <li>Example: Bubble Sort. If you need a reminder; we go through the list and compare each element with the one next to it, swapping the elements if they are out of order. At the end of the first iteration, we then start again from the beginning, with the caveat that we now know the last element is correct.</li>
+    </ul>
+  </li>
+  <li><strong>O(2^n)/Exponential Growth</strong>:
+    <ul>
+      <li>The algorithm takes twice as long for every new element added.  1 item takes 1 second, 10 items takes 1024 seconds, 100 items takes 1267650600228229401496703205376 seconds.</li>
+      <li>Example: Take for example trying to find combinations; imagine a list of 150 people and to find every combination of groupings; everyone by themselves, all of the groups of 2 people, all of the groups of 3 people etc. Using a simple program which takes each person and loops through the combinations,  if I add one extra person then it’s going to increase the processing time exponentially. Every new element will double processing time.</li>
+    </ul>
+  </li>
+  <li><a href="http://www.perlmonks.org/?node_id=227909">Informal Introduction to BigO notation</a></li>
+</ul>
+
+<h3 id="how-to-find-big-o-in-interviews">How to find Big-O in interviews?</h3>
+
+<p>Break down the loops and processing.</p>
+
+<ul>
+  <li>Does it have to go through the entire list? There will be an <code>n</code> in there somewhere.</li>
+  <li>Does the algorithms processing time increase at a slower rate than the size of the data set? Then there’s probably a <code>log n</code> in there.</li>
+  <li>Are there nested loops? You’re probably looking at <code>n^2</code> or <code>n^3</code>.</li>
+  <li>Is access time constant irrelevant of the size of the dataset? Then, <code>O(1)</code></li>
+</ul>
+
+<p>​
+## Proof by induction and contradiction</p>
+
+<p>​An online algorithm that requires only constant space and runs in linear time is just about as good as possible.</p>
+
+<h1 id="data-structures">Data Structures</h1>
+
+<h2 id="arrays">Arrays</h2>
+
+<ul>
+  <li>Duplication in array - pg 34</li>
+  <li>Arbitrary kth number</li>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/array/SecondHighestNumber.java">Find second highest number in an array</a></li>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/array/MajoritiesInArrays.java">Majorities in an array</a></li>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/array/TurningNumber.java">Find the Turning number in an array</a></li>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/array/IntersectionOf2SortedArrays.java">Intersection of 2 sorted arrays</a></li>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/numbers/BaseConversion.java">Convert decimal to binary, octal or hexadecimal or vice-versa</a></li>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/numbers/BaseConversion.java">Convert excel column name to column index</a></li>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/numbers/BitwiseProblems.java">Bitwise Operations</a></li>
+  <li><a href="">Max sub sum algorithm</a></li>
+  <li>Fibonacci
+    <ul>
+      <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/numbers/Fibonacci.java">Find nth fibonacci number</a> (with and without recursion)</li>
+      <li>Frog jumpting stairs  - pg 81</li>
+      <li>Rectangle problem  - pg 81</li>
+      <li>Intersection of sorted array - pg 194</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="strings">Strings</h2>
+
+<ul>
+  <li>Regex matching - pg 50</li>
+  <li>Check if a string is a number or not - pg 51</li>
+  <li>Replacing %20 with spaces in a string - pg 47 - Left to right approach is <code>O(n^2)</code>. Right to left is <code>O(n)</code></li>
+  <li>String compression (Input: aaaabbccc, Expected output: a4b2c3) <em>Asked in KPMG interview</em></li>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/string/PermutationCombination.java">Permutation Combination</a></li>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/string/NonRepeatedCharDetector.java">Non repeated character detector</a></li>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/string/ReverseWordsOrder.java">Reverse order of the words in a sentence</a></li>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/string/RemoveChars.java">Remove given characters from the input string</a></li>
+</ul>
+
+<h2 id="linked-lists">Linked Lists</h2>
+
+<ul>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/linkedlist/PrintFromTailToEnd.java">Print list from tail to head</a> - pg 54
+    <ul>
+      <li>Reverse the list and print. However, the structure is modified</li>
+      <li>Add elements to stack and print. However, additional data structure is needed</li>
+      <li>Use recursion</li>
+    </ul>
+  </li>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/linkedlist/ReverseSinglyLinkedList.java">Reverse a singly linked list</a></li>
+  <li>Check for loops
+    <ul>
+      <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/linkedlist/LoopCheckTortoiseAndHareMethod.java">Tortoise &amp; Hare Method</a></li>
+      <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/linkedlist/LoopCheckIdentityHashMapMethod.java">IdentityHashMap Method</a></li>
+    </ul>
+  </li>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/linkedlist/KthNodeFromEndFinder.java">Kth node from end</a></li>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/linkedlist/DeleteDuplicatesFromSortedList.java">Delete duplicate values in a sorted linked list</a></li>
+</ul>
+
+<h2 id="trees">Trees</h2>
+
+<ul>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/binarytree/TreeTraversals.java">Tree Traversals</a>
+    <ul>
+      <li>Depth-First Traversal: Post-order, In-order, Pre-order</li>
+      <li>Breadth-First Traversal: Level-order</li>
+    </ul>
+  </li>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/binarytree/BinarySearchTree.java">Binary Search Tree - add, remove</a></li>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/binarytree/BinarySearchTreeChecker.java">Check if a given tree is a binary search tree</a></li>
+  <li>[Convert a binary tree into a doubly-linked list - pg 174</li>
+</ul>
+
+<h2 id="stacks">Stacks</h2>
+
+<ul>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/stack/StackUsingQueues.java">Build a stack using 2 queues</a></li>
+</ul>
+
+<h2 id="queues">Queues</h2>
+
+<ul>
+  <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/queue/QueueUsingStacks.java">Build a queue using 1 stack &amp; 2 stacks</a></li>
+</ul>
+
+<h1 id="algorithms">Algorithms</h1>
+
+<h2 id="searching">Searching</h2>
+
+<ul>
+  <li>Binary Search
+    <ul>
+      <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/array/BinarySearch.java">Binary Search in an array</a></li>
+      <li>Binary search matrix - pg 37</li>
+      <li>Binary search in partially sorted array (HarryHe pg 89 - unable to follow)</li>
+      <li>Minimum k numbers in an array - pg 191</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="sorting">Sorting</h2>
+
+<p><img class="right" src="/technology/sorting-efficiency.png" /></p>
+
+<ul>
+  <li>Array Sorting
+    <ul>
+      <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/sort/QuickSort.java">Quick sort</a> - <em>from Sedgewick book</em></li>
+      <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/sort/SelectionSort.java">Selection sort</a></li>
+      <li>Shell sort</li>
+      <li>Insertion sort</li>
+      <li>Merge sort</li>
+    </ul>
+  </li>
+  <li>String sorting
+    <ul>
+      <li>Counting sort or key-index counting (Sedgewick pg 703)</li>
+    </ul>
+  </li>
+  <li>List sorting
+    <ul>
+      <li>….</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>Heap sort visualization - http://www2.hawaii.edu/~copley/665/HSApplet.html</p>
+</blockquote>
+
+<h2 id="backtracking">Backtracking</h2>
+
+<ul>
+  <li>String paths</li>
+  <li>Permutations
+    <ul>
+      <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/string/Permutations.java">Simple recursive method</a> (Sedgewick)</li>
+    </ul>
+  </li>
+  <li>8 queens problems - pg 175</li>
+</ul>
+
+<h1 id="bitwise-operations">Bitwise Operations</h1>
+
+<ul>
+  <li>AND (<code>&amp;</code>)
+    <ul>
+      <li><code>0 &amp; 0 = 0</code></li>
+      <li><code>1 &amp; 0 = 0</code></li>
+      <li><code>0 &amp; 1 = 0</code></li>
+      <li><code>1 &amp; 1 = 1</code></li>
+    </ul>
+  </li>
+  <li>OR (<code>|</code>)
+    <ul>
+      <li><code>0 | 0 = 0</code></li>
+      <li><code>1 | 0 = 1</code></li>
+      <li><code>0 | 1 = 1</code></li>
+      <li><code>1 | 1 = 1</code></li>
+    </ul>
+  </li>
+  <li>XOR(<code>^</code>)
+    <ul>
+      <li><code>0 ^ 0 = 0</code></li>
+      <li><code>1 ^ 0 = 1</code></li>
+      <li><code>0 ^ 1 = 1</code></li>
+      <li><code>1 ^ 1 = 0</code></li>
+    </ul>
+  </li>
+  <li>NOT (<code>~</code>)
+    <ul>
+      <li><code>~0 = 1</code></li>
+      <li><code>~0 = 0</code></li>
+    </ul>
+  </li>
+  <li>Left Shift (<code>&lt;&lt;</code>)
+    <ul>
+      <li><code>00001010 &lt;&lt; 2 = 00101000</code></li>
+      <li><code>10001010 &lt;&lt; 3 = 01010000</code></li>
+    </ul>
+  </li>
+  <li>Right Shift (<code>&gt;&gt;</code>)
+    <ul>
+      <li><code>00001010 &gt;&gt; 2 = 00000010</code></li>
+      <li><code>10001010 &gt;&gt; 3 = 11110001</code></li>
+    </ul>
+  </li>
+  <li>Unsigned Right Shift (<code>&gt;&gt;&gt;</code>)
+    <ul>
+      <li><code>00001010 &gt;&gt;&gt; 2 = 00000010</code></li>
+      <li><code>10001010 &gt;&gt;&gt; 3 = 00010001</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="searching-1">Searching</h1>
+
+<ul>
+  <li>Search types
+    <ul>
+      <li>exact search</li>
+      <li>range search</li>
+    </ul>
+  </li>
+  <li>Search algorithm types
+    <ul>
+      <li>Sequential</li>
+      <li>Direct access (hashing)</li>
+      <li>Tree indexing methods</li>
+    </ul>
+  </li>
+  <li>Binary Search</li>
+  <li>Dictionary/Interlpolation Search</li>
+  <li>Quadratic Binary Search</li>
+</ul>
+
+<h2 id="hashing">Hashing</h2>
+
+<ul>
+  <li>Hashing Functions
+    <ul>
+      <li>Perfect hashing</li>
+      <li>Consistent Hashing or Hash Ring (used for building distributed caches, data sharding. Many NoSQL databases uses this including Voldemort, Amazon Dynamo, Couchdb, etc)</li>
+    </ul>
+  </li>
+  <li>Collision Resolution Policy
+    <ul>
+      <li>Open Hashing/Separate Chaining</li>
+      <li>Closed Hashing / Open Addressing
+        <ul>
+          <li>Bucket Hashing</li>
+          <li>Linear Probing</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Cons</strong></p>
+
+<ul>
+  <li>Not good for duplicate keys</li>
+  <li>Not good for Range searches</li>
+  <li>
+    <p>good only for in-memory and disk-based searching</p>
+  </li>
+  <li><a href="http://msdn.microsoft.com/en-US/library/ms379570(v=vs.80).aspx">Guide - An Extensive Examination of Data Structures Using C# 2.0</a></li>
+  <li><a href="http://www.mpi-inf.mpg.de/~mehlhorn/Toolbox.html">1</a></li>
+  <li><a href="http://www.cs.auckland.ac.nz/software/AlgAnim/ds_ToC.html">2</a></li>
+</ul>
+
+<h1 id="dynamic-programming">Dynamic Programming</h1>
+
+<h1 id="greedy-algorithms">Greedy Algorithms</h1>
+
+<h1 id="reference">Reference</h1>
+
+<ul>
+  <li><a href="http://www.corejavainterviewquestions.com/idiots-guide-big-o/">Idiot’s guide to BigO</a></li>
+  <li><a href="http://bigocheatsheet.com/">bigocheatsheet.com</a></li>
+  <li>Books
+    <ul>
+      <li>Algorithms 4th Edition - Robert Sedgewick and Kevin Wayne</li>
+      <li>Algorithms in a Nutshell</li>
+      <li>ACE the programming interview</li>
+      <li>Coding Interview - Harry He</li>
+      <li>​Data structures and algorithm analysis in Java</li>
+    </ul>
+  </li>
+</ul>
+
+  
+    <footer>
+      
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

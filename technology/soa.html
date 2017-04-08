@@ -1,0 +1,565 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>SOA - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="SOA Concepts What is SOA? Why SOA? SOA Operations Characteristics of contemporary SOA Message Exchange Patterns (MEP) Primitive MEPs Complex MEPs &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/soa.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">SOA</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#concepts" id="markdown-toc-concepts">Concepts</a>    <ul>
+      <li><a href="#what-is-soa" id="markdown-toc-what-is-soa">What is SOA?</a></li>
+      <li><a href="#why-soa" id="markdown-toc-why-soa">Why SOA?</a></li>
+      <li><a href="#soa-operations" id="markdown-toc-soa-operations">SOA Operations</a></li>
+      <li><a href="#characteristics-of-contemporary-soa" id="markdown-toc-characteristics-of-contemporary-soa">Characteristics of contemporary SOA</a></li>
+      <li><a href="#message-exchange-patterns-mep" id="markdown-toc-message-exchange-patterns-mep">Message Exchange Patterns (MEP)</a>        <ul>
+          <li><a href="#primitive-meps" id="markdown-toc-primitive-meps">Primitive MEPs</a></li>
+          <li><a href="#complex-meps" id="markdown-toc-complex-meps">Complex MEPs</a></li>
+          <li><a href="#meps-and-wsdl" id="markdown-toc-meps-and-wsdl">MEPs and WSDL</a>            <ul>
+              <li><a href="#wsdl-11-spec" id="markdown-toc-wsdl-11-spec">WSDL 1.1 Spec</a></li>
+              <li><a href="#wsdl-20-spec" id="markdown-toc-wsdl-20-spec">WSDL 2.0 Spec</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><a href="#primitive-soa--first-generation-web-services-framework" id="markdown-toc-primitive-soa--first-generation-web-services-framework">Primitive SOA / First Generation Web-services Framework</a>        <ul>
+          <li><a href="#service-roles" id="markdown-toc-service-roles">Service Roles</a></li>
+          <li><a href="#service-models" id="markdown-toc-service-models">Service Models</a></li>
+          <li><a href="#service-endpoint-or-service-description-wsdl" id="markdown-toc-service-endpoint-or-service-description-wsdl">Service Endpoint or Service Description (WSDL)</a></li>
+          <li><a href="#service-contract-or-service-metadata" id="markdown-toc-service-contract-or-service-metadata">Service Contract or Service Metadata</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#bibliography" id="markdown-toc-bibliography">Bibliography</a></li>
+</ul>
+
+<h1 id="concepts">Concepts</h1>
+
+<h2 id="what-is-soa">What is SOA?</h2>
+
+<ul>
+  <li>SOA is a software system structuring principle based on the idea of self-describing service providers.</li>
+  <li>a service is a function (usually a business function) that is accomplished by the interchange of messages between two entities: a service provider, and a service consumer.</li>
+  <li>SOA is just a methodology, an architectural design choice. It has nothing to do with a particular technology</li>
+  <li>It is a type of distributed computing</li>
+  <li>Web services is a realization of SOA</li>
+</ul>
+
+<h2 id="why-soa">Why SOA?</h2>
+
+<ul>
+  <li>Reduces coupling between the consumer and provider. This permits controlled changes to the provider, that will not have unforeseen effects on the consumer. It also allows the consumer to switch providers easily, provided only that a compatible service interface is provided. Decoupling allows changes to occur incrementally.</li>
+  <li>Increases inter-operability across different systems, technologies and languages like Java, .Net, etc.</li>
+  <li>Since heavy monolithic systems are divided into discrete services, development, upgrade, etc. can happen independently.</li>
+  <li>Reusability of services</li>
+  <li>Predecessors of SOA : CORBA, DCOM, EJB (all 3 are RPC based), SOAP based Web services</li>
+  <li>Downside of the SOA predecessors
+    <ul>
+      <li>Interoperability across systems and technologies proved to be nettlesome. EJB &amp; DCOM are tied to specific platforms</li>
+      <li>For data exchange, proprietary, binary-based technologies were used unlike XML in SOA</li>
+    </ul>
+  </li>
+  <li>Downsides of RPC based solutions
+    <ul>
+      <li>tight coupling between server and client</li>
+      <li>repeated RPC calls increases network load</li>
+      <li>data type support between 2 incompatible languages, such as C++ and Java is complicated and challenging.</li>
+      <li>When should SOA be used and should NOT be used?</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="soa-operations">SOA Operations</h2>
+
+<p><img class="right" src="/technology/soa-operations.png" /></p>
+
+<ol>
+  <li>Publish</li>
+  <li>Find</li>
+  <li>Bind</li>
+</ol>
+
+<h2 id="characteristics-of-contemporary-soa">Characteristics of contemporary SOA</h2>
+
+<ol>
+  <li>QoS (Quality of Service) - security, reliability (in message delivery or notification), transactional capabilities (to protect the integrity of the business tasks)
+* Autonomous - services should be independent and self-contained
+* Based on Open Standards - Data exchange is governed by open standards like SOAP, WSDL, XML, etc.
+* Promotes Discovery
+* Interoperability - disparate technologies should not prevent service-oriented solutions from interoperating
+* Composability - composing 1 or more fine-grained services to form a coarse-grained service. Different solutions can be composed of different extensions and can continue to interoperate as long as they support the common extensions required
+* Reusability of services
+* Extensibility of services
+* Layers of abstraction - encapsulates application logic and technology resources
+* Promotes loose-coupling - separation of concerns
+* Stateless
+* Location-, Language- &amp; Protocol-independent</li>
+</ol>
+
+<h2 id="message-exchange-patterns-mep">Message Exchange Patterns (MEP)</h2>
+
+<ul>
+  <li>An MEP is a generic interaction pattern that defines the message exchange between two services</li>
+  <li>MEPs can composed to support the creation of large, more complex patterns.</li>
+</ul>
+
+<h3 id="primitive-meps">Primitive MEPs</h3>
+<ul>
+  <li>
+    <ol>
+      <li>Request-response
+* this could be synchronous or asynchronous
+* typically a “correlation” is used to associate a response with the request</li>
+    </ol>
+  </li>
+  <li>
+    <ol>
+      <li>Fire-and-forget
+* This simple asynchronous pattern is based on a <em>unidirectional</em> transmission of messages from a source to one or more destinations. 
+* There are few variations in this MEP.
+  * <em>single-destination</em> pattern - a source sends a message to one destination only
+  * <em>multi-cast</em> pattern - a source sends messages to a predefined set of destinations
+  * <em>broadcast</em> pattern - same as multi-cast pattern, except that the message is sent out to a broader range of recipient destinations</li>
+    </ol>
+  </li>
+</ul>
+
+<h3 id="complex-meps">Complex MEPs</h3>
+
+<ul>
+  <li>Example of a complex MEP is <strong>Publish-and-subscribe</strong> model</li>
+</ul>
+
+<h3 id="meps-and-wsdl">MEPs and WSDL</h3>
+
+<h4 id="wsdl-11-spec">WSDL 1.1 Spec</h4>
+
+<ol>
+  <li><strong>Request-response operation</strong> - upon receiving a message, the service must response with a standard message or a fault message</li>
+  <li><strong>Solicit-response operation</strong> - upon submitting a message to a service requestor, the service expects a standard response message or a fault message</li>
+  <li><strong>One-way operation</strong> - the service expects a single message and is not obligated to respond.</li>
+  <li><strong>Notification operation</strong> - The service sends a message and expects no response.</li>
+</ol>
+
+<h4 id="wsdl-20-spec">WSDL 2.0 Spec</h4>
+
+<ol>
+  <li><strong>in-out</strong> pattern - equivalent to WSDL 1.1 request-response</li>
+  <li><strong>out-in</strong> pattern - equivalent to WSDL 1.1 solicit-response</li>
+  <li><strong>in-only</strong> pattern - equivalent to WSDL 1.1 one-way</li>
+  <li><strong>out-only</strong> pattern - equivalent to WSDL 1.1 notification</li>
+  <li><strong>robust in-only</strong> pattern - a variation of the in-only pattern that provides the option of launching a fault response message as a result of a transmission or processing error</li>
+  <li><strong>robust out-only</strong> pattern - like out-only pattern, has an outbound message initiating the transmission. the difference here is that a fault message can be issued in response to the receipt of this message</li>
+  <li><strong>in-optional-out</strong> pattern - similar to in-out with an exception. This variation introduces a rule stating that the delivery of a response message is optional and should therefore not be expected by the service requetor that originated the communication. This pattern also supports the generation of a fault message.</li>
+  <li><strong>out-optional-in</strong> pattern - reverse of the in-optional-out, where the incoming message is optional. Fault message generation is also supported.</li>
+</ol>
+
+<h2 id="primitive-soa--first-generation-web-services-framework">Primitive SOA / First Generation Web-services Framework</h2>
+
+<h3 id="service-roles">Service Roles</h3>
+
+<ul>
+  <li><strong>Service Provider</strong> - who creates a service description and deploys it. (server side)</li>
+  <li><strong>Service Requestor / Service Consumer</strong> - who consumes the service
+    <ul>
+      <li>service provider entity - the organization providing the WS.</li>
+      <li>service provider agent - the web service itself.</li>
+    </ul>
+  </li>
+  <li><strong>Service Registry</strong> - who publishes the service description. match maker between provider and requestor.</li>
+  <li><strong>Intermediary service (routing service)</strong>
+    <ol>
+      <li><strong>Passive Intermediary service</strong> - It is typically responsible for routing messages to a subsequent location. It may use information in the SOAP message header to determine the routing path, or it may employ native routing logic to achieve some level of load balancing. Either way, what makes this type of intermediary passive is that it does not modify the message.</li>
+      <li><strong>Active intermediaries</strong> - also route messages to a forwarding destination. Prior to transmitting a message, however, these services actively process and alter the message contents. Typically, active intermediaries will look for particular SOAP header blocks and perform some action in response to the information they find there. They almost always alter data in header blocks and may insert or even delete header blocks entirely.</li>
+    </ol>
+  </li>
+  <li><strong>Initial sender and ultimate receiver</strong> - Initial senders are simply service requestors that initiate the transmission of a message. Therefore, the initial sender is always the first Web service in a message path. The counterpart to this role is the ultimate receiver. This label identifies service providers that exist as the last Web service along a message’s path</li>
+  <li><strong>Service Composition / Service Assemblies</strong> - A service can invoke one or more other services to complete a task. Each service participating in such composition is called as ‘service composition member’. Service composition is frequently governed by WS-* composition extensions, such as WS-BPEL and WS-CDL, which introduce the related concepts of orchestration and choreography.</li>
+</ul>
+
+<h3 id="service-models">Service Models</h3>
+
+<ul>
+  <li>Business service model</li>
+  <li>Utility service model - a generic webservice designed for re-use and non-application specific in nature</li>
+  <li>Controller service model - Service compositions are comprised of a set of independent services that each contribute to the execution of the overall business task. The assembly and coordination of these services is often a task in itself and one that can be assigned as the primary function of a dedicated service or as the secondary function of a service that is fully capable of executing a business task independently. The controller service fulfills this role, acting as the parent service to service composition members.</li>
+</ul>
+
+<h3 id="service-endpoint-or-service-description-wsdl">Service Endpoint or Service Description (WSDL)</h3>
+
+<ul>
+  <li>Service Endpoint - A WSDL describes the point of contact for a service provider, also known as the service endpoint or just endpoint. It provides a formal definition of the endpoint interface and also establishes the physical location (address) of the service.</li>
+  <li>2 categories of WSDL Description
+    <ul>
+      <li>
+        <ol>
+          <li>Abstract description
+* Describes the interface characteristics of the Web service without any reference to the technology used to host.
+* It contains <code>portType</code> (or <code>interface</code> from WSDL 2.0), <code>operation</code> and <code>message</code></li>
+        </ol>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>WSDL Abstract description</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;portType</span> <span class="na">name=</span><span class="s">&quot;glossaryTerms&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">  <span class="nt">&lt;operation</span> <span class="na">name=</span><span class="s">&quot;setTerm&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;input</span> <span class="na">name=</span><span class="s">&quot;newTerm&quot;</span> <span class="na">message=</span><span class="s">&quot;newTermValues&quot;</span><span class="nt">/&gt;</span>
+</span><span class="line">  <span class="nt">&lt;/operation&gt;</span>
+</span><span class="line"><span class="nt">&lt;/portType &gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>
+    <ol>
+      <li>Concrete description - contains
+* Describes the concrete technology used for physical transport.
+* It contains
+  * binding -  represents the transport technology the service can use to communicate. Typically it is SOAP. A binding can apply to a particular operation or all operations.
+  * port (or endpoint from WSDL 2.0) - represents the physical address at which a service can be accessed with a specific protocol.
+  * service</li>
+    </ol>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>WSDL Concrete description</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="xml"><span class="line"><span class="nt">&lt;binding</span> <span class="na">type=</span><span class="s">&quot;glossaryTerms&quot;</span> <span class="na">name=</span><span class="s">&quot;b1&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">   <span class="nt">&lt;soap:binding</span> <span class="na">style=</span><span class="s">&quot;document&quot;</span>
+</span><span class="line">   <span class="na">transport=</span><span class="s">&quot;http://schemas.xmlsoap.org/soap/http&quot;</span> <span class="nt">/&gt;</span>
+</span><span class="line">   <span class="nt">&lt;operation&gt;</span>
+</span><span class="line">     <span class="nt">&lt;soap:operation</span> <span class="na">soapAction=</span><span class="s">&quot;http://example.com/getTerm&quot;</span><span class="nt">/&gt;</span>
+</span><span class="line">     <span class="nt">&lt;input&gt;&lt;soap:body</span> <span class="na">use=</span><span class="s">&quot;literal&quot;</span><span class="nt">/&gt;&lt;/input&gt;</span>
+</span><span class="line">     <span class="nt">&lt;output&gt;&lt;soap:body</span> <span class="na">use=</span><span class="s">&quot;literal&quot;</span><span class="nt">/&gt;&lt;/output&gt;</span>
+</span><span class="line">  <span class="nt">&lt;/operation&gt;</span>
+</span><span class="line"><span class="nt">&lt;/binding&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="service-contract-or-service-metadata">Service Contract or Service Metadata</h3>
+
+<p>A service contract is comprised of the following documents:</p>
+
+<ul>
+  <li>WSDL definition</li>
+  <li>XSD schema</li>
+  <li>Policy document - provides rules, preferences, and processing details above and beyond what is expressed in WSDL &amp; XSD.</li>
+  <li>Other legal documents</li>
+</ul>
+
+<h1 id="bibliography">Bibliography</h1>
+
+<ul>
+  <li>Books
+    <ul>
+      <li>Service Oriented Architecture - Concepts, Technology and Design - Thomas Erl (2005)</li>
+      <li>SOA - Principles of Service Design - Thomas Erl</li>
+    </ul>
+  </li>
+  <li>Sites
+    <ul>
+      <li>http://www.service-architecture.com/articles/web-services/index.html</li>
+      <li><a href="http://www.servicetechbooks.com/">servicetechbooks.com</a></li>
+      <li><a href="http://www.servicetechspecs.com">servicetechspecs.com</a></li>
+      <li><a href="http://www.serviceorientation.com">serviceorientation.com</a></li>
+      <li><a href="http://www.soaglossary.com">soaglossary.com</a></li>
+      <li><a href="http://www.whatisrest.com">whatisrest.com</a></li>
+      <li><a href="http://www.servicetechmag.com">servicetechmag.com</a></li>
+    </ul>
+  </li>
+</ul>
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/soa.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/soa.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Data Science</h3>
+
+			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
+		</li>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

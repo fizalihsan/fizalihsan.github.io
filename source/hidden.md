@@ -15,3 +15,4 @@ footer: false
 * [Physics]({{ root_url }}/misc/physics.html)
 * [Tabligh]({{ root_url }}/islamic/dawah.html)
 * [TODO - Topics to learn in-depth]({{ root_url }}/technology/todo.html)
+* subl

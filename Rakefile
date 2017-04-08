@@ -253,6 +253,10 @@ desc "deploy public directory to github pages"
 multitask :push do
   puts "## Deploying branch to Github Pages "
   puts "## Pulling any updates from Github Pages "
+  if !File.directory?(deploy_dir) then
+     system "mkdir #{deploy_dir}"
+  end
+
   cd "#{deploy_dir}" do 
     Bundler.with_clean_env { system "git pull" }
   end
@@ -265,8 +269,8 @@ multitask :push do
     message = "Site updated at #{Time.now.utc}"
     puts "\n## Committing: #{message}"
     system "git commit -m \"#{message}\""
-    puts "\n## Pushing generated #{deploy_dir} website"
-    Bundler.with_clean_env { system 'git push origin #{deploy_branch} --force' }
+    puts "\n## Pushing generated #{deploy_dir} website to branch '#{deploy_branch}'"
+    Bundler.with_clean_env { system 'git push --set-upstream origin #{deploy_branch} --force' }
     puts "\n## Github Pages deploy complete"
   end
 end

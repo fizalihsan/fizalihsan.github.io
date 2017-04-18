@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Infrastructure as Code Containerization Docker Command Reference Vocabulary Configuration Management Vagrant Chef Common Resources Run list &hellip;">
+<meta name="description" content="Infrastructure as Code Infrastructure as Code Containerization Docker Command Reference Vocabulary Configuration Management Vagrant Chef Common &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -108,6 +108,7 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
+  <li><a href="#infrastructure-as-code" id="markdown-toc-infrastructure-as-code">Infrastructure as Code</a></li>
   <li><a href="#containerization" id="markdown-toc-containerization">Containerization</a>    <ul>
       <li><a href="#docker" id="markdown-toc-docker">Docker</a>        <ul>
           <li><a href="#command-reference" id="markdown-toc-command-reference">Command Reference</a></li>
@@ -128,8 +129,51 @@ messageStyle: "none",
   <li><a href="#references" id="markdown-toc-references">References</a></li>
 </ul>
 
+<h1 id="infrastructure-as-code">Infrastructure as Code</h1>
+
 <ul>
-  <li>Infrastructure as code means that your infrastructure is versionable, repeatable, testable</li>
+  <li>Iron age -&gt; Cloud age
+    <ul>
+      <li>A fundamental difference between the iron age and cloud age is the move from unreliable software, which depends on the hardware to be very reliable, to software that runs reliably on unreliable hardware.</li>
+      <li>In the cloud age, routine provisioning and change management is automated.</li>
+      <li>In cloud world, disappearing server is a feature, not a bug</li>
+    </ul>
+  </li>
+  <li><strong>What is Infrastructure as Code</strong>
+    <ul>
+      <li>an approach to infrastructure automation based on software development practices</li>
+      <li>treating infrastructure as software and data and apply software development tools (VCS) and practices (TDD, CI, CD)</li>
+    </ul>
+  </li>
+  <li><strong>Principles of Infrastructure as Code</strong>
+    <ul>
+      <li>Systems can be easily reproduced</li>
+      <li>Systems are disposable (Treat your servers like cattle, not pets)</li>
+      <li>Systems are consistent</li>
+      <li>Processes are repeatable</li>
+      <li>Antifragility
+        <ul>
+          <li>Exercise puts stress on muscles and bones, essentially damaging them, causing them to become stronger. Protecting the body by avoiding physical stress actually weakens it, making it more likely to fail in the face of extreme stress.</li>
+          <li>Similarly, protecting an IT system by minimizing the number of changes made to it will not make it more robust. Constant changing and improving will make it more ready to handle disasters.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Configuration tooling should run continuously, not ad hoc.</li>
+  <li>If automation broke on some edge case, we would either change the automation to handle it, or else fix the design of the service so it was no longer an edge case.</li>
+  <li><em>Dynamic Infrastructure</em> refers to the ability to create and destroy servers programmatically;
+    <ul>
+      <li>Issues of dynamic infrastructure
+        <ul>
+          <li>Configuration drift</li>
+          <li>Snowflake servers (Pets Vs Cattle) - can’t be touched, much less reproduced.</li>
+          <li>Fragile infrastructure</li>
+          <li>Erosion</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><em>Bare-metal cloud</em>: Hardware can be automatically provisioned so that it can be used in a fully dynamic fashion. This is sometimes referred to as ‘bare-metal cloud’</li>
 </ul>
 
 <h1 id="containerization">Containerization</h1>
@@ -379,40 +423,6 @@ end</p>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 <pre><code>├── Berksfile
 ├── chefignore​ &lt;----- list of files to ignore when uploading cookbook to a Chef server.​
-├── .delivery
-│   ├── build_cookbook
-│   │   ├── Berksfile
-│   │   ├── chefignore
-│   │   ├── data_bags
-│   │   │   └── keys
-│   │   │       └── delivery_builder_keys.json
-│   │   ├── .kitchen.yml
-│   │   ├── LICENSE
-│   │   ├── metadata.rb
-│   │   ├── README.md
-│   │   ├── recipes
-│   │   │   ├── default.rb
-│   │   │   ├── deploy.rb
-│   │   │   ├── functional.rb
-│   │   │   ├── lint.rb
-│   │   │   ├── provision.rb
-│   │   │   ├── publish.rb
-│   │   │   ├── quality.rb
-│   │   │   ├── security.rb
-│   │   │   ├── smoke.rb
-│   │   │   ├── syntax.rb
-│   │   │   └── unit.rb
-│   │   ├── secrets
-│   │   │   └── fakey-mcfakerton
-│   │   └── test
-│   │       └── fixtures
-│   │           └── cookbooks
-│   │               └── test
-│   │                   ├── metadata.rb
-│   │                   └── recipes
-│   │                       └── default.rb
-│   ├── config.json
-│   └── project.toml
 ├── files​ &lt;---- centralized file store in the cookbook to be distributed to the nodes using 'cookbook_file' resource​
 │   └── default​    &lt;----- controls whether files are copied to particular nodes​
 │       └── motd
@@ -457,6 +467,7 @@ end</p>
     <ul>
       <li>Chef Cookbook</li>
       <li>Learning Chef - O’Reilly</li>
+      <li>Infrastructure as Code</li>
     </ul>
   </li>
   <li>Sites

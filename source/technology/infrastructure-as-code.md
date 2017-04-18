@@ -9,7 +9,34 @@ footer: true
 * list element with functor item
 {:toc}
 
-* Infrastructure as code means that your infrastructure is versionable, repeatable, testable
+# Infrastructure as Code
+
+* Iron age -> Cloud age
+	* A fundamental difference between the iron age and cloud age is the move from unreliable software, which depends on the hardware to be very reliable, to software that runs reliably on unreliable hardware.
+	* In the cloud age, routine provisioning and change management is automated.
+	* In cloud world, disappearing server is a feature, not a bug
+* __What is Infrastructure as Code__
+	* an approach to infrastructure automation based on software development practices
+	* treating infrastructure as software and data and apply software development tools (VCS) and practices (TDD, CI, CD)
+* __Principles of Infrastructure as Code__
+	* Systems can be easily reproduced
+	* Systems are disposable (Treat your servers like cattle, not pets)
+	* Systems are consistent
+	* Processes are repeatable
+	* Antifragility
+		* Exercise puts stress on muscles and bones, essentially damaging them, causing them to become stronger. Protecting the body by avoiding physical stress actually weakens it, making it more likely to fail in the face of extreme stress. 
+		* Similarly, protecting an IT system by minimizing the number of changes made to it will not make it more robust. Constant changing and improving will make it more ready to handle disasters.
+
+* Configuration tooling should run continuously, not ad hoc.
+* If automation broke on some edge case, we would either change the automation to handle it, or else fix the design of the service so it was no longer an edge case.
+* _Dynamic Infrastructure_ refers to the ability to create and destroy servers programmatically; 
+	* Issues of dynamic infrastructure
+		* Configuration drift
+		* Snowflake servers (Pets Vs Cattle) - can't be touched, much less reproduced. 
+		* Fragile infrastructure
+		* Erosion
+* _Bare-metal cloud_: Hardware can be automatically provisioned so that it can be used in a fully dynamic fashion. This is sometimes referred to as 'bare-metal cloud'
+
 
 # Containerization
 
@@ -179,40 +206,6 @@ end
 ```
     ├── Berksfile
     ├── chefignore​ <----- list of files to ignore when uploading cookbook to a Chef server.​
-    ├── .delivery
-    │   ├── build_cookbook
-    │   │   ├── Berksfile
-    │   │   ├── chefignore
-    │   │   ├── data_bags
-    │   │   │   └── keys
-    │   │   │       └── delivery_builder_keys.json
-    │   │   ├── .kitchen.yml
-    │   │   ├── LICENSE
-    │   │   ├── metadata.rb
-    │   │   ├── README.md
-    │   │   ├── recipes
-    │   │   │   ├── default.rb
-    │   │   │   ├── deploy.rb
-    │   │   │   ├── functional.rb
-    │   │   │   ├── lint.rb
-    │   │   │   ├── provision.rb
-    │   │   │   ├── publish.rb
-    │   │   │   ├── quality.rb
-    │   │   │   ├── security.rb
-    │   │   │   ├── smoke.rb
-    │   │   │   ├── syntax.rb
-    │   │   │   └── unit.rb
-    │   │   ├── secrets
-    │   │   │   └── fakey-mcfakerton
-    │   │   └── test
-    │   │       └── fixtures
-    │   │           └── cookbooks
-    │   │               └── test
-    │   │                   ├── metadata.rb
-    │   │                   └── recipes
-    │   │                       └── default.rb
-    │   ├── config.json
-    │   └── project.toml
     ├── files​ <---- centralized file store in the cookbook to be distributed to the nodes using 'cookbook_file' resource​
     │   └── default​    <----- controls whether files are copied to particular nodes​
     │       └── motd
@@ -254,5 +247,6 @@ end
 * Books
   * Chef Cookbook
   * Learning Chef - O'Reilly
+  * Infrastructure as Code
 * Sites
   * https://learn.chef.io

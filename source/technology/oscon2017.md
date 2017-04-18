@@ -15,7 +15,7 @@ footer: false
 
 * Sample code: http://github.com/henrikengstrom/sa-2017-akka
 * Circuit-breakers - technique for resiliency. disallow customers from calling the service when it reaches the breaking point
-* Reactive manifesto - http://www.reactive.manifesto.org
+* Reactive manifesto - http://www.reactivemanifesto.org
 	* Responsive
 	* Resilient (self-healing)
 	* Elastic
@@ -28,10 +28,11 @@ footer: false
 * Akka HTTP
 * Alpakka is similar in goals to Apache Camel
 
-## Cloud Native Architecture Patterns
+## Cloud-Native Architecture Patterns
 
-> Get presentation link from Twitter hashtag
 
+* Matt Stein (Software Architecture Radio)
+* [Presentation Slides](https://www.slideshare.net/mstine/cloud-native-architecture-patterns-tutorial)
 * Waterscrumfall
 * Mean Time Between Failures -> Mean Time To Recovery
 * DevOps
@@ -82,7 +83,7 @@ footer: false
 		* Circuit breaker - e.g., 10 failures in 1 minute. [Netflix Hystrix](https://github.com/Netflix/Hystrix) is an open-source circuit breaker solution.
 		* Tolerant Reader
 		* Intelligent Agent
-* __Blue-Green deployment__, __Canary releases__, AB deploys
+	* __Blue-Green deployment__, __Canary releases__, AB deploys
 * [Netflix Eureka](https://github.com/Netflix/eureka/wiki)
 * BFF pattern ([Backends for frontend](http://samnewman.io/patterns/architectural/bff/))
 * DataDog - Monitoring service for cloud-scale applications
@@ -95,7 +96,7 @@ footer: false
 * __The evolution and future of Software Architecture__ (Mark Richards)
 	* Agility, Velocity, Modularity, Testability, Performance, Scalability, Simplicity, Reliability
 	* Streaming solutions
-	* Autonomic self-healing systems that can monitor themseles and adap to their environment
+	* Autonomic self-healing systems that can monitor themselves and adapt to their environment
 	* James Blieck - Faster 
 * __Computers are easy; people are hard__ (Bridget Kromhout, Pivotal)
 	* @honest_status, @ntakayama
@@ -391,7 +392,7 @@ footer: false
 
 * Kai Wähner (TIBCO)
 * Pattern
-	* Backends for frontends (http://thoughtworks.com/insights/blog/bff-soundcloud
+	* Backends for frontends (http://thoughtworks.com/insights/blog/bff-soundcloud)
 * _4_ Design microservices with open APIs in mind
 	* [12 factor apps](https://12factor.net)
 * _5_ Cloud-native is much more than just cloud-washed

@@ -37,7 +37,7 @@ https://www.usenix.org/sites/default/files/conference/protected-files/dickson.pd
 
 #Monitoring Tools
 
-1. sar
+* sar
 * trace
 * [MRTG](http://oss.oetiker.ch/mrtg/)
   * acronym for Multi Router Traffic Grapher

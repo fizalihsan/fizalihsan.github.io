@@ -166,127 +166,127 @@ messageStyle: "none",
 
 <h1 id="monitoring-tools">Monitoring Tools</h1>
 
-<ol>
-  <li>sar
+<ul>
+  <li>sar</li>
+  <li>trace</li>
+  <li><a href="http://oss.oetiker.ch/mrtg/">MRTG</a>
     <ul>
-      <li>trace</li>
-      <li><a href="http://oss.oetiker.ch/mrtg/">MRTG</a>
+      <li>acronym for Multi Router Traffic Grapher</li>
+      <li>free software for monitoring and measuring the traffic load on network links.</li>
+      <li>gets its data via SNMP agents every few minutes</li>
+      <li>results are plotted in graphs</li>
+      <li>has alerting mechanism</li>
+    </ul>
+  </li>
+  <li><a href="http://oss.oetiker.ch/rrdtool/">RRDTool</a>
+    <ul>
+      <li>acronym for Round-Robin Database Tool </li>
+      <li>aims to handle time-series data like n/w bandwidth, CPU load, etc. </li>
+      <li>The data are stored in a round-robin circular buffer/database, thus the system storage footprint remains constant over time. </li>
+      <li>It has tools to display the data in graphical format.</li>
+    </ul>
+  </li>
+  <li><a href="http://www.nagios.com/">Nagios</a></li>
+  <li><a href="http://ganglia.info/">Ganglia</a>
+    <ul>
+      <li>a scalable distributed system monitor tool for high performance computing systems such as clusters and grids.</li>
+      <li>typically used with Nagios. </li>
+    </ul>
+  </li>
+  <li><a href="http://www.cacti.net/">Cacti</a> (mrtg++) 
+    <ul>
+      <li>Network Graphing solution designed to harness the power of RRDTool’s storage and graph functionality</li>
+    </ul>
+  </li>
+  <li><a href="http://www.sensuapp.org/">Sensu</a> 
+    <ul>
+      <li>open source monitoring framework</li>
+    </ul>
+  </li>
+  <li>LogStash
+    <ul>
+      <li>Redis for storage</li>
+      <li>RabbitMQ, grok</li>
+      <li>Typical implementation: logstash + redis + elasticsearch</li>
+    </ul>
+  </li>
+  <li>Splunk</li>
+  <li><a href="http://www.fluentd.org/">FluentD</a>
+    <ul>
+      <li>an open-source tool to collect events and logs and store as JSON</li>
+      <li>built on CRuby.</li>
+      <li>plugins enables to store the massive data for Log Search (like ElasticSearch), Analytics and Archiving (MongoDB, S3, Hadoop)</li>
+    </ul>
+  </li>
+  <li><a href="http://www.graylog2.com/">GrayLog2</a>
+    <ul>
+      <li>an open source data analytics system </li>
+      <li>search logs, create charts, create alerts</li>
+      <li>leverages Java and ElasticSearch. Communication via REST API</li>
+    </ul>
+  </li>
+  <li><a href="http://opentsdb.net/">OpenTSDB</a>
+    <ul>
+      <li>pure storage solution</li>
+      <li>a free distributed time-series database written on top of HBase.</li>
+      <li>was written to store, index and serve metrics collected at a large scale, and make it easily accessible and graphable.</li>
+    </ul>
+  </li>
+  <li>D3.js - Pure visualization solution</li>
+  <li><a href="https://github.com/etsy/statsd/">Statsd</a>
+    <ul>
+      <li>listens to anything and everything</li>
+      <li>written in node.js. There are alternative implementations in groovy, C, etc.</li>
+      <li>listens to statistics (counters and timers) and sends aggregates to backend services like Graphite</li>
+    </ul>
+  </li>
+  <li><a href="http://graphite.wikidot.com/">Graphite</a>
+    <ul>
+      <li>this open-source tool written on Python does 2 things: store numeric time-series data and render graphs of this data on demand</li>
+      <li>does not collect data.</li>
+      <li>3 components
         <ul>
-          <li>acronym for Multi Router Traffic Grapher</li>
-          <li>free software for monitoring and measuring the traffic load on network links.</li>
-          <li>gets its data via SNMP agents every few minutes</li>
-          <li>results are plotted in graphs</li>
-          <li>has alerting mechanism</li>
-        </ul>
-      </li>
-      <li><a href="http://oss.oetiker.ch/rrdtool/">RRDTool</a>
-        <ul>
-          <li>acronym for Round-Robin Database Tool </li>
-          <li>aims to handle time-series data like n/w bandwidth, CPU load, etc. </li>
-          <li>The data are stored in a round-robin circular buffer/database, thus the system storage footprint remains constant over time. </li>
-          <li>It has tools to display the data in graphical format.</li>
-        </ul>
-      </li>
-      <li><a href="http://www.nagios.com/">Nagios</a></li>
-      <li><a href="http://ganglia.info/">Ganglia</a>
-        <ul>
-          <li>a scalable distributed system monitor tool for high performance computing systems such as clusters and grids.</li>
-          <li>typically used with Nagios. </li>
-        </ul>
-      </li>
-      <li><a href="http://www.cacti.net/">Cacti</a> (mrtg++) 
-        <ul>
-          <li>Network Graphing solution designed to harness the power of RRDTool’s storage and graph functionality</li>
-        </ul>
-      </li>
-      <li><a href="http://www.sensuapp.org/">Sensu</a> 
-        <ul>
-          <li>open source monitoring framework</li>
-        </ul>
-      </li>
-      <li>LogStash
-        <ul>
-          <li>Redis for storage</li>
-          <li>RabbitMQ, grok</li>
-          <li>Typical implementation: logstash + redis + elasticsearch</li>
-        </ul>
-      </li>
-      <li>Splunk</li>
-      <li><a href="http://www.fluentd.org/">FluentD</a>
-        <ul>
-          <li>an open-source tool to collect events and logs and store as JSON</li>
-          <li>built on CRuby.</li>
-          <li>plugins enables to store the massive data for Log Search (like ElasticSearch), Analytics and Archiving (MongoDB, S3, Hadoop)</li>
-        </ul>
-      </li>
-      <li><a href="http://www.graylog2.com/">GrayLog2</a>
-        <ul>
-          <li>an open source data analytics system </li>
-          <li>search logs, create charts, create alerts</li>
-          <li>leverages Java and ElasticSearch. Communication via REST API</li>
-        </ul>
-      </li>
-      <li><a href="http://opentsdb.net/">OpenTSDB</a>
-        <ul>
-          <li>pure storage solution</li>
-          <li>a free distributed time-series database written on top of HBase.</li>
-          <li>was written to store, index and serve metrics collected at a large scale, and make it easily accessible and graphable.</li>
-        </ul>
-      </li>
-      <li>D3.js - Pure visualization solution</li>
-      <li><a href="https://github.com/etsy/statsd/">Statsd</a>
-        <ul>
-          <li>listens to anything and everything</li>
-          <li>written in node.js. There are alternative implementations in groovy, C, etc.</li>
-          <li>listens to statistics (counters and timers) and sends aggregates to backend services like Graphite</li>
-        </ul>
-      </li>
-      <li><a href="http://graphite.wikidot.com/">Graphite</a>
-        <ul>
-          <li>this open-source tool written on Python does 2 things: store numeric time-series data and render graphs of this data on demand</li>
-          <li>does not collect data.</li>
-          <li>3 components</li>
-        </ul>
-      </li>
-      <li>carbon - a <a href="https://twistedmatrix.com/trac/">Twisted</a> daemon that listens for time-series data</li>
-      <li>whisper - a simple database library for storing time-series data</li>
-      <li>graphite-webapp - A <a href="https://www.djangoproject.com/">Django</a> webapp that renders graphs on-demand using <a href="http://www.cairographics.com/">Cairo</a>.</li>
-      <li><a href="http://www.shinken-monitoring.org/">Shinken</a>
-        <ul>
-          <li>open-source Nagios like tool, redesigned and rewritten from scratch.</li>
-          <li>Nagios + Graphite + Configuration</li>
-        </ul>
-      </li>
-      <li><a href="http://www.elasticsearch.org/overview/kibana/">Kibana</a>
-        <ul>
-          <li>web interface for viewing logstash records stored in elasticsearch</li>
-        </ul>
-      </li>
-      <li><a href="http://www.elasticsearch.org/">ElasticSearch</a></li>
-      <li>Zenoss</li>
-      <li>Shippers
-        <ul>
-          <li>lumberjack</li>
-          <li>beaver</li>
-          <li>syslog</li>
-          <li>woodchuck</li>
-        </ul>
-      </li>
-      <li>AppDynamics</li>
-      <li>New Relic</li>
-      <li>Other tools
-        <ul>
-          <li>monigusto</li>
-          <li>collectd</li>
-          <li>jmxtrans</li>
-          <li>tasseo</li>
-          <li>gdash</li>
-          <li>librato</li>
+          <li>carbon - a <a href="https://twistedmatrix.com/trac/">Twisted</a> daemon that listens for time-series data</li>
+          <li>whisper - a simple database library for storing time-series data</li>
+          <li>graphite-webapp - A <a href="https://www.djangoproject.com/">Django</a> webapp that renders graphs on-demand using <a href="http://www.cairographics.com/">Cairo</a>.</li>
         </ul>
       </li>
     </ul>
   </li>
-</ol>
+  <li><a href="http://www.shinken-monitoring.org/">Shinken</a>
+    <ul>
+      <li>open-source Nagios like tool, redesigned and rewritten from scratch.</li>
+      <li>Nagios + Graphite + Configuration</li>
+    </ul>
+  </li>
+  <li><a href="http://www.elasticsearch.org/overview/kibana/">Kibana</a>
+    <ul>
+      <li>web interface for viewing logstash records stored in elasticsearch</li>
+    </ul>
+  </li>
+  <li><a href="http://www.elasticsearch.org/">ElasticSearch</a></li>
+  <li>Zenoss</li>
+  <li>Shippers
+    <ul>
+      <li>lumberjack</li>
+      <li>beaver</li>
+      <li>syslog</li>
+      <li>woodchuck</li>
+    </ul>
+  </li>
+  <li>AppDynamics</li>
+  <li>New Relic</li>
+  <li>Other tools
+    <ul>
+      <li>monigusto</li>
+      <li>collectd</li>
+      <li>jmxtrans</li>
+      <li>tasseo</li>
+      <li>gdash</li>
+      <li>librato</li>
+    </ul>
+  </li>
+</ul>
 
 <h2 id="splunk">Splunk</h2>
 

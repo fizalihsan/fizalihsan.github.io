@@ -25,7 +25,7 @@ footer: true
 * Riak breaks up classes of keys into buckets to avoid key collisions.
 * Riak stores everything as a binary-encoded value.
 * Links are metadata that associate one key to other keys. Links are uni-directional. What makes Links special in Riak is link walking (and a more powerful variant, linked mapreduce queries)
-* URL Pattern: `http://SERVER:PORT/riak/BUCKET/KEY`. 
+* URL Pattern: `http://SERVER:PORT/riak/BUCKET/KEY`.
 
 ### Architecture
 * Riak server architecture removes single points of failure (all nodes are peers) and allows you to grow or shrink the cluster at will. This is important when dealing with large-scale deployments, since it allows your database to remain available even if several nodes fail or are otherwise unresponsive.
@@ -33,10 +33,10 @@ footer: true
 * **Riak Ring** - Riak divides its server configuration into partitions denoted by a 160-bit number (that’s 2^160). The Riak team likes to represent this massive integer as a circle, which they call the ring. When a key is hashed to a partition, the ring helps direct which Riak servers store the value.
 
 ### Clustering
-* Riak allows us to control reads and writes into the cluster by altering three values: 
-  * `N` is the number of nodes a write ultimately replicates to, in other words, the number of copies in the cluster. 
-  * `W` is the number of nodes that must be successfully written to before a successful response. If `W` is less than `N`, a write will be considered successful even while Riak is still copying the value in background. 
-  * `R` is the number of nodes required to read a value successfully. If `R` is greater than the number of copies available, the request will fail. If `R=1`, there is a potential chance to read stale values. If `R=N`, then if any of those `N` nodes become unavailable, read requests would fail. 
+* Riak allows us to control reads and writes into the cluster by altering three values:
+  * `N` is the number of nodes a write ultimately replicates to, in other words, the number of copies in the cluster.
+  * `W` is the number of nodes that must be successfully written to before a successful response. If `W` is less than `N`, a write will be considered successful even while Riak is still copying the value in background.
+  * `R` is the number of nodes required to read a value successfully. If `R` is greater than the number of copies available, the request will fail. If `R=1`, there is a potential chance to read stale values. If `R=N`, then if any of those `N` nodes become unavailable, read requests would fail.
 * **Conflict Resolution**
   * Riak uses vector clocks. A vector clock is a token that distributed systems like Riak use to keep the order of conflicting key-value updates intact. Timestamps cannot be used since the clocks across servers may not be synchronized.
 
@@ -46,8 +46,101 @@ footer: true
 
 ## Redis
 
+* Redis stands for Remote Dictionary Server
 * provides for complex datatypes like sorted sets and hashes, as well as basic message patterns like publish-subscribe and blocking queues.
 * by caching writes in memory before committing to disk, Redis gains amazing performance in exchange for increased risk of data loss in the case of a hardware failure. good fit for caching noncritical data and for acting as a message broker.
+
+* Durability modes
+  * in-memory - completely in-memory. data is lost when server crashes
+  * snapshot (default) - snapshots taken to files periodically
+  * Append Only File (AOF) - all data is written to file every few seconds
+* Keys
+  * Redis keys can be a simple string or a complex string (e.g., persons:123:nyc)
+  * A key can be of max size 512 MB. Keep it simple and small for performance
+  * expiration time can be set on keys
+  * Key space and keys are like Databases and tables in RDBMS
+
+### Data Types
+
+* __Hash__ or Dictionaries
+* __Linked List__
+* __Sets__
+  * Max number of elements a set can hold is 2^32 -1 (around 4 billion)
+* __Sorted sets__
+  * Each element is associated with a score. If 2 elements have same score, then they are sorted lexicographically in alphebetic order
+  * Useful to build applications like leaderboard
+  * Not as fast as sets since the scores are compared
+  * Add, remove and update of an item is `O(log N)`
+  * Internally sorted sets are implemented as 2 separate data structures
+    * A _skip list_ with a hash table. A skip list is a data structure that allows fast search within an ordered sequence of elements.
+    * and a _ziplist_
+* __Bitmaps__
+  * A Bitmap is not a real data type in Redis. Under the hood, a Bitmap is a String or a set of bit operations on a String. 
+  * also known as _bit arrays_ or _bitsets_.
+  * A Bitmap is a sequence of bits where each bit can store 0 or 1.
+  * Pro: are memory efficient, support fast data lookups, and can store up to 2^32 bits (more than 4 billion bits).
+  * Con: have to define the size of the bitmap upfront. e.g., if you are storing 5 million user ids, you have to define the bitmap of size 5m
+  * Con: not memory efficient, if only a fraction of those bits are actually being used
+* __HyperLogLogs__
+  * A HyperLogLog is not actually a real data type in Redis. Conceptually, a HyperLogLog is an algorithm that uses randomization in order to provide a very good approximation of the number of unique elements that exist in a Set. 
+  * It runs in `O(1)` and uses a very small amount of memory—up to 12 kB of memory per key. 
+  * Redis provides specific commands to manipulate Strings in order to calculate the cardinality of a set using the HyperLogLog algorithm.
+  * The HyperLogLog algorithm is probabilistic, which means that it does not ensure 100 percent accuracy. The Redis implementation of the HyperLogLog has a standard error of 0.81 percent. In theory, there is no practical limit for the cardinality of the sets that can be counted.
+  * Commands for HyperLogLogs: PFADD, PFCOUNT, and PFMERGE. (PF stands for _Philippe Flajolet_, the author of the algorithm)
+  * Pro: Usually, to perform unique counting, you need an amount of memory proportional to the number of items in the set that you are counting. HyperLogLogs solve these kinds of problems with great performance, low computation cost, and a small amount of memory.
+  * Con: are not 100% accurate. Nonetheless, in some cases, 99.19 percent is good enough.
+  * Use cases where this can be useful
+    * Counting the number of unique users who visited a website
+    * Counting the number of distinct terms that were searched for on your website on a specific date or time
+    * Counting the number of distinct hashtags that were used by a user
+    * Counting the number of distinct words that appear in a book
+
+### Redis CLI
+
+* `ping`
+* `set <key> <value>`
+* `get <key>`
+* `select <keyspace>` - create or switch to a given key space (key space is a name space like db in rdbms)
+* `keys *` - returns all keys in the current space
+* `flushdb` - delete all keys in the key space
+* `expire <key> <time_in_secs>` - expires a key after given time
+* `ttl <key>` - shows the key's time to live in seconds
+* __Hash__
+  * `hset <redis_key> <key> <value>` - set a single key value in a redis key
+  * `hget <redis_key> <key> <value>` - get a single key's value from a redis key
+  * `hmset <redis_key> <key1> <value1> <key2> <value2>` - set multiple key values
+  * `hmget<redis_key> <key1> <key2>` - get multiple values
+  * `hgetall <redis_key>` - returns all key values in this redis key
+* __Linked List__
+  * `lpush <list_name> <value>` - left push a value to list
+  * `rpush <list_name> <value>` - right push a value to list
+  * `lrange <list_name> <from_index> <to_index>` - returns all the elements in the list within the given range
+  * `lpop <list_name>` - pop out the left most element from the list
+  * `rpop <list_name>` - pop out the right most element from the list
+  * `llen <list_name>` - length of the list
+  * `ltrim <list_name> <from_index> <to_index>` - trims the elements off of the list that is within the range
+* __Set__
+  * `sadd <set> <value>`
+  * `sunion <set1> <set2>` - union of 2 sets
+  * `sinter <set1> <set2>` - intersection of 2 sets
+  * `sdiff <set1> <set2>` - difference of 2 sets
+  * `sismember <set> <value>` - checks if the given value is a member of this set
+  * `smembers <set>` - returns all the values/members from this set
+  * `srem <set> <value>` - remove an element from the set
+  * `scard <set>` - cardinality of a set
+* __Sorted Set__
+  * `zadd <set> <score> <value>` - e.g., `zadd leaders 100 "Alice"`
+  * `zrange`
+
+### Advanced Features
+
+
+* Pub-Sub
+* Sentinel (for clustering)
+
+
+* To try out: [Redis Labs](https://redislabs.com) or [try.redis](https://try.redis.io)
+
 
 # Column-oriented Databases
 
@@ -74,7 +167,7 @@ Scalability, built-in features like versioning, compression, garbage collection 
 
 ### Where to use?
 * Best used for online analytical processing systems - though individual queries are slower compared to other dbs, it works really well with enormous datasets. Big companies use this to back logging and search systems. Used by Facebook a principal component of its new messaging infrastructure. Twitter uses HBase extensively, ranging from data generation (for applications such as people search) to storing monitoring/performance data
-  
+
 ### Architecture
 * HBase is designed to be fault tolerant. Hardware failures may be uncommon for individual machines, but in a large cluster, node failure is the norm. By using write-ahead logging and distributed configuration, HBase can quickly recover from individual server failures.
 * HBase supports three running modes:
@@ -125,11 +218,11 @@ arrays
 * **Capped collection** - max size of the collection is defined at the time of creation and cannot be altered; an existing regular collection can be converted to capped collection, but not vice versa. It behaves like a circular queue and maintains the insertion order; cannot be sharded.
 * **Tailable cursors** - like `tail -f` command, tailable cursors can be defined on capped collections.
 * **TTL indexes** - Time-to-Live indexes are customizable capped collections where time-out for each document is defined by the user. A common use is in applications that maintain a rolling window of history (e.g., most recent 100 days) for user actions such as clickstreams.
-* **Full-text indexes** - give you the ability to search text quickly, as well as provide built-in support for multi-language stemming and stop words; only index string data; allows searching multiple fields with custom weightage specified (from default 1 to 1 billion); You can create a full-text index on all string fields in a document by creating an index on `$**` 
+* **Full-text indexes** - give you the ability to search text quickly, as well as provide built-in support for multi-language stemming and stop words; only index string data; allows searching multiple fields with custom weightage specified (from default 1 to 1 billion); You can create a full-text index on all string fields in a document by creating an index on `$**`
 * **Geo-spatial indexes**
   * Types of Geospatial queries : *intersection*, *within*, and *nearness*; Geospatial queries using *intersection* and *within* functions do not require an index, whereas *near* function does.
   * ***2dsphere index*** - for surface-of-the-earth-type maps; allows you to specify points, lines, and polygons in GeoJSON format. A point is given by a two-element array, representing [longitude, latitude]; A line by an array of Points; A polygon in the same way as lines but with different 'type'; Sample queries: restaurants in given coordinates, restaurants near given coordinates.
-  * ***2d index*** - for flat maps, video game maps and time series data; "2d" indexes assume a perfectly flat surface, instead of a sphere; can only store points; 
+  * ***2d index*** - for flat maps, video game maps and time series data; "2d" indexes assume a perfectly flat surface, instead of a sphere; can only store points;
 
 #### Rules of Index Design
 
@@ -139,9 +232,9 @@ arrays
 
 ### Profiling
 
-* MongoDB provides a range of logging and monitoring tools to ensure collections are appropriately indexed and queries are tuned. 
-* The MongoDB Database Profiler is most commonly used during load testing and debugging, logging all database operations or only those events whose duration exceeds a configurable threshold (the default is 100ms). 
-* Profiling data is stored in a capped collection 
+* MongoDB provides a range of logging and monitoring tools to ensure collections are appropriately indexed and queries are tuned.
+* The MongoDB Database Profiler is most commonly used during load testing and debugging, logging all database operations or only those events whose duration exceeds a configurable threshold (the default is 100ms).
+* Profiling data is stored in a capped collection
 
 ### Data modelling
 
@@ -149,7 +242,7 @@ arrays
 
 * Embed for speed, reference for integrity
 * Embed "point-in-time" data. E.g., the address fields in an order document. You don’t want a user’s past orders to change if he updates his profile.
-* Do not embed fields that have unbound growth. e.g, comments on a blog article. 
+* Do not embed fields that have unbound growth. e.g, comments on a blog article.
 * Store embedded information in arrays for anonymous access. Subdocument should be used only when you know and will always know the name of the field that you are accessing.
 
 
@@ -206,8 +299,8 @@ arrays
    * `findAndModify()` command that allows a document to be updated atomically and returned in the same round trip. Will this work for multiple documents?
    * For situations that require multi-document transactions, you can implement two-phase commit in your application to provide support for these kinds of multi-document updates. Using [2 Phase Commit](https://docs.mongodb.com/manual/tutorial/perform-two-phase-commits/) ensures that data is consistent and, in case of an error, the state that preceded the transaction is recoverable. During the procedure, however, documents can represent pending data and states.
 * Maintaining Strong Consistency - By default, MongoDB directs all read operations to primary servers, ensuring strong consistency. Also, by default any reads from secondary servers within a MongoDB replica set will be eventually consistent – much like master / slave replication in relational databases.
-* Write concerns - The write concern is configured in the driver and is highly granular – it can be set per-operation, per-collection or for the entire database. 
-* Journals 
+* Write concerns - The write concern is configured in the driver and is highly granular – it can be set per-operation, per-collection or for the entire database.
+* Journals
   * Before applying a change to the database – whether it is a write operation or an index modification – MongoDB writes the change operation to the journal. If a server failure occurs or MongoDB encounters an error before it can write the changes from the journal to the database, the journaled operation can be reapplied, thereby maintaining a consistent state when the server is recovered.
 
 #### Why no transactions?
@@ -217,8 +310,8 @@ arrays
 
 #### Write concern
 
-* MongoDB has a configurable write concern. This capability allows you to balance the importance of guaranteeing that all writes are fully recorded in the database with the speed of the insert. 
-* For example, if you issue writes to MongoDB and do not require that the database issue any response, the write operations will return very fast (since the application needs to wait for a response from the database) but you cannot be certain that all writes succeeded. Conversely, if you require that MongoDB acknowledge every write operation, the database will not return as quickly but you can be certain that every item will be present in the database. 
+* MongoDB has a configurable write concern. This capability allows you to balance the importance of guaranteeing that all writes are fully recorded in the database with the speed of the insert.
+* For example, if you issue writes to MongoDB and do not require that the database issue any response, the write operations will return very fast (since the application needs to wait for a response from the database) but you cannot be certain that all writes succeeded. Conversely, if you require that MongoDB acknowledge every write operation, the database will not return as quickly but you can be certain that every item will be present in the database.
 * The proper write concern is often an application-specific decision, and depends on the reporting requirements and uses of your analytics application.
 
 **Insert acknowledgement**
@@ -249,22 +342,22 @@ To acknowledge that the data has replicated to two members of the replica set be
 * Shard key - when you enable sharding you choose a field or two that MongoDb uses to break up data. To even create a shard key, the field(s) must be indexed. Before sharding, the collection is essentially a single chunk. Sharding splits this into smaller chunks based on the shard key
 
 * Shard
-   * A shard is one or more servers in a cluster that are responsible for some subset of the data. For instance, if we had a cluster that contained 1,000,000 documents representing a website’s users, one shard might contain information about 200,000 of the users. 
+   * A shard is one or more servers in a cluster that are responsible for some subset of the data. For instance, if we had a cluster that contained 1,000,000 documents representing a website’s users, one shard might contain information about 200,000 of the users.
    * A shard can consist of many servers. If there is more than one server in a shard, each server has an identical copy of the subset of data (Figure 2-1). In production, a shard will usually be a replica set.
    * Single range shards will lead to cascade effect and lot of data movement when rebalancing is required. Mongo uses multi-range shards to avoid this.
 * Chunk
    * A range of data is called a **chunk**. When we split a chunk’s range into two ranges, it becomes two chunks.
-   * 200MB is the max size of a chunk by default. This is because moving data is expensive: it takes a lot of time, uses system resources, and can add a significant amount of network traffic. 
+   * 200MB is the max size of a chunk by default. This is because moving data is expensive: it takes a lot of time, uses system resources, and can add a significant amount of network traffic.
 * Shard Key
    * You also cannot change the value of a shard key (with, for example, a $set). The only way to give a document a new shard key is to remove the document, change the shard key’s value on the client side, and reinsert it.
-   * A document belongs in a chunk if and only if its shard key value is in that chunk’s range. 
+   * A document belongs in a chunk if and only if its shard key value is in that chunk’s range.
 * mongos
    * `mongos` is a special routing process that sits in front of your cluster and looks like an ordinary `mongod` server to anything that connects to it. It forwards requests to the correct server or servers in the cluster, then assembles their responses and sends them back to the client. This makes it so that, in general, a client does not need to know that they’re talking to a cluster rather than a single server.
-   * *Targeted Query* - While querying, if the query has the shard key, mongos determines which shard/shards contains the data and hits those directly. This is called a targeted query. 
+   * *Targeted Query* - While querying, if the query has the shard key, mongos determines which shard/shards contains the data and hits those directly. This is called a targeted query.
    * *Spewed Query* - If the shard key is absent in the query, mongos must send the query to all of the shards. This can be less efficient than targeted queries, but not necessarily. A “spewed” query that accesses a few indexed documents in RAM will perform much better than a targeted query that has to access data from disk across many shards (a targeted query could hit every shard, too)
 * Anatomy of a cluster
-   * A MongoDB cluster basically consists of three types of processes: 
-      * the shards for actually storing data, 
+   * A MongoDB cluster basically consists of three types of processes:
+      * the shards for actually storing data,
       * the mongos processes for routing requests to the correct data, and
       * the config servers, for keeping track of the cluster’s state
 * Replica Sets
@@ -280,26 +373,26 @@ To acknowledge that the data has replicated to two members of the replica set be
 
 #### Setup
 
-* To add configuration servers to router - `$mongos --configdb cfg-server1,cfg-server2,cfg-server3` 
+* To add configuration servers to router - `$mongos --configdb cfg-server1,cfg-server2,cfg-server3`
    * All administration on a cluster is done through mongos
    * Configuration servers can be 1, 2 or 3 max. They only have configuration information and no data.
 * To add a shard - `db.runCommand({"addShard" : "server:port", "name": "shardName"})`
    * Run this from the admin db
 * To enable sharding at database level - `db.adminCommand({"enableSharding" : "dbname"})`
 * To enable sharding at collection level - `db.adminCommand({"shardCollection" : "dbname.collectionName", key : {"field1" : 1, "field2" : 1}}`
-   * If we are sharding a collection with data in it, the data must have an index on the shard key. 
+   * If we are sharding a collection with data in it, the data must have an index on the shard key.
    * All documents must have a value for the shard key, too (and the value cannot be null). After you’ve sharded the collection, you can insert documents with a null shard key value.
 * To remove a shard out of the cluster - `db.runCommand({removeShard : "shardName"})`
-   * Moves all of the information that was on this shard to other shards before it can remove this shard. 
+   * Moves all of the information that was on this shard to other shards before it can remove this shard.
    * Moving data from shard to shard is pretty slow.
 
 
 #### Shard Keys
 
 * Bad shard keys
-   * Low cardinality keys 
-      * e.g., by continent names, by country names, etc. 
-      * When the volume increases in one of these shards, there is no way to horizontally scale because there are only limited number of key values. 
+   * Low cardinality keys
+      * e.g., by continent names, by country names, etc.
+      * When the volume increases in one of these shards, there is no way to horizontally scale because there are only limited number of key values.
       * If you are tempted to use low-cardinality shard key because you query on that field a lot, use a compound shard key (a shard key with two fields) and make sure that the second field has lots of different values MongoDB can use for splitting.
       * If a key has N values in a collection, you can only have N chunks and, therefore, N shards.
    * Ascending Shard key
@@ -321,7 +414,7 @@ In a sharded environment, the limitations on the maximum insertion rate are:
 
 * Limitations
    * Cannot guarantee uniqueness on any key other than the shard key
-   * count of collection may return incorrect numbers 
+   * count of collection may return incorrect numbers
 
 
 
@@ -330,13 +423,13 @@ In a sharded environment, the limitations on the maximum insertion rate are:
 
 * Written in Erlang
 * With nearly incorruptible data files, CouchDB remains highly available even in the face of intermittent connectivity loss or hardware failure.
-* Like Mongo, CouchDB’s native query language is JavaScript. 
+* Like Mongo, CouchDB’s native query language is JavaScript.
 * Storage data format: JSON
 
 ### Admin UI
 
-* Futon is a web-based interface to work with CouchDB and it provides support for editing the configuration information, creating databases, documents, design documents, etc. 
-* URI: http://localhost:5984/_utils/index.html 
+* Futon is a web-based interface to work with CouchDB and it provides support for editing the configuration information, creating databases, documents, design documents, etc.
+* URI: http://localhost:5984/_utils/index.html
 * How to create our first database? * Futon -> Overview -> Create database* . Multiple such databases can be created in this single instance of CouchDb.
 
 ### How to access CouchDB programmatically?
@@ -345,16 +438,16 @@ via HTTP REST Interface
  Note: If the db is password protected, send requests with credentials as follows: `http://username:pass@remotehost:5984/dbname`
 
 * To check if the CouchDb is up and running: `curl http://localhost:5984`
-* To create a db: 
+* To create a db:
   * Request: `curl -X PUT http://localhost:5984/dbname`
   * Response: `{"ok":true}`
 * To delete a db:
   * Request: `curl -X DELETE http://localhost:5984/dbname`
   * Response: `{"ok":true}`
-* To retrieve db information: 
+* To retrieve db information:
   * Request: `curl -X GET http://localhost:5984/dbname`
   * Response: `{"db_name":"dbname","doc_count":0,"doc_del_count":0,"update_seq":0,"purge_seq":0,"compact_running":false,"disk_size":79,"data_size":0,"instance_start_time":"1386975670043000","disk_format_version":6,"committed_update_seq":0}`
-* To create a new document: 
+* To create a new document:
   * Request: `curl -H "Content-type: application/json" -X POST http://localhost:5984/dbname -d "{\"title\": \"Lasagne\"}"`
   * Response: `{"ok":true,"id":"d02bdee238b26628d1ce28f1c80313bb","rev":"1-f07d272c69ca1ba91b94544ec8eda1b6"}`
   * Comments: 'id' is a unique document identifier and "rev" is the revision id of the document automatically generated.
@@ -373,7 +466,7 @@ via HTTP REST Interface
 * To delete a document:
   * Request: `curl -H "Content-type: application/json" -X DELETE http://localhost:5984/dbname/pasat?rev=2-a294dbbe4a308e8586be9acdc527e6dc`
   * Response: `{"ok":true,"id":"pasat","rev":"3-fc5a45ddd7178ee92532095c38d66489"}`
-  * Comments: Both doc id and rev id is needed to delete a document. Note that a new revision is created after deleting the document for replication purposes. 
+  * Comments: Both doc id and rev id is needed to delete a document. Note that a new revision is created after deleting the document for replication purposes.
 * To upload attachments to a document:
   * Request:
 * To make a copy of a document:
@@ -389,11 +482,11 @@ via HTTP REST Interface
   * To make Futon accessible outside of the localhost: Futon -> configurations -> Bind_Address - change the value to 0.0.0.0
 * User Set up
   * After set up, CouchDb runs in 'Admin Party Mode' (anyone accessing has full admin rights). To create an admin user and password, click on 'Fix me' link at the bottom right corner in Futon. The new admin user id should be visible under http://localhost:5984/_utils/database.html?_users.
-  * About Authentication: Couch has a pluggable authentication mechanism. Futon exposes a user friendly cookie-auth which handles login and logout. 
+  * About Authentication: Couch has a pluggable authentication mechanism. Futon exposes a user friendly cookie-auth which handles login and logout.
 * Database Set up
   * How to create our first database? Futon -> Overview -> Create database
 * Replication Set up
-  * How to replicate contents from DbX to DbY? Futon -> Tools -> Replicator -> Select from and to databases, and check the 'Continuous' checkbox. If the target db requires authentication, specify the url as http://username:pass@remotehost:5984/DbY. 
+  * How to replicate contents from DbX to DbY? Futon -> Tools -> Replicator -> Select from and to databases, and check the 'Continuous' checkbox. If the target db requires authentication, specify the url as http://username:pass@remotehost:5984/DbY.
 
 # Graph Databases
 
@@ -403,10 +496,10 @@ via HTTP REST Interface
 1. **Graph Databases** - Technologies used primarily for transactional online graph persistence, typically accessed directly in real time from an application. They are the equivalent of “normal” OLTP databases in the relational world.
   * Available Graph Dbs: Dex, FlockDB (Twitter), HyperGraphDb, InfiniteGraph, Neo4j, OrientDB, Titan, Microsoft Trinity.
 2. **Graph Compute Engines** - Technologies used primarily for offline graph analytics, typically performed as a series of batch steps. They are lik eother technologies for analysis of data in bulk, such as data mining and OLAP.
-  * Available Graph Compute Engines: 
+  * Available Graph Compute Engines:
     * In-memory/Single machine: Cassovary
     * Distributed: Pegasus, Giraph
-    
+
 
 Graph databases either use a native graph storage or a non-native storage back-end (say a relational db). The benefit of a native graph storage is that its purpose-built stack is engineered for performance and scalability. The benefit of a non-native graph storage is the ease of use in production by the operation teams.
 
@@ -418,7 +511,7 @@ Graph databases either use a native graph storage or a non-native storage back-e
 * Pattern matching queries - e.g.?
 * Geospatial queries - e.g.,?
 
-### Graph Data Models 
+### Graph Data Models
 1. Property graph model
   * A property graph has the following characteristics:
   * It contains nodes and relationships
@@ -427,7 +520,7 @@ Graph databases either use a native graph storage or a non-native storage back-e
   * Relationships can also contain properties
 * 2. RDF Triples - http://en.wikipedia.org/wiki/Resource_Description_Framework
 * 3. Hypergraphs
-  * Graph Query Languages: Cypher (Neo4j), SPARQL (RDF query language), Gremlin (Imperative, path-based language) 
+  * Graph Query Languages: Cypher (Neo4j), SPARQL (RDF query language), Gremlin (Imperative, path-based language)
 
 * Graph Db Applications
 * Recommendation Engines - e.g.,?
@@ -462,3 +555,6 @@ RDBMS is optimized for aggregated data. Neo4j is optimized for highly connected 
   * Getting Started with CouchDb
   * [http://www.couchbase.com/press-releases/couchbase-and-spring-data-make-it-easier-developers-build-next-generation-enterprise](http://www.couchbase.com/press-releases/couchbase-and-spring-data-make-it-easier-developers-build-next-generation-enterprise)
   * [http://projects.spring.io/spring-data-couchbase/](http://projects.spring.io/spring-data-couchbase/)
+* Redis
+  * Redis Essentials
+  * Mastering Redis

@@ -24,15 +24,15 @@ footer: true
 	* Systems are consistent
 	* Processes are repeatable
 	* Antifragility
-		* Exercise puts stress on muscles and bones, essentially damaging them, causing them to become stronger. Protecting the body by avoiding physical stress actually weakens it, making it more likely to fail in the face of extreme stress. 
+		* Exercise puts stress on muscles and bones, essentially damaging them, causing them to become stronger. Protecting the body by avoiding physical stress actually weakens it, making it more likely to fail in the face of extreme stress.
 		* Similarly, protecting an IT system by minimizing the number of changes made to it will not make it more robust. Constant changing and improving will make it more ready to handle disasters.
 
 * Configuration tooling should run continuously, not ad hoc.
 * If automation broke on some edge case, we would either change the automation to handle it, or else fix the design of the service so it was no longer an edge case.
-* _Dynamic Infrastructure_ refers to the ability to create and destroy servers programmatically; 
+* _Dynamic Infrastructure_ refers to the ability to create and destroy servers programmatically;
 	* Issues of dynamic infrastructure
 		* Configuration drift
-		* Snowflake servers (Pets Vs Cattle) - can't be touched, much less reproduced. 
+		* Snowflake servers (Pets Vs Cattle) - can't be touched, much less reproduced.
 		* Fragile infrastructure
 		* Erosion
 * _Bare-metal cloud_: Hardware can be automatically provisioned so that it can be used in a fully dynamic fashion. This is sometimes referred to as 'bare-metal cloud'
@@ -76,7 +76,7 @@ footer: true
 	* `-d` detaches the container from the terminal from which it was started
 	* `-P` publishes all exposed ports to random ports
 	* `--name` name of the container
-* `docker port <container>` - to see the ports 
+* `docker port <container>` - to see the ports
 * `docker run -p 8888:80 prakhar1989/static-site` - to specify custom ports
 * `docker stop <container_id>` - to stop a detached container
 * `docker search <image>` searches the Docker Hub for given image name
@@ -85,8 +85,8 @@ footer: true
 
 ### Vocabulary
 
-* __Images__ - The blueprints of our application which form the basis of containers. 
-* __Containers__ - Created from Docker images and run the actual application. 
+* __Images__ - The blueprints of our application which form the basis of containers.
+* __Containers__ - Created from Docker images and run the actual application.
 * __Docker Daemon__ - The background service running on the host that manages building, running and distributing Docker containers. The daemon is the process that runs in the operation system to which clients talk to.
 * __Docker Client__ - The command line tool that allows the user to interact with the daemon. More generally, there can be other forms of clients too - such as ***Kitematic*** which provide a GUI to the users.
 * __Docker Hub__ - A registry of Docker images. You can think of the registry as a directory of all available Docker images. If required, one can host their own Docker registries and can use them for pulling images.
@@ -125,7 +125,7 @@ footer: true
 
 * __Sample recipe to install and start a httpd service__
 
-```ruby
+```
 # automatically installs httpd package
 package 'httpd'
 
@@ -154,54 +154,30 @@ end
 
 ### Common Resources
 
-* template, package, service - 3 types of resources built into the Chef DSL
-​* __package__: Installs a package using the appropriate platform-native installer/package manager (yum, apt, pacman, etc.).
-
-```ruby
-package 'ntp' do
-   action :upgrade
-end
-​```
-
-* __service__: Manages the lifecycle of any daemons/services installed by the package resource.
-
-```ruby
-service 'apache2' do
-   restart_command '/etc/init.d/apache2 restart'​
-​end
-​```
-
-* __​file__
-*​ __cookbook_file__: to transfer cookbook files from /<cookbook>/files/ to the node.
+* template, package, service: 3 types of resources built into the Chef DSL
+* __package__: Installs a package using the appropriate platform-native installer/package manager (yum, apt, pacman, etc.).
+* __service__: Manages the lifecycle of any daemons or services installed by the package resource.
+* __cookbook_file__: to transfer cookbook files from `/<cookbook>/files/` to the node.
 * __template__: A variant of the cookbook_file resource that lets you create file content from variables using an Embedded Ruby (ERB) template.
 
-​```ruby
-​template /etc/resolv.conf do
-   source 'my_resolv.conf.erb'
-   owner  'root'  
-   group  'root'  
-   mode   '0644'
-end
-```
 
+### Chef Client
 
-### Chef Client​
-
-​* Chef-client operates in 3 modes - client, local
+* Chef client operates in 3 modes: local, client, and ?
   * __local__
     * simulates a full Chef Server instance in memory. ​
-    * Any data that would have been saved to a server is written to the local directory (/nodes). 
-    * The process of writing server data locally is called _writeback_. 
+    * Any data that would have been saved to a server is written to the local directory (/nodes).
+    * The process of writing server data locally is called _writeback_.
     * designed to support a rapid Chef recipe development by using Chef Zero, the in-memory, fast-start Chef server
   * __client__
-    * chef-client is an agent (or service/daemon) that runs locally on a machine managed by Chef. 
-    * when chef-client is running in client mode, it assumes you have a Chef Server running on some other system on your network. 
+    * chef-client is an agent (or service/daemon) that runs locally on a machine managed by Chef.
+    * when chef-client is running in client mode, it assumes you have a Chef Server running on some other system on your network.
 * ​Chef client constructs 'node' object in memory providing access to information about the node. It runs `ohai` command and gathers all the node's automatic attributes such as hostname, fqdn, ip, etc.​ Ohai exposes this collection of node information to Chef as a set of automatic attributes.
 
 ### ​Cookbook​
 
 * To create a cookbook: `chef generate cookbook <bookname>`
-​* To create a file in cookbook: `chef generate ​file <filename>`
+* To create a file in cookbook: `chef generate ​file <filename>`
 
 ```
     ├── Berksfile
@@ -224,7 +200,7 @@ end
     │   └── unit
     │       └── recipes
     │           └── default_spec.rb
-    └── t​emplates​​  <--- Embedded Ruby template files 
+    └── t​emplates​​  <--- Embedded Ruby template files
         └── default
     └── test
         └── smoke
@@ -235,7 +211,7 @@ end
 ### Run list
 
 * A run list contains a list of recipes to execute on the target node.
-​* Real-world chef runs typically involve dozens of cookbooks with possibly hundreds of recipes and associated files. There needs to be a succinct way of referring to all the files in a cookbook. That’s the purpose of a run list.
+* Real-world chef runs typically involve dozens of cookbooks with possibly hundreds of recipes and associated files. There needs to be a succinct way of referring to all the files in a cookbook. That’s the purpose of a run list.
 * A run list is used to specify the cookbook recipes to be evaluated on a node.  
 * A run list specifies recipes in the form `recipe['<cookbook_name>::<recipe_name>'];` for example, `recipe['motd::default']` (or `recipe['motd']` when the Chef code is contained in the `recipes/default.rb` file).
 * ​​Run list is specified in the chef-client command or stored on a Chef server.

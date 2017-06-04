@@ -100,11 +100,14 @@ footer: true
 * `ping`
 * `set <key> <value>`
 * `get <key>`
+* `del <key>`
 * `select <keyspace>` - create or switch to a given key space (key space is a name space like db in rdbms)
 * `keys *` - returns all keys in the current space
 * `flushdb` - delete all keys in the key space
 * `expire <key> <time_in_secs>` - expires a key after given time
 * `ttl <key>` - shows the key's time to live in seconds
+* `persist <key>` - removes the timeout of a key
+* `setex <key> <timeout> <value>` - set value and timeout
 * __Hash__
   * `hset <redis_key> <key> <value>` - set a single key value in a redis key
   * `hget <redis_key> <key> <value>` - get a single key's value from a redis key
@@ -135,7 +138,16 @@ footer: true
 ### Advanced Features
 
 
-* Pub-Sub
+* __Pub-Sub__
+  * Redis support publish-subscribe pattern. Publishers send messages to channels, and subscribers receive these message if they are listening to a channel.
+  * Uses cases where Redis can be used as a pub-sub: News and weather dashboards, Chat apps, Push notifications such as travel alerts, Remote code execution similar to what the SaltStack tool supports.
+* __Transaction__
+  * Redis supports atomic execution of a sequence of commands in a transaction.
+  * `MULTI` starts a transaction, `EXEC` is commit, `DISCARD` is rollback
+* __Pipelines__
+  * is a way to send multiple commands together to the Redis server without waiting for individual replies. The replies are read all at once by the client. 
+  * commands are run sequentially in the server (the order is preserved), but they do not run as a transaction
+  * Pipelines can improve the network's performance significantly.For instance, if the network link between a client and server has a round trip time of 100 ms, the maximum number of commands that can be sent per second is 10, no matter how many commands can be handled by the Redis server. Usually, a Redis server can handle hundreds of thousands of commands per second, and not using pipelines may be a waste of resources.When Redis is used without pipelines, each command needs to wait for a reply. 
 * Sentinel (for clustering)
 
 

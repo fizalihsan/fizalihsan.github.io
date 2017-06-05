@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="NoSQL Key-Value Stores Riak Architecture Clustering Downsides/Limitations/Trade-offs Redis Data Types Redis CLI Advanced Features Column-oriented &hellip;">
+<meta name="description" content="NoSQL Key-Value Stores Riak Architecture Clustering Downsides/Limitations/Trade-offs Redis Data Types Redis CLI Advanced Features Scalability Column &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -119,6 +119,7 @@ messageStyle: "none",
           <li><a href="#data-types">Data Types</a></li>
           <li><a href="#redis-cli">Redis CLI</a></li>
           <li><a href="#advanced-features">Advanced Features</a></li>
+          <li><a href="#scalability">Scalability</a></li>
         </ul>
       </li>
     </ul>
@@ -241,11 +242,11 @@ messageStyle: "none",
   <li>
     <p>by caching writes in memory before committing to disk, Redis gains amazing performance in exchange for increased risk of data loss in the case of a hardware failure. good fit for caching noncritical data and for acting as a message broker.</p>
   </li>
-  <li>Durability modes
+  <li>3 Persistence modes
     <ul>
-      <li>in-memory - completely in-memory. data is lost when server crashes</li>
-      <li>snapshot (default) - snapshots taken to files periodically</li>
-      <li>Append Only File (AOF) - all data is written to file every few seconds</li>
+      <li><em>in-memory</em> - completely in-memory. data is lost when server crashes</li>
+      <li><em>snapshot</em> (default) - snapshots taken to files periodically</li>
+      <li><em>Append Only File</em> (AOF) - all data is written to file every few seconds</li>
     </ul>
   </li>
   <li>Keys
@@ -317,6 +318,7 @@ messageStyle: "none",
 
 <ul>
   <li><code>ping</code></li>
+  <li><code>config</code> - to view the configuration details from <code>redis.conf</code></li>
   <li><code>set &lt;key&gt; &lt;value&gt;</code></li>
   <li><code>get &lt;key&gt;</code></li>
   <li><code>del &lt;key&gt;</code></li>
@@ -387,6 +389,102 @@ messageStyle: "none",
       <li>is a way to send multiple commands together to the Redis server without waiting for individual replies. The replies are read all at once by the client. </li>
       <li>commands are run sequentially in the server (the order is preserved), but they do not run as a transaction</li>
       <li>Pipelines can improve the network’s performance significantly.For instance, if the network link between a client and server has a round trip time of 100 ms, the maximum number of commands that can be sent per second is 10, no matter how many commands can be handled by the Redis server. Usually, a Redis server can handle hundreds of thousands of commands per second, and not using pipelines may be a waste of resources.When Redis is used without pipelines, each command needs to wait for a reply. </li>
+    </ul>
+  </li>
+  <li><strong>Security</strong>
+    <ul>
+      <li>Redis uses plain-text based passwords. Does not support ACLs.</li>
+      <li>Redis is meant to run in a trusted network. To protect the servers running in a public cloud
+        <ul>
+          <li>Use firewall rules to block access from unknown clients. Either setting <code>iptables</code> in linux directly or via Security Groups in AWS-like setting</li>
+          <li>Run Redis on the loopback interface (127.0.0.1), rather than a publicly accessible network interface. This applies only if the application server and the Redis server as running on the same machine.</li>
+          <li>Run Redis in a virtual private cloud instead of the public Internet</li>
+          <li>Encrypt client-to-server communication. 
+            <ul>
+              <li>Redis does not support encryption by default. A tool like <code>stunnel</code> can be used as an SSL encryption wrapper between a local client and a local or remote server.</li>
+              <li>There are 2 options for running Redis with stunnel:
+                <ul>
+                  <li>(1) Run stunnel on both the server and client machines, using the same private key:
+                    <ul>
+                      <li>The stunnel in the server creates a tunnel to the redis-server</li>
+                      <li>The stunnel in the client creates a tunnel to the remote stunnel (on the server machine). The Redis client should connect to the local stunnel</li>
+                    </ul>
+                  </li>
+                  <li>(2) Run stunnel on the server, and a Redis client that supports SSL must be used. This client will use the private key to encrypt the connection</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="scalability">Scalability</h3>
+
+<ul>
+  <li><strong>Persistence</strong>
+    <ul>
+      <li>2 mechanisms of persistence: <em>RDB</em> (Redis Database) and <em>Append-only File</em> (AOF)</li>
+      <li><strong><em>RDB</em></strong>
+        <ul>
+          <li><code>SAVE</code> command creates a LZF-compressed binary <code>.rdb</code> file that has a point in time representing data.</li>
+          <li>great for backups and disaster recovery since it allows you to save a file every hour, day, week or month</li>
+          <li>Redis uses copy-on-write mechanism to take backups</li>
+          <li>When creating a snapshot, Redis main process executes a <code>fork()</code> to create a child process which can make the Redis instance stop serving clients for milliseconds or seconds.</li>
+        </ul>
+      </li>
+      <li><strong>AOF</strong>
+        <ul>
+          <li>AOF is a human-readable append-only log file.</li>
+          <li>AOF is an alternative to RDB snapshotting, but both can be used together. Redis will load RDB or AOF on startup if any of the files exists. If both files exist, the AOF takes precedence because of its durability guarantees. </li>
+          <li>When AOF is enabled, every time Redis receives a command that changes the dataset, it will append that command to the AOF (Append-only File). With this being said, if you have AOF enabled and Redis is restarted, it will restore the data by executing all commands listed in AOF, preserving the order, and rebuild the state of the dataset. </li>
+          <li>Restoring big dataset from an RDB is faster than AOF since RDB does not need to re-execute every change made</li>
+        </ul>
+      </li>
+      <li>Considerations when using persistence in Redis:
+        <ul>
+          <li>If your application does not need persistence, disable RDB and AOF</li>
+          <li>If your application has tolerance to data loss, use RDB</li>
+          <li>If your application requires fully durable persistence, use both RDB and AOF</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Replication</strong>
+    <ul>
+      <li>a master can have multiple slaves and slaves can also accept connections from other slaves.</li>
+      <li>Replicas are widely used for scalability purposes so that all read operations are handled by replicas and the master handles only write operations.</li>
+      <li>Persistence can be moved to the replicas so that the master does not perform disk I/O operations. In this scenario, the master server needs to disable persistence, and it should not restart automatically for any reason; otherwise, it will restart with an empty dataset and replicate it to the replicas, making them delete all of their stored data.</li>
+      <li>_Data Consistency__: It is possible to improve data consistency guarantees by requiring a minimum number of replicas connected to the master server. In this way, all write operations are only executed in the master Redis server if the minimum number of replicas are satisfied, along with their maximum replication lag (in seconds). However, this feature is still weak because it does not guarantee that all replicas have accepted the write operations; it only guarantees that there is a minimum number of replicas connected to the master.</li>
+      <li>Replicas are very useful in a master failure scenario because they contain all of the most recent data and can be promoted to master. Unfortunately, when Redis is running in single-instance mode, there is no automatic failover to promote a slave to master. All replicas and clients connected to the old master need to be reconfigured with the new master.</li>
+    </ul>
+  </li>
+  <li><strong>Partitioning</strong>
+    <ul>
+      <li>Redis does not natively support partitioning or clustering. It was designed to work well on a single server. Redis Cluster is designed to solve distributed problems in Redis.</li>
+      <li>2 types of partitioning: horizontal (sharding) and vertical partitioning</li>
+      <li><em>Range partitioning</em>
+        <ul>
+          <li>e.g., user ids 1-1000 in one server, etc. Alphabet range where A-G in one instance, H-O in another, etc.</li>
+          <li>Con: the distribution of data could be uneven</li>
+          <li>Con: does not accommodate the change easily</li>
+        </ul>
+      </li>
+      <li><em>Hash partitioning</em>
+        <ul>
+          <li>Pro: data distribution is even</li>
+          <li>Con: when new servers are added, data in other instances become invalidated</li>
+        </ul>
+      </li>
+      <li><em>Presharding</em>
+        <ul>
+          <li>One way of dealing with the problem of adding/replacing nodes over time with hash partitioning is to preshard the data. This means pre-partitioning the data to a high extent so that the host list size never changes. The idea is to create more Redis instances, reuse the existing servers, and launch more instances on different ports. This works well because Redis is single threaded and does not use all the resources available in the machine, so you can launch many Redis instances per server and still be fine.</li>
+          <li>Then, with this new list of Redis instances, you would apply the same Hash algorithm that we presented before, but now with far more elements in the Redis client array. </li>
+          <li>This method works because if you need to add more capacity to the cluster, you can replace some Redis instances with more powerful ones, and the client array size never changes.</li>
+        </ul>
+      </li>
     </ul>
   </li>
   <li>

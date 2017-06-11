@@ -165,44 +165,130 @@ footer: true
 
 ### Scalability
 
-* __Persistence__
-  * 2 mechanisms of persistence: _RDB_ (Redis Database) and _Append-only File_ (AOF)
-  * ___RDB___
-    * `SAVE` command creates a LZF-compressed binary `.rdb` file that has a point in time representing data.
-    *  great for backups and disaster recovery since it allows you to save a file every hour, day, week or month
-    * Redis uses copy-on-write mechanism to take backups
-    * When creating a snapshot, Redis main process executes a `fork()` to create a child process which can make the Redis instance stop serving clients for milliseconds or seconds.
-  * __AOF__
-    * AOF is a human-readable append-only log file.
-    * AOF is an alternative to RDB snapshotting, but both can be used together. Redis will load RDB or AOF on startup if any of the files exists. If both files exist, the AOF takes precedence because of its durability guarantees. 
-    * When AOF is enabled, every time Redis receives a command that changes the dataset, it will append that command to the AOF (Append-only File). With this being said, if you have AOF enabled and Redis is restarted, it will restore the data by executing all commands listed in AOF, preserving the order, and rebuild the state of the dataset. 
-    * Restoring big dataset from an RDB is faster than AOF since RDB does not need to re-execute every change made
+__Persistence__
+
+* 2 mechanisms of persistence: _RDB_ (Redis Database) and _Append-only File_ (AOF)
+* _RDB_
+  * `SAVE` command creates a LZF-compressed binary `.rdb` file that has a point in time representing data.
+  *  great for backups and disaster recovery since it allows you to save a file every hour, day, week or month
+  * Redis uses copy-on-write mechanism to take backups
+  * When creating a snapshot, Redis main process executes a `fork()` to create a child process which can make the Redis instance stop serving clients for milliseconds or seconds.
+* _AOF_
+  * AOF is a human-readable append-only log file.
+  * AOF is an alternative to RDB snapshotting, but both can be used together. Redis will load RDB or AOF on startup if any of the files exists. If both files exist, the AOF takes precedence because of its durability guarantees. 
+  * When AOF is enabled, every time Redis receives a command that changes the dataset, it will append that command to the AOF (Append-only File). With this being said, if you have AOF enabled and Redis is restarted, it will restore the data by executing all commands listed in AOF, preserving the order, and rebuild the state of the dataset. 
+  * Restoring big dataset from an RDB is faster than AOF since RDB does not need to re-execute every change made
   * Considerations when using persistence in Redis:
     * If your application does not need persistence, disable RDB and AOF
     * If your application has tolerance to data loss, use RDB
     * If your application requires fully durable persistence, use both RDB and AOF
-* __Replication__
-  * a master can have multiple slaves and slaves can also accept connections from other slaves.
-  * Replicas are widely used for scalability purposes so that all read operations are handled by replicas and the master handles only write operations.
-  * Persistence can be moved to the replicas so that the master does not perform disk I/O operations. In this scenario, the master server needs to disable persistence, and it should not restart automatically for any reason; otherwise, it will restart with an empty dataset and replicate it to the replicas, making them delete all of their stored data.
-  * _Data Consistency__: It is possible to improve data consistency guarantees by requiring a minimum number of replicas connected to the master server. In this way, all write operations are only executed in the master Redis server if the minimum number of replicas are satisfied, along with their maximum replication lag (in seconds). However, this feature is still weak because it does not guarantee that all replicas have accepted the write operations; it only guarantees that there is a minimum number of replicas connected to the master.
-  * Replicas are very useful in a master failure scenario because they contain all of the most recent data and can be promoted to master. Unfortunately, when Redis is running in single-instance mode, there is no automatic failover to promote a slave to master. All replicas and clients connected to the old master need to be reconfigured with the new master.
-* __Partitioning__
-  * Redis does not natively support partitioning or clustering. It was designed to work well on a single server. Redis Cluster is designed to solve distributed problems in Redis.
-  * 2 types of partitioning: horizontal (sharding) and vertical partitioning
-  * _Range partitioning_
-    * e.g., user ids 1-1000 in one server, etc. Alphabet range where A-G in one instance, H-O in another, etc.
-    * Con: the distribution of data could be uneven
-    * Con: does not accommodate the change easily
-  * _Hash partitioning_
-    * Pro: data distribution is even
-    * Con: when new servers are added, data in other instances become invalidated
-  * _Presharding_
-    * One way of dealing with the problem of adding/replacing nodes over time with hash partitioning is to preshard the data. This means pre-partitioning the data to a high extent so that the host list size never changes. The idea is to create more Redis instances, reuse the existing servers, and launch more instances on different ports. This works well because Redis is single threaded and does not use all the resources available in the machine, so you can launch many Redis instances per server and still be fine.
-    * Then, with this new list of Redis instances, you would apply the same Hash algorithm that we presented before, but now with far more elements in the Redis client array. 
-    * This method works because if you need to add more capacity to the cluster, you can replace some Redis instances with more powerful ones, and the client array size never changes.
 
-* Sentinel (for clustering)
+
+__Replication__
+
+* a master can have multiple slaves and slaves can also accept connections from other slaves.
+* Replicas are widely used for scalability purposes so that all read operations are handled by replicas and the master handles only write operations.
+* Persistence can be moved to the replicas so that the master does not perform disk I/O operations. In this scenario, the master server needs to disable persistence, and it should not restart automatically for any reason; otherwise, it will restart with an empty dataset and replicate it to the replicas, making them delete all of their stored data.
+* ___Data Consistency___: It is possible to improve data consistency guarantees by requiring a minimum number of replicas connected to the master server. In this way, all write operations are only executed in the master Redis server if the minimum number of replicas are satisfied, along with their maximum replication lag (in seconds). However, this feature is still weak because it does not guarantee that all replicas have accepted the write operations; it only guarantees that there is a minimum number of replicas connected to the master.
+* Replicas are very useful in a master failure scenario because they contain all of the most recent data and can be promoted to master. Unfortunately, when Redis is running in single-instance mode, there is no automatic failover to promote a slave to master. All replicas and clients connected to the old master need to be reconfigured with the new master.
+
+__Partitioning__
+
+* Redis does not natively support partitioning or clustering. It was designed to work well on a single server. Redis Cluster is designed to solve distributed problems in Redis.
+* 2 types of partitioning: horizontal (sharding) and vertical partitioning
+* ___Range partitioning___
+  * e.g., user ids 1-1000 in one server, etc. Alphabet range where A-G in one instance, H-O in another, etc.
+  * Con: the distribution of data could be uneven   * Con: does not accommodate the change easily
+* ___Hash partitioning___
+  * Pro: data distribution is even
+  * Con: when new servers are added, data in other instances become invalidated. 
+  * Con: adding or removing nodes from the list of servers may have a negative impact on key distribution and creation.
+* ___Presharding___
+  * One way of dealing with the problem of adding/replacing nodes over time with hash partitioning is to preshard the data. This means pre-partitioning the data to a high extent so that the host list size never changes. The idea is to create more Redis instances, reuse the existing servers, and launch more instances on different ports. This works well because Redis is single threaded and does not use all the resources available in the machine, so you can launch many Redis instances per server and still be fine.
+  * Then, with this new list of Redis instances, you would apply the same Hash algorithm that we presented before, but now with far more elements in the Redis client array. 
+  * This method works because if you need to add more capacity to the cluster, you can replace some Redis instances with more powerful ones, and the client array size never changes.
+{% img right /technology/hash_ring.jpg %}
+* ___Consistent Hashing or Hash Ring___
+  * If Redis is used as a cache system with hash partitioning, it becomes very hard to scale up because the size of the list of Redis servers cannot change (otherwise, a lot of cache misses will happen).
+  * Consistent hashing is a kind of 
+hashing that remaps only a small portion of the data to different servers when the list of Redis servers is changed (only `K/n` keys are remapped, where `K` is the number of keys and `n` is the number of servers).
+  * For example, in a cluster with 100 keys and four servers, adding a fifth node would remap only 25 keys on an average (100 divided by 4).   * The technique consists of creating multiple points in a circle for each Redis key and server. The appropriate server for a given key is the closest server to that key in the circle (clockwise); this circle is also referred to as "ring." The points are created using a hash function, such as MD5.
+  * More on consistent hashing: [link 1](https://akshatm.svbtle.com/consistent-hash-rings-theory-and-implementation)     
+* ___Tagging___ 
+  * is a technique of ensuring that keys are stored on the same server. Commands such as `SDIFF`, `SINTER`, and `SUNION` require that all keys are stored in the same Redis instance in order to work. 
+  * One way of guaranteeing that the keys will be stored in the same Redis instance is by using tagging. 
+  * Choose a convention for your key names and add a prefix or suffix. Then decide how to route that key based on the added prefix or suffix. The convention in the Redis community is to add a tag to a key name with the tag name inside curly braces (that is, `key_name:{tag}`).   * When Redis is used as a data store, the keys must always map to the same Redis instances and tagging should be used. Unfortunately, this means that the list of Redis servers cannot change; otherwise, a key could have been able to map to a different Redis instance. One way of solving this is to create copies of the data across Redis instances so that every key is replicated to a number of instances, and the system knows how to route queries (this is similar to how Riak stores data).
+
+
+__Automatic Sharding with twemproxy__
+
+* also known as ___nutcracker___ 
+* twemproxy is a fast and lightweight proxy developed by Twitter for Redis and memcached protocols that implements sharding with support for multiple hashing modes, including consistent hashing. 
+* It also enables pipelining of requests and responses, and maintains persistent server connections to shard your data automatically across multiple servers. 
+* it will help us easily scale Redis horizontally. 
+* It has been used in production by companies such as Pinterest, Tumblr, Twitter, Vine, Wikimedia, Digg, and Snapchat.
+
+Architecture styles using twemproxy
+
+| Single point of failure architecture | Load balance with multiple twemproxy servers |
+| -- | -- |
+| {% img /technology/twemproxy1.jpg %} | {% img /technology/twemproxy2.jpg %} |
+
+### Redis Sentinel
+
+* Redis Sentinel is a distributed system designed to automatically promote a Redis slave to master if the existing master fails. 
+* Sentinel does not distribute data across nodes since the master node has all of the data and the slaves have a copy of the data
+* Sentinel is not a distributed data store.
+* The most common architecture contains an installation of one Sentinel for each Redis server. 
+* Sentinel is a separate process from the Redis server, and it listens on its own port.
+* A client always connects to a Redis instance, but it needs to query a Sentinel to find out what Redis instance it is going to connect to.
+* Client tries to connect to one of the sentinels in the configuration. If the first sentinel is down, it moves on to the next until it can find a sentinel which tells who is the current master.
+* When you download Redis, it comes with a configuration file for Sentinel, called `sentinel.conf`. In the initial configuration, only the master nodes need to be listed. All slaves are found when Sentinel starts and asks the masters where their slaves are. 
+* The Sentinel configuration will be rewritten as soon as the Sentinel finds all the available slaves, or when a failover occurs.
+* Communication between all Sentinels takes place through a Pub/Sub channel called `__sentinel__:hello` in the Redis master.
+
+| Redis without Sentinel | Redis with Sentinel |
+| -- | -- |
+| {% img /technology/redis_without_sentinel.jpg %} | {% img /technology/redis_with_sentinel.jpg %} |
+
+__Configuration__
+
+```
+sentinel monitor mymaster 127.0.0.1 6379 2
+sentinel down-after-milliseconds mymaster 30000
+sentinel failover-timeout mymaster 180000
+sentinel parallel-syncs mymaster 1
+```
+
+* The preceding configuration monitors a Redis master with the name _mymaster_, IP address 127.0.0.1, port 6379, and quorum 2. 
+* The ___quorum___ represents the fewest number of sentinels that need to agree that the current master is down before starting a new master election.
+* A Sentinel will only notify other Sentinels that its master is down after the master is unreachable (unable to reply a PING) for a given number of milliseconds, specified in the directive `down-after-milliseconds`.
+* The sentinel configuration is rewritten every time a new master is elected or a new sentinel or slave joins the group of instances. 
+* Directive _failover-timeout_ is to avoid a failover to a master that has experienced issues in a short period of time (which is specified via the failover-timeout directive). For example, assume that there is a master, R1, with three slaves, R2, R3, and R4. If the master experiences issues, the slaves need to elect a new master. Assume that R2 becomes the new master and R1 returns to the group as a slave. If R2 has issues and another new election must take place before failover-timeout is exceeded, R1 will not be part of the possible nodes to be elected as the master.
+* _parallel-syncs_ specifies the number of slaves that can be reconfigured simultaneously to point to a new master. During this process the slaves will be unavailable to clients. Use a low parallel-syncs number to minimize the number of simultaneously unavailable slaves.
+
+__Network Partition (split-brain)__
+
+| Redis without Sentinel | Redis with Sentinel |
+| -- | -- |
+| {% img /technology/redis_before_split_brain.jpg %} | {% img /technology/redis_afer_split_brain.jpg %} |
+
+* Redis Sentinel is not strongly consistent in a network partition scenario. Data may be lost when a split-brain occurs. 
+* Kyle Kingsbury (also known as Aphyr on the Internet) wrote some very detailed blog posts on Redis Sentinel and its lack of consistency. The last post can be found at https://aphyr.com/posts/287-asynchronous-replication-with-failover. 
+* Salvatore Sanfilippo (also known as Antirez) wrote a reply to that blog post, which can be found at http://antirez.com/news/56.
+
+To demonstrate how Redis Sentinel will lose data when a split-brain occurs, assume the following:
+
+There are three Redis instances: one master and two replicas. For each Redis instance, there is a Redis Sentinel
+There is a client connected to the current master and writing to it
+If a network partition occurs and separates the current master from all of its slaves, and the slaves can still talk to each other, one of the slaves will be promoted to master.
+
+Meanwhile, the client will continue to write to the isolated master.
+
+If the network heals and all the servers are able to communicate to each other again, the majority of sentinels will agree that the old master (the one that was isolated) should become a slave of the new master (the slave that was promoted to master). When this happens, all writes sent by the client are lost, because there is no data synchronization in this process.
+
+### Redis Cluster
+
 
 
 * To try out: [Redis Labs](https://redislabs.com) or [try.redis](https://try.redis.io)

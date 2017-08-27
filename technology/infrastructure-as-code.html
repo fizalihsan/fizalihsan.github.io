@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Infrastructure as Code Infrastructure as Code Containerization Docker Command Reference Vocabulary Configuration Management Vagrant Chef Common &hellip;">
+<meta name="description" content="Infrastructure as Code Infrastructure as Code Containerization Docker Command Reference Vocabulary Docker flow explained Configuration Management &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -113,6 +113,7 @@ messageStyle: "none",
       <li><a href="#docker">Docker</a>        <ul>
           <li><a href="#command-reference">Command Reference</a></li>
           <li><a href="#vocabulary">Vocabulary</a></li>
+          <li><a href="#docker-flow-explained">Docker flow explained</a></li>
         </ul>
       </li>
     </ul>
@@ -207,6 +208,10 @@ messageStyle: "none",
 <h3 id="command-reference">Command Reference</h3>
 
 <ul>
+  <li><code>docker help</code></li>
+  <li><code>docker version</code></li>
+  <li><code>docker-machine version</code></li>
+  <li><code>docker-compose version</code></li>
   <li><code>docker run hello-world</code></li>
   <li><code>docker pull busybox</code>
     <ul>
@@ -253,6 +258,20 @@ messageStyle: "none",
   <li><strong>Docker Daemon</strong> - The background service running on the host that manages building, running and distributing Docker containers. The daemon is the process that runs in the operation system to which clients talk to.</li>
   <li><strong>Docker Client</strong> - The command line tool that allows the user to interact with the daemon. More generally, there can be other forms of clients too - such as <strong><em>Kitematic</em></strong> which provide a GUI to the users.</li>
   <li><strong>Docker Hub</strong> - A registry of Docker images. You can think of the registry as a directory of all available Docker images. If required, one can host their own Docker registries and can use them for pulling images.</li>
+</ul>
+
+<h3 id="docker-flow-explained">Docker flow explained</h3>
+
+<p><img src="/technology/docker-flow.png" title="right" /></p>
+
+<p>This sections explains what happens when user enters the command <code>docker run hello-world</code> in the terminal.</p>
+
+<ul>
+  <li>The Docker client contacts the Docker daemon.</li>
+  <li>The Docker daemon pulls the “hello-world” image from the Docker Hub. </li>
+  <li>If not available in Hub, then it is pulled from Docker Store</li>
+  <li>The Docker daemon creates a new container from that image within the Docker machine. It then runs the executable that produces the output.</li>
+  <li>The Docker daemon streams that output to the Docker client, which sent it to your terminal.</li>
 </ul>
 
 <h1 id="configuration-management">Configuration Management</h1>

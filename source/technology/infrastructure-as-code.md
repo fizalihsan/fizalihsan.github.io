@@ -55,6 +55,10 @@ footer: true
 
 ### Command Reference
 
+* `docker help`
+* `docker version`
+* `docker-machine version`
+* `docker-compose version`
 * `docker run hello-world`
 * `docker pull busybox`
 	* pulls the `busybox` image from Docker Registry and saves it in the system. Since the `TAG` name is not provided it pulls the `latest` by default
@@ -90,6 +94,18 @@ footer: true
 * __Docker Daemon__ - The background service running on the host that manages building, running and distributing Docker containers. The daemon is the process that runs in the operation system to which clients talk to.
 * __Docker Client__ - The command line tool that allows the user to interact with the daemon. More generally, there can be other forms of clients too - such as ***Kitematic*** which provide a GUI to the users.
 * __Docker Hub__ - A registry of Docker images. You can think of the registry as a directory of all available Docker images. If required, one can host their own Docker registries and can use them for pulling images.
+
+### Docker flow explained
+
+{% img /technology/docker-flow.png right %}
+
+This sections explains what happens when user enters the command `docker run hello-world` in the terminal.
+
+* The Docker client contacts the Docker daemon.
+* The Docker daemon pulls the "hello-world" image from the Docker Hub. 
+* If not available in Hub, then it is pulled from Docker Store
+* The Docker daemon creates a new container from that image within the Docker machine. It then runs the executable that produces the output.
+* The Docker daemon streams that output to the Docker client, which sent it to your terminal.
 
 # Configuration Management
 

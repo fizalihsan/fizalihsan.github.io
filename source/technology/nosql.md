@@ -289,7 +289,22 @@ If the network heals and all the servers are able to communicate to each other a
 
 ### Redis Cluster
 
+* Redis Cluster was designed to automatically shard data across different Redis instances, providing some degree of availability during network partitions. It is ___not strongly consistent___ under chaotic scenarios.
+* Unlike Sentinel, Redis Cluster only requires a single process to run but requires two ports: 
+   * The first is used to serve clients (low port), and 
+   * the second serves as a bus for node-to-node communication (high port). The high port is used to exchange messages such as failure detection, failover, resharding, and so on.
 
+The Redis Cluster bus uses a binary protocol to exchange messages between nodes. The low port is specified in the configuration, and Redis assigns the high port by adding 10,000 to the low port. For example, if a Redis server starts listening to port 6379 (low port) in cluster mode, it will internally assign port 16379 (high port) for node-to-node communication. The Redis Cluster topology is a full mesh network. All nodes are interconnected through Transmission Control Protocol (TCP) connections.
+
+* Redis Cluster requires at least three masters, as shown in the following figure, to be considered healthy. All data is sharded across the masters and replicated to the slaves
+* It is recommended that you have at least one replica per master. Otherwise, if any master node without at least one replica fails, the data will be lost
+* Unlike Redis Sentinel, when a failover is happening in Redis Cluster, only the keys in the slots assigned to the failed master are unavailable until a replica is promoted. The data may be unavailable during a failover, because slave promotion is not instantaneous.
+
+When Redis is in cluster mode, its interface is slightly changed. This requires a smarter client. When connecting to Redis through `redis-cli`, the `-c` parameter is required to enable cluster mode. Otherwise, Redis will work in single-instance mode:
+
+`$ redis-cli -c -h localhost -p 6379`
+
+{% img /technology/redis_cluster1.jpg %}
 
 * To try out: [Redis Labs](https://redislabs.com) or [try.redis](https://try.redis.io)
 

@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Java & Database - KnowledgeShop</title>
+  <title>Virtualization - KnowledgeShop</title>
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Java & Database JDBC ORM Hibernate JPA Connection Pooling JDBC Types of drivers? BLOB, CLOB(singlebyte LOB), DBCLOB(doublebyte LOB) Scrollable &hellip;">
+<meta name="description" content="Virtualization Docker Command Reference Vocabulary Docker flow explained Questions References Docker Images Images are the basis of the containers &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://fizalihsan.github.io/technology/java-database.html">
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/virtualization.html">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <!-- Below custom CSS is for table border styling -->
@@ -103,64 +103,136 @@ messageStyle: "none",
 <article role="article">
   
   <header>
-    <h1 class="entry-title">Java & Database</h1>
+    <h1 class="entry-title">Virtualization</h1>
     
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#jdbc">JDBC</a></li>
-  <li><a href="#orm">ORM</a>    <ul>
-      <li><a href="#hibernate">Hibernate</a></li>
+  <li><a href="#docker">Docker</a>    <ul>
+      <li><a href="#command-reference">Command Reference</a></li>
+      <li><a href="#vocabulary">Vocabulary</a></li>
+      <li><a href="#docker-flow-explained">Docker flow explained</a></li>
+      <li><a href="#questions">Questions</a></li>
     </ul>
   </li>
-  <li><a href="#jpa">JPA</a></li>
-  <li><a href="#connection-pooling">Connection Pooling</a></li>
+  <li><a href="#references">References</a></li>
 </ul>
 
-<h1 id="jdbc">JDBC</h1>
+<h1 id="docker">Docker</h1>
 
 <ul>
-  <li>Types of drivers? </li>
-  <li>BLOB, CLOB(singlebyte LOB), </li>
-  <li>DBCLOB(doublebyte LOB) </li>
-  <li>Scrollable resultsets </li>
-  <li>Rowsets http://java.sun.com/developer/Books/JDBCTutorial/chapter5.html </li>
-  <li>Is it good? conn.getHoldability()?  the holdability, one of ResultSet.HOLD_CURSORS_OVER_COMMIT or ResultSet.CLOSE_CURSORS_AT_COMMIT </li>
+  <li><strong>Images</strong>
+    <ul>
+      <li>Images are the basis of the containers - Images are pulled from the registry</li>
+      <li>Base &amp; Child Images
+        <ul>
+          <li><strong><em>Base</em></strong> images are images that have no parent image, usually images with an OS like ubuntu, busybox or debian.</li>
+          <li><strong><em>Child</em></strong> images are images that build on base images and add additional functionality.</li>
+        </ul>
+      </li>
+      <li>Official and User Images
+        <ul>
+          <li><strong><em>Official</em></strong> images are images that are officially maintained and supported by the folks at Docker. These are typically one word long. In the list of images above, the python, ubuntu, busybox and hello-world images are base images.</li>
+          <li><strong><em>User</em></strong> images are images created and shared by users like you and me. They build on base images and add additional functionality. Typically, these are formatted as user/image-name.</li>
+        </ul>
+      </li>
+      <li>Onbuild images</li>
+    </ul>
+  </li>
+  <li><code>Docker File --input---&gt; Docker Client --output--&gt; Docker image</code></li>
 </ul>
 
-<p><code>javax.sql.rowset.WebRowSet</code></p>
-
-<h1 id="orm">ORM</h1>
+<h2 id="command-reference">Command Reference</h2>
 
 <ul>
-  <li>Define ORM</li>
-  <li>Why ORM is required? </li>
-  <li>What other ORM tools are available? How is Hibernate better?</li>
-  <li><a href="http://blog.8thlight.com/uncle-bob/2013/10/01/Dance-You-Imps.html">Dance You Imps!</a></li>
-  <li><a href="http://blogs.tedneward.com/post/the-vietnam-of-computer-science">Vietname of Computer Science</a></li>
-  <li><a href="http://java.dzone.com/articles/martin-fowler-orm-hate">Martin Fowler on ORM Hate</a></li>
+  <li><code>docker help</code></li>
+  <li><code>docker version</code></li>
+  <li><code>docker-machine version</code></li>
+  <li><code>docker-compose version</code></li>
+  <li><code>docker run hello-world</code></li>
+  <li><code>docker pull busybox</code>
+    <ul>
+      <li>pulls the <code>busybox</code> image from Docker Registry and saves it in the system. Since the <code>TAG</code> name is not provided it pulls the <code>latest</code> by default</li>
+      <li>to pull a particular tag version <code>docker pull ubuntu:12.04</code></li>
+    </ul>
+  </li>
+  <li><code>docker images</code> to view the images</li>
+  <li><code>docker run busybox</code>
+    <ul>
+      <li>Docker client finds the image locally. If not found, pulls from registry</li>
+      <li>loads up the container</li>
+      <li>runs a command in that container (command not provided here)</li>
+      <li>exited</li>
+    </ul>
+  </li>
+  <li><code>docker run busybox echo 'Welcome to Docker'</code></li>
+  <li><code>docker run -it busybox sh</code> - <code>it</code> starts an interactive tty terminal to the container</li>
+  <li><code>docker ps</code> shows all the containers that are running
+    <ul>
+      <li><code>docker ps -a</code> shows containers that exited in the past</li>
+    </ul>
+  </li>
+  <li><code>docker rm &lt;container_id&gt;</code> clean up the container
+    <ul>
+      <li><code>docker rm $(docker ps -a -q -f status=exited)</code> clean up all the exited containers</li>
+    </ul>
+  </li>
+  <li><code>docker rmi</code> to delete an image</li>
+  <li><code>docker run -d -P --name &lt;container_name&gt; prakhar1989/static-site</code>
+    <ul>
+      <li><code>-d</code> detaches the container from the terminal from which it was started</li>
+      <li><code>-P</code> publishes all exposed ports to random ports</li>
+      <li><code>--name</code> name of the container</li>
+    </ul>
+  </li>
+  <li><code>docker port &lt;container&gt;</code> - to see the ports</li>
+  <li><code>docker run -p 8888:80 prakhar1989/static-site</code> - to specify custom ports</li>
+  <li><code>docker stop &lt;container_id&gt;</code> - to stop a detached container</li>
+  <li><code>docker search &lt;image&gt;</code> searches the Docker Hub for given image name</li>
+  <li><code>docker login</code> - stores the login credentials to http://hub.docker.com in <code>~/.docker/config.json</code></li>
+  <li><code>docker push &lt;user/image&gt;</code> - publishes your image to Docker hub. Once published, it can be viewed at https://hub.docker.com/r/<user>/<image>/</image></user></li>
 </ul>
 
-<h2 id="hibernate">Hibernate</h2>
+<h2 id="vocabulary">Vocabulary</h2>
 
 <ul>
-  <li>Challenges in migrating Hibernat 2 to 3? </li>
-  <li>http://www.deepakgaikwad.net/index.php/2009/03/14/complete-hibernate-tutorial-with-example.html?goback=%2Egde_43888_member_255672872</li>
-  <li>http://www.hibernate-alternative.com/</li>
+  <li><strong>Images</strong> - The blueprints of our application which form the basis of containers.</li>
+  <li><strong>Containers</strong> - Created from Docker images and run the actual application.</li>
+  <li><strong>Docker Daemon</strong> - The background service running on the host that manages building, running and distributing Docker containers. The daemon is the process that runs in the operation system to which clients talk to.</li>
+  <li><strong>Docker Client</strong> - The command line tool that allows the user to interact with the daemon. More generally, there can be other forms of clients too - such as <strong><em>Kitematic</em></strong> which provide a GUI to the users.</li>
+  <li><strong>Docker Hub</strong> - A registry of Docker images. You can think of the registry as a directory of all available Docker images. If required, one can host their own Docker registries and can use them for pulling images.</li>
 </ul>
 
-<h1 id="jpa">JPA</h1>
+<h2 id="docker-flow-explained">Docker flow explained</h2>
 
-<p>JPA specification - Apache open JPA</p>
+<p><img src="/technology/docker-flow.png" title="right" /></p>
 
-<h1 id="connection-pooling">Connection Pooling</h1>
-
-<p>Open-source softwares:</p>
+<p>This sections explains what happens when user enters the command <code>docker run hello-world</code> in the terminal.</p>
 
 <ul>
-  <li><a href="http://jakarta.apache.org/commons/dbcp">Apache Commons DBCP</a></li>
-  <li><a href="http://sourceforge.net/projects/c3p0/">c3p0</a></li>
-  <li><a href="http://jolbox.com/">BoneCP</a></li>
+  <li>The Docker client contacts the Docker daemon.</li>
+  <li>The Docker daemon pulls the “hello-world” image from the Docker Hub. </li>
+  <li>If not available in Hub, then it is pulled from Docker Store</li>
+  <li>The Docker daemon creates a new container from that image within the Docker machine. It then runs the executable that produces the output.</li>
+  <li>The Docker daemon streams that output to the Docker client, which sent it to your terminal.</li>
+</ul>
+
+<h2 id="questions">Questions</h2>
+
+<ul>
+  <li>When we build docker images, where are the images stored?</li>
+  <li></li>
+</ul>
+
+<h1 id="references">References</h1>
+
+<ul>
+  <li>Books
+    <ul>
+      <li>Mastering Docker</li>
+      <li>Using Docker</li>
+    </ul>
+  </li>
 </ul>
 
   
@@ -169,7 +241,7 @@ messageStyle: "none",
       
         <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/java-database.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/java-database.html" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/virtualization.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/virtualization.html" >Tweet</a>
   
   
   

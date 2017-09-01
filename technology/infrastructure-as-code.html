@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Infrastructure as Code Infrastructure as Code Containerization Docker Command Reference Vocabulary Docker flow explained Configuration Management &hellip;">
+<meta name="description" content="Infrastructure as Code Infrastructure as Code Configuration Management Vagrant Chef Common Resources Chef Client ​Cookbook​ Run list References &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -109,15 +109,6 @@ messageStyle: "none",
   
   <ul id="markdown-toc">
   <li><a href="#infrastructure-as-code">Infrastructure as Code</a></li>
-  <li><a href="#containerization">Containerization</a>    <ul>
-      <li><a href="#docker">Docker</a>        <ul>
-          <li><a href="#command-reference">Command Reference</a></li>
-          <li><a href="#vocabulary">Vocabulary</a></li>
-          <li><a href="#docker-flow-explained">Docker flow explained</a></li>
-        </ul>
-      </li>
-    </ul>
-  </li>
   <li><a href="#configuration-management">Configuration Management</a>    <ul>
       <li><a href="#vagrant">Vagrant</a></li>
       <li><a href="#chef">Chef</a>        <ul>
@@ -177,101 +168,6 @@ messageStyle: "none",
     </ul>
   </li>
   <li><em>Bare-metal cloud</em>: Hardware can be automatically provisioned so that it can be used in a fully dynamic fashion. This is sometimes referred to as ‘bare-metal cloud’</li>
-</ul>
-
-<h1 id="containerization">Containerization</h1>
-
-<h2 id="docker">Docker</h2>
-
-<ul>
-  <li><strong>Images</strong>
-    <ul>
-      <li>Images are the basis of the containers - Images are pulled from the registry</li>
-      <li>Base &amp; Child Images
-        <ul>
-          <li><strong><em>Base</em></strong> images are images that have no parent image, usually images with an OS like ubuntu, busybox or debian.</li>
-          <li><strong><em>Child</em></strong> images are images that build on base images and add additional functionality.</li>
-        </ul>
-      </li>
-      <li>Official and User Images
-        <ul>
-          <li><strong><em>Official</em></strong> images are images that are officially maintained and supported by the folks at Docker. These are typically one word long. In the list of images above, the python, ubuntu, busybox and hello-world images are base images.</li>
-          <li><strong><em>User</em></strong> images are images created and shared by users like you and me. They build on base images and add additional functionality. Typically, these are formatted as user/image-name.</li>
-        </ul>
-      </li>
-      <li>Onbuild images</li>
-    </ul>
-  </li>
-  <li><code>Docker File --input---&gt; Docker Client --output--&gt; Docker image</code></li>
-</ul>
-
-<h3 id="command-reference">Command Reference</h3>
-
-<ul>
-  <li><code>docker help</code></li>
-  <li><code>docker version</code></li>
-  <li><code>docker-machine version</code></li>
-  <li><code>docker-compose version</code></li>
-  <li><code>docker run hello-world</code></li>
-  <li><code>docker pull busybox</code>
-    <ul>
-      <li>pulls the <code>busybox</code> image from Docker Registry and saves it in the system. Since the <code>TAG</code> name is not provided it pulls the <code>latest</code> by default</li>
-      <li>to pull a particular tag version <code>docker pull ubuntu:12.04</code></li>
-    </ul>
-  </li>
-  <li><code>docker images</code> to view the images</li>
-  <li><code>docker run busybox</code>
-    <ul>
-      <li>Docker client finds the image locally. If not found, pulls from registry</li>
-      <li>loads up the container</li>
-      <li>runs a command in that container (command not provided here)</li>
-      <li>exited</li>
-    </ul>
-  </li>
-  <li><code>docker run busybox echo 'Welcome to Docker'</code></li>
-  <li><code>docker run -it busybox sh</code> - <code>it</code> starts an interactive tty terminal to the container</li>
-  <li><code>docker ps</code> shows all the containers that are running</li>
-  <li><code>docker ps -a</code> shows containers that exited in the past</li>
-  <li><code>docker rm &lt;container_id&gt;</code> clean up the container</li>
-  <li><code>docker rm $(docker ps -a -q -f status=exited)</code> clean up all the exited containers</li>
-  <li><code>docker rmi</code> to delete an image</li>
-  <li><code>docker run -d -P --name &lt;container_name&gt; prakhar1989/static-site</code>
-    <ul>
-      <li><code>-d</code> detaches the container from the terminal from which it was started</li>
-      <li><code>-P</code> publishes all exposed ports to random ports</li>
-      <li><code>--name</code> name of the container</li>
-    </ul>
-  </li>
-  <li><code>docker port &lt;container&gt;</code> - to see the ports</li>
-  <li><code>docker run -p 8888:80 prakhar1989/static-site</code> - to specify custom ports</li>
-  <li><code>docker stop &lt;container_id&gt;</code> - to stop a detached container</li>
-  <li><code>docker search &lt;image&gt;</code> searches the Docker Hub for given image name</li>
-  <li><code>docker login</code> - stores the login credentials to http://hub.docker.com in <code>~/.docker/config.json</code></li>
-  <li><code>docker push &lt;user/image&gt;</code> - publishes your image to Docker hub. Once published, it can be viewed at https://hub.docker.com/r/<user>/<image>/</image></user></li>
-</ul>
-
-<h3 id="vocabulary">Vocabulary</h3>
-
-<ul>
-  <li><strong>Images</strong> - The blueprints of our application which form the basis of containers.</li>
-  <li><strong>Containers</strong> - Created from Docker images and run the actual application.</li>
-  <li><strong>Docker Daemon</strong> - The background service running on the host that manages building, running and distributing Docker containers. The daemon is the process that runs in the operation system to which clients talk to.</li>
-  <li><strong>Docker Client</strong> - The command line tool that allows the user to interact with the daemon. More generally, there can be other forms of clients too - such as <strong><em>Kitematic</em></strong> which provide a GUI to the users.</li>
-  <li><strong>Docker Hub</strong> - A registry of Docker images. You can think of the registry as a directory of all available Docker images. If required, one can host their own Docker registries and can use them for pulling images.</li>
-</ul>
-
-<h3 id="docker-flow-explained">Docker flow explained</h3>
-
-<p><img src="/technology/docker-flow.png" title="right" /></p>
-
-<p>This sections explains what happens when user enters the command <code>docker run hello-world</code> in the terminal.</p>
-
-<ul>
-  <li>The Docker client contacts the Docker daemon.</li>
-  <li>The Docker daemon pulls the “hello-world” image from the Docker Hub. </li>
-  <li>If not available in Hub, then it is pulled from Docker Store</li>
-  <li>The Docker daemon creates a new container from that image within the Docker machine. It then runs the executable that produces the output.</li>
-  <li>The Docker daemon streams that output to the Docker client, which sent it to your terminal.</li>
 </ul>
 
 <h1 id="configuration-management">Configuration Management</h1>
@@ -529,7 +425,7 @@ messageStyle: "none",
 
 		<li>
 			<h3>Cloud Computing</h3>
-			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>  |  <a href="/technology/virtualization.html">Virtualization</a>
 		</li>
 
 		<li>

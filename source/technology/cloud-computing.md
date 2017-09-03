@@ -75,37 +75,38 @@ Anything-as-a-Service (XaaS) is yet another service model, which includes *Netwo
 * **Measured Service**
 	* In this service cloud provider controls and monitors all the aspects of cloud service. Resource optimization, billing, and capacity planning etc. depend on it.
 
-# VMs Vs Containers
+# Cloud Security
 
-## Hypervisor
+* Open only the ports absolutely necessary to support a server’s service and nothing more
+* Even if you are not doing load balancing, use a reverse proxy. A reverse proxy is a web server such as Apache that proxies traffic from a client to a server.
 
-* The hypervisor sits in between the physical machine and virtual machines and provides virtualization services to the virtual machines. It intercepts the guest operating system operations on the virtual machines and emulates the operation on the host machine's operating system.
-* The hypervisor handles creating the virtual environment on which the guest virtual machines operate. 
-* It supervises the guest systems and makes sure that resources are allocated to the guests as necessary. 
-* The rapid development of virtualization technologies has driven the use of virtualization further by allowing multiple virtual servers to be created on a single physical server with the help of hypervisors, such as Xen, VMware Player, KVM, etc., and incorporation of hardware support in commodity processors, such as Intel VT and AMD-V.
+## Hardening
 
+* _Hardening_ an operating system is the act of minimizing attack vectors into a server. It involves the following activities:
+	* Removing unnecessary services.
+	* Removing unnecessary accounts.
+	* Running all services as a role account (not root) when possible.
+	* Running all services in a restricted jail when possible.
+	* Verifying proper permissions for necessary system services.
+* The best way to harden your Linux system is to use a proven hardening tool such as *Bastille*.
+* Avoid using _"kitchen sink”_ Linux distributions. Each machine image should be a hardened operating system and have only the tools absolutely necessary to serve its function.
 
-{% img right /technology/vm-vs-container.jpg %}
+## Network security system
 
-Virtualization improves system utilization, decoupling applications from the underlying hardware, and enhancing workload mobility and protection.
+| Perimeter Network Security System | Cloud Network Security System |
+| ---- | ---- |
+| {% img /technology/cloud-network-security1.png %} | {% img /technology/cloud-network-security2.png %} |
 
-
-Hypervisors and VMs are just one approach to virtual workload deployment. Container virtualization is quickly emerging as an efficient and reliable alternative to traditional virtualization, providing new features and new concerns for data center professionals.
-
-## VMs
-
-* VMs is primarily in the location of the virtualization layer and the way that OS resources are used.
-* VMs rely on a hypervisor which is normally installed atop the actual *bare metal* system hardware. This has led to hypervisors being perceived as operating systems in their own right. Once the hypervisor layer is installed, VM instances can be provisioned from the system’s available computing resources. Each VM can then receive its own unique operating system and workload (application).
-* *Isolation* - A full virtualized system gets its own set of resources allocated to it, and does minimal sharing. You get more isolation, but it is much heavier (requires more resources). VMs are fully isolated from one another – no VM is aware of (or relies on) the presence of another VM on the same system – and malware, application crashes and other problems impact only the affected VM. 
-* VMs can be migrated from one virtualized system to another without regard for the system’s hardware or operating systems.
-
-## Containers
-
-* With containers, a host operating system is installed on the system first, and then a container layer (such as LXC or libcontainer) is installed atop the host OS which is usually a Linux variant.
-* Once the container layer is installed, container instances can be provisioned from the system’s available computing resources and enterprise applications can be deployed within the containers. However, every containerized application shares the same underlying operating system (the single host OS).
-* *Isolation* - With containers (like Docker using LXC) you get less isolation, but they are more lightweight and require less resources. So you could easily run 1000's on a host, and it doesn't even blink.
-* Containers are regarded as more resource-efficient than VMs because the additional resources needed for each OS is eliminated – the resulting instances are smaller and faster to create or migrate. This means a single system can potentially host far more containers than VMs. Cloud providers are particularly enthusiastic about containers because far more container instances can be deployed across the same hardware investment. However, the single OS presents a single point of failure for all of the containers that use it. For example, a malware attack or crash of the host OS can disable or impact all of the containers. In addition, containers are easy to migrate, but can only be migrated to other servers with compatible operating system kernels (potentially limiting migration options).
-
+* `Load balancer -> Web server (reverse proxy) -> App server -> DB server`
+* Use Intrusion detection software to detect Trojans in a server
+* __Network Intrusion Detection System (NIDS)__
+	* NIDS like Snort monitors local traffic for anything that looks irregular. E.g., port scans, DoS attacks, known vulnerability exploit attempts.
+	* Network intrusion detection exists to alert you of attacks before they happen and, in some cases, foil attacks as they happen.
+* Port Scans and the Amazon Cloud
+	* When an attacker is looking for vulnerabilities against a particular target, one of the first things they do is execute a port scan against a known server and then examine servers with nearby IP addresses. This approach does not provide terribly useful data when executed against the cloud for a number of reasons:    
+	* Nodes with proximate IP addresses are almost always unrelated. As a result, you cannot learn anything about the network architecture of a particular organization by executing a port scan.
+	* Amazon security groups deny all incoming traffic by default, and requests for ports that have not been opened simply do not respond. As a result, very few ports for any particular server will actually be open. Furthermore, scanning across all ports is a very slow process because each closed port times out instead of actively denying the traffic.
+	* Amazon has its own intrusion detection systems in place and does not allow its customers to execute port scans against their own servers. As a result, an active port scan is likely to be blocked before any real information can be gathered.
 
 # FAQs
 
@@ -114,10 +115,14 @@ Hypervisors and VMs are just one approach to virtual workload deployment. Contai
 	* Whereas, elasticity is being one of the characteristic provide the concept of commissioning and decommissioning of large amount of resource capacity dynamically. It is measured by the speed by which the resources are coming on demand and the usage of the resources. Elasticity is reversible scability
 * Cloudbursting
 	* A hybrid approach where many compute resources are kept private internally but when additional demand is needed, a public cloud is called upon to provide those temporary resources. This is called “Cloudbursting”
-* What are the things to do to migrate an application to cloud? or How do you design an application to be cloud-native?
+
 
 # Tools
 
 * [Simian Army](http://techblog.netflix.com/2011/07/netflix-simian-army.html)
   * [Chaos monkey](http://techblog.netflix.com/2012/07/chaos-monkey-released-into-wild.html) - Self-healing system
 
+# References
+
+* Books
+	* Cloud Application Architecture

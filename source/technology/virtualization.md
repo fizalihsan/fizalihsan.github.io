@@ -9,7 +9,7 @@ footer: true
 * list element with functor item
 {:toc}
 
-# VMs Vs Containers
+# Overview
 
 ## Hypervisor
 
@@ -35,78 +35,111 @@ Hypervisors and VMs are just one approach to virtual workload deployment. Contai
 
 ## Containers
 
-* With containers, a host operating system is installed on the system first, and then a container layer (such as LXC or libcontainer) is installed atop the host OS which is usually a Linux variant.
-* Once the container layer is installed, container instances can be provisioned from the system’s available computing resources and enterprise applications can be deployed within the containers. However, every containerized application shares the same underlying operating system (the single host OS).
-* *Isolation* - With containers (like Docker using LXC) you get less isolation, but they are more lightweight and require less resources. So you could easily run 1000's on a host, and it doesn't even blink.
-* Containers are regarded as more resource-efficient than VMs because the additional resources needed for each OS is eliminated – the resulting instances are smaller and faster to create or migrate. This means a single system can potentially host far more containers than VMs. Cloud providers are particularly enthusiastic about containers because far more container instances can be deployed across the same hardware investment. However, the single OS presents a single point of failure for all of the containers that use it. For example, a malware attack or crash of the host OS can disable or impact all of the containers. In addition, containers are easy to migrate, but can only be migrated to other servers with compatible operating system kernels (potentially limiting migration options).
-
+* Containers are an encapsulation of an application with its dependencies.
+* Containers share resources with the host OS and hence lighter than VMs.
+* Containers can be started and stopped in a fraction of a second.
+* Containers eliminate a whole class of bugs caused by environment changes- 'it runs in my machine' 
 
 # Docker
 
-* __Images__
-	* Images are the basis of the containers - Images are pulled from the registry
-	* Base & Child Images
-		* ***Base*** images are images that have no parent image, usually images with an OS like ubuntu, busybox or debian.
-		* ***Child*** images are images that build on base images and add additional functionality.
-	* Official and User Images
-		* ***Official*** images are images that are officially maintained and supported by the folks at Docker. These are typically one word long. In the list of images above, the python, ubuntu, busybox and hello-world images are base images.
-		* ***User*** images are images created and shared by users like you and me. They build on base images and add additional functionality. Typically, these are formatted as user/image-name.
-	* Onbuild images
-* `Docker File --input---> Docker Client --output--> Docker image`
-
-## Command Reference
-
-* `docker help`
-* `docker version`
-* `docker-machine version`
-* `docker-compose version`
-* `docker run hello-world`
-* `docker pull busybox`
-	* pulls the `busybox` image from Docker Registry and saves it in the system. Since the `TAG` name is not provided it pulls the `latest` by default
-	* to pull a particular tag version `docker pull ubuntu:12.04`
-* `docker images` to view the images
-* `docker run busybox`
-	* Docker client finds the image locally. If not found, pulls from registry
-	* loads up the container
-	* runs a command in that container (command not provided here)
-	* exited
-* `docker run busybox echo 'Welcome to Docker'`
-* `docker run -it busybox sh` - `it` starts an interactive tty terminal to the container
-* `docker ps` shows all the containers that are running
-	* `docker ps -a` shows containers that exited in the past
-* `docker rm <container_id>` clean up the container
-	* `docker rm $(docker ps -a -q -f status=exited)` clean up all the exited containers
-* `docker rmi` to delete an image
-* `docker run -d -P --name <container_name> prakhar1989/static-site`
-	* `-d` detaches the container from the terminal from which it was started
-	* `-P` publishes all exposed ports to random ports
-	* `--name` name of the container
-* `docker port <container>` - to see the ports
-* `docker run -p 8888:80 prakhar1989/static-site` - to specify custom ports
-* `docker stop <container_id>` - to stop a detached container
-* `docker search <image>` searches the Docker Hub for given image name
-* `docker login` - stores the login credentials to http://hub.docker.com in `~/.docker/config.json`
-* `docker push <user/image>` - publishes your image to Docker hub. Once published, it can be viewed at https://hub.docker.com/r/<user>/<image>/
-
-## Vocabulary
-
-* __Images__ - The blueprints of our application which form the basis of containers.
-* __Containers__ - Created from Docker images and run the actual application.
-* __Docker Daemon__ - The background service running on the host that manages building, running and distributing Docker containers. The daemon is the process that runs in the operation system to which clients talk to.
-* __Docker Client__ - The command line tool that allows the user to interact with the daemon. More generally, there can be other forms of clients too - such as ***Kitematic*** which provide a GUI to the users.
-* __Docker Hub__ - A registry of Docker images. You can think of the registry as a directory of all available Docker images. If required, one can host their own Docker registries and can use them for pulling images.
-
-## Docker flow explained
+## Docker flow
 
 {% img /technology/docker-flow.png right %}
 
-This sections explains what happens when user enters the command `docker run hello-world` in the terminal.
+What happens when `docker run hello-world` is executed.
 
 * The Docker client contacts the Docker daemon.
 * The Docker daemon pulls the "hello-world" image from the Docker Hub. 
 * If not available in Hub, then it is pulled from Docker Store
 * The Docker daemon creates a new container from that image within the Docker machine. It then runs the executable that produces the output.
 * The Docker daemon streams that output to the Docker client, which sent it to your terminal.
+
+## Concepts
+
+* `Docker File --input---> [Docker Client] --output--> Docker image`
+* __Images__
+	* Images are the basis of the containers - Images are pulled from the registry
+	* ***Base*** images are images that have no parent image, usually images with an OS like ubuntu, busybox or debian.
+	* ***Child*** images are images that build on base images and add additional functionality.
+	* ***Official*** images are images that are officially maintained and supported by the folks at Docker. These are typically one word long. In the list of images above, the python, ubuntu, busybox and hello-world images are base images.
+	* ***User*** images are images created and shared by users like you and me. They build on base images and add additional functionality. Typically, these are formatted as user/image-name.
+* __Containers__ - Created from Docker images and run the actual application.
+* __Docker Daemon__ - The background service running on the host that manages building, running and distributing Docker containers. The daemon is the process that runs in the operation system to which clients talk to.
+* __Docker Client__ - The command line tool that allows the user to interact with the daemon. More generally, there can be other forms of clients too - such as ***Kitematic*** which provide a GUI to the users.
+* __Docker Hub__ - A registry of Docker images. You can think of the registry as a directory of all available Docker images. If required, one can host their own Docker registries and can use them for pulling images.
+
+
+
+## Command Reference
+
+__General__
+
+* `docker help`
+* `docker version`
+* `docker-machine version`
+* `docker-compose version`
+* `docker login` - stores the login credentials to http://hub.docker.com in `~/.docker/config.json`
+
+__Images__
+
+* `docker images` to view the images
+* `docker pull <user/image:tag>`
+	* `docker pull busybox` pulls the `busybox` image from Docker Registry and saves it in the system. When 'user' is not provided, it defaults to `root` which is controlled by Docker Inc. When 'tag' name is not provided, it defaults to `latest`.
+	* to pull a particular tag version `docker pull ubuntu:12.04`
+* `docker rmi` to delete an image
+* `docker search <image>` searches the Docker Hub for given image name
+* `docker commit <container> <new_image_name>` - to convert a container (stopped/running) into an image
+* `docker build <image_name> <Dockerfile_dir>` - to convert a Dockerfile to an image
+* `docker push <user/image:tag>` - publishes your image to Docker hub. Once published, it can be viewed at https://hub.docker.com/r/<user>/<image>/
+
+__Containers__
+
+* `docker run hello-world`
+	* `docker run busybox`
+		* Docker client finds the image locally. If not found, pulls from registry
+		* loads up the container
+		* runs a command in that container (command not provided here)
+		* exited
+	* `docker run busybox echo 'Welcome to Docker'`
+	* `docker run -it busybox sh` - `it` starts an interactive tty terminal to the container
+	* Pass `--rm` flag to delete the container and associated file system when the container exits. 
+* `docker logs <container>`
+* `docker port <container>` - to see the ports
+* `docker ps` shows all the containers that are running
+	* `docker ps -a` shows containers that exited in the past
+* `docker inspect <container>` - to get the container's details like status, IP addr, etc.
+	* `docker inspect <container> --format {{.NetworkSettings.IPAddress}}` - to parse out IP
+* `docker diff <container>` - to view the files changed from within the container 
+* `docker rm <container_id>` clean up the container
+	* `docker rm $(docker ps -a -q -f status=exited)` clean up all the exited containers
+* `docker stop <container_id>` - to stop a container. A stopped container retains changes to its settings, meta‐ data, and filesystem, including runtime configuration such as IP address. 
+* `docker start <container_id>` - to start a stopped container
+
+__Volumes__
+
+* `docker volume ls` - list the volumes
+* `docker run -d -v /host/dir:/container/dir <image>` - to attach a volume to a container
+* `docker volume rm $(docker volume ls -qf dangling=true)` - to delete the dangling volumes
+
+## Advanced Concepts
+
+### Union File System
+
+{% img right /technology/union-file-system.jpg %}
+
+* Docker uses a union file system (UFS) for containers, which allows multiple filesystems to be mounted in a hierarchy and to appear as a single filesystem. 
+* The filesystem from the image has been mounted as a read-only layer, and any changes to the running container are made to a read- write layer mounted on top of this. Because of this, Docker only has to look at the topmost read-write layer to find the changes made to the running system.
+* Docker images are made up of multiple layers. Each of these layers is a read-only filesystem. A layer is created for each instruction in a Dockerfile and sits on top of the previous layers. When an image is turned into a container, the Docker engine takes the image and adds a read-write filesystem on top (as well as initializing various settings such as the IP address, name, ID, and resource limits).
+
+### Volumes
+
+* Volumes are files or directories that are directly mounted on the host and not part of the normal union file system. This means they can be shared with other containers and all changes will be made directly to the host filesystem. 
+* e.g., `VOLUME /directory`: By default, the directory or file will be mounted on the host inside your Docker installation directory (normally `/var/lib/docker/`).
+* It is possible to specify the host directory to use as the mount via the docker run command (e.g., `docker run -d -v /host/dir:/container/dir <image>`). but not from Dockerfile due to portability and security reasons (the file or directory may not exist in other systems, and containers shouldn’t be able to mount sensitive files like `/etc/passwd` without explicit permission).
+
+
+
+
 
 ## Questions
 

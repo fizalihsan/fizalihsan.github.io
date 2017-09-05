@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Virtualization Docker Command Reference Vocabulary Docker flow explained Questions References Docker Images Images are the basis of the containers &hellip;">
+<meta name="description" content="Virtualization Overview Hypervisor VMs Containers Docker Docker flow explained Concepts Union File System Image Layers Volumes Plugin Architecture &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -108,106 +108,71 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
+  <li><a href="#overview">Overview</a>    <ul>
+      <li><a href="#hypervisor">Hypervisor</a></li>
+      <li><a href="#vms">VMs</a></li>
+      <li><a href="#containers">Containers</a></li>
+    </ul>
+  </li>
   <li><a href="#docker">Docker</a>    <ul>
-      <li><a href="#command-reference">Command Reference</a></li>
-      <li><a href="#vocabulary">Vocabulary</a></li>
       <li><a href="#docker-flow-explained">Docker flow explained</a></li>
+      <li><a href="#concepts">Concepts</a>        <ul>
+          <li><a href="#union-file-system">Union File System</a></li>
+          <li><a href="#image-layers">Image Layers</a></li>
+          <li><a href="#volumes">Volumes</a></li>
+          <li><a href="#plugin-architecture">Plugin Architecture</a></li>
+        </ul>
+      </li>
+      <li><a href="#command-reference">Command Reference</a></li>
+      <li><a href="#docker-compose">Docker Compose</a></li>
       <li><a href="#questions">Questions</a></li>
     </ul>
   </li>
   <li><a href="#references">References</a></li>
 </ul>
 
+<h1 id="overview">Overview</h1>
+
+<h2 id="hypervisor">Hypervisor</h2>
+
+<ul>
+  <li>The hypervisor sits in between the physical machine and virtual machines and provides virtualization services to the virtual machines. It intercepts the guest operating system operations on the virtual machines and emulates the operation on the host machine’s operating system.</li>
+  <li>The hypervisor handles creating the virtual environment on which the guest virtual machines operate. </li>
+  <li>It supervises the guest systems and makes sure that resources are allocated to the guests as necessary. </li>
+  <li>The rapid development of virtualization technologies has driven the use of virtualization further by allowing multiple virtual servers to be created on a single physical server with the help of hypervisors, such as Xen, VMware Player, KVM, etc., and incorporation of hardware support in commodity processors, such as Intel VT and AMD-V.</li>
+</ul>
+
+<p><img class="right" src="/technology/vm-vs-container.jpg" /></p>
+
+<p>Virtualization improves system utilization, decoupling applications from the underlying hardware, and enhancing workload mobility and protection.</p>
+
+<p>Hypervisors and VMs are just one approach to virtual workload deployment. Container virtualization is quickly emerging as an efficient and reliable alternative to traditional virtualization, providing new features and new concerns for data center professionals.</p>
+
+<h2 id="vms">VMs</h2>
+
+<ul>
+  <li>VMs is primarily in the location of the virtualization layer and the way that OS resources are used.</li>
+  <li>VMs rely on a hypervisor which is normally installed atop the actual <em>bare metal</em> system hardware. This has led to hypervisors being perceived as operating systems in their own right. Once the hypervisor layer is installed, VM instances can be provisioned from the system’s available computing resources. Each VM can then receive its own unique operating system and workload (application).</li>
+  <li><em>Isolation</em> - A full virtualized system gets its own set of resources allocated to it, and does minimal sharing. You get more isolation, but it is much heavier (requires more resources). VMs are fully isolated from one another – no VM is aware of (or relies on) the presence of another VM on the same system – and malware, application crashes and other problems impact only the affected VM. </li>
+  <li>VMs can be migrated from one virtualized system to another without regard for the system’s hardware or operating systems.</li>
+</ul>
+
+<h2 id="containers">Containers</h2>
+
+<ul>
+  <li>Containers are an encapsulation of an application with its dependencies.</li>
+  <li>Containers share resources with the host OS and hence lighter than VMs.</li>
+  <li>Containers can be started and stopped in a fraction of a second.</li>
+  <li>Containers eliminate a whole class of bugs caused by environment changes- ‘it runs in my machine’ </li>
+</ul>
+
 <h1 id="docker">Docker</h1>
-
-<ul>
-  <li><strong>Images</strong>
-    <ul>
-      <li>Images are the basis of the containers - Images are pulled from the registry</li>
-      <li>Base &amp; Child Images
-        <ul>
-          <li><strong><em>Base</em></strong> images are images that have no parent image, usually images with an OS like ubuntu, busybox or debian.</li>
-          <li><strong><em>Child</em></strong> images are images that build on base images and add additional functionality.</li>
-        </ul>
-      </li>
-      <li>Official and User Images
-        <ul>
-          <li><strong><em>Official</em></strong> images are images that are officially maintained and supported by the folks at Docker. These are typically one word long. In the list of images above, the python, ubuntu, busybox and hello-world images are base images.</li>
-          <li><strong><em>User</em></strong> images are images created and shared by users like you and me. They build on base images and add additional functionality. Typically, these are formatted as user/image-name.</li>
-        </ul>
-      </li>
-      <li>Onbuild images</li>
-    </ul>
-  </li>
-  <li><code>Docker File --input---&gt; Docker Client --output--&gt; Docker image</code></li>
-</ul>
-
-<h2 id="command-reference">Command Reference</h2>
-
-<ul>
-  <li><code>docker help</code></li>
-  <li><code>docker version</code></li>
-  <li><code>docker-machine version</code></li>
-  <li><code>docker-compose version</code></li>
-  <li><code>docker run hello-world</code></li>
-  <li><code>docker pull busybox</code>
-    <ul>
-      <li>pulls the <code>busybox</code> image from Docker Registry and saves it in the system. Since the <code>TAG</code> name is not provided it pulls the <code>latest</code> by default</li>
-      <li>to pull a particular tag version <code>docker pull ubuntu:12.04</code></li>
-    </ul>
-  </li>
-  <li><code>docker images</code> to view the images</li>
-  <li><code>docker run busybox</code>
-    <ul>
-      <li>Docker client finds the image locally. If not found, pulls from registry</li>
-      <li>loads up the container</li>
-      <li>runs a command in that container (command not provided here)</li>
-      <li>exited</li>
-    </ul>
-  </li>
-  <li><code>docker run busybox echo 'Welcome to Docker'</code></li>
-  <li><code>docker run -it busybox sh</code> - <code>it</code> starts an interactive tty terminal to the container</li>
-  <li><code>docker ps</code> shows all the containers that are running
-    <ul>
-      <li><code>docker ps -a</code> shows containers that exited in the past</li>
-    </ul>
-  </li>
-  <li><code>docker rm &lt;container_id&gt;</code> clean up the container
-    <ul>
-      <li><code>docker rm $(docker ps -a -q -f status=exited)</code> clean up all the exited containers</li>
-    </ul>
-  </li>
-  <li><code>docker rmi</code> to delete an image</li>
-  <li><code>docker run -d -P --name &lt;container_name&gt; prakhar1989/static-site</code>
-    <ul>
-      <li><code>-d</code> detaches the container from the terminal from which it was started</li>
-      <li><code>-P</code> publishes all exposed ports to random ports</li>
-      <li><code>--name</code> name of the container</li>
-    </ul>
-  </li>
-  <li><code>docker port &lt;container&gt;</code> - to see the ports</li>
-  <li><code>docker run -p 8888:80 prakhar1989/static-site</code> - to specify custom ports</li>
-  <li><code>docker stop &lt;container_id&gt;</code> - to stop a detached container</li>
-  <li><code>docker search &lt;image&gt;</code> searches the Docker Hub for given image name</li>
-  <li><code>docker login</code> - stores the login credentials to http://hub.docker.com in <code>~/.docker/config.json</code></li>
-  <li><code>docker push &lt;user/image&gt;</code> - publishes your image to Docker hub. Once published, it can be viewed at https://hub.docker.com/r/<user>/<image>/</image></user></li>
-</ul>
-
-<h2 id="vocabulary">Vocabulary</h2>
-
-<ul>
-  <li><strong>Images</strong> - The blueprints of our application which form the basis of containers.</li>
-  <li><strong>Containers</strong> - Created from Docker images and run the actual application.</li>
-  <li><strong>Docker Daemon</strong> - The background service running on the host that manages building, running and distributing Docker containers. The daemon is the process that runs in the operation system to which clients talk to.</li>
-  <li><strong>Docker Client</strong> - The command line tool that allows the user to interact with the daemon. More generally, there can be other forms of clients too - such as <strong><em>Kitematic</em></strong> which provide a GUI to the users.</li>
-  <li><strong>Docker Hub</strong> - A registry of Docker images. You can think of the registry as a directory of all available Docker images. If required, one can host their own Docker registries and can use them for pulling images.</li>
-</ul>
 
 <h2 id="docker-flow-explained">Docker flow explained</h2>
 
 <p><img src="/technology/docker-flow.png" title="right" /></p>
 
-<p>This sections explains what happens when user enters the command <code>docker run hello-world</code> in the terminal.</p>
+<p>What happens when <code>docker run hello-world</code> is executed.</p>
 
 <ul>
   <li>The Docker client contacts the Docker daemon.</li>
@@ -217,11 +182,225 @@ messageStyle: "none",
   <li>The Docker daemon streams that output to the Docker client, which sent it to your terminal.</li>
 </ul>
 
+<h2 id="concepts">Concepts</h2>
+
+<ul>
+  <li><code>Docker File --input---&gt; [Docker Client] --output--&gt; Docker image</code></li>
+  <li><strong>Images</strong>
+    <ul>
+      <li>Images are the basis of the containers - Images are pulled from the registry</li>
+      <li><strong><em>Base</em></strong> images are images that have no parent image, usually images with an OS like ubuntu, busybox or debian.</li>
+      <li><strong><em>Child</em></strong> images are images that build on base images and add additional functionality.</li>
+      <li><strong><em>Official</em></strong> images are images that are officially maintained and supported by the folks at Docker. These are typically one word long. In the list of images above, the python, ubuntu, busybox and hello-world images are base images.</li>
+      <li><strong><em>User</em></strong> images are images created and shared by users like you and me. They build on base images and add additional functionality. Typically, these are formatted as user/image-name.</li>
+    </ul>
+  </li>
+  <li><strong>Containers</strong> - Created from Docker images and run the actual application.</li>
+  <li><strong>Docker Daemon</strong> - The background service running on the host that manages building, running and distributing Docker containers. The daemon is the process that runs in the operation system to which clients talk to.</li>
+  <li><strong>Docker Client</strong> - The command line tool that allows the user to interact with the daemon. More generally, there can be other forms of clients too - such as <strong><em>Kitematic</em></strong> which provide a GUI to the users.</li>
+  <li><strong>Docker Hub</strong> - A registry of Docker images. You can think of the registry as a directory of all available Docker images. If required, one can host their own Docker registries and can use them for pulling images.</li>
+</ul>
+
+<h3 id="union-file-system">Union File System</h3>
+
+<p><img class="right" src="/technology/union-file-system.jpg" /></p>
+
+<ul>
+  <li>Docker uses a union file system (UFS) for containers, which allows multiple filesystems to be mounted in a hierarchy and to appear as a single filesystem. </li>
+  <li>The filesystem from the image has been mounted as a read-only layer, and any changes to the running container are made to a read- write layer mounted on top of this. Because of this, Docker only has to look at the topmost read-write layer to find the changes made to the running system.</li>
+  <li>Docker images are made up of multiple layers. Each of these layers is a read-only filesystem. A layer is created for each instruction in a Dockerfile and sits on top of the previous layers. When an image is turned into a container, the Docker engine takes the image and adds a read-write filesystem on top (as well as initializing various settings such as the IP address, name, ID, and resource limits).</li>
+</ul>
+
+<h3 id="image-layers">Image Layers</h3>
+
+<ul>
+  <li>Each instruction in a Dockerfile results in a new image layer, which can also be used to start a container. </li>
+  <li>The new layer is created by starting a container using the image of the previ‐ous layer, executing the Dockerfile instruction and saving a new image.</li>
+  <li>When a Dockerfile instruction successfully completes, the intermediate container will be deleted, unless the <code>--rm=false</code> argument was given.</li>
+  <li>Since each instruction results in an static image—essentially just a filesystem and some metadata—all running processes in the instruction will be stopped. This means that while you can start long-lived processes, such as databases or SSH daemons in a <code>RUN</code> instruction, they will not be running when the next instruction is processed or a container is started. If you want a service or process to start with the container, it must be launched from an <code>ENTRYPOINT</code> or <code>CMD</code> instruction.</li>
+</ul>
+
+<h3 id="volumes">Volumes</h3>
+
+<ul>
+  <li>Volumes are files or directories that are directly mounted on the host and not part of the normal UFS. This means they can be shared with other containers and all changes will be made directly to the host filesystem. </li>
+  <li>First way of initializing volume
+    <ul>
+      <li><code>docker run -it --name container-test -h CONTAINER -v /data debian /bin/bash</code></li>
+      <li>This will make the directory <code>/data</code> inside the container into a volume. </li>
+      <li>Any files the image held inside the <code>/data</code> directory will be copied into the volume. </li>
+      <li>We can find out where the volume lives on the host by running this on the host from a new shell: <code>docker inspect -f  container-test</code></li>
+    </ul>
+  </li>
+  <li>Second way
+    <ul>
+      <li><code>VOLUME /directory</code>: By default, the directory or file will be mounted on the host inside your Docker installation directory (normally <code>/var/lib/docker/</code>).</li>
+    </ul>
+  </li>
+  <li>Third way
+    <ul>
+      <li><code>docker run -d -v /host/dir:/container/dir &lt;image&gt;</code></li>
+      <li>specifies the host directory to use as the mount. This is not possible from a Dockerfile due to portability and security reasons (the file or directory may not exist in other systems, and containers shouldn’t be able to mount sensitive files like <code>/etc/passwd</code> without explicit permission).</li>
+      <li><code>docker run -v /home/adrian/data:/data debian ls /data</code>
+        <ul>
+          <li>will mount the directory <code>/home/adrian/data</code> on the host as <code>/data</code> inside the container. This is commonly known as <strong>bind mount</strong>.</li>
+          <li>Any files already existing in the <code>/home/adrian/data</code> directory will be available inside the container. </li>
+          <li>If the <code>/data</code> directory already exists in the container, its contents will be hidden by the volume. </li>
+          <li>Unlike the first method, no files from the image will be copied into the volume, and the volume won’t be deleted by Docker (i.e., <code>docker rm -v</code> will not remove a volume that is mounted at a user-chosen directory).</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Sharing data: <code>docker run -it -h NEWCONTAINER --volumes-from container-test debian /bin/bash</code>. 
+    <ul>
+      <li>This allows to share the volumes from <code>container-test</code> to be shared with the NEWCONTAINER.</li>
+      <li>this works whether or not the container holding the volumes (container-test in this case) is currently running. </li>
+      <li>As long as at least one existing container links to a volume, it won’t be deleted.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="plugin-architecture">Plugin Architecture</h3>
+
+<ul>
+  <li>Registry
+    <ul>
+      <li>Docker Hub, CoreOS Enterprise Registry, Artficatory</li>
+    </ul>
+  </li>
+  <li>Networking solution
+    <ul>
+      <li>Creating network of containers that spans across hosts</li>
+      <li>Solutions: Overlay (integrated solution), Weave, Apache Calico</li>
+    </ul>
+  </li>
+  <li>Service Discovery
+    <ul>
+      <li>Docker containers need to find a way to communicate with other services which could be running on other containers. As containers are dynamically assigned IPs, this is a complex problem.</li>
+      <li>Solutions: etcd, Consul, Registrator, SkyDNS</li>
+    </ul>
+  </li>
+  <li>Orchestration and cluster management
+    <ul>
+      <li>Solutions: Docker Swarm, Google Kubernetes, Marathon (a framework for Mesos), CoreOS’s Fleet, and OpenShift.</li>
+    </ul>
+  </li>
+  <li>Volumes
+    <ul>
+      <li>For integration with other storage systems</li>
+      <li>Solutions: Flocker (a multihost data management and migration tool), and GlusterFS (for distributed storage)</li>
+    </ul>
+  </li>
+  <li>Operating System
+    <ul>
+      <li>minimal and easy-to-maintain distributions that are focused entirely on running con‐ tainers (or containers and VMs), especially within a context of powering a data- centre or cluster.</li>
+      <li>Solutions: Project Atomic, CoreOS, and RancherOS.</li>
+    </ul>
+  </li>
+  <li>PaaS
+    <ul>
+      <li>Solutions: Deis, Flynn, Paz</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="command-reference">Command Reference</h2>
+
+<p><strong>General</strong></p>
+
+<ul>
+  <li><code>docker help</code></li>
+  <li><code>docker version</code></li>
+  <li><code>docker-machine version</code></li>
+  <li><code>docker-compose version</code></li>
+  <li><code>docker login</code> - stores the login credentials to http://hub.docker.com in <code>~/.docker/config.json</code></li>
+</ul>
+
+<p><strong>Images</strong></p>
+
+<ul>
+  <li><code>docker images</code> to view the images</li>
+  <li><code>docker pull &lt;user/image:tag&gt;</code>
+    <ul>
+      <li><code>docker pull busybox</code> pulls the <code>busybox</code> image from Docker Registry and saves it in the system. When ‘user’ is not provided, it defaults to <code>root</code> which is controlled by Docker Inc. When ‘tag’ name is not provided, it defaults to <code>latest</code>.</li>
+      <li>to pull a particular tag version <code>docker pull ubuntu:12.04</code></li>
+    </ul>
+  </li>
+  <li><code>docker rmi</code> to delete an image</li>
+  <li><code>docker search &lt;image&gt;</code> searches the Docker Hub for given image name</li>
+  <li><code>docker commit &lt;container&gt; &lt;new_image_name&gt;</code> - to convert a container (stopped/running) into an image</li>
+  <li><code>docker build &lt;image_name&gt; &lt;Dockerfile_dir&gt;</code> - to convert a Dockerfile to an image</li>
+  <li><code>docker push &lt;user/image:tag&gt;</code> - publishes your image to Docker hub. Once published, it can be viewed at https://hub.docker.com/r/<user>/<image>/</image></user></li>
+  <li><code>docker history &lt;image&gt;</code> - to view the full set of layers that make up an image</li>
+</ul>
+
+<p><strong>Containers</strong></p>
+
+<ul>
+  <li><code>docker run hello-world</code>
+    <ul>
+      <li><code>docker run busybox</code>
+        <ul>
+          <li>Docker client finds the image locally. If not found, pulls from registry</li>
+          <li>loads up the container</li>
+          <li>runs a command in that container (command not provided here)</li>
+          <li>exited</li>
+        </ul>
+      </li>
+      <li><code>docker run busybox echo 'Welcome to Docker'</code></li>
+      <li><code>docker run -it busybox sh</code> - <code>it</code> starts an interactive tty terminal to the container</li>
+      <li>Pass <code>--rm</code> flag to delete the container and associated file system when the container exits. </li>
+    </ul>
+  </li>
+  <li><code>docker logs &lt;container&gt;</code></li>
+  <li><code>docker port &lt;container&gt;</code> - to see the ports</li>
+  <li><code>docker ps</code> shows all the containers that are running
+    <ul>
+      <li><code>docker ps -a</code> shows containers that exited in the past</li>
+    </ul>
+  </li>
+  <li><code>docker inspect &lt;container&gt;</code> - to get the container’s details like status, IP addr, etc.
+    <ul>
+      <li><code>docker inspect &lt;container&gt; --format </code> - to parse out IP</li>
+    </ul>
+  </li>
+  <li><code>docker diff &lt;container&gt;</code> - to view the files changed from within the container </li>
+  <li><code>docker rm &lt;container_id&gt;</code> clean up the container
+    <ul>
+      <li><code>docker rm $(docker ps -a -q -f status=exited)</code> clean up all the exited containers</li>
+    </ul>
+  </li>
+  <li><code>docker stop &lt;container_id&gt;</code> - to stop a container. A stopped container retains changes to its settings, meta‐ data, and filesystem, including runtime configuration such as IP address. </li>
+  <li><code>docker start &lt;container_id&gt;</code> - to start a stopped container</li>
+</ul>
+
+<p><strong>Volumes</strong></p>
+
+<ul>
+  <li><code>docker volume ls</code> - list the volumes</li>
+  <li><code>docker run -d -v /host/dir:/container/dir &lt;image&gt;</code> - to attach a volume to a container</li>
+  <li><code>docker volume rm $(docker volume ls -qf dangling=true)</code> - to delete the dangling volumes</li>
+</ul>
+
+<h2 id="docker-compose">Docker Compose</h2>
+
+<ul>
+  <li>Docker Compose is designed to quickly get Docker development environments up and run‐ ning. </li>
+  <li>It uses YAML files to store the configuration for sets of containers, saving developers from repetitive and error-prone typing or rolling their own solution. </li>
+  <li>Compose will free us from the need to maintain our own scripts for orchestration, including starting, linking, updating, and stopping our containers.</li>
+  <li>Bunch of containers is called ‘services’ in Compose lingo</li>
+</ul>
+
 <h2 id="questions">Questions</h2>
 
 <ul>
   <li>When we build docker images, where are the images stored?</li>
-  <li></li>
+  <li>Best practices
+    <ul>
+      <li>combine commands in RUN to reduce image size</li>
+      <li>always use a user in Dockerfile</li>
+    </ul>
+  </li>
 </ul>
 
 <h1 id="references">References</h1>

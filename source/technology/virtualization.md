@@ -42,7 +42,7 @@ Hypervisors and VMs are just one approach to virtual workload deployment. Contai
 
 # Docker
 
-## Docker flow
+## Docker flow explained
 
 {% img /technology/docker-flow.png right %}
 
@@ -68,7 +68,62 @@ What happens when `docker run hello-world` is executed.
 * __Docker Client__ - The command line tool that allows the user to interact with the daemon. More generally, there can be other forms of clients too - such as ***Kitematic*** which provide a GUI to the users.
 * __Docker Hub__ - A registry of Docker images. You can think of the registry as a directory of all available Docker images. If required, one can host their own Docker registries and can use them for pulling images.
 
+### Union File System
 
+{% img right /technology/union-file-system.jpg %}
+
+* Docker uses a union file system (UFS) for containers, which allows multiple filesystems to be mounted in a hierarchy and to appear as a single filesystem. 
+* The filesystem from the image has been mounted as a read-only layer, and any changes to the running container are made to a read- write layer mounted on top of this. Because of this, Docker only has to look at the topmost read-write layer to find the changes made to the running system.
+* Docker images are made up of multiple layers. Each of these layers is a read-only filesystem. A layer is created for each instruction in a Dockerfile and sits on top of the previous layers. When an image is turned into a container, the Docker engine takes the image and adds a read-write filesystem on top (as well as initializing various settings such as the IP address, name, ID, and resource limits).
+
+### Image Layers
+
+New Docker users are often thrown by the way images are built up. Each instruction in a Dockerfile results in a new image layer, which can also be used to start a con‐ tainer. The new layer is created by starting a container using the image of the previ‐ ous layer, executing the Dockerfile instruction and saving a new image. When a Dockerfile instruction successfully completes, the intermediate container will be deleted, unless the --rm=false argument was given.1 Since each instruction results in an static image—essentially just a filesystem and some metadata—all running pro‐ cesses in the instruction will be stopped. This means that while you can start long- lived processes, such as databases or SSH daemons in a RUN instruction, they will not be running when the next instruction is processed or a container is started. If you want a service or process to start with the container, it must be launched from an ENTRYPOINT or CMD instruction.
+
+### Volumes
+
+* Volumes are files or directories that are directly mounted on the host and not part of the normal UFS. This means they can be shared with other containers and all changes will be made directly to the host filesystem. 
+* First way of initializing volume
+	* `docker run -it --name container-test -h CONTAINER -v /data debian /bin/bash`
+	* This will make the directory `/data` inside the container into a volume. 
+	* Any files the image held inside the `/data` directory will be copied into the volume. 
+	* We can find out where the volume lives on the host by running this on the host from a new shell: `docker inspect -f {{.Mounts}} container-test`
+* Second way
+	* `VOLUME /directory`: By default, the directory or file will be mounted on the host inside your Docker installation directory (normally `/var/lib/docker/`).
+* Third way
+	* `docker run -d -v /host/dir:/container/dir <image>`
+	* specifies the host directory to use as the mount. This is not possible from a Dockerfile due to portability and security reasons (the file or directory may not exist in other systems, and containers shouldn’t be able to mount sensitive files like `/etc/passwd` without explicit permission).
+	* `docker run -v /home/adrian/data:/data debian ls /data`
+		* will mount the directory `/home/adrian/data` on the host as `/data` inside the container. This is commonly known as __bind mount__.
+		* Any files already existing in the `/home/adrian/data` directory will be available inside the container. 
+		* If the `/data` directory already exists in the container, its contents will be hidden by the volume. 
+		* Unlike the first method, no files from the image will be copied into the volume, and the volume won’t be deleted by Docker (i.e., `docker rm -v` will not remove a volume that is mounted at a user-chosen directory).
+* Sharing data: `docker run -it -h NEWCONTAINER --volumes-from container-test debian /bin/bash`. 
+	* This allows to share the volumes from `container-test` to be shared with the NEWCONTAINER.
+	* this works whether or not the container holding the volumes (container-test in this case) is currently running. 
+	* As long as at least one existing container links to a volume, it won’t be deleted.
+
+
+### Plugin Architecture
+
+* Registry
+	* Docker Hub, CoreOS Enterprise Registry, Artficatory
+* Networking solution
+	* Creating network of containers that spans across hosts
+	* Solutions: Overlay (integrated solution), Weave, Apache Calico
+* Service Discovery
+	* Docker containers need to find a way to communicate with other services which could be running on other containers. As containers are dynamically assigned IPs, this is a complex problem.
+	* Solutions: etcd, Consul, Registrator, SkyDNS
+* Orchestration and cluster management
+	* Solutions: Docker Swarm, Google Kubernetes, Marathon (a framework for Mesos), CoreOS’s Fleet, and OpenShift.
+* Volumes
+	* For integration with other storage systems
+	* Solutions: Flocker (a multihost data management and migration tool), and GlusterFS (for distributed storage)
+* Operating System
+	* minimal and easy-to-maintain distributions that are focused entirely on running con‐ tainers (or containers and VMs), especially within a context of powering a data- centre or cluster.
+	* Solutions: Project Atomic, CoreOS, and RancherOS.
+* PaaS
+	* Solutions: Deis, Flynn, Paz
 
 ## Command Reference
 
@@ -91,6 +146,7 @@ __Images__
 * `docker commit <container> <new_image_name>` - to convert a container (stopped/running) into an image
 * `docker build <image_name> <Dockerfile_dir>` - to convert a Dockerfile to an image
 * `docker push <user/image:tag>` - publishes your image to Docker hub. Once published, it can be viewed at https://hub.docker.com/r/<user>/<image>/
+* `docker history <image>` - to view the full set of layers that make up an image
 
 __Containers__
 
@@ -121,30 +177,19 @@ __Volumes__
 * `docker run -d -v /host/dir:/container/dir <image>` - to attach a volume to a container
 * `docker volume rm $(docker volume ls -qf dangling=true)` - to delete the dangling volumes
 
-## Advanced Concepts
+## Docker Compose
 
-### Union File System
-
-{% img right /technology/union-file-system.jpg %}
-
-* Docker uses a union file system (UFS) for containers, which allows multiple filesystems to be mounted in a hierarchy and to appear as a single filesystem. 
-* The filesystem from the image has been mounted as a read-only layer, and any changes to the running container are made to a read- write layer mounted on top of this. Because of this, Docker only has to look at the topmost read-write layer to find the changes made to the running system.
-* Docker images are made up of multiple layers. Each of these layers is a read-only filesystem. A layer is created for each instruction in a Dockerfile and sits on top of the previous layers. When an image is turned into a container, the Docker engine takes the image and adds a read-write filesystem on top (as well as initializing various settings such as the IP address, name, ID, and resource limits).
-
-### Volumes
-
-* Volumes are files or directories that are directly mounted on the host and not part of the normal union file system. This means they can be shared with other containers and all changes will be made directly to the host filesystem. 
-* e.g., `VOLUME /directory`: By default, the directory or file will be mounted on the host inside your Docker installation directory (normally `/var/lib/docker/`).
-* It is possible to specify the host directory to use as the mount via the docker run command (e.g., `docker run -d -v /host/dir:/container/dir <image>`). but not from Dockerfile due to portability and security reasons (the file or directory may not exist in other systems, and containers shouldn’t be able to mount sensitive files like `/etc/passwd` without explicit permission).
-
-
-
-
+* Docker Compose is designed to quickly get Docker development environments up and run‐ ning. 
+* It uses YAML files to store the configuration for sets of containers, saving developers from repetitive and error-prone typing or rolling their own solution. 
+* Compose will free us from the need to maintain our own scripts for orchestration, including starting, linking, updating, and stopping our containers.
+* Bunch of containers is called 'services' in Compose lingo
 
 ## Questions
 
 * When we build docker images, where are the images stored?
-* 
+* Best practices
+	* combine commands in RUN to reduce image size
+	* always use a user in Dockerfile
 
 # References
 

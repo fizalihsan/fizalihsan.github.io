@@ -78,7 +78,10 @@ What happens when `docker run hello-world` is executed.
 
 ### Image Layers
 
-New Docker users are often thrown by the way images are built up. Each instruction in a Dockerfile results in a new image layer, which can also be used to start a con‐ tainer. The new layer is created by starting a container using the image of the previ‐ ous layer, executing the Dockerfile instruction and saving a new image. When a Dockerfile instruction successfully completes, the intermediate container will be deleted, unless the --rm=false argument was given.1 Since each instruction results in an static image—essentially just a filesystem and some metadata—all running pro‐ cesses in the instruction will be stopped. This means that while you can start long- lived processes, such as databases or SSH daemons in a RUN instruction, they will not be running when the next instruction is processed or a container is started. If you want a service or process to start with the container, it must be launched from an ENTRYPOINT or CMD instruction.
+* Each instruction in a Dockerfile results in a new image layer, which can also be used to start a container. 
+* The new layer is created by starting a container using the image of the previ‐ous layer, executing the Dockerfile instruction and saving a new image.
+* When a Dockerfile instruction successfully completes, the intermediate container will be deleted, unless the `--rm=false` argument was given.
+* Since each instruction results in an static image—essentially just a filesystem and some metadata—all running processes in the instruction will be stopped. This means that while you can start long-lived processes, such as databases or SSH daemons in a `RUN` instruction, they will not be running when the next instruction is processed or a container is started. If you want a service or process to start with the container, it must be launched from an `ENTRYPOINT` or `CMD` instruction.
 
 ### Volumes
 

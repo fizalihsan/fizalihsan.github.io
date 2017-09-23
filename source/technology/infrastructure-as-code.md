@@ -37,6 +37,45 @@ footer: true
 		* Erosion
 * _Bare-metal cloud_: Hardware can be automatically provisioned so that it can be used in a fully dynamic fashion. This is sometimes referred to as 'bare-metal cloud'
 
+# Server Provisioning
+
+## Terraform
+
+__Concepts__
+
+* Terraform configuration files are saved as *.tf files
+* Resources representinfrastructure components  e.g. server, virtual machine, container, network port.
+* Providers are components that let you manage a resource on a particular platform e.g. OpenStack, AWS, Google Cloud, DigitalOcean
+* Provisioners provide the ability to execute commands e.g. copy a file into the VM
+
+* Infrastructure as a Code - Tool Categories
+	* Configuration Management Tools 
+		* Chef, Ansible, Puppet, Salt Stack
+		* Designed to install and manage software on existing servers
+		* Pros: coding convention, idempotent code, distribution to several servers
+	* Server Templating Tools
+		* Docker, Packer, Vagrant
+		* Instead of launching a bunch of servers and configuring them by running the same code on each one, the idea behind server templating tools is to create an image of a server that captures a fully self-contained “snapshot” of the operating system, the software, the files, and all other relevant details.
+		* Server templating is a key component of the shift to immutable infrastructure. This idea is inspired by functional programming, where variables are immutable.
+	* Server provisioning tools
+		* Terraform, AWS CloudFormation, OpenStack Heat
+		* Responsible for creating the servers themselves. Can also be used to create databases, caches, load balancers, queues, monitoring, subnet configurations, firewall settings, routing rules, SSL certificates, and almost every other aspect of your infrastructure
+
+__Commands__
+
+* `terraform init``
+* `terraform state show`
+* `terraform list`
+* `terraform plan`
+* `terraform apply -var name="Fizal Terraform Instance"`
+* `terraform apply`
+* `terraform refresh`
+
+
+* __Links__
+	* https://www.terraform.io/docs/providers/openstack/r/compute_keypair_v2.html
+	* https://www.terraform.io/docs/provisioners/chef.html
+
 
 # Configuration Management
 
@@ -147,7 +186,7 @@ end
     │   └── unit
     │       └── recipes
     │           └── default_spec.rb
-    └── t​emplates​​  <--- Embedded Ruby template files
+    └── templates​​  <--- Embedded Ruby template files
         └── default
     └── test
         └── smoke
@@ -170,6 +209,7 @@ end
 * Books
   * Chef Cookbook
   * Learning Chef - O'Reilly
-  * Infrastructure as Code
+  * Infrastructure as Code - O'Reilly
+  * Terraform - Up & Running - O'Reilly
 * Sites
   * https://learn.chef.io

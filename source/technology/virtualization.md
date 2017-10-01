@@ -44,7 +44,7 @@ Hypervisors and VMs are just one approach to virtual workload deployment. Contai
 
 ## Docker flow explained
 
-{% img /technology/docker-flow.png right %}
+{% img right /technology/docker-flow.png right 50 50 %}
 
 What happens when `docker run hello-world` is executed.
 

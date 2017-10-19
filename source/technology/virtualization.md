@@ -42,6 +42,10 @@ Hypervisors and VMs are just one approach to virtual workload deployment. Contai
 
 # Docker
 
+## Benefits
+
+* Ability to restrict resource utilization by using cgroups technology provided by the Linux Kernel
+
 ## Docker flow explained
 
 {% img right /technology/docker-flow.png right 50 50 %}
@@ -59,10 +63,10 @@ What happens when `docker run hello-world` is executed.
 * `Docker File --input---> [Docker Client] --output--> Docker image`
 * __Images__
 	* Images are the basis of the containers - Images are pulled from the registry
-	* ***Base*** images are images that have no parent image, usually images with an OS like ubuntu, busybox or debian.
-	* ***Child*** images are images that build on base images and add additional functionality.
-	* ***Official*** images are images that are officially maintained and supported by the folks at Docker. These are typically one word long. In the list of images above, the python, ubuntu, busybox and hello-world images are base images.
-	* ***User*** images are images created and shared by users like you and me. They build on base images and add additional functionality. Typically, these are formatted as user/image-name.
+	* *Base* images are images that have no parent image, usually images with an OS like ubuntu, busybox or debian.
+	* *Child* images are images that build on base images and add additional functionality.
+	* *Official* images are images that are officially maintained and supported by the folks at Docker. These are typically one word long. In the list of images above, the python, ubuntu, busybox and hello-world images are base images.
+	* *User* images are images created and shared by users like you and me. They build on base images and add additional functionality. Typically, these are formatted as user/image-name.
 * __Containers__ - Created from Docker images and run the actual application.
 * __Docker Daemon__ - The background service running on the host that manages building, running and distributing Docker containers. The daemon is the process that runs in the operation system to which clients talk to.
 * __Docker Client__ - The command line tool that allows the user to interact with the daemon. More generally, there can be other forms of clients too - such as ***Kitematic*** which provide a GUI to the users.
@@ -82,6 +86,10 @@ What happens when `docker run hello-world` is executed.
 * The new layer is created by starting a container using the image of the previ‐ous layer, executing the Dockerfile instruction and saving a new image.
 * When a Dockerfile instruction successfully completes, the intermediate container will be deleted, unless the `--rm=false` argument was given.
 * Since each instruction results in an static image—essentially just a filesystem and some metadata—all running processes in the instruction will be stopped. This means that while you can start long-lived processes, such as databases or SSH daemons in a `RUN` instruction, they will not be running when the next instruction is processed or a container is started. If you want a service or process to start with the container, it must be launched from an `ENTRYPOINT` or `CMD` instruction.
+
+* DO NOT create containers with passwords baked in
+* Files that are removed by subsequent layers in the system are actually still present in the images; they’re just inaccessible
+* Each layer is an independent delta from the layer below it. Every time you change a layer, it changes every layer that comes after it. Changing the preceding layers means that they need to be rebuilt, repushed, and repulled to deploy your image to development.
 
 ### Volumes
 
@@ -194,6 +202,10 @@ __Volumes__
 	* combine commands in RUN to reduce image size
 	* always use a user in Dockerfile
 
+# Kubernetes
+
+
+
 # OpenShift
 
 * _Pod_ 
@@ -291,5 +303,6 @@ The following service(s) have been created in your project: postgresql.
 
 * Books
 	* Mastering Docker
-	* Using Docker
-	* OpenShift for Developers
+	* O'Reilly - Using Docker
+	* O'Reilly - OpenShift for Developers
+	* O'Reilly - Kubernetes - Up & Running

@@ -194,8 +194,102 @@ __Volumes__
 	* combine commands in RUN to reduce image size
 	* always use a user in Dockerfile
 
+# OpenShift
+
+* _Pod_ 
+	* A pod is one or more containers guaranteed to be running on the same host. The containers within a pod share a unique IP address. They can communicate with each other via the “localhost” and also all share any volumes (persistent storage).
+* _Replication Controller_
+	* When scaled up, an application will have more than one copy of itself, and each copy will have its own local state. Each copy corresponds to a different instance of a pod with the pods being managed by the replication controller.  
+* _Service_
+	* As each pod has a unique IP, we need an easy way to address the set of all pods as a whole. This is where a service comes into play. 
+	* A Service groups pods and provides a common DNS name and an optional, load-balanced IP address to access them
+	* The service gets its own IP and a DNS name. When making a connection to a service, OpenShift will automatically route the connection to one of the pods associated with that service.
+	* Although a service has a DNS name, it is still only accessible within the OpenShift cluster and is not accessible externally. 
+	* To make a service externally accessible, a route needs to be created. 
+	* Creating a route automatically sets up __haproxy__ or a hardware-based router, with an externally addressable DNS name, exposing the service and load-balancing inbound traffic across the pods.
+* _Build_
+* _Deployment_
+	* A deployment is an update to your application, triggered by a changed image or configuration
+	* There are 2 deployment strategies: rolling and recreate
+	* _Rolling Strategy_
+		* This is the default deployment strategy in OpenShift
+		* A rolling deployment slowly replaces instances of the previous version of an application with instances of the new version of the application. 
+		* A rolling deployment can wait for new pods to become ready via a readiness check before scaling down the old instances. Rolling deployment can be aborted if a problem occurs.
+		* It runs old and new instances of the application in parallel and balances traffic across them as new instances are deployed and old instances shut down. It enables an update with no down time.
+		* _When to use?_: 
+			* not suitable strategy where multiple instances of the same application cannot be run at the same time
+			* where instances of both old and new code cannot be run at the same time.
+	* _Recreate Strategy_
+		* shuts down all running instances of the old app, before starting up the new instances
+		* _When to use?_: 
+			* where more than one instance of the app cannot run at the same time.
+			* where old and new code of the app cannot be run at the same time. e.g., apps running a traditional relational db
+	* _Custom strategy_
+		* Complicated custom strategies like Blue-Green or A/B deployment strategies can be implemented by using multiple deployment configurations and reconfiguring what pods are associated with the exposed service for an app using labels
+* _Scaling_
+	* The number of pods can be scaled up or down via the web console
+	* Reducing the number replicas to zero is same as taking the app offline. Users trying to connect will get http 503 error.
+	* Before scaling up, make sure the app is cloud-native (in other words, 12-factor methodology compliant) app and is safe to scaling
+	* Database cannot scaled up in a traditional ways since only the primary instance should have the ability to update data. Scaling can still be performed, but usually on read-only instances of the DB
+	* Automatic scaling
+		* can be configured by defining the upper and lower thresholds of CPU usage by pod. 
+		* If the upper threshold is consistently exceeded by the pods, a new instance of the app is started. 
+		* If the CPU drops below lower threshold, then the replicas are scaled down.
+* _Health check_
+	* Types
+		* _Readiness probe_: used to determine if the new instance of the app is running properly before reconfiguring the router to send traffic to it
+		* _Liveness probe_: runs periodically once traffic has been switched to an instance to ensure it is still behaving correctly. If the liveness probe fails, then the instance of the app is automatically shutdown by OpenShift and a new one is created.
+	* Both probes can be implemented in 3 different ways
+		* _HTTP check_: a container is considered healthy if a HTTP request against a defined url returns status 200 or 399
+		* _Container check_: a container is considered healthy if a defined command returns with a zero exit status
+		* _TCP socket check_: a container is considered healthy if a connection can be established to the exposed port of the app
+
+
+## Commands
+
+* `oc types` - quick summary of OpenShift concepts and definitions
+* `oc whoami`
+* `oc cluster up` - to start the OpenShift cluster
+* `oc new-app <base_image> <sourcecode_git_url> --name='<app-name>'` - to create a new app from source code
+* `oc expose service <routename>` - to expose a route
+* `oc get routes` - to view all the routes 
+* `oc status`
+* `oc start-build <app>`
+* `oc get pods` - get all running instances
+	* `oc get pods --selector key=value` - selectively query pods with label
+* `oc describe pod/<instance_name>` - details about an instance
+* `oc get builds` - list all builds
+* __Logs__
+	* `oc logs build/<buildname>` - show build logs
+	* `oc logs <podname>` - show application logs
+		* `oc logs --follow <podname>` - tail the logs while the app is running
+		* `oc logs --previous <podname>` - to view the logs from last attempt. This is useful when app fails to start after successive failures.
+* __Environment settings__
+	* `oc set env <deploymentconfig>/<container> --list` - list the env variables exported to a container
+	* `oc set env <deploymentconfig>/<container> key1=val1 key2=val2` - note: each configuration change triggers a redeployment of the app.
+	* `oc set env <buildconfig>/<container> key1=val1` - setting the build config env variables. Note: any env variable set for build will also be used for containers
+	* `oc env dc <app_name> -e key1=val1 -e key2=val2` - adding environment variables to deployment config of an app
+	* `oc explain` - gets the list of what can be set in a configuration
+* __Debugging__
+	* `oc rsh <app>` - to remote shell into the running pod
+	* `oc exec <app> <command>` - run a command and exit immediately with results
+	* `oc debug dc/<app>` - when app starts to fail, run this cmd. This will start up an instance of the image for the app, but instead of running the normal app command, it will run an interactive shell instead
+* __Deleting__
+	* `oc delete project <name>`
+	* `oc delete all --selector key=val` - deletes bc, dc, route, service, pod associated with the label
+The following service(s) have been created in your project: postgresql.
+
+       Username: insult
+       Password: insult
+  Database Name: insults
+ Connection URL: postgresql://postgresql:5432/
+ 
+ oc env dc insults -e POSTGRESQL_USER=insult  -e PGPASSWORD=insult POSTGRESQL_DATABASE=insults
+
+
 # References
 
 * Books
 	* Mastering Docker
 	* Using Docker
+	* OpenShift for Developers

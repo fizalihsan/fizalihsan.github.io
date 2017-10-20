@@ -205,6 +205,177 @@ __Volumes__
 # Kubernetes
 
 
+* For local single node cluster, use minikube
+* Kubernetes client
+* Kubernetes API server
+
+
+* Deployments
+* Services
+
+## Benefits
+
+* co-location
+* resource isolation
+* self-healing
+* declarative configuration (desired state is defined)
+* pods from same application are distributed onto different machines for reliability
+* graceful termination of pods for reliability (active requests are completed up to 30 secs)
+
+
+## Pods
+
+* Pods, not containers, are the smallest deployable artifact in K8S cluster
+* Pods are described in a Pod manifest file - in yaml or json format. They are stored in etcd (persistent storage)
+* All containers in a pod always land on the same machine
+* Each container within a Pod runs in its own cgroup, but they share a number of Linux namespaces.
+* Applications running in the same Pod 
+	* share the same IP address and port space (network namespace), 
+	* have the same hostname (UTS namespace), 
+	* and can communicate using native interprocess communication channels over System V IPC or POSIX message queues (IPC namespace). 
+	* Containers in different Pods running on the same node might as well be on different servers.
+* Pods don’t move and must be explicitly destroyed and rescheduled.
+
+* ___When to create a pod?___
+	* Will these containers work correctly if they land on different machines? If yes, then don't group them in a prod. Else, put them together in a pod. e.g., if all the containers want to share the file system.
+* __How a pod is created?__
+	* User creates a pod from command-line via kubectl
+	* The Kubernetes API server accepts and processes Pod manifests before storing them in persistent storage (etcd). 
+	* The scheduler uses the Kubernetes API to find Pods that haven’t been scheduled to a node. 
+	* The scheduler then places the Pods onto nodes depending on the resources and other constraints expressed in the Pod manifests. 
+	* Multiple Pods can be placed on the same machine as long as there are sufficient resources.
+	* `kubelet` daemon monitors the pod
+
+
+__To create a pod directly__
+
+```
+# to create a pod
+kubectl run kuard --image=gcr.io/kuar-demo/kuard-amd64:1
+
+kubectl get pods
+
+kubectl describe pods kuard
+
+# to access the web server in a container
+# a secure tunnel is created from your local machine through the Kubernetes master to the instance of the pod running on one of the worker nodes
+kubectl port-forward kuard 8080:8080
+
+# to delete a pod
+kubectl delete deployments/kuard
+```
+
+__To create a pod via manifest file__
+
+```
+# to start a pod
+kubectl apply -f manifest.yaml
+
+# to delete a pod by name
+kubectl delete pods/pod-name
+
+# to delete a pod by file
+kubectl delete -f manifest.yaml
+
+```
+
+
+__Sample Pod Manifest YAML file__
+
+```
+apiVersion: v1
+kind: Pod
+metadata:  
+  name: kuard
+  spec:  
+    containers:    
+      - image: gcr.io/kuar-demo/kuard-amd64:1      
+        name: kuard      
+        ports:        
+          - containerPort: 8080          
+            name: http          
+            protocol: TCP
+```
+
+
+
+* Namespaces
+	* Kubernetes uses namespaces to organize objects in the cluster. 
+	* By default, the kubectl command-line tool interacts with the `default` namespace. It can be overridden by `kubectl --namespace=mystuff`.
+* Context
+	* To change the default namespace permanently, you can use context.
+* API objects
+
+## Cluster components
+
+* All components run in the `kube-system` namespace
+
+* Types
+	* __kube-proxy__
+		* The Kubernetes proxy is responsible for routing network traffic to load-balanced services in the Kubernetes cluster. 
+		* must be present on every node in the cluster. 
+		* Kubernetes has an API object named `DaemonSet`, that is used in many clusters to accomplish this. 
+	* __kube-dns__
+		* Kubernetes also runs a DNS server, which provides naming and discovery for the services that are defined in the cluster. 
+		* This DNS server also runs as a replicated service on the cluster. Depending on the size of your cluster, you may see one or more DNS servers running in your cluster. 
+		* The DNS service is run as a Kubernetes deployment, which manages these replicas.
+		* There is a also a Kubernetes service that performs load-balancing for the DNS server.
+		* Check `/etc/resolv.conf` file in a container
+	* __kube-dashboard__
+		* The UI is run as a single replica, but it is still managed by a Kubernetes deployment for reliability and upgrades.
+
+
+	* The __controller-manager__ is responsible for running various controllers that regulate behavior in the cluster: for example, ensuring that all of the replicas of a service are available and healthy. 
+	* The __scheduler__ is responsible for placing different pods onto different nodes in the cluster. 
+	* The __etcd server__ is the storage for the cluster where all of the API objects are stored.
+	* Pods running in the cluster
+		* _kube-dns_: supplies DNS services for the cluster
+
+* __Node Types__
+	* Master node 
+		* has containers like the API server, scheduler, etc., which manage the cluster
+		* Kubernetes won’t generally schedule work onto master nodes to ensure that user workloads don’t harm the overall operation of the cluster.
+	* Worker nodes 
+		* where the application containers will run. 
+	
+
+## Tools
+
+* kubectl
+	* command-line utility to interact with the Kubernetes API
+	* Everything in Kubernetes is represented by a RESTful resource (also known as _Kubernetes objects_). The kubectl command makes HTTP requests to access the objects. e.g., https://your-k8s.com/api/v1/namespaces/default/pods/my-pod 
+	* `kubectl get <resource-name> <object-name>`
+	* `kubectl describe <resource-name> <object-name>`
+	* configuration file is located at `$HOME/.kube/config` - stores the information on how to find and authenticate to a cluster
+
+## Command Reference
+
+* `kubectl version`
+* __Get__
+	* `kubectl get componentstatuses` - view a simple diagnostic of the cluster
+	* `kubectl get nodes` - list out all the nodes in the cluster
+	* `kubectl get daemonSets  --namespace=kube-system kube-proxy` - to view proxy
+	* `kubectl get deployments --namespace=kube-system kube-dns` - to view the dns servers
+	* `kubectl get services --namespace=kube-system kube-dns` - to view the service that performs load-balancing for the DNS servers
+	* `kubectl get deployments --namespace=kube-system kubernetes-dashboard` - to view the UI server
+	* `kubectl get services --namespace=kube-system kubernetes-dashboard` - to view the service that performs load-balancing for the dashboard
+* __Config__
+	* `kubectl config set-context my-context --namespace=mystuff` - To create a new namespace
+	* `kubectl config use-context my-context` - to set the default namespace in context
+* __Describe__
+	* `kubectl describe nodes <node_name>` - to get more information about a specific node
+* __Object management__
+	* `kubectl apply -f object.yaml` - to create/update an object
+	* `kubectl delete -f object.yaml` - to delete an object
+	* `kubectl edit <resource-name> <object-name>` - to edit object state interactively
+	* `kubectl label pods <pod-name> <key=value>` - to add a label to a pod
+	* `kubectl label pods <pod-name> -<key>` - to remove a label from a pod
+* __Debugging__
+	* `kubectl logs <pod-name>` - to view the logs from all the containers in a pod
+	* `kubectl logs <pod-name> -c <container>` - to view the logs from a particular container
+	* `kubectl exec -it <pod-name> --bash` - to execute a command in a running container
+	* `kubectl cp <remote-file> <local-file>` - to copy a file to and from a container
+
 
 # OpenShift
 

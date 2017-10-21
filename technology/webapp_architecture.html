@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>XML - KnowledgeShop</title>
+  <title>Web Application Architecture - KnowledgeShop</title>
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="XML DTD &amp; XSD XML Parsing Data Binding What is XML Data Binding? JAXB XMLBeans DTD &amp; XSD Commonly used DTDs - FpML, DocBook, HRML, RDF In &hellip;">
+<meta name="description" content="Web Application Architecture Load Balancers Overview Why load balancers? Affinity vs. Persistence Types Hardware load balancer architectures 1. NAT &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://fizalihsan.github.io/technology/xml.html">
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/webapp_architecture.html">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <!-- Below custom CSS is for table border styling -->
@@ -103,116 +103,164 @@ messageStyle: "none",
 <article role="article">
   
   <header>
-    <h1 class="entry-title">XML</h1>
+    <h1 class="entry-title">Web Application Architecture</h1>
     
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#dtd--xsd">DTD &amp; XSD</a></li>
-  <li><a href="#xml-parsing">XML Parsing</a></li>
-  <li><a href="#data-binding">Data Binding</a>    <ul>
-      <li><a href="#what-is-xml-data-binding">What is XML Data Binding?</a></li>
-      <li><a href="#jaxb">JAXB</a></li>
-      <li><a href="#xmlbeans">XMLBeans</a></li>
-    </ul>
-  </li>
-</ul>
-
-<h2 id="dtd--xsd">DTD &amp; XSD</h2>
-<ul>
-  <li>Commonly used DTDs - FpML, DocBook, HRML, RDF</li>
-  <li>In XML DTD, how do you create an external entity reference in an attribute value? XML DTD dont support external entity reference in attribute values</li>
-  <li>How would you build a search engine for large volumes of XML data?</li>
-  <li>Diff b/w DTD &amp; XML schema?
-    <ul>
-      <li>DTD doesn’t have external entity reference</li>
-      <li>XSD supports data types</li>
-      <li>XSD supports namespaces - solves the problem of tag name conflicts</li>
-    </ul>
-  </li>
-  <li>Namespaces-</li>
-  <li>XPath, XSLT, XLink, XPointer, XQuery</li>
-</ul>
-
-<h2 id="xml-parsing">XML Parsing</h2>
-<ul>
-  <li>Steps to parse an XML with an example - DOM &amp; SAX - Event-based parser</li>
-  <li>SAX (Sequential Access/Push)
-    <ul>
-      <li>Disadvantage—user must keep track of previous events</li>
-    </ul>
-  </li>
-  <li>DOM (Random Access/Pull)
-    <ul>
-      <li>Advantage—simple to find particular elements</li>
-    </ul>
-  </li>
-  <li>XMLPullParser (Sequential Access/Pull)
-    <ul>
-      <li>Advantage—flow may be familiar to more programmers</li>
-      <li>Disadvantage—may have more code than the other two alternatives</li>
-    </ul>
-  </li>
-  <li>Diff b/w DOM &amp; SAX?</li>
-  <li>Types
-    <ul>
-      <li>Validating &amp; Non-validating parsers</li>
-      <li>Push parsers
-        <ul>
-          <li>Advantage—can be simpler code, once paradigm is understood</li>
+  <li><a href="#load-balancers">Load Balancers</a>    <ul>
+      <li><a href="#overview">Overview</a></li>
+      <li><a href="#why-load-balancers">Why load balancers?</a></li>
+      <li><a href="#affinity-vs-persistence">Affinity vs. Persistence</a></li>
+      <li><a href="#types">Types</a></li>
+      <li><a href="#hardware-load-balancer-architectures">Hardware load balancer architectures</a>        <ul>
+          <li><a href="#nat-or-routed-mode">1. NAT or routed mode</a></li>
+          <li><a href="#direct-server-return-or-gateway-mode">2. Direct server return or Gateway mode</a></li>
+          <li><a href="#ip-tunnel-mode">3. IP Tunnel mode</a></li>
         </ul>
       </li>
-      <li>Pull parsers
-        <ul>
-          <li>Advantage—appears as a common control style (e.g., loop) in multiple languages</li>
+      <li><a href="#software-load-balancer-architectures">Software load balancer architectures</a>        <ul>
+          <li><a href="#proxy-mode">1. Proxy mode</a></li>
+          <li><a href="#transport-proxy-mode">2. Transport proxy mode</a></li>
         </ul>
       </li>
     </ul>
   </li>
+  <li><a href="#references">References</a></li>
 </ul>
 
-<table>
-  <thead>
-    <tr>
-      <th> </th>
-      <th>Sequential</th>
-      <th>Random</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Push</td>
-      <td>SAX</td>
-      <td>None</td>
-    </tr>
-    <tr>
-      <td>Pull</td>
-      <td>XMLPullParser</td>
-      <td>DOM</td>
-    </tr>
-  </tbody>
-</table>
+<h1 id="load-balancers">Load Balancers</h1>
 
-<h2 id="data-binding">Data Binding</h2>
+<p><img class="right" src="/technology/reverse_proxy.png" /></p>
 
-<h3 id="what-is-xml-data-binding">What is XML Data Binding?</h3>
+<h2 id="overview">Overview</h2>
+
+<p>From a physical point of view, it can be plugged anywhere in the architecture:</p>
+
 <ul>
-  <li>http://www-128.ibm.com/developerworks/library/x-databdopt/</li>
-  <li>What other XML binding tools are available? - Sun’s JAXB, Castor</li>
-  <li>Advantages
+  <li>in a DMZ</li>
+  <li>in the server LAN</li>
+  <li>as front of the servers, acting as the default gateway</li>
+  <li>far away in an other separated datacenter</li>
+</ul>
+
+<h2 id="why-load-balancers">Why load balancers?</h2>
+
+<ul>
+  <li>HTTP is not a connected protocol and is stateless</li>
+  <li>When there are multiple app servers, the user may potentially hit a different server for every request and a different session on every server.</li>
+</ul>
+
+<p>Possible solutions are</p>
+
+<ol>
+  <li>Use a <strong><em>clustered web application server</em></strong> where the session are available for all the servers
     <ul>
-      <li>DOM generates an in-memory tree for the entire document. In cases where the document is very large, DOM becomes quite memory intensive and performance degrades substantially. XMLBeans scores well on performance by doing incremental unmarshalling and providing xget methods to access built-in schema data types.</li>
-      <li>SAX is less memory intensive compared to DOM. However SAX requires that developers write callback methods for event handlers. This is not required by XMLBeans.</li>
-      <li>JAXB and Castor are XML/Java technology binding technologies like XMLBeans, but none of these provide 100 percent schema support. One of the biggest advantages of XMLBeans is its nearly 100 percent support for XML Schema. Also, XMLBeans allow access to the full XML Infoset. This is useful because the order of the elements or comments might be critical for an application.</li>
-      <li>XMLBeans also provide for on-time validation of the XML instance being parsed.</li>
-      <li>XMLBeans include innovative features such as XML cursors and support for XQuery expressions.</li>
+      <li>Pros</li>
+      <li>Cons
+        <ul>
+          <li>Only certain products like Weblogic, Tomcat, JBoss, allow to create a cluster</li>
+          <li>very complex to set up and maintain</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong><em>Sharing user’s session information</em></strong> in a database or a file system on application servers
+    <ul>
+      <li>Pros
+        <ul>
+          <li>simple to share session via DB or shared file system</li>
+        </ul>
+      </li>
+      <li>Cons</li>
+    </ul>
+  </li>
+  <li>Use IP level information to maintain <strong><em>affinity</em></strong> between a user and a server
+    <ul>
+      <li>An easy way to maintain affinity between a user and a server is to use user’s IP address: this is called <strong><em>Source IP affinity</em></strong>.</li>
+      <li>Pros</li>
+      <li>Cons
+        <ul>
+          <li>works only if a user use a single IP address or never change his IP address during the session.</li>
+          <li>wouldn’t work for multiple users who are behind a single proxy</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Use application layer information to maintain <strong><em>persistance</em></strong> between a user and a server
+    <ul>
+      <li>Store the user information details in a <em>Session Cookie</em>, either set by the load-balancer itself or using one set up by the application server.</li>
+      <li>Pros</li>
+      <li>Cons</li>
+    </ul>
+  </li>
+</ol>
+
+<h2 id="affinity-vs-persistence">Affinity vs. Persistence</h2>
+
+<ul>
+  <li><strong>Affinity</strong>: this is when we use an information from a layer below the application layer to maintain a client request to a single server</li>
+  <li>
+    <p><strong>Persistence</strong>: this is when we use Application layer information to stick a client to a single server
+sticky session: a <strong><em>sticky session</em></strong> is a session maintained by persistence</p>
+  </li>
+  <li>The main advantage of the persistence over affinity is that it’s much more accurate, but sometimes, persistence is not doable, so we must rely on affinity.</li>
+  <li>Using persistence, we mean that we’re 100% sure that a user will get redirected to a single server.</li>
+  <li>Using affinity, we mean that the user may be redirected to the same server</li>
+</ul>
+
+<h2 id="types">Types</h2>
+
+<p>2 types of load balancers:</p>
+
+<ul>
+  <li>Hardware load balancer (Level 4 load-balancers)
+    <ul>
+      <li>Layer 4 (transport level). e.g.,: TCP and UDP protocols are transport level.</li>
+      <li>A layer 4 load-balancer takes routing decision based on IPs and TCP or UDP ports.</li>
+      <li>It has a packet view of the traffic exchanged between the client and a server which means it takes decisions packet by packet.</li>
+      <li>The layer 4 connection is established between the client and the server.</li>
+      <li>It is really fast but can’t perform any action on the protocol above layer 4.</li>
+      <li>The fastest layer4 load-balancers uses an ASIC to take routing decision.</li>
+      <li>Example: F5 BIG-IP, Citrix Netscaler, etc.</li>
+      <li>Expensive</li>
+    </ul>
+  </li>
+  <li>Software load balancer (Level 7 load-balancers)
+    <ul>
+      <li>Layer 7 (application level) e.g.,: HTTP, FTP, SMTP, DNS protocols are application level.</li>
+      <li>A layer 7 load-balancer takes routing decision based on IPs, TCP or UDP ports or any information it can get from the application protocol (mainly HTTP).</li>
+      <li>The layer 7 load-balancer acts as a proxy, which means it maintains two TCP connections: one with the client and one with the server.</li>
+      <li>The packets are re-assembled then the load-balancer can take a routing decision based on information it can find in the application requests or responses.</li>
+      <li>Even if this kind of processing seems slow, it is not that much: less than the millisecond.</li>
+      <li>Cheaper</li>
     </ul>
   </li>
 </ul>
 
-<h3 id="jaxb">JAXB</h3>
+<h2 id="hardware-load-balancer-architectures">Hardware load balancer architectures</h2>
 
-<h3 id="xmlbeans">XMLBeans</h3>
+<h3 id="nat-or-routed-mode">1. NAT or routed mode</h3>
+
+<h3 id="direct-server-return-or-gateway-mode">2. Direct server return or Gateway mode</h3>
+
+<h3 id="ip-tunnel-mode">3. IP Tunnel mode</h3>
+
+<h2 id="software-load-balancer-architectures">Software load balancer architectures</h2>
+
+<h3 id="proxy-mode">1. Proxy mode</h3>
+
+<h3 id="transport-proxy-mode">2. Transport proxy mode</h3>
+
+<h1 id="references">References</h1>
+
+<ul>
+  <li>Sites
+    <ul>
+      <li>haproxy.com/blog</li>
+    </ul>
+  </li>
+</ul>
 
   
     <footer>
@@ -220,7 +268,7 @@ messageStyle: "none",
       
         <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/xml.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/xml.html" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/webapp_architecture.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/webapp_architecture.html" >Tweet</a>
   
   
   

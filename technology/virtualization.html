@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Virtualization Overview Hypervisor VMs Containers Docker Docker flow explained Concepts Union File System Image Layers Volumes Plugin Architecture &hellip;">
+<meta name="description" content="Virtualization Overview Hypervisor VMs Containers Docker Benefits Docker flow explained Concepts Union File System Image Layers Volumes Plugin &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -115,6 +115,7 @@ messageStyle: "none",
     </ul>
   </li>
   <li><a href="#docker">Docker</a>    <ul>
+      <li><a href="#benefits">Benefits</a></li>
       <li><a href="#docker-flow-explained">Docker flow explained</a></li>
       <li><a href="#concepts">Concepts</a>        <ul>
           <li><a href="#union-file-system">Union File System</a></li>
@@ -126,6 +127,25 @@ messageStyle: "none",
       <li><a href="#command-reference">Command Reference</a></li>
       <li><a href="#docker-compose">Docker Compose</a></li>
       <li><a href="#questions">Questions</a></li>
+    </ul>
+  </li>
+  <li><a href="#kubernetes">Kubernetes</a>    <ul>
+      <li><a href="#benefits-1">Benefits</a></li>
+      <li><a href="#concepts-1">Concepts</a></li>
+      <li><a href="#pods">Pods</a>        <ul>
+          <li><a href="#health-check">Health Check</a></li>
+          <li><a href="#resource-management">Resource Management</a></li>
+          <li><a href="#persistent-storage">Persistent Storage</a></li>
+        </ul>
+      </li>
+      <li><a href="#labels--annotations">Labels &amp; Annotations</a></li>
+      <li><a href="#cluster-components">Cluster components</a></li>
+      <li><a href="#services">Services</a></li>
+      <li><a href="#command-reference-1">Command Reference</a></li>
+    </ul>
+  </li>
+  <li><a href="#openshift">OpenShift</a>    <ul>
+      <li><a href="#commands">Commands</a></li>
     </ul>
   </li>
   <li><a href="#references">References</a></li>
@@ -168,9 +188,15 @@ messageStyle: "none",
 
 <h1 id="docker">Docker</h1>
 
+<h2 id="benefits">Benefits</h2>
+
+<ul>
+  <li>Ability to restrict resource utilization by using cgroups technology provided by the Linux Kernel</li>
+</ul>
+
 <h2 id="docker-flow-explained">Docker flow explained</h2>
 
-<p><img src="/technology/docker-flow.png" title="right" /></p>
+<p><img class="right" src="/technology/docker-flow.png" title="right 50 50" /></p>
 
 <p>What happens when <code>docker run hello-world</code> is executed.</p>
 
@@ -189,10 +215,10 @@ messageStyle: "none",
   <li><strong>Images</strong>
     <ul>
       <li>Images are the basis of the containers - Images are pulled from the registry</li>
-      <li><strong><em>Base</em></strong> images are images that have no parent image, usually images with an OS like ubuntu, busybox or debian.</li>
-      <li><strong><em>Child</em></strong> images are images that build on base images and add additional functionality.</li>
-      <li><strong><em>Official</em></strong> images are images that are officially maintained and supported by the folks at Docker. These are typically one word long. In the list of images above, the python, ubuntu, busybox and hello-world images are base images.</li>
-      <li><strong><em>User</em></strong> images are images created and shared by users like you and me. They build on base images and add additional functionality. Typically, these are formatted as user/image-name.</li>
+      <li><em>Base</em> images are images that have no parent image, usually images with an OS like ubuntu, busybox or debian.</li>
+      <li><em>Child</em> images are images that build on base images and add additional functionality.</li>
+      <li><em>Official</em> images are images that are officially maintained and supported by the folks at Docker. These are typically one word long. In the list of images above, the python, ubuntu, busybox and hello-world images are base images.</li>
+      <li><em>User</em> images are images created and shared by users like you and me. They build on base images and add additional functionality. Typically, these are formatted as user/image-name.</li>
     </ul>
   </li>
   <li><strong>Containers</strong> - Created from Docker images and run the actual application.</li>
@@ -217,7 +243,12 @@ messageStyle: "none",
   <li>Each instruction in a Dockerfile results in a new image layer, which can also be used to start a container. </li>
   <li>The new layer is created by starting a container using the image of the previ‐ous layer, executing the Dockerfile instruction and saving a new image.</li>
   <li>When a Dockerfile instruction successfully completes, the intermediate container will be deleted, unless the <code>--rm=false</code> argument was given.</li>
-  <li>Since each instruction results in an static image—essentially just a filesystem and some metadata—all running processes in the instruction will be stopped. This means that while you can start long-lived processes, such as databases or SSH daemons in a <code>RUN</code> instruction, they will not be running when the next instruction is processed or a container is started. If you want a service or process to start with the container, it must be launched from an <code>ENTRYPOINT</code> or <code>CMD</code> instruction.</li>
+  <li>
+    <p>Since each instruction results in an static image—essentially just a filesystem and some metadata—all running processes in the instruction will be stopped. This means that while you can start long-lived processes, such as databases or SSH daemons in a <code>RUN</code> instruction, they will not be running when the next instruction is processed or a container is started. If you want a service or process to start with the container, it must be launched from an <code>ENTRYPOINT</code> or <code>CMD</code> instruction.</p>
+  </li>
+  <li>DO NOT create containers with passwords baked in</li>
+  <li>Files that are removed by subsequent layers in the system are actually still present in the images; they’re just inaccessible</li>
+  <li>Each layer is an independent delta from the layer below it. Every time you change a layer, it changes every layer that comes after it. Changing the preceding layers means that they need to be rebuilt, repushed, and repulled to deploy your image to development.</li>
 </ul>
 
 <h3 id="volumes">Volumes</h3>
@@ -403,16 +434,697 @@ messageStyle: "none",
   </li>
 </ul>
 
+<h1 id="kubernetes">Kubernetes</h1>
+
+<ul>
+  <li>For local single node cluster, use minikube</li>
+  <li>Kubernetes client</li>
+  <li>
+    <p>Kubernetes API server</p>
+  </li>
+  <li>Deployments</li>
+  <li>Services</li>
+</ul>
+
+<h2 id="benefits-1">Benefits</h2>
+
+<ul>
+  <li>co-location</li>
+  <li>resource isolation</li>
+  <li>self-healing</li>
+  <li>declarative configuration (desired state is defined)</li>
+  <li>pods from same application are distributed onto different machines for reliability</li>
+  <li>graceful termination of pods for reliability (active requests are completed up to 30 secs)</li>
+  <li>effective utilization of the compute nodes in the cluster</li>
+  <li>user can define lower and upper limit of resources needed for his app</li>
+</ul>
+
+<h2 id="concepts-1">Concepts</h2>
+
+<ul>
+  <li>Namespaces
+    <ul>
+      <li>Kubernetes uses namespaces to organize objects in the cluster. </li>
+      <li>By default, the kubectl command-line tool interacts with the <code>default</code> namespace. It can be overridden by <code>kubectl --namespace=mystuff</code>.</li>
+    </ul>
+  </li>
+  <li>Context
+    <ul>
+      <li>To change the default namespace permanently, you can use context.</li>
+    </ul>
+  </li>
+  <li>Deployment is a way to create an array of Pods</li>
+  <li>kubectl
+    <ul>
+      <li>command-line utility to interact with the Kubernetes API</li>
+      <li>Everything in Kubernetes is represented by a RESTful resource (also known as <em>Kubernetes objects</em>). The kubectl command makes HTTP requests to access the objects. e.g., https://your-k8s.com/api/v1/namespaces/default/pods/my-pod </li>
+      <li><code>kubectl get &lt;resource-name&gt; &lt;object-name&gt;</code></li>
+      <li><code>kubectl describe &lt;resource-name&gt; &lt;object-name&gt;</code></li>
+      <li>configuration file is located at <code>$HOME/.kube/config</code> - stores the information on how to find and authenticate to a cluster</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="pods">Pods</h2>
+
+<ul>
+  <li>Pods represent the atomic unit of work in a Kubernetes cluster. </li>
+  <li>Pods arecomprised of one or more containers working together symbiotically. </li>
+  <li>To create a Pod, you write a Pod manifest and submit it to the Kubernetes API server by using the command-line tool or (less frequently) by making HTTP and JSON calls to the server directly.</li>
+  <li>Pods are described in a Pod manifest file - in yaml or json format. They are stored in etcd (persistent storage)</li>
+  <li>All containers in a pod always land on the same machine</li>
+  <li>Each container within a Pod runs in its own cgroup, but they share a number of Linux namespaces.</li>
+  <li>Applications running in the same Pod 
+    <ul>
+      <li>share the same IP address and port space (network namespace), </li>
+      <li>have the same hostname (UTS namespace), </li>
+      <li>and can communicate using native interprocess communication channels over System V IPC or POSIX message queues (IPC namespace). </li>
+      <li>Containers in different Pods running on the same node might as well be on different servers.</li>
+    </ul>
+  </li>
+  <li>Pods don’t move and must be explicitly destroyed and rescheduled.</li>
+  <li><strong><em>When to create a pod?</em></strong>
+    <ul>
+      <li>Will these containers work correctly if they land on different machines? If yes, then don’t group them in a prod. Else, put them together in a pod. e.g., if all the containers want to share the file system.</li>
+    </ul>
+  </li>
+  <li><strong>How a pod is created?</strong>
+    <ul>
+      <li>User creates a pod from command-line via kubectl or submitting a manifest file</li>
+      <li>The Kubernetes API server accepts and processes Pod manifests before storing them in persistent storage (etcd). </li>
+      <li>The scheduler uses the Kubernetes API to find Pods that haven’t been scheduled to a node. </li>
+      <li>The scheduler then places the Pods onto nodes depending on the resources and other constraints expressed in the Pod manifests. </li>
+      <li>Multiple Pods can be placed on the same machine as long as there are sufficient resources.</li>
+      <li><code>kubelet</code> daemon is responsible for creating and performing health checks on the pod</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>To create a pod directly</strong></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"># to create a pod
+</span><span class="line">kubectl run kuard --image=gcr.io/kuar-demo/kuard-amd64:1
+</span><span class="line">
+</span><span class="line">kubectl get pods
+</span><span class="line">
+</span><span class="line">kubectl describe pods kuard
+</span><span class="line">
+</span><span class="line"># to access the web server in a container
+</span><span class="line"># a secure tunnel is created from your local machine through the Kubernetes master to the instance of the pod running on one of the worker nodes
+</span><span class="line">kubectl port-forward kuard 8080:8080
+</span><span class="line">
+</span><span class="line"># to delete a pod
+</span><span class="line">kubectl delete deployments/kuard</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>To create a pod via manifest file</strong></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"># to start a pod
+</span><span class="line">kubectl apply -f manifest.yaml
+</span><span class="line">
+</span><span class="line"># to delete a pod by name
+</span><span class="line">kubectl delete pods/pod-name
+</span><span class="line">
+</span><span class="line"># to delete a pod by file
+</span><span class="line">kubectl delete -f manifest.yaml
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Sample Pod Manifest YAML file</strong></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">apiVersion: v1
+</span><span class="line">kind: Pod
+</span><span class="line">metadata:  
+</span><span class="line">  name: kuard
+</span><span class="line">  spec:  
+</span><span class="line">    containers:    
+</span><span class="line">      - image: gcr.io/kuar-demo/kuard-amd64:1      
+</span><span class="line">        name: kuard      
+</span><span class="line">        ports:        
+</span><span class="line">          - containerPort: 8080          
+</span><span class="line">            name: http          
+</span><span class="line">            protocol: TCP</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="health-check">Health Check</h3>
+
+<ul>
+  <li><strong>Process health check</strong>
+    <ul>
+      <li>Kubernetes <em>process health check</em> ensures that your container is always running. If it isn’t K8S restarts it.</li>
+      <li>A simple process check alone is insufficient. If the process is deadlocked, it won’t server any requests. To address this, liveness and readiness probes are available.</li>
+    </ul>
+  </li>
+  <li><strong>HTTP health check</strong>
+    <ul>
+      <li><strong>Liveness probe</strong>
+        <ul>
+          <li>Liveness determines if an application is running properly. </li>
+          <li>Containers that fail liveness checks are restarted.  </li>
+        </ul>
+      </li>
+      <li><strong>Readiness probe</strong>
+        <ul>
+          <li>Readiness describes when a container is ready to serve user requests. </li>
+          <li>Containers that fail readiness checks are removed from service load balancers. </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>TCP health check</strong>
+    <ul>
+      <li>For non-HTTP based APIs and databases</li>
+    </ul>
+  </li>
+  <li><strong>Exec probes</strong>
+    <ul>
+      <li>execute a script or program in the context of the container. If this script returns a zero exit code, the probe succeeds; otherwise, it fails. </li>
+      <li><code>exec</code> scripts are often useful for custom application validation logic that doesn’t fit neatly into an HTTP call.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Pod manifest sample</strong></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">apiVersion: v1
+</span><span class="line">kind: Pod
+</span><span class="line">metadata:  
+</span><span class="line">  name: kuard
+</span><span class="line">spec:  
+</span><span class="line">  containers:    
+</span><span class="line">    - image: gcr.io/kuar-demo/kuard-amd64:1      
+</span><span class="line">      name: kuard      
+</span><span class="line">      livenessProbe:        
+</span><span class="line">        httpGet:          
+</span><span class="line">          path: /healthy          
+</span><span class="line">          port: 8080        
+</span><span class="line">        initialDelaySeconds: 5        
+</span><span class="line">        timeoutSeconds: 1        
+</span><span class="line">        periodSeconds: 10        
+</span><span class="line">        failureThreshold: 3      
+</span><span class="line">      ports:         
+</span><span class="line">        - containerPort: 8080          
+</span><span class="line">          name: http          
+</span><span class="line">          protocol: TCP</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="resource-management">Resource Management</h3>
+
+<p>To ensure the resources are maximally utilized, you can specifiy resource metrics in the manifest. <em>Requests</em> specificy the minimum resource need and <em>limits</em> specify the maximum.</p>
+
+<ul>
+  <li>Minimum required resources
+    <ul>
+      <li>With Kubernetes, a Pod requests the resources required to run its containers. Kubernetes guarantees that these resources are available to the Pod. </li>
+      <li>Resources are requested per container, not per Pod. The total resources requested by the Pod is the sum of all resources requested by all containers in the Pod. The reason for this is that in many cases the different containers have very different CPU requirements</li>
+      <li>Requests are used when scheduling Pods to nodes. The Kubernetes scheduler will ensure that the sum of all requests of all Pods on a node does not exceed the capacity of the node. </li>
+      <li>K8S supports requested resources like CPU, memory, GPUs and more.</li>
+      <li>CPU request
+        <ul>
+          <li>In a 4 CPU core machine, if a container requests for 1 CPU and if that is the only Pod running in that machine, then all the 4 cores are used. If another container of the same request type is added, then each container use 2 CPUs each. When 2 more containers of the same request type is added, then each container get 1 CPU each.</li>
+          <li>CPU requests are implemented using the <code>cpu-shares</code> functionality in the Linuxkernel.</li>
+        </ul>
+      </li>
+      <li>Memory request
+        <ul>
+          <li>Memory requests are handled similarly to CPU, but there is an important difference. </li>
+          <li>If a container is over its memory request, the OS can’t just remove memory from the process, because it’s been allocated. Consequently, when the system runs out of memory, the kubelet terminates containers whose memory usage is greater than their requested memory. These containers are automatically restarted, but with less available memory on the machine for the container to consume.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Maximum resource limit
+    <ul>
+      <li>Limits specify the maximum limit of resources to use</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Pod manifest sample</strong></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">apiVersion: v1
+</span><span class="line">kind: Pod
+</span><span class="line">metadata:  
+</span><span class="line">  name: kuard
+</span><span class="line">spec:  
+</span><span class="line">  containers:    
+</span><span class="line">    - image: gcr.io/kuar-demo/kuard-amd64:1      
+</span><span class="line">      name: kuard      
+</span><span class="line">      resources:
+</span><span class="line">        requests:
+</span><span class="line">          cpu: "500m"
+</span><span class="line">          memory: "128Mi"
+</span><span class="line">        limits:
+</span><span class="line">          cpu: "1000m"
+</span><span class="line">          memory: "256Mi"
+</span><span class="line">      ports:         
+</span><span class="line">        - containerPort: 8080          
+</span><span class="line">          name: http          
+</span><span class="line">          protocol: TCP</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="persistent-storage">Persistent Storage</h3>
+
+<ul>
+  <li>Many applications are stateful, and as such we must preserve any data and ensure access to the underlying storage volume regardless of what machine the application runs on. This can be achieved using a persistent volume backed by network-attached storage.</li>
+  <li><code>emptDir</code> volume
+    <ul>
+      <li>An <code>emptyDir</code> volume is scoped to the Pod’s lifespan, but can be shared between two containers. Useful for caching thumbnails, etc.</li>
+    </ul>
+  </li>
+  <li><code>hostDir</code> volume
+    <ul>
+      <li>Some applications don’t actually need a persistent volume, but they do need some access to the underlying host filesystem. For example, they may need access to the <code>/dev</code> filesystem in order to perform raw block-level access to a device on the system. For these cases, Kubernetes supports the hostDir volume, which can mount arbitrary locations on the worker node into the container.</li>
+    </ul>
+  </li>
+  <li><em>Remote network storage volumes</em>
+    <ul>
+      <li>Sometimes you will use a volume for truly persistent data that is independent of the lifespan of a particular Pod, and should move between nodes in the cluster if a node fails or a Pod moves to a different machine for some reason. </li>
+      <li>To achieve this, Kubernetes supports a wide variety of remote network storage volumes, including widely supported protocols like NFS or iSCSI as well as cloud provider network storage like Amazon’s Elastic Block Store, Azure’s Files and Disk Storage, as well as Google’s Persistent Disk.</li>
+    </ul>
+  </li>
+  <li><em>Persistent Data using Remote Disks</em>
+    <ul>
+      <li>Oftentimes, you want the data a Pod is using to stay with the Pod, even if it is restarted on a different host machine.</li>
+      <li>To achieve this, you can mount a remote network storage volume into your Pod. </li>
+      <li>When using network-based storage, Kubernetes automatically mounts and unmounts the appropriate storage whenever a Pod using that volume is scheduled onto a particular machine.</li>
+      <li>Kubernetes includes support for standard protocols such as NFS and iSCSI as well as cloud provider–based storage APIs for the major cloud providers (both public and private). In many cases, the cloud providers will also create the disk for you if it doesn’t already exist.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="labels--annotations">Labels &amp; Annotations</h2>
+
+<ul>
+  <li><strong>Labels</strong> 
+    <ul>
+      <li>are key/value pairs that can be attached to Kubernetes objects such as Pods and ReplicaSets. </li>
+      <li>They can be arbitrary, and are useful for attaching identifying information to Kubernetes objects. </li>
+      <li>Labels are used to identify and optional group objects in a cluster.</li>
+    </ul>
+  </li>
+  <li><strong>Annotations</strong> 
+    <ul>
+      <li>annotations are key/value pairs designed to hold non-identifying information that can be leveraged by tools and libraries.</li>
+      <li>While labels are used to identify and group objects, annotations are used to provide extra information about where an object came from, how to use it, or policy around that object.  </li>
+      <li>There is overlap, and it is a matter of taste as to when to use an annotation or a label.  When in doubt, add information to an object as an annotation and promote it to a label if you find yourself wanting to use it in a selector.</li>
+      <li>Where to use?
+        <ul>
+          <li>Kubernetes uses this primarily for rolling deployments to track rollout status and provide the necessary information required to roll back a deployment to a previous state.</li>
+          <li>Keep track of a “reason” for the latest update to an object.</li>
+          <li>Extend data about the last tool to update the resource and how it was updated (used for detecting changes by other tools and doing a smart merge).</li>
+          <li>Build, release, or image information that isn’t appropriate for labels (may include a Git hash, timestamp, PR number, etc.).</li>
+          <li>Provide extra data to enhance the visual quality or usability of a UI.  For example, objects could include a link to an icon (or a base64-encoded version of an icon).</li>
+        </ul>
+      </li>
+      <li>Where not to use?
+        <ul>
+          <li>Users should avoid using the Kubernetes API server as a general-purposedatabase.  Annotations are good for small bits of data that are highlyassociated with a specific resource.  If you want to store data in Kubernetes but you don’t have an obvious object to associate it with, consider storing that data in some other, more appropriate database.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="cluster-components">Cluster components</h2>
+
+<ul>
+  <li>
+    <p>All components run in the <code>kube-system</code> namespace</p>
+  </li>
+  <li>Types
+    <ul>
+      <li><strong>kube-proxy</strong>
+        <ul>
+          <li>The Kubernetes proxy is responsible for routing network traffic to load-balanced services in the Kubernetes cluster. </li>
+          <li>must be present on every node in the cluster. </li>
+          <li>Kubernetes has an API object named <code>DaemonSet</code>, that is used in many clusters to accomplish this. </li>
+        </ul>
+      </li>
+      <li><strong>kube-dns</strong>
+        <ul>
+          <li>Kubernetes also runs a DNS server, which provides naming and discovery for the services that are defined in the cluster. </li>
+          <li>This DNS server also runs as a replicated service on the cluster. Depending on the size of your cluster, you may see one or more DNS servers running in your cluster. </li>
+          <li>The DNS service is run as a Kubernetes deployment, which manages these replicas.</li>
+          <li>There is a also a Kubernetes service that performs load-balancing for the DNS server.</li>
+          <li>Check <code>/etc/resolv.conf</code> file in a container</li>
+        </ul>
+      </li>
+      <li><strong>kube-dashboard</strong>
+        <ul>
+          <li>The UI is run as a single replica, but it is still managed by a Kubernetes deployment for reliability and upgrades.</li>
+        </ul>
+      </li>
+      <li>The <strong>controller-manager</strong> is responsible for running various controllers that regulate behavior in the cluster: for example, ensuring that all of the replicas of a service are available and healthy. </li>
+      <li>The <strong>scheduler</strong> is responsible for placing different pods onto different nodes in the cluster. </li>
+      <li>The <strong>etcd server</strong> is the storage for the cluster where all of the API objects are stored.</li>
+      <li>Pods running in the cluster
+        <ul>
+          <li><em>kube-dns</em>: supplies DNS services for the cluster</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Node Types</strong>
+    <ul>
+      <li>Master node 
+        <ul>
+          <li>has containers like the API server, scheduler, etc., which manage the cluster</li>
+          <li>Kubernetes won’t generally schedule work onto master nodes to ensure that user workloads don’t harm the overall operation of the cluster.</li>
+        </ul>
+      </li>
+      <li>Worker nodes 
+        <ul>
+          <li>where the application containers will run. </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="services">Services</h2>
+
+<ul>
+  <li>A <code>Service</code> object is a way to create a named label selector. </li>
+  <li>The <code>kubernetes</code> service is automatically created for you so that you can find and talk to the Kubernetes API from within the app.</li>
+  <li>How to expose a service?
+    <ul>
+      <li><code>kubetctl expose &lt;depl&gt;</code> </li>
+      <li>creates a new service from a deployment</li>
+      <li>assigns a new type of virtual IP called <em>cluster IP</em> which is a special address the system will load-balance across all of the pods that are identified by the selector.</li>
+    </ul>
+  </li>
+  <li>Types
+    <ul>
+      <li><code>Cluster IP</code> - </li>
+      <li><code>NodePort</code> - </li>
+      <li><code>LoadBalancer</code> - </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="command-reference-1">Command Reference</h2>
+
+<ul>
+  <li><code>kubectl version</code></li>
+  <li><code>kubectl cluster-info</code> - displays the cluster information</li>
+  <li><strong>Get</strong>
+    <ul>
+      <li><code>kubectl get componentstatuses</code> - view a simple diagnostic of the cluster</li>
+      <li><code>kubectl get nodes</code> - list out all the nodes in the cluster</li>
+      <li><code>kubectl get daemonSets  --namespace=kube-system kube-proxy</code> - to view proxy</li>
+      <li><code>kubectl get services --namespace=kube-system kube-dns</code> - to view the service that performs load-balancing for the DNS servers</li>
+      <li><code>kubectl get deployments --namespace=kube-system kubernetes-dashboard</code> - to view the UI server</li>
+      <li><code>kubectl get services --namespace=kube-system kubernetes-dashboard</code> - to view the service that performs load-balancing for the dashboard</li>
+    </ul>
+  </li>
+  <li><strong>Config</strong>
+    <ul>
+      <li><code>kubectl config set-context my-context --namespace=mystuff</code> - To create a new namespace</li>
+      <li><code>kubectl config use-context my-context</code> - to set the default namespace in context</li>
+    </ul>
+  </li>
+  <li><strong>Object management</strong>
+    <ul>
+      <li><code>kubectl apply -f object.yaml</code> - to create/update an object</li>
+      <li><code>kubectl delete -f object.yaml</code> - to delete an object</li>
+      <li><code>kubectl edit &lt;resource-name&gt; &lt;object-name&gt;</code> - to edit object state interactively</li>
+    </ul>
+  </li>
+  <li><strong>Deployments</strong>
+    <ul>
+      <li><code>kubectl run &lt;deployment-name&gt; --image &lt;name&gt; --replicas=&lt;number&gt; --labels="k1=v1,k2=v2"</code> - create a deployment</li>
+      <li><code>kubectl get deployments --show-labels</code> - get deployments with their label</li>
+      <li><code>kubectl get deployments --namespace=kube-system kube-dns</code> - to view the dns servers</li>
+      <li><code>kubectl edit deployment/&lt;depl-name&gt;</code> - to view/edit deployment manifest</li>
+    </ul>
+  </li>
+  <li><strong>Labels</strong>
+    <ul>
+      <li><code>kubectl label pods &lt;pod-name&gt; &lt;key=value&gt;</code> - to add a label to a pod</li>
+      <li><code>kubectl label pods &lt;pod-name&gt; -&lt;key&gt;</code> - to remove a label from a pod</li>
+      <li><code>kubectl get pods -L -&lt;label&gt;</code> - to view all pods with a label</li>
+      <li><code>kubectl label deployments &lt;depl-name&gt; &lt;key=value&gt;</code> - to add a label to a deployment</li>
+      <li><code>kubectl label deployments &lt;depl-name&gt; -&lt;key&gt;</code> - to remove a label from a deployment</li>
+      <li><code>kubectl get deployments -L -&lt;label&gt;</code> - to view all deployments with a label</li>
+      <li><code>kubectl get deployments --selector="k1=v1,k2=v2"</code> - to view all deployments with all the labels specified</li>
+    </ul>
+  </li>
+  <li><strong>Services</strong>
+    <ul>
+      <li><code>kubectl expose deployment &lt;depl-name&gt;</code> - to expose a deployment as a service</li>
+      <li><code>kubectl get services -o wide</code> - to view all the services</li>
+      <li><code>kubectl describe service &lt;svc&gt;</code></li>
+    </ul>
+  </li>
+  <li><strong>Debugging</strong>
+    <ul>
+      <li><code>kubectl describe nodes &lt;node_name&gt;</code> - to get more information about a specific node</li>
+      <li><code>kubectl logs &lt;pod-name&gt;</code> - to view the logs from all the containers in a pod</li>
+      <li><code>kubectl logs &lt;pod-name&gt; -c &lt;container&gt;</code> - to view the logs from a particular container</li>
+      <li><code>kubectl exec -it &lt;pod-name&gt; --bash</code> - to execute a command in a running container</li>
+      <li><code>kubectl cp &lt;remote-file&gt; &lt;local-file&gt;</code> - to copy a file to and from a container</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="openshift">OpenShift</h1>
+
+<ul>
+  <li><em>Pod</em> 
+    <ul>
+      <li>A pod is one or more containers guaranteed to be running on the same host. The containers within a pod share a unique IP address. They can communicate with each other via the “localhost” and also all share any volumes (persistent storage).</li>
+    </ul>
+  </li>
+  <li><em>Replication Controller</em>
+    <ul>
+      <li>When scaled up, an application will have more than one copy of itself, and each copy will have its own local state. Each copy corresponds to a different instance of a pod with the pods being managed by the replication controller.  </li>
+    </ul>
+  </li>
+  <li><em>Service</em>
+    <ul>
+      <li>As each pod has a unique IP, we need an easy way to address the set of all pods as a whole. This is where a service comes into play. </li>
+      <li>A Service groups pods and provides a common DNS name and an optional, load-balanced IP address to access them</li>
+      <li>The service gets its own IP and a DNS name. When making a connection to a service, OpenShift will automatically route the connection to one of the pods associated with that service.</li>
+      <li>Although a service has a DNS name, it is still only accessible within the OpenShift cluster and is not accessible externally. </li>
+      <li>To make a service externally accessible, a route needs to be created. </li>
+      <li>Creating a route automatically sets up <strong>haproxy</strong> or a hardware-based router, with an externally addressable DNS name, exposing the service and load-balancing inbound traffic across the pods.</li>
+    </ul>
+  </li>
+  <li><em>Build</em></li>
+  <li><em>Deployment</em>
+    <ul>
+      <li>A deployment is an update to your application, triggered by a changed image or configuration</li>
+      <li>There are 2 deployment strategies: rolling and recreate</li>
+      <li><em>Rolling Strategy</em>
+        <ul>
+          <li>This is the default deployment strategy in OpenShift</li>
+          <li>A rolling deployment slowly replaces instances of the previous version of an application with instances of the new version of the application. </li>
+          <li>A rolling deployment can wait for new pods to become ready via a readiness check before scaling down the old instances. Rolling deployment can be aborted if a problem occurs.</li>
+          <li>It runs old and new instances of the application in parallel and balances traffic across them as new instances are deployed and old instances shut down. It enables an update with no down time.</li>
+          <li><em>When to use?</em>: 
+            <ul>
+              <li>not suitable strategy where multiple instances of the same application cannot be run at the same time</li>
+              <li>where instances of both old and new code cannot be run at the same time.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><em>Recreate Strategy</em>
+        <ul>
+          <li>shuts down all running instances of the old app, before starting up the new instances</li>
+          <li><em>When to use?</em>: 
+            <ul>
+              <li>where more than one instance of the app cannot run at the same time.</li>
+              <li>where old and new code of the app cannot be run at the same time. e.g., apps running a traditional relational db</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><em>Custom strategy</em>
+        <ul>
+          <li>Complicated custom strategies like Blue-Green or A/B deployment strategies can be implemented by using multiple deployment configurations and reconfiguring what pods are associated with the exposed service for an app using labels</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><em>Scaling</em>
+    <ul>
+      <li>The number of pods can be scaled up or down via the web console</li>
+      <li>Reducing the number replicas to zero is same as taking the app offline. Users trying to connect will get http 503 error.</li>
+      <li>Before scaling up, make sure the app is cloud-native (in other words, 12-factor methodology compliant) app and is safe to scaling</li>
+      <li>Database cannot scaled up in a traditional ways since only the primary instance should have the ability to update data. Scaling can still be performed, but usually on read-only instances of the DB</li>
+      <li>Automatic scaling
+        <ul>
+          <li>can be configured by defining the upper and lower thresholds of CPU usage by pod. </li>
+          <li>If the upper threshold is consistently exceeded by the pods, a new instance of the app is started. </li>
+          <li>If the CPU drops below lower threshold, then the replicas are scaled down.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><em>Health check</em>
+    <ul>
+      <li>Types
+        <ul>
+          <li><em>Readiness probe</em>: used to determine if the new instance of the app is running properly before reconfiguring the router to send traffic to it</li>
+          <li><em>Liveness probe</em>: runs periodically once traffic has been switched to an instance to ensure it is still behaving correctly. If the liveness probe fails, then the instance of the app is automatically shutdown by OpenShift and a new one is created.</li>
+        </ul>
+      </li>
+      <li>Both probes can be implemented in 3 different ways
+        <ul>
+          <li><em>HTTP check</em>: a container is considered healthy if a HTTP request against a defined url returns status 200 or 399</li>
+          <li><em>Container check</em>: a container is considered healthy if a defined command returns with a zero exit status</li>
+          <li><em>TCP socket check</em>: a container is considered healthy if a connection can be established to the exposed port of the app</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="commands">Commands</h2>
+
+<ul>
+  <li><code>oc types</code> - quick summary of OpenShift concepts and definitions</li>
+  <li><code>oc whoami</code></li>
+  <li><code>oc cluster up</code> - to start the OpenShift cluster</li>
+  <li><code>oc new-app &lt;base_image&gt; &lt;sourcecode_git_url&gt; --name='&lt;app-name&gt;'</code> - to create a new app from source code</li>
+  <li><code>oc expose service &lt;routename&gt;</code> - to expose a route</li>
+  <li><code>oc get routes</code> - to view all the routes </li>
+  <li><code>oc status</code></li>
+  <li><code>oc start-build &lt;app&gt;</code></li>
+  <li><code>oc get pods</code> - get all running instances
+    <ul>
+      <li><code>oc get pods --selector key=value</code> - selectively query pods with label</li>
+    </ul>
+  </li>
+  <li><code>oc describe pod/&lt;instance_name&gt;</code> - details about an instance</li>
+  <li><code>oc get builds</code> - list all builds</li>
+  <li><strong>Logs</strong>
+    <ul>
+      <li><code>oc logs build/&lt;buildname&gt;</code> - show build logs</li>
+      <li><code>oc logs &lt;podname&gt;</code> - show application logs
+        <ul>
+          <li><code>oc logs --follow &lt;podname&gt;</code> - tail the logs while the app is running</li>
+          <li><code>oc logs --previous &lt;podname&gt;</code> - to view the logs from last attempt. This is useful when app fails to start after successive failures.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Environment settings</strong>
+    <ul>
+      <li><code>oc set env &lt;deploymentconfig&gt;/&lt;container&gt; --list</code> - list the env variables exported to a container</li>
+      <li><code>oc set env &lt;deploymentconfig&gt;/&lt;container&gt; key1=val1 key2=val2</code> - note: each configuration change triggers a redeployment of the app.</li>
+      <li><code>oc set env &lt;buildconfig&gt;/&lt;container&gt; key1=val1</code> - setting the build config env variables. Note: any env variable set for build will also be used for containers</li>
+      <li><code>oc env dc &lt;app_name&gt; -e key1=val1 -e key2=val2</code> - adding environment variables to deployment config of an app</li>
+      <li><code>oc explain</code> - gets the list of what can be set in a configuration</li>
+    </ul>
+  </li>
+  <li><strong>Debugging</strong>
+    <ul>
+      <li><code>oc rsh &lt;app&gt;</code> - to remote shell into the running pod</li>
+      <li><code>oc exec &lt;app&gt; &lt;command&gt;</code> - run a command and exit immediately with results</li>
+      <li><code>oc debug dc/&lt;app&gt;</code> - when app starts to fail, run this cmd. This will start up an instance of the image for the app, but instead of running the normal app command, it will run an interactive shell instead</li>
+    </ul>
+  </li>
+  <li><strong>Deleting</strong>
+    <ul>
+      <li><code>oc delete project &lt;name&gt;</code></li>
+      <li>
+        <p><code>oc delete all --selector key=val</code> - deletes bc, dc, route, service, pod associated with the label
+The following service(s) have been created in your project: postgresql.</p>
+
+        <p>Username: insult
+ Password: insult
+Database Name: insults
+ Connection URL: postgresql://postgresql:5432/</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>oc env dc insults -e POSTGRESQL_USER=insult  -e PGPASSWORD=insult POSTGRESQL_DATABASE=insults</p>
+
 <h1 id="references">References</h1>
 
 <ul>
   <li>Books
     <ul>
       <li>Mastering Docker</li>
-      <li>Using Docker</li>
+      <li>O’Reilly - Using Docker</li>
+      <li>O’Reilly - OpenShift for Developers</li>
+      <li>O’Reilly - Kubernetes - Up &amp; Running</li>
     </ul>
   </li>
 </ul>
+
 
   
     <footer>
@@ -489,7 +1201,7 @@ messageStyle: "none",
 
 		<li>
 			<h3>Web Programming</h3>
-			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/webapp_architecture.html">Architecture</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
 		</li>
 
 		<li>

@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Infrastructure as Code Infrastructure as Code Configuration Management Vagrant Chef Common Resources Chef Client ​Cookbook​ Run list References &hellip;">
+<meta name="description" content="Infrastructure as Code Infrastructure as Code Server Provisioning Terraform Configuration Management Vagrant Chef Common Resources Chef Client ​ &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -109,6 +109,10 @@ messageStyle: "none",
   
   <ul id="markdown-toc">
   <li><a href="#infrastructure-as-code">Infrastructure as Code</a></li>
+  <li><a href="#server-provisioning">Server Provisioning</a>    <ul>
+      <li><a href="#terraform">Terraform</a></li>
+    </ul>
+  </li>
   <li><a href="#configuration-management">Configuration Management</a>    <ul>
       <li><a href="#vagrant">Vagrant</a></li>
       <li><a href="#chef">Chef</a>        <ul>
@@ -168,6 +172,65 @@ messageStyle: "none",
     </ul>
   </li>
   <li><em>Bare-metal cloud</em>: Hardware can be automatically provisioned so that it can be used in a fully dynamic fashion. This is sometimes referred to as ‘bare-metal cloud’</li>
+</ul>
+
+<h1 id="server-provisioning">Server Provisioning</h1>
+
+<h2 id="terraform">Terraform</h2>
+
+<p><strong>Concepts</strong></p>
+
+<ul>
+  <li>Terraform configuration files are saved as *.tf files</li>
+  <li>Resources representinfrastructure components  e.g. server, virtual machine, container, network port.</li>
+  <li>Providers are components that let you manage a resource on a particular platform e.g. OpenStack, AWS, Google Cloud, DigitalOcean</li>
+  <li>
+    <p>Provisioners provide the ability to execute commands e.g. copy a file into the VM</p>
+  </li>
+  <li>Infrastructure as a Code - Tool Categories
+    <ul>
+      <li>Configuration Management Tools 
+        <ul>
+          <li>Chef, Ansible, Puppet, Salt Stack</li>
+          <li>Designed to install and manage software on existing servers</li>
+          <li>Pros: coding convention, idempotent code, distribution to several servers</li>
+        </ul>
+      </li>
+      <li>Server Templating Tools
+        <ul>
+          <li>Docker, Packer, Vagrant</li>
+          <li>Instead of launching a bunch of servers and configuring them by running the same code on each one, the idea behind server templating tools is to create an image of a server that captures a fully self-contained “snapshot” of the operating system, the software, the files, and all other relevant details.</li>
+          <li>Server templating is a key component of the shift to immutable infrastructure. This idea is inspired by functional programming, where variables are immutable.</li>
+        </ul>
+      </li>
+      <li>Server provisioning tools
+        <ul>
+          <li>Terraform, AWS CloudFormation, OpenStack Heat</li>
+          <li>Responsible for creating the servers themselves. Can also be used to create databases, caches, load balancers, queues, monitoring, subnet configurations, firewall settings, routing rules, SSL certificates, and almost every other aspect of your infrastructure</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Commands</strong></p>
+
+<ul>
+  <li><code>terraform init</code>`</li>
+  <li><code>terraform state show</code></li>
+  <li><code>terraform list</code></li>
+  <li><code>terraform plan</code></li>
+  <li><code>terraform apply -var name="Fizal Terraform Instance"</code></li>
+  <li><code>terraform apply</code></li>
+  <li>
+    <p><code>terraform refresh</code></p>
+  </li>
+  <li><strong>Links</strong>
+    <ul>
+      <li>https://www.terraform.io/docs/providers/openstack/r/compute_keypair_v2.html</li>
+      <li>https://www.terraform.io/docs/provisioners/chef.html</li>
+    </ul>
+  </li>
 </ul>
 
 <h1 id="configuration-management">Configuration Management</h1>
@@ -350,7 +413,7 @@ messageStyle: "none",
 </span><span class="line">│   └── unit
 </span><span class="line">│       └── recipes
 </span><span class="line">│           └── default_spec.rb
-</span><span class="line">└── t​emplates​​  &lt;--- Embedded Ruby template files
+</span><span class="line">└── templates​​  &lt;--- Embedded Ruby template files
 </span><span class="line">    └── default
 </span><span class="line">└── test
 </span><span class="line">    └── smoke
@@ -375,7 +438,8 @@ messageStyle: "none",
     <ul>
       <li>Chef Cookbook</li>
       <li>Learning Chef - O’Reilly</li>
-      <li>Infrastructure as Code</li>
+      <li>Infrastructure as Code - O’Reilly</li>
+      <li>Terraform - Up &amp; Running - O’Reilly</li>
     </ul>
   </li>
   <li>Sites
@@ -460,7 +524,7 @@ messageStyle: "none",
 
 		<li>
 			<h3>Web Programming</h3>
-			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/webapp_architecture.html">Architecture</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
 		</li>
 
 		<li>

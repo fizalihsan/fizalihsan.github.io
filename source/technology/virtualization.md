@@ -221,11 +221,30 @@ __Volumes__
 * declarative configuration (desired state is defined)
 * pods from same application are distributed onto different machines for reliability
 * graceful termination of pods for reliability (active requests are completed up to 30 secs)
+* effective utilization of the compute nodes in the cluster
+* user can define lower and upper limit of resources needed for his app
 
+
+## Concepts
+
+* Namespaces
+	* Kubernetes uses namespaces to organize objects in the cluster. 
+	* By default, the kubectl command-line tool interacts with the `default` namespace. It can be overridden by `kubectl --namespace=mystuff`.
+* Context
+	* To change the default namespace permanently, you can use context.
+* Deployment is a way to create an array of Pods
+* kubectl
+	* command-line utility to interact with the Kubernetes API
+	* Everything in Kubernetes is represented by a RESTful resource (also known as _Kubernetes objects_). The kubectl command makes HTTP requests to access the objects. e.g., https://your-k8s.com/api/v1/namespaces/default/pods/my-pod 
+	* `kubectl get <resource-name> <object-name>`
+	* `kubectl describe <resource-name> <object-name>`
+	* configuration file is located at `$HOME/.kube/config` - stores the information on how to find and authenticate to a cluster
 
 ## Pods
 
-* Pods, not containers, are the smallest deployable artifact in K8S cluster
+* Pods represent the atomic unit of work in a Kubernetes cluster. 
+* Pods arecomprised of one or more containers working together symbiotically. 
+* To create a Pod, you write a Pod manifest and submit it to the Kubernetes API server by using the command-line tool or (less frequently) by making HTTP and JSON calls to the server directly.
 * Pods are described in a Pod manifest file - in yaml or json format. They are stored in etcd (persistent storage)
 * All containers in a pod always land on the same machine
 * Each container within a Pod runs in its own cgroup, but they share a number of Linux namespaces.
@@ -235,16 +254,15 @@ __Volumes__
 	* and can communicate using native interprocess communication channels over System V IPC or POSIX message queues (IPC namespace). 
 	* Containers in different Pods running on the same node might as well be on different servers.
 * Pods don’t move and must be explicitly destroyed and rescheduled.
-
 * ___When to create a pod?___
 	* Will these containers work correctly if they land on different machines? If yes, then don't group them in a prod. Else, put them together in a pod. e.g., if all the containers want to share the file system.
 * __How a pod is created?__
-	* User creates a pod from command-line via kubectl
+	* User creates a pod from command-line via kubectl or submitting a manifest file
 	* The Kubernetes API server accepts and processes Pod manifests before storing them in persistent storage (etcd). 
 	* The scheduler uses the Kubernetes API to find Pods that haven’t been scheduled to a node. 
 	* The scheduler then places the Pods onto nodes depending on the resources and other constraints expressed in the Pod manifests. 
 	* Multiple Pods can be placed on the same machine as long as there are sufficient resources.
-	* `kubelet` daemon monitors the pod
+	* `kubelet` daemon is responsible for creating and performing health checks on the pod
 
 
 __To create a pod directly__
@@ -299,12 +317,130 @@ metadata:
 
 
 
-* Namespaces
-	* Kubernetes uses namespaces to organize objects in the cluster. 
-	* By default, the kubectl command-line tool interacts with the `default` namespace. It can be overridden by `kubectl --namespace=mystuff`.
-* Context
-	* To change the default namespace permanently, you can use context.
-* API objects
+### Health Check
+
+* __Process health check__
+	* Kubernetes _process health check_ ensures that your container is always running. If it isn't K8S restarts it.
+	* A simple process check alone is insufficient. If the process is deadlocked, it won't server any requests. To address this, liveness and readiness probes are available.
+* __HTTP health check__
+	* __Liveness probe__
+		* Liveness determines if an application is running properly. 
+		* Containers that fail liveness checks are restarted.  
+	* __Readiness probe__
+		* Readiness describes when a container is ready to serve user requests. 
+		* Containers that fail readiness checks are removed from service load balancers. 
+* __TCP health check__
+	* For non-HTTP based APIs and databases
+* __Exec probes__
+	* execute a script or program in the context of the container. If this script returns a zero exit code, the probe succeeds; otherwise, it fails. 
+	* `exec` scripts are often useful for custom application validation logic that doesn’t fit neatly into an HTTP call.
+
+
+__Pod manifest sample__
+
+```
+apiVersion: v1
+kind: Pod
+metadata:  
+  name: kuard
+spec:  
+  containers:    
+    - image: gcr.io/kuar-demo/kuard-amd64:1      
+      name: kuard      
+      livenessProbe:        
+        httpGet:          
+          path: /healthy          
+          port: 8080        
+        initialDelaySeconds: 5        
+        timeoutSeconds: 1        
+        periodSeconds: 10        
+        failureThreshold: 3      
+      ports:         
+        - containerPort: 8080          
+          name: http          
+          protocol: TCP
+```
+
+
+### Resource Management
+
+To ensure the resources are maximally utilized, you can specifiy resource metrics in the manifest. _Requests_ specificy the minimum resource need and _limits_ specify the maximum.
+
+
+* Minimum required resources
+	* With Kubernetes, a Pod requests the resources required to run its containers. Kubernetes guarantees that these resources are available to the Pod. 
+	* Resources are requested per container, not per Pod. The total resources requested by the Pod is the sum of all resources requested by all containers in the Pod. The reason for this is that in many cases the different containers have very different CPU requirements
+	* Requests are used when scheduling Pods to nodes. The Kubernetes scheduler will ensure that the sum of all requests of all Pods on a node does not exceed the capacity of the node. 
+	* K8S supports requested resources like CPU, memory, GPUs and more.
+	* CPU request
+		* In a 4 CPU core machine, if a container requests for 1 CPU and if that is the only Pod running in that machine, then all the 4 cores are used. If another container of the same request type is added, then each container use 2 CPUs each. When 2 more containers of the same request type is added, then each container get 1 CPU each.
+		* CPU requests are implemented using the `cpu-shares` functionality in the Linuxkernel.
+	* Memory request
+		* Memory requests are handled similarly to CPU, but there is an important difference. 
+		* If a container is over its memory request, the OS can’t just remove memory from the process, because it’s been allocated. Consequently, when the system runs out of memory, the kubelet terminates containers whose memory usage is greater than their requested memory. These containers are automatically restarted, but with less available memory on the machine for the container to consume.
+* Maximum resource limit
+	* Limits specify the maximum limit of resources to use
+
+__Pod manifest sample__
+
+```
+apiVersion: v1
+kind: Pod
+metadata:  
+  name: kuard
+spec:  
+  containers:    
+    - image: gcr.io/kuar-demo/kuard-amd64:1      
+      name: kuard      
+      resources:
+        requests:
+          cpu: "500m"
+          memory: "128Mi"
+        limits:
+          cpu: "1000m"
+          memory: "256Mi"
+      ports:         
+        - containerPort: 8080          
+          name: http          
+          protocol: TCP
+```
+
+### Persistent Storage
+
+* Many applications are stateful, and as such we must preserve any data and ensure access to the underlying storage volume regardless of what machine the application runs on. This can be achieved using a persistent volume backed by network-attached storage.
+* `emptDir` volume
+	* An `emptyDir` volume is scoped to the Pod's lifespan, but can be shared between two containers. Useful for caching thumbnails, etc.
+* `hostDir` volume
+	* Some applications don’t actually need a persistent volume, but they do need some access to the underlying host filesystem. For example, they may need access to the `/dev` filesystem in order to perform raw block-level access to a device on the system. For these cases, Kubernetes supports the hostDir volume, which can mount arbitrary locations on the worker node into the container.
+* _Remote network storage volumes_
+	* Sometimes you will use a volume for truly persistent data that is independent of the lifespan of a particular Pod, and should move between nodes in the cluster if a node fails or a Pod moves to a different machine for some reason. 
+	* To achieve this, Kubernetes supports a wide variety of remote network storage volumes, including widely supported protocols like NFS or iSCSI as well as cloud provider network storage like Amazon’s Elastic Block Store, Azure’s Files and Disk Storage, as well as Google’s Persistent Disk.
+* _Persistent Data using Remote Disks_
+	* Oftentimes, you want the data a Pod is using to stay with the Pod, even if it is restarted on a different host machine.
+	* To achieve this, you can mount a remote network storage volume into your Pod. 
+	* When using network-based storage, Kubernetes automatically mounts and unmounts the appropriate storage whenever a Pod using that volume is scheduled onto a particular machine.
+	* Kubernetes includes support for standard protocols such as NFS and iSCSI as well as cloud provider–based storage APIs for the major cloud providers (both public and private). In many cases, the cloud providers will also create the disk for you if it doesn’t already exist.
+
+## Labels & Annotations
+
+* __Labels__ 
+	* are key/value pairs that can be attached to Kubernetes objects such as Pods and ReplicaSets. 
+	* They can be arbitrary, and are useful for attaching identifying information to Kubernetes objects. 
+	* Labels are used to identify and optional group objects in a cluster.
+* __Annotations__ 
+	* annotations are key/value pairs designed to hold non-identifying information that can be leveraged by tools and libraries.
+	* While labels are used to identify and group objects, annotations are used to provide extra information about where an object came from, how to use it, or policy around that object.  
+	* There is overlap, and it is a matter of taste as to when to use an annotation or a label.  When in doubt, add information to an object as an annotation and promote it to a label if you find yourself wanting to use it in a selector.
+	* Where to use?
+		* Kubernetes uses this primarily for rolling deployments to track rollout status and provide the necessary information required to roll back a deployment to a previous state.
+		* Keep track of a “reason” for the latest update to an object.
+		* Extend data about the last tool to update the resource and how it was updated (used for detecting changes by other tools and doing a smart merge).
+		* Build, release, or image information that isn’t appropriate for labels (may include a Git hash, timestamp, PR number, etc.).
+		* Provide extra data to enhance the visual quality or usability of a UI.  For example, objects could include a link to an icon (or a base64-encoded version of an icon).
+	* Where not to use?
+		* Users should avoid using the Kubernetes API server as a general-purposedatabase.  Annotations are good for small bits of data that are highlyassociated with a specific resource.  If you want to store data in Kubernetes but you don’t have an obvious object to associate it with, consider storing that data in some other, more appropriate database.
+
+
 
 ## Cluster components
 
@@ -337,45 +473,62 @@ metadata:
 		* Kubernetes won’t generally schedule work onto master nodes to ensure that user workloads don’t harm the overall operation of the cluster.
 	* Worker nodes 
 		* where the application containers will run. 
-	
 
-## Tools
+## Services
 
-* kubectl
-	* command-line utility to interact with the Kubernetes API
-	* Everything in Kubernetes is represented by a RESTful resource (also known as _Kubernetes objects_). The kubectl command makes HTTP requests to access the objects. e.g., https://your-k8s.com/api/v1/namespaces/default/pods/my-pod 
-	* `kubectl get <resource-name> <object-name>`
-	* `kubectl describe <resource-name> <object-name>`
-	* configuration file is located at `$HOME/.kube/config` - stores the information on how to find and authenticate to a cluster
+* A `Service` object is a way to create a named label selector. 
+* The `kubernetes` service is automatically created for you so that you can find and talk to the Kubernetes API from within the app.
+* How to expose a service?
+	* `kubetctl expose <depl>` 
+	* creates a new service from a deployment
+	* assigns a new type of virtual IP called _cluster IP_ which is a special address the system will load-balance across all of the pods that are identified by the selector.
+* Types
+	* `Cluster IP` - 
+	* `NodePort` - 
+	* `LoadBalancer` - 
+
 
 ## Command Reference
 
 * `kubectl version`
+* `kubectl cluster-info` - displays the cluster information
 * __Get__
 	* `kubectl get componentstatuses` - view a simple diagnostic of the cluster
 	* `kubectl get nodes` - list out all the nodes in the cluster
 	* `kubectl get daemonSets  --namespace=kube-system kube-proxy` - to view proxy
-	* `kubectl get deployments --namespace=kube-system kube-dns` - to view the dns servers
 	* `kubectl get services --namespace=kube-system kube-dns` - to view the service that performs load-balancing for the DNS servers
 	* `kubectl get deployments --namespace=kube-system kubernetes-dashboard` - to view the UI server
 	* `kubectl get services --namespace=kube-system kubernetes-dashboard` - to view the service that performs load-balancing for the dashboard
 * __Config__
 	* `kubectl config set-context my-context --namespace=mystuff` - To create a new namespace
 	* `kubectl config use-context my-context` - to set the default namespace in context
-* __Describe__
-	* `kubectl describe nodes <node_name>` - to get more information about a specific node
 * __Object management__
 	* `kubectl apply -f object.yaml` - to create/update an object
 	* `kubectl delete -f object.yaml` - to delete an object
 	* `kubectl edit <resource-name> <object-name>` - to edit object state interactively
+* __Deployments__
+	* `kubectl run <deployment-name> --image <name> --replicas=<number> --labels="k1=v1,k2=v2"` - create a deployment
+	* `kubectl get deployments --show-labels` - get deployments with their label
+	* `kubectl get deployments --namespace=kube-system kube-dns` - to view the dns servers
+	* `kubectl edit deployment/<depl-name>` - to view/edit deployment manifest
+* __Labels__
 	* `kubectl label pods <pod-name> <key=value>` - to add a label to a pod
 	* `kubectl label pods <pod-name> -<key>` - to remove a label from a pod
+	* `kubectl get pods -L -<label>` - to view all pods with a label
+	* `kubectl label deployments <depl-name> <key=value>` - to add a label to a deployment
+	* `kubectl label deployments <depl-name> -<key>` - to remove a label from a deployment
+	* `kubectl get deployments -L -<label>` - to view all deployments with a label
+	* `kubectl get deployments --selector="k1=v1,k2=v2"` - to view all deployments with all the labels specified
+* __Services__
+	* `kubectl expose deployment <depl-name>` - to expose a deployment as a service
+	* `kubectl get services -o wide` - to view all the services
+	* `kubectl describe service <svc>`
 * __Debugging__
+	* `kubectl describe nodes <node_name>` - to get more information about a specific node
 	* `kubectl logs <pod-name>` - to view the logs from all the containers in a pod
 	* `kubectl logs <pod-name> -c <container>` - to view the logs from a particular container
 	* `kubectl exec -it <pod-name> --bash` - to execute a command in a running container
 	* `kubectl cp <remote-file> <local-file>` - to copy a file to and from a container
-
 
 # OpenShift
 

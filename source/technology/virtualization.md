@@ -40,6 +40,7 @@ Hypervisors and VMs are just one approach to virtual workload deployment. Contai
 * Containers can be started and stopped in a fraction of a second.
 * Containers eliminate a whole class of bugs caused by environment changes- 'it runs in my machine' 
 
+
 # Docker
 
 ## Benefits
@@ -530,6 +531,9 @@ spec:
 	* `kubectl exec -it <pod-name> --bash` - to execute a command in a running container
 	* `kubectl cp <remote-file> <local-file>` - to copy a file to and from a container
 
+
+
+
 # OpenShift
 
 * _Pod_ 
@@ -630,3 +634,4 @@ The following service(s) have been created in your project: postgresql.
 	* O'Reilly - Using Docker
 	* O'Reilly - OpenShift for Developers
 	* O'Reilly - Kubernetes - Up & Running
+	

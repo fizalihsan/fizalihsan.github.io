@@ -9,32 +9,33 @@ footer: true
 * list element with functor item
 {:toc}
 
+
 # Infrastructure as Code
 
 * Iron age -> Cloud age
-	* A fundamental difference between the iron age and cloud age is the move from unreliable software, which depends on the hardware to be very reliable, to software that runs reliably on unreliable hardware.
-	* In the cloud age, routine provisioning and change management is automated.
-	* In cloud world, disappearing server is a feature, not a bug
+  * A fundamental difference between the iron age and cloud age is the move from unreliable software, which depends on the hardware to be very reliable, to software that runs reliably on unreliable hardware.
+  * In the cloud age, routine provisioning and change management is automated.
+  * In cloud world, disappearing server is a feature, not a bug
 * __What is Infrastructure as Code__
-	* an approach to infrastructure automation based on software development practices
-	* treating infrastructure as software and data and apply software development tools (VCS) and practices (TDD, CI, CD)
+  * an approach to infrastructure automation based on software development practices
+  * treating infrastructure as software and data and apply software development tools (VCS) and practices (TDD, CI, CD)
 * __Principles of Infrastructure as Code__
-	* Systems can be easily reproduced
-	* Systems are disposable (Treat your servers like cattle, not pets)
-	* Systems are consistent
-	* Processes are repeatable
-	* Antifragility
-		* Exercise puts stress on muscles and bones, essentially damaging them, causing them to become stronger. Protecting the body by avoiding physical stress actually weakens it, making it more likely to fail in the face of extreme stress.
-		* Similarly, protecting an IT system by minimizing the number of changes made to it will not make it more robust. Constant changing and improving will make it more ready to handle disasters.
+  * Systems can be easily reproduced
+  * Systems are disposable (Treat your servers like cattle, not pets)
+  * Systems are consistent
+  * Processes are repeatable
+  * Antifragility
+    * Exercise puts stress on muscles and bones, essentially damaging them, causing them to become stronger. Protecting the body by avoiding physical stress actually weakens it, making it more likely to fail in the face of extreme stress.
+    * Similarly, protecting an IT system by minimizing the number of changes made to it will not make it more robust. Constant changing and improving will make it more ready to handle disasters.
 
 * Configuration tooling should run continuously, not ad hoc.
 * If automation broke on some edge case, we would either change the automation to handle it, or else fix the design of the service so it was no longer an edge case.
 * _Dynamic Infrastructure_ refers to the ability to create and destroy servers programmatically;
-	* Issues of dynamic infrastructure
-		* Configuration drift
-		* Snowflake servers (Pets Vs Cattle) - can't be touched, much less reproduced.
-		* Fragile infrastructure
-		* Erosion
+  * Issues of dynamic infrastructure
+    * Configuration drift
+    * Snowflake servers (Pets Vs Cattle) - can't be touched, much less reproduced.
+    * Fragile infrastructure
+    * Erosion
 * _Bare-metal cloud_: Hardware can be automatically provisioned so that it can be used in a fully dynamic fashion. This is sometimes referred to as 'bare-metal cloud'
 
 # Server Provisioning
@@ -49,17 +50,17 @@ __Concepts__
 * Provisioners provide the ability to execute commands e.g. copy a file into the VM
 
 * Infrastructure as a Code - Tool Categories
-	* Configuration Management Tools 
-		* Chef, Ansible, Puppet, Salt Stack
-		* Designed to install and manage software on existing servers
-		* Pros: coding convention, idempotent code, distribution to several servers
-	* Server Templating Tools
-		* Docker, Packer, Vagrant
-		* Instead of launching a bunch of servers and configuring them by running the same code on each one, the idea behind server templating tools is to create an image of a server that captures a fully self-contained “snapshot” of the operating system, the software, the files, and all other relevant details.
-		* Server templating is a key component of the shift to immutable infrastructure. This idea is inspired by functional programming, where variables are immutable.
-	* Server provisioning tools
-		* Terraform, AWS CloudFormation, OpenStack Heat
-		* Responsible for creating the servers themselves. Can also be used to create databases, caches, load balancers, queues, monitoring, subnet configurations, firewall settings, routing rules, SSL certificates, and almost every other aspect of your infrastructure
+  * Configuration Management Tools 
+    * Chef, Ansible, Puppet, Salt Stack
+    * Designed to install and manage software on existing servers
+    * Pros: coding convention, idempotent code, distribution to several servers
+  * Server Templating Tools
+    * Docker, Packer, Vagrant
+    * Instead of launching a bunch of servers and configuring them by running the same code on each one, the idea behind server templating tools is to create an image of a server that captures a fully self-contained “snapshot” of the operating system, the software, the files, and all other relevant details.
+    * Server templating is a key component of the shift to immutable infrastructure. This idea is inspired by functional programming, where variables are immutable.
+  * Server provisioning tools
+    * Terraform, AWS CloudFormation, OpenStack Heat
+    * Responsible for creating the servers themselves. Can also be used to create databases, caches, load balancers, queues, monitoring, subnet configurations, firewall settings, routing rules, SSL certificates, and almost every other aspect of your infrastructure
 
 __Commands__
 
@@ -73,8 +74,8 @@ __Commands__
 
 
 * __Links__
-	* https://www.terraform.io/docs/providers/openstack/r/compute_keypair_v2.html
-	* https://www.terraform.io/docs/provisioners/chef.html
+  * https://www.terraform.io/docs/providers/openstack/r/compute_keypair_v2.html
+  * https://www.terraform.io/docs/provisioners/chef.html
 
 
 # Configuration Management

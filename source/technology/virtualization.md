@@ -250,8 +250,9 @@ __Volumes__
 * All containers in a pod always land on the same machine
 * Each container within a Pod runs in its own cgroup, but they share a number of Linux namespaces.
 * Applications running in the same Pod 
+	* can connect to each using localhost and a fixed port
 	* share the same IP address and port space (network namespace), 
-	* have the same hostname (Unix Time Sharing[UTS] namespace), 
+	* have the same hostname (Unix Time Shared[UTS] namespace), 
 	* and can communicate using native interprocess communication channels over System V IPC or POSIX message queues (Interprocess Communication [IPC] namespace). 
 	* Containers in different Pods running on the same node might as well be on different servers.
 * Pods don’t move and must be explicitly destroyed and rescheduled.
@@ -428,24 +429,46 @@ spec:
 
 ## Labels & Annotations
 
-* __Labels__ 
-	* are key/value pairs that can be attached to Kubernetes objects such as Pods and ReplicaSets. 
-	* They can be arbitrary, and are useful for attaching identifying information to Kubernetes objects. 
-	* Labels are used to identify and optional group objects in a cluster.
-* __Annotations__ 
-	* annotations are key/value pairs designed to hold non-identifying information that can be leveraged by tools and libraries.
-	* While labels are used to identify and group objects, annotations are used to provide extra information about where an object came from, how to use it, or policy around that object.  
-	* There is overlap, and it is a matter of taste as to when to use an annotation or a label.  When in doubt, add information to an object as an annotation and promote it to a label if you find yourself wanting to use it in a selector.
-	* Where to use?
-		* Kubernetes uses this primarily for rolling deployments to track rollout status and provide the necessary information required to roll back a deployment to a previous state.
-		* Keep track of a “reason” for the latest update to an object.
-		* Extend data about the last tool to update the resource and how it was updated (used for detecting changes by other tools and doing a smart merge).
-		* Build, release, or image information that isn’t appropriate for labels (may include a Git hash, timestamp, PR number, etc.).
-		* Provide extra data to enhance the visual quality or usability of a UI.  For example, objects could include a link to an icon (or a base64-encoded version of an icon).
-	* Where not to use?
-		* Users should avoid using the Kubernetes API server as a general-purposedatabase.  Annotations are good for small bits of data that are highlyassociated with a specific resource.  If you want to store data in Kubernetes but you don’t have an obvious object to associate it with, consider storing that data in some other, more appropriate database.
+__Labels__ 
+
+* primarily for user/admin
+* are key/value pairs that can be attached to Kubernetes objects such as Pods and ReplicaSets. 
+* They can be arbitrary, and are useful for attaching identifying information to Kubernetes objects. 
+* Labels are used to identify and optional group objects in a cluster.
+
+```json
+"labels": {
+	"git": "ab656b56a56ba56b56522abbc27896",
+	"env": "prod",
+	"sla": "super-premium",
+	"tier": "frontend"
+}
+```
 
 
+__Annotations__ 
+
+* primarily for tooling
+* annotations are key/value pairs designed to hold non-identifying information that can be leveraged by tools and libraries.
+* While labels are used to identify and group objects, annotations are used to provide extra information about where an object came from, how to use it, or policy around that object.  
+* There is overlap, and it is a matter of taste as to when to use an annotation or a label.  When in doubt, add information to an object as an annotation and promote it to a label if you find yourself wanting to use it in a selector.
+* Where to use?
+	* Kubernetes uses this primarily for rolling deployments to track rollout status and provide the necessary information required to roll back a deployment to a previous state.
+	* Keep track of a “reason” for the latest update to an object.
+	* Extend data about the last tool to update the resource and how it was updated (used for detecting changes by other tools and doing a smart merge).
+	* Build, release, or image information that isn’t appropriate for labels (may include a Git hash, timestamp, PR number, etc.).
+	* Provide extra data to enhance the visual quality or usability of a UI.  For example, objects could include a link to an icon (or a base64-encoded version of an icon).
+* Where not to use?
+	* Users should avoid using the Kubernetes API server as a general-purpose database.  
+	* Annotations are good for small bits of data that are highlyassociated with a specific resource.  If you want to store data in Kubernetes but you don’t have an obvious object to associate it with, consider storing that data in some other, more appropriate database.
+	* Labels can be used to filter objects serverside, whereas annotations can't
+
+```json
+"annotations": {
+	"bindingHost": "192.168.24.65",
+	"executorId": "k8sm-executor"
+}
+```
 
 ## Cluster components
 
@@ -485,17 +508,41 @@ spec:
 
 {% img right /technology/kubernetes-services.jpg %}
 
+{% img right /technology/kubernetes-services-endpoints.png 600 600 %}
+
 * A `Service` object is a way to create a named label selector. 
 * The `kubernetes` service is automatically created for you so that you can find and talk to the Kubernetes API from within the app.
 * How to expose a service?
 	* `kubetctl expose <depl>` 
 	* creates a new service from a deployment
 	* assigns a new type of virtual IP called _cluster IP_ which is a special address the system will load-balance across all of the pods that are identified by the selector.
+
+
+
+> Traffic from a pod is intercepted on the host of the pod, not the destination of the connection.
+
 * Types
 	* `Cluster IP` - 
 	* `NodePort` - 
 	* `LoadBalancer` - 
+* A service without any pod is completely valid
 
+
+__Core Kubernetes architecture principle:__
+
+* Logic is in __control loops__ ("controllers") which 
+	* are stateless (can recover from failure)
+	* and decoupled (communication via API-server)
+
+__Control Loop to run Pods__
+
+* _INPUT_:
+	* REPLICAS: # of mypods that should be running
+* _ALGORITHM_
+	1. running = # of running pods with label `name=mypod`
+	2. If running > REPLICAS, then delete some mypods
+	3. If running < REPLICAS, then launch some mypods
+	4. Goto 1
 
 ## Command Reference
 

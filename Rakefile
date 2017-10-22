@@ -269,8 +269,8 @@ multitask :push do
     message = "Site updated at #{Time.now.utc}"
     puts "\n## Committing: #{message}"
     system "git commit -m \"#{message}\""
-    puts "\n## Pushing generated #{deploy_dir} website to branch '#{deploy_branch}'"
-    Bundler.with_clean_env { system 'git push --set-upstream origin #{deploy_branch} --force' }
+    puts "\n## Pushing generated #{deploy_dir} website"
+    Bundler.with_clean_env { system 'git push origin master --force' }
     puts "\n## Github Pages deploy complete"
   end
 end

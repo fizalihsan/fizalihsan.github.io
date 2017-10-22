@@ -456,7 +456,7 @@ messageStyle: "none",
   <li>pods from same application are distributed onto different machines for reliability</li>
   <li>graceful termination of pods for reliability (active requests are completed up to 30 secs)</li>
   <li>effective utilization of the compute nodes in the cluster</li>
-  <li>user can define lower and upper limit of resources needed for his app</li>
+  <li>user can define lower and upper limit of resources needed for an app</li>
 </ul>
 
 <h2 id="concepts-1">Concepts</h2>
@@ -489,7 +489,7 @@ messageStyle: "none",
 
 <ul>
   <li>Pods represent the atomic unit of work in a Kubernetes cluster. </li>
-  <li>Pods arecomprised of one or more containers working together symbiotically. </li>
+  <li>Pods = one or more containers working together symbiotically. </li>
   <li>To create a Pod, you write a Pod manifest and submit it to the Kubernetes API server by using the command-line tool or (less frequently) by making HTTP and JSON calls to the server directly.</li>
   <li>Pods are described in a Pod manifest file - in yaml or json format. They are stored in etcd (persistent storage)</li>
   <li>All containers in a pod always land on the same machine</li>
@@ -497,8 +497,8 @@ messageStyle: "none",
   <li>Applications running in the same Pod 
     <ul>
       <li>share the same IP address and port space (network namespace), </li>
-      <li>have the same hostname (UTS namespace), </li>
-      <li>and can communicate using native interprocess communication channels over System V IPC or POSIX message queues (IPC namespace). </li>
+      <li>have the same hostname (Unix Time Sharing[UTS] namespace), </li>
+      <li>and can communicate using native interprocess communication channels over System V IPC or POSIX message queues (Interprocess Communication [IPC] namespace). </li>
       <li>Containers in different Pods running on the same node might as well be on different servers.</li>
     </ul>
   </li>
@@ -510,7 +510,7 @@ messageStyle: "none",
   </li>
   <li><strong>How a pod is created?</strong>
     <ul>
-      <li>User creates a pod from command-line via kubectl or submitting a manifest file</li>
+      <li>User creates a pod from command-line via kubectl or by submitting a manifest file</li>
       <li>The Kubernetes API server accepts and processes Pod manifests before storing them in persistent storage (etcd). </li>
       <li>The scheduler uses the Kubernetes API to find Pods that haven’t been scheduled to a node. </li>
       <li>The scheduler then places the Pods onto nodes depending on the resources and other constraints expressed in the Pod manifests. </li>
@@ -602,7 +602,7 @@ messageStyle: "none",
   <li><strong>Process health check</strong>
     <ul>
       <li>Kubernetes <em>process health check</em> ensures that your container is always running. If it isn’t K8S restarts it.</li>
-      <li>A simple process check alone is insufficient. If the process is deadlocked, it won’t server any requests. To address this, liveness and readiness probes are available.</li>
+      <li>A simple process check alone is insufficient. If the process is deadlocked, it won’t serve any requests. To address this, liveness and readiness probes are available.</li>
     </ul>
   </li>
   <li><strong>HTTP health check</strong>
@@ -679,7 +679,7 @@ messageStyle: "none",
 
 <h3 id="resource-management">Resource Management</h3>
 
-<p>To ensure the resources are maximally utilized, you can specifiy resource metrics in the manifest. <em>Requests</em> specificy the minimum resource need and <em>limits</em> specify the maximum.</p>
+<p>To ensure the resources are maximally utilized, you can specifiy resource metrics in the manifest. <em>Requests</em> specify the minimum resource need and <em>limits</em> specify the maximum.</p>
 
 <ul>
   <li>Minimum required resources
@@ -754,28 +754,38 @@ messageStyle: "none",
 
 <ul>
   <li>Many applications are stateful, and as such we must preserve any data and ensure access to the underlying storage volume regardless of what machine the application runs on. This can be achieved using a persistent volume backed by network-attached storage.</li>
-  <li><code>emptDir</code> volume
+  <li><strong>emptyDir</strong> volume
     <ul>
       <li>An <code>emptyDir</code> volume is scoped to the Pod’s lifespan, but can be shared between two containers. Useful for caching thumbnails, etc.</li>
     </ul>
   </li>
-  <li><code>hostDir</code> volume
+  <li><strong>hostDir</strong> volume
     <ul>
-      <li>Some applications don’t actually need a persistent volume, but they do need some access to the underlying host filesystem. For example, they may need access to the <code>/dev</code> filesystem in order to perform raw block-level access to a device on the system. For these cases, Kubernetes supports the hostDir volume, which can mount arbitrary locations on the worker node into the container.</li>
+      <li>Some applications don’t actually need a persistent volume, but they do need some access to the underlying host filesystem. For example, they may need access to the <code>/dev</code> filesystem in order to perform raw block-level access to a device on the system. For these cases, Kubernetes supports the <code>hostDir</code> volume, which can mount arbitrary locations on the worker node into the container.</li>
     </ul>
   </li>
-  <li><em>Remote network storage volumes</em>
+  <li><strong>Remote network storage volumes</strong>
     <ul>
       <li>Sometimes you will use a volume for truly persistent data that is independent of the lifespan of a particular Pod, and should move between nodes in the cluster if a node fails or a Pod moves to a different machine for some reason. </li>
-      <li>To achieve this, Kubernetes supports a wide variety of remote network storage volumes, including widely supported protocols like NFS or iSCSI as well as cloud provider network storage like Amazon’s Elastic Block Store, Azure’s Files and Disk Storage, as well as Google’s Persistent Disk.</li>
+      <li>To achieve this, Kubernetes supports a wide variety of remote network storage volumes
+        <ul>
+          <li>including widely supported protocols like NFS or iSCSI</li>
+          <li>cloud provider network storage
+            <ul>
+              <li>Amazon’s Elastic Block Store</li>
+              <li>Azure’s Files and Disk Storage</li>
+              <li>Google’s Persistent Disk.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
     </ul>
   </li>
-  <li><em>Persistent Data using Remote Disks</em>
+  <li><strong>Persistent Data using Remote Disks</strong>
     <ul>
       <li>Oftentimes, you want the data a Pod is using to stay with the Pod, even if it is restarted on a different host machine.</li>
       <li>To achieve this, you can mount a remote network storage volume into your Pod. </li>
       <li>When using network-based storage, Kubernetes automatically mounts and unmounts the appropriate storage whenever a Pod using that volume is scheduled onto a particular machine.</li>
-      <li>Kubernetes includes support for standard protocols such as NFS and iSCSI as well as cloud provider–based storage APIs for the major cloud providers (both public and private). In many cases, the cloud providers will also create the disk for you if it doesn’t already exist.</li>
     </ul>
   </li>
 </ul>
@@ -816,14 +826,32 @@ messageStyle: "none",
 <h2 id="cluster-components">Cluster components</h2>
 
 <ul>
-  <li>
-    <p>All components run in the <code>kube-system</code> namespace</p>
-  </li>
+  <li>All components run in the <code>kube-system</code> namespace</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>Architecture</th>
+      <th>Kubernetes Master</th>
+      <th>Kubernetes Node</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><img src="/technology/kubernetes-architecture.jpg" /></td>
+      <td><img src="/technology/kubernetes-architecture2.jpg" /></td>
+      <td><img src="/technology/kubernetes-architecture3.jpg" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
   <li>Types
     <ul>
       <li><strong>kube-proxy</strong>
         <ul>
-          <li>The Kubernetes proxy is responsible for routing network traffic to load-balanced services in the Kubernetes cluster. </li>
+          <li>responsible for routing network traffic to load-balanced services in the Kubernetes cluster. </li>
           <li>must be present on every node in the cluster. </li>
           <li>Kubernetes has an API object named <code>DaemonSet</code>, that is used in many clusters to accomplish this. </li>
         </ul>
@@ -845,11 +873,6 @@ messageStyle: "none",
       <li>The <strong>controller-manager</strong> is responsible for running various controllers that regulate behavior in the cluster: for example, ensuring that all of the replicas of a service are available and healthy. </li>
       <li>The <strong>scheduler</strong> is responsible for placing different pods onto different nodes in the cluster. </li>
       <li>The <strong>etcd server</strong> is the storage for the cluster where all of the API objects are stored.</li>
-      <li>Pods running in the cluster
-        <ul>
-          <li><em>kube-dns</em>: supplies DNS services for the cluster</li>
-        </ul>
-      </li>
     </ul>
   </li>
   <li><strong>Node Types</strong>
@@ -870,6 +893,8 @@ messageStyle: "none",
 </ul>
 
 <h2 id="services">Services</h2>
+
+<p><img class="right" src="/technology/kubernetes-services.jpg" /></p>
 
 <ul>
   <li>A <code>Service</code> object is a way to create a named label selector. </li>

@@ -223,7 +223,7 @@ __Volumes__
 * pods from same application are distributed onto different machines for reliability
 * graceful termination of pods for reliability (active requests are completed up to 30 secs)
 * effective utilization of the compute nodes in the cluster
-* user can define lower and upper limit of resources needed for his app
+* user can define lower and upper limit of resources needed for an app
 
 
 ## Concepts
@@ -244,21 +244,21 @@ __Volumes__
 ## Pods
 
 * Pods represent the atomic unit of work in a Kubernetes cluster. 
-* Pods arecomprised of one or more containers working together symbiotically. 
+* Pods = one or more containers working together symbiotically. 
 * To create a Pod, you write a Pod manifest and submit it to the Kubernetes API server by using the command-line tool or (less frequently) by making HTTP and JSON calls to the server directly.
 * Pods are described in a Pod manifest file - in yaml or json format. They are stored in etcd (persistent storage)
 * All containers in a pod always land on the same machine
 * Each container within a Pod runs in its own cgroup, but they share a number of Linux namespaces.
 * Applications running in the same Pod 
 	* share the same IP address and port space (network namespace), 
-	* have the same hostname (UTS namespace), 
-	* and can communicate using native interprocess communication channels over System V IPC or POSIX message queues (IPC namespace). 
+	* have the same hostname (Unix Time Sharing[UTS] namespace), 
+	* and can communicate using native interprocess communication channels over System V IPC or POSIX message queues (Interprocess Communication [IPC] namespace). 
 	* Containers in different Pods running on the same node might as well be on different servers.
 * Pods don’t move and must be explicitly destroyed and rescheduled.
 * ___When to create a pod?___
 	* Will these containers work correctly if they land on different machines? If yes, then don't group them in a prod. Else, put them together in a pod. e.g., if all the containers want to share the file system.
 * __How a pod is created?__
-	* User creates a pod from command-line via kubectl or submitting a manifest file
+	* User creates a pod from command-line via kubectl or by submitting a manifest file
 	* The Kubernetes API server accepts and processes Pod manifests before storing them in persistent storage (etcd). 
 	* The scheduler uses the Kubernetes API to find Pods that haven’t been scheduled to a node. 
 	* The scheduler then places the Pods onto nodes depending on the resources and other constraints expressed in the Pod manifests. 
@@ -322,7 +322,7 @@ metadata:
 
 * __Process health check__
 	* Kubernetes _process health check_ ensures that your container is always running. If it isn't K8S restarts it.
-	* A simple process check alone is insufficient. If the process is deadlocked, it won't server any requests. To address this, liveness and readiness probes are available.
+	* A simple process check alone is insufficient. If the process is deadlocked, it won't serve any requests. To address this, liveness and readiness probes are available.
 * __HTTP health check__
 	* __Liveness probe__
 		* Liveness determines if an application is running properly. 
@@ -365,7 +365,7 @@ spec:
 
 ### Resource Management
 
-To ensure the resources are maximally utilized, you can specifiy resource metrics in the manifest. _Requests_ specificy the minimum resource need and _limits_ specify the maximum.
+To ensure the resources are maximally utilized, you can specifiy resource metrics in the manifest. _Requests_ specify the minimum resource need and _limits_ specify the maximum.
 
 
 * Minimum required resources
@@ -409,18 +409,22 @@ spec:
 ### Persistent Storage
 
 * Many applications are stateful, and as such we must preserve any data and ensure access to the underlying storage volume regardless of what machine the application runs on. This can be achieved using a persistent volume backed by network-attached storage.
-* `emptDir` volume
+* __emptyDir__ volume
 	* An `emptyDir` volume is scoped to the Pod's lifespan, but can be shared between two containers. Useful for caching thumbnails, etc.
-* `hostDir` volume
-	* Some applications don’t actually need a persistent volume, but they do need some access to the underlying host filesystem. For example, they may need access to the `/dev` filesystem in order to perform raw block-level access to a device on the system. For these cases, Kubernetes supports the hostDir volume, which can mount arbitrary locations on the worker node into the container.
-* _Remote network storage volumes_
+* __hostDir__ volume
+	* Some applications don’t actually need a persistent volume, but they do need some access to the underlying host filesystem. For example, they may need access to the `/dev` filesystem in order to perform raw block-level access to a device on the system. For these cases, Kubernetes supports the `hostDir` volume, which can mount arbitrary locations on the worker node into the container.
+* __Remote network storage volumes__
 	* Sometimes you will use a volume for truly persistent data that is independent of the lifespan of a particular Pod, and should move between nodes in the cluster if a node fails or a Pod moves to a different machine for some reason. 
-	* To achieve this, Kubernetes supports a wide variety of remote network storage volumes, including widely supported protocols like NFS or iSCSI as well as cloud provider network storage like Amazon’s Elastic Block Store, Azure’s Files and Disk Storage, as well as Google’s Persistent Disk.
-* _Persistent Data using Remote Disks_
+	* To achieve this, Kubernetes supports a wide variety of remote network storage volumes
+		* including widely supported protocols like NFS or iSCSI
+		* cloud provider network storage
+			* Amazon’s Elastic Block Store
+			* Azure’s Files and Disk Storage
+			* Google’s Persistent Disk.
+* __Persistent Data using Remote Disks__
 	* Oftentimes, you want the data a Pod is using to stay with the Pod, even if it is restarted on a different host machine.
 	* To achieve this, you can mount a remote network storage volume into your Pod. 
 	* When using network-based storage, Kubernetes automatically mounts and unmounts the appropriate storage whenever a Pod using that volume is scheduled onto a particular machine.
-	* Kubernetes includes support for standard protocols such as NFS and iSCSI as well as cloud provider–based storage APIs for the major cloud providers (both public and private). In many cases, the cloud providers will also create the disk for you if it doesn’t already exist.
 
 ## Labels & Annotations
 
@@ -449,7 +453,7 @@ spec:
 
 * Types
 	* __kube-proxy__
-		* The Kubernetes proxy is responsible for routing network traffic to load-balanced services in the Kubernetes cluster. 
+		* responsible for routing network traffic to load-balanced services in the Kubernetes cluster. 
 		* must be present on every node in the cluster. 
 		* Kubernetes has an API object named `DaemonSet`, that is used in many clusters to accomplish this. 
 	* __kube-dns__
@@ -465,8 +469,6 @@ spec:
 	* The __controller-manager__ is responsible for running various controllers that regulate behavior in the cluster: for example, ensuring that all of the replicas of a service are available and healthy. 
 	* The __scheduler__ is responsible for placing different pods onto different nodes in the cluster. 
 	* The __etcd server__ is the storage for the cluster where all of the API objects are stored.
-	* Pods running in the cluster
-		* _kube-dns_: supplies DNS services for the cluster
 
 * __Node Types__
 	* Master node 

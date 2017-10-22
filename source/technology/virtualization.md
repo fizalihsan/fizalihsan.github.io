@@ -451,6 +451,10 @@ spec:
 
 * All components run in the `kube-system` namespace
 
+|Architecture| Kubernetes Master| Kubernetes Node|
+|---|---|---|
+|{% img /technology/kubernetes-architecture.jpg %}|{% img /technology/kubernetes-architecture2.jpg %}|{% img /technology/kubernetes-architecture3.jpg %}|
+
 * Types
 	* __kube-proxy__
 		* responsible for routing network traffic to load-balanced services in the Kubernetes cluster. 
@@ -478,6 +482,8 @@ spec:
 		* where the application containers will run. 
 
 ## Services
+
+{% img right /technology/kubernetes-services.jpg %}
 
 * A `Service` object is a way to create a named label selector. 
 * The `kubernetes` service is automatically created for you so that you can find and talk to the Kubernetes API from within the app.

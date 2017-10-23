@@ -496,8 +496,9 @@ messageStyle: "none",
   <li>Each container within a Pod runs in its own cgroup, but they share a number of Linux namespaces.</li>
   <li>Applications running in the same Pod 
     <ul>
+      <li>can connect to each using localhost and a fixed port</li>
       <li>share the same IP address and port space (network namespace), </li>
-      <li>have the same hostname (Unix Time Sharing[UTS] namespace), </li>
+      <li>have the same hostname (Unix Time Shared[UTS] namespace), </li>
       <li>and can communicate using native interprocess communication channels over System V IPC or POSIX message queues (Interprocess Communication [IPC] namespace). </li>
       <li>Containers in different Pods running on the same node might as well be on different servers.</li>
     </ul>
@@ -792,36 +793,63 @@ messageStyle: "none",
 
 <h2 id="labels--annotations">Labels &amp; Annotations</h2>
 
+<p><strong>Labels</strong> </p>
+
 <ul>
-  <li><strong>Labels</strong> 
+  <li>primarily for user/admin</li>
+  <li>are key/value pairs that can be attached to Kubernetes objects such as Pods and ReplicaSets. </li>
+  <li>They can be arbitrary, and are useful for attaching identifying information to Kubernetes objects. </li>
+  <li>Labels are used to identify and optional group objects in a cluster.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="s2">&quot;labels&quot;</span><span class="err">:</span> <span class="p">{</span>
+</span><span class="line">	<span class="nt">&quot;git&quot;</span><span class="p">:</span> <span class="s2">&quot;ab656b56a56ba56b56522abbc27896&quot;</span><span class="p">,</span>
+</span><span class="line">	<span class="nt">&quot;env&quot;</span><span class="p">:</span> <span class="s2">&quot;prod&quot;</span><span class="p">,</span>
+</span><span class="line">	<span class="nt">&quot;sla&quot;</span><span class="p">:</span> <span class="s2">&quot;super-premium&quot;</span><span class="p">,</span>
+</span><span class="line">	<span class="nt">&quot;tier&quot;</span><span class="p">:</span> <span class="s2">&quot;frontend&quot;</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Annotations</strong> </p>
+
+<ul>
+  <li>primarily for tooling</li>
+  <li>annotations are key/value pairs designed to hold non-identifying information that can be leveraged by tools and libraries.</li>
+  <li>While labels are used to identify and group objects, annotations are used to provide extra information about where an object came from, how to use it, or policy around that object.  </li>
+  <li>There is overlap, and it is a matter of taste as to when to use an annotation or a label.  When in doubt, add information to an object as an annotation and promote it to a label if you find yourself wanting to use it in a selector.</li>
+  <li>Where to use?
     <ul>
-      <li>are key/value pairs that can be attached to Kubernetes objects such as Pods and ReplicaSets. </li>
-      <li>They can be arbitrary, and are useful for attaching identifying information to Kubernetes objects. </li>
-      <li>Labels are used to identify and optional group objects in a cluster.</li>
+      <li>Kubernetes uses this primarily for rolling deployments to track rollout status and provide the necessary information required to roll back a deployment to a previous state.</li>
+      <li>Keep track of a “reason” for the latest update to an object.</li>
+      <li>Extend data about the last tool to update the resource and how it was updated (used for detecting changes by other tools and doing a smart merge).</li>
+      <li>Build, release, or image information that isn’t appropriate for labels (may include a Git hash, timestamp, PR number, etc.).</li>
+      <li>Provide extra data to enhance the visual quality or usability of a UI.  For example, objects could include a link to an icon (or a base64-encoded version of an icon).</li>
     </ul>
   </li>
-  <li><strong>Annotations</strong> 
+  <li>Where not to use?
     <ul>
-      <li>annotations are key/value pairs designed to hold non-identifying information that can be leveraged by tools and libraries.</li>
-      <li>While labels are used to identify and group objects, annotations are used to provide extra information about where an object came from, how to use it, or policy around that object.  </li>
-      <li>There is overlap, and it is a matter of taste as to when to use an annotation or a label.  When in doubt, add information to an object as an annotation and promote it to a label if you find yourself wanting to use it in a selector.</li>
-      <li>Where to use?
-        <ul>
-          <li>Kubernetes uses this primarily for rolling deployments to track rollout status and provide the necessary information required to roll back a deployment to a previous state.</li>
-          <li>Keep track of a “reason” for the latest update to an object.</li>
-          <li>Extend data about the last tool to update the resource and how it was updated (used for detecting changes by other tools and doing a smart merge).</li>
-          <li>Build, release, or image information that isn’t appropriate for labels (may include a Git hash, timestamp, PR number, etc.).</li>
-          <li>Provide extra data to enhance the visual quality or usability of a UI.  For example, objects could include a link to an icon (or a base64-encoded version of an icon).</li>
-        </ul>
-      </li>
-      <li>Where not to use?
-        <ul>
-          <li>Users should avoid using the Kubernetes API server as a general-purposedatabase.  Annotations are good for small bits of data that are highlyassociated with a specific resource.  If you want to store data in Kubernetes but you don’t have an obvious object to associate it with, consider storing that data in some other, more appropriate database.</li>
-        </ul>
-      </li>
+      <li>Users should avoid using the Kubernetes API server as a general-purpose database.  </li>
+      <li>Annotations are good for small bits of data that are highlyassociated with a specific resource.  If you want to store data in Kubernetes but you don’t have an obvious object to associate it with, consider storing that data in some other, more appropriate database.</li>
+      <li>Labels can be used to filter objects serverside, whereas annotations can’t</li>
     </ul>
   </li>
 </ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="s2">&quot;annotations&quot;</span><span class="err">:</span> <span class="p">{</span>
+</span><span class="line">	<span class="nt">&quot;bindingHost&quot;</span><span class="p">:</span> <span class="s2">&quot;192.168.24.65&quot;</span><span class="p">,</span>
+</span><span class="line">	<span class="nt">&quot;executorId&quot;</span><span class="p">:</span> <span class="s2">&quot;k8sm-executor&quot;</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h2 id="cluster-components">Cluster components</h2>
 
@@ -896,6 +924,8 @@ messageStyle: "none",
 
 <p><img class="right" src="/technology/kubernetes-services.jpg" /></p>
 
+<p><img class="right" src="/technology/kubernetes-services-endpoints.png" width="600" height="600" /></p>
+
 <ul>
   <li>A <code>Service</code> object is a way to create a named label selector. </li>
   <li>The <code>kubernetes</code> service is automatically created for you so that you can find and talk to the Kubernetes API from within the app.</li>
@@ -906,12 +936,49 @@ messageStyle: "none",
       <li>assigns a new type of virtual IP called <em>cluster IP</em> which is a special address the system will load-balance across all of the pods that are identified by the selector.</li>
     </ul>
   </li>
+</ul>
+
+<blockquote>
+  <p>Traffic from a pod is intercepted on the host of the pod, not the destination of the connection.</p>
+</blockquote>
+
+<ul>
   <li>Types
     <ul>
       <li><code>Cluster IP</code> - </li>
       <li><code>NodePort</code> - </li>
       <li><code>LoadBalancer</code> - </li>
     </ul>
+  </li>
+  <li>A service without any pod is completely valid</li>
+</ul>
+
+<p><strong>Core Kubernetes architecture principle:</strong></p>
+
+<ul>
+  <li>Logic is in <strong>control loops</strong> (“controllers”) which 
+    <ul>
+      <li>are stateless (can recover from failure)</li>
+      <li>and decoupled (communication via API-server)</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Control Loop to run Pods</strong></p>
+
+<ul>
+  <li><em>INPUT</em>:
+    <ul>
+      <li>REPLICAS: # of mypods that should be running</li>
+    </ul>
+  </li>
+  <li><em>ALGORITHM</em>
+    <ol>
+      <li>running = # of running pods with label <code>name=mypod</code></li>
+      <li>If running &gt; REPLICAS, then delete some mypods</li>
+      <li>If running &lt; REPLICAS, then launch some mypods</li>
+      <li>Goto 1</li>
+    </ol>
   </li>
 </ul>
 

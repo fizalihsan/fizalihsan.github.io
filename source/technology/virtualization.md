@@ -506,9 +506,12 @@ __Annotations__
 
 ## Services
 
-{% img right /technology/kubernetes-services.jpg %}
+| --- | --- |
+| --- | --- |
+| {% img right /technology/kubernetes-services.jpg %} |  {% img right /technology/kubernetes-services-endpoints.png 600 600 %} |
 
-{% img right /technology/kubernetes-services-endpoints.png 600 600 %}
+* Why services?
+	* We can always use labels to identify the set of pods we are interested in, get all of the pods for those labels, and dig out the IP address.  But keeping the correct set of labels to use in sync can be tricky.  This is why the Service object was created.
 
 * A `Service` object is a way to create a named label selector. 
 * The `kubernetes` service is automatically created for you so that you can find and talk to the Kubernetes API from within the app.
@@ -516,8 +519,6 @@ __Annotations__
 	* `kubetctl expose <depl>` 
 	* creates a new service from a deployment
 	* assigns a new type of virtual IP called _cluster IP_ which is a special address the system will load-balance across all of the pods that are identified by the selector.
-
-
 
 > Traffic from a pod is intercepted on the host of the pod, not the destination of the connection.
 
@@ -528,21 +529,110 @@ __Annotations__
 * A service without any pod is completely valid
 
 
-__Core Kubernetes architecture principle:__
+* __DNS Service__
+	* Kubernetes provides a DNS service (installed as a system component when the cluster was first created)
+	* DNS service is exposed to Pods running in the cluster
+	* It provides DNS names for cluster IPs
+	* Sample fully qualified DNS name: `alpaca-prod.default.svc.cluster.local`
+	* `alpaca-prod` - name of the service
+	* `default` - namespace that this service is in
+	* `svc` - recognizing that this is a service
+	* `cluster.local` - The base domain name for the cluster.  This is the default and what you will see for most clusters. Administrators may change this to allow unique DNS names across multiple clusters.
 
-* Logic is in __control loops__ ("controllers") which 
-	* are stateless (can recover from failure)
-	* and decoupled (communication via API-server)
+* __Endpoints__
+	* For every Service object, Kubernetes creates a buddy Endpointsobject that contains the IP addresses for that service
+	* Apps that want to use services without using a cluster IP can use 'Endpoints'.
+	* To use a service, an advanced application can talk to the Kubernetes API directly to look up endpoints and call them.
 
-__Control Loop to run Pods__
+{% img right /technology/kube_proxy.png 600 600 %}
 
-* _INPUT_:
-	* REPLICAS: # of mypods that should be running
-* _ALGORITHM_
-	1. running = # of running pods with label `name=mypod`
-	2. If running > REPLICAS, then delete some mypods
-	3. If running < REPLICAS, then launch some mypods
-	4. Goto 1
+* __kube-proxy__
+	* Cluster IPs are stable virtual IPs that load-balance traffic across all of the endpoints in a service. This magic is performed by a component running on every node in the cluster called the `kube-proxy`
+	* `kube-proxy` watches for new services in the cluster via the API server. It then programs a set of iptables rules in the kernel of that host to rewrite the destination of packets so they are directed at one of the endpoints for that service.
+	* If the set of endpoints for a service changes (due to pods coming and going or due to a failed readiness check) the set of iptables rules is rewritten.
+	* The cluster IP itself is usually assigned by the API server as the service is created.  However, when creating the service, the user can specify a specific cluster IP.
+	* Once set, the cluster IP cannot be modified without deleting and recreating the Service object.
+
+* __Daemons__
+	* `supervisord` is a lightweight process monitor and control system that can be used to keep kubelet and docker running.
+	* [fluentd](https://www.fluentd.org) is a daemon which helps provide cluster-level logging.
+	* `OSCAP` - security
+	* [prometheus](https://prometheus.io/) - monitoring and alerting toolkit (heapster)
+	* [flannel](https://github.com/coreos/flannel) - layer 3 network fabric designed for Kubernetes
+	* [linkerd]
+	* [envoy](https://www.envoyproxy.io/)
+	* [istio](https://istio.io/)
+	* `systemd`
+	* `journald`
+
+## ReplicaSets
+
+* Multiple replica of containers are needed for variety of reasons like:
+	* Redundancy - Multiple running instances mean failure can be tolerated.
+	* Scale - Multiple running instances mean that more requests can be handled.
+	* Sharding - Different replicas can handle different parts of a computation in parallel.
+* Composing Pods with ReplicaSets provides the foundation for building robust applications with automatic failover, and makes deploying those applications a breeze by enabling scalable and sane deployment patterns. 
+* ReplicaSets should be used for any Pod you care about, even if it is a single Pod! Some people even default to using ReplicaSets instead of Pods. 
+* ReplicaSet enables a user managing a replicated set of Pods considers them as a single entity to be defined and managed. A ReplicaSet acts as a cluster-wide Pod manager, ensuring that the right types and number of Pods are running at all times.
+* ReplicaSets provide the underpinning for building self-healing apps. Pods managed by ReplicaSets are automatically rescheduled under certain failure conditions such as node failures and network partitions.
+
+
+* ReplicaSets and Pods are loosely coupled. Though ReplicaSets create and manage Pods, they do not own the Pods they create.
+* ReplicaSets use label queries to identify the set of Pods they should be managing.
+* ReplicaSets monitor cluster state using a set of Pod labels. Labels are used to filter Pod listings and track Pods running within a cluster. When ReplicaSets are initially created, the ReplicaSet fetches a Pod listing from the Kubernetes API and filters the results by labels. Based on the number of Pods returned by the query, the ReplicaSet deletes or creates Pods to meet the desired number of replicas. 
+* ReplicaSets that create multiple Pods and the services that load-balance to those Pods are also totally separate, decoupled API objects.
+* Quarantining faulty containers
+	* When a server misbehaves, Pod-level health checks will automatically restart that Pod. But if your health checks are incomplete, a Pod can be misbehaving but still be part of the replicated set. In these situations, while it would work to simply kill the Pod, that would leave your developers with only logs to debug the problem. Instead, you can modify the set of labels on the sick Pod. Doing so will disassociate it from the ReplicaSet (and service) so that you can debug the Pod. The ReplicaSet controller will notice that a Pod is missing and create a new copy, but because the Pod is still running, it is available to developers for interactive debugging, which is significantly more valuable than debugging from logs.
+* Designing with ReplicaSets
+	* every Pod that is created by the ReplicaSet controller is entirely homogeneous. ReplicaSets are designed for stateless (or nearly stateless) services. The elements created by the ReplicaSet are interchangeable; when a ReplicaSet is scaled down, an arbitrary Pod is selected for deletion. Your application’s behavior shouldn’t change because of such a scale-down operation.
+
+__Sample ReplicaSet Spec__
+
+* ReplicaSet name must be unique within the cluster (`metadata.name`)
+
+```
+apiVersion: extensions/v1beta1
+kind: ReplicaSet
+metadata:
+  name: kuard
+spec:
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: kuard
+        version: "2"
+    spec:
+      containers:
+        - name: kuard
+          image: "gcr.io/kuar-demo/kuard-amd64:2"
+          ports:
+            - containerPort: 80
+```
+
+__Reconciliation Loop__
+
+* The reconciliation loop is a single loop that constantly runs, observes the current state of the world and takes action to try to make the observed state match the desired state.
+* it handles both user actions to scale up or scale down the ReplicaSet, as well as node failures or nodes rejoining the cluster after being absent.
+* Foundation for the self-healing system
+* __How it works?__
+	* _INPUT_:
+		* REPLICAS: # of mypods that should be running
+	* _ALGORITHM_
+		1. running = # of running pods with label `name=mypod`
+		2. If running > REPLICAS, then delete some mypods
+		3. If running < REPLICAS, then launch some mypods
+		4. Goto 1
+
+__Autoscaling__
+
+* Kubernetes supports autoscaling
+	* Horizontal pod autoscaling (HPA) - creating additional replicas of a Pod when needed
+	* Vertical pod autoscaling - K8S does not support this at the time of this writing
+	* Cluster autoscaling - where the number of machines in the cluster is scaled in response to resource needs
+* HPA requires the presence of out-of-the-box pod called _Heapster_ which keeps track of metrics and provides an API for consuming metrics HPA uses when making scaling decisions.
+
+> Because of the decoupled nature of Kubernetes, there is no direct link between the horizontal pod autoscaler and the ReplicaSet. While this is great for modularity and composition, it also enables some antipatterns. In particular, it’s a bad idea to combine both autoscaling and imperative or declarative management of the number of replicas. If both you and an autoscaler are attempting to modify the number of replicas, it’s highly likely that you will clash, resulting in unexpected behavior.
 
 ## Command Reference
 
@@ -579,6 +669,15 @@ __Control Loop to run Pods__
 	* `kubectl expose deployment <depl-name>` - to expose a deployment as a service
 	* `kubectl get services -o wide` - to view all the services
 	* `kubectl describe service <svc>`
+* __ReplicaSets__
+	* `kubectl describe rs <name>`
+	* `kubectl get pods <pod-name> -o yaml` - pods with annotation entry `kubernetes.io/created-by` are the ones created by Kubernetes
+	* `kubectl scale <replicaset> --replicas=4` - to reset/edit the number of replicas
+	* `kubectl delete rs <replicaset>` - to delete the replicaset and the pods
+	* `kubectl delete rs <replicaset> --cascade=false` - to delete only the replicaset and not the pods
+* __Autoscaling__
+	* `kubectl autoscale rs <pod-name> --min=2 --max=5 --cpu-percent=80` - creates an autoscaler that scales between two and five replicas with a CPU threshold of 80%.
+	* `kubectl get hpa` 
 * __Debugging__
 	* `kubectl describe nodes <node_name>` - to get more information about a specific node
 	* `kubectl logs <pod-name>` - to view the logs from all the containers in a pod

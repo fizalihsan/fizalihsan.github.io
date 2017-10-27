@@ -204,6 +204,35 @@ end
 * ​​Run list is specified in the chef-client command or stored on a Chef server.
 * For each node, Chef evaluates only recipe files that are specified on the node's run list.​
 
+## SaltStack
+
+* States are stored in text files on the master and transferred to the minions on demand via the master's File Server.
+* The collection of state files make up the _State Tree_
+
+
+Open Questions
+--------------
+
+* How to start the salt master/minion?
+* How to check if master/minion is running?
+* How to sync the changes from master to all minions?
+* how to check if the changes are all synced up to all minions?
+
+After making a change to `/etc/salt/master`, restart the master daemon running, `pkill salt-master`,
+`salt-master -d`
+
+```
+salt-master
+sudo salt '*' saltutil.sync_all
+sudo salt '*' mine.update
+sudo
+```
+
+
+* `salt '*' state.apply` to instruct all minions to run _state.apply_.
+
+* `salt-key -L` - to view salt authentication keys
+
 
 # References
 

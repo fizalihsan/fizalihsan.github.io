@@ -48,7 +48,6 @@ __Concepts__
 * Resources representinfrastructure components  e.g. server, virtual machine, container, network port.
 * Providers are components that let you manage a resource on a particular platform e.g. OpenStack, AWS, Google Cloud, DigitalOcean
 * Provisioners provide the ability to execute commands e.g. copy a file into the VM
-
 * Infrastructure as a Code - Tool Categories
   * Configuration Management Tools 
     * Chef, Ansible, Puppet, Salt Stack

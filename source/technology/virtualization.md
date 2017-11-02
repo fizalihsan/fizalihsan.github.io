@@ -49,7 +49,7 @@ Hypervisors and VMs are just one approach to virtual workload deployment. Contai
 
 ## Docker flow explained
 
-{% img right /technology/docker-flow.png right 50 50 %}
+{% img right /technology/docker-flow.png right 40 40 %}
 
 What happens when `docker run hello-world` is executed.
 
@@ -81,18 +81,26 @@ What happens when `docker run hello-world` is executed.
 * The filesystem from the image has been mounted as a read-only layer, and any changes to the running container are made to a read- write layer mounted on top of this. Because of this, Docker only has to look at the topmost read-write layer to find the changes made to the running system.
 * Docker images are made up of multiple layers. Each of these layers is a read-only filesystem. A layer is created for each instruction in a Dockerfile and sits on top of the previous layers. When an image is turned into a container, the Docker engine takes the image and adds a read-write filesystem on top (as well as initializing various settings such as the IP address, name, ID, and resource limits).
 
-### Image Layers
+__Images__
 
 * Each instruction in a Dockerfile results in a new image layer, which can also be used to start a container. 
-* The new layer is created by starting a container using the image of the previ‐ous layer, executing the Dockerfile instruction and saving a new image.
+* The new layer is created by starting a container using the image of the previous layer, executing the Dockerfile instruction and saving a new image.
 * When a Dockerfile instruction successfully completes, the intermediate container will be deleted, unless the `--rm=false` argument was given.
-* Since each instruction results in an static image—essentially just a filesystem and some metadata—all running processes in the instruction will be stopped. This means that while you can start long-lived processes, such as databases or SSH daemons in a `RUN` instruction, they will not be running when the next instruction is processed or a container is started. If you want a service or process to start with the container, it must be launched from an `ENTRYPOINT` or `CMD` instruction.
+* Since each instruction results in an static image, all running processes in the instruction will be stopped. 
+* To start long-lived processes within the container, such as databases or SSH daemons, it must be launched from an `ENTRYPOINT` or `CMD` instruction.
 
+
+* DO NOT use a large folder as _build context_ since it is tarred up and sent to docker daemon
 * DO NOT create containers with passwords baked in
 * Files that are removed by subsequent layers in the system are actually still present in the images; they’re just inaccessible
 * Each layer is an independent delta from the layer below it. Every time you change a layer, it changes every layer that comes after it. Changing the preceding layers means that they need to be rebuilt, repushed, and repulled to deploy your image to development.
+*  Often you can use separate images for building (e.g., java-jdk) and distributing (e.g., java:jre) your software, which gets rid of the unnecessary build tooling).
 
-### Volumes
+__Linking__
+
+By default, containers will be able to talk to each other whether or not they have been explicitly linked. If you want to prevent containers that haven’t been linked from communicating, use the arguments `--icc=false` and `--iptables` when starting the Docker daemon. Now when containers are linked, Docker will set up iptables rules to allow the containers to communicate on any ports that have been declared as exposed.
+
+__Volumes__
 
 * Volumes are files or directories that are directly mounted on the host and not part of the normal UFS. This means they can be shared with other containers and all changes will be made directly to the host filesystem. 
 * First way of initializing volume

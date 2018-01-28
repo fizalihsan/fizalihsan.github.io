@@ -130,7 +130,7 @@ __Volumes__
 	* Docker Hub, CoreOS Enterprise Registry, Artficatory
 * Networking solution
 	* Creating network of containers that spans across hosts
-	* Solutions: Overlay (integrated solution), Weave, Apache Calico
+	* Solutions: Overlay (integrated solution), Weave, Apache Calico, Flannel, Linkerd service mesh
 * Service Discovery
 	* Docker containers need to find a way to communicate with other services which could be running on other containers. As containers are dynamically assigned IPs, this is a complex problem.
 	* Solutions: etcd, Consul, Registrator, SkyDNS
@@ -144,6 +144,8 @@ __Volumes__
 	* Solutions: Project Atomic, CoreOS, and RancherOS.
 * PaaS
 	* Solutions: Deis, Flynn, Paz
+* Monitoring
+	* init, systemd, runit, upstart, and supervisord.
 
 ## Command Reference
 

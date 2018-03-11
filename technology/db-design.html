@@ -368,11 +368,116 @@ which is present in an application is absolutely critical.</li>
 
 <h3 id="entity-attribute-value">Entity attribute value</h3>
 
+<ul>
+  <li>also known as <em>open schema</em>, <em>schemaless</em>, <em>name-value pairs</em></li>
+  <li>Objective
+    <ul>
+      <li>to support variable attributes for an entity</li>
+      <li>different object types have different attributes and hence stored in different tables. When different object types are related, they are considered instances of the same base type, as well as instances of their respective subtypes. We would like to store objects as rows in a single db table to simplify comparisons and calculations over multiple objects. But we also need to allow objects of each subtype to store their respective attribute columns, which may not apply to the base type or to other subtypes. e.g., in a bugs db, base type is Issue, subtypes are Bug and FeatureRequest.</li>
+    </ul>
+  </li>
+  <li>Cons
+    <ul>
+      <li>cannot make mandatory attributes</li>
+      <li>cannot make default values for missing attributes</li>
+      <li>cannot use SQL data types except string. No way of rejecting invalid data.</li>
+      <li>cannot enforce referential integrity</li>
+      <li>attribute names could be different for each record e.g., <code>reported_date</code>, <code>date_reported</code>. One remedy is to declare a foreign key on the attr_name column.</li>
+      <li>retrieving all attributes of an entity as a single row requires a join for each attribute. 
+        <ul>
+          <li>One must also know the name of all the attributes at the time of writing the query. </li>
+          <li>when metadata is fluid, it’s harder to formulate simple queries.</li>
+          <li>You must use outer joins because inner joins would cause the query to return no rows if any one of the attributes were not present for an entity.</li>
+          <li>as the number of attributes increases, so does the number of joins, and the cost of the query increases exponentially.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Solutions
+    <ul>
+      <li><strong>Single Table Inheritance</strong>
+        <ul>
+          <li>store all related types in a one table. e.g., table = Issues</li>
+          <li>pros: simple and best suited when you have few subtypes and few subtype-specific attributes, and you need to use a single-table db access pattern like ActiveRecord</li>
+          <li>cons:
+            <ul>
+              <li>may encounter a limit on the number of columns per table</li>
+              <li>need to add an extra column to define the subtype of each row</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><strong>Concrete Table Inheritance</strong>
+        <ul>
+          <li>every table contains the same attributes that are common to the base type as well as the respective subtype-specific attributes. e.g., table = Bugs, FeatureRequests. </li>
+          <li>pros
+            <ul>
+              <li>prevented from storing a row containing values for attributes that don’t apply to that row’s subtype</li>
+              <li>no need for extra attribute to define the subtype for each row</li>
+            </ul>
+          </li>
+          <li>cons
+            <ul>
+              <li>when new attribute is added to the set of common attributes, every table needs to be altered</li>
+              <li>no way to easily identify which are common attributes and which are not. </li>
+              <li>metadata does not tell any logical relationship exists or whether the tables have similarities merely by coincidence</li>
+              <li>to search all objects regardless of their subtypes requires combining multiple queries. Remedy: define a view that is the union of the tables, selecting only the common attributes</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><strong>Class Table Inheritance</strong>
+        <ul>
+          <li>create a single table for the base type, containing attributes common to all subtypes. Then for each subtype, create another table, with a primary key that also serves as a foreign key to the base table.</li>
+          <li>pros:
+            <ul>
+              <li>easy to search against all subtypes, as long as your search references only the base type’s attributes</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><strong>Semistructured Data/Seralized LOB</strong>
+        <ul>
+          <li>when there are many subtypes or must support new attributes frequently, add a JSON data type</li>
+          <li>pros
+            <ul>
+              <li>completely extensible and adding new attributes is seamless</li>
+              <li>every row stores a potentially distinct set of attributes, so many subtypes can be supported</li>
+            </ul>
+          </li>
+          <li>cons
+            <ul>
+              <li>SQL written to access attributes in such a structure is non-standard</li>
+              <li>no foreign key constraints</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
 <h3 id="metadata-tribbles">Metadata tribbles</h3>
 
 <h3 id="adjacency-list">Adjacency List</h3>
 
-<p>Storing multi-level hierarchical data like organization chart, threaded discussion and comments, directory structure, etc.</p>
+<ul>
+  <li>storing multi-level hierarchical data like organization chart, threaded discussion and comments, directory structure, etc.</li>
+  <li>pros
+    <ul>
+      <li>Good for use cases where the depth is not more than 2 or 3 and is fixed.</li>
+    </ul>
+  </li>
+  <li>cons
+    <ul>
+      <li>It is easy to query one or two levels of the hierarchy by self joins. However, in order to extend the query to any depth, it becomes impossible, since the number of joins in SQL must be fixed.</li>
+      <li>Copying the entire hierarchy from database to application for tree creation is highly inefficient.</li>
+      <li>Inserting a node in a sub-tree is easy, however deleting a node or an entire sub-tree is difficult. ON DELETE CASCADE modifier can be used.</li>
+      <li>If the non-leaf node should be deleted without deleting the children, then all the parent_id needs to be modified.</li>
+      <li>Some databases support <code>WITH</code> keyword to recursively query hierarchical data.</li>
+    </ul>
+  </li>
+</ul>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -388,33 +493,43 @@ which is present in an application is absolutely critical.</li>
 </span><span class="line"><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p><strong>Pros</strong></p>
-
 <ul>
-  <li>Good for use cases where the depth is not more than 2 or 3 and is fixed.</li>
-</ul>
-
-<p><strong>Cons</strong></p>
-
-<ul>
-  <li>It is easy to query one or two levels of the hierarchy by self joins. However, in order to extend the query to any depth, it becomes impossible, since the number of joins in SQL must be fixed.</li>
-  <li>Copying the entire hierarchy from database to application for tree creation is highly inefficient.</li>
-  <li>Inserting a node in a sub-tree is easy, however deleting a node or an entire sub-tree is difficult. ON DELETE CASCADE modifier can be used.</li>
-  <li>If the non-leaf node should be deleted without deleting the children, then all the parent_id needs to be modified.</li>
-  <li>Some databases support <code>WITH</code> keyword to recursively query hierarchical data.</li>
-</ul>
-
-<p><em>Alternatives</em></p>
-
-<ul>
-  <li><em>Path Enumeration</em>
+  <li>Solutions
     <ul>
-      <li>Instead of storing parent_id, store the path to each node in unix file path like format in varchar column. E.g., 1/2/4/5.</li>
+      <li><strong>Path Enumeration</strong>
+        <ul>
+          <li>Instead of storing parent_id, store the path to each node in unix file path like format in varchar column. E.g., 1/2/4/5.</li>
+          <li>pros: Querying ancestors and children is easy. E.g., <code>SELECT * FROM Comment c WHERE c.path like '1/4/'</code></li>
+          <li>cons: Same problem as the Jaywalking antipattern.</li>
+        </ul>
+      </li>
+      <li><strong>Nested Sets</strong>
+        <ul>
+          <li>Assigning a number to each node’s left and right children. Kind of like balanced binary tree.</li>
+          <li>cons
+            <ul>
+              <li>Not easily understandable</li>
+              <li>Does not support referential integrity</li>
+              <li>Useful only when the tree is queried frequently, than modified</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><strong>Closure Table</strong>
+        <ul>
+          <li>Creating a separate table to store the relationship of nodes. By far the versatile design for storing tree structures.</li>
+          <li>cons
+            <ul>
+              <li>requires additional table and hence increasing space consumption.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
     </ul>
   </li>
 </ul>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Path Enumeration</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
@@ -427,42 +542,6 @@ which is present in an application is absolutely critical.</li>
 </span><span class="line">	<span class="k">FOREIGN</span> <span class="k">KEY</span> <span class="p">(</span><span class="n">parent_id</span><span class="p">)</span> <span class="k">REFERENCES</span> <span class="k">Comment</span> <span class="p">(</span><span class="n">id</span><span class="p">)</span>
 </span><span class="line"><span class="p">)</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-<p><strong>Pros</strong></p>
-
-<ul>
-  <li>Querying ancestors and children is easy. E.g., <code>SELECT * FROM Comment c WHERE c.path like '1/4/'</code></li>
-</ul>
-
-<p><strong>Cons</strong></p>
-
-<ul>
-  <li>
-    <p>Same problem as the Jaywalking antipattern.</p>
-  </li>
-  <li>
-    <p><em>Nested Sets</em></p>
-
-    <ul>
-      <li>Assigning a number to each node’s left and right children. Kind of like balanced binary tree.</li>
-    </ul>
-  </li>
-</ul>
-
-<p><strong>Cons</strong></p>
-
-<ul>
-  <li>Not easily understandable</li>
-  <li>Does not support referential integrity</li>
-  <li>Useful only when the tree is queried frequently, than modified</li>
-</ul>
-
-<p><em>Closure Table</em></p>
-
-<p>Creating a separate table to store the relationship of nodes. By far the versatile design for storing tree structures.</p>
-
-<p><strong>Cons</strong></p>
-
-<p>Requires additional table and hence increasing space consumption.</p>
 
 <h2 id="physical-database-anti-patterns">Physical Database Anti-patterns</h2>
 
@@ -659,7 +738,7 @@ which is present in an application is absolutely critical.</li>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  Copyright &copy; 2018 - Mohamed Fizal Ihsan Mohamed -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Physics - KnowledgeShop</title>
+  <title>Machine Learning - KnowledgeShop</title>
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Physics Classical physics Modern Physics Quantum physics or quantum mechanics Classical physics Laws and principles of physics that were developed &hellip;">
+<meta name="description" content="Machine Learning Types of Machines Learning Algorithms Taxonomy class Data set Tools Questions References Types of Machines Learning Predictive or &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://fizalihsan.github.io/misc/physics.html">
+  <link rel="canonical" href="http://fizalihsan.github.io/datascience/machine-learning.html">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <!-- Below custom CSS is for table border styling -->
@@ -103,45 +103,117 @@ messageStyle: "none",
 <article role="article">
   
   <header>
-    <h1 class="entry-title">Physics</h1>
+    <h1 class="entry-title">Machine Learning</h1>
     
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#classical-physics">Classical physics</a></li>
-  <li><a href="#modern-physics">Modern Physics</a>    <ul>
-      <li><a href="#quantum-physics-or-quantum-mechanics">Quantum physics or quantum mechanics</a></li>
+  <li><a href="#types-of-machines-learning">Types of Machines Learning</a></li>
+  <li><a href="#algorithms">Algorithms</a></li>
+  <li><a href="#taxonomy-class">Taxonomy class</a></li>
+  <li><a href="#data-set">Data set</a></li>
+  <li><a href="#tools">Tools</a></li>
+  <li><a href="#questions">Questions</a></li>
+  <li><a href="#references">References</a></li>
+</ul>
+
+<h1 id="types-of-machines-learning">Types of Machines Learning</h1>
+
+<ul>
+  <li><strong>Predictive or supervised learning</strong>
+    <ul>
+      <li>the goal is to learn a mapping from inputs <code>x</code> to outputs <code>y</code>, given a labeled set of input-output pairs $ D = \{ (x _{i}, y _{i}) \} _{i=1}^N $. </li>
+      <li>Here D is called the <strong><em>training set</em></strong>, and <code>N</code> is the number of training examples.</li>
+      <li>In the simplest setting, each training input $x _{i}$ is a D-dimensional vector of numbers, representing, say, the height and weight of a person. These are called <strong><em>features, attributes or covariates</em></strong>. </li>
+      <li>In general, $x _{i}$ could be a complex structured object, such as an image, a sentence, an email message, a time series, a molecular shape, a graph, etc.</li>
+      <li>Similarly the form of the <strong>output or response variable</strong> can be anything.
+        <ul>
+          <li>When $y _{i}$ is a categorical or nominal variable from some finite set, $y _{i}$ ∈ {1, &#8230; , C} (such as male or female), the problem is known as <strong>classification or pattern recognition</strong>.
+            <ul>
+              <li>Document classification - e.g., email spam filtering, ad targeting</li>
+              <li>Image classification - e.g., photo is vertical or horizontal, detect the person in picture is male/female, face detection in Google street view</li>
+            </ul>
+          </li>
+          <li>When $y _{i}$ is a real-valued scalar (such as income level) or continuous, the problem is known as <strong>regression</strong>. <em>Ordinal regression</em> occurs where label space Y has some natural ordering, such as grades A–F.
+            <ul>
+              <li>Predict tomorrow’s stock market price given current market conditions and other possible side information.</li>
+              <li>Predict the age of a viewer watching a given video on YouTube.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Descriptive or unsupervised learning</strong>
+    <ul>
+      <li>Here we are only given inputs, $ D = \{ (x _{i}) \} _{i=1}^N $, and the goal is to find “interesting patterns” in the data. This is sometimes called <strong>knowledge discovery</strong>. </li>
+      <li>This is a much less well-defined problem, since we are not told what kinds of patterns to look for, and there is no obvious error metric to use (unlike supervised learning, where we can compare our prediction of y for a given x to the observed value).</li>
+      <li>Discovering clusters
+        <ul>
+          <li>e.g., In e-commerce, it is common to cluster users into groups, based on their purchasing or web-surfing behavior, and then to send customized targeted advertising to each group</li>
+        </ul>
+      </li>
+      <li>Discovering graph structure
+        <ul>
+          <li>Sometimes we measure a set of correlated variables, and we would like to discover which ones are most correlated with which others. This can be represented by a graph G, in which nodes represent variables, and edges represent direct dependence between variables. </li>
+          <li>e.g., predicting traffic jams in freeway</li>
+        </ul>
+      </li>
+      <li>Matrix completion
+        <ul>
+          <li>Sometimes we have missing data, that is, variables whose values are unknown. For example, we might have conducted a survey, and some people might not have answered certain questions. Or we might have various sensors, some of which fail. The corresponding design matrix will then have “holes” in it; these missing entries are often represented by NaN, which stands for “not a number”. The goal of imputation is to infer plausible values for the missing entries. This is sometimes called matrix completion. </li>
+          <li>Image inpainting - The goal is to “fill in” holes (e.g., due to scratches or occlusions) in an image with realistic texture.</li>
+          <li>Collaborative filtering - Netflix predicting which movies a user is likely to watch based on his past view history.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Reinforcement Learning</strong>
+    <ul>
+      <li>is somewhat less commonly used. This is useful for learning how to act or behave when given occasional reward or punishment signals. (For example, consider how a baby learns to walk.) </li>
     </ul>
   </li>
 </ul>
 
-<h1 id="classical-physics">Classical physics</h1>
+<h1 id="algorithms">Algorithms</h1>
 
 <ul>
-  <li>Laws and principles of physics that were developed before about 1900 are considered “classical” physics.</li>
-  <li>Classical physics is the physics of everyday objects—tennis balls and squeaky toys, stoves and ice cubes, magnets and electrical wiring. Classical laws of motion govern the motion of anything large enough to see with the naked eye. Classical thermodynamics explains the physics of heating and cooling objects, and the operation of engines and refrigerators. Classical electromagnetism explains the behavior of lightbulbs, radios, and magnets.</li>
+  <li></li>
 </ul>
 
-<h1 id="modern-physics">Modern Physics</h1>
+<h1 id="taxonomy-class">Taxonomy class</h1>
 
 <ul>
-  <li>Modern physics describes the stranger world that we see when we go beyond the everyday. This world was first revealed in experiments done in the late 1800s and early 1900s, which cannot be explained with classical laws of physics. New fields with different rules needed to be developed.</li>
-  <li>Modern physics is divided into two parts, each representing a radical departure from classical rules. One part, relativity, deals with objects that move very fast, or are in the presence of strong gravitational forces. Albert Einstein introduced relativity in 1905, and it’s a fascinating subject in its own right, but beyond the scope of this book.
-The other part of modern physics is what I talk to my dog about. </li>
+  <li>Decision tree</li>
+  <li>Kernel</li>
 </ul>
 
-<h2 id="quantum-physics-or-quantum-mechanics">Quantum physics or quantum mechanics</h2>
+<h1 id="data-set">Data set</h1>
 
 <ul>
-  <li>is the name given to the part of modern physics dealing with light and things that are very small—molecules, single atoms, subatomic particles. Max Planck coined the word “quantum” in 1900, and Einstein won the Nobel Prize for presenting the first quantum theory of light. The full theory of quantum mechanics was developed over the next thirty years or so.</li>
-  <li>The people who made the theory, from early pioneers like Planck and Niels Bohr, who made the first quantum model of the hydrogen atom, to later visionaries like Richard Feynman and Julian Schwinger, who each independently worked out what we now call <em>quantum electrodynamics</em> (QED), are rightly regarded as titans of physics. Some elements of quantum theory have even escaped the realm of physics and captured the popular imagination, like Werner Heisenberg’s uncertainty principle, Erwin Schrödinger’s cat paradox, and the parallel universes of Hugh Everett’s many-worlds interpretation.</li>
-  <li>Without an understanding of the quantum nature of the electron, it would be impossible to make the semiconductor chips that run our computers. Without an understanding of the quantum nature of light and atoms, it would be impossible to make the lasers we use to send messages over fiber-optic communication lines.</li>
-  <li>The terms “quantum physics,” “quantum theory,” and “quantum mechanics” are more or less interchangeable.</li>
-  <li>Material particles have wave nature and can diffract around objects. If you send a beam of electrons at a barrier, they’ll go around it to the left and to the right, at the same time.</li>
-  <li><strong>Particle-wave duality</strong> - the fact that both light and matter have particle-like and wavelike properties at the same time. A beam of light, which is generally thought of as a wave, turns out to behave like a stream of particles in some experiments. At the same time, a beam of electrons, which is generally thought of as a stream of particles, turns out to behave like a wave in some experiments. Particle and wave properties seem to be contradictory, and yet everything in the universe somehow manages to be both a particle and a wave. The discovery in the early 1900s that light behaves like a particle is the launching point for all of quantum mechanics</li>
-  <li>Light waves travel only in straight lines, while sound waves seem to bend around obstacles.</li>
+  <li><a href="http://archive.ics.uci.edu/ml/index.php">UCI Machine Learning Repository</a></li>
 </ul>
 
+<h1 id="tools">Tools</h1>
+
+<ul>
+  <li><a href="https://www.cs.waikato.ac.nz/ml/weka/downloading.html">Weka UI</a></li>
+  <li>R</li>
+  <li>Scikit-learn</li>
+</ul>
+
+<h1 id="questions">Questions</h1>
+
+<ul>
+  <li>What is targeted practice?</li>
+  <li>Univariate probability model</li>
+</ul>
+
+<h1 id="references">References</h1>
+
+<ul>
+  <li>http://www.cs.ubc.ca/~murphyk/MLbook/pml-intro-22may12.pdf</li>
+</ul>
 
   
     <footer>
@@ -149,7 +221,7 @@ The other part of modern physics is what I talk to my dog about. </li>
       
         <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/misc/physics.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/misc/physics.html" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/datascience/machine-learning.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/datascience/machine-learning.html" >Tweet</a>
   
   
   

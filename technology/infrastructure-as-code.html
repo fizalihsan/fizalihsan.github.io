@@ -122,6 +122,8 @@ messageStyle: "none",
           <li><a href="#run-list">Run list</a></li>
         </ul>
       </li>
+      <li><a href="#saltstack">SaltStack</a></li>
+      <li><a href="#open-questions">Open Questions</a></li>
     </ul>
   </li>
   <li><a href="#references">References</a></li>
@@ -184,9 +186,7 @@ messageStyle: "none",
   <li>Terraform configuration files are saved as *.tf files</li>
   <li>Resources representinfrastructure components  e.g. server, virtual machine, container, network port.</li>
   <li>Providers are components that let you manage a resource on a particular platform e.g. OpenStack, AWS, Google Cloud, DigitalOcean</li>
-  <li>
-    <p>Provisioners provide the ability to execute commands e.g. copy a file into the VM</p>
-  </li>
+  <li>Provisioners provide the ability to execute commands e.g. copy a file into the VM</li>
   <li>Infrastructure as a Code - Tool Categories
     <ul>
       <li>Configuration Management Tools 
@@ -431,6 +431,43 @@ messageStyle: "none",
   <li>For each node, Chef evaluates only recipe files that are specified on the node’s run list.​</li>
 </ul>
 
+<h2 id="saltstack">SaltStack</h2>
+
+<ul>
+  <li>States are stored in text files on the master and transferred to the minions on demand via the master’s File Server.</li>
+  <li>The collection of state files make up the <em>State Tree</em></li>
+</ul>
+
+<h2 id="open-questions">Open Questions</h2>
+
+<ul>
+  <li>How to start the salt master/minion?</li>
+  <li>How to check if master/minion is running?</li>
+  <li>How to sync the changes from master to all minions?</li>
+  <li>how to check if the changes are all synced up to all minions?</li>
+</ul>
+
+<p>After making a change to <code>/etc/salt/master</code>, restart the master daemon running, <code>pkill salt-master</code>,
+<code>salt-master -d</code></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">salt-master
+</span><span class="line">sudo salt '*' saltutil.sync_all
+</span><span class="line">sudo salt '*' mine.update
+</span><span class="line">sudo</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>
+    <p><code>salt '*' state.apply</code> to instruct all minions to run <em>state.apply</em>.</p>
+  </li>
+  <li>
+    <p><code>salt-key -L</code> - to view salt authentication keys</p>
+  </li>
+</ul>
+
 <h1 id="references">References</h1>
 
 <ul>
@@ -601,7 +638,7 @@ messageStyle: "none",
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  Copyright &copy; 2018 - Mohamed Fizal Ihsan Mohamed -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

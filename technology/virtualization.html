@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Virtualization Overview Hypervisor VMs Containers Docker Benefits Docker flow explained Concepts Union File System Image Layers Volumes Plugin &hellip;">
+<meta name="description" content="Virtualization Overview Hypervisor VMs Containers Docker Benefits Docker flow explained Concepts Union File System Plugin Architecture Command &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -119,8 +119,6 @@ messageStyle: "none",
       <li><a href="#docker-flow-explained">Docker flow explained</a></li>
       <li><a href="#concepts">Concepts</a>        <ul>
           <li><a href="#union-file-system">Union File System</a></li>
-          <li><a href="#image-layers">Image Layers</a></li>
-          <li><a href="#volumes">Volumes</a></li>
           <li><a href="#plugin-architecture">Plugin Architecture</a></li>
         </ul>
       </li>
@@ -141,6 +139,7 @@ messageStyle: "none",
       <li><a href="#labels--annotations">Labels &amp; Annotations</a></li>
       <li><a href="#cluster-components">Cluster components</a></li>
       <li><a href="#services">Services</a></li>
+      <li><a href="#replicasets">ReplicaSets</a></li>
       <li><a href="#command-reference-1">Command Reference</a></li>
     </ul>
   </li>
@@ -196,7 +195,7 @@ messageStyle: "none",
 
 <h2 id="docker-flow-explained">Docker flow explained</h2>
 
-<p><img class="right" src="/technology/docker-flow.png" title="right 50 50" /></p>
+<p><img class="right" src="/technology/docker-flow.png" title="right 40 40" /></p>
 
 <p>What happens when <code>docker run hello-world</code> is executed.</p>
 
@@ -237,21 +236,28 @@ messageStyle: "none",
   <li>Docker images are made up of multiple layers. Each of these layers is a read-only filesystem. A layer is created for each instruction in a Dockerfile and sits on top of the previous layers. When an image is turned into a container, the Docker engine takes the image and adds a read-write filesystem on top (as well as initializing various settings such as the IP address, name, ID, and resource limits).</li>
 </ul>
 
-<h3 id="image-layers">Image Layers</h3>
+<p><strong>Images</strong></p>
 
 <ul>
   <li>Each instruction in a Dockerfile results in a new image layer, which can also be used to start a container. </li>
-  <li>The new layer is created by starting a container using the image of the previ‐ous layer, executing the Dockerfile instruction and saving a new image.</li>
+  <li>The new layer is created by starting a container using the image of the previous layer, executing the Dockerfile instruction and saving a new image.</li>
   <li>When a Dockerfile instruction successfully completes, the intermediate container will be deleted, unless the <code>--rm=false</code> argument was given.</li>
+  <li>Since each instruction results in an static image, all running processes in the instruction will be stopped. </li>
   <li>
-    <p>Since each instruction results in an static image—essentially just a filesystem and some metadata—all running processes in the instruction will be stopped. This means that while you can start long-lived processes, such as databases or SSH daemons in a <code>RUN</code> instruction, they will not be running when the next instruction is processed or a container is started. If you want a service or process to start with the container, it must be launched from an <code>ENTRYPOINT</code> or <code>CMD</code> instruction.</p>
+    <p>To start long-lived processes within the container, such as databases or SSH daemons, it must be launched from an <code>ENTRYPOINT</code> or <code>CMD</code> instruction.</p>
   </li>
+  <li>DO NOT use a large folder as <em>build context</em> since it is tarred up and sent to docker daemon</li>
   <li>DO NOT create containers with passwords baked in</li>
   <li>Files that are removed by subsequent layers in the system are actually still present in the images; they’re just inaccessible</li>
   <li>Each layer is an independent delta from the layer below it. Every time you change a layer, it changes every layer that comes after it. Changing the preceding layers means that they need to be rebuilt, repushed, and repulled to deploy your image to development.</li>
+  <li>Often you can use separate images for building (e.g., java-jdk) and distributing (e.g., java:jre) your software, which gets rid of the unnecessary build tooling).</li>
 </ul>
 
-<h3 id="volumes">Volumes</h3>
+<p><strong>Linking</strong></p>
+
+<p>By default, containers will be able to talk to each other whether or not they have been explicitly linked. If you want to prevent containers that haven’t been linked from communicating, use the arguments <code>--icc=false</code> and <code>--iptables</code> when starting the Docker daemon. Now when containers are linked, Docker will set up iptables rules to allow the containers to communicate on any ports that have been declared as exposed.</p>
+
+<p><strong>Volumes</strong></p>
 
 <ul>
   <li>Volumes are files or directories that are directly mounted on the host and not part of the normal UFS. This means they can be shared with other containers and all changes will be made directly to the host filesystem. </li>
@@ -302,7 +308,7 @@ messageStyle: "none",
   <li>Networking solution
     <ul>
       <li>Creating network of containers that spans across hosts</li>
-      <li>Solutions: Overlay (integrated solution), Weave, Apache Calico</li>
+      <li>Solutions: Overlay (integrated solution), Weave, Apache Calico, Flannel, Linkerd service mesh</li>
     </ul>
   </li>
   <li>Service Discovery
@@ -331,6 +337,11 @@ messageStyle: "none",
   <li>PaaS
     <ul>
       <li>Solutions: Deis, Flynn, Paz</li>
+    </ul>
+  </li>
+  <li>Monitoring
+    <ul>
+      <li>init, systemd, runit, upstart, and supervisord.</li>
     </ul>
   </li>
 </ul>
@@ -922,11 +933,21 @@ messageStyle: "none",
 
 <h2 id="services">Services</h2>
 
-<p><img class="right" src="/technology/kubernetes-services.jpg" /></p>
-
-<p><img class="right" src="/technology/kubernetes-services-endpoints.png" width="600" height="600" /></p>
+<table>
+  <tbody>
+    <tr>
+      <td><img class="right" src="/technology/kubernetes-services.jpg" /></td>
+      <td><img class="right" src="/technology/kubernetes-services-endpoints.png" width="600" height="600" /></td>
+    </tr>
+  </tbody>
+</table>
 
 <ul>
+  <li>Why services?
+    <ul>
+      <li>We can always use labels to identify the set of pods we are interested in, get all of the pods for those labels, and dig out the IP address.  But keeping the correct set of labels to use in sync can be tricky.  This is why the Service object was created.</li>
+    </ul>
+  </li>
   <li>A <code>Service</code> object is a way to create a named label selector. </li>
   <li>The <code>kubernetes</code> service is automatically created for you so that you can find and talk to the Kubernetes API from within the app.</li>
   <li>How to expose a service?
@@ -950,37 +971,173 @@ messageStyle: "none",
       <li><code>LoadBalancer</code> - </li>
     </ul>
   </li>
-  <li>A service without any pod is completely valid</li>
-</ul>
-
-<p><strong>Core Kubernetes architecture principle:</strong></p>
-
-<ul>
-  <li>Logic is in <strong>control loops</strong> (“controllers”) which 
+  <li>
+    <p>A service without any pod is completely valid</p>
+  </li>
+  <li><strong>DNS Service</strong>
     <ul>
-      <li>are stateless (can recover from failure)</li>
-      <li>and decoupled (communication via API-server)</li>
+      <li>Kubernetes provides a DNS service (installed as a system component when the cluster was first created)</li>
+      <li>DNS service is exposed to Pods running in the cluster</li>
+      <li>It provides DNS names for cluster IPs</li>
+      <li>Sample fully qualified DNS name: <code>alpaca-prod.default.svc.cluster.local</code></li>
+      <li><code>alpaca-prod</code> - name of the service</li>
+      <li><code>default</code> - namespace that this service is in</li>
+      <li><code>svc</code> - recognizing that this is a service</li>
+      <li><code>cluster.local</code> - The base domain name for the cluster.  This is the default and what you will see for most clusters. Administrators may change this to allow unique DNS names across multiple clusters.</li>
+    </ul>
+  </li>
+  <li><strong>Endpoints</strong>
+    <ul>
+      <li>For every Service object, Kubernetes creates a buddy Endpointsobject that contains the IP addresses for that service</li>
+      <li>Apps that want to use services without using a cluster IP can use ‘Endpoints’.</li>
+      <li>To use a service, an advanced application can talk to the Kubernetes API directly to look up endpoints and call them.</li>
     </ul>
   </li>
 </ul>
 
-<p><strong>Control Loop to run Pods</strong></p>
+<p><img class="right" src="/technology/kube_proxy.png" width="600" height="600" /></p>
 
 <ul>
-  <li><em>INPUT</em>:
+  <li><strong>kube-proxy</strong>
     <ul>
-      <li>REPLICAS: # of mypods that should be running</li>
+      <li>Cluster IPs are stable virtual IPs that load-balance traffic across all of the endpoints in a service. This magic is performed by a component running on every node in the cluster called the <code>kube-proxy</code></li>
+      <li><code>kube-proxy</code> watches for new services in the cluster via the API server. It then programs a set of iptables rules in the kernel of that host to rewrite the destination of packets so they are directed at one of the endpoints for that service.</li>
+      <li>If the set of endpoints for a service changes (due to pods coming and going or due to a failed readiness check) the set of iptables rules is rewritten.</li>
+      <li>The cluster IP itself is usually assigned by the API server as the service is created.  However, when creating the service, the user can specify a specific cluster IP.</li>
+      <li>Once set, the cluster IP cannot be modified without deleting and recreating the Service object.</li>
     </ul>
   </li>
-  <li><em>ALGORITHM</em>
-    <ol>
-      <li>running = # of running pods with label <code>name=mypod</code></li>
-      <li>If running &gt; REPLICAS, then delete some mypods</li>
-      <li>If running &lt; REPLICAS, then launch some mypods</li>
-      <li>Goto 1</li>
-    </ol>
+  <li><strong>Daemons</strong>
+    <ul>
+      <li><code>supervisord</code> is a lightweight process monitor and control system that can be used to keep kubelet and docker running.</li>
+      <li><a href="https://www.fluentd.org">fluentd</a> is a daemon which helps provide cluster-level logging.</li>
+      <li><code>OSCAP</code> - security</li>
+      <li><a href="https://prometheus.io/">prometheus</a> - monitoring and alerting toolkit (heapster)</li>
+      <li><a href="https://github.com/coreos/flannel">flannel</a> - layer 3 network fabric designed for Kubernetes</li>
+      <li>[linkerd]</li>
+      <li><a href="https://www.envoyproxy.io/">envoy</a></li>
+      <li><a href="https://istio.io/">istio</a></li>
+      <li><code>systemd</code></li>
+      <li><code>journald</code></li>
+    </ul>
   </li>
 </ul>
+
+<h2 id="replicasets">ReplicaSets</h2>
+
+<ul>
+  <li>Multiple replica of containers are needed for variety of reasons like:
+    <ul>
+      <li>Redundancy - Multiple running instances mean failure can be tolerated.</li>
+      <li>Scale - Multiple running instances mean that more requests can be handled.</li>
+      <li>Sharding - Different replicas can handle different parts of a computation in parallel.</li>
+    </ul>
+  </li>
+  <li>Composing Pods with ReplicaSets provides the foundation for building robust applications with automatic failover, and makes deploying those applications a breeze by enabling scalable and sane deployment patterns. </li>
+  <li>ReplicaSets should be used for any Pod you care about, even if it is a single Pod! Some people even default to using ReplicaSets instead of Pods. </li>
+  <li>ReplicaSet enables a user managing a replicated set of Pods considers them as a single entity to be defined and managed. A ReplicaSet acts as a cluster-wide Pod manager, ensuring that the right types and number of Pods are running at all times.</li>
+  <li>
+    <p>ReplicaSets provide the underpinning for building self-healing apps. Pods managed by ReplicaSets are automatically rescheduled under certain failure conditions such as node failures and network partitions.</p>
+  </li>
+  <li>ReplicaSets and Pods are loosely coupled. Though ReplicaSets create and manage Pods, they do not own the Pods they create.</li>
+  <li>ReplicaSets use label queries to identify the set of Pods they should be managing.</li>
+  <li>ReplicaSets monitor cluster state using a set of Pod labels. Labels are used to filter Pod listings and track Pods running within a cluster. When ReplicaSets are initially created, the ReplicaSet fetches a Pod listing from the Kubernetes API and filters the results by labels. Based on the number of Pods returned by the query, the ReplicaSet deletes or creates Pods to meet the desired number of replicas. </li>
+  <li>ReplicaSets that create multiple Pods and the services that load-balance to those Pods are also totally separate, decoupled API objects.</li>
+  <li>Quarantining faulty containers
+    <ul>
+      <li>When a server misbehaves, Pod-level health checks will automatically restart that Pod. But if your health checks are incomplete, a Pod can be misbehaving but still be part of the replicated set. In these situations, while it would work to simply kill the Pod, that would leave your developers with only logs to debug the problem. Instead, you can modify the set of labels on the sick Pod. Doing so will disassociate it from the ReplicaSet (and service) so that you can debug the Pod. The ReplicaSet controller will notice that a Pod is missing and create a new copy, but because the Pod is still running, it is available to developers for interactive debugging, which is significantly more valuable than debugging from logs.</li>
+    </ul>
+  </li>
+  <li>Designing with ReplicaSets
+    <ul>
+      <li>every Pod that is created by the ReplicaSet controller is entirely homogeneous. ReplicaSets are designed for stateless (or nearly stateless) services. The elements created by the ReplicaSet are interchangeable; when a ReplicaSet is scaled down, an arbitrary Pod is selected for deletion. Your application’s behavior shouldn’t change because of such a scale-down operation.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Sample ReplicaSet Spec</strong></p>
+
+<ul>
+  <li>ReplicaSet name must be unique within the cluster (<code>metadata.name</code>)</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="err">apiVersion:</span> <span class="err">extensions/v</span><span class="mi">1</span><span class="err">beta</span><span class="mi">1</span>
+</span><span class="line"><span class="err">kind:</span> <span class="err">ReplicaSet</span>
+</span><span class="line"><span class="err">metadata:</span>
+</span><span class="line">  <span class="err">name:</span> <span class="err">kuard</span>
+</span><span class="line"><span class="err">spec:</span>
+</span><span class="line">  <span class="err">replicas:</span> <span class="mi">3</span>
+</span><span class="line">  <span class="err">template:</span>
+</span><span class="line">    <span class="err">metadata:</span>
+</span><span class="line">      <span class="err">labels:</span>
+</span><span class="line">        <span class="err">app:</span> <span class="err">kuard</span>
+</span><span class="line">        <span class="err">version:</span> <span class="s2">&quot;2&quot;</span>
+</span><span class="line">    <span class="err">spec:</span>
+</span><span class="line">      <span class="err">containers:</span>
+</span><span class="line">        <span class="err">-</span> <span class="err">name:</span> <span class="err">kuard</span>
+</span><span class="line">          <span class="err">image:</span> <span class="s2">&quot;gcr.io/kuar-demo/kuard-amd64:2&quot;</span>
+</span><span class="line">          <span class="err">ports:</span>
+</span><span class="line">            <span class="err">-</span> <span class="err">containerPort:</span> <span class="mi">80</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Reconciliation Loop</strong></p>
+
+<ul>
+  <li>The reconciliation loop is a single loop that constantly runs, observes the current state of the world and takes action to try to make the observed state match the desired state.</li>
+  <li>it handles both user actions to scale up or scale down the ReplicaSet, as well as node failures or nodes rejoining the cluster after being absent.</li>
+  <li>Foundation for the self-healing system</li>
+  <li><strong>How it works?</strong>
+    <ul>
+      <li><em>INPUT</em>:
+        <ul>
+          <li>REPLICAS: # of mypods that should be running</li>
+        </ul>
+      </li>
+      <li><em>ALGORITHM</em>
+        <ol>
+          <li>running = # of running pods with label <code>name=mypod</code></li>
+          <li>If running &gt; REPLICAS, then delete some mypods</li>
+          <li>If running &lt; REPLICAS, then launch some mypods</li>
+          <li>Goto 1</li>
+        </ol>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Autoscaling</strong></p>
+
+<ul>
+  <li>Kubernetes supports autoscaling
+    <ul>
+      <li>Horizontal pod autoscaling (HPA) - creating additional replicas of a Pod when needed</li>
+      <li>Vertical pod autoscaling - K8S does not support this at the time of this writing</li>
+      <li>Cluster autoscaling - where the number of machines in the cluster is scaled in response to resource needs</li>
+    </ul>
+  </li>
+  <li>HPA requires the presence of out-of-the-box pod called <em>Heapster</em> which keeps track of metrics and provides an API for consuming metrics HPA uses when making scaling decisions.</li>
+</ul>
+
+<blockquote>
+  <p>Because of the decoupled nature of Kubernetes, there is no direct link between the horizontal pod autoscaler and the ReplicaSet. While this is great for modularity and composition, it also enables some antipatterns. In particular, it’s a bad idea to combine both autoscaling and imperative or declarative management of the number of replicas. If both you and an autoscaler are attempting to modify the number of replicas, it’s highly likely that you will clash, resulting in unexpected behavior.</p>
+</blockquote>
 
 <h2 id="command-reference-1">Command Reference</h2>
 
@@ -1034,6 +1191,21 @@ messageStyle: "none",
       <li><code>kubectl expose deployment &lt;depl-name&gt;</code> - to expose a deployment as a service</li>
       <li><code>kubectl get services -o wide</code> - to view all the services</li>
       <li><code>kubectl describe service &lt;svc&gt;</code></li>
+    </ul>
+  </li>
+  <li><strong>ReplicaSets</strong>
+    <ul>
+      <li><code>kubectl describe rs &lt;name&gt;</code></li>
+      <li><code>kubectl get pods &lt;pod-name&gt; -o yaml</code> - pods with annotation entry <code>kubernetes.io/created-by</code> are the ones created by Kubernetes</li>
+      <li><code>kubectl scale &lt;replicaset&gt; --replicas=4</code> - to reset/edit the number of replicas</li>
+      <li><code>kubectl delete rs &lt;replicaset&gt;</code> - to delete the replicaset and the pods</li>
+      <li><code>kubectl delete rs &lt;replicaset&gt; --cascade=false</code> - to delete only the replicaset and not the pods</li>
+    </ul>
+  </li>
+  <li><strong>Autoscaling</strong>
+    <ul>
+      <li><code>kubectl autoscale rs &lt;pod-name&gt; --min=2 --max=5 --cpu-percent=80</code> - creates an autoscaler that scales between two and five replicas with a CPU threshold of 80%.</li>
+      <li><code>kubectl get hpa</code> </li>
     </ul>
   </li>
   <li><strong>Debugging</strong>
@@ -1370,7 +1542,7 @@ Database Name: insults
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2017 - Mohamed Fizal Ihsan Mohamed -
+  Copyright &copy; 2018 - Mohamed Fizal Ihsan Mohamed -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

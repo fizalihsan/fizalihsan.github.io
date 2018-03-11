@@ -166,6 +166,51 @@ which is present in an application is absolutely critical.
 
 ### Entity attribute value
 
+* also known as _open schema_, _schemaless_, _name-value pairs_
+* Objective
+	* to support variable attributes for an entity
+	* different object types have different attributes and hence stored in different tables. When different object types are related, they are considered instances of the same base type, as well as instances of their respective subtypes. We would like to store objects as rows in a single db table to simplify comparisons and calculations over multiple objects. But we also need to allow objects of each subtype to store their respective attribute columns, which may not apply to the base type or to other subtypes. e.g., in a bugs db, base type is Issue, subtypes are Bug and FeatureRequest.
+* Cons
+	* cannot make mandatory attributes
+	* cannot make default values for missing attributes
+	* cannot use SQL data types except string. No way of rejecting invalid data.
+	* cannot enforce referential integrity
+	* attribute names could be different for each record e.g., `reported_date`, `date_reported`. One remedy is to declare a foreign key on the attr_name column.
+	* retrieving all attributes of an entity as a single row requires a join for each attribute. 
+		* One must also know the name of all the attributes at the time of writing the query. 
+		* when metadata is fluid, it's harder to formulate simple queries.
+		* You must use outer joins because inner joins would cause the query to return no rows if any one of the attributes were not present for an entity.
+		* as the number of attributes increases, so does the number of joins, and the cost of the query increases exponentially.
+* Solutions
+	* __Single Table Inheritance__
+		* store all related types in a one table. e.g., table = Issues
+		* pros: simple and best suited when you have few subtypes and few subtype-specific attributes, and you need to use a single-table db access pattern like ActiveRecord
+		* cons:
+			* may encounter a limit on the number of columns per table
+			* need to add an extra column to define the subtype of each row
+	* __Concrete Table Inheritance__
+		* every table contains the same attributes that are common to the base type as well as the respective subtype-specific attributes. e.g., table = Bugs, FeatureRequests. 
+		* pros
+			* prevented from storing a row containing values for attributes that don't apply to that row's subtype
+			* no need for extra attribute to define the subtype for each row
+		* cons
+			* when new attribute is added to the set of common attributes, every table needs to be altered
+			* no way to easily identify which are common attributes and which are not. 
+			* metadata does not tell any logical relationship exists or whether the tables have similarities merely by coincidence
+			* to search all objects regardless of their subtypes requires combining multiple queries. Remedy: define a view that is the union of the tables, selecting only the common attributes
+	* __Class Table Inheritance__
+		* create a single table for the base type, containing attributes common to all subtypes. Then for each subtype, create another table, with a primary key that also serves as a foreign key to the base table.
+		* pros:
+			* easy to search against all subtypes, as long as your search references only the base type's attributes
+	* __Semistructured Data/Seralized LOB__
+		* when there are many subtypes or must support new attributes frequently, add a JSON data type
+		* pros
+			* completely extensible and adding new attributes is seamless
+			* every row stores a potentially distinct set of attributes, so many subtypes can be supported
+		* cons
+			* SQL written to access attributes in such a structure is non-standard
+			* no foreign key constraints
+
 ### Metadata tribbles
 
 ### Adjacency List

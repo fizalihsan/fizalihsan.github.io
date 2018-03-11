@@ -214,8 +214,7 @@ CREATE TABLE Comment (
 
 * Same problem as the Jaywalking antipattern.
 
-* *Nested Sets*
-
+* __Nested Sets__
 	* Assigning a number to each node's left and right children. Kind of like balanced binary tree.
 
 **Cons**

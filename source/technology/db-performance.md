@@ -357,18 +357,33 @@ Database federated support in DB2 allows tables from multiple databases to be pr
 
 DB2 uses NICKNAME, SERVER, WRAPPER, and USER MAPPING objects to implement federation. 
 
-## DB Partitioning
+# Partitioning
 
-* DPF(DB partioning feature) lets you partition your database across multiple servers or within a large SMP server. This allows for scalability, since you can add new machines and spread your database across them. That means more CPUs, more memory, and more disks from each of the additional machines for your database! Partitioning is a concept that applies to the database, not the instance; you partition a database, not an instance.
-* In a partitioned environment SYSCATSPACE is not partitioned, but resides on one partition known as the catalog partition. The partition from which the CREATE DATABASE command is issued becomes the catalog partition for the new database. All access to system tables must go through this database partition.
-* Each buffer pool in a DPF environment holds data only from the database partition where the buffer pool is located. 
+(_following points are MySQL specific at the time of the writing_)
+* partition expression must be an integer
+* no foreign key constraints	
+* partitions can't be accessed directly
+* each partition can have its own index
+* each partition can live in a separate disk
+* indexing on columns not part of partition key leads to poor performance
+* max # of partitions possible = 1024. Optimal size is around 100
+* types of partitioning
+	* range partitioning
+    * each partition is defined to accept a specific range of values for some column or columns, or a function over those columns
+    * cons: For every row inserted into the table that’s partitioned by range, the server has to scan the list of partitions to select the destination. As the number of partitions grow, this can be costly.
+	* key, hash partitioning
+    * pros: scales well with partition growth unlike range partitioning
+  * list partitioning
+  * Row-wide partitioning
+  * Column-wide partitioning
 
-## Partitioning Types
+* cons/limitations of partitioning:
+  * Opening and locking partitions when a query accesses a partitioned table is another type of per-partition overhead
+  * all partitions should use the same storage engine
 
-* Row-wide partitioning
-* Column-wide partitioning
 
-## DB Replication
+
+# Replication
 
 HADR - High Availability Database Replication (from version 9.7) 
 

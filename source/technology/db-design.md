@@ -282,6 +282,25 @@ Requires additional table and hence increasing space consumption.
 * Phantom Files
 * FLOAT Antipattern
 * ENUM Antipattern
+	* When to use enums?
+		* when the set of values is unchanging. e.g., days of week, active/inactive, internal/external, etc.
+		* use metadata when validating against a fixed set of values. use data when validating a fluid set of values.
+	* Pros:
+		* storage is compact compared to strings, since only the ordinal number of the string in the enumerated list is stored.
+	* Cons:
+		* valid values for a column is stored in metadata of the table. Modifying valid values require change to table definition. Changing table or column definition should be infrequent, and with attention to testing and quality assurance.
+		* querying current set of valid values is not easy/straight-forward. e.g., for UI drop-downs. Risk of maintaining information in 2 different places.
+		* making a value obsolete could upset historical data.
+		* less portability (not all databases support ENUMs)
+	* Solutions:
+		* create a lookup table with one for each allowed value and declare a foreign key constraint.
+		* pros:
+			* set of permitted values is stored in data, not metadata
+			* changing data values needs no interruption to the table access, no table/column definition change
+			* renaming a value is easy
+			* easy to make a set of values obsolute 
+
+
 * Readable Passwords
 
 ## Query Anti-patterns

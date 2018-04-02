@@ -64,6 +64,9 @@ footer: true
 * S3 is a highly-durable and highly-scalable cloud object store
 * By default, every object is world-readable
 * Scalability: S3 automatically partitions buckets to support very high request rates and simultaneous access by many clients
+* Data consistency
+	* S3 offers _read-after-write consistency_ for `PUT`s on new objects
+	* otherwise offers _eventual consistency_
 
 ### S3 Buckets
 
@@ -91,8 +94,10 @@ footer: true
 		* Max 1024 bytes of UTF-8 characters (including slashes, backslashes, dots, dashes)
 		* Keys must be unique within a single bucket
 * You cannot incrementally update portions of the object as you would with a file
-* **ARNs (Amazon Resource Name)** uniquely identify AWS resources. (http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
-	* Object in an Amazon S3 bucket `arn:aws:s3:::my_bucket/exampleobject.png`
+* **ARNs (Amazon Resource Name)** uniquely identify AWS resources. ([AWS ARNs and Namespaces](http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
+	* Object in an Amazon S3 bucket. e.g., `arn:aws:s3:::my-family-photos-2017/birthday.jpg`
+		* `arn:aws:s3:::bucket_name`
+		* `arn:aws:s3:::bucket_name/key_name`
 	* General formats
 	  * `arn:partition:service:region:account-id:resource`
 	  * `arn:partition:service:region:account-id:resourcetype/resource`
@@ -136,27 +141,25 @@ footer: true
 
 ### S3 Data Protection
 
-* Bucket-level permissioning - existing permissioning policies can be copied or generated using 'Bucket policy generator'
+* Bucket-level permissioning - existing permissioning policies can be copied or generated using ['Bucket policy generator'](http://awspolicygen.s3.amazonaws.com/policygen.html)
 * By default, all S3 objects and buckets are private and can only be accessed by the owner.
 * **Access Control**
-	* *Coarse-grained access controls*
-		* **S3 Access Control Lists (ACLs)**
-			* legacy mechanism, created before IAM
-			* Limited to read, write, or full-control at object/bucket level
-			* Best used for enabling bucket logging or making a bucket that hosts a static website be readable
-	* *Fine-grained access controls*
-		* **S3 bucket policies**
-			* Recommended access control mechanism
-			* Can specify
-				* who can access the bucket
-				* from where (by *CIDR* block or IP address)
-				* at what time of the day
-			* Bucket policies allows to assign cross-account access to S3 resources
-			* Similar to IAM but
-				* associated with bucket resource instead of an IAM principal
-				* includes an explicit reference to the IAM principal in the policy. This principal can be associated with a different AWS account
-		* AWS Identity and Access Management (IAM) policies
-		* Query String Authentication
+	* **S3 Access Control Lists (ACLs)** (*Coarse-grained access controls*)
+		* legacy mechanism, created before IAM
+		* Limited to read, write, or full-control at object/bucket level
+		* Best used for enabling bucket logging or making a bucket that hosts a static website be readable
+	* **S3 bucket policies** (*Fine-grained access controls*)
+		* Recommended access control mechanism
+		* Can specify
+			* who can access the bucket
+			* from where (by *CIDR* block or IP address)
+			* at what time of the day
+		* Bucket policies allows to assign cross-account access to S3 resources
+		* Similar to IAM but
+			* associated with bucket resource instead of an IAM principal
+			* includes an explicit reference to the IAM principal in the policy. This principal can be associated with a different AWS account
+	* AWS Identity and Access Management (IAM) policies
+	* Query String Authentication
 * **Encryption**
 	* Encrypt data in-flight
 		* Transmit data using HTTPS protocol to SSL API endpoints
@@ -180,8 +183,16 @@ footer: true
 		* ***Client-Side Encryption (CSE)***
 			* You encrypt the data before sending it to S3
 			* 2 options for using data encryption keys
-			 	* Use an AWS KMS-managed customer master key
+				* Use an AWS KMS-managed customer master key
 				* Use a client-side master key
+
+| | who creates the key? | who protects and manages the key? | who encrypts and decrypts data? |
+| - | - | - | - | - |
+| **SSE-S3** | AWS | AWS | AWS |
+| **SSE-KMS** | You | AWS  | AWS |
+| **SSE-C**| You | You | AWS |
+| **CSE** | You | You | You |
+
 * **Versioning**
 	* If an object is accidentally changed/deleted, one can restore the object to its original state by referencing the version ID in addition to the bucket and object key
 	* Versioning is turned on at the bucket level. Once enabled, versioning cannot be removed from a bucket; it can only be suspended.
@@ -222,7 +233,7 @@ footer: true
 ## Amazon Glacier
 
 * Extremely low-cost storage service for data archiving and long-term backup. Optimized for infrequently accessed data where a retrieval time of several hours is suitable.
-* To retrieve an object, issue a restore command using S3 API; 3 to 5 hours later, it is copied to S3 RRS. Restore simply creates a copy; the original data is retained in Glacier until explicitly deleted.
+* To retrieve an object, issue a `restore` command using S3 API; 3 to 5 hours later, it is copied to S3 RRS. `Restore` simply creates a copy; the original data is retained in Glacier until explicitly deleted.
 * **Archives**
 	* Data is stored in *archives*
 	* Max 40 TB of data per archive

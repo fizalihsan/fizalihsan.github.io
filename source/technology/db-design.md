@@ -215,7 +215,15 @@ which is present in an application is absolutely critical.
 
 ### Adjacency List
 
-Storing multi-level hierarchical data like organization chart, threaded discussion and comments, directory structure, etc.
+* storing multi-level hierarchical data like organization chart, threaded discussion and comments, directory structure, etc.
+* pros
+	* Good for use cases where the depth is not more than 2 or 3 and is fixed.
+* cons
+	* It is easy to query one or two levels of the hierarchy by self joins. However, in order to extend the query to any depth, it becomes impossible, since the number of joins in SQL must be fixed.
+	* Copying the entire hierarchy from database to application for tree creation is highly inefficient.
+	* Inserting a node in a sub-tree is easy, however deleting a node or an entire sub-tree is difficult. ON DELETE CASCADE modifier can be used.
+	* If the non-leaf node should be deleted without deleting the children, then all the parent_id needs to be modified.
+	* Some databases support `WITH` keyword to recursively query hierarchical data.
 
 ```sql
 CREATE TABLE Comment (
@@ -226,24 +234,23 @@ CREATE TABLE Comment (
 )
 ```
 
-**Pros**
+* Solutions
+	* __Path Enumeration__
+		* Instead of storing parent_id, store the path to each node in unix file path like format in varchar column. E.g., 1/2/4/5.
+		* pros: Querying ancestors and children is easy. E.g., `SELECT * FROM Comment c WHERE c.path like '1/4/'`
+		* cons: Same problem as the Jaywalking antipattern.
+	* __Nested Sets__
+		* Assigning a number to each node's left and right children. Kind of like balanced binary tree.
+		* cons
+			* Not easily understandable
+			* Does not support referential integrity
+			* Useful only when the tree is queried frequently, than modified
+	* __Closure Table__
+		* Creating a separate table to store the relationship of nodes. By far the versatile design for storing tree structures.
+		* cons
+			* requires additional table and hence increasing space consumption.
 
-* Good for use cases where the depth is not more than 2 or 3 and is fixed.
-
-**Cons**
-
-* It is easy to query one or two levels of the hierarchy by self joins. However, in order to extend the query to any depth, it becomes impossible, since the number of joins in SQL must be fixed.
-* Copying the entire hierarchy from database to application for tree creation is highly inefficient.
-* Inserting a node in a sub-tree is easy, however deleting a node or an entire sub-tree is difficult. ON DELETE CASCADE modifier can be used.
-* If the non-leaf node should be deleted without deleting the children, then all the parent_id needs to be modified.
-* Some databases support `WITH` keyword to recursively query hierarchical data.
-
-*Alternatives*
-
-* *Path Enumeration*
-	* Instead of storing parent_id, store the path to each node in unix file path like format in varchar column. E.g., 1/2/4/5.
-
-```sql
+```sql Path Enumeration
 CREATE TABLE Comment (
 	id INT PRIMARY KEY
 	path VARCHAR(1000), <------
@@ -251,30 +258,6 @@ CREATE TABLE Comment (
 	FOREIGN KEY (parent_id) REFERENCES Comment (id)
 )
 ```
-**Pros**
-
-* Querying ancestors and children is easy. E.g., `SELECT * FROM Comment c WHERE c.path like '1/4/'`
-
-**Cons**
-
-* Same problem as the Jaywalking antipattern.
-
-* __Nested Sets__
-	* Assigning a number to each node's left and right children. Kind of like balanced binary tree.
-
-**Cons**
-
-* Not easily understandable
-* Does not support referential integrity
-* Useful only when the tree is queried frequently, than modified
-
-*Closure Table*
-
-Creating a separate table to store the relationship of nodes. By far the versatile design for storing tree structures.
-
-**Cons**
-
-Requires additional table and hence increasing space consumption.
 
 ## Physical Database Anti-patterns
 

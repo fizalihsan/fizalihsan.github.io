@@ -383,9 +383,14 @@ messageStyle: "none",
     </ul>
   </li>
   <li>You cannot incrementally update portions of the object as you would with a file</li>
-  <li><strong>ARNs (Amazon Resource Name)</strong> uniquely identify AWS resources. (http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html)
+  <li><strong>ARNs (Amazon Resource Name)</strong> uniquely identify AWS resources. (<a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">AWS ARNs and Namespaces</a>
     <ul>
-      <li>Object in an Amazon S3 bucket <code>arn:aws:s3:::my_bucket/exampleobject.png</code></li>
+      <li>Object in an Amazon S3 bucket. e.g., <code>arn:aws:s3:::my-family-photos-2017/birthday.jpg</code>
+        <ul>
+          <li><code>arn:aws:s3:::bucket_name</code></li>
+          <li><code>arn:aws:s3:::bucket_name/key_name</code></li>
+        </ul>
+      </li>
       <li>General formats
         <ul>
           <li><code>arn:partition:service:region:account-id:resource</code></li>
@@ -486,46 +491,38 @@ messageStyle: "none",
 <h3 id="s3-data-protection">S3 Data Protection</h3>
 
 <ul>
-  <li>Bucket-level permissioning - existing permissioning policies can be copied or generated using ‘Bucket policy generator’</li>
+  <li>Bucket-level permissioning - existing permissioning policies can be copied or generated using <a href="http://awspolicygen.s3.amazonaws.com/policygen.html">‘Bucket policy generator’</a></li>
   <li>By default, all S3 objects and buckets are private and can only be accessed by the owner.</li>
   <li><strong>Access Control</strong>
     <ul>
-      <li><em>Coarse-grained access controls</em>
+      <li><strong>S3 Access Control Lists (ACLs)</strong> (<em>Coarse-grained access controls</em>)
         <ul>
-          <li><strong>S3 Access Control Lists (ACLs)</strong>
+          <li>legacy mechanism, created before IAM</li>
+          <li>Limited to read, write, or full-control at object/bucket level</li>
+          <li>Best used for enabling bucket logging or making a bucket that hosts a static website be readable</li>
+        </ul>
+      </li>
+      <li><strong>S3 bucket policies</strong> (<em>Fine-grained access controls</em>)
+        <ul>
+          <li>Recommended access control mechanism</li>
+          <li>Can specify
             <ul>
-              <li>legacy mechanism, created before IAM</li>
-              <li>Limited to read, write, or full-control at object/bucket level</li>
-              <li>Best used for enabling bucket logging or making a bucket that hosts a static website be readable</li>
+              <li>who can access the bucket</li>
+              <li>from where (by <em>CIDR</em> block or IP address)</li>
+              <li>at what time of the day</li>
+            </ul>
+          </li>
+          <li>Bucket policies allows to assign cross-account access to S3 resources</li>
+          <li>Similar to IAM but
+            <ul>
+              <li>associated with bucket resource instead of an IAM principal</li>
+              <li>includes an explicit reference to the IAM principal in the policy. This principal can be associated with a different AWS account</li>
             </ul>
           </li>
         </ul>
       </li>
-      <li><em>Fine-grained access controls</em>
-        <ul>
-          <li><strong>S3 bucket policies</strong>
-            <ul>
-              <li>Recommended access control mechanism</li>
-              <li>Can specify
-                <ul>
-                  <li>who can access the bucket</li>
-                  <li>from where (by <em>CIDR</em> block or IP address)</li>
-                  <li>at what time of the day</li>
-                </ul>
-              </li>
-              <li>Bucket policies allows to assign cross-account access to S3 resources</li>
-              <li>Similar to IAM but
-                <ul>
-                  <li>associated with bucket resource instead of an IAM principal</li>
-                  <li>includes an explicit reference to the IAM principal in the policy. This principal can be associated with a different AWS account</li>
-                </ul>
-              </li>
-            </ul>
-          </li>
-          <li>AWS Identity and Access Management (IAM) policies</li>
-          <li>Query String Authentication</li>
-        </ul>
-      </li>
+      <li>AWS Identity and Access Management (IAM) policies</li>
+      <li>Query String Authentication</li>
     </ul>
   </li>
   <li><strong>Encryption</strong>
@@ -572,8 +569,8 @@ messageStyle: "none",
             <ul>
               <li>You encrypt the data before sending it to S3</li>
               <li>2 options for using data encryption keys
-   	* Use an AWS KMS-managed customer master key
                 <ul>
+                  <li>Use an AWS KMS-managed customer master key</li>
                   <li>Use a client-side master key</li>
                 </ul>
               </li>
@@ -583,6 +580,81 @@ messageStyle: "none",
       </li>
     </ul>
   </li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th> </th>
+      <th> </th>
+      <th> </th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>who creates the key?</td>
+      <td>AWS</td>
+      <td>You</td>
+      <td>You</td>
+      <td>You</td>
+    </tr>
+    <tr>
+      <td>who protects and manages the key?</td>
+      <td>AWS</td>
+      <td>AWS</td>
+      <td>You</td>
+      <td>You</td>
+    </tr>
+    <tr>
+      <td>who encrypts and decrypts data?</td>
+      <td>AWS</td>
+      <td>AWS</td>
+      <td>AWS</td>
+      <td>AWS</td>
+    </tr>
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr>
+      <th> </th>
+      <th>who creates the key?</th>
+      <th>who protects and manages the key?</th>
+      <th>who encrypts and decrypts data?</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>SSE-S3</strong></td>
+      <td>AWS</td>
+      <td>AWS</td>
+      <td>AWS</td>
+    </tr>
+    <tr>
+      <td><strong>SSE-KMS</strong></td>
+      <td>You</td>
+      <td>AWS</td>
+      <td>AWS</td>
+    </tr>
+    <tr>
+      <td><strong>SSE-C</strong></td>
+      <td>You</td>
+      <td>You</td>
+      <td>You</td>
+    </tr>
+    <tr>
+      <td><strong>CSE</strong></td>
+      <td>You</td>
+      <td>You</td>
+      <td>You</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
   <li><strong>Versioning</strong>
     <ul>
       <li>If an object is accidentally changed/deleted, one can restore the object to its original state by referencing the version ID in addition to the bucket and object key</li>

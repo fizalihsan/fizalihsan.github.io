@@ -16,3 +16,6 @@ footer: false
 * [Physics]({{ root_url }}/misc/physics.html)
 * [Tabligh]({{ root_url }}/islamic/dawah.html)
 * [TODO - Topics to learn in-depth]({{ root_url }}/technology/todo.html)
+
+* [AWS Certification - Trivias]({{ root_url }}/technology/aws_trivia.html)
+* [Kubernetes in AWS]({{ root_url }}/technology/kubernetes-in-aws.html)

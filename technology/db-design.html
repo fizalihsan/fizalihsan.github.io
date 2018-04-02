@@ -549,7 +549,42 @@ which is present in an application is absolutely critical.</li>
   <li>ID Required</li>
   <li>Phantom Files</li>
   <li>FLOAT Antipattern</li>
-  <li>ENUM Antipattern</li>
+  <li>ENUM Antipattern
+    <ul>
+      <li>When to use enums?
+        <ul>
+          <li>when the set of values is unchanging. e.g., days of week, active/inactive, internal/external, etc.</li>
+          <li>use metadata when validating against a fixed set of values. use data when validating a fluid set of values.</li>
+        </ul>
+      </li>
+      <li>Pros:
+        <ul>
+          <li>storage is compact compared to strings, since only the ordinal number of the string in the enumerated list is stored.</li>
+        </ul>
+      </li>
+      <li>Cons:
+        <ul>
+          <li>valid values for a column is stored in metadata of the table. Modifying valid values require change to table definition. Changing table or column definition should be infrequent, and with attention to testing and quality assurance.</li>
+          <li>querying current set of valid values is not easy/straight-forward. e.g., for UI drop-downs. Risk of maintaining information in 2 different places.</li>
+          <li>making a value obsolete could upset historical data.</li>
+          <li>less portability (not all databases support ENUMs)</li>
+        </ul>
+      </li>
+      <li>Solutions:
+        <ul>
+          <li>create a lookup table with one for each allowed value and declare a foreign key constraint.</li>
+          <li>pros:
+            <ul>
+              <li>set of permitted values is stored in data, not metadata</li>
+              <li>changing data values needs no interruption to the table access, no table/column definition change</li>
+              <li>renaming a value is easy</li>
+              <li>easy to make a set of values obsolute </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
   <li>Readable Passwords</li>
 </ul>
 

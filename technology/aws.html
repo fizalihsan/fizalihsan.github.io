@@ -337,6 +337,12 @@ messageStyle: "none",
   <li>S3 is a highly-durable and highly-scalable cloud object store</li>
   <li>By default, every object is world-readable</li>
   <li>Scalability: S3 automatically partitions buckets to support very high request rates and simultaneous access by many clients</li>
+  <li>Data consistency
+    <ul>
+      <li>S3 offers <em>read-after-write consistency</em> for <code>PUT</code>s on new objects</li>
+      <li>otherwise offers <em>eventual consistency</em></li>
+    </ul>
+  </li>
 </ul>
 
 <h3 id="s3-buckets">S3 Buckets</h3>
@@ -586,41 +592,6 @@ messageStyle: "none",
   <thead>
     <tr>
       <th> </th>
-      <th> </th>
-      <th> </th>
-      <th> </th>
-      <th> </th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>who creates the key?</td>
-      <td>AWS</td>
-      <td>You</td>
-      <td>You</td>
-      <td>You</td>
-    </tr>
-    <tr>
-      <td>who protects and manages the key?</td>
-      <td>AWS</td>
-      <td>AWS</td>
-      <td>You</td>
-      <td>You</td>
-    </tr>
-    <tr>
-      <td>who encrypts and decrypts data?</td>
-      <td>AWS</td>
-      <td>AWS</td>
-      <td>AWS</td>
-      <td>AWS</td>
-    </tr>
-  </tbody>
-</table>
-
-<table>
-  <thead>
-    <tr>
-      <th> </th>
       <th>who creates the key?</th>
       <th>who protects and manages the key?</th>
       <th>who encrypts and decrypts data?</th>
@@ -643,7 +614,7 @@ messageStyle: "none",
       <td><strong>SSE-C</strong></td>
       <td>You</td>
       <td>You</td>
-      <td>You</td>
+      <td>AWS</td>
     </tr>
     <tr>
       <td><strong>CSE</strong></td>
@@ -723,7 +694,7 @@ messageStyle: "none",
 
 <ul>
   <li>Extremely low-cost storage service for data archiving and long-term backup. Optimized for infrequently accessed data where a retrieval time of several hours is suitable.</li>
-  <li>To retrieve an object, issue a restore command using S3 API; 3 to 5 hours later, it is copied to S3 RRS. Restore simply creates a copy; the original data is retained in Glacier until explicitly deleted.</li>
+  <li>To retrieve an object, issue a <code>restore</code> command using S3 API; 3 to 5 hours later, it is copied to S3 RRS. <code>Restore</code> simply creates a copy; the original data is retained in Glacier until explicitly deleted.</li>
   <li><strong>Archives</strong>
     <ul>
       <li>Data is stored in <em>archives</em></li>

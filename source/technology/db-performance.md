@@ -360,6 +360,7 @@ DB2 uses NICKNAME, SERVER, WRAPPER, and USER MAPPING objects to implement federa
 # Partitioning
 
 (_following points are MySQL specific at the time of the writing_)
+
 * partition expression must be an integer
 * no foreign key constraints	
 * partitions can't be accessed directly
@@ -367,7 +368,7 @@ DB2 uses NICKNAME, SERVER, WRAPPER, and USER MAPPING objects to implement federa
 * each partition can live in a separate disk
 * indexing on columns not part of partition key leads to poor performance
 * max # of partitions possible = 1024. Optimal size is around 100
-* types of partitioning
+* __Types__
 	* range partitioning
     * each partition is defined to accept a specific range of values for some column or columns, or a function over those columns
     * cons: For every row inserted into the table that’s partitioned by range, the server has to scan the list of partitions to select the destination. As the number of partitions grow, this can be costly.
@@ -377,7 +378,7 @@ DB2 uses NICKNAME, SERVER, WRAPPER, and USER MAPPING objects to implement federa
   * Row-wide partitioning
   * Column-wide partitioning
 
-* cons/limitations of partitioning:
+* __Cons__
   * Opening and locking partitions when a query accesses a partitioned table is another type of per-partition overhead
   * all partitions should use the same storage engine
 

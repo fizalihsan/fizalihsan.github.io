@@ -88,6 +88,7 @@ __Commands__
 
 ## Vagrant
 
+* `vagrant login` - create login at https://app.vagrantup.com/
 * Download : `vagrant box add bento/centos-7.2 --provider=virtualbox`
 * creates a configuration file with CPU, memory, etc.: `vagrant init bento/centos-7.2`
 * Uses the configuration file to create a virtual machine instance: `vagrant up`

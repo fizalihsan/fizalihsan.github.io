@@ -173,8 +173,38 @@ Sensitive data should be protected with cryptographic services like SSL. The Web
 ## Hashing (a.k.a Message Digest)
 
 * Hashing/Message digests are secure one-way hash functions that take arbitrary-sized data and output a fixed-length hash value.
+* They turn any amount of data into a fixed-length "fingerprint" that cannot be reversed. If the input changes by even a tiny bit, the resulting hash is completely different (see the example above). 
+* __Cryptographic hash functions__
+  * regular hash functions used in hash tables are designed to be fast, not secure
+  * used for protecting passwords. Safe even if the password file is compromised, but at the same time, allows to verify that a user's password is correct.
+  * example: SHA256, SHA512, RipeMD, and WHIRLPOOL
 * `java.security.MessageDigest` class supports MD5 and SHA digests.
 * Shiro supports hex-encode and Base64 encoding.
+
+### Salt Hashing
+
+* There are several ways in which even a cryptographic hashed password can also be hacked.
+* __Dictionary Attacks__
+  * uses a file containing words, phrases, common passwords, and other strings that are likely to be used as a password. Each word in the file is hashed, and its hash is compared to the password hash. If they match, that word is the password. 
+* __Brute Force Attacks__
+* __Lookup Tables__
+  * The general idea is to pre-compute the hashes of the passwords in a password dictionary and store them, and their corresponding password, in a lookup table data structure. e.g., https://crackstation.net/
+  * extremely effective method for cracking many hashes of the same type very quickly
+
+```bash
+hash("hello")                    = 2cf24dba5fb0a30e26e83b2ac5b9e29e1b161e5c1fa7425e73043362938b9824
+# add a random string called 'salt'
+hash("hello" + "QxLUF1bgIAdeQX") = 9e209040c863f84a31e719795b2577523954739fe5ed3b58a75cff2127075ed1
+hash("hello" + "bv5PehSMfV11Cd") = d1d3ec2e6f20fd420d50e2642992841d8338a314b8ea157c9e18477aaef226ab
+hash("hello" + "YYLmfY6IehjZMQ") = a49670c3c18b9e079b9cfaf51634f563dc8ae3070db2c4a8544305df1b60f007
+```
+
+* Lookup tables work only because each password is hashed the exact same way. If two users have the same password, they'll have the same password hashes. We can prevent these attacks by randomizing each hash, so that when the same password is hashed twice, the hashes are not the same.
+* We can randomize the hashes by appending or prepending a random string, called a ***salt***, to the password before hashing.
+* To check if a password is correct, we need the salt, so it is usually stored in the user account database along with the hash, or as part of the hash string itself.
+
+The salt does not need to be secret. Just by randomizing the hashes, lookup tables, reverse lookup tables, and rainbow tables become ineffective. An attacker won't know in advance what the salt will be, so they can't pre-compute a lookup table or rainbow table. If each user's password is hashed with a different salt, the reverse lookup table attack won't work either.
+
 
 ## Cipher
 

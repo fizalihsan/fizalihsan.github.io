@@ -183,6 +183,8 @@ Sensitive data should be protected with cryptographic services like SSL. The Web
 
 ### Salt Hashing
 
+> Source: https://crackstation.net/hashing-security.htm
+
 * There are several ways in which even a cryptographic hashed password can also be hacked.
 * __Dictionary Attacks__
   * uses a file containing words, phrases, common passwords, and other strings that are likely to be used as a password. Each word in the file is hashed, and its hash is compared to the password hash. If they match, that word is the password. 
@@ -203,8 +205,28 @@ hash("hello" + "YYLmfY6IehjZMQ") = a49670c3c18b9e079b9cfaf51634f563dc8ae3070db2c
 * We can randomize the hashes by appending or prepending a random string, called a ***salt***, to the password before hashing.
 * To check if a password is correct, we need the salt, so it is usually stored in the user account database along with the hash, or as part of the hash string itself.
 
-The salt does not need to be secret. Just by randomizing the hashes, lookup tables, reverse lookup tables, and rainbow tables become ineffective. An attacker won't know in advance what the salt will be, so they can't pre-compute a lookup table or rainbow table. If each user's password is hashed with a different salt, the reverse lookup table attack won't work either.
+* The salt does not need to be secret, but should be generated using Cryptographically Secure Pseudo-Random Generator (CSPRG) 
+* DO NOT use the username as the salt
+* DO NOT reused the salt for all users. Use a separate random salt string for every user and every time the password is changed.
+* DO NOT use a short salt. To make it impossible for an attacker to create a lookup table for every possible salt, a good rule of thumb is to use a salt that is the same size as the output of the hash function. For example, the output of SHA256 is 256 bits (32 bytes), so the salt should be at least 32 random bytes.
+* DO NOT use double hashing or wacky combination of hashing functions. 
+  * Cons
+    * creates interoperability problems
+    * makes the hashes less secure, if the hacker gets hold of the open source code ([Kerckhoffs's principle](https://en.wikipedia.org/wiki/Kerckhoffs%27s_principle) - _A cryptosystem should be secure even if everything about the system, except the key, is public knowledge_)
+  * If needed, use a 'wacky' function like HMAC (Hash-based Message Authentication Code).
+    
+```bash
+md5(sha1(password))
+md5(md5(salt) + md5(password))
+sha1(sha1(password))
+sha1(str_rot13(password + salt))
+md5(sha1(md5(md5(password) + sha1(password)) + md5(password)))
+```
 
+* **Key Stretching**
+  * Salt ensures attackers can't use specialized attacks to crack passwords using large collection of hashes. Using high-end GPUs and custom hardware it is possible to generate billions of hashes in seconds. To make these attacks less effective, we can use a technique known as *key stretching*.
+  * Key stretching is implemented using a special type of CPU-intensive hash function. e.g., PBKDF2, bcrypt
+  * Key stretching may make it easier to run a DoS (Denial of Service) attack on your website. It can be eliminated by making the user solve a CAPTCHA.
 
 ## Cipher
 

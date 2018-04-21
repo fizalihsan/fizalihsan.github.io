@@ -19,3 +19,8 @@ footer: false
 
 * [AWS Certification - Trivias]({{ root_url }}/technology/aws_trivia.html)
 * [Kubernetes in AWS]({{ root_url }}/technology/kubernetes-in-aws.html)
+
+* **Data Science**
+	* [Overview]({{ root_url }}/datascience/datascience.html)
+	* [Statistics]({{ root_url }}/datascience/statistics.html)
+	* [R]({{ root_url }}/datascience/r.html)

@@ -634,26 +634,29 @@ called <em>write locks</em>.</p>
 
 <h1 id="partitioning">Partitioning</h1>
 
-<p>(<em>following points are MySQL specific at the time of the writing</em>)
-* partition expression must be an integer
-* no foreign key constraints	
-* partitions can’t be accessed directly
-* each partition can have its own index
-* each partition can live in a separate disk
-* indexing on columns not part of partition key leads to poor performance
-* max # of partitions possible = 1024. Optimal size is around 100
-* types of partitioning
-	* range partitioning
-    * each partition is defined to accept a specific range of values for some column or columns, or a function over those columns
-    * cons: For every row inserted into the table that’s partitioned by range, the server has to scan the list of partitions to select the destination. As the number of partitions grow, this can be costly.
-	* key, hash partitioning
-    * pros: scales well with partition growth unlike range partitioning
-  * list partitioning
-  * Row-wide partitioning
-  * Column-wide partitioning</p>
+<p>(<em>following points are MySQL specific at the time of the writing</em>)</p>
 
 <ul>
-  <li>cons/limitations of partitioning:
+  <li>partition expression must be an integer</li>
+  <li>no foreign key constraints	</li>
+  <li>partitions can’t be accessed directly</li>
+  <li>each partition can have its own index</li>
+  <li>each partition can live in a separate disk</li>
+  <li>indexing on columns not part of partition key leads to poor performance</li>
+  <li>max # of partitions possible = 1024. Optimal size is around 100</li>
+  <li><strong>Types</strong>
+    <ul>
+      <li>range partitioning</li>
+      <li>each partition is defined to accept a specific range of values for some column or columns, or a function over those columns</li>
+      <li>cons: For every row inserted into the table that’s partitioned by range, the server has to scan the list of partitions to select the destination. As the number of partitions grow, this can be costly.</li>
+      <li>key, hash partitioning</li>
+      <li>pros: scales well with partition growth unlike range partitioning</li>
+      <li>list partitioning</li>
+      <li>Row-wide partitioning</li>
+      <li>Column-wide partitioning</li>
+    </ul>
+  </li>
+  <li><strong>Cons</strong>
     <ul>
       <li>Opening and locking partitions when a query accesses a partitioned table is another type of per-partition overhead</li>
       <li>all partitions should use the same storage engine</li>
@@ -776,12 +779,6 @@ called <em>write locks</em>.</p>
 		</li>
 
 		<h2>Non-Techninal</h2>
-
-		<li>
-			<h3>Data Science</h3>
-
-			<a href="/datascience/datascience.html">Overview</a>  |  <a href="/datascience/statistics.html">Statistics</a>  |  <a href="/datascience/r.html">R</a>
-		</li>
 
 		<li>
 			<h3>Domain Knowledge</h3>

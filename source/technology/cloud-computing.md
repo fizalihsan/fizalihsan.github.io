@@ -95,7 +95,7 @@ Anything-as-a-Service (XaaS) is yet another service model, which includes *Netwo
 
 | Perimeter Network Security System | Cloud Network Security System |
 | ---- | ---- |
-| {% img /technology/cloud-network-security1.png %} | {% img /technology/cloud-network-security2.png %} |
+| {% img /technology/cloud-network-security2.png %} | {% img /technology/cloud-network-security1.png %} |
 
 * `Load balancer -> Web server (reverse proxy) -> App server -> DB server`
 * Use Intrusion detection software to detect Trojans in a server

@@ -1,0 +1,828 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Microservices - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Microservices Event-Driven Microservices Downsides of monolith architecture Microservices Patterns Decomposition Patterns Deployment Patterns &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/microservices.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Microservices</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#event-driven-microservices">Event-Driven Microservices</a>    <ul>
+      <li><a href="#downsides-of-monolith-architecture">Downsides of monolith architecture</a></li>
+    </ul>
+  </li>
+  <li><a href="#microservices-patterns">Microservices Patterns</a>    <ul>
+      <li><a href="#decomposition-patterns">Decomposition Patterns</a></li>
+      <li><a href="#deployment-patterns">Deployment Patterns</a></li>
+      <li><a href="#communication-patterns">Communication Patterns</a></li>
+      <li><a href="#service-discovery">Service Discovery</a></li>
+      <li><a href="#cross-cutting-concerns">Cross-cutting concerns</a></li>
+      <li><a href="#data-management">Data Management</a>        <ul>
+          <li><a href="#event-sourcing">Event Sourcing</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#strategies-to-refactor-monolith-to-microservices">Strategies to refactor Monolith to Microservices</a></li>
+</ul>
+
+<h1 id="event-driven-microservices">Event-Driven Microservices</h1>
+
+<h2 id="downsides-of-monolith-architecture">Downsides of monolith architecture</h2>
+
+<ul>
+  <li>Agile development and deployment becomes impossible</li>
+  <li>Intimidates developers and becomes a monumental effort for new team members to learn the system</li>
+  <li>Some part of the app can be memory-intensive and other parts IO/CPU-intensive. (Cryptography/graphics) Challenging to find optimal hardware to run the system. (EC2 and other cloud providers provide t-shirt sized instances which are either good for memory/IO/CPU intensive cases.) Monoliths running on general-purpose is not optimal</li>
+  <li>IDE and app start up time is slow</li>
+  <li>Requires front-end and back-end co-ordination before change or deployment</li>
+  <li>Requires lot term commitment to the technology stack - rewriting a part of the system to adapt a newer technology to solve a certain problem in a better way is impossible. If the system is built on a legacy technology that no one wants to work with, it becomes harder to find resources</li>
+</ul>
+
+<h1 id="microservices-patterns">Microservices Patterns</h1>
+
+<ul>
+  <li>3 axes of decomposition from “The Art of Scalability” book. </li>
+</ul>
+
+<h2 id="decomposition-patterns">Decomposition Patterns</h2>
+
+<p><strong>Functional decomposition</strong></p>
+
+<ul>
+  <li>Pros of decomposing/partitioning to separate services
+    <ul>
+      <li>Change to one service can happen independently and does not impact other services</li>
+      <li>Development and deployment can happen more frequently</li>
+      <li>Different components with conflicting resource requirements can scale easily (in-memory databases that require lot of memory can run on its own machine, while the cryptography/graphics like CPU-intensive modules can run separately)</li>
+      <li>Improved fault isolation - e.g., a memory-leak in one of the components does not impact the entire application</li>
+      <li>Eliminates long term commitment to a single tech stack - leading to modular system, polyglot and multi-framework system</li>
+    </ul>
+  </li>
+  <li>Cons
+    <ul>
+      <li>Complexity of developing a distributed system - inter process communication (RPC, REST, gRPC…), partial failures (other services is slow in responding)</li>
+      <li>Multiple databases and transaction management e.g., eventual consistency</li>
+      <li>Complexity of testing a distributed system  - end-to-end testing (https://martinfowler.com/articles/microservice-testing )</li>
+      <li>Complexity of testing a distributed system - need a lot of automation, virtualized/containerized infrastructure, continuous deployment</li>
+      <li>Co-ordinating feature development that span across services</li>
+      <li>Potential risk of excessive network hops</li>
+      <li>Runtime overhead (nano-service anti-pattern) - e.g., overhead of running JVM which contains only 100 lines of code</li>
+      <li>Tracing requests and performance measurement</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Partitioning Strategies</strong></p>
+
+<ul>
+  <li>Goals of partitioning: parallelize development and deployment</li>
+  <li>Strategies
+    <ul>
+      <li>Partition by noun e.g., Catalog service for products</li>
+      <li>Partition by verb e.g., Check out </li>
+      <li>Single Responsibility Principle</li>
+      <li>Subdomain </li>
+    </ul>
+  </li>
+  <li>Anti*pattern: Distributed monolith
+    <ul>
+      <li>Partition your app so that most changes only impact a single service.</li>
+      <li>Common Closure Principle - Components that change for the same reason should be packaged together</li>
+    </ul>
+  </li>
+  <li>Anti*pattern: Nano-services</li>
+</ul>
+
+<h2 id="deployment-patterns">Deployment Patterns</h2>
+
+<ul>
+  <li><strong>Multiple services per host</strong>
+    <ul>
+      <li>Cons
+        <ul>
+          <li>Less isolation </li>
+          <li>Difficult to limit resource utilization</li>
+          <li>Risk of dependency version conflict </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Single service per host</strong></li>
+  <li><strong>Service per VM</strong>
+    <ul>
+      <li>Pros
+        <ul>
+          <li>Leverage cloud infrastructure to auto scale and load balance</li>
+        </ul>
+      </li>
+      <li>Cons
+        <ul>
+          <li>Less efficient resource utilization</li>
+          <li>Slow build and deployment: due to image size and start up time</li>
+        </ul>
+      </li>
+      <li>http://packer.io, http://boxfuse.com - for automation of VM image creation</li>
+    </ul>
+  </li>
+  <li><strong>Service per container</strong></li>
+</ul>
+
+<h2 id="communication-patterns">Communication Patterns</h2>
+
+<ul>
+  <li>Issues
+    <ul>
+      <li>How do clients interact with the services?</li>
+      <li>How do services within the system interact with each other?</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>API Gateway</strong></p>
+
+<ul>
+  <li>Forces
+    <ul>
+      <li>Different clients (UI, Mobile) need different data</li>
+      <li>The number of service instances and their locations changes dynamically</li>
+      <li>Web unfriendly protocols e.g., Thrift, Protocol Buffer</li>
+    </ul>
+  </li>
+  <li>API Gateway is responsible for tasks such as load balancing, caching, access control, API metering, monitoring, etc.</li>
+  <li>Pros
+    <ul>
+      <li>Single point of entry</li>
+      <li>Provides optimal API for client specific (UI, Android, iOS, TV)</li>
+      <li>Protocol translation (http &gt; thrift)</li>
+      <li>Insulates clients from partition and discovery</li>
+    </ul>
+  </li>
+  <li>Cons
+    <ul>
+      <li>Increased complexity - the API gateway is yet another highly available component that must developed, deployed and managed</li>
+      <li>Increased response time due to additional network hop</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Inter Process Communication</strong></p>
+
+<ul>
+  <li>Netflix approach for Partial failures - when one of the service is slow or not responding. How to deal with it? (Netflix https://medium.com/netflix-techblog/fault-tolerance-in-a-high-volume-distributed-system-91ab4faae74a )
+    <ul>
+      <li>Network timeouts: never wait for response indefinitely</li>
+      <li>Invoke remote services via a bounded thread pool</li>
+      <li>Use the circuit breaker pattern e.g., 5 failures in a row indicates the service is down</li>
+      <li>Netflix Hystrix addresses all this</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="service-discovery">Service Discovery</h2>
+
+<ul>
+  <li>Forces
+    <ul>
+      <li>Client or API gateway needs to know where the service is running</li>
+      <li>The destination host and IP are dynamically assigned and bound to change</li>
+      <li>How to load balance</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Client-service discovery</strong></p>
+
+<ul>
+  <li>When a service comes up, it publishes its location to a central Service Registry. Client queries the registry and load balances the request to appropriate service. e.g., Netflix Eureka (Service Registry) and Ribbon</li>
+  <li>Pros
+    <ul>
+      <li>Less network hop since client talks to service directly</li>
+    </ul>
+  </li>
+  <li>Cons
+    <ul>
+      <li>couples the client to the service registry</li>
+      <li>Need to implement client-side load balancing and routing logic in multiple languages and frameworks</li>
+      <li>Service Registry is another moving part which must be highly available</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Server-side discovery</strong></p>
+
+<ul>
+  <li>Same as client-side, however the client calls a router instead of Service registry. Router talks to Service Registry and then load balances the requests to service instances. e.g., AWS Load Balancer, Nginx, Kubernetes</li>
+  <li>Pros
+    <ul>
+      <li>Simple client code</li>
+      <li>Built-in to cloud/container environments</li>
+    </ul>
+  </li>
+  <li>Cons
+    <ul>
+      <li>Limited to load balancing algorithms provided by router</li>
+      <li>Other cons as client-side</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Service Registration</strong></p>
+
+<ul>
+  <li>Forces
+    <ul>
+      <li>Service instances must be registered in the registry during start up and unregistered during shutdown</li>
+      <li>Service instances that crash must be unregistered from the registry</li>
+      <li>Service instances that are running but incapable of serving must be unregistered from the registry</li>
+      <li>Who registers the service in the registry - service or 3rd-party?</li>
+    </ul>
+  </li>
+  <li>Service Registries: Netflix Eureka, Apache Zookeeper, Hashicorp Consul, CoreOS etcd</li>
+  <li><em>Self Registration</em>
+    <ul>
+      <li>Service registers and unregisters itself. e.g., Netflix Eureka Java client, Zookeeper Java client</li>
+      <li>Pros
+        <ul>
+          <li>Simple</li>
+        </ul>
+      </li>
+      <li>Cons
+        <ul>
+          <li>Couples services to the registry</li>
+          <li>Must implement registration logic in multiple languages/framework</li>
+          <li>Service might lack the self awareness to unregister itself</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><em>3rd party Registration</em>
+    <ul>
+      <li>Registrar detects somehow the service is up, registers to the Service Registry, periodically performs health check on the service and sends heartbeat to service registry, </li>
+      <li>Examples
+        <ul>
+          <li>AWS Autoscaling groups - automatically register/unregister EC2 instances with ELB</li>
+          <li>Kubernetes/Marathon</li>
+          <li>Netflix Eureka Prana</li>
+          <li>Container Buddy - runs as services’ parent process in docker container, registers services with Consul or etcd</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="cross-cutting-concerns">Cross-cutting concerns</h2>
+
+<p><strong>Microservice Chassis Framework</strong></p>
+
+<ul>
+  <li>Cross-cutting concerns 
+    <ul>
+      <li>External configuration
+        <ul>
+          <li>N/w location of external services, credentials, etc.</li>
+          <li>Different for different environments</li>
+        </ul>
+      </li>
+      <li>Logging</li>
+      <li>Service discovery</li>
+      <li>Circuit breaker</li>
+      <li>Health checks - e.g., health check URL</li>
+      <li>Metrics - e.g., reporting to metrics collection service</li>
+    </ul>
+  </li>
+  <li>Chassis Framework
+    <ul>
+      <li>Unlike monolith, all the above needs to be repeated multiple times</li>
+      <li>Microservice Chassis is a framework that actually takes care of the above e.g., Spring Boot + Spring Cloud, DropWizard</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="data-management">Data Management</h2>
+
+<ul>
+  <li>Problem of Data Consistency
+    <ul>
+      <li>What is the database architecture for a micro service architecture - shared db or db per service?</li>
+      <li>Each microservices has its own data store in order to ensure loose coupling. However, this makes it difficult to maintain consistency across multiple services. You can’t, for example, use distributed transactions (2PC).</li>
+    </ul>
+  </li>
+  <li>Forces
+    <ul>
+      <li>Some business transactions must update data owned by other services</li>
+      <li>Some queries must join data owned by other services</li>
+      <li>Different services have different storage requirements</li>
+      <li>Database must sometimes be sharded or replicated for scalability</li>
+      <li>Services must be loosely coupled so that they can be developed and deployed independently</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Pattern: Shared Database</strong></p>
+
+<ul>
+  <li>Pros
+    <ul>
+      <li>Simple</li>
+      <li>Local transactions only</li>
+    </ul>
+  </li>
+  <li>Cons
+    <ul>
+      <li>Services are tightly coupled</li>
+      <li>lack of encapsulation</li>
+      <li>Single db may not satisfy the data access requirements of multiple services</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Pattern: Database per service</strong></p>
+
+<ul>
+  <li>Private tables: services owns a set of tables that are private to that service</li>
+  <li>Private schema: services owns a schema that are private to that service</li>
+  <li>Private server: services owns a db server that are private to that service</li>
+  <li>Pros
+    <ul>
+      <li>Escapes the constraints of relational databases</li>
+      <li>Services are loosely coupled</li>
+    </ul>
+  </li>
+  <li>Cons
+    <ul>
+      <li>Implementing transactions and queries that spans multiple services is challenging</li>
+      <li>More complex to operate</li>
+    </ul>
+  </li>
+  <li>Problem of 2-phase commit
+    <ul>
+      <li>Guaranteed atomicity but 
+        <ul>
+          <li>Need a distributed transaction manager</li>
+          <li>DB and message broker must support 2PC</li>
+          <li>Impacts reliability</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Pattern: Transaction log tailing</strong></p>
+
+<ul>
+  <li>After a record is written to db, other services can read/tail off of it</li>
+  <li>LinkedIn Databus https://github.com/linkedin/databus, Mongodb (Oplog), AWS Dynamodb supports streaming of CRUD operations</li>
+  <li>Pros
+    <ul>
+      <li>No 2PC</li>
+      <li>No app changes needed</li>
+      <li>Guaranteed to be accurate</li>
+    </ul>
+  </li>
+  <li>Cons
+    <ul>
+      <li>Immature</li>
+      <li>Specific to a database solution</li>
+      <li>Low level DB changes rather than business level events = need to reverse-engineer domain events</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="event-sourcing">Event Sourcing</h3>
+
+<ul>
+  <li>Radically different approach in storing business entities and writing business logic. Most notably, the way in which business entities are stored in a data store is not by storing the current state but by storing the sequence of state-changing events (immutable events). Whenever the current state is needed, you reload past events and compute them.</li>
+  <li>For each business entity (aggregate)
+    <ul>
+      <li>Identify (state changing) domain events</li>
+      <li>Define Event classes</li>
+    </ul>
+  </li>
+  <li>Event Store = database + message broker
+    <ul>
+      <li>Store entities as a series of state changing immutable events, and reconstruct the current state by replaying them.</li>
+      <li>Functionality of event store
+        <ul>
+          <li>Save aggregate events</li>
+          <li>Get aggregate events</li>
+          <li>Subscribe to events</li>
+        </ul>
+      </li>
+      <li>Implementations: Greg Young’s https://eventstore.org and https://eventuate.io </li>
+    </ul>
+  </li>
+  <li>Pros
+    <ul>
+      <li>Solves data consistency issues in a microservice/nosql based architecture</li>
+      <li>Reliable event publishing</li>
+      <li>Eliminate O/R mapping problem</li>
+      <li>Enables temporal querying, audit logs</li>
+    </ul>
+  </li>
+  <li>Cons
+    <ul>
+      <li>Requires application rewrite</li>
+      <li>Must detect and handle duplicate events
+        <ul>
+          <li>Idempotent event handlers</li>
+          <li>Or track most recent event and ignore older ones</li>
+        </ul>
+      </li>
+      <li>Querying the event store can be challenging
+        <ul>
+          <li>Some queries can be complex or inefficient e.g., accounts with balance &gt; X</li>
+          <li>Event store might support only look up of events by entity id</li>
+          <li>Must use CQRS to handle queries =&gt; app must handle eventual consistent data. CQRS subscribes to events and stores a denormalized view of the event data that is easier to query</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Event Sourcing Design</strong></p>
+
+<ul>
+  <li>There are 3 types of components in an event sourcing design
+    <ul>
+      <li>Data model</li>
+      <li>Domain events</li>
+      <li>Commands</li>
+    </ul>
+  </li>
+  <li>Designing data model
+    <ul>
+      <li>DDD vocabulary
+        <ul>
+          <li>Entities - something that is identified by an id and persisted in db. e.g., Order, Product, Account</li>
+          <li>Value Object - e.g., Money, Date</li>
+          <li>Service</li>
+          <li>Repository</li>
+          <li>Aggregates
+            <ul>
+              <li>A transaction can update only a single aggregate. Scope of a transaction is really one aggregate. This fits well for NoSQL databases as well where you can update only one thing/document/aggregate at a time. Hence NoSQL databases are also called as aggregate-oriented databases.</li>
+              <li>Aggregate granularity
+                <ul>
+                  <li>if you want you could combine Customer, Order and Product as a single aggregate, it will be work and be more consistent, but won’t scale well.</li>
+                  <li>however, if they are treated as separate aggregates, then scalability and user experience improves since they can be stored and worked on in parallel.</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Designing Domain Events
+    <ul>
+      <li>Domain events store the information about the following 
+        <ul>
+          <li>Event Metadata e.g., time of the event, sender Id, etc.</li>
+          <li>Required by aggregate e.g., productId, </li>
+          <li>Enrichment - useful for consumers e.g., price, product name </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Designing Commands
+    <ul>
+      <li>Created by a service from incoming request</li>
+      <li>Processed by an aggregate </li>
+      <li>Immutable</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>CQRS (Command-Query Responsibility Seggregation) pattern</strong></p>
+
+<ul>
+  <li>
+    <p>In relational databases, query a customer and his order details is joining those 2 tables. However, event store only supports primary key look ups.</p>
+  </li>
+  <li>Rather a single component performing both command and query operation, handle them separately. </li>
+  <li>Command side would handle HTTP POST, DELETE, PUT methods. </li>
+  <li>Query side would handle GET methods. Query side stores only more materialized or denormalized views of the data.</li>
+  <li>View Store could be MongoDb, GraphDb, ElasticSearch, AWS DynamoDb etc. depending on the data needs</li>
+  <li>Pros
+    <ul>
+      <li>Necessary in an event sourcing architecture</li>
+      <li>Separation of concerns</li>
+      <li>Supports multiple denormalized views either as documents or graphs</li>
+      <li>Improved scalability and performance</li>
+    </ul>
+  </li>
+  <li>Cons
+    <ul>
+      <li>Complexity</li>
+      <li>Code duplication</li>
+      <li>Replication lag/eventually consistent views</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="strategies-to-refactor-monolith-to-microservices">Strategies to refactor Monolith to Microservices</h1>
+
+<ul>
+  <li>Strangler Application (Martin Fowler)</li>
+  <li><strong>#1: Stop digging</strong>
+    <ul>
+      <li>If you find yourself in a hole, stop digging. https://en.wikipedia.org/wiki/Law_of_holes </li>
+      <li>Stop adding new features to the monolith, and create a new service. </li>
+      <li>Router routes the traffic to old / new service</li>
+      <li>Build an anti-corruption layer to bridge/glue between monolith and new service</li>
+    </ul>
+  </li>
+  <li><strong>#2: Split front-end and back-end</strong></li>
+  <li><strong>#3: Extract services</strong>
+    <ul>
+      <li>Extract a service, introduce anti-corruption layer and repeat</li>
+      <li>What to extract?
+        <ul>
+          <li>Have the ideal partitioned architecture in mind: Partition by noun/verb?</li>
+          <li>Start with modules that gives the highest ROI
+            <ul>
+              <li>Velocity -&gt; frequently updated</li>
+              <li>Scalability -&gt; Conflicting resource requirements e.g., cryptograph code that requires more CPU</li>
+            </ul>
+          </li>
+          <li>Look for components that interact with each only via messaging. Since they are loosely coupled they could live in separate services. </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>#4: Anti-corruption layer</strong>
+    <ul>
+      <li>First appeared in DDD book by Eric Evans</li>
+      <li>Goal is to prevent your legacy system from polluting the pristine new code</li>
+    </ul>
+  </li>
+</ul>
+
+
+  
+    <footer>
+      
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  <a href="/technology/coding-principles.html">Coding Principles</a>  |  <a href="/technology/design-principles.html">Design Principles</a>  |  <a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  <a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  <a href="/technology/patterns.html">Patterns</a>  |  <a href="/technology/sdlc.html">SDLC</a>
+			  |  <a href="/technology/scalability.html">Scalability</a>  |  <a href="/technology/security.html">Security</a>  |  <a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  <a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  <a href="/technology/elasticsearch.html">ElasticSearch</a>  |  <a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  <a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  <a href="/technology/nosql.html">NoSQL</a>  |  <a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  <a href="/technology/aws.html">AWS</a>  |  <a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>  |  <a href="/technology/virtualization.html">Virtualization</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  <a href="/technology/db-design.html">Design</a>  |  <a href="/technology/db-performance.html">Performance</a>  |  <a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  <a href="/technology/java-collections.html">Collections</a>  |  <a href="/technology/java-concurrency.html">Concurrency</a>  |  <a href="/technology/java-database.html">Database</a>  |  <a href="/technology/java-jmx.html">JMX</a>  |  <a href="/technology/java-jndi.html">JNDI</a>  |  <a href="/technology/java-io.html">I/O</a>  |  <a href="/technology/java-performance.html">Performance</a>  |  <a href="/technology/java-testing.html">Testing</a>  |  <a href="/technology/java-web.html">Web</a>  |  <a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  <a href="/technology/python.html">Python</a>  |  <a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a> |<a href="/technology/microservices.html">Microservices</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  <a href="/technology/spring.html">Core</a>  |  <a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web Programming</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> | <a href="/technology/webapp_architecture.html">Architecture</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  <a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  <a href="/technology/datastructures.html">Data Structures</a>  |  <a href="/technology/design-faqs.html">Design FAQs</a>  |  <a href="/technology/networking.html">Networking</a>  |  <a href="/technology/oops.html">OOPS</a>  |  <a href="/technology/os.html">Operating Systems</a>  |  <a href="/technology/vcs.html">VCS</a>  |  <a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  <a href="/softskills/productivity.html">Productivity</a>  |  <a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2018 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

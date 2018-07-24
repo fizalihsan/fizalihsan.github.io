@@ -125,6 +125,7 @@ messageStyle: "none",
     </ul>
   </li>
   <li><a href="#strategies-to-refactor-monolith-to-microservices">Strategies to refactor Monolith to Microservices</a></li>
+  <li><a href="#references">References</a></li>
 </ul>
 
 <h1 id="event-driven-microservices">Event-Driven Microservices</h1>
@@ -141,6 +142,8 @@ messageStyle: "none",
 </ul>
 
 <h1 id="microservices-patterns">Microservices Patterns</h1>
+
+<p><img class="right 100 100" src="/technology/microservices-patterns.png" /></p>
 
 <ul>
   <li>3 axes of decomposition from “The Art of Scalability” book. </li>
@@ -186,13 +189,13 @@ messageStyle: "none",
       <li>Subdomain </li>
     </ul>
   </li>
-  <li>Anti*pattern: Distributed monolith
+  <li>Anti-pattern: Distributed monolith
     <ul>
       <li>Partition your app so that most changes only impact a single service.</li>
       <li>Common Closure Principle - Components that change for the same reason should be packaged together</li>
     </ul>
   </li>
-  <li>Anti*pattern: Nano-services</li>
+  <li>Anti-pattern: Nano-services</li>
 </ul>
 
 <h2 id="deployment-patterns">Deployment Patterns</h2>
@@ -242,6 +245,8 @@ messageStyle: "none",
 
 <p><strong>API Gateway</strong></p>
 
+<p><img class="right" src="/technology/microservices-patterns-api-gateway.png" /></p>
+
 <ul>
   <li>Forces
     <ul>
@@ -282,6 +287,9 @@ messageStyle: "none",
 
 <h2 id="service-discovery">Service Discovery</h2>
 
+<p><img src="/technology/microservices-patterns-discovery-problem.png" />
+<img class="right" src="/technology/microservices-patterns-clientside-discovery.png" /></p>
+
 <ul>
   <li>Forces
     <ul>
@@ -311,6 +319,8 @@ messageStyle: "none",
 </ul>
 
 <p><strong>Server-side discovery</strong></p>
+
+<p><img class="right" src="/technology/microservices-patterns-serverside-discovery.png" /></p>
 
 <ul>
   <li>Same as client-side, however the client calls a router instead of Service registry. Router talks to Service Registry and then load balances the requests to service instances. e.g., AWS Load Balancer, Nginx, Kubernetes</li>
@@ -492,6 +502,8 @@ messageStyle: "none",
 
 <h3 id="event-sourcing">Event Sourcing</h3>
 
+<p><img class="right" src="/technology/microservices-patterns-eventsourcing1.png" /></p>
+
 <ul>
   <li>Radically different approach in storing business entities and writing business logic. Most notably, the way in which business entities are stored in a data store is not by storing the current state but by storing the sequence of state-changing events (immutable events). Whenever the current state is needed, you reload past events and compute them.</li>
   <li>For each business entity (aggregate)
@@ -596,6 +608,8 @@ messageStyle: "none",
 
 <p><strong>CQRS (Command-Query Responsibility Seggregation) pattern</strong></p>
 
+<p><img class="right" src="/technology/microservices-patterns-cqrs.png" /></p>
+
 <ul>
   <li>
     <p>In relational databases, query a customer and his order details is joining those 2 tables. However, event store only supports primary key look ups.</p>
@@ -659,6 +673,13 @@ messageStyle: "none",
   </li>
 </ul>
 
+<p><img class="right" src="/technology/microservices-patterns-anticorruption-layer.png" /></p>
+
+<h1 id="references">References</h1>
+
+<ul>
+  <li>Chris Richardson’s talk on “Event-Driven Microservices” in Safari</li>
+</ul>
 
   
     <footer>
@@ -716,7 +737,7 @@ messageStyle: "none",
 
 		<li>
 			<h3>SOA</h3>
-			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a> |<a href="/technology/microservices.html">Microservices</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
+			<a href="/technology/soa.html">Concepts</a>  |  <a href="/technology/camel.html">Camel</a>  |  <a href="/technology/messaging.html">Messaging</a> |  <a href="/technology/microservices.html">Microservices</a>   |  <a href="/technology/rest-services.html">REST</a>  |  <a href="/technology/soap-services.html">SOAP</a>  |  <a href="/technology/webservices.html">Web Services</a> |  <a href="/technology/xml.html">XML</a>
 		</li>
 
 		<li>

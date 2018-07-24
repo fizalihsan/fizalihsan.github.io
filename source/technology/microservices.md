@@ -22,6 +22,8 @@ footer: true
 
 # Microservices Patterns
 
+{% img right 100 100 /technology/microservices-patterns.png %}
+
 * 3 axes of decomposition from “The Art of Scalability” book. 
  
 ## Decomposition Patterns
@@ -52,10 +54,10 @@ __Partitioning Strategies__
     * Partition by verb e.g., Check out 
     * Single Responsibility Principle
     * Subdomain 
-* Anti*pattern: Distributed monolith
+* Anti-pattern: Distributed monolith
     * Partition your app so that most changes only impact a single service.
     * Common Closure Principle - Components that change for the same reason should be packaged together
-* Anti*pattern: Nano-services
+* Anti-pattern: Nano-services
 
 ## Deployment Patterns
 
@@ -82,6 +84,8 @@ __Partitioning Strategies__
 
 __API Gateway__
 
+{% img right /technology/microservices-patterns-api-gateway.png %}
+
 * Forces
     * Different clients (UI, Mobile) need different data
     * The number of service instances and their locations changes dynamically
@@ -106,6 +110,9 @@ __Inter Process Communication__
 
 ## Service Discovery
 
+{% img /technology/microservices-patterns-discovery-problem.png %}
+{% img right /technology/microservices-patterns-clientside-discovery.png %}
+
 * Forces
     * Client or API gateway needs to know where the service is running
     * The destination host and IP are dynamically assigned and bound to change
@@ -122,6 +129,8 @@ __Client-service discovery__
     * Service Registry is another moving part which must be highly available
 
 __Server-side discovery__
+
+{% img right /technology/microservices-patterns-serverside-discovery.png %}
 
 * Same as client-side, however the client calls a router instead of Service registry. Router talks to Service Registry and then load balances the requests to service instances. e.g., AWS Load Balancer, Nginx, Kubernetes
 * Pros
@@ -228,6 +237,8 @@ __Pattern: Transaction log tailing__
 
 ### Event Sourcing
 
+{% img right /technology/microservices-patterns-eventsourcing1.png %}
+
 * Radically different approach in storing business entities and writing business logic. Most notably, the way in which business entities are stored in a data store is not by storing the current state but by storing the sequence of state-changing events (immutable events). Whenever the current state is needed, you reload past events and compute them.
 * For each business entity (aggregate)
     * Identify (state changing) domain events
@@ -283,6 +294,8 @@ __Event Sourcing Design__
 
 __CQRS (Command-Query Responsibility Seggregation) pattern__
 
+{% img right /technology/microservices-patterns-cqrs.png %}
+
 * In relational databases, query a customer and his order details is joining those 2 tables. However, event store only supports primary key look ups.
 
 * Rather a single component performing both command and query operation, handle them separately. 
@@ -320,3 +333,8 @@ __CQRS (Command-Query Responsibility Seggregation) pattern__
     * First appeared in DDD book by Eric Evans
     * Goal is to prevent your legacy system from polluting the pristine new code
 
+{% img right /technology/microservices-patterns-anticorruption-layer.png %}
+
+# References
+
+* Chris Richardson's talk on "Event-Driven Microservices" in Safari

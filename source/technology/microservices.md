@@ -11,6 +11,13 @@ footer: true
 
 # Event-Driven Microservices
 
+__Definition of a Stateless Service__
+
+* Not a cache or a database
+* only stores frequently accessed metadata/configuration
+* no instance affinity (i.e., a client request should be served by an instance)
+* loss of a node is a non-event
+
 ## Downsides of monolith architecture
 
 * Agile development and deployment becomes impossible
@@ -19,6 +26,70 @@ footer: true
 * IDE and app start up time is slow
 * Requires front-end and back-end co-ordination before change or deployment
 * Requires lot term commitment to the technology stack - rewriting a part of the system to adapt a newer technology to solve a certain problem in a better way is impossible. If the system is built on a legacy technology that no one wants to work with, it becomes harder to find resources
+
+## Challenges of microservices architecture
+
+There are 4 categories of problems: Dependency, Scale, Variance, Change
+
+* __Dependency__
+    * Problem
+        * Distributed microservices over the network means multiple point of failures for the application
+            * n/w latency, n/w failure, n/w congestion, h/w failure, bad deployment on dependency services
+            * cascading failures
+    * Solution
+        * Use a tool like Netflix Hystrix that manages latency and fault tolerance 
+            * fallback option (e.g., when a service is down, return a static message)
+            * circuit breaker (e.g., if the service is down, don't call it repeatedly)
+        * Testing via FIT (Fault Injection Testing)
+            * Synthetic transactions, test as if the service is down without taking it down, squeeze testing
+        * eventual consistency
+        * multi-region failover
+* __Scale__
+    * Problem
+        * How to scale stateless services
+    * Solution
+        * Auto-scaling group
+            * scales seamlessly during node failures or traffic spikes or DDoS attacks or performance bugs in code
+            * cost effective
+        * Caching
+            * Using a distributed cache like EVCache (wrapper on memcached)
+        * Redundancy (avoid SPoF)
+        * Partitioned workloads
+        * failure-driven design
+        * Chaos under load
+* __Variance__
+    * Problem
+        * Variety in architecture. More varience = more challenges, due to the complexity of the environment to manage
+        * Operation drift (unintentional but it does happen)
+            * Drift over the time: Over time configuration settings like alert threshold can vary, and so is timeout, retry, throughput, etc.
+            * Drift across microservices: best practices are not uniformly followed by all the services
+        * Polyglot
+            * Cost of variance.
+                * Insight into CPU/memory usage inside a VM or container
+                * VM base image fragmentation
+                * Node management is complex
+                * library/platform duplication (e.g., a piece of code is duplicated in different languages)
+                * learning curve
+    * Solution
+        * Operation drift
+            * continuous learning and automation
+        * Polyglot (intentional) - polygot persistence, polygot programming
+            * Raise awareness of costs
+            * Constraint centralized support
+            * allowing only a finite set of people to work on these
+            * seek reusable solutions
+* __Change__
+    * Problem
+        * How to achieve velocity with confidence?
+    * Solution
+        * Using a global cloud management and delivery platform like Spinnaker
+        * Integrating best practices and production ready checklists into the pipeline as and when needed. 
+            * red/black pipelines
+            * automated canaries
+            * staged deployments
+            * squeeze tests, etc.
+
+
 
 # Microservices Patterns
 

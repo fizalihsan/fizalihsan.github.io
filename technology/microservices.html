@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Microservices Event-Driven Microservices Downsides of monolith architecture Microservices Patterns Decomposition Patterns Deployment Patterns &hellip;">
+<meta name="description" content="Microservices Event-Driven Microservices Downsides of monolith architecture Challenges of microservices architecture Microservices Patterns &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -110,6 +110,7 @@ messageStyle: "none",
   <ul id="markdown-toc">
   <li><a href="#event-driven-microservices">Event-Driven Microservices</a>    <ul>
       <li><a href="#downsides-of-monolith-architecture">Downsides of monolith architecture</a></li>
+      <li><a href="#challenges-of-microservices-architecture">Challenges of microservices architecture</a></li>
     </ul>
   </li>
   <li><a href="#microservices-patterns">Microservices Patterns</a>    <ul>
@@ -130,6 +131,15 @@ messageStyle: "none",
 
 <h1 id="event-driven-microservices">Event-Driven Microservices</h1>
 
+<p><strong>Definition of a Stateless Service</strong></p>
+
+<ul>
+  <li>Not a cache or a database</li>
+  <li>only stores frequently accessed metadata/configuration</li>
+  <li>no instance affinity (i.e., a client request should be served by an instance)</li>
+  <li>loss of a node is a non-event</li>
+</ul>
+
 <h2 id="downsides-of-monolith-architecture">Downsides of monolith architecture</h2>
 
 <ul>
@@ -139,6 +149,139 @@ messageStyle: "none",
   <li>IDE and app start up time is slow</li>
   <li>Requires front-end and back-end co-ordination before change or deployment</li>
   <li>Requires lot term commitment to the technology stack - rewriting a part of the system to adapt a newer technology to solve a certain problem in a better way is impossible. If the system is built on a legacy technology that no one wants to work with, it becomes harder to find resources</li>
+</ul>
+
+<h2 id="challenges-of-microservices-architecture">Challenges of microservices architecture</h2>
+
+<p>There are 4 categories of problems: Dependency, Scale, Variance, Change</p>
+
+<ul>
+  <li><strong>Dependency</strong>
+    <ul>
+      <li>Problem
+        <ul>
+          <li>Distributed microservices over the network means multiple point of failures for the application
+            <ul>
+              <li>n/w latency, n/w failure, n/w congestion, h/w failure, bad deployment on dependency services</li>
+              <li>cascading failures</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>Solution
+        <ul>
+          <li>Use a tool like Netflix Hystrix that manages latency and fault tolerance 
+            <ul>
+              <li>fallback option (e.g., when a service is down, return a static message)</li>
+              <li>circuit breaker (e.g., if the service is down, don’t call it repeatedly)</li>
+            </ul>
+          </li>
+          <li>Testing via FIT (Fault Injection Testing)
+            <ul>
+              <li>Synthetic transactions, test as if the service is down without taking it down, squeeze testing</li>
+            </ul>
+          </li>
+          <li>eventual consistency</li>
+          <li>multi-region failover</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Scale</strong>
+    <ul>
+      <li>Problem
+        <ul>
+          <li>How to scale stateless services</li>
+        </ul>
+      </li>
+      <li>Solution
+        <ul>
+          <li>Auto-scaling group
+            <ul>
+              <li>scales seamlessly during node failures or traffic spikes or DDoS attacks or performance bugs in code</li>
+              <li>cost effective</li>
+            </ul>
+          </li>
+          <li>Caching
+            <ul>
+              <li>Using a distributed cache like EVCache (wrapper on memcached)</li>
+            </ul>
+          </li>
+          <li>Redundancy (avoid SPoF)</li>
+          <li>Partitioned workloads</li>
+          <li>failure-driven design</li>
+          <li>Chaos under load</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Variance</strong>
+    <ul>
+      <li>Problem
+        <ul>
+          <li>Variety in architecture. More varience = more challenges, due to the complexity of the environment to manage</li>
+          <li>Operation drift (unintentional but it does happen)
+            <ul>
+              <li>Drift over the time: Over time configuration settings like alert threshold can vary, and so is timeout, retry, throughput, etc.</li>
+              <li>Drift across microservices: best practices are not uniformly followed by all the services</li>
+            </ul>
+          </li>
+          <li>Polyglot
+            <ul>
+              <li>Cost of variance.
+                <ul>
+                  <li>Insight into CPU/memory usage inside a VM or container</li>
+                  <li>VM base image fragmentation</li>
+                  <li>Node management is complex</li>
+                  <li>library/platform duplication (e.g., a piece of code is duplicated in different languages)</li>
+                  <li>learning curve</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>Solution
+        <ul>
+          <li>Operation drift
+            <ul>
+              <li>continuous learning and automation</li>
+            </ul>
+          </li>
+          <li>Polyglot (intentional) - polygot persistence, polygot programming
+            <ul>
+              <li>Raise awareness of costs</li>
+              <li>Constraint centralized support</li>
+              <li>allowing only a finite set of people to work on these</li>
+              <li>seek reusable solutions</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Change</strong>
+    <ul>
+      <li>Problem
+        <ul>
+          <li>How to achieve velocity with confidence?</li>
+        </ul>
+      </li>
+      <li>Solution
+        <ul>
+          <li>Using a global cloud management and delivery platform like Spinnaker</li>
+          <li>Integrating best practices and production ready checklists into the pipeline as and when needed. 
+            <ul>
+              <li>red/black pipelines</li>
+              <li>automated canaries</li>
+              <li>staged deployments</li>
+              <li>squeeze tests, etc.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
 </ul>
 
 <h1 id="microservices-patterns">Microservices Patterns</h1>

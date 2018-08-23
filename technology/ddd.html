@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Blog Archive - KnowledgeShop</title>
+  <title>Domain Driven Design - KnowledgeShop</title>
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Blog Archive Technical Architecture Overview | Coding Principles |	DDD | Design Principles | Event Sourcing | Lambda Architecture | Logging &amp; &hellip;">
+<meta name="description" content="Domain Driven Design Entities something uniquely identifiable. Entities are the same if they have the same identity. e.g. Profile, Opteam Value &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://fizalihsan.github.io/blog/archives">
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/ddd.html">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <!-- Below custom CSS is for table border styling -->
@@ -103,14 +103,71 @@ messageStyle: "none",
 <article role="article">
   
   <header>
-    <h1 class="entry-title">Blog Archive</h1>
+    <h1 class="entry-title">Domain Driven Design</h1>
     
   </header>
   
-  <div id="blog-archives">
+  
+<ul>
+  <li>Entities
+    <ul>
+      <li>something uniquely identifiable. Entities are the same if they have the same identity. e.g. Profile, Opteam</li>
+    </ul>
+  </li>
+  <li>Value objects
+    <ul>
+      <li>have no uniqueness</li>
+      <li>are the same if they have the same value </li>
+      <li>are immutable</li>
+      <li>e.g., Number, Money, Address, Date, Duration, Color</li>
+    </ul>
+  </li>
+  <li>Aggregates
+    <ul>
+      <li>cluster of entities and value types</li>
+      <li>each aggregate is treated as one single unit</li>
+      <li>Each aggregate has one root entity known as the “Aggregate Root”</li>
+    </ul>
+  </li>
+  <li>Repositories
+    <ul>
+      <li>responsible for domain objects persistence and retrieval</li>
+      <li>one respository per aggregate (not entities)</li>
+      <li>DDD uses repositories to create persistence ignorance</li>
+    </ul>
+  </li>
+  <li>Domain Services - </li>
+  <li>Specification
+    <ul>
+      <li>encapsulates a single rule. e.g., GoldCustomerSpec().is_satisfied_by(employee)</li>
+      <li>can also construct objects according to some specification</li>
+      <li>can also query objects that match some specification. e.g., repository.get_customers_satisfying(gold_customer_spec)</li>
+    </ul>
+  </li>
+  <li>Factories
+    <ul>
+      <li>create complex domain objects especially useful for aggregates</li>
+    </ul>
+  </li>
+  <li>BoundedContext - 
+    <ul>
+      <li>when you have multiple models, you should consider bounded context.</li>
+      <li>each BC is a self-contained mini application containing it’s own model, persistence and code base</li>
+      <li>e.g., user, profiles, documents, data points, ACL</li>
+    </ul>
+  </li>
+  <li>Context Map
+    <ul>
+      <li>To map between bounded contexts, you need Context map</li>
+    </ul>
+  </li>
+</ul>
 
-</div>
-
+  
+    <footer>
+      
+      
+    </footer>
   
 </article>
 

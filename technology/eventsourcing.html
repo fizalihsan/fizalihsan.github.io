@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Blog Archive - KnowledgeShop</title>
+  <title>Event Sourcing - KnowledgeShop</title>
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Blog Archive Technical Architecture Overview | Coding Principles |	DDD | Design Principles | Event Sourcing | Lambda Architecture | Logging &amp; &hellip;">
+<meta name="description" content="Event Sourcing Concepts Event-First Design Best Practices References Concepts publish events reliably and atomically whenever state changes Whenever &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://fizalihsan.github.io/blog/archives">
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/eventsourcing.html">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <!-- Below custom CSS is for table border styling -->
@@ -103,14 +103,203 @@ messageStyle: "none",
 <article role="article">
   
   <header>
-    <h1 class="entry-title">Blog Archive</h1>
+    <h1 class="entry-title">Event Sourcing</h1>
     
   </header>
   
-  <div id="blog-archives">
+  <ul id="markdown-toc">
+  <li><a href="#concepts">Concepts</a></li>
+  <li><a href="#event-first-design">Event-First Design</a></li>
+  <li><a href="#best-practices">Best Practices</a></li>
+  <li><a href="#references">References</a></li>
+</ul>
 
-</div>
+<h2 id="concepts">Concepts</h2>
 
+<ul>
+  <li>publish events reliably and atomically whenever state changes</li>
+  <li>Whenever the state of a business entity changes, a new event is appended to the list of events.</li>
+  <li>100% reliable audit log of the changes made to a business entity</li>
+  <li>the application reconstructs an entity’s current state by replaying the events </li>
+  <li>events are stored in an Event Store.</li>
+  <li><strong>Event Store</strong>
+    <ul>
+      <li>Event Store = Database + Message broker</li>
+      <li>also acts as a message broker which enables services to subscribe to events</li>
+      <li>Technology implications
+        <ul>
+          <li>The storage system becomes an additive only architecture</li>
+          <li>Append-only architectures distribute</li>
+          <li>Far fewer locks to deal with</li>
+          <li>Horizontal Partitioning is difficult for a relational model</li>
+        </ul>
+      </li>
+      <li>Business implications
+        <ul>
+          <li>Criteria is tracked from inception as an event stream</li>
+          <li>You can answer questions from the origin of the system</li>
+          <li>You can answer questions not asked yet!</li>
+          <li>Natural audit log</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Periodical snapshotting </li>
+  <li><strong>Drawbacks</strong>
+    <ul>
+      <li>Needs CQRS to implement queries - which means application must handle eventually consistent data. However, one should embrace the fact that information is always from the past.</li>
+    </ul>
+  </li>
+  <li><strong>Features of eventsourcing library</strong>
+    <ul>
+      <li>Automatic versioning</li>
+      <li>Subscribe to events
+        <ul>
+          <li>Can be used to updated a view</li>
+          <li>Republish domain events to other downstream apps</li>
+        </ul>
+      </li>
+      <li>Snapshotting - avoids replaying the entire stream to get the state of the entity
+        <ul>
+          <li>Can be taken manually </li>
+          <li>Can be taken automatically. e.g., every 10 events</li>
+          <li>Separate table for snapshot records</li>
+        </ul>
+      </li>
+      <li>Encryption is optionally enabled</li>
+      <li>Hashchains</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="event-first-design">Event-First Design</h2>
+
+<ul>
+  <li>Events First Domain Driven Design</li>
+</ul>
+
+<blockquote>
+  <p>When you start modeling events, it forces you to think about the behavior of the system. As opposed to thinking about the structure of the system. - Greg Young</p>
+</blockquote>
+
+<ul>
+  <li>Immutable append-only event store - means easy to scale</li>
+  <li>Events can help manage failure instead of avoiding it</li>
+  <li>Why? 
+    <ul>
+      <li>Modeling events forces behavioral focus over structural focus of the system</li>
+      <li>Modeling events forces temporal focus
+        <ul>
+          <li>e.g., what if this happens before that</li>
+        </ul>
+      </li>
+      <li>Event sourcing is naturally functional model - append-only immutable log of events happened in the past, left-fold to get current state</li>
+      <li>One single-source of truth with all history</li>
+      <li>No impedance mismatch or object-relational mismatch</li>
+      <li>Allows others to subscribe to state changes</li>
+      <li>ES enables time travel
+        <ul>
+          <li>Replace the log for historic debugging</li>
+          <li>Replace the log for auditing and traceability</li>
+          <li>Replace the log on failure</li>
+          <li>Replace the log for replication</li>
+        </ul>
+      </li>
+      <li>Event-first design helps
+        <ul>
+          <li>Move faster towards a scalable and resilient architecture</li>
+          <li>design autonomous services</li>
+        </ul>
+      </li>
+      <li>Event logging allows
+        <ul>
+          <li>AVOID CRUD and ORM</li>
+          <li>take control of your system’s history</li>
+          <li>time-travel</li>
+          <li>Balance Strong and eventual consistency</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="best-practices">Best Practices</h2>
+
+<ul>
+  <li>Intention-revealing interfaces</li>
+  <li>Domain model is always in a valid state - no additional validation rules</li>
+  <li>Side-effect free functions</li>
+  <li><strong>Onion Architecture</strong>
+    <ul>
+      <li>Domain model - e.g., Profile, ProfileRepository, Opteam, OpteamReopository
+        <ul>
+          <li>Contains information about the Domain</li>
+          <li>state of the business objects is held here</li>
+          <li>Does not contain persistence details</li>
+        </ul>
+      </li>
+      <li>Domain services
+        <ul>
+          <li>Contains business logic that are not natural part of entities or value objects</li>
+          <li>services are stateless</li>
+          <li>services can usually manipulate multiple entities</li>
+        </ul>
+      </li>
+      <li>Application services - e.g., EmailSender, TicketSender, etc.
+        <ul>
+          <li>Does not contain business logic</li>
+          <li>Does not hold state of the business objects</li>
+        </ul>
+      </li>
+      <li>User interface / Test </li>
+      <li>Infrastructure
+        <ul>
+          <li>acts as a supporting layer for other layers</li>
+          <li>implements persistence for business objects e.g., SmtpEmailSender, SDSKCreator, etc</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Design Philosophy</strong></p>
+
+<p>Event sourcing allows to embrace the following design philosophies</p>
+
+<ul>
+  <li>Domain Driven Design</li>
+  <li>Actor Models</li>
+  <li>Message-driven and asynchronous</li>
+  <li>Distributed persistence concepts (CQRS and ES)</li>
+  <li>Functional programming</li>
+  <li>Microservices</li>
+</ul>
+
+<h2 id="references">References</h2>
+
+<ol>
+  <li><a href="https://www.youtube.com/watch?v=LDW0QWie21s">Greg Young - A Decade of DDD, CQRS, Event Sourcing</a></li>
+  <li><a href="https://t.co/TKYrLtv9fC">Event Sourcing: What it is and why it’s awesome</a></li>
+  <li><a href="https://docs.microsoft.com/en-us/previous-versions/msp-n-p/jj554200(v%3dpandp.10)">Greg Young - Exploring CQRS and Event Sourcing</a></li>
+  <li><a href="https://leanpub.com/esversioning/read">Greg Young - Event Versioning</a></li>
+  <li><a href="https://www.confluent.io/blog/data-dichotomy-rethinking-the-way-we-treat-data-and-services/">Data Dichotomy</a></li>
+  <li><a href="https://www.youtube.com/watch?v=STKCRSUsyP0">Martin Fowler - Many meanings to Event-Driven Architecture</a></li>
+  <li><a href="https://mechanical-sympathy.blogspot.com/2011/09/single-writer-principle.html">Single Writer Principle</a></li>
+  <li><a href="http://highscalability.com/blog/2015/1/26/paper-immutability-changes-everything-by-pat-helland.html">Pat Helland - Immutability changes everything</a>
+    <ol>
+      <li><a href="http://cidrdb.org/cidr2015/Papers/CIDR15_Paper16.pdf">Immutability changes everything</a></li>
+      <li><a href="http://adrianmarriott.net/logosroot/papers/LifeBeyondTxns.pdf">Life beyond distribute transactions</a></li>
+      <li><a href="https://queue.acm.org/detail.cfm?id=2953944">Standing on distributed shoulders of giants</a></li>
+    </ol>
+  </li>
+</ol>
+
+
+  
+    <footer>
+      
+      
+    </footer>
   
 </article>
 

@@ -17,7 +17,7 @@ footer: false
 * [TODO - Topics to learn in-depth]({{ root_url }}/technology/todo.html)
 * __Conferences__
 	* [2017 O'Reilly Software Architecture Conference]({{ root_url }}/technology/oscon2017.html)
-	* [2018 QCon Conference]({{ root_url }}/technology/.html)
+	* [2018 QCon Conference]({{ root_url }}/technology/qcon2018.html)
 
 
 * [AWS Certification - Trivias]({{ root_url }}/technology/aws_trivia.html)

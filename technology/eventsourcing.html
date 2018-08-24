@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Event Sourcing Concepts Event-First Design Best Practices References Concepts publish events reliably and atomically whenever state changes Whenever &hellip;">
+<meta name="description" content="Event Sourcing Concepts Event-First Design Best Practices Versionining References Concepts publish events reliably and atomically whenever state &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -111,6 +111,7 @@ messageStyle: "none",
   <li><a href="#concepts">Concepts</a></li>
   <li><a href="#event-first-design">Event-First Design</a></li>
   <li><a href="#best-practices">Best Practices</a></li>
+  <li><a href="#versionining">Versionining</a></li>
   <li><a href="#references">References</a></li>
 </ul>
 
@@ -273,6 +274,26 @@ messageStyle: "none",
   <li>Distributed persistence concepts (CQRS and ES)</li>
   <li>Functional programming</li>
   <li>Microservices</li>
+</ul>
+
+<h2 id="versionining">Versionining</h2>
+
+<p>There are few things to take care of before versioning in event sourced systems - https://leanpub.com/esversioning/read</p>
+
+<ul>
+  <li>Why can’t I update an event?
+    <ul>
+      <li>Immutability - with immutable you can use a caching layer or reverse proxy to serve from cached information. How do caches get invalidated on an update?</li>
+      <li>Consumers - say an event is consumed by an email service that sends email to customer about order creation. If the order event is updated, do we send another email?</li>
+      <li>Audit - when you edit an event, you lose the audit trail.</li>
+    </ul>
+  </li>
+  <li>Avoid versioning via types - e.g., CreateOrderEvent_v1, CreateOrderEvent_v2…</li>
+  <li>Strong schema or out-of-band schema: Without the schema, the message cannot be deserialized. E.g., Binary serialization of Java objects. Producer cannot change, unless all consumers are ready to change.</li>
+  <li>Weak schema or hybrid schema - e.g., JSON, XML.</li>
+  <li>If you find projections making calls to other projections or external services or temporal business logic to calculate the current state, then replaying events will be a problem since the data can change over time. e.g., calculating tax based on tax percent which changes</li>
+  <li>Semantic meaning should not change between versions. e.g., when storing weather, switching from Celsius to Fahrenheit can be disastrous.
+​</li>
 </ul>
 
 <h2 id="references">References</h2>

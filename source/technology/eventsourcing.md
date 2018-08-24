@@ -111,6 +111,20 @@ Event sourcing allows to embrace the following design philosophies
 * Functional programming
 * Microservices
 
+## Versionining
+
+There are few things to take care of before versioning in event sourced systems - https://leanpub.com/esversioning/read
+
+* Why can’t I update an event?
+    * Immutability - with immutable you can use a caching layer or reverse proxy to serve from cached information. How do caches get invalidated on an update?
+    * Consumers - say an event is consumed by an email service that sends email to customer about order creation. If the order event is updated, do we send another email?
+    * Audit - when you edit an event, you lose the audit trail.
+* Avoid versioning via types - e.g., CreateOrderEvent_v1, CreateOrderEvent_v2…
+* Strong schema or out-of-band schema: Without the schema, the message cannot be deserialized. E.g., Binary serialization of Java objects. Producer cannot change, unless all consumers are ready to change.
+* Weak schema or hybrid schema - e.g., JSON, XML.
+* If you find projections making calls to other projections or external services or temporal business logic to calculate the current state, then replaying events will be a problem since the data can change over time. e.g., calculating tax based on tax percent which changes
+* Semantic meaning should not change between versions. e.g., when storing weather, switching from Celsius to Fahrenheit can be disastrous.
+​
 
 ## References
 

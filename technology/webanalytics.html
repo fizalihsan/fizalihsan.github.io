@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title> - KnowledgeShop</title>
+  <title>Web Analytics - KnowledgeShop</title>
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Statistics R Programming Technical Architecture Overview | Coding Principles |	DDD | Design Principles | Event Sourcing | Lambda Architecture | &hellip;">
+<meta name="description" content="Web Analytics Concepts Web Analytics 1.0 Web Analytics 2.0 References Concepts What is a Web Tag? A web tag is a 1x1 pixel-sized image beacon or &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://fizalihsan.github.io/.old">
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/webanalytics.html">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <!-- Below custom CSS is for table border styling -->
@@ -103,18 +103,233 @@ messageStyle: "none",
 <article role="article">
   
   <header>
-    <h1 class="entry-title"></h1>
+    <h1 class="entry-title">Web Analytics</h1>
     
   </header>
   
-  <ul>
-  <li><a href="/datascience/statistics.html">Statistics</a></li>
-  <li><a href="/datascience/r.html">R Programming</a></li>
+  <ul id="markdown-toc">
+  <li><a href="#concepts">Concepts</a></li>
+  <li><a href="#web-analytics-10">Web Analytics 1.0</a></li>
+  <li><a href="#web-analytics-20">Web Analytics 2.0</a></li>
+  <li><a href="#references">References</a></li>
+</ul>
+
+<h1 id="concepts">Concepts</h1>
+
+<ul>
+  <li><strong>What is a Web Tag?</strong>
+    <ul>
+      <li>A web tag is a <code>1x1</code> pixel-sized image beacon or JavaScript snippet that is embedded into the code of a web page to capture and report data. A web tag is triggered whenever a predetermined action occurs on a specified platform in the web. It captures the data and sends the information back to your preferred data collection system. A web tag is usually implemented to: track online user behavior for marketing analytics, instruct web browsers and implemented technologies to collect data, to set cookies and to integrate third-party content.</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="web-analytics-10">Web Analytics 1.0</h1>
+
+<ul>
+  <li>Web analytics evolution
+    <ul>
+      <li>Web server logs parsing -&gt; WebTrends</li>
+      <li>Javascript Tags</li>
+      <li>Site overlay or Click Density
+        <ul>
+          <li>display where visitors clicked</li>
+          <li>segments based on where users came from</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Traditional Analytics KPI Metrics</strong>
+    <ul>
+      <li>Page views
+        <ul>
+          <li>frustrating navigation means more page view, but no buy</li>
+          <li>better naviation means faster decision, and yet no buy</li>
+        </ul>
+      </li>
+      <li>Hits
+        <ul>
+          <li>Pages with images &amp; media has more hits to the server</li>
+          <li>With CDNs, servers receive lesser hits</li>
+          <li><code>more hits != more visitors</code></li>
+        </ul>
+      </li>
+      <li>Top Exit Pages
+        <ul>
+          <li>Top Exit Pages does not mean pages are suboptimal or product is bad</li>
+          <li>Exit rates doesn’t tell content is good or bad</li>
+        </ul>
+      </li>
+      <li>Website Engagement
+        <ul>
+          <li><code>Engagement = # of sessions / # of visitors</code></li>
+          <li>Repeated visitors means they can’t find what they want or the site is good?</li>
+        </ul>
+      </li>
+      <li>Visitor screen resolution
+        <ul>
+          <li>Seldom this data changes. Instead of wasting time and money capturing this, use Forrestor Research/Gartner data</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p>Traditional KPI can’t accommodate for strategic business goals. We now have <strong>KIA</strong> (<em>Key Insight Analysis</em>)</p>
+
+<ul>
+  <li><strong>KIA</strong> (<em>Key Insight Analysis</em>)
+    <ul>
+      <li>Click Density Analysis
+        <ul>
+          <li>using the site overlay feature, it helps you walk in the shoes of your customer</li>
+          <li>segment your traffic and personalize content differently for visitors from Google vs. Facebook, increasing the customer engagement</li>
+        </ul>
+      </li>
+      <li>Visitor Primary Purpose
+        <ul>
+          <li>ask customers why they are visiting your site</li>
+          <li>run a survey, do phone interviews, etc.</li>
+        </ul>
+      </li>
+      <li>Task Completion Rates
+        <ul>
+          <li>Page views != users found what they were looking for</li>
+          <li>Do survey, lab usability, create tests, …</li>
+        </ul>
+      </li>
+      <li>Segmented Visitor Trends
+        <ul>
+          <li>old world embedded attributes in JS tags</li>
+          <li>new tools = Click Tracks, Visual Sciences</li>
+          <li>Reports on “Average time on site”, “Top search keywords”, “popular content”- based on real segmentation of data.</li>
+        </ul>
+      </li>
+      <li>Multichannel Impact Analysis
+        <ul>
+          <li>Measuring the impact of non-web channels (like TV, newspaper) on your website</li>
+          <li>e.g. how many people use your site but buy your product via retail or phone channel?</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="web-analytics-20">Web Analytics 2.0</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Web Analytics 2.0</th>
+      <th>Multiplicity</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><img src="/technology/web_analytics_2.0_demystified.png" /></td>
+      <td><img src="/technology/web_analytics_multiplicity.png" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>Quantitative, Qualitative, Competetive analytics</li>
+  <li>Paradox of Data
+    <ul>
+      <li>Lack of data -&gt; cannot make complete decisions</li>
+      <li>Lots of data -&gt; less insights</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Multiplicity</strong></p>
+
+<ul>
+  <li>one tool from each layer/pillar for better insights</li>
+</ul>
+
+<ol>
+  <li>Clickstream data (WHAT)
+    <ul>
+      <li>click-level data</li>
+      <li>visits, visitors, source, time on site, page views, etc.</li>
+      <li>great at answering “WHAT”, but not “WHY”</li>
+      <li>e.g, tools like WebTrends, Google Analytics</li>
+    </ul>
+  </li>
+  <li>Multiple Outcome Analysis (HOW MUCH)
+    <ul>
+      <li>measuring outcome means connecting customer behavior to the bottom line of the company</li>
+      <li>outcome types of a webiste
+        <ul>
+          <li>increased revenue</li>
+          <li>reduced cost</li>
+          <li>improve customer satisfaction/loyalty</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Experimentation and Testing (WHY)
+    <ul>
+      <li>Launch fast, fail/succeed fast <code>Experiment or Die</code></li>
+      <li>A/B and multivariate testing</li>
+      <li>Tools: Google Website Optimizer, Adobe Analytics Target</li>
+    </ul>
+  </li>
+  <li>Voice of Customer (WHY)
+    <ul>
+      <li>What customers wanted, but did not find</li>
+      <li>e.g., surveys, lab usability testing, remote usability testing, card sorts, etc.</li>
+    </ul>
+  </li>
+  <li>Competitive Intelligence (WHAT ELSE)
+    <ul>
+      <li>compare your performance with your competitors</li>
+      <li>gether info on your direct and indirect competitors</li>
+    </ul>
+  </li>
+</ol>
+
+<blockquote>
+  <p>Knowing how you are performing is good; Knowing how your competitors are performing is priceless.</p>
+</blockquote>
+
+<ul>
+  <li>Maxamine/ObservePoint
+    <ul>
+      <li>missing JavaScript tags, duplicative content, security &amp; privacy compliance, black holes not crawled by search engine, broken links/forms.</li>
+    </ul>
+  </li>
+  <li>Coradiant
+    <ul>
+      <li>Why conversion rates are low? Pages are slow or missing?</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="references">References</h1>
+
+<ul>
+  <li>Books
+    <ul>
+      <li>Web Analytics - An hour a day - Avinash Kaushik</li>
+      <li>Web Analytics 2.0 - Avinash Kaushik</li>
+    </ul>
+  </li>
 </ul>
 
   
     <footer>
       
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/webanalytics.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/webanalytics.html" >Tweet</a>
+  
+  
+  
+</div>
+
       
     </footer>
   

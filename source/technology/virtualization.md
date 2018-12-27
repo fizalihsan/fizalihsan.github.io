@@ -790,6 +790,42 @@ The following service(s) have been created in your project: postgresql.
  
  oc env dc insults -e POSTGRESQL_USER=insult  -e PGPASSWORD=insult POSTGRESQL_DATABASE=insults
 
+# Containerization Patterns
+
+## Sidecar Pattern (single node)
+
+{% img /technology/sidecar_container.png right %}
+
+* Application container contains the core logic of the application
+* Sidecar container is to augment and improve the application container, often without the application container’s knowledge.
+* Sidecar containers are coscheduled onto the same machine via an atomic container group, such as the pod API object in Kubernetes
+* Use cases
+	* Adding HTTPS to a legacy service that is on HTTP. Sidecar can act as a proxy to incoming traffic enforcing HTTPS security.
+	* Synchronize configurations for a legacy service - pull configuration updates from API service periodically, update a file and notify the legacy service.
+
+| HTTPS example | Config Sync example | 
+| -- | -- |
+| {% img /technology/sidecar_example1.png %} | {% img /technology/sidecar_example2.png %}|
+
+## Ambassador Pattern (single node)
+
+{% img /technology/ambassador_container.png right %}
+
+* an ambassador container brokers interactions between the application container and the rest of the world
+* Use cases
+	* used for sharding service
+
+{% img /technology/ambassador_example.png right %}
+
+## Adapter Pattern (single node)
+
+{% img /technology/adapter_container.png right %}
+
+* Adapter container is used to modify the interface of the application container so that it conforms to some predefined interface that is expected of all applications. 
+* For example, an adapter might ensure that an application implements a consistent monitoring interface. Or it might ensure that log files are always written to `stdout` or any number of other conventions
+* __Use cases__
+	* Monitoring: Keeping the application container untouched, one can add an adapter container that contains the tools for transforming the monitoring interface exposed by the application container into the interface expected by the general-purpose monitoring system like Prometheus.
+	* Logging: capturing logs from a wide variety of heterogenous systems and input into common logging interface. 
 
 # References
 
@@ -798,4 +834,5 @@ The following service(s) have been created in your project: postgresql.
 	* O'Reilly - Using Docker
 	* O'Reilly - OpenShift for Developers
 	* O'Reilly - Kubernetes - Up & Running
+	* O'Reilly - Designing Distributed Systems
 	

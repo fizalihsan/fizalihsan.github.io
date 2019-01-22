@@ -147,6 +147,12 @@ messageStyle: "none",
       <li><a href="#commands">Commands</a></li>
     </ul>
   </li>
+  <li><a href="#containerization-patterns">Containerization Patterns</a>    <ul>
+      <li><a href="#sidecar-pattern-single-node">Sidecar Pattern (single node)</a></li>
+      <li><a href="#ambassador-pattern-single-node">Ambassador Pattern (single node)</a></li>
+      <li><a href="#adapter-pattern-single-node">Adapter Pattern (single node)</a></li>
+    </ul>
+  </li>
   <li><a href="#references">References</a></li>
 </ul>
 
@@ -1376,6 +1382,69 @@ Database Name: insults
 
 <p>oc env dc insults -e POSTGRESQL_USER=insult  -e PGPASSWORD=insult POSTGRESQL_DATABASE=insults</p>
 
+<h1 id="containerization-patterns">Containerization Patterns</h1>
+
+<h2 id="sidecar-pattern-single-node">Sidecar Pattern (single node)</h2>
+
+<p><img src="/technology/sidecar_container.png" title="right" /></p>
+
+<ul>
+  <li>Application container contains the core logic of the application</li>
+  <li>Sidecar container is to augment and improve the application container, often without the application container’s knowledge.</li>
+  <li>Sidecar containers are coscheduled onto the same machine via an atomic container group, such as the pod API object in Kubernetes</li>
+  <li>Use cases
+    <ul>
+      <li>Adding HTTPS to a legacy service that is on HTTP. Sidecar can act as a proxy to incoming traffic enforcing HTTPS security.</li>
+      <li>Synchronize configurations for a legacy service - pull configuration updates from API service periodically, update a file and notify the legacy service.</li>
+    </ul>
+  </li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>HTTPS example</th>
+      <th>Config Sync example</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><img src="/technology/sidecar_example1.png" /></td>
+      <td><img src="/technology/sidecar_example2.png" /></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="ambassador-pattern-single-node">Ambassador Pattern (single node)</h2>
+
+<p><img src="/technology/ambassador_container.png" title="right" /></p>
+
+<ul>
+  <li>an ambassador container brokers interactions between the application container and the rest of the world</li>
+  <li>Use cases
+    <ul>
+      <li>used for sharding service</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/technology/ambassador_example.png" title="right" /></p>
+
+<h2 id="adapter-pattern-single-node">Adapter Pattern (single node)</h2>
+
+<p><img src="/technology/adapter_container.png" title="right" /></p>
+
+<ul>
+  <li>Adapter container is used to modify the interface of the application container so that it conforms to some predefined interface that is expected of all applications. </li>
+  <li>For example, an adapter might ensure that an application implements a consistent monitoring interface. Or it might ensure that log files are always written to <code>stdout</code> or any number of other conventions</li>
+  <li><strong>Use cases</strong>
+    <ul>
+      <li>Monitoring: Keeping the application container untouched, one can add an adapter container that contains the tools for transforming the monitoring interface exposed by the application container into the interface expected by the general-purpose monitoring system like Prometheus.</li>
+      <li>Logging: capturing logs from a wide variety of heterogenous systems and input into common logging interface. </li>
+    </ul>
+  </li>
+</ul>
+
 <h1 id="references">References</h1>
 
 <ul>
@@ -1385,6 +1454,7 @@ Database Name: insults
       <li>O’Reilly - Using Docker</li>
       <li>O’Reilly - OpenShift for Developers</li>
       <li>O’Reilly - Kubernetes - Up &amp; Running</li>
+      <li>O’Reilly - Designing Distributed Systems</li>
     </ul>
   </li>
 </ul>
@@ -1467,7 +1537,10 @@ Database Name: insults
 		<li>
 			<h3>Web</h3>
 			<a href="/technology/webconcepts.html">Concepts</a> |
-			<a href="/technology/webanalytics.html">Analytics</a> | <a href="/technology/webapp_architecture.html">Architecture</a> | <a href="/technology/js-ecosystem.html">JS Ecosystem</a>
+			<a href="/technology/webanalytics.html">Analytics</a> | 
+			<a href="/technology/webapp_architecture.html">Architecture</a> | 
+			<a href="/technology/js-ecosystem.html">JS Ecosystem</a> |
+			<a href="/technology/ux.html">UX</a>
 		</li>
 
 		<li>
@@ -1538,7 +1611,7 @@ Database Name: insults
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2018 - Mohamed Fizal Ihsan Mohamed -
+  Copyright &copy; 2019 - Mohamed Fizal Ihsan Mohamed -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

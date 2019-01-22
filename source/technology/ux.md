@@ -9,7 +9,7 @@ footer: true
 * list element with functor item
 {:toc}
 
-> The biggest life in software is Phase 2
+> The biggest lie in software is Phase 2
 
 # Lean UX
 
@@ -169,7 +169,7 @@ No single tool is important on its own. All of these tools can help you flesh ou
     * __Bad__: It’s not particularly good for validating a hypothesis or for testing for usability, since these are not artifacts that are meant to be shown to users. 
     * __Tools__: Visio, OmniGraffle, etc.
 
-{% img /technology/ux-sketch.png right %}
+
 * Sketch
     * Sketching is the first time that you start to visualize your product or feature. You stop thinking of it as “User needs to log in” and start thinking of it as a group of elements that a user would need to log in. You also start to think of where those elements go in relation to one another.
     * You do it in a sketch because sketches are quick and disposable. You can throw a bunch of elements onto a page and move them around and toss some and add some new ones in a matter of minutes. You can make a half-dozen sketches, each of which presents different elements, or groups information differently. You can experiment easily.
@@ -177,7 +177,8 @@ No single tool is important on its own. All of these tools can help you flesh ou
     * __Bad__: Sketches are less good for getting feedback from users. While you can get some overall information from them by showing a sketch, too often you’re simply asking them to fill in information on their own. People who are unfamiliar with your product are not going to be able to form much of an opinion when faced with a static sketch.
     * __Tools__: Balsamiq, OmniGraffle, MockFlow, MockingBird, etc.
 
-{% img /technology/ux-wireframe.png right %}
+{% img /technology/ux-sketch.png 400 400 right %}
+
 * Wireframe
     * A wireframe is somewhere between a rough sketch and an interactive prototype.
     * A useful wireframe needs to include all the copy, buttons, calls-to-action, and navigation elements of a real product. It doesn’t have any visual design yet.
@@ -187,6 +188,8 @@ No single tool is important on its own. All of these tools can help you flesh ou
     * Usability feedback: They look enough like a real product that users can react to them and tell you things like what they think a screen does or how they would accomplish a task by using them.
     * They’re also pretty much a good replacement for multi-page design specs. Instead of giving out a giant written document, show them a working screen. Want to know what’s in a drop- down list? Click on it! Want to know where the error messages go and what they say? 
     * __Tools__: HTML, CSS, JS, Axure, OmniGraffle, Mockingbird, JustInMind, etc.
+
+{% img /technology/ux-wireframe.png 400 400 right %}
 
 * Interactive Prototype
     * You never have to make a fully interactive prototype. Except for when you do. Because sometimes it’s really the only way that you’re going to avoid a huge amount of rework later.

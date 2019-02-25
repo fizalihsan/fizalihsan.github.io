@@ -1,0 +1,793 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>O&#8217;Reilly Software Architecture Conference 2019 - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="O'Reilly Software Architecture Conference 2019 Day 1 - META: Microservices Design Architectural anti-patterns when delivering a software ecosystem &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/sacon2019.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">O&#8217;Reilly Software Architecture Conference 2019</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#day-1---meta-microservices">Day 1 - META: Microservices</a></li>
+  <li><a href="#design">Design</a></li>
+  <li><a href="#architectural-anti-patterns-when-delivering-a-software-ecosystem-with-kubernetes">Architectural anti-patterns when delivering a software ecosystem with Kubernetes</a></li>
+  <li><a href="#day-2---keynotes">Day 2 - Keynotes</a></li>
+  <li><a href="#day-3">Day 3</a></li>
+  <li><a href="#action-items">Action Items</a></li>
+</ul>
+<p># Software Architecture Conference 2019</p>
+
+<h1 id="day-1---meta-microservices">Day 1 - META: Microservices</h1>
+<ul>
+  <li>META: Microservice-based Enterprise Transformation Approach</li>
+  <li>Barriers to Digital Transformation
+    <ul>
+      <li>Highly-integrated apps and data</li>
+      <li>Legacy tech, packaged solutions, skill gaps</li>
+      <li>Large, hierarchical organizations</li>
+      <li>Outsourcing, geographical distribution</li>
+      <li>industry regulations, shareholder/public scrutiny</li>
+    </ul>
+  </li>
+  <li>Essential vs. accidental complexity
+    <ul>
+      <li>Essential - stuff that can’t be broken down. the complexity of the software’s functional scope and the problems it solves (e.g., correlating and analyzing large amounts of data in real time)</li>
+      <li>accidental - complexity of language implementation</li>
+      <li>Frederick Brook - Mythical man month - No silver bullet article</li>
+    </ul>
+  </li>
+  <li>Modularization
+    <ul>
+      <li>Modularity is to a technological economy what the division of labor is for the manufactoring</li>
+      <li>Aligned modularization with domains (DDD)</li>
+    </ul>
+  </li>
+  <li>Agile</li>
+  <li>System control
+    <ul>
+      <li>Roy Fieldings quote on control and REST</li>
+    </ul>
+  </li>
+  <li>Beyond system
+    <ul>
+      <li>the biggest cause of failure in software-intensive systems is not technical failure; it’s building the wrong thing. (Mary Poppendieck - creator of Lean Software Development)</li>
+      <li>almost always</li>
+    </ul>
+  </li>
+  <li>Lessons
+    <ul>
+      <li>1 - differentiate the complexity</li>
+      <li>2 - modularize the system</li>
+      <li>3 - start small and iterate</li>
+      <li>4 - influence - don’t control - the system</li>
+      <li>5 - the system is more then ‘The System’ (people, etc)</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="design">Design</h1>
+<p>## Program Design
+## System Design
+* Define the target system scope
+* Determine functional domains
+    - bounded contexts, services, and interactions
+* Determine non-functional domains
+    - trust domains (security), operational domains (availability, reliability, capacity)
+<strong>Complexity in a microservice architecture</strong>
+* Essential complexity in microservices
+    * in a microservice architecture, the topology of the implemented system closely resembles the model of the system’s essence
+* Accidental complexity in microservices
+    * in a microservice architecture, accidental complexity can be minimized through automation and distribution
+DDD provides a framework for defining and modeling the essentail capabilities of complex software systems.
+* Event Storming - by Alberto Brandolini
+    * product, technology teams together - discuss business events and outcomes - sticky notes
+* Innovative dilemma book - ‘jobs-to-be-done’ process
+* Susan Fowler - Production Ready Microservices book
+## Service Design
+* Sketch the service
+    * take an ‘outside in’ approach
+* Design the <em>interface</em>
+    * API contract
+    * prototype it
+    * Design canvas based on Lean Canvas concept
+        * the idea here is to put all the information about the service in a single page before jumpting into the implementation
+* Determine the <em>implementation</em>
+    * Find a reusable service
+    * evolve an existing service
+    * develop net new service
+* ‘Just enough’ design
+## Foundation Design
+* think of the capabilities you need, before choosing a technology
+* POISED: technological capability foundation
+    * Microservices (honeycomb)
+        * platform capabilities
+        * observation capabilities
+        * interop capabilities
+        * security capabilities
+        * engineering capabilities
+        * deployment capabilities
+## 
+* Processes &amp; Methodologies
+* Organizational Practices
+* Cultural Practices
+* Agile - Spotify (idea of guilds)</p>
+
+<h1 id="architectural-anti-patterns-when-delivering-a-software-ecosystem-with-kubernetes">Architectural anti-patterns when delivering a software ecosystem with Kubernetes</h1>
+<ul>
+  <li>Anti-patterns
+    <ul>
+      <li>Statefulness</li>
+      <li>Keep configurations as environment variables</li>
+      <li>Health check/probes
+        <ul>
+          <li>liveness probe - if K8S finds a pod is not passing liveness, it will restart</li>
+          <li>readiness probe - if K8S finds a pod is not passing readiness, it will not restart. It will stop the traffic to that service.</li>
+          <li>Liveness and readiness health checks should be different urls</li>
+          <li>use different port for app and management</li>
+        </ul>
+      </li>
+      <li>one pod - multiple containers within.
+        <ul>
+          <li>this is nothing but a modular monolith. You cannot deploy or scale independently</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="day-2---keynotes">Day 2 - Keynotes</h1>
+<ul>
+  <li>37 things one architect knows about IT transformation - Gregor Hohpe</li>
+  <li>IBM KNative</li>
+  <li>Architect skills (Trisha Gee - JetBrains)
+    <ul>
+      <li>Skills
+        <ul>
+          <li>Asking questions - and listening to answers</li>
+          <li>Good communication skills
+            <ul>
+              <li>good emails, documentation</li>
+              <li>talking to computers is easy</li>
+            </ul>
+          </li>
+          <li>Adaptability - and being open minded
+            <ul>
+              <li>don’t be dogmatic about stuff</li>
+            </ul>
+          </li>
+          <li>Prioritisation - and time management</li>
+          <li>Technology skills
+            <ul>
+              <li>ability to learn new skills</li>
+            </ul>
+          </li>
+          <li>Be aware
+            <ul>
+              <li>If you perform non-technical activities too well, you may well be moved to non-technical roles</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>Scaling
+        <ul>
+          <li>to become a 10x developer, teach 10 other developers</li>
+          <li>Pair programming
+            <ul>
+              <li>best way to share knowledge</li>
+              <li>Mob programming - not just developers, but also QA + product</li>
+            </ul>
+          </li>
+          <li>Community support</li>
+          <li>Internal learning sessions
+            <ul>
+              <li>Monday morning brown bags</li>
+              <li>Internal user groups</li>
+              <li>Guilds</li>
+            </ul>
+          </li>
+          <li>Book club
+            <ul>
+              <li>everyone read one chapter from a book and present it</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>Summary
+        <ul>
+          <li>your key skills are not technical</li>
+          <li>to scale your skills, share them</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Chat with Mark Richards
+    <ul>
+      <li>Those who cannot remember their past are condemned to repeat the mistakes</li>
+      <li>ArchUnit - automated architecture governance tool. https://www.archunit.org/</li>
+      <li>Cart before the horse. Jumping the band wagon - microservice, cloud, …</li>
+      <li>Next Gen - self-governing, self-protecting, self-healing autonomic systems</li>
+    </ul>
+  </li>
+  <li>Serverless Content Delivery
+    <ul>
+      <li>SymphoniaCloud - https://github.com/SymphoniaCloud</li>
+      <li>https://github.com/symphoniacloud/sacon-nyc-2019-continuous-delivery</li>
+      <li>Serverless attributes
+        <ul>
+          <li>no managing of hosts or processes</li>
+          <li>self auto scaling and provisioning</li>
+          <li>costs based on precise usage
+  *</li>
+        </ul>
+      </li>
+      <li>Serverless = FaaS + BaaS
+        <ul>
+          <li>Function aaS (AWS Lambda, Auth0 Webtask, Google Cloud Functions)</li>
+          <li>Backend aaS (AuthO, Firebase, CloudFront, S3, Parse)</li>
+        </ul>
+      </li>
+      <li>S3
+        <ul>
+          <li>99.9999999999% durability</li>
+          <li>99.99% availability</li>
+          <li>hosting a website on S3</li>
+          <li>pay by the request</li>
+          <li>no servers (from our perspective)</li>
+          <li>highly available</li>
+          <li>highly scalable</li>
+          <li>Caveats
+            <ul>
+              <li>relatively slow</li>
+              <li>S3 is regional , so requests must go to the regional data center</li>
+              <li>custom domain require a specific bucket name
+                <ul>
+                  <li>S3 global bucket namespace == squatting, requires support intervention</li>
+                </ul>
+              </li>
+              <li>S3 transfer/request pricing</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>CloudFormation + AWS Route 53 DNS + ACM (AWS Certificate Manager) + Lambda@Edge basics</li>
+      <li>Lambda@Edge basics
+        <ul>
+          <li>a flavor of lambda that runs in cloudfront</li>
+          <li>hooks into viewer and origin request/response events</li>
+          <li>Node.js runtime only</li>
+          <li>viewer requests/response has limited capability (5 secs runtime, 10MB response, 1 MB function)</li>
+          <li>origin requests/response (30 secs runtime)</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Gitops</li>
+  <li>
+    <p>Fitness function driven development</p>
+  </li>
+  <li>Security Principles
+    <ul>
+      <li>Least privilege - limit privileges to the minimum for the context</li>
+      <li>Separate responsibilities - separate and compartmentalize responsibilities and privileges</li>
+      <li>Trust cautiously - assume unknown entities are untrusted, have a clear process to establish trust, validate who is connecting</li>
+      <li>Simplest solution possible - actively design for simplicity - avoid complex failure modes, implicit behavior, unnecessary features</li>
+      <li>Audit sensitive events - record all security significant events in a tamper-resistent store</li>
+      <li>Secure defaults &amp; Fail securely - force changes to security sensitive parameters. Think through failures - to be secure but recoverable</li>
+      <li>Never ruly on obscurity - assume attacker with perfect knowledge, this forces secure system design</li>
+      <li>Defence in depth - don’t rely on single point of security, secure every level, stop failures at one level propagating
+        <ul>
+          <li>Hardening - Highly secure linux hosts</li>
+        </ul>
+      </li>
+      <li>Never invent security tech - don’t create  your own security technology - always use a proven component
+        <ul>
+          <li>Use tools like Hashicorp Vault</li>
+        </ul>
+      </li>
+      <li>
+        <p>Secure the weakest link - find the weakest link in the security chain and strengthen it - repeat! (Threat modelling)</p>
+      </li>
+      <li>Hackers need to get lucky only once. You need to be lucky all the time.</li>
+      <li>Book: Software Systems Architecture</li>
+    </ul>
+  </li>
+  <li>Kubernetes for Java Developers
+    <ul>
+      <li>Java 9 modularity - jlink, jdeps</li>
+      <li>Micro VMs - Fire cracker, NanoVM</li>
+    </ul>
+  </li>
+  <li>Continuous Threat modelling
+    <ul>
+      <li>Email the author for the presentation</li>
+      <li>“All software developers are now security engineers. Your code is now the security of the org you work for” - Jim Manico</li>
+      <li>In addition to performance questions in interviews, ask security questions too.</li>
+      <li>Threat Modelling
+        <ul>
+          <li>around for a long time - predates Agile</li>
+          <li>threat model every story
+            <ul>
+              <li>if the story generates a security ‘notable event’, either fix it or pop it up as a ‘threat model candidate finding’ for the curator to take notice of</li>
+            </ul>
+          </li>
+          <li>“Teach principles not formulas” - Richard Feynman</li>
+          <li>Principle checklist
+            <ul>
+              <li>not more than a page
+  TM as code</li>
+              <li>ThreatSpec - @zeroXten - TM in code</li>
+              <li>ThreatPlaybook - @abhaybharghav - TM from code</li>
+              <li>PyTM (https://github.com/izar/pytm)
+                <ul>
+                  <li>write python code - generate images as output</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="day-3">Day 3</h1>
+
+<ul>
+  <li>Keynotes
+    <ul>
+      <li>Book list</li>
+      <li>Observability</li>
+      <li>Interops</li>
+      <li>Codifying best practices - Archunit</li>
+      <li>Kubernetes Operators - extension points</li>
+    </ul>
+  </li>
+  <li>Choreographing Microservices (Allen Holub @allenholub holub.com)
+    <ul>
+      <li>Small</li>
+      <li>Independently deployable - one service change should not force other services to change. this includes the UI</li>
+      <li>hides implementation details</li>
+      <li>modeled around business concepts ( DDD is necessary)</li>
+      <li>decentralized ( distributed)</li>
+      <li>highly observable</li>
+      <li>autonomous, highly isolated
+        <ul>
+          <li>Microsoft Service Fabric is an abomination - now you are dependent on a platform. Same thing with OpenShift vs Mulesoft</li>
+        </ul>
+      </li>
+      <li>temporal isolation</li>
+      <li>location transparency - you don’t know where it is running. sticky routing</li>
+      <li>Think ‘object’ - an object is defined by what it does, not what it contains. Services should be doing something, not providing data.</li>
+      <li>You shouldn’t know who’s talking to you - you shouldn’t need to know the IP address, location, etc. Decoupling.</li>
+      <li>you should be able to radically change the implementation of a class without impacting the clients</li>
+      <li>Bounded context - models business structure or flow.
+        <ul>
+          <li>sometimes each bounded context is a microservice, sometimes not</li>
+          <li>context is a runtime boundary</li>
+          <li>no generalized classes shared across contexts</li>
+        </ul>
+      </li>
+      <li>UI layer - MVC is a lie.</li>
+      <li>Inter-service communication
+        <ul>
+          <li>no RPC. Local != Remote</li>
+          <li>REST - they do only one thing. they manipulate data: GET, PUT</li>
+        </ul>
+      </li>
+      <li>Orchestration
+        <ul>
+          <li>one central thing orchestrates the entire system</li>
+          <li>synchronous services - one central service orchestrates the workflow with 3 other services. If one goes, down, then
+  *
+            <ul>
+              <li>Circuit breaker
+  *</li>
+            </ul>
+          </li>
+          <li>When there’s failure (none of the options below work)
+            <ul>
+              <li>
+                <ol>
+                  <li>Saga pattern doesn’t work either</li>
+                </ol>
+              </li>
+              <li>
+                <ol>
+                  <li>REtry again</li>
+                </ol>
+              </li>
+              <li>
+                <ol>
+                  <li>Multi-phase commit</li>
+                </ol>
+              </li>
+              <li>
+                <ol>
+                  <li>after-the-fact repair</li>
+                </ol>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>Choreography
+        <ul>
+          <li>Choreographed systems are always asynchronous (REST is a synchronous protocol)</li>
+          <li>Orchestration should not be used at all for microservices</li>
+          <li>Reactivity reduces latency</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Developer Experience (Daniel Bryant - DataWire)
+    <ul>
+      <li>Author of Continuous Delivery in Java</li>
+      <li>Martin Fowler’s article - you must be this tall to use microservices - https://martinfowler.com/bliki/MicroservicePrerequisites.html</li>
+      <li>DevEx = DevOps Handbook + Implementing Lean software development + Design of Everyday Things</li>
+      <li>https://speakerdeck.com/stilkov/microservices-patterns-and-antipatterns-1</li>
+      <li>Netflix Hystrix in Java and Ruby are completely different. So polyglot in microservices is not a silver bullet.</li>
+      <li>https://www.infoq.com/news/2017/06/paved-paas-netflix</li>
+      <li>https://www.infoq.com/news/2018/07/shopify-kubernetes-paas</li>
+      <li>https://landscape.cncf.io/</li>
+      <li>https://github.com/cncf/landscape</li>
+      <li>https://articles.microservices.com/developer-workflow-trail-for-cloud-native-applications-request-for-feedback-a9365b64c790</li>
+      <li>https://aws.amazon.com/architecture/well-architected/</li>
+      <li>Develop and test services
+        <ul>
+          <li>Local/remote container dev tools like Telepresence/Squash allow hybrid</li>
+          <li>Redhat’s Kubernetes native IDE</li>
+        </ul>
+      </li>
+      <li>https://medium.com/@copyconstruct</li>
+      <li>https://medium.com/netflix-techblog/automated-canary-analysis-at-netflix-with-kayenta-3260bc7acc69</li>
+      <li>https://blog.openshift.com/multiple-deployment-methods-openshift/</li>
+      <li>https://www.appdirect.com/blog/evolution-of-the-appdirect-kubernetes-network-infrastructure</li>
+      <li>https://www.infoq.com/articles/ambassador-api-gateway-kubernetes</li>
+      <li>focused canary testing</li>
+      <li>Control planes for Envoy: Gloo, Istio, <a href="https://www.getambassador.io/">Ambassador</a></li>
+      <li>Continuous Delivery with Docker Containers and Java: The Good, the … - https://www.youtube.com/watch?v=hJkhPP2OLA8</li>
+      <li>Observability &gt; Testing
+        <ul>
+          <li>is there a common correlation id from UI to database?</li>
+          <li>https://www.infoq.com/articles/observability-financial-times</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Micro front-end architecture (@lucamezzarila)
+    <ul>
+      <li>Microapps
+        <ul>
+          <li>https://www.forbes.com/sites/adrianbridgwater/2015/07/16/what-are-micro-apps-and-why-do-they-matter-for-mobile/</li>
+          <li>https://dzone.com/articles/micro-apps-what-they-are-and-why-you-should-not-ig</li>
+        </ul>
+      </li>
+      <li>SPA - Monolith - DB</li>
+      <li>SPA - API Gateway - Microservices * - DB *</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="action-items">Action Items</h1>
+<ul>
+  <li></li>
+</ul>
+
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  
+			<a href="/technology/coding-principles.html">Coding Principles</a> |	
+			<a href="/technology/ddd.html">DDD</a>  |  
+			<a href="/technology/design-principles.html">Design Principles</a>  |
+			<a href="/technology/eventsourcing.html">Event Sourcing</a> |  
+			<a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  
+			<a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  
+			<a href="/technology/patterns.html">Patterns</a>  |  
+			<a href="/technology/sdlc.html">SDLC</a> |  
+			<a href="/technology/scalability.html">Scalability</a>  |  
+			<a href="/technology/security.html">Security</a>  |  
+			<a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  
+			<a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  
+			<a href="/technology/elasticsearch.html">ElasticSearch</a>  |  
+			<a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  
+			<a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  
+			<a href="/technology/nosql.html">NoSQL</a>  |  
+			<a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  
+			<a href="/technology/aws.html">AWS</a>  |  
+			<a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>  |  
+			<a href="/technology/virtualization.html">Virtualization</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  
+			<a href="/technology/db-design.html">Design</a>  |  
+			<a href="/technology/db-performance.html">Performance</a>  |  
+			<a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  
+			<a href="/technology/java-collections.html">Collections</a>  |  
+			<a href="/technology/java-concurrency.html">Concurrency</a>  |  
+			<a href="/technology/java-database.html">Database</a>  |  
+			<a href="/technology/java-jmx.html">JMX</a>  |  
+			<a href="/technology/java-jndi.html">JNDI</a>  |  
+			<a href="/technology/java-io.html">I/O</a>  |  
+			<a href="/technology/java-performance.html">Performance</a>  |  
+			<a href="/technology/java-testing.html">Testing</a>  |  
+			<a href="/technology/java-web.html">Web</a>  |  
+			<a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  
+			<a href="/technology/python.html">Python</a>  |  
+			<a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  
+			<a href="/technology/camel.html">Camel</a>  |  
+			<a href="/technology/messaging.html">Messaging</a> |  
+			<a href="/technology/microservices.html">Microservices</a>   |  
+			<a href="/technology/rest-services.html">REST</a>  | 
+			<a href="/technology/soap-services.html">SOAP</a>  |  
+			<a href="/technology/webservices.html">Web Services</a> |  
+			<a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  
+			<a href="/technology/spring.html">Core</a>  |  
+			<a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> |
+			<a href="/technology/webanalytics.html">Analytics</a> | 
+			<a href="/technology/webapp_architecture.html">Architecture</a> | 
+			<a href="/technology/js-ecosystem.html">JS Ecosystem</a> |
+			<a href="/technology/ux.html">UX</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  
+			<a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  
+			<a href="/technology/datastructures.html">Data Structures</a>  |  
+			<a href="/technology/design-faqs.html">Design FAQs</a>  |  
+			<a href="/technology/networking.html">Networking</a>  |  
+			<a href="/technology/oops.html">OOPS</a>  |  
+			<a href="/technology/os.html">Operating Systems</a>  |  
+			<a href="/technology/vcs.html">VCS</a>  |  
+			<a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  
+			<a href="/softskills/productivity.html">Productivity</a>  |  
+			<a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2019 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

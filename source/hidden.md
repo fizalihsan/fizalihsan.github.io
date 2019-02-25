@@ -16,8 +16,9 @@ footer: false
 * [Tabligh]({{ root_url }}/islamic/dawah.html)
 * [TODO - Topics to learn in-depth]({{ root_url }}/technology/todo.html)
 * __Conferences__
-	* [2017 O'Reilly Software Architecture Conference]({{ root_url }}/technology/oscon2017.html)
+	* [2017 O'Reilly Software Architecture Conference]({{ root_url }}/technology/sacon2017.html)
 	* [2018 QCon Conference]({{ root_url }}/technology/qcon2018.html)
+	* [2019 O'Reilly Software Architecture Conference]({{ root_url }}/technology/sacon2019.html)
 
 
 * [AWS Certification - Trivias]({{ root_url }}/technology/aws_trivia.html)

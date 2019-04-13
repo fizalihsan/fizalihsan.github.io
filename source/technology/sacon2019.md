@@ -38,14 +38,21 @@ footer: false
     * 5 - the system is more then 'The System' (people, etc)
 
 # Design
+
 ## Program Design
+
+...
+
 ## System Design
+
 * Define the target system scope
 * Determine functional domains
     - bounded contexts, services, and interactions
 * Determine non-functional domains
     - trust domains (security), operational domains (availability, reliability, capacity)
+
 __Complexity in a microservice architecture__
+
 * Essential complexity in microservices
     * in a microservice architecture, the topology of the implemented system closely resembles the model of the system's essence
 * Accidental complexity in microservices
@@ -55,7 +62,9 @@ DDD provides a framework for defining and modeling the essentail capabilities of
     * product, technology teams together - discuss business events and outcomes - sticky notes
 * Innovative dilemma book - 'jobs-to-be-done' process
 * Susan Fowler - Production Ready Microservices book
+
 ## Service Design
+
 * Sketch the service
     * take an 'outside in' approach
 * Design the _interface_
@@ -68,7 +77,9 @@ DDD provides a framework for defining and modeling the essentail capabilities of
     * evolve an existing service
     * develop net new service
 * 'Just enough' design
+
 ## Foundation Design
+
 * think of the capabilities you need, before choosing a technology
 * POISED: technological capability foundation
     * Microservices (honeycomb)
@@ -78,13 +89,16 @@ DDD provides a framework for defining and modeling the essentail capabilities of
         * security capabilities
         * engineering capabilities
         * deployment capabilities
-## 
+
+## ??
+
 * Processes & Methodologies
 * Organizational Practices
 * Cultural Practices
 * Agile - Spotify (idea of guilds)
 
-# Architectural anti-patterns when delivering a software ecosystem with Kubernetes
+## Architectural anti-patterns when delivering a software ecosystem with Kubernetes
+
 * Anti-patterns
     * Statefulness
     * Keep configurations as environment variables
@@ -97,6 +111,7 @@ DDD provides a framework for defining and modeling the essentail capabilities of
         * this is nothing but a modular monolith. You cannot deploy or scale independently
 
 # Day 2 - Keynotes
+
 * 37 things one architect knows about IT transformation - Gregor Hohpe
 * IBM KNative
 * Architect skills (Trisha Gee - JetBrains)

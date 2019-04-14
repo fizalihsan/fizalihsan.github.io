@@ -67,6 +67,7 @@ footer: true
     * Although each team may be good at their part of the design (e.g., building a screen, adding a back-end API or service, or developing a new storage mechanism), to release a new business capability or feature, all three teams must be involved in building the feature. 
     * it’s hard for someone to change something if the thing she wants to change is owned by someone else. Software architects should pay attention to how work is divided and delegated to align architectural goals with team structure.
     * Many companies who build architectures such as microservices structure their teams around service boundaries rather than siloed technical architecture partitions (called [the Inverse Conway Maneuver](https://www.thoughtworks.com/radar/techniques/inverse-conway-maneuver:) ). 
+    * In microservices architecture, build cross-functional teams that matched the purview of the service: each service team consists of service owner, a few developers, a business analyst, a database administrator (DBA), a quality assurance (QA) person, and an operations person.
 
 # Enterprise Integration Approaches
 

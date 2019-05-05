@@ -1,0 +1,1318 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>GraphQL - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="GraphQL Overview Query Language Query Object types One-to-Many connections Fragments Union types Intefaces Mutation Introspection Schema Design &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/graphql.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">GraphQL</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#overview">Overview</a></li>
+  <li><a href="#query-language">Query Language</a>    <ul>
+      <li><a href="#query">Query</a>        <ul>
+          <li><a href="#object-types">Object types</a></li>
+          <li><a href="#one-to-many-connections">One-to-Many connections</a></li>
+          <li><a href="#fragments">Fragments</a></li>
+          <li><a href="#union-types">Union types</a></li>
+          <li><a href="#intefaces">Intefaces</a></li>
+        </ul>
+      </li>
+      <li><a href="#mutation">Mutation</a></li>
+      <li><a href="#introspection">Introspection</a></li>
+    </ul>
+  </li>
+  <li><a href="#schema-design">Schema Design</a>    <ul>
+      <li><a href="#scalar-types">Scalar types</a></li>
+      <li><a href="#object-types-1">Object Types</a></li>
+      <li><a href="#connections-and-lists">Connections and Lists</a>        <ul>
+          <li><a href="#many-to-many-connections">Many-to-many connections</a></li>
+          <li><a href="#unions">Unions</a></li>
+          <li><a href="#interfaces">Interfaces</a></li>
+        </ul>
+      </li>
+      <li><a href="#arguments">Arguments</a></li>
+      <li><a href="#data-paging">Data Paging</a></li>
+      <li><a href="#sorting">Sorting</a></li>
+      <li><a href="#return-types">Return Types</a></li>
+    </ul>
+  </li>
+  <li><a href="#references">References</a></li>
+</ul>
+
+<h1 id="overview">Overview</h1>
+
+<ul>
+  <li>With GraphQL, clients can obtain all of the data they need in one request.</li>
+  <li>Whenever a query is executed against a GraphQL server, it is validated against a type system. A type system is like a blueprint for your API’s data, backed by a list of objects that you define.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">type Person {
+</span><span class="line">    id: ID!
+</span><span class="line">    name: String
+</span><span class="line">    birthYear: String
+</span><span class="line">    eyeColor: String
+</span><span class="line">    gender: String
+</span><span class="line">}</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>GraphQL is often referred to as a <em>declarative data-fetching language</em>. Developers list their data requirements as what data they need without focusing on how they’re going to get it.</li>
+  <li>GraphQL is a specification (spec) for client-server communication.</li>
+  <li>A GraphQL query is <em>hierarchical</em>. Fields are nested within other fields and the query is shaped like the data that it returns.</li>
+</ul>
+
+<p><strong>REST Drawbacks</strong></p>
+
+<ul>
+  <li><em>Data overfetching and underfetching</em> - REST either returns more data than what user needs or would require additional requests are needed to get more details. similar to N+1 problem in ORM</li>
+  <li><em>Managing endpoints</em> - as the client needs change, more endpoints need to be created which eventually multiply quickly. GraphQL architecture typically involves only a single endpoint.</li>
+</ul>
+
+<p>e.g., https://swapi.co/api/people/1/</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="s2">&quot;films&quot;</span><span class="err">:</span> <span class="p">[</span>
+</span><span class="line">    <span class="s2">&quot;https://swapi.co/api/films/2/&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s2">&quot;https://swapi.co/api/films/6/&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s2">&quot;https://swapi.co/api/films/3/&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s2">&quot;https://swapi.co/api/films/1/&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s2">&quot;https://swapi.co/api/films/7/&quot;</span>
+</span><span class="line">  <span class="p">]</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h1 id="query-language">Query Language</h1>
+
+<ul>
+  <li>Like SQL, GraphQL can be used for all CRUD operations</li>
+  <li>Data Types/Operations: 
+    <ul>
+      <li><code>Query</code> - read</li>
+      <li><code>Mutation</code> - insert, update and delete</li>
+      <li><code>Subscription</code> - used to listen for data changes</li>
+    </ul>
+  </li>
+  <li>A GraphQL document can contain the definitions of one or more operations. For example, one could place 2 query operations in a query document.</li>
+  <li>A JSON response can contain both “data” and “errors.”</li>
+</ul>
+
+<h2 id="query">Query</h2>
+
+<ul>
+  <li>A <code>Query</code> data type is called a <em>root type</em> because it’s a type that maps to an operation, and operations represent the roots of our query document. </li>
+  <li>Selection sets
+    <ul>
+      <li>When we write queries, we are selecting the fields that we need by encapsulating them in curly brackets. These blocks are referred to as selection sets.</li>
+      <li>You can nest selection sets within one another.</li>
+    </ul>
+  </li>
+  <li>Fields
+    <ul>
+      <li>The <em>fields</em> that are available to query in a GraphQL API have been defined in that API’s schema. The documentation will tell us what fields are available to select on the Query type.</li>
+      <li>fields can be either scalar types or object types.</li>
+    </ul>
+  </li>
+  <li>Response
+    <ul>
+      <li>We can change the field names in the response object within the query by specifying an <em>alias</em>. e.g., <code>liftName</code> in below example.</li>
+    </ul>
+  </li>
+  <li>Query Arguments
+    <ul>
+      <li>A way to filter the results of a GraphQL query is to pass in <em>query arguments</em>. </li>
+      <li>Arguments are a key–value pair (or pairs) associated with a query field. </li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="err">query</span> <span class="err">liftsAndTrails</span> <span class="p">{</span>
+</span><span class="line">  <span class="err">open:</span> <span class="err">liftCount(status:</span> <span class="err">OPEN,</span> <span class="err">sortBy:</span> <span class="nt">&quot;name&quot;</span><span class="err">)</span>
+</span><span class="line">  <span class="err">chairlifts</span><span class="p">:</span> <span class="err">allLifts</span> <span class="p">{</span>
+</span><span class="line">    <span class="err">liftName:</span> <span class="err">name</span>
+</span><span class="line">    <span class="err">status</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line">  <span class="err">skiSlopes</span><span class="p">:</span> <span class="err">allTrails</span> <span class="p">{</span>
+</span><span class="line">    <span class="err">name</span>
+</span><span class="line">    <span class="err">difficulty</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="p">{</span>
+</span><span class="line">  <span class="nt">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class="line">    <span class="nt">&quot;open&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+</span><span class="line">    <span class="nt">&quot;chairlifts&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class="line">      <span class="p">{</span>
+</span><span class="line">        <span class="nt">&quot;liftName&quot;</span><span class="p">:</span> <span class="s2">&quot;Astra Express&quot;</span><span class="p">,</span>
+</span><span class="line">        <span class="nt">&quot;status&quot;</span><span class="p">:</span> <span class="s2">&quot;open&quot;</span>
+</span><span class="line">      <span class="p">}</span>
+</span><span class="line">    <span class="p">],</span>
+</span><span class="line">    <span class="nt">&quot;skiSlopes&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class="line">      <span class="p">{</span>
+</span><span class="line">        <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Ditch of Doom&quot;</span><span class="p">,</span>
+</span><span class="line">        <span class="nt">&quot;difficulty&quot;</span><span class="p">:</span> <span class="s2">&quot;intermediate&quot;</span>
+</span><span class="line">      <span class="p">}</span>
+</span><span class="line">    <span class="p">]</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Example for passing a GraphQL query in curl: </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">curl  <span class="s1">&#39;http://snowtooth.herokuapp.com/&#39;</span>
+</span><span class="line">  -H <span class="s1">&#39;Content-Type: application/json&#39;</span>
+</span><span class="line">  --data <span class="s1">&#39;{&quot;query&quot;:&quot;{ allLifts {name }}&quot;}&#39;</span><span class="sb">`</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="object-types">Object types</h3>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="nb">type </span>User <span class="o">{</span>
+</span><span class="line">  name: String!
+</span><span class="line">  username: String!
+</span><span class="line"><span class="o">}</span>
+</span><span class="line">
+</span><span class="line"><span class="nb">type </span>Document <span class="o">{</span>
+</span><span class="line">  title: String!
+</span><span class="line">  content: String!
+</span><span class="line">  author: User!
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="one-to-many-connections">One-to-Many connections</h3>
+
+<p>Aa one-to-many relationship between User and Document. Notice that the documents field will contain an actual array of documents.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="nb">type </span>User <span class="o">{</span>
+</span><span class="line">  name: String!
+</span><span class="line">  username: String!
+</span><span class="line">  email: String!
+</span><span class="line">  noOfDocuments: Int!
+</span><span class="line">  documents: <span class="o">[</span>Document!<span class="o">]</span>!
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>In this example, <code>trailAccess</code> returns a filtered list of trails that are accessible from <em>Jazz Cat</em>. Because <code>trailAccess</code> is a field within the <code>Lift</code> type, the API can use details about the parent object, the Jazz Cat <code>Lift</code>, to filter the list of returned trails.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">query trailsAccessedByJazzCat <span class="o">{</span>
+</span><span class="line">    Lift<span class="o">(</span>id:<span class="s2">&quot;jazz-cat&quot;</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">        capacity
+</span><span class="line">        trailAccess <span class="o">{</span>
+</span><span class="line">            name
+</span><span class="line">            difficulty
+</span><span class="line">        <span class="o">}</span>
+</span><span class="line">    <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="fragments">Fragments</h3>
+
+<p>Resuable set of fields to include in queries.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="o">{</span>
+</span><span class="line">  leftComparison: hero<span class="o">(</span>episode: EMPIRE<span class="o">)</span> <span class="o">{</span>
+</span><span class="line">    ...comparisonFields <span class="c"># JS spread operator</span>
+</span><span class="line">  <span class="o">}</span>
+</span><span class="line">  rightComparison: hero<span class="o">(</span>episode: JEDI<span class="o">)</span> <span class="o">{</span>
+</span><span class="line">    ...comparisonFields
+</span><span class="line">  <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span><span class="line">
+</span><span class="line">fragment comparisonFields on Character <span class="o">{</span>
+</span><span class="line">  name
+</span><span class="line">  appearsIn
+</span><span class="line">  friends <span class="o">{</span>
+</span><span class="line">    name
+</span><span class="line">  <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="union-types">Union types</h3>
+
+<p>If you want a list to return more than one type, you could create a <em>union type</em>, which creates an association between two different object types.</p>
+
+<p>Suppose that we’re building a scheduling app for college students with which they can add Workout and Study Group events to an agenda. When writing a query for a student’s agenda, you can use fragments to define which fields to select when the <code>AgendaItem</code> is a <code>Workout</code>, and which fields to select when the <code>AgendaItem</code> is a <code>StudyGroup</code>.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">query schedule <span class="o">{</span>
+</span><span class="line">    agenda <span class="o">{</span>
+</span><span class="line">    ...on Workout <span class="o">{</span> <span class="c"># inline fragments</span>
+</span><span class="line">      name
+</span><span class="line">      reps
+</span><span class="line">    <span class="o">}</span>
+</span><span class="line">    ...on StudyGroup <span class="o">{</span>
+</span><span class="line">      name
+</span><span class="line">      subject
+</span><span class="line">      students
+</span><span class="line">    <span class="o">}</span>
+</span><span class="line">  <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="p">{</span>
+</span><span class="line">  <span class="nt">&quot;data&quot;</span><span class="p">:</span> <span class="p">{</span>
+</span><span class="line">    <span class="nt">&quot;agenda&quot;</span><span class="p">:</span> <span class="p">[</span>
+</span><span class="line">      <span class="p">{</span>
+</span><span class="line">        <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Comp Sci&quot;</span><span class="p">,</span>
+</span><span class="line">        <span class="nt">&quot;subject&quot;</span><span class="p">:</span> <span class="s2">&quot;Computer Science&quot;</span><span class="p">,</span>
+</span><span class="line">        <span class="nt">&quot;students&quot;</span><span class="p">:</span> <span class="mi">12</span>
+</span><span class="line">      <span class="p">},</span>
+</span><span class="line">      <span class="p">{</span>
+</span><span class="line">        <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Cardio&quot;</span><span class="p">,</span>
+</span><span class="line">        <span class="nt">&quot;reps&quot;</span><span class="p">:</span> <span class="mi">100</span>
+</span><span class="line">      <span class="p">},</span>
+</span><span class="line">      <span class="p">{</span>
+</span><span class="line">        <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Poets&quot;</span><span class="p">,</span>
+</span><span class="line">        <span class="nt">&quot;subject&quot;</span><span class="p">:</span> <span class="s2">&quot;English 101&quot;</span><span class="p">,</span>
+</span><span class="line">        <span class="nt">&quot;students&quot;</span><span class="p">:</span> <span class="mi">3</span>
+</span><span class="line">      <span class="p">}</span>
+</span><span class="line">    <span class="p">]</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>The same union type above using named fragments</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="err">query</span> <span class="err">today</span> <span class="p">{</span>
+</span><span class="line">    <span class="err">agenda</span> <span class="err">{</span>
+</span><span class="line">    <span class="err">...workout</span>
+</span><span class="line">    <span class="err">...study</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line"><span class="err">}</span>
+</span><span class="line">
+</span><span class="line"><span class="err">fragment</span> <span class="err">workout</span> <span class="err">on</span> <span class="err">Workout</span> <span class="p">{</span>
+</span><span class="line">  <span class="err">name</span>
+</span><span class="line">  <span class="err">reps</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="err">fragment</span> <span class="err">study</span> <span class="err">on</span> <span class="err">StudyGroup</span> <span class="p">{</span>
+</span><span class="line">  <span class="err">name</span>
+</span><span class="line">  <span class="err">subject</span>
+</span><span class="line">  <span class="err">students</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="intefaces">Intefaces</h3>
+
+<p>Interfaces are another option when dealing with multiple object types that could be returned by a single field. An interface is an abstract type that establishes a list of fields that should be implemented in similar object types. When another type implements the interface, it includes all of the fields from the interface and usually some of its own fields.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="err">interface</span> <span class="err">Character</span> <span class="p">{</span>
+</span><span class="line">  <span class="err">id:</span> <span class="err">ID!</span>
+</span><span class="line">  <span class="err">name:</span> <span class="err">String!</span>
+</span><span class="line">  <span class="err">friends:</span> <span class="err">[Character]</span>
+</span><span class="line">  <span class="err">appearsIn:</span> <span class="err">[Episode]!</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="err">type</span> <span class="err">Human</span> <span class="err">implements</span> <span class="err">Character</span> <span class="p">{</span>
+</span><span class="line">  <span class="err">id:</span> <span class="err">ID!</span>
+</span><span class="line">  <span class="err">name:</span> <span class="err">String!</span>
+</span><span class="line">  <span class="err">friends:</span> <span class="err">[Character]</span>
+</span><span class="line">  <span class="err">appearsIn:</span> <span class="err">[Episode]!</span>
+</span><span class="line">  <span class="err">starships:</span> <span class="err">[Starship]</span>
+</span><span class="line">  <span class="err">totalCredits:</span> <span class="err">Int</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="err">type</span> <span class="err">Droid</span> <span class="err">implements</span> <span class="err">Character</span> <span class="p">{</span>
+</span><span class="line">  <span class="err">id:</span> <span class="err">ID!</span>
+</span><span class="line">  <span class="err">name:</span> <span class="err">String!</span>
+</span><span class="line">  <span class="err">friends:</span> <span class="err">[Character]</span>
+</span><span class="line">  <span class="err">appearsIn:</span> <span class="err">[Episode]!</span>
+</span><span class="line">  <span class="err">primaryFunction:</span> <span class="err">String</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="mutation">Mutation</h2>
+
+<ul>
+  <li><code>Mutation</code> is a root object type</li>
+  <li>In the below example, it returns a selection set with <code>name</code> and <code>status</code> after mutation</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="err">mutation</span> <span class="p">{</span>
+</span><span class="line">  <span class="err">setLiftStatus(id:</span> <span class="nt">&quot;panorama&quot;</span> <span class="err">status</span><span class="p">:</span> <span class="err">OPEN)</span> <span class="p">{</span>
+</span><span class="line">    <span class="err">name</span>
+</span><span class="line">    <span class="err">status</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Using query variables to replace hardcoded values in the mutation arguments</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="err">mutation</span> <span class="err">createSong($title:String!</span> <span class="err">$numberOne:Int</span> <span class="err">$by:String!)</span> <span class="p">{</span>
+</span><span class="line">  <span class="err">addSong(title:$title,</span> <span class="err">numberOne:$numberOne,</span> <span class="err">performerName:$by)</span> <span class="err">{</span>
+</span><span class="line">    <span class="err">id</span>
+</span><span class="line">    <span class="err">title</span>
+</span><span class="line">    <span class="err">numberOne</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line"><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="introspection">Introspection</h2>
+
+<ul>
+  <li>
+    <p>Introspection is the ability to query details about the current API’s schema. You can send queries to every GraphQL API that return data about a given API’s schema. </p>
+  </li>
+  <li>
+    <p>This query returns all available types in the API, including root types, custom types, and even scalar types.</p>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="err">query</span> <span class="p">{</span>
+</span><span class="line">  <span class="err">__schema</span> <span class="err">{</span>
+</span><span class="line">    <span class="err">types</span> <span class="err">{</span>
+</span><span class="line">      <span class="err">name</span>
+</span><span class="line">      <span class="err">description</span>
+</span><span class="line">    <span class="p">}</span>
+</span><span class="line">  <span class="err">}</span>
+</span><span class="line"><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>To see the details of a particular type, we can run the <code>__type</code> query and send the name of the type that we want to query as an argument:</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="err">query</span> <span class="err">liftDetails</span> <span class="p">{</span>
+</span><span class="line">  <span class="err">__type(name:</span><span class="nt">&quot;Lift&quot;</span><span class="err">)</span> <span class="p">{</span>
+</span><span class="line">    <span class="err">name</span>
+</span><span class="line">    <span class="err">fields</span> <span class="err">{</span>
+</span><span class="line">      <span class="err">name</span>
+</span><span class="line">      <span class="err">description</span>
+</span><span class="line">      <span class="err">type</span> <span class="err">{</span>
+</span><span class="line">        <span class="err">name</span>
+</span><span class="line">      <span class="p">}</span>
+</span><span class="line">    <span class="p">}</span>
+</span><span class="line">  <span class="err">}</span>
+</span><span class="line"><span class="err">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h1 id="schema-design">Schema Design</h1>
+
+<ul>
+  <li>GraphQL is going to change your design process. Instead of looking at APIs as a collection of REST endpoints, begin looking at your APIs as collections of types.</li>
+  <li><strong>Schema First Design</strong> 
+    <ul>
+      <li><em>Schema First</em> design methodology gets all teams on the same page about the data types that make up your application.</li>
+      <li>The backend team will have a clear understanding about the data that it needs to store and deliver. The frontend team will have the definitions that it needs to begin building user interfaces.</li>
+    </ul>
+  </li>
+  <li>GraphQL Schema Definition Language (SDL) is same irrespective of the language or framework in which your application is built.</li>
+</ul>
+
+<p><strong>Schema &amp; Types</strong></p>
+
+<ul>
+  <li>A <em>schema</em> is a collection of type definitions. You can write your schemas in a JS file as a string or in any text file. These files usually carry the <code>.graphql</code> extension.</li>
+  <li>A <em>type</em> has fields that represent the data associated with each object. Each field returns a specific type of data. This could mean an integer or a string, but it also could mean a custom object type or list of types.</li>
+  <li>The exclamation point specifies that the field is non-nullable, which means that the name and url fields must return some data in each query</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="s2">&quot;&quot;&quot;</span>
+</span><span class="line"><span class="s2">Defining a custom type named Photo</span>
+</span><span class="line"><span class="s2">&quot;&quot;&quot;</span>
+</span><span class="line"><span class="err">type</span> <span class="err">Photo</span> <span class="p">{</span>
+</span><span class="line">    <span class="err">id:</span> <span class="err">ID!</span>
+</span><span class="line">    <span class="err">name:</span> <span class="err">String!</span>
+</span><span class="line">    <span class="err">url:</span> <span class="err">String!</span>
+</span><span class="line">
+</span><span class="line">    <span class="nt">&quot;Optional field to describe the photo</span>
+</span><span class="line"><span class="nt">    &quot;</span>
+</span><span class="line">    <span class="err">description</span><span class="p">:</span> <span class="err">String</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="scalar-types">Scalar types</h2>
+
+<ul>
+  <li>A scalar type is not an object type. It does not have fields. </li>
+  <li>Built-in scalar types 
+    <ul>
+      <li><code>Int</code>, <code>Float</code> - return JSON numbers</li>
+      <li><code>String</code>, <code>ID</code> (unique identifiers) - return strings. 
+        <ul>
+          <li>Even though ID and String will return the same type of JSON data, GraphQL still makes sure that IDs return unique strings</li>
+          <li>the ID scalar type is used when a unique identifier should be returned.</li>
+        </ul>
+      </li>
+      <li><code>Boolean</code> - return boolean</li>
+    </ul>
+  </li>
+  <li>Custom scalar type
+    <ul>
+      <li>In the example below, a custom scalar type: <code>DateTime</code> is created. </li>
+      <li>Any field marked <code>DateTime</code> will return a JSON string, but we can use the custom scalar to make sure that string can be serialized, validated, and formatted as an official date and time</li>
+      <li>The <code>graphql-custom-types</code> npm package contains some commonly used custom scalar types</li>
+      <li><em>enums</em> are scalar types that allow a field to return a restrictive set of string values.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="err">scalar</span> <span class="err">DateTime</span>
+</span><span class="line">
+</span><span class="line"><span class="err">enum</span> <span class="err">PhotoCategory</span> <span class="p">{</span>
+</span><span class="line">    <span class="err">PORTRAIT</span>
+</span><span class="line">    <span class="err">LANDSCAPE</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="err">type</span> <span class="err">Photo</span> <span class="p">{</span>
+</span><span class="line">    <span class="err">id:</span> <span class="err">ID!</span>
+</span><span class="line">    <span class="err">name:</span> <span class="err">String!</span>
+</span><span class="line">    <span class="err">url:</span> <span class="err">String!</span>
+</span><span class="line">    <span class="err">description:</span> <span class="err">String</span>
+</span><span class="line">    <span class="err">created:</span> <span class="err">DateTime!</span>
+</span><span class="line">    <span class="err">category:</span> <span class="err">PhotoCategory!</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="object-types-1">Object Types</h2>
+
+<ul>
+  <li>GraphQL object types are user-defined groups of one or more fields that you define in your schema. They define the shape of the JSON object that should be returned. JSON can endlessly nest objects under fields, and so can GraphQL</li>
+</ul>
+
+<h2 id="connections-and-lists">Connections and Lists</h2>
+
+<ul>
+  <li>When you create GraphQL schemas, you can define fields that return lists of any GraphQL type</li>
+  <li>A list can contain elements of different types</li>
+  <li>Variations
+    <ul>
+      <li><code>[Int]</code> - A list of nullable integer values</li>
+      <li><code>[Int!]</code> - A list of non-nullable integer values</li>
+      <li><code>[Int]!</code> - A non-nullable list of nullable integer values</li>
+      <li><code>[Int!]!</code> - A non-nullable list of non-nullable integer values</li>
+    </ul>
+  </li>
+  <li>One-to-many connections
+    <ul>
+      <li>It is a good idea to keep GraphQL services undirected when possible. This provides our clients with the ultimate flexibility to create queries because they can start traversing the graph from any node. All we need to do to follow this practice is provide a path back from <code>User</code> types to <code>Photo</code> types. This means that when we query a <code>User</code>, we should get to see all of the photos that particular user posted:</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="err">type</span> <span class="err">User</span> <span class="p">{</span>
+</span><span class="line">    <span class="err">githubLogin:</span> <span class="err">ID!</span>
+</span><span class="line">    <span class="err">name:</span> <span class="err">String</span>
+</span><span class="line">    <span class="err">avatar:</span> <span class="err">String</span>
+</span><span class="line">    <span class="err">postedPhotos:</span> <span class="err">[Photo!]!</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="err">type</span> <span class="err">Photo</span> <span class="p">{</span>
+</span><span class="line">    <span class="err">id:</span> <span class="err">ID!</span>
+</span><span class="line">    <span class="err">name:</span> <span class="err">String!</span>
+</span><span class="line">    <span class="err">url:</span> <span class="err">String!</span>
+</span><span class="line">    <span class="err">description:</span> <span class="err">String</span>
+</span><span class="line">    <span class="err">created:</span> <span class="err">DateTime!</span>
+</span><span class="line">    <span class="err">category:</span> <span class="err">PhotoCategory!</span>
+</span><span class="line">    <span class="err">postedBy:</span> <span class="err">User!</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="many-to-many-connections">Many-to-many connections</h3>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="err">type</span> <span class="err">User</span> <span class="p">{</span>
+</span><span class="line">    <span class="err">...</span>
+</span><span class="line">    <span class="err">inPhotos:</span> <span class="err">[Photo!]!</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="err">type</span> <span class="err">Photo</span> <span class="p">{</span>
+</span><span class="line">    <span class="err">...</span>
+</span><span class="line">    <span class="err">taggedUsers:</span> <span class="err">[User!]!</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="unions">Unions</h3>
+
+<ul>
+  <li>a union type is a type that we can use to return one of several different types.</li>
+  <li><code>AgendaItem</code> combines study groups and workouts under a single type. When we add the agenda field to our Query, we are defining it as a list of either workouts or study groups.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="err">union</span> <span class="err">AgendaItem</span> <span class="err">=</span> <span class="err">StudyGroup</span> <span class="err">|</span> <span class="err">Workout</span>
+</span><span class="line">
+</span><span class="line"><span class="err">type</span> <span class="err">StudyGroup</span> <span class="p">{</span>
+</span><span class="line">    <span class="err">name:</span> <span class="err">String!</span>
+</span><span class="line">    <span class="err">subject:</span> <span class="err">String</span>
+</span><span class="line">    <span class="err">students:</span> <span class="err">[User!]!</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="err">type</span> <span class="err">Workout</span> <span class="p">{</span>
+</span><span class="line">    <span class="err">name:</span> <span class="err">String!</span>
+</span><span class="line">    <span class="err">reps:</span> <span class="err">Int!</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="err">type</span> <span class="err">Query</span> <span class="p">{</span>
+</span><span class="line">    <span class="err">agenda:</span> <span class="err">[AgendaItem!]!</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="interfaces">Interfaces</h3>
+
+<ul>
+  <li>Another way of handling fields that could contain multiple types is to use an interface. </li>
+  <li>Both union types and interfaces are tools that you can use to create fields that contain different object types. </li>
+  <li>In general, if the objects contain completely different fields, it is a good idea to use union types. They are very effective. If an object type must contain specific fields in order to interface with another type of object, you will need to use an interface rather than a union type.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="err">scalar</span> <span class="err">DateTime</span>
+</span><span class="line">
+</span><span class="line"><span class="err">interface</span> <span class="err">AgendaItem</span> <span class="p">{</span>
+</span><span class="line">    <span class="err">name:</span> <span class="err">String!</span>
+</span><span class="line">    <span class="err">start:</span> <span class="err">DateTime!</span>
+</span><span class="line">    <span class="err">end:</span> <span class="err">DateTime!</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="err">type</span> <span class="err">StudyGroup</span> <span class="err">implements</span> <span class="err">AgendaItem</span> <span class="p">{</span>
+</span><span class="line">    <span class="err">name:</span> <span class="err">String!</span>
+</span><span class="line">    <span class="err">start:</span> <span class="err">DateTime!</span>
+</span><span class="line">    <span class="err">end:</span> <span class="err">DateTime!</span>
+</span><span class="line">    <span class="err">participants:</span> <span class="err">[User!]!</span>
+</span><span class="line">    <span class="err">topic:</span> <span class="err">String!</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="err">type</span> <span class="err">Workout</span> <span class="err">implements</span> <span class="err">AgendaItem</span> <span class="p">{</span>
+</span><span class="line">    <span class="err">name:</span> <span class="err">String!</span>
+</span><span class="line">    <span class="err">start:</span> <span class="err">DateTime!</span>
+</span><span class="line">    <span class="err">end:</span> <span class="err">DateTime!</span>
+</span><span class="line">    <span class="err">reps:</span> <span class="err">Int!</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="err">type</span> <span class="err">Query</span> <span class="p">{</span>
+</span><span class="line">    <span class="err">agenda:</span> <span class="err">[AgendaItem!]!</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="arguments">Arguments</h2>
+
+<ul>
+  <li>Arguments can be added to any field in GraphQL.</li>
+  <li>Just like a field, an argument must have a type - which can be scalar types or object types that are available in our schema. </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="err">type</span> <span class="err">Query</span> <span class="p">{</span>
+</span><span class="line">    <span class="err">...</span>
+</span><span class="line">    <span class="err">User(githubLogin:</span> <span class="err">ID!):</span> <span class="err">User!</span> <span class="err">#</span> <span class="err">mandatory</span> <span class="err">argument</span>
+</span><span class="line">    <span class="err">Photo(category:</span> <span class="err">PhotoCategory):</span> <span class="err">[Photo!]!</span> <span class="err">#</span> <span class="err">optional</span> <span class="err">argument</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="data-paging">Data Paging</h2>
+
+<ul>
+  <li>Used to control the number of records returned in query response</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="err">type</span> <span class="err">Query</span> <span class="p">{</span>
+</span><span class="line">    <span class="err">...</span>
+</span><span class="line">    <span class="err">allUsers(first:</span> <span class="err">Int=50</span> <span class="err">start:</span> <span class="err">Int=0):</span> <span class="err">[User!]!</span>
+</span><span class="line">    <span class="err">allPhotos(first:</span> <span class="err">Int=25</span> <span class="err">start:</span> <span class="err">Int=0):</span> <span class="err">[Photo!]!</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="sorting">Sorting</h2>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="err">enum</span> <span class="err">SortDirection</span> <span class="p">{</span>
+</span><span class="line">    <span class="err">ASCENDING</span>
+</span><span class="line">    <span class="err">DESCENDING</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="err">enum</span> <span class="err">SortablePhotoField</span> <span class="p">{</span>
+</span><span class="line">    <span class="err">name</span>
+</span><span class="line">    <span class="err">description</span>
+</span><span class="line">    <span class="err">category</span>
+</span><span class="line">    <span class="err">created</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="err">Query</span> <span class="p">{</span>
+</span><span class="line">    <span class="err">allPhotos(</span>
+</span><span class="line">        <span class="err">sort:</span> <span class="err">SortDirection</span> <span class="err">=</span> <span class="err">DESCENDING</span>
+</span><span class="line">        <span class="err">sortBy:</span> <span class="err">SortablePhotoField</span> <span class="err">=</span> <span class="err">created</span>
+</span><span class="line">    <span class="err">):</span> <span class="err">[Photo!]!</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="return-types">Return Types</h2>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="err">type</span> <span class="err">AuthPayload</span> <span class="p">{</span>
+</span><span class="line">    <span class="err">user:</span> <span class="err">User!</span>
+</span><span class="line">    <span class="err">token:</span> <span class="err">String!</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="err">type</span> <span class="err">Mutation</span> <span class="p">{</span>
+</span><span class="line">    <span class="err">...</span>
+</span><span class="line">    <span class="err">githubAuth(code:</span> <span class="err">String!):</span> <span class="err">AuthPayload!</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h1 id="references">References</h1>
+
+<ul>
+  <li>Books
+    <ul>
+      <li>O’Reilly Learning GraphQL</li>
+    </ul>
+  </li>
+  <li><a href="https://github.com/moonhighway/learning-graphql/">https://github.com/moonhighway/learning-graphql/</a></li>
+  <li><a href="https://www.graphqlworkshop.com/">https://www.graphqlworkshop.com/</a></li>
+  <li><a href="https://www.graphql.org/">https://www.graphql.org/</a></li>
+  <li><a href="https://github.com/fizalihsan/graphql101">GraphQL Python Examples</a></li>
+  <li><a href="https://github.com/fizalihsan/graphql102">GraphQL Java Examples</a></li>
+</ul>
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/graphql.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/graphql.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  
+			<a href="/technology/coding-principles.html">Coding Principles</a> |	
+			<a href="/technology/ddd.html">DDD</a>  |  
+			<a href="/technology/design-principles.html">Design Principles</a>  |
+			<a href="/technology/eventsourcing.html">Event Sourcing</a> |  
+			<a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  
+			<a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  
+			<a href="/technology/patterns.html">Patterns</a>  |  
+			<a href="/technology/sdlc.html">SDLC</a> |  
+			<a href="/technology/scalability.html">Scalability</a>  |  
+			<a href="/technology/security.html">Security</a>  |  
+			<a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  
+			<a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  
+			<a href="/technology/elasticsearch.html">ElasticSearch</a>  |  
+			<a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  
+			<a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  
+			<a href="/technology/nosql.html">NoSQL</a>  |  
+			<a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  
+			<a href="/technology/aws.html">AWS</a>  |  
+			<a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>  |  
+			<a href="/technology/virtualization.html">Virtualization</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  
+			<a href="/technology/db-design.html">Design</a>  |  
+			<a href="/technology/db-performance.html">Performance</a>  |  
+			<a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  
+			<a href="/technology/java-collections.html">Collections</a>  |  
+			<a href="/technology/java-concurrency.html">Concurrency</a>  |  
+			<a href="/technology/java-database.html">Database</a>  |  
+			<a href="/technology/java-jmx.html">JMX</a>  |  
+			<a href="/technology/java-jndi.html">JNDI</a>  |  
+			<a href="/technology/java-io.html">I/O</a>  |  
+			<a href="/technology/java-performance.html">Performance</a>  |  
+			<a href="/technology/java-testing.html">Testing</a>  |  
+			<a href="/technology/java-web.html">Web</a>  |  
+			<a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  
+			<a href="/technology/python.html">Python</a>  |  
+			<a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  
+			<a href="/technology/camel.html">Camel</a>  |  
+			<a href="/technology/graphql.html">GraphQL</a>  |  
+			<a href="/technology/messaging.html">Messaging</a> |  
+			<a href="/technology/microservices.html">Microservices</a>   |  
+			<a href="/technology/rest-services.html">REST</a>  | 
+			<a href="/technology/soap-services.html">SOAP</a>  |  
+			<a href="/technology/webservices.html">Web Services</a> |  
+			<a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  
+			<a href="/technology/spring.html">Core</a>  |  
+			<a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> |
+			<a href="/technology/webanalytics.html">Analytics</a> | 
+			<a href="/technology/webapp_architecture.html">Architecture</a> | 
+			<a href="/technology/js-ecosystem.html">JS Ecosystem</a> |
+			<a href="/technology/ux.html">UX</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  
+			<a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  
+			<a href="/technology/datastructures.html">Data Structures</a>  |  
+			<a href="/technology/design-faqs.html">Design FAQs</a>  |  
+			<a href="/technology/networking.html">Networking</a>  |  
+			<a href="/technology/oops.html">OOPS</a>  |  
+			<a href="/technology/os.html">Operating Systems</a>  |  
+			<a href="/technology/vcs.html">VCS</a>  |  
+			<a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  
+			<a href="/softskills/productivity.html">Productivity</a>  |  
+			<a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2019 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

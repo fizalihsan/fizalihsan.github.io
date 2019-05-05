@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "Groovy"
+title: "GraphQL"
 comments: true
 sharing: true
 footer: true
@@ -14,7 +14,7 @@ footer: true
 * With GraphQL, clients can obtain all of the data they need in one request.
 * Whenever a query is executed against a GraphQL server, it is validated against a type system. A type system is like a blueprint for your API’s data, backed by a list of objects that you define.
 
-``` Example
+```
 type Person {
     id: ID!
     name: String
@@ -35,7 +35,7 @@ __REST Drawbacks__
 
 e.g., https://swapi.co/api/people/1/
 
-```json Underfetching
+```json
 "films": [
     "https://swapi.co/api/films/2/",
     "https://swapi.co/api/films/6/",
@@ -44,6 +44,7 @@ e.g., https://swapi.co/api/people/1/
     "https://swapi.co/api/films/7/"
   ]
 ```
+
 # Query Language
 
 * Like SQL, GraphQL can be used for all CRUD operations
@@ -69,7 +70,7 @@ e.g., https://swapi.co/api/people/1/
     * A way to filter the results of a GraphQL query is to pass in _query arguments_. 
     * Arguments are a key–value pair (or pairs) associated with a query field. 
 
-``` Sample Query
+```
 query liftsAndTrails {
   open: liftCount(status: OPEN, sortBy: "name")
   chairlifts: allLifts {
@@ -83,7 +84,7 @@ query liftsAndTrails {
 }
 ```
 
-```json Sample response
+```json
 {
   "data": {
     "open": 5,
@@ -113,7 +114,7 @@ curl  'http://snowtooth.herokuapp.com/'
 
 ### Object types
 
-``` Example of user-defined types
+```
 type User {
   name: String!
   username: String!
@@ -199,7 +200,7 @@ query schedule {
 }
 ```
 
-```json Sample response
+```json
 {
   "data": {
     "agenda": [
@@ -573,3 +574,6 @@ type Mutation {
     * O'Reilly Learning GraphQL
 * [https://github.com/moonhighway/learning-graphql/](https://github.com/moonhighway/learning-graphql/)
 * [https://www.graphqlworkshop.com/](https://www.graphqlworkshop.com/)
+* [https://www.graphql.org/](https://www.graphql.org/)
+* [GraphQL Python Examples](https://github.com/fizalihsan/graphql101)
+* [GraphQL Java Examples](https://github.com/fizalihsan/graphql102)

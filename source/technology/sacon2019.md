@@ -304,5 +304,18 @@ DDD provides a framework for defining and modeling the essentail capabilities of
     * SPA - Monolith - DB
     * SPA - API Gateway - Microservices * - DB *
 
-# Action Items
-* 
+# Vendors
+
+* [Auth0](https://auth0.com/) - Identity and access management 
+* [Circonus](https://www.circonus.com/) - Monitoring as code
+* [Contino](https://www.contino.io/) - consultancy that helps orgs to adapt DevOps and cloud-native computing
+* [IronDb](https://irondb.io) - scalable time-series backend for graphite
+* [Humio](https://www.humio.com/) - Monitoring, logs, metrics - Observability
+* [Kong](https://konghq.com/) - API Management
+* [Lightstep [x]PM](https://lightstep.com/products/xpm/) - Performance management
+* [LogRocket](https://logrocket.com/)
+* [Okta](https://www.okta.com/) - Identity and access management 
+* [Ops.City](https://ops.city/) - NanoVMs
+* [SonarGraph](https://www.hello2morrow.com/products/sonargraph)
+* [Synopsys](https://synopsys.com) - Coverity Static Analysis
+* [WhiteSource](https://www.whitesourcesoftware.com/) - Open Source security vulnerability scanning

@@ -19,6 +19,7 @@ footer: false
 	* [2017 O'Reilly Software Architecture Conference]({{ root_url }}/technology/sacon2017.html)
 	* [2018 QCon Conference]({{ root_url }}/technology/qcon2018.html)
 	* [2019 O'Reilly Software Architecture Conference]({{ root_url }}/technology/sacon2019.html)
+	* [2019 DeveloperWeek Conference]({{ root_url }}/technology/conf_devweek2019.html)
 
 
 * [AWS Certification - Trivias]({{ root_url }}/technology/aws_trivia.html)

@@ -15,7 +15,7 @@ footer: false
 
 * Sample code: http://github.com/henrikengstrom/sa-2017-akka
 * Circuit-breakers - technique for resiliency. disallow customers from calling the service when it reaches the breaking point
-* Reactive manifesto - http://www.reactivemanifesto.org
+* [Reactive manifesto](http://www.reactivemanifesto.org)
 	* Responsive
 	* Resilient (self-healing)
 	* Elastic
@@ -87,7 +87,7 @@ footer: false
 * [Netflix Eureka](https://github.com/Netflix/eureka/wiki)
 * BFF pattern ([Backends for frontend](http://samnewman.io/patterns/architectural/bff/))
 * DataDog - Monitoring service for cloud-scale applications
-> DeskScribble - white boarding tool
+* DeskScribble - white boarding tool
 
 # Day 2
 
@@ -297,7 +297,7 @@ footer: false
 	* summarized view of why you made a particular choice
 	* you want an organized way to demonstrate why you made your decision
 	* Scorecard
-		*KISS
+		* KISS
 		* No binary 
 		* Simple ranges: 1-3 or 1-5 
 		* Add weights for prioritization
@@ -313,7 +313,7 @@ footer: false
 	* automates tests are run for evey commit
 	* avoid branches
 * Releasing incomplete work
-	* Feature toggles (http://martinfowler.com/articles/feature-toggles.html) 
+	* [Feature toggles](http://martinfowler.com/articles/feature-toggles.html) 
 		* Don't confuse deploy with release
 * Pipelines you should be including
 	* test before you commit http://thoughtworks.github.io/talisman
@@ -329,7 +329,7 @@ footer: false
 * Managing Risk
 	* Deployment patterns
 		* Canary release
-		* Dark launching	- Facebook messenger trial running their app selectively
+		* Dark launching - Facebook messenger trial running their app selectively
 		* http://githubengineering.com/move-fast
 	* Feeback loops
 		* create useful logging for everything

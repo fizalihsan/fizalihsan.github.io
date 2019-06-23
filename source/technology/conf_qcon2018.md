@@ -23,7 +23,7 @@ footer: false
     * Uber Hack (2016) - 
     * [Security Ergonomics - Youtube video](https://www.youtube.com/watch?v=fDryj_9I5eM)
     * How companies implement security
-        * Google BeyondCorp - https://cloud.google.com/beyondcorp (IAP - Identity Aware Proxy)
+        * [Google BeyondCorp](https://cloud.google.com/beyondcorp) (IAP - Identity Aware Proxy)
         * Microsoft PAW (Privileged Access Workstations)
         * Netflix BLESS
 * Chick-fil-A architecture
@@ -45,7 +45,7 @@ footer: false
         * Resetting cluster state:
             * need to be able to re-image remotely
             * solution: Overlay FS + HAMS (manages wiping clsuters and restoring to base)
-        * Hooves up (https://github.com/chick-fil-a/hoovesup) - self healing AWS SSM (Simple systems manager) registration - able to do remote commands and patch reporting/management - remotely logging via SSM and issue AWS commands to install Ansible
+        * [Hooves up](https://github.com/chick-fil-a/hoovesup) - self healing AWS SSM (Simple systems manager) registration - able to do remote commands and patch reporting/management - remotely logging via SSM and issue AWS commands to install Ansible
         * Fleet (custom)
             * custom package and deployment management tool
             * other tools: SQS, MQTT, Helm
@@ -53,17 +53,17 @@ footer: false
             * sane rollback 
 * Canopy: Scalable Distributed Tracing & Analysis @Facebook
     * Observability
-    * how distributed tracing works in microservices world - http://opentracing.io/documentation/
+    * how distributed tracing works in microservices world - [OpenTracing](http://opentracing.io/documentation/)
     * what is p75 and p90 in terms of latency
     * Distributed Tracing - holistic view of a single request - each request is assigned a token - tracing happens at transport level, not application level - each writes to a common store - don't trace all requests, use sampling say one out of every 100 or 1000 requests
     * multithreaded service calls
     * Does NewRelic support distrubted tracing?
-    * https://research.fb.com/publications/canopy-end-to-end-performance-tracing-at-scale/
+    * [canopy-end-to-end-performance-tracing-at-scale](https://research.fb.com/publications/canopy-end-to-end-performance-tracing-at-scale/)
     * Understanding RPC vs REST for HTTP APIs
     * Open source
-        * OpenTracing - http://opentracing.io
-        * OpenZipkin - https://zipkin.io
-        * XRay from Amazon - https://aws.amazon.com/xray/
+        * [OpenTracing](http://opentracing.io)
+        * [OpenZipkin](https://zipkin.io)
+        * [XRay from Amazon](https://aws.amazon.com/xray/)
         * 
 
 * Scaling Push Messaging for Millions of Devices @Netflix
@@ -106,10 +106,10 @@ footer: false
         * Problems operating message bus - dead message, no context, inaccesible payload, hard to redeliver, ...
     * Distributed Transactions
         * Paper: Life beyond distributed transactions: an apostate's opinion - Pet Helland
-        * Saga pattern (http://microservices.io/patterns/data/saga.html)
+        * [Saga pattern](http://microservices.io/patterns/data/saga.html)
             * or compensating activity (BPMN engine can do that automatically) - Distributed transactions using compensation - eventual consistency
         * Service Provider has to offer compensation
-    * https://github.com/flowing/flowing-retail
+    * [Flowing Retail](https://github.com/flowing/flowing-retail)
 
 
 ## Day 2
@@ -150,7 +150,7 @@ footer: false
     * Aeron ()
         * Efficient reliable UDP unicast, UDP multicast, and IPC message transport
 * How to Accelerate Delivery of Reliable Software (OverOps)
-    * Culture of Observability - http://onemogin.com/observability/stripe/culture/monitoring/monitorama/creating-a-culture-of-observability.html
+    * [Culture of Observability](http://onemogin.com/observability/stripe/culture/monitoring/monitorama/creating-a-culture-of-observability.html)
     * AI Ops, MetricsHub app
     * Shift to Observability
         * Application monitoring - 
@@ -162,14 +162,14 @@ footer: false
 * Debugging Microservices: How Google SREs Resolve Outages (Google)
     * SLO (Service level objective) - Google has only regional SLOs
         * e.g., Percentage of slow user queries too high
-    * OODA (Observe-Orient-Direct-Act) loop - https://en.wikipedia.org/wiki/OODA_loop
+    * [OODA (Observe-Orient-Direct-Act) loop](https://en.wikipedia.org/wiki/OODA_loop)
     * SLO breach debugging steps
         * Layer peeling
         * Dynamic Data Joins
         * Exemplars
     * What is StackDriver? Panopticon? Monarch?
-    * https://cloudplatform.googleblog.com
-* How Blockchains Work and How To Scale Them (BloxRoute Labs - http://www.bloxroute.com)
+    * [Cloud Platform - Google Blog](https://cloudplatform.googleblog.com)
+* How Blockchains Work and How To Scale Them ([BloxRoute Labs](http://www.bloxroute.com)
     * What is blockchain
         * goal: cut out middlemen
         * special nodes called Miners (Proof of Work)
@@ -177,7 +177,7 @@ footer: false
             * aggregate txs into blocks
             * each block reward it
     * Scability Problem
-        * https://blockgeeks.com/guides/blockchain-scalability/
+        * [Blockchain Scalability](https://blockgeeks.com/guides/blockchain-scalability/)
     * Solution
         * sending lot of data to lot of people is a solved problem - Akamai '96
         * Relay networks (1 block in bitcoin takes a 10 secs to reach the entire n/w)
@@ -203,11 +203,11 @@ footer: false
         * Operator - traditional procesing platforms, tranditional data sources, events, systems integration, peers, concensus, security, 
         * Architect - business concerns, design trade offs
     * Use cases
-        * https://www.ibm.com/blockchain/use-cases - good place for beginners
+        * [Blockchain use cases](https://www.ibm.com/blockchain/use-cases) - good place for beginners
     * How do we program the ledger?
-        * With Chaincode aka Smart Contracts - http://hyperledger-fabric.readthedocs.io/en/release-1.1/ - best documentation for smart contract developers
-        * https://www.hyperledger.org/projects/fabric
-        * https://www.hyperledger.org/projects/composer - web-based tool to create smart contracts
+        * With Chaincode aka Smart Contracts - [Hyperledger docs](http://hyperledger-fabric.readthedocs.io/en/release-1.1/) - best documentation for smart contract developers
+        * [Hyperledger Fabric](https://www.hyperledger.org/projects/fabric)
+        * [Hyperledger Compose](https://www.hyperledger.org/projects/composer) - web-based tool to create smart contracts
             * files involved
                 * Model file (*.cto)
                 * Script file (file.js)
@@ -229,7 +229,7 @@ footer: false
     * Disaster management (reliability is everyone's job)
         * prevention 
             * think of SREs and ops as fire fighters - as last resort
-            * #hugops
+            * `#hugops`
             * making it harder for the fire to start
             * wiring inspection (good test suite, chaos engineering)
         * detection
@@ -255,7 +255,7 @@ footer: false
         * VM/Docker/Kubernetes
     * https://developers.sap.com
 * Seamlessly Migrating To Serverless with 80-Million Users (Bustle.com CTO)
-    * Strangler pattern (https://www.martinfowler.com/bliki/StranglerApplication.html)
+    * [Strangler pattern](https://www.martinfowler.com/bliki/StranglerApplication.html)
 * Help! I accidentally distributed my system
     * 
 * Have You Tried Turning It Off and On Again? (David Blank-Edelman, Author of Seeking SRE, Founder of SRECon, @otterbook)
@@ -283,12 +283,12 @@ footer: false
     * Bustle
 
 * Camunden? - BPMN solution 
-* Aeron clustering (https://github.com/real-logic/aeron)
+* [Aeron clustering](https://github.com/real-logic/aeron)
 * Systems Management, Distributed Tracing, Monitoring solutions
-    * StackDriver (https://cloud.google.com/stackdriver/) - hybrid cloud solution supporting both Google 
-    * Zipkin (https://zipkin.io) - distributed tracing framework
-    * Honeycomb (https://www.infoq.com/news/2016/10/honeycomb-debug-systems) - a tool for observing and correlating events in distributed systems 
-    * OpenCensus (https://opencensus.io)
+    * [StackDriver](https://cloud.google.com/stackdriver/) - hybrid cloud solution supporting both Google 
+    * [Zipkin](https://zipkin.io) - distributed tracing framework
+    * [Honeycomb](https://www.infoq.com/news/2016/10/honeycomb-debug-systems) - a tool for observing and correlating events in distributed systems 
+    * [OpenCensus](https://opencensus.io)
 * Chaos Engineering
     * Gremlin - chaos engineering tool
 * Cloud
@@ -310,8 +310,7 @@ footer: false
 * What is Service Mesh
 * Raft consensus algo
 * Helm (Chart)
-* Probablistic Programming 
-    * https://en.wikipedia.org/wiki/Probabilistic_programming_language
+* [Probablistic Programming Language](https://en.wikipedia.org/wiki/Probabilistic_programming_language)
 * Hack programming language
     * by Facebook - dialect of PHP - built for HHVM(HipHop VM) - both dynamically typed and statically typed (also called gradually typing system) - Hack seems to add some features to PHP to make it a more reasonable programming language
 

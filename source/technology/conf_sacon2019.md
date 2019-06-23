@@ -7,7 +7,6 @@ footer: false
 ---
 * list element with functor item
 {:toc}
-# Software Architecture Conference 2019
 
 # Day 1 - META: Microservices
 * META: Microservice-based Enterprise Transformation Approach
@@ -61,7 +60,7 @@ DDD provides a framework for defining and modeling the essentail capabilities of
 * Event Storming - by Alberto Brandolini
     * product, technology teams together - discuss business events and outcomes - sticky notes
 * Innovative dilemma book - 'jobs-to-be-done' process
-* Susan Fowler - Production Ready Microservices book
+* Susan Fowler - __Production Ready Microservices__ book
 
 ## Service Design
 
@@ -145,12 +144,12 @@ DDD provides a framework for defining and modeling the essentail capabilities of
  
 * Chat with Mark Richards
     * Those who cannot remember their past are condemned to repeat the mistakes
-    * ArchUnit - automated architecture governance tool. https://www.archunit.org/
+    * [ArchUnit](https://www.archunit.org/) - automated architecture governance tool.
     * Cart before the horse. Jumping the band wagon - microservice, cloud, ...
     * Next Gen - self-governing, self-protecting, self-healing autonomic systems
  
 * Serverless Content Delivery
-    * SymphoniaCloud - https://github.com/SymphoniaCloud
+    * [SymphoniaCloud](https://github.com/SymphoniaCloud)
     * https://github.com/symphoniacloud/sacon-nyc-2019-continuous-delivery
     * Serverless attributes
         * no managing of hosts or processes
@@ -198,7 +197,6 @@ DDD provides a framework for defining and modeling the essentail capabilities of
     * Never invent security tech - don't create  your own security technology - always use a proven component
         * Use tools like Hashicorp Vault
     * Secure the weakest link - find the weakest link in the security chain and strengthen it - repeat! (Threat modelling)
- 
     * Hackers need to get lucky only once. You need to be lucky all the time.
     * Book: Software Systems Architecture
  
@@ -220,7 +218,7 @@ DDD provides a framework for defining and modeling the essentail capabilities of
         TM as code
             * ThreatSpec - @zeroXten - TM in code
             * ThreatPlaybook - @abhaybharghav - TM from code
-            * PyTM (https://github.com/izar/pytm)
+            * [PyTM](https://github.com/izar/pytm)
                 * write python code - generate images as output
  
 # Day 3
@@ -259,12 +257,12 @@ DDD provides a framework for defining and modeling the essentail capabilities of
         * synchronous services - one central service orchestrates the workflow with 3 other services. If one goes, down, then
         *
             * Circuit breaker
-            *
+            * ???
         * When there's failure (none of the options below work)
-            * 1. Saga pattern doesn't work either
-            * 2. REtry again
-            * 3. Multi-phase commit
-            * 4. after-the-fact repair
+            * (1) Saga pattern doesn't work either
+            * (2) REtry again
+            * (3) Multi-phase commit
+            * (4) after-the-fact repair
     * Choreography
         * Choreographed systems are always asynchronous (REST is a synchronous protocol)
         * Orchestration should not be used at all for microservices
@@ -302,7 +300,7 @@ DDD provides a framework for defining and modeling the essentail capabilities of
         * https://www.forbes.com/sites/adrianbridgwater/2015/07/16/what-are-micro-apps-and-why-do-they-matter-for-mobile/
         * https://dzone.com/articles/micro-apps-what-they-are-and-why-you-should-not-ig
     * SPA - Monolith - DB
-    * SPA - API Gateway - Microservices * - DB *
+    * SPA - API Gateway - Microservices - DB
 
 # Vendors
 

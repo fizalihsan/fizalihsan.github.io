@@ -216,6 +216,8 @@ __Volumes__
 # Kubernetes
 
 
+|{% img /technology/k8s_architecture.jpg %}
+
 * For local single node cluster, use minikube
 * Kubernetes client
 * Kubernetes API server

@@ -218,13 +218,7 @@ __Volumes__
 
 |{% img /technology/k8s_architecture.png %}
 
-* For local single node cluster, use minikube
-* Kubernetes client
-* Kubernetes API server
-
-
-* Deployments
-* Services
+* For local single node cluster, use `minikube`
 
 ## Benefits
 
@@ -245,10 +239,12 @@ __Volumes__
 	* By default, the kubectl command-line tool interacts with the `default` namespace. It can be overridden by `kubectl --namespace=mystuff`.
 * Context
 	* To change the default namespace permanently, you can use context.
-* Deployment is a way to create an array of Pods
+* Deployment 
+	* is a way to create an array of Pods
+* Services
 * kubectl
-	* command-line utility to interact with the Kubernetes API
-	* Everything in Kubernetes is represented by a RESTful resource (also known as _Kubernetes objects_). The kubectl command makes HTTP requests to access the objects. e.g., https://your-k8s.com/api/v1/namespaces/default/pods/my-pod 
+	* CLI to interact with the Kubernetes API
+	* Everything in Kubernetes is represented by a RESTful resource (also known as _Kubernetes objects_). The `kubectl` command makes HTTP requests to access the objects. e.g., https://your-k8s.com/api/v1/namespaces/default/pods/my-pod 
 	* `kubectl get <resource-name> <object-name>`
 	* `kubectl describe <resource-name> <object-name>`
 	* configuration file is located at `$HOME/.kube/config` - stores the information on how to find and authenticate to a cluster
@@ -257,31 +253,31 @@ __Volumes__
 
 * Pods represent the atomic unit of work in a Kubernetes cluster. 
 * Pods = one or more containers working together symbiotically. 
-* To create a Pod, you write a Pod manifest and submit it to the Kubernetes API server by using the command-line tool or (less frequently) by making HTTP and JSON calls to the server directly.
-* Pods are described in a Pod manifest file - in yaml or json format. They are stored in etcd (persistent storage)
+* To create a Pod, you write a pod manifest and submit it to the Kubernetes API server by using the CLI or (less frequently) by making HTTP and JSON calls to the server directly.
+* Pods are described in a pod manifest file - in yaml or json format. They are stored in _etcd_ (persistent storage)
 * All containers in a pod always land on the same machine
-* Each container within a Pod runs in its own cgroup, but they share a number of Linux namespaces.
-* Applications running in the same Pod 
+* Each container within a pod runs in its own cgroup, but they share a number of Linux namespaces.
+* Applications running in the same pod 
 	* can connect to each using localhost and a fixed port
 	* share the same IP address and port space (network namespace), 
 	* have the same hostname (Unix Time Shared[UTS] namespace), 
 	* and can communicate using native interprocess communication channels over System V IPC or POSIX message queues (Interprocess Communication [IPC] namespace). 
-	* Containers in different Pods running on the same node might as well be on different servers.
+	* Containers in different pods running on the same node might as well be on different servers.
 * Pods don’t move and must be explicitly destroyed and rescheduled.
-* ___When to create a pod?___
-	* Will these containers work correctly if they land on different machines? If yes, then don't group them in a prod. Else, put them together in a pod. e.g., if all the containers want to share the file system.
+* __When to create a pod?__
+	* Will these containers work correctly if they land on different machines? If yes, then don't group them in a pod. Otherwise, put them together in a pod. e.g., if all the containers want to share the file system.
 * __How a pod is created?__
-	* User creates a pod from command-line via kubectl or by submitting a manifest file
+	* User creates a pod via kubectl or by submitting a manifest file
 	* The Kubernetes API server accepts and processes Pod manifests before storing them in persistent storage (etcd). 
-	* The scheduler uses the Kubernetes API to find Pods that haven’t been scheduled to a node. 
-	* The scheduler then places the Pods onto nodes depending on the resources and other constraints expressed in the Pod manifests. 
-	* Multiple Pods can be placed on the same machine as long as there are sufficient resources.
+	* The scheduler uses the Kubernetes API to find pods that haven’t been scheduled to a node. 
+	* The scheduler then places the pods onto nodes depending on the resources and other constraints expressed in the pod manifests. 
+	* Multiple pods can be placed on the same machine as long as there are sufficient resources.
 	* `kubelet` daemon is responsible for creating and performing health checks on the pod
 
 
 __To create a pod directly__
 
-```
+```bash
 # to create a pod
 kubectl run kuard --image=gcr.io/kuar-demo/kuard-amd64:1
 
@@ -299,7 +295,7 @@ kubectl delete deployments/kuard
 
 __To create a pod via manifest file__
 
-```
+```bash
 # to start a pod
 kubectl apply -f manifest.yaml
 
@@ -308,13 +304,11 @@ kubectl delete pods/pod-name
 
 # to delete a pod by file
 kubectl delete -f manifest.yaml
-
 ```
-
 
 __Sample Pod Manifest YAML file__
 
-```
+```yaml
 apiVersion: v1
 kind: Pod
 metadata:  
@@ -334,7 +328,7 @@ metadata:
 ### Health Check
 
 * __Process health check__
-	* Kubernetes _process health check_ ensures that your container is always running. If it isn't K8S restarts it.
+	* Kubernetes _process health check_ ensures that your container is always running. If not, K8S restarts it.
 	* A simple process check alone is insufficient. If the process is deadlocked, it won't serve any requests. To address this, liveness and readiness probes are available.
 * __HTTP health check__
 	* __Liveness probe__
@@ -352,7 +346,7 @@ metadata:
 
 __Pod manifest sample__
 
-```
+```yaml
 apiVersion: v1
 kind: Pod
 metadata:  
@@ -397,7 +391,7 @@ To ensure the resources are maximally utilized, you can specifiy resource metric
 
 __Pod manifest sample__
 
-```
+```yaml
 apiVersion: v1
 kind: Pod
 metadata:  
@@ -472,8 +466,8 @@ __Annotations__
 	* Provide extra data to enhance the visual quality or usability of a UI.  For example, objects could include a link to an icon (or a base64-encoded version of an icon).
 * Where not to use?
 	* Users should avoid using the Kubernetes API server as a general-purpose database.  
-	* Annotations are good for small bits of data that are highlyassociated with a specific resource.  If you want to store data in Kubernetes but you don’t have an obvious object to associate it with, consider storing that data in some other, more appropriate database.
-	* Labels can be used to filter objects serverside, whereas annotations can't
+	* Annotations are good for small bits of data that are highly associated with a specific resource.  If you want to store data in Kubernetes but you don’t have an obvious object to associate it with, consider storing that data in some other, more appropriate database.
+	* Labels can be used to filter objects server-side, whereas annotations can't
 
 ```json
 "annotations": {
@@ -485,6 +479,10 @@ __Annotations__
 ## Cluster components
 
 * All components run in the `kube-system` namespace
+
+> Image courtesy: https://medium.com/@tsuyoshiushio
+
+{% img /technology/k8s_objects.jpeg %}
 
 |Architecture| Kubernetes Master| Kubernetes Node|
 |---|---|---|

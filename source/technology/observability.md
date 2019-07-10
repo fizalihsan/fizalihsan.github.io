@@ -1,6 +1,6 @@
 ---
 layout: page
-title: "Logging & Monitoring"
+title: "Observability"
 comments: true
 sharing: true
 footer: true
@@ -9,7 +9,31 @@ footer: true
 * list element with functor item
 {:toc}
 
-* What is write-ahead logging? Used in HBase.
+# Overview
+
+Monitoring != Logging != Tracing != Instrumentation
+
+|.|__Logging__|__Tracing__|__Monitoring__|
+|-|-|-|-|
+|Purpose|represents state transformation or events within an app. When things go wrong, logs are helpful to identify what event caused the error.|represents a single user's journey through an entire stack of an application. Often used for optimization purposes.|Instrumenting an application and monitoring the results represents the use of a system. Often used for diagnostic purposes. Monitor apps to detect problems and anomalies. Basic fitness tests like the app is up or down, and more proactive health checks. Provides insights into capacity requirements.|
+|Pros and Cons|Obtaining, transferring, storing and parsing logs is expensive. Log only important and actionable information.|Tracing libraries are often more complicated than the code they are serving. So tracing tends to be expensive|Instrumentation is often cheap to compute. Metrics take nanoseconds to update and some monitoring systems operate on a “pull” model, which means that the service is not affected by monitoring load.|
+|Tools and Frameworks|depends on the technology. e.g, logback, log4j, etc. Splunk|OpenTracing|Prometheus, DynaTrace, Wily|
+
+# Logging
+
+* Structured Logging - https://stackify.com/what-is-structured-logging-and-why-developers-need-it/
+
+## slf4j
+
+* Meta logging Frameworks - http://www.slf4j.org
+* NDC, MDC statements - http://stackoverflow.com/questions/7404435/conditional-logging-with-log4j?
+* What are the classloader issues that plague JCL?
+* what is meant by 'static binding approach' in sl4j?
+* Marker objects
+* NOPLogger?
+
+# Monitoring
+
 * Metric identity name: k-tuple
 * Metrics values
   * counters, gauges, percentiles, nominal, ordinal, interval, ratio, derived
@@ -17,8 +41,9 @@ footer: true
   * Resolution: how frequent to collect the metrics? every 6-10secs?
   * Latency: how long before we act on them?
   * Diversity: are we collecting different metrics?
+* What is write-ahead logging? Used in HBase.
 
-# Monitoring Components
+## Monitoring Components
 
 https://www.usenix.org/sites/default/files/conference/protected-files/dickson.pdf 
 
@@ -35,7 +60,7 @@ https://www.usenix.org/sites/default/files/conference/protected-files/dickson.pd
 * Configuration
 * Configuration and Storage are cross-cutting concerns.
 
-#Monitoring Tools
+## Monitoring Tools
 
 * sar
 * trace
@@ -158,15 +183,19 @@ https://www.usenix.org/sites/default/files/conference/protected-files/dickson.pd
 * Operational Intelligence refers to the information collected and processed 
 * Semantic logging as data or events that are written to log files explicitly for the purpose of gathering analytics.
 
-# Java Logging
+# Tracing
 
-## slf4j
+## OpenTracking
 
-* Meta logging Frameworks - http://www.slf4j.org
-* NDC, MDC statements - http://stackoverflow.com/questions/7404435/conditional-logging-with-log4j?
-* What are the classloader issues that plague JCL?
-* what is meant by 'static binding approach' in sl4j?
-* Marker objects
-* NOPLogger?
+* [OpenTracing](https://opentracing.io/) is a vendor neutral specification for instrumentation APIs.
+* It offers consistent, expressive, vendor-neutral APIs for popular platforms, making it easy for developers to add (or switch) tracing implementations with an O(1) configuration change. 
+* OpenTracing also offers a lingua franca for OSS instrumentation and platform-specific tracing helper libraries.
+* [Tutorials](https://github.com/yurishkuro/opentracing-tutorial)
+* CNCF [Jaeger](https://jaegertracing.io/), a Distributed Tracing UI Platform 
 
-## logback
+# References
+
+* Books
+  * [Mastering Distributed Tracing](https://www.shkuro.com/books/2019-mastering-distributed-tracing/)
+  * Distributed Systems Observability - Cindy Sridharan
+  * Logging and Log Management - Anton Chuvakin, Kevin Schmidt

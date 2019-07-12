@@ -308,7 +308,7 @@ kubectl delete -f manifest.yaml
 
 __Sample Pod Manifest YAML file__
 
-```yaml
+```yml
 apiVersion: v1
 kind: Pod
 metadata:  
@@ -346,7 +346,7 @@ metadata:
 
 __Pod manifest sample__
 
-```yaml
+```yml
 apiVersion: v1
 kind: Pod
 metadata:  
@@ -391,7 +391,7 @@ To ensure the resources are maximally utilized, you can specifiy resource metric
 
 __Pod manifest sample__
 
-```yaml
+```yml
 apiVersion: v1
 kind: Pod
 metadata:  
@@ -600,7 +600,7 @@ __Sample ReplicaSet Spec__
 
 * ReplicaSet name must be unique within the cluster (`metadata.name`)
 
-```
+```yml
 apiVersion: extensions/v1beta1
 kind: ReplicaSet
 metadata:

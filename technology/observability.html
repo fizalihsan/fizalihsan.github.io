@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Logging & Monitoring - KnowledgeShop</title>
+  <title>Observability - KnowledgeShop</title>
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Logging & Monitoring Monitoring Components Monitoring Tools Splunk Components Queries Analytics Java Logging slf4j logback What is write-ahead &hellip;">
+<meta name="description" content="Observability Overview Logging slf4j Monitoring Monitoring Components Monitoring Tools Splunk Components Queries Analytics Tracing OpenTracking &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://fizalihsan.github.io/technology/logging-and-monitoring.html">
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/observability.html">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <!-- Below custom CSS is for table border styling -->
@@ -103,13 +103,19 @@ messageStyle: "none",
 <article role="article">
   
   <header>
-    <h1 class="entry-title">Logging & Monitoring</h1>
+    <h1 class="entry-title">Observability</h1>
     
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#monitoring-components">Monitoring Components</a></li>
-  <li><a href="#monitoring-tools">Monitoring Tools</a>    <ul>
+  <li><a href="#overview">Overview</a></li>
+  <li><a href="#logging">Logging</a>    <ul>
+      <li><a href="#slf4j">slf4j</a></li>
+    </ul>
+  </li>
+  <li><a href="#monitoring">Monitoring</a>    <ul>
+      <li><a href="#monitoring-components">Monitoring Components</a></li>
+      <li><a href="#monitoring-tools">Monitoring Tools</a></li>
       <li><a href="#splunk">Splunk</a>        <ul>
           <li><a href="#components">Components</a></li>
           <li><a href="#queries">Queries</a></li>
@@ -118,15 +124,68 @@ messageStyle: "none",
       </li>
     </ul>
   </li>
-  <li><a href="#java-logging">Java Logging</a>    <ul>
-      <li><a href="#slf4j">slf4j</a></li>
-      <li><a href="#logback">logback</a></li>
+  <li><a href="#tracing">Tracing</a>    <ul>
+      <li><a href="#opentracking">OpenTracking</a></li>
     </ul>
   </li>
+  <li><a href="#references">References</a></li>
 </ul>
 
+<h1 id="overview">Overview</h1>
+
+<p>Monitoring != Logging != Tracing != Instrumentation</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>.</th>
+      <th><strong>Logging</strong></th>
+      <th><strong>Tracing</strong></th>
+      <th><strong>Monitoring</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Purpose</td>
+      <td>represents state transformation or events within an app. When things go wrong, logs are helpful to identify what event caused the error.</td>
+      <td>represents a single user’s journey through an entire stack of an application. Often used for optimization purposes.</td>
+      <td>Instrumenting an application and monitoring the results represents the use of a system. Often used for diagnostic purposes. Monitor apps to detect problems and anomalies. Basic fitness tests like the app is up or down, and more proactive health checks. Provides insights into capacity requirements.</td>
+    </tr>
+    <tr>
+      <td>Pros and Cons</td>
+      <td>Obtaining, transferring, storing and parsing logs is expensive. Log only important and actionable information.</td>
+      <td>Tracing libraries are often more complicated than the code they are serving. So tracing tends to be expensive</td>
+      <td>Instrumentation is often cheap to compute. Metrics take nanoseconds to update and some monitoring systems operate on a “pull” model, which means that the service is not affected by monitoring load.</td>
+    </tr>
+    <tr>
+      <td>Tools and Frameworks</td>
+      <td>depends on the technology. e.g, logback, log4j, etc. Splunk</td>
+      <td>OpenTracing</td>
+      <td>Prometheus, DynaTrace, Wily</td>
+    </tr>
+  </tbody>
+</table>
+
+<h1 id="logging">Logging</h1>
+
 <ul>
-  <li>What is write-ahead logging? Used in HBase.</li>
+  <li>Structured Logging - https://stackify.com/what-is-structured-logging-and-why-developers-need-it/</li>
+</ul>
+
+<h2 id="slf4j">slf4j</h2>
+
+<ul>
+  <li>Meta logging Frameworks - http://www.slf4j.org</li>
+  <li>NDC, MDC statements - http://stackoverflow.com/questions/7404435/conditional-logging-with-log4j?</li>
+  <li>What are the classloader issues that plague JCL?</li>
+  <li>what is meant by ‘static binding approach’ in sl4j?</li>
+  <li>Marker objects</li>
+  <li>NOPLogger?</li>
+</ul>
+
+<h1 id="monitoring">Monitoring</h1>
+
+<ul>
   <li>Metric identity name: k-tuple</li>
   <li>Metrics values
     <ul>
@@ -140,9 +199,10 @@ messageStyle: "none",
       <li>Diversity: are we collecting different metrics?</li>
     </ul>
   </li>
+  <li>What is write-ahead logging? Used in HBase.</li>
 </ul>
 
-<h1 id="monitoring-components">Monitoring Components</h1>
+<h2 id="monitoring-components">Monitoring Components</h2>
 
 <p>https://www.usenix.org/sites/default/files/conference/protected-files/dickson.pdf </p>
 
@@ -164,7 +224,7 @@ messageStyle: "none",
   </li>
 </ol>
 
-<h1 id="monitoring-tools">Monitoring Tools</h1>
+<h2 id="monitoring-tools">Monitoring Tools</h2>
 
 <ul>
   <li>sar</li>
@@ -359,20 +419,29 @@ messageStyle: "none",
   <li>Semantic logging as data or events that are written to log files explicitly for the purpose of gathering analytics.</li>
 </ul>
 
-<h1 id="java-logging">Java Logging</h1>
+<h1 id="tracing">Tracing</h1>
 
-<h2 id="slf4j">slf4j</h2>
+<h2 id="opentracking">OpenTracking</h2>
 
 <ul>
-  <li>Meta logging Frameworks - http://www.slf4j.org</li>
-  <li>NDC, MDC statements - http://stackoverflow.com/questions/7404435/conditional-logging-with-log4j?</li>
-  <li>What are the classloader issues that plague JCL?</li>
-  <li>what is meant by ‘static binding approach’ in sl4j?</li>
-  <li>Marker objects</li>
-  <li>NOPLogger?</li>
+  <li><a href="https://opentracing.io/">OpenTracing</a> is a vendor neutral specification for instrumentation APIs.</li>
+  <li>It offers consistent, expressive, vendor-neutral APIs for popular platforms, making it easy for developers to add (or switch) tracing implementations with an O(1) configuration change. </li>
+  <li>OpenTracing also offers a lingua franca for OSS instrumentation and platform-specific tracing helper libraries.</li>
+  <li><a href="https://github.com/yurishkuro/opentracing-tutorial">Tutorials</a></li>
+  <li>CNCF <a href="https://jaegertracing.io/">Jaeger</a>, a Distributed Tracing UI Platform </li>
 </ul>
 
-<h2 id="logback">logback</h2>
+<h1 id="references">References</h1>
+
+<ul>
+  <li>Books
+    <ul>
+      <li><a href="https://www.shkuro.com/books/2019-mastering-distributed-tracing/">Mastering Distributed Tracing</a></li>
+      <li>Distributed Systems Observability - Cindy Sridharan</li>
+      <li>Logging and Log Management - Anton Chuvakin, Kevin Schmidt</li>
+    </ul>
+  </li>
+</ul>
 
   
     <footer>
@@ -380,7 +449,7 @@ messageStyle: "none",
       
         <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/logging-and-monitoring.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/logging-and-monitoring.html" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/observability.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/observability.html" >Tweet</a>
   
   
   
@@ -409,7 +478,7 @@ messageStyle: "none",
 			<a href="/technology/design-principles.html">Design Principles</a>  |
 			<a href="/technology/eventsourcing.html">Event Sourcing</a> |  
 			<a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  
-			<a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  
+			<a href="/technology/observability.html">Observability</a>  |  
 			<a href="/technology/patterns.html">Patterns</a>  |  
 			<a href="/technology/sdlc.html">SDLC</a> |  
 			<a href="/technology/scalability.html">Scalability</a>  |  

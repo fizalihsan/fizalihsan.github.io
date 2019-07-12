@@ -453,14 +453,16 @@ messageStyle: "none",
 
 <h1 id="kubernetes">Kubernetes</h1>
 
+<table>
+  <tbody>
+    <tr>
+      <td><img src="/technology/k8s_architecture.png" /></td>
+    </tr>
+  </tbody>
+</table>
+
 <ul>
-  <li>For local single node cluster, use minikube</li>
-  <li>Kubernetes client</li>
-  <li>
-    <p>Kubernetes API server</p>
-  </li>
-  <li>Deployments</li>
-  <li>Services</li>
+  <li>For local single node cluster, use <code>minikube</code></li>
 </ul>
 
 <h2 id="benefits-1">Benefits</h2>
@@ -490,11 +492,16 @@ messageStyle: "none",
       <li>To change the default namespace permanently, you can use context.</li>
     </ul>
   </li>
-  <li>Deployment is a way to create an array of Pods</li>
+  <li>Deployment 
+    <ul>
+      <li>is a way to create an array of Pods</li>
+    </ul>
+  </li>
+  <li>Services</li>
   <li>kubectl
     <ul>
-      <li>command-line utility to interact with the Kubernetes API</li>
-      <li>Everything in Kubernetes is represented by a RESTful resource (also known as <em>Kubernetes objects</em>). The kubectl command makes HTTP requests to access the objects. e.g., https://your-k8s.com/api/v1/namespaces/default/pods/my-pod </li>
+      <li>CLI to interact with the Kubernetes API</li>
+      <li>Everything in Kubernetes is represented by a RESTful resource (also known as <em>Kubernetes objects</em>). The <code>kubectl</code> command makes HTTP requests to access the objects. e.g., https://your-k8s.com/api/v1/namespaces/default/pods/my-pod </li>
       <li><code>kubectl get &lt;resource-name&gt; &lt;object-name&gt;</code></li>
       <li><code>kubectl describe &lt;resource-name&gt; &lt;object-name&gt;</code></li>
       <li>configuration file is located at <code>$HOME/.kube/config</code> - stores the information on how to find and authenticate to a cluster</li>
@@ -507,32 +514,32 @@ messageStyle: "none",
 <ul>
   <li>Pods represent the atomic unit of work in a Kubernetes cluster. </li>
   <li>Pods = one or more containers working together symbiotically. </li>
-  <li>To create a Pod, you write a Pod manifest and submit it to the Kubernetes API server by using the command-line tool or (less frequently) by making HTTP and JSON calls to the server directly.</li>
-  <li>Pods are described in a Pod manifest file - in yaml or json format. They are stored in etcd (persistent storage)</li>
+  <li>To create a Pod, you write a pod manifest and submit it to the Kubernetes API server by using the CLI or (less frequently) by making HTTP and JSON calls to the server directly.</li>
+  <li>Pods are described in a pod manifest file - in yaml or json format. They are stored in <em>etcd</em> (persistent storage)</li>
   <li>All containers in a pod always land on the same machine</li>
-  <li>Each container within a Pod runs in its own cgroup, but they share a number of Linux namespaces.</li>
-  <li>Applications running in the same Pod 
+  <li>Each container within a pod runs in its own cgroup, but they share a number of Linux namespaces.</li>
+  <li>Applications running in the same pod 
     <ul>
       <li>can connect to each using localhost and a fixed port</li>
       <li>share the same IP address and port space (network namespace), </li>
       <li>have the same hostname (Unix Time Shared[UTS] namespace), </li>
       <li>and can communicate using native interprocess communication channels over System V IPC or POSIX message queues (Interprocess Communication [IPC] namespace). </li>
-      <li>Containers in different Pods running on the same node might as well be on different servers.</li>
+      <li>Containers in different pods running on the same node might as well be on different servers.</li>
     </ul>
   </li>
   <li>Pods don’t move and must be explicitly destroyed and rescheduled.</li>
-  <li><strong><em>When to create a pod?</em></strong>
+  <li><strong>When to create a pod?</strong>
     <ul>
-      <li>Will these containers work correctly if they land on different machines? If yes, then don’t group them in a prod. Else, put them together in a pod. e.g., if all the containers want to share the file system.</li>
+      <li>Will these containers work correctly if they land on different machines? If yes, then don’t group them in a pod. Otherwise, put them together in a pod. e.g., if all the containers want to share the file system.</li>
     </ul>
   </li>
   <li><strong>How a pod is created?</strong>
     <ul>
-      <li>User creates a pod from command-line via kubectl or by submitting a manifest file</li>
+      <li>User creates a pod via kubectl or by submitting a manifest file</li>
       <li>The Kubernetes API server accepts and processes Pod manifests before storing them in persistent storage (etcd). </li>
-      <li>The scheduler uses the Kubernetes API to find Pods that haven’t been scheduled to a node. </li>
-      <li>The scheduler then places the Pods onto nodes depending on the resources and other constraints expressed in the Pod manifests. </li>
-      <li>Multiple Pods can be placed on the same machine as long as there are sufficient resources.</li>
+      <li>The scheduler uses the Kubernetes API to find pods that haven’t been scheduled to a node. </li>
+      <li>The scheduler then places the pods onto nodes depending on the resources and other constraints expressed in the pod manifests. </li>
+      <li>Multiple pods can be placed on the same machine as long as there are sufficient resources.</li>
       <li><code>kubelet</code> daemon is responsible for creating and performing health checks on the pod</li>
     </ul>
   </li>
@@ -540,7 +547,7 @@ messageStyle: "none",
 
 <p><strong>To create a pod directly</strong></p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
@@ -553,23 +560,24 @@ messageStyle: "none",
 <span class="line-number">11</span>
 <span class="line-number">12</span>
 <span class="line-number">13</span>
-</pre></td><td class="code"><pre><code class=""><span class="line"># to create a pod
-</span><span class="line">kubectl run kuard --image=gcr.io/kuar-demo/kuard-amd64:1
+</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="c"># to create a pod</span>
+</span><span class="line">kubectl run kuard --image<span class="o">=</span>gcr.io/kuar-demo/kuard-amd64:1
 </span><span class="line">
 </span><span class="line">kubectl get pods
 </span><span class="line">
 </span><span class="line">kubectl describe pods kuard
 </span><span class="line">
-</span><span class="line"># to access the web server in a container
-</span><span class="line"># a secure tunnel is created from your local machine through the Kubernetes master to the instance of the pod running on one of the worker nodes
+</span><span class="line"><span class="c"># to access the web server in a container</span>
+</span><span class="line"><span class="c"># a secure tunnel is created from your local machine through the Kubernetes master to the instance of the pod running on one of the worker nodes</span>
 </span><span class="line">kubectl port-forward kuard 8080:8080
 </span><span class="line">
-</span><span class="line"># to delete a pod
-</span><span class="line">kubectl delete deployments/kuard</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span><span class="line"><span class="c"># to delete a pod</span>
+</span><span class="line">kubectl delete deployments/kuard
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p><strong>To create a pod via manifest file</strong></p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
@@ -577,19 +585,19 @@ messageStyle: "none",
 <span class="line-number">6</span>
 <span class="line-number">7</span>
 <span class="line-number">8</span>
-</pre></td><td class="code"><pre><code class=""><span class="line"># to start a pod
+</pre></td><td class="code"><pre><code class="bash"><span class="line"><span class="c"># to start a pod</span>
 </span><span class="line">kubectl apply -f manifest.yaml
 </span><span class="line">
-</span><span class="line"># to delete a pod by name
+</span><span class="line"><span class="c"># to delete a pod by name</span>
 </span><span class="line">kubectl delete pods/pod-name
 </span><span class="line">
-</span><span class="line"># to delete a pod by file
+</span><span class="line"><span class="c"># to delete a pod by file</span>
 </span><span class="line">kubectl delete -f manifest.yaml
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p><strong>Sample Pod Manifest YAML file</strong></p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
@@ -601,25 +609,26 @@ messageStyle: "none",
 <span class="line-number">10</span>
 <span class="line-number">11</span>
 <span class="line-number">12</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">apiVersion: v1
-</span><span class="line">kind: Pod
-</span><span class="line">metadata:  
-</span><span class="line">  name: kuard
-</span><span class="line">  spec:  
-</span><span class="line">    containers:    
-</span><span class="line">      - image: gcr.io/kuar-demo/kuard-amd64:1      
-</span><span class="line">        name: kuard      
-</span><span class="line">        ports:        
-</span><span class="line">          - containerPort: 8080          
-</span><span class="line">            name: http          
-</span><span class="line">            protocol: TCP</span></code></pre></td></tr></table></div></figure></notextile></div>
+</pre></td><td class="code"><pre><code class="yaml"><span class="line"><span class="l-Scalar-Plain">apiVersion</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">v1</span>
+</span><span class="line"><span class="l-Scalar-Plain">kind</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Pod</span>
+</span><span class="line"><span class="l-Scalar-Plain">metadata</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">kuard</span>
+</span><span class="line">  <span class="l-Scalar-Plain">spec</span><span class="p-Indicator">:</span>
+</span><span class="line">    <span class="l-Scalar-Plain">containers</span><span class="p-Indicator">:</span>
+</span><span class="line">      <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">image</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">gcr.io/kuar-demo/kuard-amd64:1</span>
+</span><span class="line">        <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">kuard</span>
+</span><span class="line">        <span class="l-Scalar-Plain">ports</span><span class="p-Indicator">:</span>
+</span><span class="line">          <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">containerPort</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">8080</span>
+</span><span class="line">            <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">http</span>
+</span><span class="line">            <span class="l-Scalar-Plain">protocol</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">TCP</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h3 id="health-check">Health Check</h3>
 
 <ul>
   <li><strong>Process health check</strong>
     <ul>
-      <li>Kubernetes <em>process health check</em> ensures that your container is always running. If it isn’t K8S restarts it.</li>
+      <li>Kubernetes <em>process health check</em> ensures that your container is always running. If not, K8S restarts it.</li>
       <li>A simple process check alone is insufficient. If the process is deadlocked, it won’t serve any requests. To address this, liveness and readiness probes are available.</li>
     </ul>
   </li>
@@ -654,7 +663,7 @@ messageStyle: "none",
 
 <p><strong>Pod manifest sample</strong></p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
@@ -674,26 +683,27 @@ messageStyle: "none",
 <span class="line-number">18</span>
 <span class="line-number">19</span>
 <span class="line-number">20</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">apiVersion: v1
-</span><span class="line">kind: Pod
-</span><span class="line">metadata:  
-</span><span class="line">  name: kuard
-</span><span class="line">spec:  
-</span><span class="line">  containers:    
-</span><span class="line">    - image: gcr.io/kuar-demo/kuard-amd64:1      
-</span><span class="line">      name: kuard      
-</span><span class="line">      livenessProbe:        
-</span><span class="line">        httpGet:          
-</span><span class="line">          path: /healthy          
-</span><span class="line">          port: 8080        
-</span><span class="line">        initialDelaySeconds: 5        
-</span><span class="line">        timeoutSeconds: 1        
-</span><span class="line">        periodSeconds: 10        
-</span><span class="line">        failureThreshold: 3      
-</span><span class="line">      ports:         
-</span><span class="line">        - containerPort: 8080          
-</span><span class="line">          name: http          
-</span><span class="line">          protocol: TCP</span></code></pre></td></tr></table></div></figure></notextile></div>
+</pre></td><td class="code"><pre><code class="yaml"><span class="line"><span class="l-Scalar-Plain">apiVersion</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">v1</span>
+</span><span class="line"><span class="l-Scalar-Plain">kind</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Pod</span>
+</span><span class="line"><span class="l-Scalar-Plain">metadata</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">kuard</span>
+</span><span class="line"><span class="l-Scalar-Plain">spec</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">containers</span><span class="p-Indicator">:</span>
+</span><span class="line">    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">image</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">gcr.io/kuar-demo/kuard-amd64:1</span>
+</span><span class="line">      <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">kuard</span>
+</span><span class="line">      <span class="l-Scalar-Plain">livenessProbe</span><span class="p-Indicator">:</span>
+</span><span class="line">        <span class="l-Scalar-Plain">httpGet</span><span class="p-Indicator">:</span>
+</span><span class="line">          <span class="l-Scalar-Plain">path</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">/healthy</span>
+</span><span class="line">          <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">8080</span>
+</span><span class="line">        <span class="l-Scalar-Plain">initialDelaySeconds</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">5</span>
+</span><span class="line">        <span class="l-Scalar-Plain">timeoutSeconds</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">1</span>
+</span><span class="line">        <span class="l-Scalar-Plain">periodSeconds</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">10</span>
+</span><span class="line">        <span class="l-Scalar-Plain">failureThreshold</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">3</span>
+</span><span class="line">      <span class="l-Scalar-Plain">ports</span><span class="p-Indicator">:</span>
+</span><span class="line">        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">containerPort</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">8080</span>
+</span><span class="line">          <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">http</span>
+</span><span class="line">          <span class="l-Scalar-Plain">protocol</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">TCP</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h3 id="resource-management">Resource Management</h3>
 
@@ -729,7 +739,7 @@ messageStyle: "none",
 
 <p><strong>Pod manifest sample</strong></p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
@@ -748,25 +758,26 @@ messageStyle: "none",
 <span class="line-number">17</span>
 <span class="line-number">18</span>
 <span class="line-number">19</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">apiVersion: v1
-</span><span class="line">kind: Pod
-</span><span class="line">metadata:  
-</span><span class="line">  name: kuard
-</span><span class="line">spec:  
-</span><span class="line">  containers:    
-</span><span class="line">    - image: gcr.io/kuar-demo/kuard-amd64:1      
-</span><span class="line">      name: kuard      
-</span><span class="line">      resources:
-</span><span class="line">        requests:
-</span><span class="line">          cpu: "500m"
-</span><span class="line">          memory: "128Mi"
-</span><span class="line">        limits:
-</span><span class="line">          cpu: "1000m"
-</span><span class="line">          memory: "256Mi"
-</span><span class="line">      ports:         
-</span><span class="line">        - containerPort: 8080          
-</span><span class="line">          name: http          
-</span><span class="line">          protocol: TCP</span></code></pre></td></tr></table></div></figure></notextile></div>
+</pre></td><td class="code"><pre><code class="yaml"><span class="line"><span class="l-Scalar-Plain">apiVersion</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">v1</span>
+</span><span class="line"><span class="l-Scalar-Plain">kind</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Pod</span>
+</span><span class="line"><span class="l-Scalar-Plain">metadata</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">kuard</span>
+</span><span class="line"><span class="l-Scalar-Plain">spec</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">containers</span><span class="p-Indicator">:</span>
+</span><span class="line">    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">image</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">gcr.io/kuar-demo/kuard-amd64:1</span>
+</span><span class="line">      <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">kuard</span>
+</span><span class="line">      <span class="l-Scalar-Plain">resources</span><span class="p-Indicator">:</span>
+</span><span class="line">        <span class="l-Scalar-Plain">requests</span><span class="p-Indicator">:</span>
+</span><span class="line">          <span class="l-Scalar-Plain">cpu</span><span class="p-Indicator">:</span> <span class="s">&quot;500m&quot;</span>
+</span><span class="line">          <span class="l-Scalar-Plain">memory</span><span class="p-Indicator">:</span> <span class="s">&quot;128Mi&quot;</span>
+</span><span class="line">        <span class="l-Scalar-Plain">limits</span><span class="p-Indicator">:</span>
+</span><span class="line">          <span class="l-Scalar-Plain">cpu</span><span class="p-Indicator">:</span> <span class="s">&quot;1000m&quot;</span>
+</span><span class="line">          <span class="l-Scalar-Plain">memory</span><span class="p-Indicator">:</span> <span class="s">&quot;256Mi&quot;</span>
+</span><span class="line">      <span class="l-Scalar-Plain">ports</span><span class="p-Indicator">:</span>
+</span><span class="line">        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">containerPort</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">8080</span>
+</span><span class="line">          <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">http</span>
+</span><span class="line">          <span class="l-Scalar-Plain">protocol</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">TCP</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h3 id="persistent-storage">Persistent Storage</h3>
 
@@ -852,8 +863,8 @@ messageStyle: "none",
   <li>Where not to use?
     <ul>
       <li>Users should avoid using the Kubernetes API server as a general-purpose database.  </li>
-      <li>Annotations are good for small bits of data that are highlyassociated with a specific resource.  If you want to store data in Kubernetes but you don’t have an obvious object to associate it with, consider storing that data in some other, more appropriate database.</li>
-      <li>Labels can be used to filter objects serverside, whereas annotations can’t</li>
+      <li>Annotations are good for small bits of data that are highly associated with a specific resource.  If you want to store data in Kubernetes but you don’t have an obvious object to associate it with, consider storing that data in some other, more appropriate database.</li>
+      <li>Labels can be used to filter objects server-side, whereas annotations can’t</li>
     </ul>
   </li>
 </ul>
@@ -873,6 +884,12 @@ messageStyle: "none",
 <ul>
   <li>All components run in the <code>kube-system</code> namespace</li>
 </ul>
+
+<blockquote>
+  <p>Image courtesy: https://medium.com/@tsuyoshiushio</p>
+</blockquote>
+
+<p><img src="/technology/k8s_objects.jpeg" /></p>
 
 <table>
   <thead>
@@ -1084,23 +1101,23 @@ messageStyle: "none",
 <span class="line-number">15</span>
 <span class="line-number">16</span>
 <span class="line-number">17</span>
-</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="err">apiVersion:</span> <span class="err">extensions/v</span><span class="mi">1</span><span class="err">beta</span><span class="mi">1</span>
-</span><span class="line"><span class="err">kind:</span> <span class="err">ReplicaSet</span>
-</span><span class="line"><span class="err">metadata:</span>
-</span><span class="line">  <span class="err">name:</span> <span class="err">kuard</span>
-</span><span class="line"><span class="err">spec:</span>
-</span><span class="line">  <span class="err">replicas:</span> <span class="mi">3</span>
-</span><span class="line">  <span class="err">template:</span>
-</span><span class="line">    <span class="err">metadata:</span>
-</span><span class="line">      <span class="err">labels:</span>
-</span><span class="line">        <span class="err">app:</span> <span class="err">kuard</span>
-</span><span class="line">        <span class="err">version:</span> <span class="s2">&quot;2&quot;</span>
-</span><span class="line">    <span class="err">spec:</span>
-</span><span class="line">      <span class="err">containers:</span>
-</span><span class="line">        <span class="err">-</span> <span class="err">name:</span> <span class="err">kuard</span>
-</span><span class="line">          <span class="err">image:</span> <span class="s2">&quot;gcr.io/kuar-demo/kuard-amd64:2&quot;</span>
-</span><span class="line">          <span class="err">ports:</span>
-</span><span class="line">            <span class="err">-</span> <span class="err">containerPort:</span> <span class="mi">80</span>
+</pre></td><td class="code"><pre><code class="yaml"><span class="line"><span class="l-Scalar-Plain">apiVersion</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">extensions/v1beta1</span>
+</span><span class="line"><span class="l-Scalar-Plain">kind</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ReplicaSet</span>
+</span><span class="line"><span class="l-Scalar-Plain">metadata</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">kuard</span>
+</span><span class="line"><span class="l-Scalar-Plain">spec</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">replicas</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">3</span>
+</span><span class="line">  <span class="l-Scalar-Plain">template</span><span class="p-Indicator">:</span>
+</span><span class="line">    <span class="l-Scalar-Plain">metadata</span><span class="p-Indicator">:</span>
+</span><span class="line">      <span class="l-Scalar-Plain">labels</span><span class="p-Indicator">:</span>
+</span><span class="line">        <span class="l-Scalar-Plain">app</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">kuard</span>
+</span><span class="line">        <span class="l-Scalar-Plain">version</span><span class="p-Indicator">:</span> <span class="s">&quot;2&quot;</span>
+</span><span class="line">    <span class="l-Scalar-Plain">spec</span><span class="p-Indicator">:</span>
+</span><span class="line">      <span class="l-Scalar-Plain">containers</span><span class="p-Indicator">:</span>
+</span><span class="line">        <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">kuard</span>
+</span><span class="line">          <span class="l-Scalar-Plain">image</span><span class="p-Indicator">:</span> <span class="s">&quot;gcr.io/kuar-demo/kuard-amd64:2&quot;</span>
+</span><span class="line">          <span class="l-Scalar-Plain">ports</span><span class="p-Indicator">:</span>
+</span><span class="line">            <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">containerPort</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">80</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p><strong>Reconciliation Loop</strong></p>
@@ -1495,7 +1512,7 @@ Database Name: insults
 			<a href="/technology/design-principles.html">Design Principles</a>  |
 			<a href="/technology/eventsourcing.html">Event Sourcing</a> |  
 			<a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  
-			<a href="/technology/logging-and-monitoring.html">Logging &amp; Monitoring</a>  |  
+			<a href="/technology/observability.html">Observability</a>  |  
 			<a href="/technology/patterns.html">Patterns</a>  |  
 			<a href="/technology/sdlc.html">SDLC</a> |  
 			<a href="/technology/scalability.html">Scalability</a>  |  

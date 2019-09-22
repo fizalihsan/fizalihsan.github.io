@@ -9,6 +9,8 @@ footer: true
 * list element with functor item
 {:toc}
 
+> REST is an architectural style. GraphQL is a data query language + framework
+
 # Overview
 
 * With GraphQL, clients can obtain all of the data they need in one request.

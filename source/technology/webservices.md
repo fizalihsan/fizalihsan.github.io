@@ -11,6 +11,21 @@ footer: true
 
 # Service Design Patterns
 
+## API Paradigms
+
+* Flat File
+* RPC API
+* Web API e.g., REST
+* Query API e.g., GraphQL
+* Streaming API
+
+The choice of paradigm should always be the function of your constraints like the ones below:
+
+* Business constraints
+* Domain constraints
+* Complexity constraints e.g., cognitive complexity
+* Cultural constraints e.g., conway's law, lack of REST knowledge, etc.
+
 ## API Styles
 
 ### 1. RPC API

@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Event Sourcing - KnowledgeShop</title>
+  <title>Web Security - KnowledgeShop</title>
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Event Sourcing Concepts Event-First Design Best Practices Versionining References Concepts publish events reliably and atomically whenever state &hellip;">
+<meta name="description" content="Web Security Vulnerabilities XSS (Cross Site Scripting) HTTP Security Headers Content-Security-Policy References Vulnerabilities XSS (Cross Site &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://fizalihsan.github.io/technology/eventsourcing.html">
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/web_security.html">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <!-- Below custom CSS is for table border styling -->
@@ -103,222 +103,94 @@ messageStyle: "none",
 <article role="article">
   
   <header>
-    <h1 class="entry-title">Event Sourcing</h1>
+    <h1 class="entry-title">Web Security</h1>
     
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#concepts">Concepts</a></li>
-  <li><a href="#event-first-design">Event-First Design</a></li>
-  <li><a href="#best-practices">Best Practices</a></li>
-  <li><a href="#versionining">Versionining</a></li>
+  <li><a href="#vulnerabilities">Vulnerabilities</a>    <ul>
+      <li><a href="#xss-cross-site-scripting">XSS (Cross Site Scripting)</a></li>
+    </ul>
+  </li>
+  <li><a href="#http-security-headers">HTTP Security Headers</a>    <ul>
+      <li><a href="#content-security-policy">Content-Security-Policy</a></li>
+    </ul>
+  </li>
   <li><a href="#references">References</a></li>
 </ul>
 
-<h2 id="concepts">Concepts</h2>
+<h1 id="vulnerabilities">Vulnerabilities</h1>
+
+<h2 id="xss-cross-site-scripting">XSS (Cross Site Scripting)</h2>
 
 <ul>
-  <li>publish events reliably and atomically whenever state changes</li>
-  <li>Whenever the state of a business entity changes, a new event is appended to the list of events.</li>
-  <li>100% reliable audit log of the changes made to a business entity</li>
-  <li>the application reconstructs an entity’s current state by replaying the events </li>
-  <li>events are stored in an Event Store.</li>
-  <li><strong>Event Store</strong>
-    <ul>
-      <li>Event Store = Database + Message broker</li>
-      <li>also acts as a message broker which enables services to subscribe to events</li>
-      <li>Technology implications
-        <ul>
-          <li>The storage system becomes an additive only architecture</li>
-          <li>Append-only architectures distribute</li>
-          <li>Far fewer locks to deal with</li>
-          <li>Horizontal Partitioning is difficult for a relational model</li>
-        </ul>
-      </li>
-      <li>Business implications
-        <ul>
-          <li>Criteria is tracked from inception as an event stream</li>
-          <li>You can answer questions from the origin of the system</li>
-          <li>You can answer questions not asked yet!</li>
-          <li>Natural audit log</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li>Periodical snapshotting </li>
-  <li><strong>Drawbacks</strong>
-    <ul>
-      <li>Needs CQRS to implement queries - which means application must handle eventually consistent data. However, one should embrace the fact that information is always from the past.</li>
-    </ul>
-  </li>
-  <li><strong>Features of eventsourcing library</strong>
-    <ul>
-      <li>Automatic versioning</li>
-      <li>Subscribe to events
-        <ul>
-          <li>Can be used to updated a view</li>
-          <li>Republish domain events to other downstream apps</li>
-        </ul>
-      </li>
-      <li>Snapshotting - avoids replaying the entire stream to get the state of the entity
-        <ul>
-          <li>Can be taken manually </li>
-          <li>Can be taken automatically. e.g., every 10 events</li>
-          <li>Separate table for snapshot records</li>
-        </ul>
-      </li>
-      <li>Encryption is optionally enabled</li>
-      <li>Hashchains</li>
-    </ul>
-  </li>
+  <li></li>
+  <li>e.g., an input field allowing JS code like <code>&lt;script&gt;alert('hello')&lt;/script&gt;</code></li>
 </ul>
 
-<h2 id="event-first-design">Event-First Design</h2>
+<p><strong>How to prevent?</strong></p>
 
 <ul>
-  <li>Events First Domain Driven Design</li>
+  <li><a href="https://www.google.com/about/appsecurity/learning/xss/">https://www.google.com/about/appsecurity/learning/xss/</a></li>
 </ul>
 
-<blockquote>
-  <p>When you start modeling events, it forces you to think about the behavior of the system. As opposed to thinking about the structure of the system. - Greg Young</p>
-</blockquote>
+<h1 id="http-security-headers">HTTP Security Headers</h1>
 
 <ul>
-  <li>Immutable append-only event store - means easy to scale</li>
-  <li>Events can help manage failure instead of avoiding it</li>
-  <li>Why? 
-    <ul>
-      <li>Modeling events forces behavioral focus over structural focus of the system</li>
-      <li>Modeling events forces temporal focus
-        <ul>
-          <li>e.g., what if this happens before that</li>
-        </ul>
-      </li>
-      <li>Event sourcing is naturally functional model - append-only immutable log of events happened in the past, left-fold to get current state</li>
-      <li>One single-source of truth with all history</li>
-      <li>No impedance mismatch or object-relational mismatch</li>
-      <li>Allows others to subscribe to state changes</li>
-      <li>ES enables time travel
-        <ul>
-          <li>Replace the log for historic debugging</li>
-          <li>Replace the log for auditing and traceability</li>
-          <li>Replace the log on failure</li>
-          <li>Replace the log for replication</li>
-        </ul>
-      </li>
-      <li>Event-first design helps
-        <ul>
-          <li>Move faster towards a scalable and resilient architecture</li>
-          <li>design autonomous services</li>
-        </ul>
-      </li>
-      <li>Event logging allows
-        <ul>
-          <li>AVOID CRUD and ORM</li>
-          <li>take control of your system’s history</li>
-          <li>time-travel</li>
-          <li>Balance Strong and eventual consistency</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
+  <li><a href="https://github.com/twitter/secure_headers">https://github.com/twitter/secure_headers</a></li>
 </ul>
 
-<h2 id="best-practices">Best Practices</h2>
+<h2 id="content-security-policy">Content-Security-Policy</h2>
 
 <ul>
-  <li>Intention-revealing interfaces</li>
-  <li>Domain model is always in a valid state - no additional validation rules</li>
-  <li>Side-effect free functions</li>
-  <li><strong>Onion Architecture</strong>
-    <ul>
-      <li>Domain model - e.g., Profile, ProfileRepository, Opteam, OpteamReopository
-        <ul>
-          <li>Contains information about the Domain</li>
-          <li>state of the business objects is held here</li>
-          <li>Does not contain persistence details</li>
-        </ul>
-      </li>
-      <li>Domain services
-        <ul>
-          <li>Contains business logic that are not natural part of entities or value objects</li>
-          <li>services are stateless</li>
-          <li>services can usually manipulate multiple entities</li>
-        </ul>
-      </li>
-      <li>Application services - e.g., EmailSender, TicketSender, etc.
-        <ul>
-          <li>Does not contain business logic</li>
-          <li>Does not hold state of the business objects</li>
-        </ul>
-      </li>
-      <li>User interface / Test </li>
-      <li>Infrastructure
-        <ul>
-          <li>acts as a supporting layer for other layers</li>
-          <li>implements persistence for business objects e.g., SmtpEmailSender, SDSKCreator, etc</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
+  <li>used to prevent cross site scripting by specifying which resources are allowed to load</li>
+  <li>it is enabled by setting the <code>Content-Security-Policy</code> HTTP response header.</li>
 </ul>
 
-<p><strong>Design Philosophy</strong></p>
-
-<p>Event sourcing allows to embrace the following design philosophies</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class=""><span class="line"># Default to only allow content from the current site
+</span><span class="line"># Allow images from current site and imgur.com
+</span><span class="line"># Don't allow objects such as Flash and Java
+</span><span class="line"># Only allow scripts from the current site
+</span><span class="line"># Only allow styles from the current site
+</span><span class="line"># Only allow frames from the current site
+</span><span class="line"># Restrict URL's in the &lt;base&gt; tag to current site
+</span><span class="line"># Allow forms to submit only to the current site
+</span><span class="line">Content-Security-Policy: default-src 'self'; img-src 'self' https://i.imgur.com; object-src 'none'; script-src 'self'; style-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self';</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <ul>
-  <li>Domain Driven Design</li>
-  <li>Actor Models</li>
-  <li>Message-driven and asynchronous</li>
-  <li>Distributed persistence concepts (CQRS and ES)</li>
-  <li>Functional programming</li>
-  <li>Microservices</li>
+  <li><a href="https://content-security-policy.com/">https://content-security-policy.com/</a></li>
+  <li><a href="https://csp.withgoogle.com/">https://csp.withgoogle.com/</a></li>
+  <li><a href="https://observatory.mozilla.org">Mozilla Observatory</a></li>
+  <li><a href="https://addons.mozilla.org/en-US/firefox/addon/laboratory-by-mozilla/">Mozilla Laboratory-Browser Extension</a></li>
 </ul>
 
-<h2 id="versionining">Versionining</h2>
-
-<p>There are few things to take care of before versioning in event sourced systems - https://leanpub.com/esversioning/read</p>
+<h1 id="references">References</h1>
 
 <ul>
-  <li>Why can’t I update an event?
-    <ul>
-      <li>Immutability - with immutable you can use a caching layer or reverse proxy to serve from cached information. How do caches get invalidated on an update?</li>
-      <li>Consumers - say an event is consumed by an email service that sends email to customer about order creation. If the order event is updated, do we send another email?</li>
-      <li>Audit - when you edit an event, you lose the audit trail.</li>
-    </ul>
-  </li>
-  <li>Avoid versioning via types - e.g., CreateOrderEvent_v1, CreateOrderEvent_v2…</li>
-  <li>Strong schema or out-of-band schema: Without the schema, the message cannot be deserialized. E.g., Binary serialization of Java objects. Producer cannot change, unless all consumers are ready to change.</li>
-  <li>Weak schema or hybrid schema - e.g., JSON, XML.</li>
-  <li>If you find projections making calls to other projections or external services or temporal business logic to calculate the current state, then replaying events will be a problem since the data can change over time. e.g., calculating tax based on tax percent which changes</li>
-  <li>Semantic meaning should not change between versions. e.g., when storing weather, switching from Celsius to Fahrenheit can be disastrous.
-​</li>
+  <li></li>
 </ul>
-
-<h2 id="references">References</h2>
-
-<ol>
-  <li><a href="https://www.youtube.com/watch?v=LDW0QWie21s">Greg Young - A Decade of DDD, CQRS, Event Sourcing</a></li>
-  <li><a href="https://t.co/TKYrLtv9fC">Event Sourcing: What it is and why it’s awesome</a></li>
-  <li><a href="https://docs.microsoft.com/en-us/previous-versions/msp-n-p/jj554200(v%3dpandp.10)">Greg Young - Exploring CQRS and Event Sourcing</a></li>
-  <li><a href="https://leanpub.com/esversioning/read">Greg Young - Event Versioning</a></li>
-  <li><a href="https://www.confluent.io/blog/data-dichotomy-rethinking-the-way-we-treat-data-and-services/">Data Dichotomy</a></li>
-  <li><a href="https://www.youtube.com/watch?v=STKCRSUsyP0">Martin Fowler - Many meanings to Event-Driven Architecture</a></li>
-  <li><a href="https://mechanical-sympathy.blogspot.com/2011/09/single-writer-principle.html">Single Writer Principle</a></li>
-  <li><a href="http://highscalability.com/blog/2015/1/26/paper-immutability-changes-everything-by-pat-helland.html">Pat Helland - Immutability changes everything</a>
-    <ol>
-      <li><a href="http://cidrdb.org/cidr2015/Papers/CIDR15_Paper16.pdf">Immutability changes everything</a></li>
-      <li><a href="http://adrianmarriott.net/logosroot/papers/LifeBeyondTxns.pdf">Life beyond distribute transactions</a></li>
-      <li><a href="https://queue.acm.org/detail.cfm?id=2953944">Standing on distributed shoulders of giants</a></li>
-    </ol>
-  </li>
-</ol>
-
 
   
     <footer>
       
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/web_security.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/web_security.html" >Tweet</a>
+  
+  
+  
+</div>
+
       
     </footer>
   

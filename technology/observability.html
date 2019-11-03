@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Observability - KnowledgeShop</title>
+  <title>Monitoring & Observability - KnowledgeShop</title>
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Observability Overview Logging slf4j Monitoring Monitoring Components Monitoring Tools Splunk Components Queries Analytics Tracing OpenTracking &hellip;">
+<meta name="description" content="Monitoring & Observability Overview Logging slf4j Monitoring Anti-patterns Design Patterns Telemetry Data Components 1) Data collection 2) Data &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -103,7 +103,7 @@ messageStyle: "none",
 <article role="article">
   
   <header>
-    <h1 class="entry-title">Observability</h1>
+    <h1 class="entry-title">Monitoring & Observability</h1>
     
   </header>
   
@@ -114,10 +114,22 @@ messageStyle: "none",
     </ul>
   </li>
   <li><a href="#monitoring">Monitoring</a>    <ul>
-      <li><a href="#monitoring-components">Monitoring Components</a></li>
-      <li><a href="#monitoring-tools">Monitoring Tools</a></li>
+      <li><a href="#anti-patterns">Anti-patterns</a></li>
+      <li><a href="#design-patterns">Design Patterns</a></li>
+      <li><a href="#telemetry-data">Telemetry Data</a></li>
+      <li><a href="#components">Components</a>        <ul>
+          <li><a href="#data-collection">1) Data collection</a></li>
+          <li><a href="#data-storage">2) Data storage</a></li>
+          <li><a href="#visualization">3) Visualization</a></li>
+          <li><a href="#analytics-and-reporting">4) Analytics and reporting</a></li>
+          <li><a href="#alerting">5) Alerting</a></li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#tools">Tools</a>    <ul>
       <li><a href="#splunk">Splunk</a>        <ul>
-          <li><a href="#components">Components</a></li>
+          <li><a href="#components-1">Components</a></li>
           <li><a href="#queries">Queries</a></li>
           <li><a href="#analytics">Analytics</a></li>
         </ul>
@@ -125,7 +137,7 @@ messageStyle: "none",
     </ul>
   </li>
   <li><a href="#tracing">Tracing</a>    <ul>
-      <li><a href="#opentracking">OpenTracking</a></li>
+      <li><a href="#opentracing">OpenTracing</a></li>
     </ul>
   </li>
   <li><a href="#references">References</a></li>
@@ -185,6 +197,10 @@ messageStyle: "none",
 
 <h1 id="monitoring">Monitoring</h1>
 
+<blockquote>
+  <p><a href="https://vimeo.com/monitorama/videos">Monitorama Videos</a></p>
+</blockquote>
+
 <ul>
   <li>Metric identity name: k-tuple</li>
   <li>Metrics values
@@ -202,104 +218,190 @@ messageStyle: "none",
   <li>What is write-ahead logging? Used in HBase.</li>
 </ul>
 
-<h2 id="monitoring-components">Monitoring Components</h2>
+<h2 id="anti-patterns">Anti-patterns</h2>
+
+<ul>
+  <li><strong>Tool Obsession</strong>
+    <ul>
+      <li>there is no such things as the single-pane-of-glass tool that will suddenly provide you with perfect visibility into your network, servers, and applications, all with little to no tuning or investment of staff. Many monitoring software vendors sell this idea, but it’s a myth.</li>
+      <li>Monitoring isn’t a single problem, so it stands to reason that it can’t be solved with a single tool either.</li>
+      <li>Agentless monitoring is extraordinarily inflexible and will never give you the amount of control and visibility you desire.</li>
+      <li><em>How many tools is too many?</em> - If there are 3 tools to monitor your DB and they all provide the same information, you should consider consolidating. On the other hand, if all three provide different information, you’re probably fine.</li>
+      <li><em>Avoid Cargo-culting tools</em> - Adopting tools and procedures of more successful teams and companies in the misguided notion that the tools and procedures are what made those teams successful, so they will also make your own team successful in the same ways. Sadly, the cause and effect are backward: the success that team experienced led them to create the tools and procedures, not the other way around.  </li>
+    </ul>
+  </li>
+  <li><strong>Monitoring-as-a-Job</strong>
+    <ul>
+      <li>Strive to make monitoring a first-class citizen when it comes to building and managing services. Remember, it’s not ready for production until it’s monitored.</li>
+      <li><em>Observability team</em> is the team whose job is to build self-service monitoring tools as a service to another team. However, this team is not responsible for instrumenting the apps, creating alerts, etc. The anti-pattern is to caution against having your company shirk the responsibility of monitoring at all by resting it solely on the shoulders of a single person.</li>
+    </ul>
+  </li>
+  <li><strong>Checkbox Monitoring</strong>
+    <ul>
+      <li>This antipattern is when you have monitoring systems for the sole sake of saying you have them. This is ineffective, noisy, untrustworthy, and probably worse than having no monitoring at all.</li>
+      <li>Common signs of this antipattern
+        <ul>
+          <li>recording metrics like CPU usage, system load, and memory utilization, but the service still goes down.</li>
+          <li>find yourself consistently ignoring alerts, as they are falst alarms more often than not.</li>
+          <li>checking systems for metrics every 5 mins.</li>
+          <li>not storing historical metric data.</li>
+        </ul>
+      </li>
+      <li>Fix
+        <ul>
+          <li>OS metrics aren’t very useful for alerting. If CPU usage is above 90% that is no reason to alert, if the server is still doing what it’s supposed to do.</li>
+          <li>Collect your metrics more often and look for patterns.</li>
+        </ul>
+      </li>
+      <li><strong>Alerting as a Crutch</strong>
+        <ul>
+          <li>Avoid the tendency to learn on monitoring as a crutch. Monitoring is great for alerting problems, but don’t forget the next step: fixing the problems.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="design-patterns">Design Patterns</h2>
+
+<ul>
+  <li>1) <strong>Composable Monitoring</strong>: <em>Use multiple specialized tools and couple them loosely together, forming a monitoring platform</em>. Similar to the UNIX philosophy, <em>Write a program that do one thing and do it well. Write programs to work together.</em></li>
+  <li>2) <strong>Monitor from the user perspective</strong>: One of the most effective things to monitor is simply HTTP response codes (especially of the HTTP 5xx variety) followed by request times (aka latency). Always ask yourself, <em>“How will these metrics show me the user impact?”</em>.</li>
+</ul>
+
+<h2 id="telemetry-data">Telemetry Data</h2>
+
+<ul>
+  <li>
+    <p><a href="https://newrelic.com/platform/telemetry-data-101">M.E.L.T. (Metrics, Events, Logs and Traces)</a></p>
+  </li>
+  <li><strong>Metrics</strong>
+    <ul>
+      <li>Metrics come in different representations</li>
+      <li><em>Counter</em> is an ever-increasing metric. e.g., Odometer in a car, number of visits to a site.</li>
+      <li><em>Gauge</em> is a point-in-time value. e.g., Speedometer n a car.
+        <ul>
+          <li>The nature of gauge has one big shortcoming: it doesn’t tell anything about previous values and provides no hint of future values. Storing gauges in a TSDB can do such things as plot on a graph, predict future trends, etc.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Events</strong></li>
+  <li><strong>Logs</strong>
+    <ul>
+      <li>Logs are essentially strings of text with a timestamp associated with them.</li>
+      <li>Logs come in 2 types
+        <ul>
+          <li><em>Unstructured Logs</em></li>
+          <li><em>Structured Logs</em>: </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Traces</strong></li>
+</ul>
+
+<h2 id="components">Components</h2>
 
 <p>https://www.usenix.org/sites/default/files/conference/protected-files/dickson.pdf </p>
 
-<ol>
-  <li>Sensing/Measurement: Creation of metrics
-    <ul>
-      <li>various systems gather data at various speeds.</li>
-      <li>various systems have various concepts of a unit of a metric identity</li>
-      <li>no consistent interface</li>
-      <li>e.g., <code>top</code>, <code>np</code>, <code>netstats</code>, <code>sar</code>, <code>nagios</code>.</li>
-      <li>Storage</li>
-      <li>Collection</li>
-      <li>Analysis</li>
-      <li>Alerting/Escalation</li>
-      <li>Visualization - should be actionable items. Avoid pie charts for disk usage metrics. Think of visual graphs which can predict the disk size after 6 months.</li>
-      <li>Configuration</li>
-      <li>Configuration and Storage are cross-cutting concerns.</li>
-    </ul>
-  </li>
-</ol>
+<p>A monitoring service has 5 primary facets</p>
 
-<h2 id="monitoring-tools">Monitoring Tools</h2>
+<h3 id="data-collection">1) Data collection</h3>
 
 <ul>
-  <li>sar</li>
-  <li>trace</li>
-  <li><a href="http://oss.oetiker.ch/mrtg/">MRTG</a>
+  <li><em>Pull-based</em> 
     <ul>
-      <li>acronym for Multi Router Traffic Grapher</li>
-      <li>free software for monitoring and measuring the traffic load on network links.</li>
-      <li>gets its data via SNMP agents every few minutes</li>
-      <li>results are plotted in graphs</li>
-      <li>has alerting mechanism</li>
+      <li>SNMP, Nagios. </li>
+      <li>use of <code>/health</code> endpoint pattern in app monitoring which exposes metrics and health information about an app which can be polled by a monitoring service, service discovery tool like Consul and etcd or by a load balancer.</li>
+      <li>Pull model can be difficult to scale, as it requires central systems to keep track of all known clients, handle scheduling, and parse returning data.</li>
     </ul>
   </li>
-  <li><a href="http://oss.oetiker.ch/rrdtool/">RRDTool</a>
+  <li><em>Push-based</em>
     <ul>
-      <li>acronym for Round-Robin Database Tool </li>
-      <li>aims to handle time-series data like n/w bandwidth, CPU load, etc. </li>
-      <li>The data are stored in a round-robin circular buffer/database, thus the system storage footprint remains constant over time. </li>
-      <li>It has tools to display the data in graphical format.</li>
+      <li>Push model is easier to scale in a distributed architecture such as cloud, due to the lack of a central poller. Nodes pushing data need to only know where to send it, and don’t need to worry about underlying implementation of the receiving end.</li>
     </ul>
   </li>
-  <li><a href="http://www.nagios.com/">Nagios</a></li>
-  <li><a href="http://ganglia.info/">Ganglia</a>
+  <li>various systems gather data at various speeds.</li>
+  <li>various systems have various concepts of a unit of a metric identity</li>
+  <li>no consistent interface</li>
+  <li>e.g., <code>top</code>, <code>np</code>, <code>netstats</code>, <code>sar</code>, <code>nagios</code>.</li>
+</ul>
+
+<h3 id="data-storage">2) Data storage</h3>
+
+<ul>
+  <li><strong>Metrics Storage</strong>
     <ul>
-      <li>a scalable distributed system monitor tool for high performance computing systems such as clusters and grids.</li>
-      <li>typically used with Nagios. </li>
+      <li>Metrics, being time series, as usually stored in a <em>Time Series Database (TSDB)</em>. e.g., Round Robin Database (RRD), Graphite’s Whisper, OpenTSDB.</li>
+      <li>Many TSDBs <strong>roll up</strong> or <strong>age out</strong> data after a certain time period. This means that as the data gets older, multiple datapoints are summarized into a single datapoint. A common roll up method is <em>averaging</em>, though some tools support other methods such as <em>summing datapoints</em>.</li>
+      <li>Metric rollup occurs as a result of compromises: storing native resolution of metrics gets very expensive for disks - both in storage and in the time it takes to read all those datapoints from disk for use in a graph.</li>
     </ul>
   </li>
-  <li><a href="http://www.cacti.net/">Cacti</a> (mrtg++) 
+  <li><strong>Log Storage</strong>
     <ul>
-      <li>Network Graphing solution designed to harness the power of RRDTool’s storage and graph functionality</li>
+      <li>2 flavors
+        <ul>
+          <li>Store the log data as flat files. e.g., <code>rsyslog</code></li>
+          <li>Store the log files in a search engine. e.g., ElasticSearch</li>
+        </ul>
+      </li>
+      <li>Metric storage is inexpensive. Log storage can get expensive.</li>
     </ul>
   </li>
-  <li><a href="http://www.sensuapp.org/">Sensu</a> 
+</ul>
+
+<h3 id="visualization">3) Visualization</h3>
+
+<blockquote>
+  <p>Edward Tufte’s <em>The Visual Display of Quantitive Information</em> and Stephen Few’s <em>Information Dashboard Design</em>.</p>
+</blockquote>
+
+<ul>
+  <li>A driving principle behind great monitoring is that you should be building things in a way that works best for your environment.</li>
+  <li>Common visualization for time series data is the <em>line graph</em> (also called a <em>strip data</em>).</li>
+  <li>Visualization should be actionable items. Avoid pie charts for disk usage metrics. Think of visual graphs which can predict the disk size after 6 months.</li>
+</ul>
+
+<h3 id="analytics-and-reporting">4) Analytics and reporting</h3>
+
+<ul>
+  <li>SLA, SLO, SLI
     <ul>
-      <li>open source monitoring framework</li>
+      <li>Service Level Agreement </li>
+      <li>Service Level Objective</li>
     </ul>
   </li>
-  <li>LogStash
+  <li>SLA &amp; SLO are important for reporting</li>
+  <li><strong>Availability</strong>
     <ul>
-      <li>Redis for storage</li>
-      <li>RabbitMQ, grok</li>
-      <li>Typical implementation: logstash + redis + elasticsearch</li>
+      <li>Availability of an application/service is commonly referred to by the number of <em>nines</em>. 99.99% is four nines.</li>
+      <li><code>Availability = uptime / (downtime + uptime)</code></li>
+      <li><em>Why High Availability is difficult?</em>: According to <a href="http://bit.ly/2i2kBmv"><em>Nyquist-Shannon sampling theorem</em></a>, to measure an outage of 2 minutes, you must be collecting data in minute-long intervals. Thus, to measure availability down to 1 second, you must be collecting data at sub-second intervals. This is just one reason why achieving accurate SLA reporting better than 99% is so difficult.</li>
+      <li>An oft-overlooked point about availability is when your app has dependent components: your service can ony be as available as the underlying components on which it is built. e.g, AWS S3 provides 99.95% SLA. An app depending on S3 can never be &gt;99.95% SLA.</li>
+      <li>Similarly, if the underlying network is unreliable, the servers and application higher in the stack can’t possibly be more reliable than the network.</li>
+      <li>Each additional nine of availability has significantly more cost associated with it, and the investment often isn’t worth it: many customers can’t tell the difference between 99% and 99.9%.</li>
     </ul>
   </li>
-  <li>Splunk</li>
-  <li><a href="http://www.fluentd.org/">FluentD</a>
-    <ul>
-      <li>an open-source tool to collect events and logs and store as JSON</li>
-      <li>built on CRuby.</li>
-      <li>plugins enables to store the massive data for Log Search (like ElasticSearch), Analytics and Archiving (MongoDB, S3, Hadoop)</li>
-    </ul>
-  </li>
-  <li><a href="http://www.graylog2.com/">GrayLog2</a>
-    <ul>
-      <li>an open source data analytics system </li>
-      <li>search logs, create charts, create alerts</li>
-      <li>leverages Java and ElasticSearch. Communication via REST API</li>
-    </ul>
-  </li>
-  <li><a href="http://opentsdb.net/">OpenTSDB</a>
-    <ul>
-      <li>pure storage solution</li>
-      <li>a free distributed time-series database written on top of HBase.</li>
-      <li>was written to store, index and serve metrics collected at a large scale, and make it easily accessible and graphable.</li>
-    </ul>
-  </li>
-  <li>D3.js - Pure visualization solution</li>
-  <li><a href="https://github.com/etsy/statsd/">Statsd</a>
-    <ul>
-      <li>listens to anything and everything</li>
-      <li>written in node.js. There are alternative implementations in groovy, C, etc.</li>
-      <li>listens to statistics (counters and timers) and sends aggregates to backend services like Graphite</li>
-    </ul>
-  </li>
+</ul>
+
+<h3 id="alerting">5) Alerting</h3>
+
+<ul>
+  <li>Monitoring doesn’t exist to generate alerts: alerts are just one possible outcome. With this in mind, remember that every metric you collect and graph does not need to have a corresponding alert.</li>
+</ul>
+
+<h1 id="tools">Tools</h1>
+
+<ul>
+  <li>AppDynamics</li>
+  <li><a href="http://www.cacti.net/">Cacti</a> (mrtg++) - Network Graphing solution designed to harness the power of RRDTool’s storage and graph functionality</li>
+  <li><a href="https://www.consul.io">Consul</a></li>
+  <li><a href="http://www.elasticsearch.org/">ElasticSearch</a></li>
+  <li><a href="https://coreos.com/etcd">etcd</a></li>
+  <li><a href="http://www.fluentd.org/">FluentD</a> - an open-source tool to collect events and logs and store as JSON - built on CRuby - plugins enables to store the massive data for Log Search (like ElasticSearch), Analytics and Archiving (MongoDB, S3, Hadoop)</li>
+  <li><a href="http://ganglia.info/">Ganglia</a> - a scalable distributed system monitor tool for high performance computing systems such as clusters and grids. - typically used with Nagios. </li>
+  <li><a href="https://grafana.com">Grafana</a> - Visualization tool</li>
   <li><a href="http://graphite.wikidot.com/">Graphite</a>
     <ul>
       <li>this open-source tool written on Python does 2 things: store numeric time-series data and render graphs of this data on demand</li>
@@ -313,18 +415,37 @@ messageStyle: "none",
       </li>
     </ul>
   </li>
+  <li><a href="http://www.graylog2.com/">GrayLog2</a> - an open source data analytics system - search logs, create charts, create alerts - leverages Java and ElasticSearch. Communication via REST API</li>
+  <li>LogStash - Redis for storage - RabbitMQ, grok - Typical implementation: logstash + redis + elasticsearch</li>
+  <li>InfluxDB</li>
+  <li><a href="http://www.elasticsearch.org/overview/kibana/">Kibana</a> - web interface for viewing logstash records stored in elasticsearch</li>
+  <li>Librato - Commercial tool</li>
+  <li>Loggly - Commercial tool</li>
+  <li><a href="http://oss.oetiker.ch/mrtg/">MRTG</a> - acronym for Multi Router Traffic Grapher - free software for monitoring and measuring the traffic load on network links. - gets its data via SNMP agents every few minutes - results are plotted in graphs - has alerting mechanism</li>
+  <li><a href="http://www.nagios.com/">Nagios</a></li>
+  <li>NewRelic</li>
+  <li><a href="http://opentsdb.net/">OpenTSDB</a> - pure storage solution - a free distributed time-series database written on top of HBase - was written to store, index and serve metrics collected at a large scale, and make it easily accessible and graphable.</li>
+  <li>Pingdom - Commercial tool</li>
+  <li><a href="https://prometheus.io">Prometheus</a></li>
+  <li><a href="http://oss.oetiker.ch/rrdtool/">RRDTool</a> - acronym for Round-Robin Database Tool  - aims to handle time-series data like n/w bandwidth, CPU load, etc.  - The data are stored in a round-robin circular buffer/database, thus the system storage footprint remains constant over time. - It has tools to display the data in graphical format.</li>
+  <li>sar</li>
+  <li><a href="http://www.sensuapp.org/">Sensu</a> - open source monitoring framework</li>
   <li><a href="http://www.shinken-monitoring.org/">Shinken</a>
     <ul>
       <li>open-source Nagios like tool, redesigned and rewritten from scratch.</li>
       <li>Nagios + Graphite + Configuration</li>
     </ul>
   </li>
-  <li><a href="http://www.elasticsearch.org/overview/kibana/">Kibana</a>
+  <li><a href="https://github.com/Smashing/smashing">Smashing</a> - Visualization tool</li>
+  <li>Splunk</li>
+  <li><a href="https://github.com/etsy/statsd/">Statsd</a>
     <ul>
-      <li>web interface for viewing logstash records stored in elasticsearch</li>
+      <li>listens to anything and everything</li>
+      <li>written in node.js. There are alternative implementations in groovy, C, etc.</li>
+      <li>listens to statistics (counters and timers) and sends aggregates to backend services like Graphite</li>
     </ul>
   </li>
-  <li><a href="http://www.elasticsearch.org/">ElasticSearch</a></li>
+  <li>trace</li>
   <li>Zenoss</li>
   <li>Shippers
     <ul>
@@ -334,8 +455,6 @@ messageStyle: "none",
       <li>woodchuck</li>
     </ul>
   </li>
-  <li>AppDynamics</li>
-  <li>New Relic</li>
   <li>Other tools
     <ul>
       <li>monigusto</li>
@@ -370,7 +489,7 @@ messageStyle: "none",
   <li>Splunk breaks down log file entries into different events based on the associated timestamp. If no timestamp is found, then all the lines in the log file is considered as a single event.</li>
 </ul>
 
-<h3 id="components">Components</h3>
+<h3 id="components-1">Components</h3>
 
 <ol>
   <li>Search Head</li>
@@ -421,7 +540,7 @@ messageStyle: "none",
 
 <h1 id="tracing">Tracing</h1>
 
-<h2 id="opentracking">OpenTracking</h2>
+<h2 id="opentracing">OpenTracing</h2>
 
 <ul>
   <li><a href="https://opentracing.io/">OpenTracing</a> is a vendor neutral specification for instrumentation APIs.</li>
@@ -439,6 +558,7 @@ messageStyle: "none",
       <li><a href="https://www.shkuro.com/books/2019-mastering-distributed-tracing/">Mastering Distributed Tracing</a></li>
       <li>Distributed Systems Observability - Cindy Sridharan</li>
       <li>Logging and Log Management - Anton Chuvakin, Kevin Schmidt</li>
+      <li>O’Reilly Book - <a href="https://www.practicalmonitoring.com/">Practical Monitoring</a></li>
     </ul>
   </li>
 </ul>

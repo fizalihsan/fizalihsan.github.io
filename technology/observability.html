@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Monitoring & Observability Overview Logging slf4j Monitoring Anti-patterns Design Patterns Telemetry Data Components 1) Data collection 2) Data &hellip;">
+<meta name="description" content="Monitoring & Observability Overview Monitoring Anti-patterns Design Patterns Telemetry Data Components 1) Data collection 2) Data storage 3) &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -109,10 +109,6 @@ messageStyle: "none",
   
   <ul id="markdown-toc">
   <li><a href="#overview">Overview</a></li>
-  <li><a href="#logging">Logging</a>    <ul>
-      <li><a href="#slf4j">slf4j</a></li>
-    </ul>
-  </li>
   <li><a href="#monitoring">Monitoring</a>    <ul>
       <li><a href="#anti-patterns">Anti-patterns</a></li>
       <li><a href="#design-patterns">Design Patterns</a></li>
@@ -123,6 +119,15 @@ messageStyle: "none",
           <li><a href="#visualization">3) Visualization</a></li>
           <li><a href="#analytics-and-reporting">4) Analytics and reporting</a></li>
           <li><a href="#alerting">5) Alerting</a></li>
+        </ul>
+      </li>
+      <li><a href="#monitoring-at-various-tiers">Monitoring at various tiers</a>        <ul>
+          <li><a href="#business-monitoring">Business Monitoring</a></li>
+          <li><a href="#frontend-monitoring">Frontend Monitoring</a></li>
+          <li><a href="#application-monitoring">Application Monitoring</a></li>
+          <li><a href="#server-monitoring">Server Monitoring</a></li>
+          <li><a href="#network-monitoring">Network Monitoring</a></li>
+          <li><a href="#security-monitoring">Security Monitoring</a></li>
         </ul>
       </li>
     </ul>
@@ -136,12 +141,21 @@ messageStyle: "none",
       </li>
     </ul>
   </li>
+  <li><a href="#logging">Logging</a>    <ul>
+      <li><a href="#slf4j">slf4j</a></li>
+    </ul>
+  </li>
   <li><a href="#tracing">Tracing</a>    <ul>
       <li><a href="#opentracing">OpenTracing</a></li>
     </ul>
   </li>
   <li><a href="#references">References</a></li>
 </ul>
+
+<blockquote>
+  <p>Monitoring is the action of observing and checking the behavior and outputs of a system and its components over time.
+Monitoring doesn’t <em>fix</em> anything. You need to fix things after they break.</p>
+</blockquote>
 
 <h1 id="overview">Overview</h1>
 
@@ -177,23 +191,6 @@ messageStyle: "none",
     </tr>
   </tbody>
 </table>
-
-<h1 id="logging">Logging</h1>
-
-<ul>
-  <li>Structured Logging - https://stackify.com/what-is-structured-logging-and-why-developers-need-it/</li>
-</ul>
-
-<h2 id="slf4j">slf4j</h2>
-
-<ul>
-  <li>Meta logging Frameworks - http://www.slf4j.org</li>
-  <li>NDC, MDC statements - http://stackoverflow.com/questions/7404435/conditional-logging-with-log4j?</li>
-  <li>What are the classloader issues that plague JCL?</li>
-  <li>what is meant by ‘static binding approach’ in sl4j?</li>
-  <li>Marker objects</li>
-  <li>NOPLogger?</li>
-</ul>
 
 <h1 id="monitoring">Monitoring</h1>
 
@@ -272,34 +269,96 @@ messageStyle: "none",
 <h2 id="telemetry-data">Telemetry Data</h2>
 
 <ul>
+  <li><a href="https://newrelic.com/platform/telemetry-data-101">M.E.L.T. (Metrics, Events, Logs and Traces)</a></li>
   <li>
-    <p><a href="https://newrelic.com/platform/telemetry-data-101">M.E.L.T. (Metrics, Events, Logs and Traces)</a></p>
+    <p>M.E.L.T. are the essential data types of observability.</p>
+  </li>
+  <li><strong>Events</strong>
+    <ul>
+      <li>An event is a discrete action happening at a moment in time. Events are just about “something happened at some time.”</li>
+      <li>Example: <em>At 3:34pm on 2/21/2019 a bag of BBQ chips was purchased for 1 dollar.</em></li>
+      <li>There’s no hard and fast rule about what data an event can contain—you define an event as you see fit. Events become more powerful when you add more metadata to them. e.g., Event type, ItemCategory and PaymentType, etc.</li>
+      <li>Since events are basically a history of every individual thing that happened in your system, you can roll them up into aggregates to answer more advanced questions on the fly.</li>
+      <li>Pros
+        <ul>
+          <li>Include individual data points</li>
+          <li>allow you to ask whatever questions you want at any point</li>
+          <li>can be computed on the fly</li>
+        </ul>
+      </li>
+      <li>Cons
+        <ul>
+          <li>Every event takes some amount of computational energy to collect and process. They also take up space in your database—potentially lots of space. For example, you could store an event for every minuscule, sub-degree shift in temperature, which would quickly fill up even the largest databases. Or you could instead take a sample of the temperature at a regular interval. This kind of data is better stored as a <em>metric</em>.</li>
+          <li>Expensive to store high volumes of event data</li>
+          <li>May hit bandwidth constraints within the source system while collecting and sending the event data</li>
+          <li>Can be time-consuming to query</li>
+        </ul>
+      </li>
+    </ul>
   </li>
   <li><strong>Metrics</strong>
     <ul>
-      <li>Metrics come in different representations</li>
-      <li><em>Counter</em> is an ever-increasing metric. e.g., Odometer in a car, number of visits to a site.</li>
-      <li><em>Gauge</em> is a point-in-time value. e.g., Speedometer n a car.
+      <li>Metrics are an aggregated set of measurements grouped or collected at regular intervals. </li>
+      <li>Unlike events, metrics are not discrete — they represent aggregates of data over a given time span. </li>
+      <li>Types of metric aggregation are diverse (e.g., average, total, minimum, maximum, sum-of-squares) but all metrics generally share the following traits:
         <ul>
-          <li>The nature of gauge has one big shortcoming: it doesn’t tell anything about previous values and provides no hint of future values. Storing gauges in a TSDB can do such things as plot on a graph, predict future trends, etc.</li>
+          <li>A timestamp (note that this timestamp represents a timespan, not a specific time)</li>
+          <li>A name</li>
+          <li>One or more numeric values representing some specific aggregated value</li>
+          <li>A count of how many events are represented in the aggregate</li>
+        </ul>
+      </li>
+      <li>Example: <em>For the minute of 3:34-3:35pm on 2/21/2019 there was a total of three purchases totaling $2.75.</em>
+        <ul>
+          <li>Notice, we’ve lost some data here compared to an event. We no longer know what the specific three purchases were, nor do we have access to their individual values (and this data cannot be recovered). However, this data requires significantly less storage but still allows us to ask certain critical questions like, “What were my total sales during any given minute?”</li>
+          <li>Example metrics: error rate, response time, throughput, etc.</li>
+        </ul>
+      </li>
+      <li>Metrics come in different representations
+        <ul>
+          <li><em>Counter</em> is an ever-increasing metric. e.g., Odometer in a car, number of visits to a site.</li>
+          <li><em>Gauge</em> is a point-in-time value. e.g., Speedometer n a car.
+            <ul>
+              <li>The nature of gauge has one big shortcoming: it doesn’t tell anything about previous values and provides no hint of future values. Storing gauges in a TSDB can do such things as plot on a graph, predict future trends, etc.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>Pros
+        <ul>
+          <li>Store significantly less data</li>
+          <li>Less time to compute roll-ups</li>
+        </ul>
+      </li>
+      <li>Cons
+        <ul>
+          <li>Required to make decisions ahead of time on which you want to analyze the data</li>
         </ul>
       </li>
     </ul>
   </li>
-  <li><strong>Events</strong></li>
   <li><strong>Logs</strong>
     <ul>
       <li>Logs are essentially strings of text with a timestamp associated with them.</li>
+      <li>Like events, log data is discrete</li>
       <li>Logs come in 2 types
         <ul>
           <li><em>Unstructured Logs</em></li>
-          <li><em>Structured Logs</em>: </li>
+          <li><em>Structured Logs</em>: most common example is JSON format. </li>
         </ul>
       </li>
+      <li>One can event produce multiple logs. e.g., one customer purchase event in a vending machine could potentially have multiple log messages like coin inserted, buttons pressed, dispensed, etc.</li>
     </ul>
   </li>
-  <li><strong>Traces</strong></li>
+  <li><strong>Traces</strong>
+    <ul>
+      <li>Traces—or more precisely, “distributed traces”—are samples of causal chains of events (or transactions) between different components in a microservices ecosystem. And like events and logs, traces are discrete and irregular in occurrence.</li>
+      <li>Traces stitched together form special events called <strong>“spans”</strong>; spans help you track a causal chain through a microservices ecosystem for a single transaction. To accomplish this, each service passes correlation identifiers, known as <em>“trace context,”</em> to each other; this trace context is used to add attributes on the span.</li>
+    </ul>
+  </li>
 </ul>
+
+<p><img src="/technology/melt-distributed-tracing-sample.jpg" /></p>
 
 <h2 id="components">Components</h2>
 
@@ -389,6 +448,246 @@ messageStyle: "none",
 
 <ul>
   <li>Monitoring doesn’t exist to generate alerts: alerts are just one possible outcome. With this in mind, remember that every metric you collect and graph does not need to have a corresponding alert.</li>
+  <li>An <strong>alert</strong> should evoke a sense of urgency and require action from the person receiving that alert. Everything else can essentially be a log entry, a message dropped in your internal chat room, or an auto-generated ticket.</li>
+  <li><strong>3 alert categories</strong>
+    <ul>
+      <li>Response/action required immediately - send these to SMS, PagerDuty</li>
+      <li>Awareness needed, but immediate action not required - send these to internal chat rooms</li>
+      <li>Record for historical/diagnostic purposes - send it to log file and analyze later</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>6 alerting best practices</strong></p>
+
+<ul>
+  <li><em>Stop using email for alerts</em></li>
+  <li><em>Write runbooks</em> - A runbook is for when human judgement and diagnosis is necessary to resolve something.</li>
+  <li><em>Arbitrary static thresholds aren’t the only way</em>
+    <ul>
+      <li>Alerting on things like “datapoint has crossed X” isn’t useful. A static threshold set to alert at “free space under 10%” isn’t going to alert when a disk quickly growing in usage from 11% to 80% overnight.</li>
+      <li>Using a <em>percent change/derivative</em> would handle our disk usage problem by reporting us “disk usage has grown by 50% overnight”</li>
+      <li>Few such approaches: <em>moving averages</em>, <em>confidence bands</em>, <em>standard deviation</em></li>
+    </ul>
+  </li>
+  <li><em>Delete and tune alerts</em>
+    <ul>
+      <li><em>Alert fatigue</em> occurs when you are so exposed to alerts that you become desensitized to them. Alerts should cause a small adrenaline rush.</li>
+    </ul>
+  </li>
+  <li><em>Use maintenance periods</em>
+    <ul>
+      <li>If you need to do work on a service or app, and you expect it to trigger an alert (e.g., due to it being down), then set that alert into maintenance period.</li>
+    </ul>
+  </li>
+  <li><em>Attempt self-healing first</em></li>
+</ul>
+
+<p><strong>On-Call</strong></p>
+
+<p>Effective strategies for On-Call</p>
+
+<ul>
+  <li>Make it the duty of on-call to work on systems resiliency and stability during their on-call shift when they aren’t fighing fires.</li>
+  <li>Explicitly plan for systems resiliency and stability work during the following week’s sprint planning/team meeting, based on the information collected from the previous on-call week.</li>
+  <li>Start the on-call rotation during the workweek instead of calendar week. This allows the team to do an on-call handoff.</li>
+  <li><em>Follow-The-Sun (FTS) Rotations</em> allow to have full on-call coverage with no one being on-call during nights. One big downside to FTS rotations is the significant increase in communication overhead.</li>
+  <li>Only when you have a large team, have a backup on-call person to the primary on-call person. For smaller teams, this means the same person being on-call every 2-3 weeks.</li>
+  <li>How many people do you need for an effective on-call rotation schedule? It depends on 2 factors: how busy your on-call tends to be and how much time you want to give people between on-call shifts.</li>
+  <li>Software engineers should be on-call. Avoid the <em>“throw-it-over-the-wall</em> version of software engineering. If software engineers are aware of the struggles that come up during the on-call, then they are incentivized to build better software.</li>
+</ul>
+
+<p>Tools: PagerDuty, VictorOps, OpsGenie</p>
+
+<blockquote>
+  <p>PagerDuty’s Incident Response Documentation <a href="https://response.pagerduty.com/">https://response.pagerduty.com/</a></p>
+</blockquote>
+
+<h2 id="monitoring-at-various-tiers">Monitoring at various tiers</h2>
+
+<h3 id="business-monitoring">Business Monitoring</h3>
+
+<p>TBD</p>
+
+<h3 id="frontend-monitoring">Frontend Monitoring</h3>
+
+<ul>
+  <li>2 approaches for frontend monitoring
+    <ul>
+      <li>RUM (real use monitoring)
+        <ul>
+          <li>uses actual user traffic for the monitoring data</li>
+          <li>e.g., Google Analytics</li>
+        </ul>
+      </li>
+      <li>Synthetic monitoring
+        <ul>
+          <li>create fake requests under a variety of test conditions to generate the data</li>
+          <li>e.g., WebpageTest.org, Dynatrace Gomez scripts</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>DOM (Document Object Model)
+    <ul>
+      <li><em>Synchronous loading</em>: By default, scripts in a webpage are loaded synchronously. i.e., if the DOM parsing encounters a <code>&lt;script&gt;</code> tag, then the browser will stop parsing the DOM and load the script.</li>
+      <li><em>Asynchronous loading</em>: HTML5 supports <code>async</code> attribute on <code>&lt;script&gt;</code> tags which allows the scripts to be downloaded in background while the DOM continues to be loaded, executing the script when it’s finished downloading. This improves the page performance greatly.</li>
+    </ul>
+  </li>
+  <li>Performance Metrics
+    <ul>
+      <li><em>Navigation Timing API</em>
+        <ul>
+          <li>Browsers expose page performance metrics via <a href="https://www.w3.org/TR/navigation-timing">Navigation Timing API</a>. </li>
+          <li>This API exposes 21 metrics. Consistently useful among them are <code>navigationStart</code>, <code>domLoading</code>, <code>domInteractive</code>, <code>domContentLoaded</code>, <code>domComplete</code></li>
+        </ul>
+      </li>
+      <li><em>User Timing API</em>
+        <ul>
+          <li>While Navigation Timing API’s metrics are browser set, User Timing API allows you to create your metrics and events.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Tools
+    <ul>
+      <li>WebPageTest.org</li>
+      <li><strong>SpeedIndex</strong>
+        <ul>
+          <li>calculates the user-perceived completeness</li>
+          <li>Whereas Navigation Timing metrics ruly on accurate reporting by the browser, <a href="https://sites.google.com/a/webpagetest.org/docs/using-webpagetest/metrics/speed-index">Speed Index</a> uses video capture at a rate of 10 frames per second to determine exactlly when a page is finised loading from a visual perspective.</li>
+          <li>Speed Index Algorithm produces a single number as output - lower is better.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/technology/navigation-timing-overview.PNG" /></p>
+
+<h3 id="application-monitoring">Application Monitoring</h3>
+
+<ul>
+  <li><strong>StatsD</strong>
+    <ul>
+      <li>tool created by Etsy in 2011 to add metrics inside of your code - originally designed for a Graphite backend</li>
+      <li>A network daemon that runs on the Node.js platform and listens for statistics, like counters and timers, sent over UDP or TCP and sends aggregates to one or more pluggable backend services (e.g., Graphite, OpenTSDB, InfluxDB)</li>
+    </ul>
+  </li>
+  <li>Monitor CI/CD pipeline
+    <ul>
+      <li>capture metrics like deployment start time, end time, etc.</li>
+      <li>Deployment metrics along with application performance metrics together can help identify issues caused by a particular deployment.</li>
+    </ul>
+  </li>
+  <li><strong>Health Endpoint Pattern</strong>
+    <ul>
+      <li><code>/health</code> endpoint pattern or <em>canary endpoint</em> or <em>status endpoint</em> is an HTTP endpoint to provide basic health metrics about the app - e.g., app version, configuration used, status of dependencies, etc.</li>
+      <li>Benefits
+        <ul>
+          <li>can be used as the health check for a load balancer or for service discovery tools</li>
+          <li>helpful for debugging: exposing build information helps with determining what is running in the environment easily</li>
+        </ul>
+      </li>
+      <li>Downsides
+        <ul>
+          <li>involves a lot more engineering work to implement than a simple push-based metrics approach</li>
+          <li>need tooling to consistently check the endpoint</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Monitoring Serverless Apps
+    <ul>
+      <li>TBD</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="server-monitoring">Server Monitoring</h3>
+
+<ul>
+  <li><strong>CPU usage</strong>: <code>/proc/stat</code> metrics via <code>top</code> command</li>
+  <li><strong>Memory usage</strong>: <code>/proc/meminfo</code> metrics via <code>free -m</code> command
+    <ul>
+      <li>also monitor the <em>OOMKiller</em> spawning in the logs</li>
+    </ul>
+  </li>
+  <li><strong>Network usage</strong>: <code>/proc/net/dev</code> metrics via <code>ifconfig</code>, <code>ip</code>(from the <code>iproute2</code> package)</li>
+  <li><strong>Disk usage</strong>: <code>/proc/diskstats</code> metrics via <code>iostat -x</code> (from the <code>sysstat</code> package)
+    <ul>
+      <li><em>iowait</em> represents the amount of time the CPU was idle due to waiting on the disk to complete operations.</li>
+      <li><code>iostat</code> without <code>-x</code> returns <em>tps (transfers per second)</em> or <em>IOPS (I/O per second)</em>. Noticing a sudden drop in IOPS may indicate a disk performance problem.</li>
+    </ul>
+  </li>
+  <li><strong>Load</strong>: <code>/proc/loadavg</code> metrics via <code>uptime</code> command.
+    <ul>
+      <li>Load is a measurement of how many processes are waiting to be served by the CPI. It’s represented by 3 numbers: a 1 m average, a 5 m average, a 15 m average (<a href="http://www.brendangregg.com/blog/2017-08-08/linux-load-averages.html">Brendan Gregg’s article to learn more</a>)</li>
+    </ul>
+  </li>
+  <li><strong>SSL Certificates</strong>
+    <ul>
+      <li>For external site monitoring, use tools like Pingdom, StatusCake, etc.</li>
+      <li>For internal site monitoring, create custom shell scripts. </li>
+    </ul>
+  </li>
+  <li><strong>Web Servers</strong>
+    <ul>
+      <li><em>Requests per second (req/sec)</em>:Golden metric for assessing web server performance or throughput.</li>
+      <li><em>open connections</em> or <em>keepalives</em>
+        <ul>
+          <li>connections are <em>not</em> requests. Prior to the use of keepalives, each request required its own connection. Since a web page may have multiple objects to request for the page to load, this led to a whole lot of connections. </li>
+          <li>Opening a connection requires going through the full TCP handshake, setting up a connection, moving data, and tearing down the connection - dozens of times for a single page. </li>
+          <li>Thus, <em>HTTP keepalives</em> were born: the web server holds open the connection for a client rather than tearing it down, to reuse the connection for the client which allows many requests to be made over a single connection. Of course, the connection can’t be held open forever, so keepalives are governed by a timeout on the webserver side. </li>
+          <li>There is also a keepalive configuration on the browser side called <em>persistent connection</em> with their own timeout values. All modern browsers use persistent connections by default.</li>
+        </ul>
+      </li>
+      <li><em>request time</em></li>
+    </ul>
+  </li>
+  <li><strong>Database Servers</strong>
+    <ul>
+      <li><em>open connections</em></li>
+      <li><em>queries per second</em></li>
+      <li><em>IOPS</em></li>
+    </ul>
+  </li>
+  <li><strong>Caching</strong>
+    <ul>
+      <li><em># of evicted items</em>: high evictions are a good signal for a cache being too small, causing too many items to be evicted in order to make room for new items.</li>
+      <li><em>Hit/miss ratio</em> or <em>cache-hit ratio</em></li>
+    </ul>
+  </li>
+  <li><strong>NTP server</strong>
+    <ul>
+      <li><code>ntpstat</code></li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="network-monitoring">Network Monitoring</h3>
+
+<p>TBD</p>
+
+<h3 id="security-monitoring">Security Monitoring</h3>
+
+<ul>
+  <li><strong>HIDS (Host Intrusion Detection System)</strong>
+    <ul>
+      <li>detects bad actors or <em>rootkits</em> on a particular host</li>
+      <li>Rootkits can be anything from mass-installed webshells to stealthy recompiled binaries and everything in-between.</li>
+      <li>Due to their stealthy nature, rootkits can be rather difficult to detect.</li>
+      <li>Tools: <em>rkhunter</em>, <a href="https://ossec.github.io">OSSEC</a>.</li>
+    </ul>
+  </li>
+  <li><strong>NIDS (Network Intrusion Detection System)</strong>
+    <ul>
+      <li>detects threats on the network itself.</li>
+      <li>works by listening in on the raw traffic on the wire using one or more <em>network taps</em> placed throughout the network.</li>
+      <li>A <em>Network tap</em> is a piece of hardware that sits inline on your network, intercepting all traffic that passes through it and forwarding a copy to another system.</li>
+      <li>The networks tap traffic are sent for analysis into a tool called <strong>security information and event management (SIEM)</strong>. e.g., <a href="https://www.zeek.org/">Zeek</a>, <a href="https://www.snort.org/">Snort</a>.</li>
+    </ul>
+  </li>
 </ul>
 
 <h1 id="tools">Tools</h1>
@@ -418,6 +717,7 @@ messageStyle: "none",
   <li><a href="http://www.graylog2.com/">GrayLog2</a> - an open source data analytics system - search logs, create charts, create alerts - leverages Java and ElasticSearch. Communication via REST API</li>
   <li>LogStash - Redis for storage - RabbitMQ, grok - Typical implementation: logstash + redis + elasticsearch</li>
   <li>InfluxDB</li>
+  <li><a href="https://jaegertracing.io/">Jaeger</a> - open-source distributed tracing system</li>
   <li><a href="http://www.elasticsearch.org/overview/kibana/">Kibana</a> - web interface for viewing logstash records stored in elasticsearch</li>
   <li>Librato - Commercial tool</li>
   <li>Loggly - Commercial tool</li>
@@ -447,6 +747,7 @@ messageStyle: "none",
   </li>
   <li>trace</li>
   <li>Zenoss</li>
+  <li><a href="http://zipkin.io/">Zipkin</a></li>
   <li>Shippers
     <ul>
       <li>lumberjack</li>
@@ -538,13 +839,42 @@ messageStyle: "none",
   <li>Semantic logging as data or events that are written to log files explicitly for the purpose of gathering analytics.</li>
 </ul>
 
+<h1 id="logging">Logging</h1>
+
+<ul>
+  <li>Structured Logging - https://stackify.com/what-is-structured-logging-and-why-developers-need-it/</li>
+</ul>
+
+<h2 id="slf4j">slf4j</h2>
+
+<ul>
+  <li>Meta logging Frameworks - http://www.slf4j.org</li>
+  <li>NDC, MDC statements - http://stackoverflow.com/questions/7404435/conditional-logging-with-log4j?</li>
+  <li>What are the classloader issues that plague JCL?</li>
+  <li>what is meant by ‘static binding approach’ in sl4j?</li>
+  <li>Marker objects</li>
+  <li>NOPLogger?</li>
+</ul>
+
 <h1 id="tracing">Tracing</h1>
+
+<ul>
+  <li>Distributed Tracing is a methodology and toolchain for monitoring the complex interactions inherent in a microservice architecture. </li>
+  <li>e.g. Google Dapper, Zipkin</li>
+  <li>How it works?
+    <ul>
+      <li>for every request that ocmes in, “tag” it with a unique request ID. </li>
+      <li>this request ID stays with the request and resulting requests throughout its life, allowing to see what services a request touches and how much time is spent in each service.</li>
+    </ul>
+  </li>
+  <li>Tracing is more concerned with individual requests than aggregated metrics</li>
+</ul>
 
 <h2 id="opentracing">OpenTracing</h2>
 
 <ul>
   <li><a href="https://opentracing.io/">OpenTracing</a> is a vendor neutral specification for instrumentation APIs.</li>
-  <li>It offers consistent, expressive, vendor-neutral APIs for popular platforms, making it easy for developers to add (or switch) tracing implementations with an O(1) configuration change. </li>
+  <li>It offers consistent, expressive, vendor-neutral APIs for popular platforms, making it easy for developers to add (or switch) tracing implementations with an <code>O(1)</code> configuration change. </li>
   <li>OpenTracing also offers a lingua franca for OSS instrumentation and platform-specific tracing helper libraries.</li>
   <li><a href="https://github.com/yurishkuro/opentracing-tutorial">Tutorials</a></li>
   <li>CNCF <a href="https://jaegertracing.io/">Jaeger</a>, a Distributed Tracing UI Platform </li>

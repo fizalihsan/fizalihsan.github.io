@@ -9,6 +9,9 @@ footer: true
 * list element with functor item
 {:toc}
 
+> Monitoring is the action of observing and checking the behavior and outputs of a system and its components over time.
+> Monitoring doesn't _fix_ anything. You need to fix things after they break.
+
 # Overview
 
 Monitoring != Logging != Tracing != Instrumentation
@@ -19,18 +22,6 @@ Monitoring != Logging != Tracing != Instrumentation
 |Pros and Cons|Obtaining, transferring, storing and parsing logs is expensive. Log only important and actionable information.|Tracing libraries are often more complicated than the code they are serving. So tracing tends to be expensive|Instrumentation is often cheap to compute. Metrics take nanoseconds to update and some monitoring systems operate on a “pull” model, which means that the service is not affected by monitoring load.|
 |Tools and Frameworks|depends on the technology. e.g, logback, log4j, etc. Splunk|OpenTracing|Prometheus, DynaTrace, Wily|
 
-# Logging
-
-* Structured Logging - https://stackify.com/what-is-structured-logging-and-why-developers-need-it/
-
-## slf4j
-
-* Meta logging Frameworks - http://www.slf4j.org
-* NDC, MDC statements - http://stackoverflow.com/questions/7404435/conditional-logging-with-log4j?
-* What are the classloader issues that plague JCL?
-* what is meant by 'static binding approach' in sl4j?
-* Marker objects
-* NOPLogger?
 
 # Monitoring
 
@@ -77,20 +68,54 @@ Monitoring != Logging != Tracing != Instrumentation
 ## Telemetry Data
 
 * [M.E.L.T. (Metrics, Events, Logs and Traces)](https://newrelic.com/platform/telemetry-data-101)
+* M.E.L.T. are the essential data types of observability.
 
-* __Metrics__
-  * Metrics come in different representations
-  * _Counter_ is an ever-increasing metric. e.g., Odometer in a car, number of visits to a site.
-  * _Gauge_ is a point-in-time value. e.g., Speedometer n a car.
-    * The nature of gauge has one big shortcoming: it doesn't tell anything about previous values and provides no hint of future values. Storing gauges in a TSDB can do such things as plot on a graph, predict future trends, etc.
 * __Events__
+  * An event is a discrete action happening at a moment in time. Events are just about “something happened at some time.”
+  * Example: _At 3:34pm on 2/21/2019 a bag of BBQ chips was purchased for 1 dollar._
+  * There’s no hard and fast rule about what data an event can contain—you define an event as you see fit. Events become more powerful when you add more metadata to them. e.g., Event type, ItemCategory and PaymentType, etc.
+  * Since events are basically a history of every individual thing that happened in your system, you can roll them up into aggregates to answer more advanced questions on the fly.
+  * Pros
+    * Include individual data points
+    * allow you to ask whatever questions you want at any point
+    * can be computed on the fly
+  * Cons
+    * Every event takes some amount of computational energy to collect and process. They also take up space in your database—potentially lots of space. For example, you could store an event for every minuscule, sub-degree shift in temperature, which would quickly fill up even the largest databases. Or you could instead take a sample of the temperature at a regular interval. This kind of data is better stored as a _metric_.
+    * Expensive to store high volumes of event data
+    * May hit bandwidth constraints within the source system while collecting and sending the event data
+    * Can be time-consuming to query
+* __Metrics__
+  * Metrics are an aggregated set of measurements grouped or collected at regular intervals. 
+  * Unlike events, metrics are not discrete — they represent aggregates of data over a given time span. 
+  * Types of metric aggregation are diverse (e.g., average, total, minimum, maximum, sum-of-squares) but all metrics generally share the following traits:
+    * A timestamp (note that this timestamp represents a timespan, not a specific time)
+    * A name
+    * One or more numeric values representing some specific aggregated value
+    * A count of how many events are represented in the aggregate
+  * Example: _For the minute of 3:34-3:35pm on 2/21/2019 there was a total of three purchases totaling $2.75._
+    * Notice, we’ve lost some data here compared to an event. We no longer know what the specific three purchases were, nor do we have access to their individual values (and this data cannot be recovered). However, this data requires significantly less storage but still allows us to ask certain critical questions like, “What were my total sales during any given minute?”
+    * Example metrics: error rate, response time, throughput, etc.
+  * Metrics come in different representations
+    * _Counter_ is an ever-increasing metric. e.g., Odometer in a car, number of visits to a site.
+    * _Gauge_ is a point-in-time value. e.g., Speedometer n a car.
+      * The nature of gauge has one big shortcoming: it doesn't tell anything about previous values and provides no hint of future values. Storing gauges in a TSDB can do such things as plot on a graph, predict future trends, etc.
+  * Pros
+    * Store significantly less data
+    * Less time to compute roll-ups
+  * Cons
+    * Required to make decisions ahead of time on which you want to analyze the data
 * __Logs__
   * Logs are essentially strings of text with a timestamp associated with them.
+  * Like events, log data is discrete
   * Logs come in 2 types
     * _Unstructured Logs_
-    * _Structured Logs_: 
+    * _Structured Logs_: most common example is JSON format. 
+  * One can event produce multiple logs. e.g., one customer purchase event in a vending machine could potentially have multiple log messages like coin inserted, buttons pressed, dispensed, etc.
 * __Traces__
+  * Traces—or more precisely, “distributed traces”—are samples of causal chains of events (or transactions) between different components in a microservices ecosystem. And like events and logs, traces are discrete and irregular in occurrence.
+  * Traces stitched together form special events called __“spans”__; spans help you track a causal chain through a microservices ecosystem for a single transaction. To accomplish this, each service passes correlation identifiers, known as _“trace context,”_ to each other; this trace context is used to add attributes on the span.
 
+{% img /technology/melt-distributed-tracing-sample.jpg %}
 
 ## Components
 
@@ -148,7 +173,145 @@ A monitoring service has 5 primary facets
 ### 5) Alerting
 
 * Monitoring doesn't exist to generate alerts: alerts are just one possible outcome. With this in mind, remember that every metric you collect and graph does not need to have a corresponding alert.
+* An __alert__ should evoke a sense of urgency and require action from the person receiving that alert. Everything else can essentially be a log entry, a message dropped in your internal chat room, or an auto-generated ticket.
+* __3 alert categories__
+  * Response/action required immediately - send these to SMS, PagerDuty
+  * Awareness needed, but immediate action not required - send these to internal chat rooms
+  * Record for historical/diagnostic purposes - send it to log file and analyze later
 
+__6 alerting best practices__
+
+* _Stop using email for alerts_
+* _Write runbooks_ - A runbook is for when human judgement and diagnosis is necessary to resolve something.
+* _Arbitrary static thresholds aren't the only way_
+  * Alerting on things like "datapoint has crossed X" isn't useful. A static threshold set to alert at "free space under 10%" isn't going to alert when a disk quickly growing in usage from 11% to 80% overnight.
+  * Using a _percent change/derivative_ would handle our disk usage problem by reporting us "disk usage has grown by 50% overnight"
+  * Few such approaches: _moving averages_, _confidence bands_, _standard deviation_
+* _Delete and tune alerts_
+  * _Alert fatigue_ occurs when you are so exposed to alerts that you become desensitized to them. Alerts should cause a small adrenaline rush.
+* _Use maintenance periods_
+  * If you need to do work on a service or app, and you expect it to trigger an alert (e.g., due to it being down), then set that alert into maintenance period.
+* _Attempt self-healing first_
+
+__On-Call__
+
+Effective strategies for On-Call
+
+* Make it the duty of on-call to work on systems resiliency and stability during their on-call shift when they aren't fighing fires.
+* Explicitly plan for systems resiliency and stability work during the following week's sprint planning/team meeting, based on the information collected from the previous on-call week.
+* Start the on-call rotation during the workweek instead of calendar week. This allows the team to do an on-call handoff.
+* _Follow-The-Sun (FTS) Rotations_ allow to have full on-call coverage with no one being on-call during nights. One big downside to FTS rotations is the significant increase in communication overhead.
+* Only when you have a large team, have a backup on-call person to the primary on-call person. For smaller teams, this means the same person being on-call every 2-3 weeks.
+* How many people do you need for an effective on-call rotation schedule? It depends on 2 factors: how busy your on-call tends to be and how much time you want to give people between on-call shifts.
+* Software engineers should be on-call. Avoid the _"throw-it-over-the-wall_ version of software engineering. If software engineers are aware of the struggles that come up during the on-call, then they are incentivized to build better software.
+
+Tools: PagerDuty, VictorOps, OpsGenie
+
+> PagerDuty's Incident Response Documentation [https://response.pagerduty.com/](https://response.pagerduty.com/)
+
+
+## Monitoring at various tiers
+
+
+### Business Monitoring
+
+TBD
+
+### Frontend Monitoring
+
+* 2 approaches for frontend monitoring
+  * RUM (real use monitoring)
+    * uses actual user traffic for the monitoring data
+    * e.g., Google Analytics
+  * Synthetic monitoring
+    * create fake requests under a variety of test conditions to generate the data
+    * e.g., WebpageTest.org, Dynatrace Gomez scripts
+* DOM (Document Object Model)
+  * _Synchronous loading_: By default, scripts in a webpage are loaded synchronously. i.e., if the DOM parsing encounters a `<script>` tag, then the browser will stop parsing the DOM and load the script.
+  * _Asynchronous loading_: HTML5 supports `async` attribute on `<script>` tags which allows the scripts to be downloaded in background while the DOM continues to be loaded, executing the script when it's finished downloading. This improves the page performance greatly.
+* Performance Metrics
+  * _Navigation Timing API_
+    * Browsers expose page performance metrics via [Navigation Timing API](https://www.w3.org/TR/navigation-timing). 
+    * This API exposes 21 metrics. Consistently useful among them are `navigationStart`, `domLoading`, `domInteractive`, `domContentLoaded`, `domComplete`
+  * _User Timing API_
+    * While Navigation Timing API's metrics are browser set, User Timing API allows you to create your metrics and events.
+* Tools
+  * WebPageTest.org
+  * __SpeedIndex__
+    * calculates the user-perceived completeness
+    * Whereas Navigation Timing metrics ruly on accurate reporting by the browser, [Speed Index](https://sites.google.com/a/webpagetest.org/docs/using-webpagetest/metrics/speed-index) uses video capture at a rate of 10 frames per second to determine exactlly when a page is finised loading from a visual perspective.
+    * Speed Index Algorithm produces a single number as output - lower is better.
+
+{% img /technology/navigation-timing-overview.PNG %}
+
+### Application Monitoring
+
+* __StatsD__
+  * tool created by Etsy in 2011 to add metrics inside of your code - originally designed for a Graphite backend
+  * A network daemon that runs on the Node.js platform and listens for statistics, like counters and timers, sent over UDP or TCP and sends aggregates to one or more pluggable backend services (e.g., Graphite, OpenTSDB, InfluxDB)
+* Monitor CI/CD pipeline
+  * capture metrics like deployment start time, end time, etc.
+  * Deployment metrics along with application performance metrics together can help identify issues caused by a particular deployment.
+* __Health Endpoint Pattern__
+  * `/health` endpoint pattern or _canary endpoint_ or _status endpoint_ is an HTTP endpoint to provide basic health metrics about the app - e.g., app version, configuration used, status of dependencies, etc.
+  * Benefits
+    * can be used as the health check for a load balancer or for service discovery tools
+    * helpful for debugging: exposing build information helps with determining what is running in the environment easily
+  * Downsides
+    * involves a lot more engineering work to implement than a simple push-based metrics approach
+    * need tooling to consistently check the endpoint
+* Monitoring Serverless Apps
+  * TBD
+
+
+### Server Monitoring
+
+* __CPU usage__: `/proc/stat` metrics via `top` command
+* __Memory usage__: `/proc/meminfo` metrics via `free -m` command
+  * also monitor the _OOMKiller_ spawning in the logs
+* __Network usage__: `/proc/net/dev` metrics via `ifconfig`, `ip`(from the `iproute2` package)
+* __Disk usage__: `/proc/diskstats` metrics via `iostat -x` (from the `sysstat` package)
+  * _iowait_ represents the amount of time the CPU was idle due to waiting on the disk to complete operations.
+  * `iostat` without `-x` returns _tps (transfers per second)_ or _IOPS (I/O per second)_. Noticing a sudden drop in IOPS may indicate a disk performance problem.
+* __Load__: `/proc/loadavg` metrics via `uptime` command.
+  * Load is a measurement of how many processes are waiting to be served by the CPI. It's represented by 3 numbers: a 1 m average, a 5 m average, a 15 m average ([Brendan Gregg's article to learn more](http://www.brendangregg.com/blog/2017-08-08/linux-load-averages.html))
+* __SSL Certificates__
+  * For external site monitoring, use tools like Pingdom, StatusCake, etc.
+  * For internal site monitoring, create custom shell scripts. 
+* __Web Servers__
+  * _Requests per second (req/sec)_:Golden metric for assessing web server performance or throughput.
+  * _open connections_ or _keepalives_
+    * connections are _not_ requests. Prior to the use of keepalives, each request required its own connection. Since a web page may have multiple objects to request for the page to load, this led to a whole lot of connections. 
+    * Opening a connection requires going through the full TCP handshake, setting up a connection, moving data, and tearing down the connection - dozens of times for a single page. 
+    * Thus, _HTTP keepalives_ were born: the web server holds open the connection for a client rather than tearing it down, to reuse the connection for the client which allows many requests to be made over a single connection. Of course, the connection can't be held open forever, so keepalives are governed by a timeout on the webserver side. 
+    * There is also a keepalive configuration on the browser side called _persistent connection_ with their own timeout values. All modern browsers use persistent connections by default.
+  * _request time_
+* __Database Servers__
+  * _open connections_
+  * _queries per second_
+  * _IOPS_
+* __Caching__
+  * _# of evicted items_: high evictions are a good signal for a cache being too small, causing too many items to be evicted in order to make room for new items.
+  * _Hit/miss ratio_ or _cache-hit ratio_
+* __NTP server__
+  * `ntpstat`
+
+### Network Monitoring
+
+TBD
+
+### Security Monitoring
+
+* __HIDS (Host Intrusion Detection System)__
+  * detects bad actors or _rootkits_ on a particular host
+  * Rootkits can be anything from mass-installed webshells to stealthy recompiled binaries and everything in-between.
+  * Due to their stealthy nature, rootkits can be rather difficult to detect.
+  * Tools: _rkhunter_, [OSSEC](https://ossec.github.io).
+* __NIDS (Network Intrusion Detection System)__
+  * detects threats on the network itself.
+  * works by listening in on the raw traffic on the wire using one or more _network taps_ placed throughout the network.
+  * A _Network tap_ is a piece of hardware that sits inline on your network, intercepting all traffic that passes through it and forwarding a copy to another system.
+  * The networks tap traffic are sent for analysis into a tool called __security information and event management (SIEM)__. e.g., [Zeek](https://www.zeek.org/), [Snort](https://www.snort.org/).
 
 # Tools
 
@@ -170,6 +333,7 @@ A monitoring service has 5 primary facets
 * [GrayLog2](http://www.graylog2.com/) - an open source data analytics system - search logs, create charts, create alerts - leverages Java and ElasticSearch. Communication via REST API
 * LogStash - Redis for storage - RabbitMQ, grok - Typical implementation: logstash + redis + elasticsearch
 * InfluxDB
+* [Jaeger](https://jaegertracing.io/) - open-source distributed tracing system
 * [Kibana](http://www.elasticsearch.org/overview/kibana/) - web interface for viewing logstash records stored in elasticsearch
 * Librato - Commercial tool
 * Loggly - Commercial tool
@@ -193,6 +357,7 @@ A monitoring service has 5 primary facets
   * listens to statistics (counters and timers) and sends aggregates to backend services like Graphite
 * trace
 * Zenoss
+* [Zipkin](http://zipkin.io/)
 * Shippers
   * lumberjack
   * beaver
@@ -255,12 +420,33 @@ A monitoring service has 5 primary facets
 * Operational Intelligence refers to the information collected and processed 
 * Semantic logging as data or events that are written to log files explicitly for the purpose of gathering analytics.
 
+# Logging
+
+* Structured Logging - https://stackify.com/what-is-structured-logging-and-why-developers-need-it/
+
+## slf4j
+
+* Meta logging Frameworks - http://www.slf4j.org
+* NDC, MDC statements - http://stackoverflow.com/questions/7404435/conditional-logging-with-log4j?
+* What are the classloader issues that plague JCL?
+* what is meant by 'static binding approach' in sl4j?
+* Marker objects
+* NOPLogger?
+
+
 # Tracing
+
+* Distributed Tracing is a methodology and toolchain for monitoring the complex interactions inherent in a microservice architecture. 
+* e.g. Google Dapper, Zipkin
+* How it works?
+  * for every request that ocmes in, "tag" it with a unique request ID. 
+  * this request ID stays with the request and resulting requests throughout its life, allowing to see what services a request touches and how much time is spent in each service.
+* Tracing is more concerned with individual requests than aggregated metrics
 
 ## OpenTracing
 
 * [OpenTracing](https://opentracing.io/) is a vendor neutral specification for instrumentation APIs.
-* It offers consistent, expressive, vendor-neutral APIs for popular platforms, making it easy for developers to add (or switch) tracing implementations with an O(1) configuration change. 
+* It offers consistent, expressive, vendor-neutral APIs for popular platforms, making it easy for developers to add (or switch) tracing implementations with an `O(1)` configuration change. 
 * OpenTracing also offers a lingua franca for OSS instrumentation and platform-specific tracing helper libraries.
 * [Tutorials](https://github.com/yurishkuro/opentracing-tutorial)
 * CNCF [Jaeger](https://jaegertracing.io/), a Distributed Tracing UI Platform 

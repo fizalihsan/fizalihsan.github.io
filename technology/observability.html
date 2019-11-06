@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Monitoring & Observability Overview Monitoring Anti-patterns Design Patterns Telemetry Data Components 1) Data collection 2) Data storage 3) &hellip;">
+<meta name="description" content="Monitoring & Observability Overview Monitoring Types Why Monitor? 4 Golden Signals Anti-patterns Design Patterns Telemetry Data Components 1) Data &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -110,6 +110,9 @@ messageStyle: "none",
   <ul id="markdown-toc">
   <li><a href="#overview">Overview</a></li>
   <li><a href="#monitoring">Monitoring</a>    <ul>
+      <li><a href="#types">Types</a></li>
+      <li><a href="#why-monitor">Why Monitor?</a></li>
+      <li><a href="#golden-signals">4 Golden Signals</a></li>
       <li><a href="#anti-patterns">Anti-patterns</a></li>
       <li><a href="#design-patterns">Design Patterns</a></li>
       <li><a href="#telemetry-data">Telemetry Data</a></li>
@@ -212,7 +215,101 @@ Monitoring doesn’t <em>fix</em> anything. You need to fix things after they br
       <li>Diversity: are we collecting different metrics?</li>
     </ul>
   </li>
-  <li>What is write-ahead logging? Used in HBase.</li>
+  <li>
+    <p>What is write-ahead logging? Used in HBase.</p>
+  </li>
+  <li>Any monitoring system should answer 2 main questions:
+    <ul>
+      <li>What’s broken?</li>
+      <li>and why?</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="types">Types</h2>
+
+<ul>
+  <li><strong>Black-box monitoring</strong>
+    <ul>
+      <li>Testing externally visible behavior as a user would see it. e.g., Dynatrace Gomez</li>
+      <li>It is symptom-oriented and represents active - not predicted problems. e.g., <em>“The system isn’t working right now.”</em></li>
+      <li>Useful for paging. It has the key benefit of forcing discipline to only nag a human when a problem is both already ongoing and contributing to real symptoms.</li>
+    </ul>
+  </li>
+  <li><strong>White-box monitoring</strong>
+    <ul>
+      <li>Monitoring based on metrics exposed by the internals of the system, including logs, interfaces like JVM profiling interface, or an HTTP handler that emits internal statistics. e.g. <code>/health</code> endpoint pattern.</li>
+      <li>It depends on the ability to inspect the innards of the system, such as logs or HTTP endpoints, with instrumentation. </li>
+      <li>It allows detection of imminent problems, failures masked by retires, and so forth.</li>
+      <li>Telemetry from white-box monitoring is essential for debugging. e.g., <em>if web requests are slow, you need to know whether the slowness is caused by a network problem or slowness in database.</em></li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="why-monitor">Why Monitor?</h2>
+
+<ul>
+  <li><em>Analyzing long-term trends</em>
+    <ul>
+      <li>How big is my database and how fast is it growing? How quickly is my daily-active user count growing?</li>
+    </ul>
+  </li>
+  <li><em>Comparing over time or experiment groups</em>
+    <ul>
+      <li>Are queries faster with Acme Bucket of Bytes 2.72 versus Ajax DB 3.14? How much better is my memcache hit rate with an extra node? Is my site slower than it was last week?</li>
+    </ul>
+  </li>
+  <li><em>Alerting</em></li>
+  <li><em>Building dashboards</em></li>
+  <li><em>Conducting ad hoc retrospective analysis (i.e., debugging)</em>
+    <ul>
+      <li>Our latency just shot up; what else happened around the same time?</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="golden-signals">4 Golden Signals</h2>
+
+<p>The 4 golden signals of monitoring are: S.E.L.T. (saturation, error, latency, traffic)</p>
+
+<ul>
+  <li><strong>Latency</strong>
+    <ul>
+      <li>The time it takes to service a request. </li>
+      <li>It’s important to distinguish between the latency of successful requests and the latency of failed requests. </li>
+      <li>For example, an HTTP 500 error triggered due to loss of connection to a database or other critical backend might be served very quickly; however, as an HTTP 500 error indicates a failed request, factoring 500s into your overall latency might result in misleading calculations. On the other hand, a slow error is even worse than a fast error! </li>
+    </ul>
+  </li>
+  <li><strong>Traffic</strong>
+    <ul>
+      <li>A measure of how much demand is being placed on your system, measured in a high-level system-specific metric. </li>
+      <li>For a web service, this measurement is usually HTTP requests per second, perhaps broken out by the nature of the requests (e.g., static versus dynamic content). </li>
+      <li>For an audio streaming system, this measurement might focus on network I/O rate or concurrent sessions. </li>
+      <li>For a key-value storage system, this measurement might be transactions and retrievals per second.</li>
+    </ul>
+  </li>
+  <li><strong>Errors</strong>
+    <ul>
+      <li>The rate of requests that fail, 
+        <ul>
+          <li>either <strong><em>explicitly</em></strong> (e.g., HTTP 500s), </li>
+          <li><strong><em>implicitly</em></strong> (for example, an HTTP 200 success response, but coupled with the wrong content), </li>
+          <li>or <strong><em>by policy</em></strong> (for example, “If you committed to one-second response times, any request over one second is an error”). </li>
+        </ul>
+      </li>
+      <li>Where protocol response codes are insufficient to express all failure conditions, secondary (internal) protocols may be necessary to track partial failure modes. </li>
+      <li>Monitoring these cases can be drastically different: catching HTTP 500s at your load balancer can do a decent job of catching all completely failed requests, while only end-to-end system tests can detect that you’re serving the wrong content.</li>
+    </ul>
+  </li>
+  <li><strong>Saturation</strong>
+    <ul>
+      <li>How “full” your service is. </li>
+      <li>A measure of your system fraction, emphasizing the resources that are most constrained (e.g., in a memory-constrained system, show memory; in an I/O- constrained system, show I/O). </li>
+      <li>Note that many systems degrade in performance before they achieve 100% utilization, so having a utilization target is essential.</li>
+      <li>Latency increases are often a leading indicator of saturation.</li>
+      <li>Saturation is also concerned with predications of impending saturation, such as <em>“it looks like your DB will fill its hard drive in 4 hours”</em></li>
+    </ul>
+  </li>
 </ul>
 
 <h2 id="anti-patterns">Anti-patterns</h2>
@@ -223,7 +320,7 @@ Monitoring doesn’t <em>fix</em> anything. You need to fix things after they br
       <li>there is no such things as the single-pane-of-glass tool that will suddenly provide you with perfect visibility into your network, servers, and applications, all with little to no tuning or investment of staff. Many monitoring software vendors sell this idea, but it’s a myth.</li>
       <li>Monitoring isn’t a single problem, so it stands to reason that it can’t be solved with a single tool either.</li>
       <li>Agentless monitoring is extraordinarily inflexible and will never give you the amount of control and visibility you desire.</li>
-      <li><em>How many tools is too many?</em> - If there are 3 tools to monitor your DB and they all provide the same information, you should consider consolidating. On the other hand, if all three provide different information, you’re probably fine.</li>
+      <li><strong><em>How many tools is too many?</em></strong> - If there are 3 tools to monitor your DB and they all provide the same information, you should consider consolidating. On the other hand, if all three provide different information, you’re probably fine.</li>
       <li><em>Avoid Cargo-culting tools</em> - Adopting tools and procedures of more successful teams and companies in the misguided notion that the tools and procedures are what made those teams successful, so they will also make your own team successful in the same ways. Sadly, the cause and effect are backward: the success that team experienced led them to create the tools and procedures, not the other way around.  </li>
     </ul>
   </li>
@@ -263,7 +360,10 @@ Monitoring doesn’t <em>fix</em> anything. You need to fix things after they br
 
 <ul>
   <li>1) <strong>Composable Monitoring</strong>: <em>Use multiple specialized tools and couple them loosely together, forming a monitoring platform</em>. Similar to the UNIX philosophy, <em>Write a program that do one thing and do it well. Write programs to work together.</em></li>
-  <li>2) <strong>Monitor from the user perspective</strong>: One of the most effective things to monitor is simply HTTP response codes (especially of the HTTP 5xx variety) followed by request times (aka latency). Always ask yourself, <em>“How will these metrics show me the user impact?”</em>.</li>
+  <li>
+    <p>2) <strong>Monitor from the user perspective</strong>: One of the most effective things to monitor is simply HTTP response codes (especially of the HTTP 5xx variety) followed by request times (aka latency). Always ask yourself, <em>“How will these metrics show me the user impact?”</em>.</p>
+  </li>
+  <li>When measuring the performance of your request, don’t just calculate the average response time. Bucket them by latencies: <em>how many requests took between 0 ms and 10ms, between 10 ms and 30 ms, , between 30 ms and 100 ms, and so on</em>. Plotting this in a histogram is often an easy way to visualize the distribution of your requests.</li>
 </ul>
 
 <h2 id="telemetry-data">Telemetry Data</h2>
@@ -424,24 +524,58 @@ Monitoring doesn’t <em>fix</em> anything. You need to fix things after they br
 
 <h3 id="analytics-and-reporting">4) Analytics and reporting</h3>
 
+<p><strong>SLA, SLO, SLI</strong></p>
+
+<blockquote>
+  <p>The SLA, SLO, and SLI are based on the assumption that the service will not be available 100%</p>
+</blockquote>
+
 <ul>
-  <li>SLA, SLO, SLI
+  <li>SLA (<em>Service Level Agreement</em>) 
     <ul>
-      <li>Service Level Agreement </li>
-      <li>Service Level Objective</li>
+      <li>is a contract that the service provider promises customers on service availability, performance, etc. </li>
+      <li>SLAs are for external</li>
     </ul>
   </li>
-  <li>SLA &amp; SLO are important for reporting</li>
-  <li><strong>Availability</strong>
+  <li>SLO (<em>Service Level Objective</em>)
     <ul>
-      <li>Availability of an application/service is commonly referred to by the number of <em>nines</em>. 99.99% is four nines.</li>
-      <li><code>Availability = uptime / (downtime + uptime)</code></li>
-      <li><em>Why High Availability is difficult?</em>: According to <a href="http://bit.ly/2i2kBmv"><em>Nyquist-Shannon sampling theorem</em></a>, to measure an outage of 2 minutes, you must be collecting data in minute-long intervals. Thus, to measure availability down to 1 second, you must be collecting data at sub-second intervals. This is just one reason why achieving accurate SLA reporting better than 99% is so difficult.</li>
-      <li>An oft-overlooked point about availability is when your app has dependent components: your service can ony be as available as the underlying components on which it is built. e.g, AWS S3 provides 99.95% SLA. An app depending on S3 can never be &gt;99.95% SLA.</li>
-      <li>Similarly, if the underlying network is unreliable, the servers and application higher in the stack can’t possibly be more reliable than the network.</li>
-      <li>Each additional nine of availability has significantly more cost associated with it, and the investment often isn’t worth it: many customers can’t tell the difference between 99% and 99.9%.</li>
+      <li>is a goal that service provider wants to reach.</li>
+      <li>SLOs are generally used for internal only.</li>
+      <li>If a service availability violates the SLO, operations need to react quicly to avoid it breaking the SLA which would cost money to the service provider.</li>
+      <li>SLOs are alerting rules</li>
     </ul>
   </li>
+  <li>SLI (<em>Service Level Indicator</em>)
+    <ul>
+      <li>is a measurement the service provider uses for the goal.</li>
+      <li>SLIs are the metrics in the monitoring system</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>Most people really mean SLO when they say “SLA”. One giveaway: if somebody talks about an “SLA violation”, they are almost always talking about a missed SLO. A real SLA violation might trigger a court case for breach of contract.</p>
+</blockquote>
+
+<ul>
+  <li>Relationship
+    <ul>
+      <li>The service provider needs to collect metrics based on SLI,</li>
+      <li>define thresholds of metrics based on SLO, and</li>
+      <li>monitor the thresholds of metrics so that it won’t break SLA.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Availability</strong></p>
+
+<ul>
+  <li>Availability of an application/service is commonly referred to by the number of <em>nines</em>. 99.99% is four nines.</li>
+  <li><code>Availability = uptime / (downtime + uptime)</code></li>
+  <li><em>Why High Availability is difficult?</em>: According to <a href="http://bit.ly/2i2kBmv"><em>Nyquist-Shannon sampling theorem</em></a>, to measure an outage of 2 minutes, you must be collecting data in minute-long intervals. Thus, to measure availability down to 1 second, you must be collecting data at sub-second intervals. This is just one reason why achieving accurate SLA reporting better than 99% is so difficult.</li>
+  <li>An oft-overlooked point about availability is when your app has dependent components: your service can ony be as available as the underlying components on which it is built. e.g, AWS S3 provides 99.95% SLA. An app depending on S3 can never be &gt;99.95% SLA.</li>
+  <li>Similarly, if the underlying network is unreliable, the servers and application higher in the stack can’t possibly be more reliable than the network.</li>
+  <li>Each additional nine of availability has significantly more cost associated with it, and the investment often isn’t worth it: many customers can’t tell the difference between 99% and 99.9%.</li>
 </ul>
 
 <h3 id="alerting">5) Alerting</h3>
@@ -563,7 +697,7 @@ Monitoring doesn’t <em>fix</em> anything. You need to fix things after they br
   </li>
 </ul>
 
-<p><img src="/technology/navigation-timing-overview.PNG" /></p>
+<p><img src="/technology/navigation-timing-overview.png" /></p>
 
 <h3 id="application-monitoring">Application Monitoring</h3>
 
@@ -888,7 +1022,9 @@ Monitoring doesn’t <em>fix</em> anything. You need to fix things after they br
       <li><a href="https://www.shkuro.com/books/2019-mastering-distributed-tracing/">Mastering Distributed Tracing</a></li>
       <li>Distributed Systems Observability - Cindy Sridharan</li>
       <li>Logging and Log Management - Anton Chuvakin, Kevin Schmidt</li>
-      <li>O’Reilly Book - <a href="https://www.practicalmonitoring.com/">Practical Monitoring</a></li>
+      <li>O’Reilly - <a href="https://www.practicalmonitoring.com/">Practical Monitoring</a> - Mike Julian</li>
+      <li>O’Reilly - Monitoring Distributed Systems - Rob Ewaschuk, Betsy Beyer</li>
+      <li>O’Reilly - <a href="https://landing.google.com/sre/sre-book/toc/index.html">Site Reliability Engineering</a></li>
     </ul>
   </li>
 </ul>

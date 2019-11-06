@@ -36,13 +36,67 @@ Monitoring != Logging != Tracing != Instrumentation
   * Diversity: are we collecting different metrics?
 * What is write-ahead logging? Used in HBase.
 
+* Any monitoring system should answer 2 main questions:
+  * What's broken?
+  * and why?
+
+## Types
+
+* __Black-box monitoring__
+  * Testing externally visible behavior as a user would see it. e.g., Dynatrace Gomez
+  * It is symptom-oriented and represents active - not predicted problems. e.g., _"The system isn't working right now."_
+  * Useful for paging. It has the key benefit of forcing discipline to only nag a human when a problem is both already ongoing and contributing to real symptoms.
+* __White-box monitoring__
+  * Monitoring based on metrics exposed by the internals of the system, including logs, interfaces like JVM profiling interface, or an HTTP handler that emits internal statistics. e.g. `/health` endpoint pattern.
+  * It depends on the ability to inspect the innards of the system, such as logs or HTTP endpoints, with instrumentation. 
+  * It allows detection of imminent problems, failures masked by retires, and so forth.
+  * Telemetry from white-box monitoring is essential for debugging. e.g., _if web requests are slow, you need to know whether the slowness is caused by a network problem or slowness in database._
+
+## Why Monitor?
+
+* _Analyzing long-term trends_
+  * How big is my database and how fast is it growing? How quickly is my daily-active user count growing?
+* _Comparing over time or experiment groups_
+  * Are queries faster with Acme Bucket of Bytes 2.72 versus Ajax DB 3.14? How much better is my memcache hit rate with an extra node? Is my site slower than it was last week?
+* _Alerting_
+* _Building dashboards_
+* _Conducting ad hoc retrospective analysis (i.e., debugging)_
+  * Our latency just shot up; what else happened around the same time?
+
+## 4 Golden Signals
+
+The 4 golden signals of monitoring are: S.E.L.T. (saturation, error, latency, traffic)
+
+* __Latency__
+  * The time it takes to service a request. 
+  * It’s important to distinguish between the latency of successful requests and the latency of failed requests. 
+  * For example, an HTTP 500 error triggered due to loss of connection to a database or other critical backend might be served very quickly; however, as an HTTP 500 error indicates a failed request, factoring 500s into your overall latency might result in misleading calculations. On the other hand, a slow error is even worse than a fast error! 
+* __Traffic__
+  * A measure of how much demand is being placed on your system, measured in a high-level system-specific metric. 
+  * For a web service, this measurement is usually HTTP requests per second, perhaps broken out by the nature of the requests (e.g., static versus dynamic content). 
+  * For an audio streaming system, this measurement might focus on network I/O rate or concurrent sessions. 
+  * For a key-value storage system, this measurement might be transactions and retrievals per second.
+* __Errors__
+  * The rate of requests that fail, 
+    * either __*explicitly*__ (e.g., HTTP 500s), 
+    * __*implicitly*__ (for example, an HTTP 200 success response, but coupled with the wrong content), 
+    * or __*by policy*__ (for example, “If you committed to one-second response times, any request over one second is an error”). 
+  * Where protocol response codes are insufficient to express all failure conditions, secondary (internal) protocols may be necessary to track partial failure modes. 
+  * Monitoring these cases can be drastically different: catching HTTP 500s at your load balancer can do a decent job of catching all completely failed requests, while only end-to-end system tests can detect that you’re serving the wrong content.
+* __Saturation__
+  * How “full” your service is. 
+  * A measure of your system fraction, emphasizing the resources that are most constrained (e.g., in a memory-constrained system, show memory; in an I/O- constrained system, show I/O). 
+  * Note that many systems degrade in performance before they achieve 100% utilization, so having a utilization target is essential.
+  * Latency increases are often a leading indicator of saturation.
+  * Saturation is also concerned with predications of impending saturation, such as _"it looks like your DB will fill its hard drive in 4 hours"_
+
 ## Anti-patterns
 
 * __Tool Obsession__
   * there is no such things as the single-pane-of-glass tool that will suddenly provide you with perfect visibility into your network, servers, and applications, all with little to no tuning or investment of staff. Many monitoring software vendors sell this idea, but it's a myth.
   * Monitoring isn't a single problem, so it stands to reason that it can't be solved with a single tool either.
   * Agentless monitoring is extraordinarily inflexible and will never give you the amount of control and visibility you desire.
-  * _How many tools is too many?_ - If there are 3 tools to monitor your DB and they all provide the same information, you should consider consolidating. On the other hand, if all three provide different information, you're probably fine.
+  * __*How many tools is too many?*__ - If there are 3 tools to monitor your DB and they all provide the same information, you should consider consolidating. On the other hand, if all three provide different information, you're probably fine.
   * _Avoid Cargo-culting tools_ - Adopting tools and procedures of more successful teams and companies in the misguided notion that the tools and procedures are what made those teams successful, so they will also make your own team successful in the same ways. Sadly, the cause and effect are backward: the success that team experienced led them to create the tools and procedures, not the other way around.  
 * __Monitoring-as-a-Job__
   * Strive to make monitoring a first-class citizen when it comes to building and managing services. Remember, it's not ready for production until it's monitored.
@@ -64,6 +118,8 @@ Monitoring != Logging != Tracing != Instrumentation
 
 * 1) __Composable Monitoring__: _Use multiple specialized tools and couple them loosely together, forming a monitoring platform_. Similar to the UNIX philosophy, _Write a program that do one thing and do it well. Write programs to work together._
 * 2) __Monitor from the user perspective__: One of the most effective things to monitor is simply HTTP response codes (especially of the HTTP 5xx variety) followed by request times (aka latency). Always ask yourself, _"How will these metrics show me the user impact?"_.
+
+* When measuring the performance of your request, don't just calculate the average response time. Bucket them by latencies: _how many requests took between 0 ms and 10ms, between 10 ms and 30 ms, , between 30 ms and 100 ms, and so on_. Plotting this in a histogram is often an easy way to visualize the distribution of your requests.
 
 ## Telemetry Data
 
@@ -158,17 +214,37 @@ A monitoring service has 5 primary facets
 
 ### 4) Analytics and reporting
 
-* SLA, SLO, SLI
-  * Service Level Agreement 
-  * Service Level Objective
-* SLA & SLO are important for reporting
-* __Availability__
-  * Availability of an application/service is commonly referred to by the number of _nines_. 99.99% is four nines.
-  * `Availability = uptime / (downtime + uptime)`
-  * _Why High Availability is difficult?_: According to [_Nyquist-Shannon sampling theorem_](http://bit.ly/2i2kBmv), to measure an outage of 2 minutes, you must be collecting data in minute-long intervals. Thus, to measure availability down to 1 second, you must be collecting data at sub-second intervals. This is just one reason why achieving accurate SLA reporting better than 99% is so difficult.
-  * An oft-overlooked point about availability is when your app has dependent components: your service can ony be as available as the underlying components on which it is built. e.g, AWS S3 provides 99.95% SLA. An app depending on S3 can never be >99.95% SLA.
-  * Similarly, if the underlying network is unreliable, the servers and application higher in the stack can't possibly be more reliable than the network.
-  * Each additional nine of availability has significantly more cost associated with it, and the investment often isn't worth it: many customers can't tell the difference between 99% and 99.9%.
+__SLA, SLO, SLI__
+
+> The SLA, SLO, and SLI are based on the assumption that the service will not be available 100%
+
+* SLA (_Service Level Agreement_) 
+  * is a contract that the service provider promises customers on service availability, performance, etc. 
+  * SLAs are for external
+* SLO (_Service Level Objective_)
+  * is a goal that service provider wants to reach.
+  * SLOs are generally used for internal only.
+  * If a service availability violates the SLO, operations need to react quicly to avoid it breaking the SLA which would cost money to the service provider.
+  * SLOs are alerting rules
+* SLI (_Service Level Indicator_)
+  * is a measurement the service provider uses for the goal.
+  * SLIs are the metrics in the monitoring system
+
+> Most people really mean SLO when they say "SLA". One giveaway: if somebody talks about an "SLA violation", they are almost always talking about a missed SLO. A real SLA violation might trigger a court case for breach of contract.
+
+* Relationship
+  * The service provider needs to collect metrics based on SLI,
+  * define thresholds of metrics based on SLO, and
+  * monitor the thresholds of metrics so that it won't break SLA.
+
+__Availability__
+
+* Availability of an application/service is commonly referred to by the number of _nines_. 99.99% is four nines.
+* `Availability = uptime / (downtime + uptime)`
+* _Why High Availability is difficult?_: According to [_Nyquist-Shannon sampling theorem_](http://bit.ly/2i2kBmv), to measure an outage of 2 minutes, you must be collecting data in minute-long intervals. Thus, to measure availability down to 1 second, you must be collecting data at sub-second intervals. This is just one reason why achieving accurate SLA reporting better than 99% is so difficult.
+* An oft-overlooked point about availability is when your app has dependent components: your service can ony be as available as the underlying components on which it is built. e.g, AWS S3 provides 99.95% SLA. An app depending on S3 can never be >99.95% SLA.
+* Similarly, if the underlying network is unreliable, the servers and application higher in the stack can't possibly be more reliable than the network.
+* Each additional nine of availability has significantly more cost associated with it, and the investment often isn't worth it: many customers can't tell the difference between 99% and 99.9%.
 
 ### 5) Alerting
 
@@ -242,7 +318,7 @@ TBD
     * Whereas Navigation Timing metrics ruly on accurate reporting by the browser, [Speed Index](https://sites.google.com/a/webpagetest.org/docs/using-webpagetest/metrics/speed-index) uses video capture at a rate of 10 frames per second to determine exactlly when a page is finised loading from a visual perspective.
     * Speed Index Algorithm produces a single number as output - lower is better.
 
-{% img /technology/navigation-timing-overview.PNG %}
+{% img /technology/navigation-timing-overview.png %}
 
 ### Application Monitoring
 
@@ -457,4 +533,6 @@ TBD
   * [Mastering Distributed Tracing](https://www.shkuro.com/books/2019-mastering-distributed-tracing/)
   * Distributed Systems Observability - Cindy Sridharan
   * Logging and Log Management - Anton Chuvakin, Kevin Schmidt
-  * O'Reilly Book - [Practical Monitoring](https://www.practicalmonitoring.com/)
+  * O'Reilly - [Practical Monitoring](https://www.practicalmonitoring.com/) - Mike Julian
+  * O'Reilly - Monitoring Distributed Systems - Rob Ewaschuk, Betsy Beyer
+  * O'Reilly - [Site Reliability Engineering](https://landing.google.com/sre/sre-book/toc/index.html)

@@ -211,6 +211,8 @@ A monitoring service has 5 primary facets
 * A driving principle behind great monitoring is that you should be building things in a way that works best for your environment.
 * Common visualization for time series data is the _line graph_ (also called a _strip data_).
 * Visualization should be actionable items. Avoid pie charts for disk usage metrics. Think of visual graphs which can predict the disk size after 6 months.
+* [Flame graphs](http://www.brendangregg.com/flamegraphs.html)
+* [State maps](https://github.com/joyent/statemap)
 
 ### 4) Analytics and reporting
 

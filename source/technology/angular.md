@@ -12,35 +12,6 @@ footer: true
 
 * [Angular Docs](https://angular.io/docs)
 
-## Concepts
-
-* Binding
-    * Interpolation
-    * Data binding
-        * `<div class="name">Hello {{name}}</div>`
-    * Property binding
-        * `<div class="price" [class]="positiveChange ? 'plus' : 'minus'">$ {{price}}</div>`
-        * Tells Angular to bind to the __class__ property of the DOM element to the value of the expression. 
-        * Square-bracket notation refers to data flowing from the component to the UI.
-        * When you bind to the class property, it overrides the existing value of the property. In the example above, `class="price"` has no effect. 
-        * Angular data binding only works with DOM properties, and not with HTML attributes. (see section below)
-    * Event binding
-        * `<button (click)="toggleFavorite()" [disabled]="favorite">Add to Favorite</button>`
-        * The parentheses notation refers to events.
-        * Angular gives you access to the underlying DOM event by giving access to a special variable `$event`. You can access it or even pass it to your function as follows: `<button (click)="toggleFavorite($event)" [disabled]="favorite">Add to Favorite</button>`
-* Directives
-
-
-_HTML attribute vs. DOM property: What's the difference?_
-
-* In Angular, one-way binding binds to the DOM property, and not to the HTML attributes. 
-* Attributes are defined by HTML, while properties are defined by the DOM. Though some attributes (like `ID` and `class`) directly map to DOM properties, others may exist on one side but not the other.
-* The distinction between the two is that HTML attributes are generally used for initialization of a DOM element, but after that, they have no purpose or effect on the underlying element. Once the element is initialized, its behavior is controlled by the DOM properties from then on.
-* For example, consider the input HTML element. If we bootstrap our HTML with something like: `<input type="text" value="foo"/>` this initializes an input DOM element, with the initial value of the DOM property value to be set to foo. Now let’s assume we type something in the text box, say bar. At this point:
-    * If we do input.getAttribute('value'), it would return foo, which was the attribute value we used to initialize the HTML.
-    * If we do input.value, we will get the current value of the DOM property, which is bar.
-* That is, the attribute value is used to boostrap and set the initial value of the HTML DOM element, but after that, it is the DOM property that drives the behavior. If you inspect the HTML, you will see that it is still the initial HTML we provided, and does not update either.
-
 
 # Project Structure
 
@@ -92,6 +63,36 @@ _HTML attribute vs. DOM property: What's the difference?_
 
 {% img /technology/angular_file_deps.svg File Dependencies! %}
 
+# Concepts
+
+## Binding
+    
+* Data binding
+    * `<div class="name">Hello {{name}}</div>`. This is called _Interpolation_.
+* Property binding
+    * `<div class="price" [class]="positiveChange ? 'plus' : 'minus'">$ {{price}}</div>`
+    * Tells Angular to bind to the __class__ property of the DOM element to the value of the expression. 
+    * Square-bracket notation refers to data flowing from the component to the UI.
+    * When you bind to the class property, it overrides the existing value of the property. In the example above, `class="price"` has no effect. 
+    * Angular data binding only works with DOM properties, and not with HTML attributes. (see section below)
+* Event binding
+    * `<button (click)="toggleFavorite()" [disabled]="favorite">Add to Favorite</button>`
+    * The parentheses notation refers to events.
+    * Angular gives you access to the underlying DOM event by giving access to a special variable `$event`. You can access it or even pass it to your function as follows: `<button (click)="toggleFavorite($event)" [disabled]="favorite">Add to Favorite</button>`
+
+_HTML attribute vs. DOM property: What's the difference?_
+
+* In Angular, one-way binding binds to the DOM property, and not to the HTML attributes. 
+* Attributes are defined by HTML, while properties are defined by the DOM. Though some attributes (like `ID` and `class`) directly map to DOM properties, others may exist on one side but not the other.
+* The distinction between the two is that HTML attributes are generally used for initialization of a DOM element, but after that, they have no purpose or effect on the underlying element. Once the element is initialized, its behavior is controlled by the DOM properties from then on.
+* For example, consider the input HTML element. If we bootstrap our HTML with something like: `<input type="text" value="foo"/>` this initializes an input DOM element, with the initial value of the DOM property value to be set to foo. Now let’s assume we type something in the text box, say bar. At this point:
+    * If we do input.getAttribute('value'), it would return foo, which was the attribute value we used to initialize the HTML.
+    * If we do input.value, we will get the current value of the DOM property, which is bar.
+* That is, the attribute value is used to boostrap and set the initial value of the HTML DOM element, but after that, it is the DOM property that drives the behavior. If you inspect the HTML, you will see that it is still the initial HTML we provided, and does not update either.
+
+
+## Components
+
 __Root Component__
 
 A component in Angular is nothing but a TypeScript class, decorated with some attributes and metadata. The class encapsulates all the data and functionality of the component, while the decorator specifies how it translates into the HTML.
@@ -113,6 +114,50 @@ export class AppComponent { // The component class with its own members and func
   title = 'stock-market';
 }
 ```
+
+## Directives
+
+* A __directive__ in Angular allows you to attach some custom functionality to elements in your HTML. A __component__ in Angular is a direcive that provides both functionality and UI logic.
+* Types
+    * Component directive
+    * Non-component directive (work on and modify existing elements)
+        * Attribute directive
+            * Attribute directives change the look and feel, or the behavior, of an existing element or component that it is applied on. e.g, `ngClass`, `ngStyle`
+        * Structural directive
+            * Structural directives change the DOM layout by adding or removing elements from the view. e.g., `ngIf`, `ngFor`
+
+* __Attribute directives__
+    * Definition
+    * _NgClass_
+        * The NgClass directive allows us to apply or remove multiple CSS classes simultaneously from an element in our HTML. For instance, when we have to apply multiple CSS classes to an element like `<div class="price positive large-change">`
+        * NgClass directive takes a JavaScript object as input. For each key in the object that has a truthy value, Angular will add that key (the key itself, not the value of the key!) as a class to the element. Similarly, each key in the object that has a falsy value will be removed as a class from that element.
+    * _NgStyle_
+        * The NgStyle directive is the lower-level equivalent of the NgClass directive. It operates in a manner similar to the NgClass in that it takes a JSON object and applies it based on the values of the keys. But the NgStyle directive works at a CSS style/properties level. The keys and values it expects are CSS properties and attributes rather than class names.
+    * _NgSwitch_
+        * is an attribute directive
+* __Structural directives__
+    * Definition
+        * are responsible for changing the layout of the HTML by adding, removing, or modifying elements from the DOM. 
+        * structural directives are applied on a pre-existing element, and the directive then operates on the content of that element.
+        * All structural directives in Angular start with an asterisk (*)
+    * _*ngIf_
+        * `<div *ngIf="stock.favorite"></div>`
+        * this directive allows you to conditionally hide or show elements in your UI. Technically, ngIf removes the element from the rendered DOM.
+        * _Why does *ngIf remove the element, instead of hiding it via CSS?_
+            * The reason comes down to performance and the implications thereof. Angular continues to listen and watch for events on all elements in the DOM. Removing the element from the DOM is a good way to ensure that it reduces any impact on performance, especially when the element being removed is a resource-intensive component (think a graph, or an autoupdating widget). This does mean that it is slightly less efficient when the condition toggles (since it involves a DOM addition/removal), but in the grand context of things, it is more efficient.
+    * _*ngFor_
+        * `*ngFor - trackBy`
+            * Angular recognizes each element in an array based on their object references, by default. 
+            * There are cases when the element reference might change, but you still want to continue using the same element. For example, when you fetch new data from the server, you don’t want to blow away your list and re-create it unless the data has fundamentally changed. This is where the `trackBy` capability of the NgFor directive comes into play.
+            * Example: `<div class="stock-container" *ngFor="let stock of stocks; index as i; trackBy: trackStockByCode">`
+            * `trackStockByCode` function implementation: `trackStockByCode(index, stock) { return stock.code; }`
+            * This will ensure that Angular calls this function to figure out how to identify individual items, instead of using the object reference.
+    * Angular does not allow to have more than one directive on the same element. e.g., `<div *ngFor="let stock of stocks" *ngIf="stock.active">` is invalid. 
+
+> __Truthy and Falsy in JavaScript__
+> Falsy: `undefined`, `null`, `NaN`,`0`, `""` (any empty string), `false` (the boolean value)
+> Truthy: Any nonzero number, Any nonempty string, Any nonnull object or array, `true` (the boolean value)
+
 
 
 __Tools__

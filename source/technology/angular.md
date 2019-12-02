@@ -93,15 +93,22 @@ _HTML attribute vs. DOM property: What's the difference?_
 
 ## Components
 
-__Root Component__
-
 A component in Angular is nothing but a TypeScript class, decorated with some attributes and metadata. The class encapsulates all the data and functionality of the component, while the decorator specifies how it translates into the HTML.
 
-* There are 2 responsibilities of a component:
+To some extent, you can consider an Angular application to be nothing but a tree of components
+
+* At its very simplest, a component is nothing but 
+    * a _class_ that encapsulates behavior (what data to load, what data to render, and how to respond to user interactions) 
+    * and a _template_ (how the data is rendered). 
+* 2 responsibilities of a component:
     * Load and hold all the data necessary for rendering the component
     * Handle and process any events that may arise from any element in the component
+* A component is defined using the Typescript annotation `@Component`
+* Any component needs the below 2 attributes - others are optional
+    * a _selector_ (to tell Angular how to find instances of the component being used) 
+    * and a _template_ (that Angular has to render when it finds the element). 
 
-```ts
+```ts app.component.ts (Root Component)
 import { Component } from '@angular/core';
 
 @Component({
@@ -115,9 +122,59 @@ export class AppComponent { // The component class with its own members and func
 }
 ```
 
+In the example below, we have defined that the `StockItemComponent` is to be rendered whenever Angular encounters the `app-stock-item` selector, and to render the `stock-item.component.html` file when it encounters the element.
+
+```ts stock-item.component.ts
+@Component({
+  selector: 'app-stock-item',
+  templateUrl: './stock-item.component.html',
+  styleUrls: ['./stock-item.component.css']
+})
+export class StockItemComponent implements OnInit {
+   // Code omitted here for clarity
+}
+```
+
+* Every component has to be part of a module. If you create a new component, and do not add it to a module, Angular will complain that you have components that are not part of any modules.
+
+```ts app.module.ts
+import { AppComponent } from './app.component';
+import { StockItemComponent } from './component/stock-item/stock-item.component';
+
+@NgModule({
+  declarations: [ // ensures that components and directives are available to use within the scope of the module.
+    AppComponent,
+    StockItemComponent
+  ],
+  imports: [ // specify modules that you want imported and accessible within your module. 
+    BrowserModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+```
+
+### Component Attributes
+
+* Selector
+    * Few way you could specify the _selector_ attribute and how you would use it in the HTML:
+        * `selector: 'app-stock-item'` would result in the component being used as `<app-stock-item></app-stock-item>` in the HTML.
+        * `selector: '.app-stock-item'` would result in the component being used as a CSS class like `<div class="app-stock-item"></div>` in the HTML.
+        * `selector: '[app-stock-item]'` would result in the component being used as an attribute on an existing element like `<div app-stock-item></div>` in the HTML.
+* Template
+    * `templateUrl` is relative to the path of the component. Using absolute urls will break the build.
+    * Angular precompiles a build and ensures that the template is inlined as part of the build process.
+* Style
+    * A component can have multiple styles attached to it.
+    * One thing that Angular promotes out of the box is complete encapsulation and isolation of styles. That means by default, the styles you define and use in one component will not affect/impact any other parent or child component. This ensures that you can be confident that the CSS classes you define in any component will not unknowingly affect anything else, unless you explicitly pull in the necessary styles.
+    * Angular will not pull in these styles at runtime, but rather precompile and create a bundle with the necessary styles.
+
 ## Directives
 
-* A __directive__ in Angular allows you to attach some custom functionality to elements in your HTML. A __component__ in Angular is a direcive that provides both functionality and UI logic.
+* A __directive__ in Angular allows you to attach some custom functionality to elements in your HTML. 
+* A directive allow us to change the behavior of an existing element or to change the structure of the template being rendered.
+* Angular only has directives. A __component__ is a direcive that provides both functionality and UI logic.
 * Types
     * Component directive
     * Non-component directive (work on and modify existing elements)

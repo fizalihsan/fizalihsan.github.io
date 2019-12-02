@@ -170,6 +170,27 @@ export class AppModule { }
     * One thing that Angular promotes out of the box is complete encapsulation and isolation of styles. That means by default, the styles you define and use in one component will not affect/impact any other parent or child component. This ensures that you can be confident that the CSS classes you define in any component will not unknowingly affect anything else, unless you explicitly pull in the necessary styles.
     * Angular will not pull in these styles at runtime, but rather precompile and create a bundle with the necessary styles.
 
+### Component Input & Output
+
+* A component is truly useful when it is reusable. One of the ways we can make a component reusable (rather than having default, hardcoded values inside it) is by passing in different inputs depending on the use case. Similarly, there might be cases where we want hooks from a component when a certain activity happens within its context.
+* Input
+    * `@Input` decorator on a member variable automatically allows you to pass in values to the component for that particular input via Angular’s data binding syntax. 
+    * These inputs are data bound, so if you end up changing the value of the object in AppComponent, it will automatically be reflected in the child StockItemComponent.
+* Output
+    * `@Output` decorator allows to register and listen to events emitted by a component.
+    * We just added an event binding using Angular’s event-binding syntax to the output declared in the stock-item component.
+* Both `@Input` and `@Output` are class member variable level decorators.
+
+{% img /technology/component_input_output.png Component Input Output! %}
+
+### View and Content Projection
+
+TBD
+
+### Component Lifecycle
+
+TBD
+
 ## Directives
 
 * A __directive__ in Angular allows you to attach some custom functionality to elements in your HTML. 

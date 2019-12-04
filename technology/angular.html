@@ -1,0 +1,782 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Angular - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Angular Project Structure Files Structure Concepts Binding Components Component Attributes Component Input &amp; Output View and Content Projection &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/angular.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Angular</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#project-structure">Project Structure</a>    <ul>
+      <li><a href="#files">Files</a></li>
+      <li><a href="#structure">Structure</a></li>
+    </ul>
+  </li>
+  <li><a href="#concepts">Concepts</a>    <ul>
+      <li><a href="#binding">Binding</a></li>
+      <li><a href="#components">Components</a>        <ul>
+          <li><a href="#component-attributes">Component Attributes</a></li>
+          <li><a href="#component-input--output">Component Input &amp; Output</a></li>
+          <li><a href="#view-and-content-projection">View and Content Projection</a></li>
+          <li><a href="#component-lifecycle">Component Lifecycle</a></li>
+        </ul>
+      </li>
+      <li><a href="#directives">Directives</a></li>
+      <li><a href="#questions">Questions</a></li>
+    </ul>
+  </li>
+  <li><a href="#references">References</a></li>
+</ul>
+
+<ul>
+  <li><a href="https://angular.io/docs">Angular Docs</a></li>
+</ul>
+
+<h1 id="project-structure">Project Structure</h1>
+
+<h2 id="files">Files</h2>
+
+<ul>
+  <li><code>main.js</code> - transpiled code that is specific to your application</li>
+  <li><code>vendor.js</code> - includes all the third-party libraries and frameworks you depend on (including Angular)</li>
+  <li><code>styles.js</code> - compilation of all the CSS styles that are needed for your application</li>
+  <li><code>polyfills.js</code> - includes all the polyfills needed for supporting some capabilities in older browsers (like advanced ECMAScript features not yet available in all browsers)</li>
+  <li><code>runtime.js</code> - includes webpack utilities and loaders that is needed for bootstrapping the application.</li>
+</ul>
+
+<h2 id="structure">Structure</h2>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">.
+</span><span class="line">├── angular.json                     &lt;-- Angular CLI config
+</span><span class="line">├── browserslist                     &lt;-- 
+</span><span class="line">├── e2e                              &lt;-- End-to-end test root directory
+</span><span class="line">│   ├── protractor.conf.js           &lt;-- 
+</span><span class="line">│   ├── src
+</span><span class="line">│   │   ├── app.e2e-spec.ts          &lt;-- 
+</span><span class="line">│   │   └── app.po.ts                &lt;-- 
+</span><span class="line">│   └── tsconfig.json                &lt;-- 
+</span><span class="line">├── karma.conf.js                    &lt;-- 
+</span><span class="line">├── package-lock.json                &lt;-- NPM dependencies lock file
+</span><span class="line">├── package.json                     &lt;-- NPM dependencies
+</span><span class="line">├── src
+</span><span class="line">│   ├── app                          &lt;-- A component directory
+</span><span class="line">│   │   ├── app.component.css        &lt;-- 
+</span><span class="line">│   │   ├── app.component.html       &lt;-- 
+</span><span class="line">│   │   ├── app.component.spec.ts    &lt;-- 
+</span><span class="line">│   │   ├── app.component.ts         &lt;-- Root component
+</span><span class="line">│   │   └── app.module.ts            &lt;-- Main module. Application specific code starts from here
+</span><span class="line">│   ├── assets 
+</span><span class="line">│   ├── environments                 &lt;-- 
+</span><span class="line">│   │   ├── environment.prod.ts
+</span><span class="line">│   │   └── environment.ts
+</span><span class="line">│   ├── favicon.ico
+</span><span class="line">│   ├── index.html                   &lt;-- Root HTML
+</span><span class="line">│   ├── main.ts                      &lt;-- Entrypoint: identifies which Angular module to be loaded when the app starts. Main objective of this file is to point the Angular framework at the core module of your application.
+</span><span class="line">│   ├── polyfills.ts                 &lt;-- 
+</span><span class="line">│   ├── styles.css                   &lt;-- 
+</span><span class="line">│   └── test.ts                      &lt;-- 
+</span><span class="line">├── tsconfig.app.json                &lt;-- 
+</span><span class="line">├── tsconfig.json                    &lt;-- 
+</span><span class="line">├── tsconfig.spec.json               &lt;-- 
+</span><span class="line">└── tslint.json                      &lt;-- </span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><img src="/technology/angular_file_deps.svg" title="File Dependencies!" /></p>
+
+<h1 id="concepts">Concepts</h1>
+
+<h2 id="binding">Binding</h2>
+
+<ul>
+  <li>Data binding
+    <ul>
+      <li><code>&lt;div class="name"&gt;Hello &lt;/div&gt;</code>. This is called <em>Interpolation</em>.</li>
+    </ul>
+  </li>
+  <li>Property binding
+    <ul>
+      <li><code>&lt;div class="price" [class]="positiveChange ? 'plus' : 'minus'"&gt;$ &lt;/div&gt;</code></li>
+      <li>Tells Angular to bind to the <strong>class</strong> property of the DOM element to the value of the expression. </li>
+      <li>Square-bracket notation refers to data flowing from the component to the UI.</li>
+      <li>When you bind to the class property, it overrides the existing value of the property. In the example above, <code>class="price"</code> has no effect. </li>
+      <li>Angular data binding only works with DOM properties, and not with HTML attributes. (see section below)</li>
+    </ul>
+  </li>
+  <li>Event binding
+    <ul>
+      <li><code>&lt;button (click)="toggleFavorite()" [disabled]="favorite"&gt;Add to Favorite&lt;/button&gt;</code></li>
+      <li>The parentheses notation refers to events.</li>
+      <li>Angular gives you access to the underlying DOM event by giving access to a special variable <code>$event</code>. You can access it or even pass it to your function as follows: <code>&lt;button (click)="toggleFavorite($event)" [disabled]="favorite"&gt;Add to Favorite&lt;/button&gt;</code></li>
+    </ul>
+  </li>
+</ul>
+
+<p><em>HTML attribute vs. DOM property: What’s the difference?</em></p>
+
+<ul>
+  <li>In Angular, one-way binding binds to the DOM property, and not to the HTML attributes. </li>
+  <li>Attributes are defined by HTML, while properties are defined by the DOM. Though some attributes (like <code>ID</code> and <code>class</code>) directly map to DOM properties, others may exist on one side but not the other.</li>
+  <li>The distinction between the two is that HTML attributes are generally used for initialization of a DOM element, but after that, they have no purpose or effect on the underlying element. Once the element is initialized, its behavior is controlled by the DOM properties from then on.</li>
+  <li>For example, consider the input HTML element. If we bootstrap our HTML with something like: <code>&lt;input type="text" value="foo"/&gt;</code> this initializes an input DOM element, with the initial value of the DOM property value to be set to foo. Now let’s assume we type something in the text box, say bar. At this point:
+    <ul>
+      <li>If we do input.getAttribute(‘value’), it would return foo, which was the attribute value we used to initialize the HTML.</li>
+      <li>If we do input.value, we will get the current value of the DOM property, which is bar.</li>
+    </ul>
+  </li>
+  <li>That is, the attribute value is used to boostrap and set the initial value of the HTML DOM element, but after that, it is the DOM property that drives the behavior. If you inspect the HTML, you will see that it is still the initial HTML we provided, and does not update either.</li>
+</ul>
+
+<h2 id="components">Components</h2>
+
+<p>A component in Angular is nothing but a TypeScript class, decorated with some attributes and metadata. The class encapsulates all the data and functionality of the component, while the decorator specifies how it translates into the HTML.</p>
+
+<p>To some extent, you can consider an Angular application to be nothing but a tree of components</p>
+
+<ul>
+  <li>At its very simplest, a component is nothing but 
+    <ul>
+      <li>a <em>class</em> that encapsulates behavior (what data to load, what data to render, and how to respond to user interactions) </li>
+      <li>and a <em>template</em> (how the data is rendered). </li>
+    </ul>
+  </li>
+  <li>2 responsibilities of a component:
+    <ul>
+      <li>Load and hold all the data necessary for rendering the component</li>
+      <li>Handle and process any events that may arise from any element in the component</li>
+    </ul>
+  </li>
+  <li>A component is defined using the Typescript annotation <code>@Component</code></li>
+  <li>Any component needs the below 2 attributes - others are optional
+    <ul>
+      <li>a <em>selector</em> (to tell Angular how to find instances of the component being used) </li>
+      <li>and a <em>template</em> (that Angular has to render when it finds the element). </li>
+    </ul>
+  </li>
+</ul>
+
+<p><em>app.component.ts (Root Component)</em></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">import { Component } from '@angular/core';
+</span><span class="line">
+</span><span class="line">@Component({
+</span><span class="line">  selector: 'app-root', // DOM selector that gets translated into an instance of this component
+</span><span class="line">  templateUrl: './app.component.html', // The HTML template backing this component - in this case, the URL to it
+</span><span class="line">  styleUrls: ['./app.component.css'] // Any component-specific styling
+</span><span class="line">})
+</span><span class="line">
+</span><span class="line">export class AppComponent { // The component class with its own members and functions
+</span><span class="line">  title = 'stock-market';
+</span><span class="line">}</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>In the example below, we have defined that the <code>StockItemComponent</code> is to be rendered whenever Angular encounters the <code>app-stock-item</code> selector, and to render the <code>stock-item.component.html</code> file when it encounters the element.</p>
+
+<p><em>stock-item.component.ts</em></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">@Component({
+</span><span class="line">  selector: 'app-stock-item',
+</span><span class="line">  templateUrl: './stock-item.component.html',
+</span><span class="line">  styleUrls: ['./stock-item.component.css']
+</span><span class="line">})
+</span><span class="line">export class StockItemComponent implements OnInit {
+</span><span class="line">   // Code omitted here for clarity
+</span><span class="line">}</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Every component has to be part of a module. If you create a new component, and do not add it to a module, Angular will complain that you have components that are not part of any modules.</li>
+</ul>
+
+<p><em>app.module.ts</em></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">import { AppComponent } from './app.component';
+</span><span class="line">import { StockItemComponent } from './component/stock-item/stock-item.component';
+</span><span class="line">
+</span><span class="line">@NgModule({
+</span><span class="line">  declarations: [ // ensures that components and directives are available to use within the scope of the module.
+</span><span class="line">    AppComponent,
+</span><span class="line">    StockItemComponent
+</span><span class="line">  ],
+</span><span class="line">  imports: [ // specify modules that you want imported and accessible within your module. 
+</span><span class="line">    BrowserModule
+</span><span class="line">  ],
+</span><span class="line">  providers: [],
+</span><span class="line">  bootstrap: [AppComponent]
+</span><span class="line">})
+</span><span class="line">export class AppModule { }</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="component-attributes">Component Attributes</h3>
+
+<ul>
+  <li>Selector
+    <ul>
+      <li>Few way you could specify the <em>selector</em> attribute and how you would use it in the HTML:
+        <ul>
+          <li><code>selector: 'app-stock-item'</code> would result in the component being used as <code>&lt;app-stock-item&gt;&lt;/app-stock-item&gt;</code> in the HTML.</li>
+          <li><code>selector: '.app-stock-item'</code> would result in the component being used as a CSS class like <code>&lt;div class="app-stock-item"&gt;&lt;/div&gt;</code> in the HTML.</li>
+          <li><code>selector: '[app-stock-item]'</code> would result in the component being used as an attribute on an existing element like <code>&lt;div app-stock-item&gt;&lt;/div&gt;</code> in the HTML.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Template
+    <ul>
+      <li><code>templateUrl</code> is relative to the path of the component. Using absolute urls will break the build.</li>
+      <li>Angular precompiles a build and ensures that the template is inlined as part of the build process.</li>
+    </ul>
+  </li>
+  <li>Style
+    <ul>
+      <li>A component can have multiple styles attached to it.</li>
+      <li>One thing that Angular promotes out of the box is complete encapsulation and isolation of styles. That means by default, the styles you define and use in one component will not affect/impact any other parent or child component. This ensures that you can be confident that the CSS classes you define in any component will not unknowingly affect anything else, unless you explicitly pull in the necessary styles.</li>
+      <li>Angular will not pull in these styles at runtime, but rather precompile and create a bundle with the necessary styles.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="component-input--output">Component Input &amp; Output</h3>
+
+<ul>
+  <li>A component is truly useful when it is reusable. One of the ways we can make a component reusable (rather than having default, hardcoded values inside it) is by passing in different inputs depending on the use case. Similarly, there might be cases where we want hooks from a component when a certain activity happens within its context.</li>
+  <li>Input
+    <ul>
+      <li><code>@Input</code> decorator on a member variable automatically allows you to pass in values to the component for that particular input via Angular’s data binding syntax. </li>
+      <li>These inputs are data bound, so if you end up changing the value of the object in AppComponent, it will automatically be reflected in the child StockItemComponent.</li>
+    </ul>
+  </li>
+  <li>Output
+    <ul>
+      <li><code>@Output</code> decorator allows to register and listen to events emitted by a component.</li>
+      <li>We just added an event binding using Angular’s event-binding syntax to the output declared in the stock-item component.</li>
+    </ul>
+  </li>
+  <li>Both <code>@Input</code> and <code>@Output</code> are class member variable level decorators.</li>
+</ul>
+
+<p><img src="/technology/component_input_output.png" title="Component Input Output!" /></p>
+
+<h3 id="view-and-content-projection">View and Content Projection</h3>
+
+<p>TBD</p>
+
+<h3 id="component-lifecycle">Component Lifecycle</h3>
+
+<p>TBD</p>
+
+<h2 id="directives">Directives</h2>
+
+<ul>
+  <li>A <strong>directive</strong> in Angular allows you to attach some custom functionality to elements in your HTML. </li>
+  <li>A directive allow us to change the behavior of an existing element or to change the structure of the template being rendered.</li>
+  <li>Angular only has directives. A <strong>component</strong> is a direcive that provides both functionality and UI logic.</li>
+  <li>Types
+    <ul>
+      <li>Component directive</li>
+      <li>Non-component directive (work on and modify existing elements)
+        <ul>
+          <li>Attribute directive
+            <ul>
+              <li>Attribute directives change the look and feel, or the behavior, of an existing element or component that it is applied on. e.g, <code>ngClass</code>, <code>ngStyle</code></li>
+            </ul>
+          </li>
+          <li>Structural directive
+            <ul>
+              <li>Structural directives change the DOM layout by adding or removing elements from the view. e.g., <code>ngIf</code>, <code>ngFor</code></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Attribute directives</strong>
+    <ul>
+      <li>Definition</li>
+      <li><em>NgClass</em>
+        <ul>
+          <li>The NgClass directive allows us to apply or remove multiple CSS classes simultaneously from an element in our HTML. For instance, when we have to apply multiple CSS classes to an element like <code>&lt;div class="price positive large-change"&gt;</code></li>
+          <li>NgClass directive takes a JavaScript object as input. For each key in the object that has a truthy value, Angular will add that key (the key itself, not the value of the key!) as a class to the element. Similarly, each key in the object that has a falsy value will be removed as a class from that element.</li>
+        </ul>
+      </li>
+      <li><em>NgStyle</em>
+        <ul>
+          <li>The NgStyle directive is the lower-level equivalent of the NgClass directive. It operates in a manner similar to the NgClass in that it takes a JSON object and applies it based on the values of the keys. But the NgStyle directive works at a CSS style/properties level. The keys and values it expects are CSS properties and attributes rather than class names.</li>
+        </ul>
+      </li>
+      <li><em>NgSwitch</em>
+        <ul>
+          <li>is an attribute directive</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Structural directives</strong>
+    <ul>
+      <li>Definition
+        <ul>
+          <li>are responsible for changing the layout of the HTML by adding, removing, or modifying elements from the DOM. </li>
+          <li>structural directives are applied on a pre-existing element, and the directive then operates on the content of that element.</li>
+          <li>All structural directives in Angular start with an asterisk (*)</li>
+        </ul>
+      </li>
+      <li><em>*ngIf</em>
+        <ul>
+          <li><code>&lt;div *ngIf="stock.favorite"&gt;&lt;/div&gt;</code></li>
+          <li>this directive allows you to conditionally hide or show elements in your UI. Technically, ngIf removes the element from the rendered DOM.</li>
+          <li><em>Why does *ngIf remove the element, instead of hiding it via CSS?</em>
+            <ul>
+              <li>The reason comes down to performance and the implications thereof. Angular continues to listen and watch for events on all elements in the DOM. Removing the element from the DOM is a good way to ensure that it reduces any impact on performance, especially when the element being removed is a resource-intensive component (think a graph, or an autoupdating widget). This does mean that it is slightly less efficient when the condition toggles (since it involves a DOM addition/removal), but in the grand context of things, it is more efficient.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><em>*ngFor</em>
+        <ul>
+          <li><code>*ngFor - trackBy</code>
+            <ul>
+              <li>Angular recognizes each element in an array based on their object references, by default. </li>
+              <li>There are cases when the element reference might change, but you still want to continue using the same element. For example, when you fetch new data from the server, you don’t want to blow away your list and re-create it unless the data has fundamentally changed. This is where the <code>trackBy</code> capability of the NgFor directive comes into play.</li>
+              <li>Example: <code>&lt;div class="stock-container" *ngFor="let stock of stocks; index as i; trackBy: trackStockByCode"&gt;</code></li>
+              <li><code>trackStockByCode</code> function implementation: <code>trackStockByCode(index, stock) { return stock.code; }</code></li>
+              <li>This will ensure that Angular calls this function to figure out how to identify individual items, instead of using the object reference.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>Angular does not allow to have more than one directive on the same element. e.g., <code>&lt;div *ngFor="let stock of stocks" *ngIf="stock.active"&gt;</code> is invalid. </li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p><strong>Truthy and Falsy in JavaScript</strong>
+Falsy: <code>undefined</code>, <code>null</code>, <code>NaN</code>,<code>0</code>, <code>""</code> (any empty string), <code>false</code> (the boolean value)
+Truthy: Any nonzero number, Any nonempty string, Any nonnull object or array, <code>true</code> (the boolean value)</p>
+</blockquote>
+
+<p><strong>Tools</strong></p>
+
+<ul>
+  <li>build - webpack, npm, ?</li>
+  <li>testing - karma, jasmine, protractor, ??</li>
+  <li>debug - augury</li>
+  <li>stylesheets - css, scss, sass, stylus</li>
+  <li>state management - ???</li>
+</ul>
+
+<h2 id="questions">Questions</h2>
+
+<ul>
+  <li>diff b/w unit test and e2e test?</li>
+  <li>Typescript - decorators</li>
+</ul>
+
+<h1 id="references">References</h1>
+
+<ul>
+  <li>Books
+    <ul>
+      <li>O’Reilly - Angular Up and Running - Shyam Seshadri - 2018</li>
+    </ul>
+  </li>
+</ul>
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/angular.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/angular.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  
+			<a href="/technology/coding-principles.html">Coding Principles</a> |	
+			<a href="/technology/ddd.html">DDD</a>  |  
+			<a href="/technology/design-principles.html">Design Principles</a>  |
+			<a href="/technology/eventsourcing.html">Event Sourcing</a> |  
+			<a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  
+			<a href="/technology/observability.html">Observability</a>  |  
+			<a href="/technology/patterns.html">Patterns</a>  |  
+			<a href="/technology/sdlc.html">SDLC</a> |  
+			<a href="/technology/scalability.html">Scalability</a>  |  
+			<a href="/technology/security.html">Security</a>  |  
+			<a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  
+			<a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  
+			<a href="/technology/elasticsearch.html">ElasticSearch</a>  |  
+			<a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  
+			<a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  
+			<a href="/technology/nosql.html">NoSQL</a>  |  
+			<a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  
+			<a href="/technology/aws.html">AWS</a>  |  
+			<a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>  |  
+			<a href="/technology/virtualization.html">Virtualization</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  
+			<a href="/technology/db-design.html">Design</a>  |  
+			<a href="/technology/db-performance.html">Performance</a>  |  
+			<a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  
+			<a href="/technology/java-collections.html">Collections</a>  |  
+			<a href="/technology/java-concurrency.html">Concurrency</a>  |  
+			<a href="/technology/java-database.html">Database</a>  |  
+			<a href="/technology/java-jmx.html">JMX</a>  |  
+			<a href="/technology/java-jndi.html">JNDI</a>  |  
+			<a href="/technology/java-io.html">I/O</a>  |  
+			<a href="/technology/java-performance.html">Performance</a>  |  
+			<a href="/technology/java-testing.html">Testing</a>  |  
+			<a href="/technology/java-web.html">Web</a>  |  
+			<a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  
+			<a href="/technology/python.html">Python</a>  |  
+			<a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  
+			<a href="/technology/camel.html">Camel</a>  |  
+			<a href="/technology/graphql.html">GraphQL</a>  |  
+			<a href="/technology/messaging.html">Messaging</a> |  
+			<a href="/technology/microservices.html">Microservices</a>   |  
+			<a href="/technology/rest-services.html">REST</a>  | 
+			<a href="/technology/soap-services.html">SOAP</a>  |  
+			<a href="/technology/webservices.html">Web Services</a> |  
+			<a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  
+			<a href="/technology/spring.html">Core</a>  |  
+			<a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> |
+			<a href="/technology/webanalytics.html">Analytics</a> |
+			<a href="/technology/angular.html">Angular</a> | 
+			<a href="/technology/webapp_architecture.html">Architecture</a> | 
+			<a href="/technology/js-ecosystem.html">JS Ecosystem</a> |
+			<a href="/technology/web_security.html">Security</a> |
+			<a href="/technology/ux.html">UX</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  
+			<a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  
+			<a href="/technology/datastructures.html">Data Structures</a>  |  
+			<a href="/technology/design-faqs.html">Design FAQs</a>  |  
+			<a href="/technology/networking.html">Networking</a>  |  
+			<a href="/technology/oops.html">OOPS</a>  |  
+			<a href="/technology/os.html">Operating Systems</a>  |  
+			<a href="/technology/vcs.html">VCS</a>  |  
+			<a href="/technology/coding_bibliography.html">Coding Bibliography</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  
+			<a href="/softskills/productivity.html">Productivity</a>  |  
+			<a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2019 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

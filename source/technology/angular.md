@@ -68,7 +68,7 @@ footer: true
 ## Binding
     
 * Data binding
-    * `<div class="name">Hello {{name}}</div>`. This is called _Interpolation_.
+    * `<div class="name">Hello \\{{name}}</div>`. This is called _Interpolation_.
 * Property binding
     * `<div class="price" [class]="positiveChange ? 'plus' : 'minus'">$ {{price}}</div>`
     * Tells Angular to bind to the __class__ property of the DOM element to the value of the expression. 
@@ -108,7 +108,9 @@ To some extent, you can consider an Angular application to be nothing but a tree
     * a _selector_ (to tell Angular how to find instances of the component being used) 
     * and a _template_ (that Angular has to render when it finds the element). 
 
-```ts app.component.ts (Root Component)
+_app.component.ts (Root Component)_
+
+```
 import { Component } from '@angular/core';
 
 @Component({
@@ -124,7 +126,9 @@ export class AppComponent { // The component class with its own members and func
 
 In the example below, we have defined that the `StockItemComponent` is to be rendered whenever Angular encounters the `app-stock-item` selector, and to render the `stock-item.component.html` file when it encounters the element.
 
-```ts stock-item.component.ts
+_stock-item.component.ts_
+
+```
 @Component({
   selector: 'app-stock-item',
   templateUrl: './stock-item.component.html',
@@ -137,7 +141,9 @@ export class StockItemComponent implements OnInit {
 
 * Every component has to be part of a module. If you create a new component, and do not add it to a module, Angular will complain that you have components that are not part of any modules.
 
-```ts app.module.ts
+_app.module.ts_
+
+```
 import { AppComponent } from './app.component';
 import { StockItemComponent } from './component/stock-item/stock-item.component';
 

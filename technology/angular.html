@@ -108,25 +108,31 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#project-structure">Project Structure</a>    <ul>
-      <li><a href="#files">Files</a></li>
-      <li><a href="#structure">Structure</a></li>
+  <li><a href="#project-structure" id="markdown-toc-project-structure">Project Structure</a>    <ul>
+      <li><a href="#files" id="markdown-toc-files">Files</a></li>
+      <li><a href="#structure" id="markdown-toc-structure">Structure</a></li>
     </ul>
   </li>
-  <li><a href="#concepts">Concepts</a>    <ul>
-      <li><a href="#binding">Binding</a></li>
-      <li><a href="#components">Components</a>        <ul>
-          <li><a href="#component-attributes">Component Attributes</a></li>
-          <li><a href="#component-input--output">Component Input &amp; Output</a></li>
-          <li><a href="#view-and-content-projection">View and Content Projection</a></li>
-          <li><a href="#component-lifecycle">Component Lifecycle</a></li>
+  <li><a href="#concepts" id="markdown-toc-concepts">Concepts</a>    <ul>
+      <li><a href="#binding" id="markdown-toc-binding">Binding</a></li>
+      <li><a href="#components" id="markdown-toc-components">Components</a>        <ul>
+          <li><a href="#component-attributes" id="markdown-toc-component-attributes">Component Attributes</a></li>
+          <li><a href="#component-input--output" id="markdown-toc-component-input--output">Component Input &amp; Output</a></li>
+          <li><a href="#view-and-content-projection" id="markdown-toc-view-and-content-projection">View and Content Projection</a></li>
+          <li><a href="#component-lifecycle" id="markdown-toc-component-lifecycle">Component Lifecycle</a></li>
         </ul>
       </li>
-      <li><a href="#directives">Directives</a></li>
-      <li><a href="#questions">Questions</a></li>
+      <li><a href="#directives" id="markdown-toc-directives">Directives</a></li>
+      <li><a href="#forms" id="markdown-toc-forms">Forms</a>        <ul>
+          <li><a href="#template-driven-forms" id="markdown-toc-template-driven-forms">Template-driven forms</a></li>
+          <li><a href="#form-validations" id="markdown-toc-form-validations">Form Validations</a></li>
+        </ul>
+      </li>
+      <li><a href="#tools" id="markdown-toc-tools">Tools</a></li>
+      <li><a href="#questions" id="markdown-toc-questions">Questions</a></li>
     </ul>
   </li>
-  <li><a href="#references">References</a></li>
+  <li><a href="#references" id="markdown-toc-references">References</a></li>
 </ul>
 
 <ul>
@@ -223,15 +229,15 @@ messageStyle: "none",
 <ul>
   <li>Data binding
     <ul>
-      <li><code>&lt;div class="name"&gt;Hello &lt;/div&gt;</code>. This is called <em>Interpolation</em>.</li>
+      <li><code>&lt;div class="name"&gt;Hello  {{name}}  &lt;/div&gt;</code>. This is called <em>Interpolation</em>.</li>
     </ul>
   </li>
   <li>Property binding
     <ul>
-      <li><code>&lt;div class="price" [class]="positiveChange ? 'plus' : 'minus'"&gt;$ &lt;/div&gt;</code></li>
-      <li>Tells Angular to bind to the <strong>class</strong> property of the DOM element to the value of the expression. </li>
+      <li><code>&lt;div class="price" [class]="positiveChange ? 'plus' : 'minus'"&gt;$ {{price}}&lt;/div&gt;</code></li>
+      <li>Tells Angular to bind to the <strong>class</strong> property of the DOM element to the value of the expression.</li>
       <li>Square-bracket notation refers to data flowing from the component to the UI.</li>
-      <li>When you bind to the class property, it overrides the existing value of the property. In the example above, <code>class="price"</code> has no effect. </li>
+      <li>When you bind to the class property, it overrides the existing value of the property. In the example above, <code>class="price"</code> has no effect.</li>
       <li>Angular data binding only works with DOM properties, and not with HTML attributes. (see section below)</li>
     </ul>
   </li>
@@ -247,7 +253,7 @@ messageStyle: "none",
 <p><em>HTML attribute vs. DOM property: What’s the difference?</em></p>
 
 <ul>
-  <li>In Angular, one-way binding binds to the DOM property, and not to the HTML attributes. </li>
+  <li>In Angular, one-way binding binds to the DOM property, and not to the HTML attributes.</li>
   <li>Attributes are defined by HTML, while properties are defined by the DOM. Though some attributes (like <code>ID</code> and <code>class</code>) directly map to DOM properties, others may exist on one side but not the other.</li>
   <li>The distinction between the two is that HTML attributes are generally used for initialization of a DOM element, but after that, they have no purpose or effect on the underlying element. Once the element is initialized, its behavior is controlled by the DOM properties from then on.</li>
   <li>For example, consider the input HTML element. If we bootstrap our HTML with something like: <code>&lt;input type="text" value="foo"/&gt;</code> this initializes an input DOM element, with the initial value of the DOM property value to be set to foo. Now let’s assume we type something in the text box, say bar. At this point:
@@ -266,10 +272,10 @@ messageStyle: "none",
 <p>To some extent, you can consider an Angular application to be nothing but a tree of components</p>
 
 <ul>
-  <li>At its very simplest, a component is nothing but 
+  <li>At its very simplest, a component is nothing but
     <ul>
-      <li>a <em>class</em> that encapsulates behavior (what data to load, what data to render, and how to respond to user interactions) </li>
-      <li>and a <em>template</em> (how the data is rendered). </li>
+      <li>a <em>class</em> that encapsulates behavior (what data to load, what data to render, and how to respond to user interactions)</li>
+      <li>and a <em>template</em> (how the data is rendered).</li>
     </ul>
   </li>
   <li>2 responsibilities of a component:
@@ -281,8 +287,8 @@ messageStyle: "none",
   <li>A component is defined using the Typescript annotation <code>@Component</code></li>
   <li>Any component needs the below 2 attributes - others are optional
     <ul>
-      <li>a <em>selector</em> (to tell Angular how to find instances of the component being used) </li>
-      <li>and a <em>template</em> (that Angular has to render when it finds the element). </li>
+      <li>a <em>selector</em> (to tell Angular how to find instances of the component being used)</li>
+      <li>and a <em>template</em> (that Angular has to render when it finds the element).</li>
     </ul>
   </li>
 </ul>
@@ -375,7 +381,7 @@ messageStyle: "none",
 <ul>
   <li>Selector
     <ul>
-      <li>Few way you could specify the <em>selector</em> attribute and how you would use it in the HTML:
+      <li>Few ways you could specify the <em>selector</em> attribute and how you would use it in the HTML:
         <ul>
           <li><code>selector: 'app-stock-item'</code> would result in the component being used as <code>&lt;app-stock-item&gt;&lt;/app-stock-item&gt;</code> in the HTML.</li>
           <li><code>selector: '.app-stock-item'</code> would result in the component being used as a CSS class like <code>&lt;div class="app-stock-item"&gt;&lt;/div&gt;</code> in the HTML.</li>
@@ -405,7 +411,7 @@ messageStyle: "none",
   <li>A component is truly useful when it is reusable. One of the ways we can make a component reusable (rather than having default, hardcoded values inside it) is by passing in different inputs depending on the use case. Similarly, there might be cases where we want hooks from a component when a certain activity happens within its context.</li>
   <li>Input
     <ul>
-      <li><code>@Input</code> decorator on a member variable automatically allows you to pass in values to the component for that particular input via Angular’s data binding syntax. </li>
+      <li><code>@Input</code> decorator on a member variable automatically allows you to pass in values to the component for that particular input via Angular’s data binding syntax.</li>
       <li>These inputs are data bound, so if you end up changing the value of the object in AppComponent, it will automatically be reflected in the child StockItemComponent.</li>
     </ul>
   </li>
@@ -431,7 +437,7 @@ messageStyle: "none",
 <h2 id="directives">Directives</h2>
 
 <ul>
-  <li>A <strong>directive</strong> in Angular allows you to attach some custom functionality to elements in your HTML. </li>
+  <li>A <strong>directive</strong> in Angular allows you to attach some custom functionality to elements in your HTML.</li>
   <li>A directive allow us to change the behavior of an existing element or to change the structure of the template being rendered.</li>
   <li>Angular only has directives. A <strong>component</strong> is a direcive that provides both functionality and UI logic.</li>
   <li>Types
@@ -478,7 +484,7 @@ messageStyle: "none",
     <ul>
       <li>Definition
         <ul>
-          <li>are responsible for changing the layout of the HTML by adding, removing, or modifying elements from the DOM. </li>
+          <li>are responsible for changing the layout of the HTML by adding, removing, or modifying elements from the DOM.</li>
           <li>structural directives are applied on a pre-existing element, and the directive then operates on the content of that element.</li>
           <li>All structural directives in Angular start with an asterisk (*)</li>
         </ul>
@@ -498,7 +504,7 @@ messageStyle: "none",
         <ul>
           <li><code>*ngFor - trackBy</code>
             <ul>
-              <li>Angular recognizes each element in an array based on their object references, by default. </li>
+              <li>Angular recognizes each element in an array based on their object references, by default.</li>
               <li>There are cases when the element reference might change, but you still want to continue using the same element. For example, when you fetch new data from the server, you don’t want to blow away your list and re-create it unless the data has fundamentally changed. This is where the <code>trackBy</code> capability of the NgFor directive comes into play.</li>
               <li>Example: <code>&lt;div class="stock-container" *ngFor="let stock of stocks; index as i; trackBy: trackStockByCode"&gt;</code></li>
               <li><code>trackStockByCode</code> function implementation: <code>trackStockByCode(index, stock) { return stock.code; }</code></li>
@@ -507,7 +513,7 @@ messageStyle: "none",
           </li>
         </ul>
       </li>
-      <li>Angular does not allow to have more than one directive on the same element. e.g., <code>&lt;div *ngFor="let stock of stocks" *ngIf="stock.active"&gt;</code> is invalid. </li>
+      <li>Angular does not allow to have more than one directive on the same element. e.g., <code>&lt;div *ngFor="let stock of stocks" *ngIf="stock.active"&gt;</code> is invalid.</li>
     </ul>
   </li>
 </ul>
@@ -518,7 +524,465 @@ Falsy: <code>undefined</code>, <code>null</code>, <code>NaN</code>,<code>0</code
 Truthy: Any nonzero number, Any nonempty string, Any nonnull object or array, <code>true</code> (the boolean value)</p>
 </blockquote>
 
-<p><strong>Tools</strong></p>
+<h2 id="forms">Forms</h2>
+
+<p>There are 2 primary mechanisms to create forms 
+* Template-driven forms
+* Reactive forms</p>
+
+<h3 id="template-driven-forms">Template-driven forms</h3>
+
+<ul>
+  <li>allows you to drive the logic of your application via your template.</li>
+  <li>The <code>FormsModule</code> adds the capability of using ngModel, which allows for two-way data binding in Angular.</li>
+</ul>
+
+<p><strong>Value and Event Binding Example</strong></p>
+
+<ul>
+  <li><em>UI –&gt; Component binding</em>: The <code>value</code> binding is telling Angular to update the value property of the <code>input</code> element using the <code>stock.name</code> field in the component class. If and when it changes, Angular will be responsible for updating the property as well.</li>
+  <li><em>Component –&gt; UI binding</em>: The <code>input</code> event binding is instructing Angular to update the <code>value</code> of <code>stock.name</code> with the value from the event. The <code>$event</code> in this case is the underlying DOM <code>InputEvent</code>, through which we access the target and from it, the changed value.</li>
+  <li>Button on click resets the value of <code>stock.name</code> to <code>'test'</code>.</li>
+  <li>Cons
+    <ul>
+      <li>It is hard to remember exactly which property is used by each form field, and what are the various events and where the values would be available.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">&lt;div class="form-group"&gt;
+</span><span class="line">  &lt;form&gt;
+</span><span class="line">    &lt;div class="stock-name"&gt;
+</span><span class="line">      &lt;input type="text"
+</span><span class="line">             placeholder="Stock Name"
+</span><span class="line">             [value]="stock.name"
+</span><span class="line">             (input)="stock.name=$event.target.value"&gt;
+</span><span class="line">    &lt;/div&gt;
+</span><span class="line">  &lt;/form&gt;
+</span><span class="line">  &lt;button (click)="stock.name='test'"&gt;Reset stock name&lt;/button&gt;
+</span><span class="line">&lt;/div&gt;</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>ngModel directive - expanded form</strong></p>
+
+<ul>
+  <li>The <code>ngModel</code> directive and its special syntax abstracts away the internals of each and every input type from developers, making it easier to quickly develop form-based applications.</li>
+  <li>Added a <code>name</code> field to the input form element. This is necessary for the <code>ngModel</code> directive to work. If you remove this, you will see errors in the console.</li>
+  <li>We added two bindings. The first one is <code>ngModel</code> data binding. This does the work of the value binding we had previously, but abstracting out which property underneath needs to be bound. It points to the component member variable that it takes the value from.</li>
+  <li>The second binding we added is the <code>ngModelChange</code> event binding. In this, we update the underlying component member variable (<code>stock.name</code>) with the value of the <code>$event</code>, which is the changed value of the text field.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">&lt;div class="form-group"&gt;
+</span><span class="line">  &lt;form&gt;
+</span><span class="line">    &lt;div class="stock-name"&gt;
+</span><span class="line">      &lt;input type="text"
+</span><span class="line">             placeholder="Stock Name"
+</span><span class="line">             name="stockName"
+</span><span class="line">             [ngModel]="stock.name"
+</span><span class="line">             (ngModelChange)="stock.name=$event"&gt;
+</span><span class="line">    &lt;/div&gt;
+</span><span class="line">  &lt;/form&gt;
+</span><span class="line">  &lt;button (click)="stock.name='test'"&gt;Reset stock name&lt;/button&gt;
+</span><span class="line">&lt;/div&gt;</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>ngModel directive - simpler form</strong></p>
+
+<ul>
+  <li><code>[(ngModel)]</code> banana-in-a-box syntax, as it is called. ( <code>()</code> looks like 2 bananas.)</li>
+  <li>Cons
+    <ul>
+      <li>The combined <code>ngModel</code> syntax only has the capability to set the data-bound property. If you need to do something more complicated (say convert the text into upper-case before setting the model variable), or set it in a different field itself (a calculated value maybe?), or do multiple things, then you might want to consider the expanded syntax.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">&lt;div class="form-group"&gt;
+</span><span class="line">  &lt;form&gt;
+</span><span class="line">    &lt;div class="stock-name"&gt;
+</span><span class="line">      &lt;input type="text"
+</span><span class="line">             placeholder="Stock Name"
+</span><span class="line">             name="stockName"
+</span><span class="line">             [(ngModel)]="stock.name"&gt;
+</span><span class="line">    &lt;/div&gt;
+</span><span class="line">  &lt;/form&gt;
+</span><span class="line">  &lt;button (click)="stock.name='test'"&gt;Reset stock name&lt;/button&gt;
+</span><span class="line">&lt;/div&gt;</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="form-validations">Form Validations</h3>
+
+<ul>
+  <li>Angular form validation for template-driven forms relies and extends the <a href="https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5/Constraint_validation">native form validation from HTML</a></li>
+  <li>Angular does the work of integrating these <strong>control states</strong> and <strong>validations</strong> with its own internal model (whether it is <code>ngModel</code> or <code>ngForm</code>), and it is up to us to use this internal model to then show the right kind of message to the user.</li>
+  <li>There are 2 aspects to this:
+    <ul>
+      <li><strong>The state</strong> allows us to peek into the state of the form control, on
+        <ul>
+          <li>whether the user has <em>visited</em> it,</li>
+          <li>whether the user has <em>changed</em> it, and finally</li>
+          <li>whether it is in a <em>valid state</em>.</li>
+        </ul>
+      </li>
+      <li><strong>The validity</strong>,  tells us whether a form control is valid or not, and if it is not valid, the underlying reason (or reasons) for which the form element is invalid.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Control State</strong></p>
+
+<ul>
+  <li>The <code>ngModel</code> directive changes and adds CSS classes to the element it is on, based on the user’s interaction with it. There are 3 primary modes of interaction that it tracks, and 2 CSS classes per mode of interation associated with it.</li>
+  <li>To use these control state classes, we actually don’t need to make any component class code changes. We only need to tweak the CSS a bit and then leverage that in the HTML template for the component.</li>
+  <li>Angular’s Form Module is responsible for reading it and applying the form control state classes accordingly, without any other work on our side.</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th><strong>Control state</strong></th>
+      <th><strong>CSS class if True</strong></th>
+      <th><strong>CSS class if False</strong></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Visited</td>
+      <td><code>ng-touched</code></td>
+      <td><code>ng-untouched</code></td>
+    </tr>
+    <tr>
+      <td>Changed</td>
+      <td><code>ng-dirty</code></td>
+      <td><code>ng-pristine</code></td>
+    </tr>
+    <tr>
+      <td>Valid</td>
+      <td><code>ng-valid</code></td>
+      <td><code>ng-invalid</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class="css"><span class="line"><span class="nc">.stock-name</span> <span class="nc">.ng-valid</span><span class="o">,</span>
+</span><span class="line"><span class="nc">.stock-code</span> <span class="nc">.ng-pristine</span><span class="o">,</span>
+</span><span class="line"><span class="nc">.stock-price</span> <span class="nc">.ng-untouched</span> <span class="p">{</span>
+</span><span class="line">  <span class="k">background-color</span><span class="o">:</span> <span class="nb">green</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="nc">.stock-name</span> <span class="nc">.ng-invalid</span><span class="o">,</span>
+</span><span class="line"><span class="nc">.stock-code</span> <span class="nc">.ng-dirty</span><span class="o">,</span>
+</span><span class="line"><span class="nc">.stock-price</span> <span class="nc">.ng-touched</span> <span class="p">{</span>
+</span><span class="line">  <span class="k">background-color</span><span class="o">:</span> <span class="nb">pink</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+<span class="line-number">39</span>
+<span class="line-number">40</span>
+<span class="line-number">41</span>
+<span class="line-number">42</span>
+<span class="line-number">43</span>
+<span class="line-number">44</span>
+<span class="line-number">45</span>
+<span class="line-number">46</span>
+<span class="line-number">47</span>
+<span class="line-number">48</span>
+<span class="line-number">49</span>
+<span class="line-number">50</span>
+<span class="line-number">51</span>
+<span class="line-number">52</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">  <span class="nt">&lt;form</span> <span class="err">(</span><span class="na">ngSubmit</span><span class="err">)=&quot;</span><span class="na">createStock</span><span class="err">()&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div&gt;</span>
+</span><span class="line">      The following element changes from green to red when it is invalid
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-name&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span>
+</span><span class="line">             <span class="na">placeholder=</span><span class="s">&quot;Stock Name&quot;</span>
+</span><span class="line">             <span class="na">required</span>
+</span><span class="line">             <span class="na">name=</span><span class="s">&quot;stockName&quot;</span>
+</span><span class="line">             <span class="err">[(</span><span class="na">ngModel</span><span class="err">)]=&quot;</span><span class="na">stock</span><span class="err">.</span><span class="na">name</span><span class="err">&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div&gt;</span>
+</span><span class="line">      The following element changes from green to red when it has been modified
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-code&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span>
+</span><span class="line">             <span class="na">placeholder=</span><span class="s">&quot;Stock Code&quot;</span>
+</span><span class="line">             <span class="na">name=</span><span class="s">&quot;stockCode&quot;</span>
+</span><span class="line">             <span class="err">[(</span><span class="na">ngModel</span><span class="err">)]=&quot;</span><span class="na">stock</span><span class="err">.</span><span class="na">code</span><span class="err">&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div&gt;</span>
+</span><span class="line">        The following element changes from green to red when it is visited by the user, regardless of change
+</span><span class="line">      <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-price&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;number&quot;</span>
+</span><span class="line">             <span class="na">placeholder=</span><span class="s">&quot;Stock Price&quot;</span>
+</span><span class="line">             <span class="na">name=</span><span class="s">&quot;stockPrice&quot;</span>
+</span><span class="line">             <span class="err">[</span><span class="na">ngModel</span><span class="err">]=&quot;</span><span class="na">stock</span><span class="err">.</span><span class="na">price</span><span class="err">&quot;</span>
+</span><span class="line">             <span class="err">(</span><span class="na">ngModelChange</span><span class="err">)=&quot;</span><span class="na">setStockPrice</span><span class="err">($</span><span class="na">event</span><span class="err">)&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-exchange&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">      <span class="nt">&lt;div&gt;</span>
+</span><span class="line">        <span class="nt">&lt;select</span> <span class="na">name=</span><span class="s">&quot;stockExchange&quot;</span> <span class="err">[(</span><span class="na">ngModel</span><span class="err">)]=&quot;</span><span class="na">stock</span><span class="err">.</span><span class="na">exchange</span><span class="err">&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">          <span class="nt">&lt;option</span> <span class="err">*</span><span class="na">ngFor=</span><span class="s">&quot;let exchange of exchanges&quot;</span>
+</span><span class="line">                  <span class="err">[</span><span class="na">ngValue</span><span class="err">]=&quot;</span><span class="na">exchange</span><span class="err">&quot;</span><span class="nt">&gt;</span><span class="nt">&lt;/option&gt;</span>
+</span><span class="line">        <span class="nt">&lt;/select&gt;</span>
+</span><span class="line">      <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-confirm&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span>
+</span><span class="line">             <span class="na">name=</span><span class="s">&quot;stockConfirm&quot;</span>
+</span><span class="line">             <span class="err">[(</span><span class="na">ngModel</span><span class="err">)]=&quot;</span><span class="na">confirmed</span><span class="err">&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">      I confirm that the information provided above is accurate!
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;button</span> <span class="err">[</span><span class="na">disabled</span><span class="err">]=&quot;!</span><span class="na">confirmed</span><span class="err">&quot;</span>
+</span><span class="line">            <span class="na">type=</span><span class="s">&quot;submit&quot;</span><span class="nt">&gt;</span>Create<span class="nt">&lt;/button&gt;</span>
+</span><span class="line">  <span class="nt">&lt;/form&gt;</span>
+</span><span class="line"><span class="nt">&lt;/div&gt;</span>
+</span><span class="line">
+</span><span class="line"><span class="nt">&lt;h4&gt;</span>Stock Name is <span class="nt">&lt;/h4&gt;</span>
+</span><span class="line"><span class="nt">&lt;h4&gt;</span>Data has been confirmed: <span class="nt">&lt;/h4&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Control Validity</strong></p>
+
+<ul>
+  <li>Internally, Angular has its own set of validators.</li>
+  <li>Once you add any validators to your form elements, Angular will take care of running them every time any of the form control changes.</li>
+  <li>In the example below
+    <ul>
+      <li>a template reference variable is added at the form level, and at each control level. The form-level template reference variable (<code>stockForm</code>) gets the <code>NgForm</code> model object bound to it, which allows us to check on things like form and control validity and values through it.</li>
+      <li>template reference variables (<code>stockName</code>, <code>stockPrice</code>, <code>stockCode</code>) are added on each of the text boxes, and assigned the <code>NgModel</code> model object to it. This allows us to check the form field for all the control states that we were previously using through CSS classes (<em>dirty/pristine</em>, <em>valid/invalid</em>, and <em>touched/untouched</em>), in addition to errors.</li>
+      <li>On form submit the <code>stockForm</code> template reference variable is passed, which points to the form model, to the <code>createStock()</code> method. This is another capability of template reference variables: <em>you can pass them in as arguments to your component class</em>.</li>
+      <li>Notice that the error message for the stock name is displayed by default, but the error message that the price and code are required is only displayed after we touch the field. This is the advantage of wrapping the error message under the control state (dirty and invalid). Otherwise, the field is invalid by default (because it is empty).</li>
+      <li>Note that for the stock price, the minlength and required validators are not shown simultaneously. This is handled by the Angular built-in validators,</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+<span class="line-number">39</span>
+<span class="line-number">40</span>
+<span class="line-number">41</span>
+<span class="line-number">42</span>
+<span class="line-number">43</span>
+<span class="line-number">44</span>
+<span class="line-number">45</span>
+<span class="line-number">46</span>
+<span class="line-number">47</span>
+<span class="line-number">48</span>
+<span class="line-number">49</span>
+<span class="line-number">50</span>
+<span class="line-number">51</span>
+<span class="line-number">52</span>
+<span class="line-number">53</span>
+<span class="line-number">54</span>
+<span class="line-number">55</span>
+<span class="line-number">56</span>
+<span class="line-number">57</span>
+<span class="line-number">58</span>
+<span class="line-number">59</span>
+<span class="line-number">60</span>
+<span class="line-number">61</span>
+<span class="line-number">62</span>
+<span class="line-number">63</span>
+<span class="line-number">64</span>
+<span class="line-number">65</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">  <span class="nt">&lt;form</span> <span class="err">(</span><span class="na">ngSubmit</span><span class="err">)=&quot;</span><span class="na">createStock</span><span class="err">(</span><span class="na">stockForm</span><span class="err">)&quot;</span> <span class="err">#</span><span class="na">stockForm=</span><span class="s">&quot;ngForm&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-name&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span>
+</span><span class="line">             <span class="na">placeholder=</span><span class="s">&quot;Stock Name&quot;</span>
+</span><span class="line">             <span class="na">required</span>
+</span><span class="line">             <span class="na">name=</span><span class="s">&quot;stockName&quot;</span>
+</span><span class="line">             <span class="err">#</span><span class="na">stockName=</span><span class="s">&quot;ngModel&quot;</span>
+</span><span class="line">             <span class="err">[(</span><span class="na">ngModel</span><span class="err">)]=&quot;</span><span class="na">stock</span><span class="err">.</span><span class="na">name</span><span class="err">&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="err">*</span><span class="na">ngIf=</span><span class="s">&quot;stockName.errors &amp;&amp; stockName.errors.required&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        Stock Name is Mandatory
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-code&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span>
+</span><span class="line">             <span class="na">placeholder=</span><span class="s">&quot;Stock Code&quot;</span>
+</span><span class="line">             <span class="na">required</span>
+</span><span class="line">             <span class="na">minlength=</span><span class="s">&quot;2&quot;</span>
+</span><span class="line">             <span class="na">name=</span><span class="s">&quot;stockCode&quot;</span>
+</span><span class="line">             <span class="err">#</span><span class="na">stockCode=</span><span class="s">&quot;ngModel&quot;</span>
+</span><span class="line">             <span class="err">[(</span><span class="na">ngModel</span><span class="err">)]=&quot;</span><span class="na">stock</span><span class="err">.</span><span class="na">code</span><span class="err">&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="err">*</span><span class="na">ngIf=</span><span class="s">&quot;stockCode.dirty &amp;&amp; stockCode.invalid&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">      <span class="nt">&lt;div</span> <span class="err">*</span><span class="na">ngIf=</span><span class="s">&quot;stockCode.errors.required&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        Stock Code is Mandatory
+</span><span class="line">      <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">      <span class="nt">&lt;div</span> <span class="err">*</span><span class="na">ngIf=</span><span class="s">&quot;stockCode.errors.minlength&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        Stock Code must be atleast of length 2
+</span><span class="line">      <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-price&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;number&quot;</span>
+</span><span class="line">             <span class="na">placeholder=</span><span class="s">&quot;Stock Price&quot;</span>
+</span><span class="line">             <span class="na">name=</span><span class="s">&quot;stockPrice&quot;</span>
+</span><span class="line">             <span class="na">required</span>
+</span><span class="line">             <span class="err">#</span><span class="na">stockPrice=</span><span class="s">&quot;ngModel&quot;</span>
+</span><span class="line">             <span class="err">[</span><span class="na">ngModel</span><span class="err">]=&quot;</span><span class="na">stock</span><span class="err">.</span><span class="na">price</span><span class="err">&quot;</span>
+</span><span class="line">             <span class="err">(</span><span class="na">ngModelChange</span><span class="err">)=&quot;</span><span class="na">setStockPrice</span><span class="err">($</span><span class="na">event</span><span class="err">)&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="err">*</span><span class="na">ngIf=</span><span class="s">&quot;stockPrice.dirty &amp;&amp; stockPrice.invalid&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">      <span class="nt">&lt;div</span> <span class="err">*</span><span class="na">ngIf=</span><span class="s">&quot;stockPrice.errors.required&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        Stock Price is Mandatory
+</span><span class="line">      <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-exchange&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">      <span class="nt">&lt;div&gt;</span>
+</span><span class="line">        <span class="nt">&lt;select</span> <span class="na">name=</span><span class="s">&quot;stockExchange&quot;</span> <span class="err">[(</span><span class="na">ngModel</span><span class="err">)]=&quot;</span><span class="na">stock</span><span class="err">.</span><span class="na">exchange</span><span class="err">&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">          <span class="nt">&lt;option</span> <span class="err">*</span><span class="na">ngFor=</span><span class="s">&quot;let exchange of exchanges&quot;</span>
+</span><span class="line">                  <span class="err">[</span><span class="na">ngValue</span><span class="err">]=&quot;</span><span class="na">exchange</span><span class="err">&quot;</span><span class="nt">&gt;</span><span class="nt">&lt;/option&gt;</span>
+</span><span class="line">        <span class="nt">&lt;/select&gt;</span>
+</span><span class="line">      <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-confirm&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span>
+</span><span class="line">             <span class="na">name=</span><span class="s">&quot;stockConfirm&quot;</span>
+</span><span class="line">             <span class="na">required</span>
+</span><span class="line">             <span class="err">[(</span><span class="na">ngModel</span><span class="err">)]=&quot;</span><span class="na">confirmed</span><span class="err">&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">      I confirm that the information provided above is accurate!
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span><span class="nt">&gt;</span>Create<span class="nt">&lt;/button&gt;</span>
+</span><span class="line">  <span class="nt">&lt;/form&gt;</span>
+</span><span class="line"><span class="nt">&lt;/div&gt;</span>
+</span><span class="line">
+</span><span class="line"><span class="nt">&lt;h4&gt;</span>Stock Name is <span class="nt">&lt;/h4&gt;</span>
+</span><span class="line"><span class="nt">&lt;h4&gt;</span>Data has been confirmed: <span class="nt">&lt;/h4&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Template Reference Variable</strong></p>
+
+<ul>
+  <li>A template reference variable in Angular allows us to get a temporary handle on a DOM element, component, or directive directly in the template.</li>
+  <li>It is denoted by a standard syntax in the HTML, which is a prefix of <code>#</code>. For example, in the following HTML: <code>&lt;input type="text" #myStockField name="stockName"&gt;</code></li>
+  <li>The <code>#myStockField</code> is a template reference variable that gives us a reference to the input form field</li>
+  <li>When we don’t pass it any value, it will always refer to the HTML DOM element</li>
+</ul>
+
+<h2 id="tools">Tools</h2>
 
 <ul>
   <li>build - webpack, npm, ?</li>

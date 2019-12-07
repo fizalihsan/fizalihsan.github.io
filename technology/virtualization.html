@@ -108,52 +108,52 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#overview">Overview</a>    <ul>
-      <li><a href="#hypervisor">Hypervisor</a></li>
-      <li><a href="#vms">VMs</a></li>
-      <li><a href="#containers">Containers</a></li>
+  <li><a href="#overview" id="markdown-toc-overview">Overview</a>    <ul>
+      <li><a href="#hypervisor" id="markdown-toc-hypervisor">Hypervisor</a></li>
+      <li><a href="#vms" id="markdown-toc-vms">VMs</a></li>
+      <li><a href="#containers" id="markdown-toc-containers">Containers</a></li>
     </ul>
   </li>
-  <li><a href="#docker">Docker</a>    <ul>
-      <li><a href="#benefits">Benefits</a></li>
-      <li><a href="#docker-flow-explained">Docker flow explained</a></li>
-      <li><a href="#concepts">Concepts</a>        <ul>
-          <li><a href="#union-file-system">Union File System</a></li>
-          <li><a href="#plugin-architecture">Plugin Architecture</a></li>
+  <li><a href="#docker" id="markdown-toc-docker">Docker</a>    <ul>
+      <li><a href="#benefits" id="markdown-toc-benefits">Benefits</a></li>
+      <li><a href="#docker-flow-explained" id="markdown-toc-docker-flow-explained">Docker flow explained</a></li>
+      <li><a href="#concepts" id="markdown-toc-concepts">Concepts</a>        <ul>
+          <li><a href="#union-file-system" id="markdown-toc-union-file-system">Union File System</a></li>
+          <li><a href="#plugin-architecture" id="markdown-toc-plugin-architecture">Plugin Architecture</a></li>
         </ul>
       </li>
-      <li><a href="#command-reference">Command Reference</a></li>
-      <li><a href="#docker-compose">Docker Compose</a></li>
-      <li><a href="#questions">Questions</a></li>
+      <li><a href="#command-reference" id="markdown-toc-command-reference">Command Reference</a></li>
+      <li><a href="#docker-compose" id="markdown-toc-docker-compose">Docker Compose</a></li>
+      <li><a href="#questions" id="markdown-toc-questions">Questions</a></li>
     </ul>
   </li>
-  <li><a href="#kubernetes">Kubernetes</a>    <ul>
-      <li><a href="#benefits-1">Benefits</a></li>
-      <li><a href="#concepts-1">Concepts</a></li>
-      <li><a href="#pods">Pods</a>        <ul>
-          <li><a href="#health-check">Health Check</a></li>
-          <li><a href="#resource-management">Resource Management</a></li>
-          <li><a href="#persistent-storage">Persistent Storage</a></li>
+  <li><a href="#kubernetes" id="markdown-toc-kubernetes">Kubernetes</a>    <ul>
+      <li><a href="#benefits-1" id="markdown-toc-benefits-1">Benefits</a></li>
+      <li><a href="#concepts-1" id="markdown-toc-concepts-1">Concepts</a></li>
+      <li><a href="#pods" id="markdown-toc-pods">Pods</a>        <ul>
+          <li><a href="#health-check" id="markdown-toc-health-check">Health Check</a></li>
+          <li><a href="#resource-management" id="markdown-toc-resource-management">Resource Management</a></li>
+          <li><a href="#persistent-storage" id="markdown-toc-persistent-storage">Persistent Storage</a></li>
         </ul>
       </li>
-      <li><a href="#labels--annotations">Labels &amp; Annotations</a></li>
-      <li><a href="#cluster-components">Cluster components</a></li>
-      <li><a href="#services">Services</a></li>
-      <li><a href="#replicasets">ReplicaSets</a></li>
-      <li><a href="#command-reference-1">Command Reference</a></li>
+      <li><a href="#labels--annotations" id="markdown-toc-labels--annotations">Labels &amp; Annotations</a></li>
+      <li><a href="#cluster-components" id="markdown-toc-cluster-components">Cluster components</a></li>
+      <li><a href="#services" id="markdown-toc-services">Services</a></li>
+      <li><a href="#replicasets" id="markdown-toc-replicasets">ReplicaSets</a></li>
+      <li><a href="#command-reference-1" id="markdown-toc-command-reference-1">Command Reference</a></li>
     </ul>
   </li>
-  <li><a href="#openshift">OpenShift</a>    <ul>
-      <li><a href="#commands">Commands</a></li>
+  <li><a href="#openshift" id="markdown-toc-openshift">OpenShift</a>    <ul>
+      <li><a href="#commands" id="markdown-toc-commands">Commands</a></li>
     </ul>
   </li>
-  <li><a href="#containerization-patterns">Containerization Patterns</a>    <ul>
-      <li><a href="#sidecar-pattern-single-node">Sidecar Pattern (single node)</a></li>
-      <li><a href="#ambassador-pattern-single-node">Ambassador Pattern (single node)</a></li>
-      <li><a href="#adapter-pattern-single-node">Adapter Pattern (single node)</a></li>
+  <li><a href="#containerization-patterns" id="markdown-toc-containerization-patterns">Containerization Patterns</a>    <ul>
+      <li><a href="#sidecar-pattern-single-node" id="markdown-toc-sidecar-pattern-single-node">Sidecar Pattern (single node)</a></li>
+      <li><a href="#ambassador-pattern-single-node" id="markdown-toc-ambassador-pattern-single-node">Ambassador Pattern (single node)</a></li>
+      <li><a href="#adapter-pattern-single-node" id="markdown-toc-adapter-pattern-single-node">Adapter Pattern (single node)</a></li>
     </ul>
   </li>
-  <li><a href="#references">References</a></li>
+  <li><a href="#references" id="markdown-toc-references">References</a></li>
 </ul>
 
 <h1 id="overview">Overview</h1>
@@ -162,8 +162,8 @@ messageStyle: "none",
 
 <ul>
   <li>The hypervisor sits in between the physical machine and virtual machines and provides virtualization services to the virtual machines. It intercepts the guest operating system operations on the virtual machines and emulates the operation on the host machine’s operating system.</li>
-  <li>The hypervisor handles creating the virtual environment on which the guest virtual machines operate. </li>
-  <li>It supervises the guest systems and makes sure that resources are allocated to the guests as necessary. </li>
+  <li>The hypervisor handles creating the virtual environment on which the guest virtual machines operate.</li>
+  <li>It supervises the guest systems and makes sure that resources are allocated to the guests as necessary.</li>
   <li>The rapid development of virtualization technologies has driven the use of virtualization further by allowing multiple virtual servers to be created on a single physical server with the help of hypervisors, such as Xen, VMware Player, KVM, etc., and incorporation of hardware support in commodity processors, such as Intel VT and AMD-V.</li>
 </ul>
 
@@ -178,7 +178,7 @@ messageStyle: "none",
 <ul>
   <li>VMs is primarily in the location of the virtualization layer and the way that OS resources are used.</li>
   <li>VMs rely on a hypervisor which is normally installed atop the actual <em>bare metal</em> system hardware. This has led to hypervisors being perceived as operating systems in their own right. Once the hypervisor layer is installed, VM instances can be provisioned from the system’s available computing resources. Each VM can then receive its own unique operating system and workload (application).</li>
-  <li><em>Isolation</em> - A full virtualized system gets its own set of resources allocated to it, and does minimal sharing. You get more isolation, but it is much heavier (requires more resources). VMs are fully isolated from one another – no VM is aware of (or relies on) the presence of another VM on the same system – and malware, application crashes and other problems impact only the affected VM. </li>
+  <li><em>Isolation</em> - A full virtualized system gets its own set of resources allocated to it, and does minimal sharing. You get more isolation, but it is much heavier (requires more resources). VMs are fully isolated from one another – no VM is aware of (or relies on) the presence of another VM on the same system – and malware, application crashes and other problems impact only the affected VM.</li>
   <li>VMs can be migrated from one virtualized system to another without regard for the system’s hardware or operating systems.</li>
 </ul>
 
@@ -188,7 +188,7 @@ messageStyle: "none",
   <li>Containers are an encapsulation of an application with its dependencies.</li>
   <li>Containers share resources with the host OS and hence lighter than VMs.</li>
   <li>Containers can be started and stopped in a fraction of a second.</li>
-  <li>Containers eliminate a whole class of bugs caused by environment changes- ‘it runs in my machine’ </li>
+  <li>Containers eliminate a whole class of bugs caused by environment changes- ‘it runs in my machine’</li>
 </ul>
 
 <h1 id="docker">Docker</h1>
@@ -207,7 +207,7 @@ messageStyle: "none",
 
 <ul>
   <li>The Docker client contacts the Docker daemon.</li>
-  <li>The Docker daemon pulls the “hello-world” image from the Docker Hub. </li>
+  <li>The Docker daemon pulls the “hello-world” image from the Docker Hub.</li>
   <li>If not available in Hub, then it is pulled from Docker Store</li>
   <li>The Docker daemon creates a new container from that image within the Docker machine. It then runs the executable that produces the output.</li>
   <li>The Docker daemon streams that output to the Docker client, which sent it to your terminal.</li>
@@ -237,7 +237,7 @@ messageStyle: "none",
 <p><img class="right" src="/technology/union-file-system.jpg" /></p>
 
 <ul>
-  <li>Docker uses a union file system (UFS) for containers, which allows multiple filesystems to be mounted in a hierarchy and to appear as a single filesystem. </li>
+  <li>Docker uses a union file system (UFS) for containers, which allows multiple filesystems to be mounted in a hierarchy and to appear as a single filesystem.</li>
   <li>The filesystem from the image has been mounted as a read-only layer, and any changes to the running container are made to a read- write layer mounted on top of this. Because of this, Docker only has to look at the topmost read-write layer to find the changes made to the running system.</li>
   <li>Docker images are made up of multiple layers. Each of these layers is a read-only filesystem. A layer is created for each instruction in a Dockerfile and sits on top of the previous layers. When an image is turned into a container, the Docker engine takes the image and adds a read-write filesystem on top (as well as initializing various settings such as the IP address, name, ID, and resource limits).</li>
 </ul>
@@ -245,10 +245,10 @@ messageStyle: "none",
 <p><strong>Images</strong></p>
 
 <ul>
-  <li>Each instruction in a Dockerfile results in a new image layer, which can also be used to start a container. </li>
+  <li>Each instruction in a Dockerfile results in a new image layer, which can also be used to start a container.</li>
   <li>The new layer is created by starting a container using the image of the previous layer, executing the Dockerfile instruction and saving a new image.</li>
   <li>When a Dockerfile instruction successfully completes, the intermediate container will be deleted, unless the <code>--rm=false</code> argument was given.</li>
-  <li>Since each instruction results in an static image, all running processes in the instruction will be stopped. </li>
+  <li>Since each instruction results in an static image, all running processes in the instruction will be stopped.</li>
   <li>
     <p>To start long-lived processes within the container, such as databases or SSH daemons, it must be launched from an <code>ENTRYPOINT</code> or <code>CMD</code> instruction.</p>
   </li>
@@ -266,12 +266,12 @@ messageStyle: "none",
 <p><strong>Volumes</strong></p>
 
 <ul>
-  <li>Volumes are files or directories that are directly mounted on the host and not part of the normal UFS. This means they can be shared with other containers and all changes will be made directly to the host filesystem. </li>
+  <li>Volumes are files or directories that are directly mounted on the host and not part of the normal UFS. This means they can be shared with other containers and all changes will be made directly to the host filesystem.</li>
   <li>First way of initializing volume
     <ul>
       <li><code>docker run -it --name container-test -h CONTAINER -v /data debian /bin/bash</code></li>
-      <li>This will make the directory <code>/data</code> inside the container into a volume. </li>
-      <li>Any files the image held inside the <code>/data</code> directory will be copied into the volume. </li>
+      <li>This will make the directory <code>/data</code> inside the container into a volume.</li>
+      <li>Any files the image held inside the <code>/data</code> directory will be copied into the volume.</li>
       <li>We can find out where the volume lives on the host by running this on the host from a new shell: <code>docker inspect -f  container-test</code></li>
     </ul>
   </li>
@@ -287,17 +287,17 @@ messageStyle: "none",
       <li><code>docker run -v /home/adrian/data:/data debian ls /data</code>
         <ul>
           <li>will mount the directory <code>/home/adrian/data</code> on the host as <code>/data</code> inside the container. This is commonly known as <strong>bind mount</strong>.</li>
-          <li>Any files already existing in the <code>/home/adrian/data</code> directory will be available inside the container. </li>
-          <li>If the <code>/data</code> directory already exists in the container, its contents will be hidden by the volume. </li>
+          <li>Any files already existing in the <code>/home/adrian/data</code> directory will be available inside the container.</li>
+          <li>If the <code>/data</code> directory already exists in the container, its contents will be hidden by the volume.</li>
           <li>Unlike the first method, no files from the image will be copied into the volume, and the volume won’t be deleted by Docker (i.e., <code>docker rm -v</code> will not remove a volume that is mounted at a user-chosen directory).</li>
         </ul>
       </li>
     </ul>
   </li>
-  <li>Sharing data: <code>docker run -it -h NEWCONTAINER --volumes-from container-test debian /bin/bash</code>. 
+  <li>Sharing data: <code>docker run -it -h NEWCONTAINER --volumes-from container-test debian /bin/bash</code>.
     <ul>
       <li>This allows to share the volumes from <code>container-test</code> to be shared with the NEWCONTAINER.</li>
-      <li>this works whether or not the container holding the volumes (container-test in this case) is currently running. </li>
+      <li>this works whether or not the container holding the volumes (container-test in this case) is currently running.</li>
       <li>As long as at least one existing container links to a volume, it won’t be deleted.</li>
     </ul>
   </li>
@@ -397,7 +397,7 @@ messageStyle: "none",
       </li>
       <li><code>docker run busybox echo 'Welcome to Docker'</code></li>
       <li><code>docker run -it busybox sh</code> - <code>it</code> starts an interactive tty terminal to the container</li>
-      <li>Pass <code>--rm</code> flag to delete the container and associated file system when the container exits. </li>
+      <li>Pass <code>--rm</code> flag to delete the container and associated file system when the container exits.</li>
     </ul>
   </li>
   <li><code>docker logs &lt;container&gt;</code></li>
@@ -412,13 +412,13 @@ messageStyle: "none",
       <li><code>docker inspect &lt;container&gt; --format </code> - to parse out IP</li>
     </ul>
   </li>
-  <li><code>docker diff &lt;container&gt;</code> - to view the files changed from within the container </li>
+  <li><code>docker diff &lt;container&gt;</code> - to view the files changed from within the container</li>
   <li><code>docker rm &lt;container_id&gt;</code> clean up the container
     <ul>
       <li><code>docker rm $(docker ps -a -q -f status=exited)</code> clean up all the exited containers</li>
     </ul>
   </li>
-  <li><code>docker stop &lt;container_id&gt;</code> - to stop a container. A stopped container retains changes to its settings, meta‐ data, and filesystem, including runtime configuration such as IP address. </li>
+  <li><code>docker stop &lt;container_id&gt;</code> - to stop a container. A stopped container retains changes to its settings, meta‐ data, and filesystem, including runtime configuration such as IP address.</li>
   <li><code>docker start &lt;container_id&gt;</code> - to start a stopped container</li>
 </ul>
 
@@ -433,8 +433,8 @@ messageStyle: "none",
 <h2 id="docker-compose">Docker Compose</h2>
 
 <ul>
-  <li>Docker Compose is designed to quickly get Docker development environments up and run‐ ning. </li>
-  <li>It uses YAML files to store the configuration for sets of containers, saving developers from repetitive and error-prone typing or rolling their own solution. </li>
+  <li>Docker Compose is designed to quickly get Docker development environments up and run‐ ning.</li>
+  <li>It uses YAML files to store the configuration for sets of containers, saving developers from repetitive and error-prone typing or rolling their own solution.</li>
   <li>Compose will free us from the need to maintain our own scripts for orchestration, including starting, linking, updating, and stopping our containers.</li>
   <li>Bunch of containers is called ‘services’ in Compose lingo</li>
 </ul>
@@ -483,7 +483,7 @@ messageStyle: "none",
 <ul>
   <li>Namespaces
     <ul>
-      <li>Kubernetes uses namespaces to organize objects in the cluster. </li>
+      <li>Kubernetes uses namespaces to organize objects in the cluster.</li>
       <li>By default, the kubectl command-line tool interacts with the <code>default</code> namespace. It can be overridden by <code>kubectl --namespace=mystuff</code>.</li>
     </ul>
   </li>
@@ -492,7 +492,7 @@ messageStyle: "none",
       <li>To change the default namespace permanently, you can use context.</li>
     </ul>
   </li>
-  <li>Deployment 
+  <li>Deployment
     <ul>
       <li>is a way to create an array of Pods</li>
     </ul>
@@ -501,7 +501,7 @@ messageStyle: "none",
   <li>kubectl
     <ul>
       <li>CLI to interact with the Kubernetes API</li>
-      <li>Everything in Kubernetes is represented by a RESTful resource (also known as <em>Kubernetes objects</em>). The <code>kubectl</code> command makes HTTP requests to access the objects. e.g., https://your-k8s.com/api/v1/namespaces/default/pods/my-pod </li>
+      <li>Everything in Kubernetes is represented by a RESTful resource (also known as <em>Kubernetes objects</em>). The <code>kubectl</code> command makes HTTP requests to access the objects. e.g., https://your-k8s.com/api/v1/namespaces/default/pods/my-pod</li>
       <li><code>kubectl get &lt;resource-name&gt; &lt;object-name&gt;</code></li>
       <li><code>kubectl describe &lt;resource-name&gt; &lt;object-name&gt;</code></li>
       <li>configuration file is located at <code>$HOME/.kube/config</code> - stores the information on how to find and authenticate to a cluster</li>
@@ -512,18 +512,18 @@ messageStyle: "none",
 <h2 id="pods">Pods</h2>
 
 <ul>
-  <li>Pods represent the atomic unit of work in a Kubernetes cluster. </li>
-  <li>Pods = one or more containers working together symbiotically. </li>
+  <li>Pods represent the atomic unit of work in a Kubernetes cluster.</li>
+  <li>Pods = one or more containers working together symbiotically.</li>
   <li>To create a Pod, you write a pod manifest and submit it to the Kubernetes API server by using the CLI or (less frequently) by making HTTP and JSON calls to the server directly.</li>
   <li>Pods are described in a pod manifest file - in yaml or json format. They are stored in <em>etcd</em> (persistent storage)</li>
   <li>All containers in a pod always land on the same machine</li>
   <li>Each container within a pod runs in its own cgroup, but they share a number of Linux namespaces.</li>
-  <li>Applications running in the same pod 
+  <li>Applications running in the same pod
     <ul>
       <li>can connect to each using localhost and a fixed port</li>
-      <li>share the same IP address and port space (network namespace), </li>
-      <li>have the same hostname (Unix Time Shared[UTS] namespace), </li>
-      <li>and can communicate using native interprocess communication channels over System V IPC or POSIX message queues (Interprocess Communication [IPC] namespace). </li>
+      <li>share the same IP address and port space (network namespace),</li>
+      <li>have the same hostname (Unix Time Shared[UTS] namespace),</li>
+      <li>and can communicate using native interprocess communication channels over System V IPC or POSIX message queues (Interprocess Communication [IPC] namespace).</li>
       <li>Containers in different pods running on the same node might as well be on different servers.</li>
     </ul>
   </li>
@@ -536,9 +536,9 @@ messageStyle: "none",
   <li><strong>How a pod is created?</strong>
     <ul>
       <li>User creates a pod via kubectl or by submitting a manifest file</li>
-      <li>The Kubernetes API server accepts and processes Pod manifests before storing them in persistent storage (etcd). </li>
-      <li>The scheduler uses the Kubernetes API to find pods that haven’t been scheduled to a node. </li>
-      <li>The scheduler then places the pods onto nodes depending on the resources and other constraints expressed in the pod manifests. </li>
+      <li>The Kubernetes API server accepts and processes Pod manifests before storing them in persistent storage (etcd).</li>
+      <li>The scheduler uses the Kubernetes API to find pods that haven’t been scheduled to a node.</li>
+      <li>The scheduler then places the pods onto nodes depending on the resources and other constraints expressed in the pod manifests.</li>
       <li>Multiple pods can be placed on the same machine as long as there are sufficient resources.</li>
       <li><code>kubelet</code> daemon is responsible for creating and performing health checks on the pod</li>
     </ul>
@@ -636,14 +636,14 @@ messageStyle: "none",
     <ul>
       <li><strong>Liveness probe</strong>
         <ul>
-          <li>Liveness determines if an application is running properly. </li>
-          <li>Containers that fail liveness checks are restarted.  </li>
+          <li>Liveness determines if an application is running properly.</li>
+          <li>Containers that fail liveness checks are restarted.</li>
         </ul>
       </li>
       <li><strong>Readiness probe</strong>
         <ul>
-          <li>Readiness describes when a container is ready to serve user requests. </li>
-          <li>Containers that fail readiness checks are removed from service load balancers. </li>
+          <li>Readiness describes when a container is ready to serve user requests.</li>
+          <li>Containers that fail readiness checks are removed from service load balancers.</li>
         </ul>
       </li>
     </ul>
@@ -655,7 +655,7 @@ messageStyle: "none",
   </li>
   <li><strong>Exec probes</strong>
     <ul>
-      <li>execute a script or program in the context of the container. If this script returns a zero exit code, the probe succeeds; otherwise, it fails. </li>
+      <li>execute a script or program in the context of the container. If this script returns a zero exit code, the probe succeeds; otherwise, it fails.</li>
       <li><code>exec</code> scripts are often useful for custom application validation logic that doesn’t fit neatly into an HTTP call.</li>
     </ul>
   </li>
@@ -712,9 +712,9 @@ messageStyle: "none",
 <ul>
   <li>Minimum required resources
     <ul>
-      <li>With Kubernetes, a Pod requests the resources required to run its containers. Kubernetes guarantees that these resources are available to the Pod. </li>
+      <li>With Kubernetes, a Pod requests the resources required to run its containers. Kubernetes guarantees that these resources are available to the Pod.</li>
       <li>Resources are requested per container, not per Pod. The total resources requested by the Pod is the sum of all resources requested by all containers in the Pod. The reason for this is that in many cases the different containers have very different CPU requirements</li>
-      <li>Requests are used when scheduling Pods to nodes. The Kubernetes scheduler will ensure that the sum of all requests of all Pods on a node does not exceed the capacity of the node. </li>
+      <li>Requests are used when scheduling Pods to nodes. The Kubernetes scheduler will ensure that the sum of all requests of all Pods on a node does not exceed the capacity of the node.</li>
       <li>K8S supports requested resources like CPU, memory, GPUs and more.</li>
       <li>CPU request
         <ul>
@@ -724,7 +724,7 @@ messageStyle: "none",
       </li>
       <li>Memory request
         <ul>
-          <li>Memory requests are handled similarly to CPU, but there is an important difference. </li>
+          <li>Memory requests are handled similarly to CPU, but there is an important difference.</li>
           <li>If a container is over its memory request, the OS can’t just remove memory from the process, because it’s been allocated. Consequently, when the system runs out of memory, the kubelet terminates containers whose memory usage is greater than their requested memory. These containers are automatically restarted, but with less available memory on the machine for the container to consume.</li>
         </ul>
       </li>
@@ -795,7 +795,7 @@ messageStyle: "none",
   </li>
   <li><strong>Remote network storage volumes</strong>
     <ul>
-      <li>Sometimes you will use a volume for truly persistent data that is independent of the lifespan of a particular Pod, and should move between nodes in the cluster if a node fails or a Pod moves to a different machine for some reason. </li>
+      <li>Sometimes you will use a volume for truly persistent data that is independent of the lifespan of a particular Pod, and should move between nodes in the cluster if a node fails or a Pod moves to a different machine for some reason.</li>
       <li>To achieve this, Kubernetes supports a wide variety of remote network storage volumes
         <ul>
           <li>including widely supported protocols like NFS or iSCSI</li>
@@ -813,7 +813,7 @@ messageStyle: "none",
   <li><strong>Persistent Data using Remote Disks</strong>
     <ul>
       <li>Oftentimes, you want the data a Pod is using to stay with the Pod, even if it is restarted on a different host machine.</li>
-      <li>To achieve this, you can mount a remote network storage volume into your Pod. </li>
+      <li>To achieve this, you can mount a remote network storage volume into your Pod.</li>
       <li>When using network-based storage, Kubernetes automatically mounts and unmounts the appropriate storage whenever a Pod using that volume is scheduled onto a particular machine.</li>
     </ul>
   </li>
@@ -821,12 +821,12 @@ messageStyle: "none",
 
 <h2 id="labels--annotations">Labels &amp; Annotations</h2>
 
-<p><strong>Labels</strong> </p>
+<p><strong>Labels</strong></p>
 
 <ul>
   <li>primarily for user/admin</li>
-  <li>are key/value pairs that can be attached to Kubernetes objects such as Pods and ReplicaSets. </li>
-  <li>They can be arbitrary, and are useful for attaching identifying information to Kubernetes objects. </li>
+  <li>are key/value pairs that can be attached to Kubernetes objects such as Pods and ReplicaSets.</li>
+  <li>They can be arbitrary, and are useful for attaching identifying information to Kubernetes objects.</li>
   <li>Labels are used to identify and optional group objects in a cluster.</li>
 </ul>
 
@@ -844,12 +844,12 @@ messageStyle: "none",
 </span><span class="line"><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p><strong>Annotations</strong> </p>
+<p><strong>Annotations</strong></p>
 
 <ul>
   <li>primarily for tooling</li>
   <li>annotations are key/value pairs designed to hold non-identifying information that can be leveraged by tools and libraries.</li>
-  <li>While labels are used to identify and group objects, annotations are used to provide extra information about where an object came from, how to use it, or policy around that object.  </li>
+  <li>While labels are used to identify and group objects, annotations are used to provide extra information about where an object came from, how to use it, or policy around that object.</li>
   <li>There is overlap, and it is a matter of taste as to when to use an annotation or a label.  When in doubt, add information to an object as an annotation and promote it to a label if you find yourself wanting to use it in a selector.</li>
   <li>Where to use?
     <ul>
@@ -862,7 +862,7 @@ messageStyle: "none",
   </li>
   <li>Where not to use?
     <ul>
-      <li>Users should avoid using the Kubernetes API server as a general-purpose database.  </li>
+      <li>Users should avoid using the Kubernetes API server as a general-purpose database.</li>
       <li>Annotations are good for small bits of data that are highly associated with a specific resource.  If you want to store data in Kubernetes but you don’t have an obvious object to associate it with, consider storing that data in some other, more appropriate database.</li>
       <li>Labels can be used to filter objects server-side, whereas annotations can’t</li>
     </ul>
@@ -913,15 +913,15 @@ messageStyle: "none",
     <ul>
       <li><strong>kube-proxy</strong>
         <ul>
-          <li>responsible for routing network traffic to load-balanced services in the Kubernetes cluster. </li>
-          <li>must be present on every node in the cluster. </li>
-          <li>Kubernetes has an API object named <code>DaemonSet</code>, that is used in many clusters to accomplish this. </li>
+          <li>responsible for routing network traffic to load-balanced services in the Kubernetes cluster.</li>
+          <li>must be present on every node in the cluster.</li>
+          <li>Kubernetes has an API object named <code>DaemonSet</code>, that is used in many clusters to accomplish this.</li>
         </ul>
       </li>
       <li><strong>kube-dns</strong>
         <ul>
-          <li>Kubernetes also runs a DNS server, which provides naming and discovery for the services that are defined in the cluster. </li>
-          <li>This DNS server also runs as a replicated service on the cluster. Depending on the size of your cluster, you may see one or more DNS servers running in your cluster. </li>
+          <li>Kubernetes also runs a DNS server, which provides naming and discovery for the services that are defined in the cluster.</li>
+          <li>This DNS server also runs as a replicated service on the cluster. Depending on the size of your cluster, you may see one or more DNS servers running in your cluster.</li>
           <li>The DNS service is run as a Kubernetes deployment, which manages these replicas.</li>
           <li>There is a also a Kubernetes service that performs load-balancing for the DNS server.</li>
           <li>Check <code>/etc/resolv.conf</code> file in a container</li>
@@ -932,22 +932,22 @@ messageStyle: "none",
           <li>The UI is run as a single replica, but it is still managed by a Kubernetes deployment for reliability and upgrades.</li>
         </ul>
       </li>
-      <li>The <strong>controller-manager</strong> is responsible for running various controllers that regulate behavior in the cluster: for example, ensuring that all of the replicas of a service are available and healthy. </li>
-      <li>The <strong>scheduler</strong> is responsible for placing different pods onto different nodes in the cluster. </li>
+      <li>The <strong>controller-manager</strong> is responsible for running various controllers that regulate behavior in the cluster: for example, ensuring that all of the replicas of a service are available and healthy.</li>
+      <li>The <strong>scheduler</strong> is responsible for placing different pods onto different nodes in the cluster.</li>
       <li>The <strong>etcd server</strong> is the storage for the cluster where all of the API objects are stored.</li>
     </ul>
   </li>
   <li><strong>Node Types</strong>
     <ul>
-      <li>Master node 
+      <li>Master node
         <ul>
           <li>has containers like the API server, scheduler, etc., which manage the cluster</li>
           <li>Kubernetes won’t generally schedule work onto master nodes to ensure that user workloads don’t harm the overall operation of the cluster.</li>
         </ul>
       </li>
-      <li>Worker nodes 
+      <li>Worker nodes
         <ul>
-          <li>where the application containers will run. </li>
+          <li>where the application containers will run.</li>
         </ul>
       </li>
     </ul>
@@ -971,11 +971,11 @@ messageStyle: "none",
       <li>We can always use labels to identify the set of pods we are interested in, get all of the pods for those labels, and dig out the IP address.  But keeping the correct set of labels to use in sync can be tricky.  This is why the Service object was created.</li>
     </ul>
   </li>
-  <li>A <code>Service</code> object is a way to create a named label selector. </li>
+  <li>A <code>Service</code> object is a way to create a named label selector.</li>
   <li>The <code>kubernetes</code> service is automatically created for you so that you can find and talk to the Kubernetes API from within the app.</li>
   <li>How to expose a service?
     <ul>
-      <li><code>kubetctl expose &lt;depl&gt;</code> </li>
+      <li><code>kubetctl expose &lt;depl&gt;</code></li>
       <li>creates a new service from a deployment</li>
       <li>assigns a new type of virtual IP called <em>cluster IP</em> which is a special address the system will load-balance across all of the pods that are identified by the selector.</li>
     </ul>
@@ -989,9 +989,9 @@ messageStyle: "none",
 <ul>
   <li>Types
     <ul>
-      <li><code>Cluster IP</code> - </li>
-      <li><code>NodePort</code> - </li>
-      <li><code>LoadBalancer</code> - </li>
+      <li><code>Cluster IP</code> -</li>
+      <li><code>NodePort</code> -</li>
+      <li><code>LoadBalancer</code> -</li>
     </ul>
   </li>
   <li>
@@ -1056,15 +1056,15 @@ messageStyle: "none",
       <li>Sharding - Different replicas can handle different parts of a computation in parallel.</li>
     </ul>
   </li>
-  <li>Composing Pods with ReplicaSets provides the foundation for building robust applications with automatic failover, and makes deploying those applications a breeze by enabling scalable and sane deployment patterns. </li>
-  <li>ReplicaSets should be used for any Pod you care about, even if it is a single Pod! Some people even default to using ReplicaSets instead of Pods. </li>
+  <li>Composing Pods with ReplicaSets provides the foundation for building robust applications with automatic failover, and makes deploying those applications a breeze by enabling scalable and sane deployment patterns.</li>
+  <li>ReplicaSets should be used for any Pod you care about, even if it is a single Pod! Some people even default to using ReplicaSets instead of Pods.</li>
   <li>ReplicaSet enables a user managing a replicated set of Pods considers them as a single entity to be defined and managed. A ReplicaSet acts as a cluster-wide Pod manager, ensuring that the right types and number of Pods are running at all times.</li>
   <li>
     <p>ReplicaSets provide the underpinning for building self-healing apps. Pods managed by ReplicaSets are automatically rescheduled under certain failure conditions such as node failures and network partitions.</p>
   </li>
   <li>ReplicaSets and Pods are loosely coupled. Though ReplicaSets create and manage Pods, they do not own the Pods they create.</li>
   <li>ReplicaSets use label queries to identify the set of Pods they should be managing.</li>
-  <li>ReplicaSets monitor cluster state using a set of Pod labels. Labels are used to filter Pod listings and track Pods running within a cluster. When ReplicaSets are initially created, the ReplicaSet fetches a Pod listing from the Kubernetes API and filters the results by labels. Based on the number of Pods returned by the query, the ReplicaSet deletes or creates Pods to meet the desired number of replicas. </li>
+  <li>ReplicaSets monitor cluster state using a set of Pod labels. Labels are used to filter Pod listings and track Pods running within a cluster. When ReplicaSets are initially created, the ReplicaSet fetches a Pod listing from the Kubernetes API and filters the results by labels. Based on the number of Pods returned by the query, the ReplicaSet deletes or creates Pods to meet the desired number of replicas.</li>
   <li>ReplicaSets that create multiple Pods and the services that load-balance to those Pods are also totally separate, decoupled API objects.</li>
   <li>Quarantining faulty containers
     <ul>
@@ -1228,7 +1228,7 @@ messageStyle: "none",
   <li><strong>Autoscaling</strong>
     <ul>
       <li><code>kubectl autoscale rs &lt;pod-name&gt; --min=2 --max=5 --cpu-percent=80</code> - creates an autoscaler that scales between two and five replicas with a CPU threshold of 80%.</li>
-      <li><code>kubectl get hpa</code> </li>
+      <li><code>kubectl get hpa</code></li>
     </ul>
   </li>
   <li><strong>Debugging</strong>
@@ -1245,23 +1245,23 @@ messageStyle: "none",
 <h1 id="openshift">OpenShift</h1>
 
 <ul>
-  <li><em>Pod</em> 
+  <li><em>Pod</em>
     <ul>
       <li>A pod is one or more containers guaranteed to be running on the same host. The containers within a pod share a unique IP address. They can communicate with each other via the “localhost” and also all share any volumes (persistent storage).</li>
     </ul>
   </li>
   <li><em>Replication Controller</em>
     <ul>
-      <li>When scaled up, an application will have more than one copy of itself, and each copy will have its own local state. Each copy corresponds to a different instance of a pod with the pods being managed by the replication controller.  </li>
+      <li>When scaled up, an application will have more than one copy of itself, and each copy will have its own local state. Each copy corresponds to a different instance of a pod with the pods being managed by the replication controller.</li>
     </ul>
   </li>
   <li><em>Service</em>
     <ul>
-      <li>As each pod has a unique IP, we need an easy way to address the set of all pods as a whole. This is where a service comes into play. </li>
+      <li>As each pod has a unique IP, we need an easy way to address the set of all pods as a whole. This is where a service comes into play.</li>
       <li>A Service groups pods and provides a common DNS name and an optional, load-balanced IP address to access them</li>
       <li>The service gets its own IP and a DNS name. When making a connection to a service, OpenShift will automatically route the connection to one of the pods associated with that service.</li>
-      <li>Although a service has a DNS name, it is still only accessible within the OpenShift cluster and is not accessible externally. </li>
-      <li>To make a service externally accessible, a route needs to be created. </li>
+      <li>Although a service has a DNS name, it is still only accessible within the OpenShift cluster and is not accessible externally.</li>
+      <li>To make a service externally accessible, a route needs to be created.</li>
       <li>Creating a route automatically sets up <strong>haproxy</strong> or a hardware-based router, with an externally addressable DNS name, exposing the service and load-balancing inbound traffic across the pods.</li>
     </ul>
   </li>
@@ -1273,10 +1273,10 @@ messageStyle: "none",
       <li><em>Rolling Strategy</em>
         <ul>
           <li>This is the default deployment strategy in OpenShift</li>
-          <li>A rolling deployment slowly replaces instances of the previous version of an application with instances of the new version of the application. </li>
+          <li>A rolling deployment slowly replaces instances of the previous version of an application with instances of the new version of the application.</li>
           <li>A rolling deployment can wait for new pods to become ready via a readiness check before scaling down the old instances. Rolling deployment can be aborted if a problem occurs.</li>
           <li>It runs old and new instances of the application in parallel and balances traffic across them as new instances are deployed and old instances shut down. It enables an update with no down time.</li>
-          <li><em>When to use?</em>: 
+          <li><em>When to use?</em>:
             <ul>
               <li>not suitable strategy where multiple instances of the same application cannot be run at the same time</li>
               <li>where instances of both old and new code cannot be run at the same time.</li>
@@ -1287,7 +1287,7 @@ messageStyle: "none",
       <li><em>Recreate Strategy</em>
         <ul>
           <li>shuts down all running instances of the old app, before starting up the new instances</li>
-          <li><em>When to use?</em>: 
+          <li><em>When to use?</em>:
             <ul>
               <li>where more than one instance of the app cannot run at the same time.</li>
               <li>where old and new code of the app cannot be run at the same time. e.g., apps running a traditional relational db</li>
@@ -1310,8 +1310,8 @@ messageStyle: "none",
       <li>Database cannot scaled up in a traditional ways since only the primary instance should have the ability to update data. Scaling can still be performed, but usually on read-only instances of the DB</li>
       <li>Automatic scaling
         <ul>
-          <li>can be configured by defining the upper and lower thresholds of CPU usage by pod. </li>
-          <li>If the upper threshold is consistently exceeded by the pods, a new instance of the app is started. </li>
+          <li>can be configured by defining the upper and lower thresholds of CPU usage by pod.</li>
+          <li>If the upper threshold is consistently exceeded by the pods, a new instance of the app is started.</li>
           <li>If the CPU drops below lower threshold, then the replicas are scaled down.</li>
         </ul>
       </li>
@@ -1344,7 +1344,7 @@ messageStyle: "none",
   <li><code>oc cluster up</code> - to start the OpenShift cluster</li>
   <li><code>oc new-app &lt;base_image&gt; &lt;sourcecode_git_url&gt; --name='&lt;app-name&gt;'</code> - to create a new app from source code</li>
   <li><code>oc expose service &lt;routename&gt;</code> - to expose a route</li>
-  <li><code>oc get routes</code> - to view all the routes </li>
+  <li><code>oc get routes</code> - to view all the routes</li>
   <li><code>oc status</code></li>
   <li><code>oc start-build &lt;app&gt;</code></li>
   <li><code>oc get pods</code> - get all running instances
@@ -1452,12 +1452,12 @@ Database Name: insults
 <p><img src="/technology/adapter_container.png" title="right" /></p>
 
 <ul>
-  <li>Adapter container is used to modify the interface of the application container so that it conforms to some predefined interface that is expected of all applications. </li>
+  <li>Adapter container is used to modify the interface of the application container so that it conforms to some predefined interface that is expected of all applications.</li>
   <li>For example, an adapter might ensure that an application implements a consistent monitoring interface. Or it might ensure that log files are always written to <code>stdout</code> or any number of other conventions</li>
   <li><strong>Use cases</strong>
     <ul>
       <li>Monitoring: Keeping the application container untouched, one can add an adapter container that contains the tools for transforming the monitoring interface exposed by the application container into the interface expected by the general-purpose monitoring system like Prometheus.</li>
-      <li>Logging: capturing logs from a wide variety of heterogenous systems and input into common logging interface. </li>
+      <li>Logging: capturing logs from a wide variety of heterogenous systems and input into common logging interface.</li>
     </ul>
   </li>
 </ul>

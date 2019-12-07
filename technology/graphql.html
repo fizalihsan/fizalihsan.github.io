@@ -108,36 +108,36 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#overview">Overview</a></li>
-  <li><a href="#query-language">Query Language</a>    <ul>
-      <li><a href="#query">Query</a>        <ul>
-          <li><a href="#object-types">Object types</a></li>
-          <li><a href="#one-to-many-connections">One-to-Many connections</a></li>
-          <li><a href="#fragments">Fragments</a></li>
-          <li><a href="#union-types">Union types</a></li>
-          <li><a href="#intefaces">Intefaces</a></li>
+  <li><a href="#overview" id="markdown-toc-overview">Overview</a></li>
+  <li><a href="#query-language" id="markdown-toc-query-language">Query Language</a>    <ul>
+      <li><a href="#query" id="markdown-toc-query">Query</a>        <ul>
+          <li><a href="#object-types" id="markdown-toc-object-types">Object types</a></li>
+          <li><a href="#one-to-many-connections" id="markdown-toc-one-to-many-connections">One-to-Many connections</a></li>
+          <li><a href="#fragments" id="markdown-toc-fragments">Fragments</a></li>
+          <li><a href="#union-types" id="markdown-toc-union-types">Union types</a></li>
+          <li><a href="#intefaces" id="markdown-toc-intefaces">Intefaces</a></li>
         </ul>
       </li>
-      <li><a href="#mutation">Mutation</a></li>
-      <li><a href="#introspection">Introspection</a></li>
+      <li><a href="#mutation" id="markdown-toc-mutation">Mutation</a></li>
+      <li><a href="#introspection" id="markdown-toc-introspection">Introspection</a></li>
     </ul>
   </li>
-  <li><a href="#schema-design">Schema Design</a>    <ul>
-      <li><a href="#scalar-types">Scalar types</a></li>
-      <li><a href="#object-types-1">Object Types</a></li>
-      <li><a href="#connections-and-lists">Connections and Lists</a>        <ul>
-          <li><a href="#many-to-many-connections">Many-to-many connections</a></li>
-          <li><a href="#unions">Unions</a></li>
-          <li><a href="#interfaces">Interfaces</a></li>
+  <li><a href="#schema-design" id="markdown-toc-schema-design">Schema Design</a>    <ul>
+      <li><a href="#scalar-types" id="markdown-toc-scalar-types">Scalar types</a></li>
+      <li><a href="#object-types-1" id="markdown-toc-object-types-1">Object Types</a></li>
+      <li><a href="#connections-and-lists" id="markdown-toc-connections-and-lists">Connections and Lists</a>        <ul>
+          <li><a href="#many-to-many-connections" id="markdown-toc-many-to-many-connections">Many-to-many connections</a></li>
+          <li><a href="#unions" id="markdown-toc-unions">Unions</a></li>
+          <li><a href="#interfaces" id="markdown-toc-interfaces">Interfaces</a></li>
         </ul>
       </li>
-      <li><a href="#arguments">Arguments</a></li>
-      <li><a href="#data-paging">Data Paging</a></li>
-      <li><a href="#sorting">Sorting</a></li>
-      <li><a href="#return-types">Return Types</a></li>
+      <li><a href="#arguments" id="markdown-toc-arguments">Arguments</a></li>
+      <li><a href="#data-paging" id="markdown-toc-data-paging">Data Paging</a></li>
+      <li><a href="#sorting" id="markdown-toc-sorting">Sorting</a></li>
+      <li><a href="#return-types" id="markdown-toc-return-types">Return Types</a></li>
     </ul>
   </li>
-  <li><a href="#references">References</a></li>
+  <li><a href="#references" id="markdown-toc-references">References</a></li>
 </ul>
 
 <blockquote>
@@ -201,7 +201,7 @@ messageStyle: "none",
 
 <ul>
   <li>Like SQL, GraphQL can be used for all CRUD operations</li>
-  <li>Data Types/Operations: 
+  <li>Data Types/Operations:
     <ul>
       <li><code>Query</code> - read</li>
       <li><code>Mutation</code> - insert, update and delete</li>
@@ -215,7 +215,7 @@ messageStyle: "none",
 <h2 id="query">Query</h2>
 
 <ul>
-  <li>A <code>Query</code> data type is called a <em>root type</em> because it’s a type that maps to an operation, and operations represent the roots of our query document. </li>
+  <li>A <code>Query</code> data type is called a <em>root type</em> because it’s a type that maps to an operation, and operations represent the roots of our query document.</li>
   <li>Selection sets
     <ul>
       <li>When we write queries, we are selecting the fields that we need by encapsulating them in curly brackets. These blocks are referred to as selection sets.</li>
@@ -235,8 +235,8 @@ messageStyle: "none",
   </li>
   <li>Query Arguments
     <ul>
-      <li>A way to filter the results of a GraphQL query is to pass in <em>query arguments</em>. </li>
-      <li>Arguments are a key–value pair (or pairs) associated with a query field. </li>
+      <li>A way to filter the results of a GraphQL query is to pass in <em>query arguments</em>.</li>
+      <li>Arguments are a key–value pair (or pairs) associated with a query field.</li>
     </ul>
   </li>
 </ul>
@@ -302,7 +302,7 @@ messageStyle: "none",
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <ul>
-  <li>Example for passing a GraphQL query in curl: </li>
+  <li>Example for passing a GraphQL query in curl:</li>
 </ul>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
@@ -628,7 +628,7 @@ messageStyle: "none",
 
 <ul>
   <li>
-    <p>Introspection is the ability to query details about the current API’s schema. You can send queries to every GraphQL API that return data about a given API’s schema. </p>
+    <p>Introspection is the ability to query details about the current API’s schema. You can send queries to every GraphQL API that return data about a given API’s schema.</p>
   </li>
   <li>
     <p>This query returns all available types in the API, including root types, custom types, and even scalar types.</p>
@@ -687,7 +687,7 @@ messageStyle: "none",
 
 <ul>
   <li>GraphQL is going to change your design process. Instead of looking at APIs as a collection of REST endpoints, begin looking at your APIs as collections of types.</li>
-  <li><strong>Schema First Design</strong> 
+  <li><strong>Schema First Design</strong>
     <ul>
       <li><em>Schema First</em> design methodology gets all teams on the same page about the data types that make up your application.</li>
       <li>The backend team will have a clear understanding about the data that it needs to store and deliver. The frontend team will have the definitions that it needs to begin building user interfaces.</li>
@@ -733,11 +733,11 @@ messageStyle: "none",
 <h2 id="scalar-types">Scalar types</h2>
 
 <ul>
-  <li>A scalar type is not an object type. It does not have fields. </li>
-  <li>Built-in scalar types 
+  <li>A scalar type is not an object type. It does not have fields.</li>
+  <li>Built-in scalar types
     <ul>
       <li><code>Int</code>, <code>Float</code> - return JSON numbers</li>
-      <li><code>String</code>, <code>ID</code> (unique identifiers) - return strings. 
+      <li><code>String</code>, <code>ID</code> (unique identifiers) - return strings.
         <ul>
           <li>Even though ID and String will return the same type of JSON data, GraphQL still makes sure that IDs return unique strings</li>
           <li>the ID scalar type is used when a unique identifier should be returned.</li>
@@ -748,7 +748,7 @@ messageStyle: "none",
   </li>
   <li>Custom scalar type
     <ul>
-      <li>In the example below, a custom scalar type: <code>DateTime</code> is created. </li>
+      <li>In the example below, a custom scalar type: <code>DateTime</code> is created.</li>
       <li>Any field marked <code>DateTime</code> will return a JSON string, but we can use the custom scalar to make sure that string can be serialized, validated, and formatted as an official date and time</li>
       <li>The <code>graphql-custom-types</code> npm package contains some commonly used custom scalar types</li>
       <li><em>enums</em> are scalar types that allow a field to return a restrictive set of string values.</li>
@@ -914,8 +914,8 @@ messageStyle: "none",
 <h3 id="interfaces">Interfaces</h3>
 
 <ul>
-  <li>Another way of handling fields that could contain multiple types is to use an interface. </li>
-  <li>Both union types and interfaces are tools that you can use to create fields that contain different object types. </li>
+  <li>Another way of handling fields that could contain multiple types is to use an interface.</li>
+  <li>Both union types and interfaces are tools that you can use to create fields that contain different object types.</li>
   <li>In general, if the objects contain completely different fields, it is a good idea to use union types. They are very effective. If an object type must contain specific fields in order to interface with another type of object, you will need to use an interface rather than a union type.</li>
 </ul>
 
@@ -977,7 +977,7 @@ messageStyle: "none",
 
 <ul>
   <li>Arguments can be added to any field in GraphQL.</li>
-  <li>Just like a field, an argument must have a type - which can be scalar types or object types that are available in our schema. </li>
+  <li>Just like a field, an argument must have a type - which can be scalar types or object types that are available in our schema.</li>
 </ul>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>

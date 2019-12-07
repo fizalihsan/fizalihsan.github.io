@@ -108,36 +108,36 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#physical-database-design">Physical Database Design</a>    <ul>
-      <li><a href="#normalization">Normalization</a></li>
-      <li><a href="#concept-of-time-in-database">Concept of Time in Database</a>        <ul>
-          <li><a href="#temporal-data-types">Temporal Data Types</a></li>
-          <li><a href="#kinds-of-time">Kinds of Time</a></li>
-          <li><a href="#temporal-table-types">Temporal Table Types</a></li>
+  <li><a href="#physical-database-design" id="markdown-toc-physical-database-design">Physical Database Design</a>    <ul>
+      <li><a href="#normalization" id="markdown-toc-normalization">Normalization</a></li>
+      <li><a href="#concept-of-time-in-database" id="markdown-toc-concept-of-time-in-database">Concept of Time in Database</a>        <ul>
+          <li><a href="#temporal-data-types" id="markdown-toc-temporal-data-types">Temporal Data Types</a></li>
+          <li><a href="#kinds-of-time" id="markdown-toc-kinds-of-time">Kinds of Time</a></li>
+          <li><a href="#temporal-table-types" id="markdown-toc-temporal-table-types">Temporal Table Types</a></li>
         </ul>
       </li>
-      <li><a href="#time-series-databases">Time-Series Databases</a></li>
+      <li><a href="#time-series-databases" id="markdown-toc-time-series-databases">Time-Series Databases</a></li>
     </ul>
   </li>
-  <li><a href="#patterns">Patterns</a>    <ul>
-      <li><a href="#schema-patterns">Schema Patterns</a></li>
+  <li><a href="#patterns" id="markdown-toc-patterns">Patterns</a>    <ul>
+      <li><a href="#schema-patterns" id="markdown-toc-schema-patterns">Schema Patterns</a></li>
     </ul>
   </li>
-  <li><a href="#anti-patterns">Anti-Patterns</a>    <ul>
-      <li><a href="#logical-database-anti-patterns">Logical Database Anti-patterns</a>        <ul>
-          <li><a href="#comma-separated-lists-jaywalking">Comma separated lists (Jaywalking)</a></li>
-          <li><a href="#multi-column-attributes">Multi-column attributes</a></li>
-          <li><a href="#entity-attribute-value">Entity attribute value</a></li>
-          <li><a href="#metadata-tribbles">Metadata tribbles</a></li>
-          <li><a href="#adjacency-list">Adjacency List</a></li>
+  <li><a href="#anti-patterns" id="markdown-toc-anti-patterns">Anti-Patterns</a>    <ul>
+      <li><a href="#logical-database-anti-patterns" id="markdown-toc-logical-database-anti-patterns">Logical Database Anti-patterns</a>        <ul>
+          <li><a href="#comma-separated-lists-jaywalking" id="markdown-toc-comma-separated-lists-jaywalking">Comma separated lists (Jaywalking)</a></li>
+          <li><a href="#multi-column-attributes" id="markdown-toc-multi-column-attributes">Multi-column attributes</a></li>
+          <li><a href="#entity-attribute-value" id="markdown-toc-entity-attribute-value">Entity attribute value</a></li>
+          <li><a href="#metadata-tribbles" id="markdown-toc-metadata-tribbles">Metadata tribbles</a></li>
+          <li><a href="#adjacency-list" id="markdown-toc-adjacency-list">Adjacency List</a></li>
         </ul>
       </li>
-      <li><a href="#physical-database-anti-patterns">Physical Database Anti-patterns</a></li>
-      <li><a href="#query-anti-patterns">Query Anti-patterns</a></li>
-      <li><a href="#application-anti-patterns">Application Anti-patterns</a></li>
+      <li><a href="#physical-database-anti-patterns" id="markdown-toc-physical-database-anti-patterns">Physical Database Anti-patterns</a></li>
+      <li><a href="#query-anti-patterns" id="markdown-toc-query-anti-patterns">Query Anti-patterns</a></li>
+      <li><a href="#application-anti-patterns" id="markdown-toc-application-anti-patterns">Application Anti-patterns</a></li>
     </ul>
   </li>
-  <li><a href="#references">References</a></li>
+  <li><a href="#references" id="markdown-toc-references">References</a></li>
 </ul>
 
 <h1 id="physical-database-design">Physical Database Design</h1>
@@ -146,7 +146,7 @@ messageStyle: "none",
   <li>Data compression techniques</li>
   <li>Data Striping (RAID)
     <ul>
-      <li>What is RAID and what are different types of RAID configurations? </li>
+      <li>What is RAID and what are different types of RAID configurations?</li>
       <li>RAID stands for Redundant Array of Inexpensive Disks, used to provide fault tolerance to database servers. There are six RAID levels 0 through 5 offering different levels of performance, fault-tolerance.</li>
     </ul>
   </li>
@@ -163,15 +163,15 @@ messageStyle: "none",
 <ul>
   <li><a href="http://dev.mysql.com/tech-resources/articles/intro-to-normalization.html">Intro to Normalization</a></li>
   <li>
-    <p>http://www.bkent.net/Doc/simple5.htm </p>
+    <p>http://www.bkent.net/Doc/simple5.htm</p>
   </li>
   <li><strong>What is Normalization?</strong>
     <ul>
-      <li>process to eliminate data redundancy, and to remove potential update inconsistencies which arise from inserting, modifying, and deleting data. </li>
-      <li>The goal of normalization is to create a set of relational tables that are free of redundant data and that can be consistently and correctly modified. This means that all tables in a relational database should be in the third normal form (3NF). </li>
+      <li>process to eliminate data redundancy, and to remove potential update inconsistencies which arise from inserting, modifying, and deleting data.</li>
+      <li>The goal of normalization is to create a set of relational tables that are free of redundant data and that can be consistently and correctly modified. This means that all tables in a relational database should be in the third normal form (3NF).</li>
     </ul>
   </li>
-  <li><strong>1st Normal Form</strong> </li>
+  <li><strong>1st Normal Form</strong></li>
 </ul>
 
 <p><img src="/technology/1NF.png" /></p>
@@ -235,7 +235,7 @@ messageStyle: "none",
       <li>An interval can be added to an instant, yielding another instant</li>
       <li>The distance between two instants is an interval</li>
       <li>Unlike instants, intervals have direction. e.g., -7 days</li>
-      <li><strong><em>Year-Month Intervals</em></strong> - store only year, or only month or year-month. </li>
+      <li><strong><em>Year-Month Intervals</em></strong> - store only year, or only month or year-month.</li>
       <li><strong><em>Day-Time Intervals</em></strong></li>
       <li>SQL Data types
         <ul>
@@ -289,7 +289,7 @@ which is present in an application is absolutely critical.</li>
   <li>Valid-Time State tables
     <ul>
       <li>Valid-time tables capture a history of validity</li>
-      <li>contains <code>FROM_DATE</code> &amp; <code>TO_DATE</code> </li>
+      <li>contains <code>FROM_DATE</code> &amp; <code>TO_DATE</code></li>
       <li>To indicate an active record <code>TO_DATE</code> is set to <code>null</code> or end-of-time <code>9999-12-31</code></li>
       <li>The first consequence of adding valid-time support to a table is that the primary key of such tables needs to take the timestamp into consideration, so that the record is unique <em>at any point in time</em>.</li>
     </ul>
@@ -332,10 +332,10 @@ which is present in an application is absolutely critical.</li>
 <h1 id="patterns">Patterns</h1>
 
 <ul>
-  <li>How do you implement 1-to-1, 1-to-many and many-to-many relationships while designing tables? 
+  <li>How do you implement 1-to-1, 1-to-many and many-to-many relationships while designing tables?
     <ul>
-      <li>1-to-1 relationship can be implemented as a single table and rarely as two tables with primary and foreign key relationships. </li>
-      <li>1-to-Many relationships are implemented by splitting the data into two tables with primary key and foreign key relationships. </li>
+      <li>1-to-1 relationship can be implemented as a single table and rarely as two tables with primary and foreign key relationships.</li>
+      <li>1-to-Many relationships are implemented by splitting the data into two tables with primary key and foreign key relationships.</li>
       <li>Many-to-Many relationships are implemented using a junction table with the keys from both the tables forming the composite primary key of the junction table.</li>
     </ul>
   </li>
@@ -383,9 +383,9 @@ which is present in an application is absolutely critical.</li>
       <li>cannot use SQL data types except string. No way of rejecting invalid data.</li>
       <li>cannot enforce referential integrity</li>
       <li>attribute names could be different for each record e.g., <code>reported_date</code>, <code>date_reported</code>. One remedy is to declare a foreign key on the attr_name column.</li>
-      <li>retrieving all attributes of an entity as a single row requires a join for each attribute. 
+      <li>retrieving all attributes of an entity as a single row requires a join for each attribute.
         <ul>
-          <li>One must also know the name of all the attributes at the time of writing the query. </li>
+          <li>One must also know the name of all the attributes at the time of writing the query.</li>
           <li>when metadata is fluid, it’s harder to formulate simple queries.</li>
           <li>You must use outer joins because inner joins would cause the query to return no rows if any one of the attributes were not present for an entity.</li>
           <li>as the number of attributes increases, so does the number of joins, and the cost of the query increases exponentially.</li>
@@ -409,7 +409,7 @@ which is present in an application is absolutely critical.</li>
       </li>
       <li><strong>Concrete Table Inheritance</strong>
         <ul>
-          <li>every table contains the same attributes that are common to the base type as well as the respective subtype-specific attributes. e.g., table = Bugs, FeatureRequests. </li>
+          <li>every table contains the same attributes that are common to the base type as well as the respective subtype-specific attributes. e.g., table = Bugs, FeatureRequests.</li>
           <li>pros
             <ul>
               <li>prevented from storing a row containing values for attributes that don’t apply to that row’s subtype</li>
@@ -419,7 +419,7 @@ which is present in an application is absolutely critical.</li>
           <li>cons
             <ul>
               <li>when new attribute is added to the set of common attributes, every table needs to be altered</li>
-              <li>no way to easily identify which are common attributes and which are not. </li>
+              <li>no way to easily identify which are common attributes and which are not.</li>
               <li>metadata does not tell any logical relationship exists or whether the tables have similarities merely by coincidence</li>
               <li>to search all objects regardless of their subtypes requires combining multiple queries. Remedy: define a view that is the union of the tables, selecting only the common attributes</li>
             </ul>
@@ -578,7 +578,7 @@ which is present in an application is absolutely critical.</li>
               <li>set of permitted values is stored in data, not metadata</li>
               <li>changing data values needs no interruption to the table access, no table/column definition change</li>
               <li>renaming a value is easy</li>
-              <li>easy to make a set of values obsolute </li>
+              <li>easy to make a set of values obsolute</li>
             </ul>
           </li>
         </ul>

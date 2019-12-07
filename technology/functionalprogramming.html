@@ -108,30 +108,30 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#abstraction">Abstraction</a></li>
-  <li><a href="#fp-principles--concepts">FP principles &amp; concepts</a></li>
-  <li><a href="#data-structures">Data Structures</a></li>
-  <li><a href="#concurrency-principles">Concurrency Principles</a>    <ul>
-      <li><a href="#the-actor-model">The Actor Model</a></li>
-      <li><a href="#software-transactional-model-stm">Software Transactional Model (STM)</a></li>
+  <li><a href="#abstraction" id="markdown-toc-abstraction">Abstraction</a></li>
+  <li><a href="#fp-principles--concepts" id="markdown-toc-fp-principles--concepts">FP principles &amp; concepts</a></li>
+  <li><a href="#data-structures" id="markdown-toc-data-structures">Data Structures</a></li>
+  <li><a href="#concurrency-principles" id="markdown-toc-concurrency-principles">Concurrency Principles</a>    <ul>
+      <li><a href="#the-actor-model" id="markdown-toc-the-actor-model">The Actor Model</a></li>
+      <li><a href="#software-transactional-model-stm" id="markdown-toc-software-transactional-model-stm">Software Transactional Model (STM)</a></li>
     </ul>
   </li>
-  <li><a href="#lambdas">Lambdas</a>    <ul>
-      <li><a href="#java-8-lambda-styles">Java 8 Lambda Styles</a></li>
-      <li><a href="#concepts">Concepts</a>        <ul>
-          <li><a href="#lexical-scoping">Lexical Scoping</a></li>
-          <li><a href="#data-type-inference">Data Type Inference</a></li>
-          <li><a href="#functional-interface">Functional Interface</a></li>
-          <li><a href="#default-methods">Default Methods</a></li>
-          <li><a href="#method-references">Method References</a></li>
-          <li><a href="#streams">Streams</a></li>
-          <li><a href="#data-parallelism">Data Parallelism</a></li>
+  <li><a href="#lambdas" id="markdown-toc-lambdas">Lambdas</a>    <ul>
+      <li><a href="#java-8-lambda-styles" id="markdown-toc-java-8-lambda-styles">Java 8 Lambda Styles</a></li>
+      <li><a href="#concepts" id="markdown-toc-concepts">Concepts</a>        <ul>
+          <li><a href="#lexical-scoping" id="markdown-toc-lexical-scoping">Lexical Scoping</a></li>
+          <li><a href="#data-type-inference" id="markdown-toc-data-type-inference">Data Type Inference</a></li>
+          <li><a href="#functional-interface" id="markdown-toc-functional-interface">Functional Interface</a></li>
+          <li><a href="#default-methods" id="markdown-toc-default-methods">Default Methods</a></li>
+          <li><a href="#method-references" id="markdown-toc-method-references">Method References</a></li>
+          <li><a href="#streams" id="markdown-toc-streams">Streams</a></li>
+          <li><a href="#data-parallelism" id="markdown-toc-data-parallelism">Data Parallelism</a></li>
         </ul>
       </li>
-      <li><a href="#lambdas-and-patterns">Lambdas and Patterns</a></li>
+      <li><a href="#lambdas-and-patterns" id="markdown-toc-lambdas-and-patterns">Lambdas and Patterns</a></li>
     </ul>
   </li>
-  <li><a href="#references">References</a></li>
+  <li><a href="#references" id="markdown-toc-references">References</a></li>
 </ul>
 
 <h1 id="abstraction">Abstraction</h1>
@@ -195,7 +195,7 @@ messageStyle: "none",
       <li>Both currying and partial application give you the ability to manipulate the number of arguments to functions or methods, typically by supplying one or more default values for some arguments (known as <em>fixing arguments</em>)</li>
       <li>Currying describes the conversion of a multiargument function into a chain of single-argument functions. It describes the transformation process, not the invocation of the converted function. The caller can decide how many arguments to apply, thereby creating a derived function with that smaller number of arguments.</li>
       <li>Use currying to construct specific functions from general ones.</li>
-      <li>Currying is a metafunction technique: doing something to the function itself rather than the function results. </li>
+      <li>Currying is a metafunction technique: doing something to the function itself rather than the function results.</li>
       <li>Currying acts as a factory (pattern) for functions.</li>
     </ul>
   </li>
@@ -413,12 +413,12 @@ messageStyle: "none",
   <li>Going by horses-pulling-carts analogy, it would be like taking half of the goods inside our cart and putting them into another cart for another horse to pull, with both horses taking an identical route to the destination.</li>
   <li>Data parallelism works really well when you want to perform the same operation on a lot of data. The problem needs be decomposed in a way that will work on subsections of the data, and then the answers from each subsection can be composed at the end.</li>
   <li><em>Data parallelism</em> is often contrasted with <em>task parallelism</em>, in which each individual thread of execution can be doing a totally different task. Probably the most commonly encountered task parallelism is a Java EE application container.</li>
-  <li>The five main factors influencing performance are 
+  <li>The five main factors influencing performance are
     <ul>
-      <li>the data size, </li>
-      <li>the source data structure, </li>
-      <li>whether the values are packed, </li>
-      <li>the number of available cores, </li>
+      <li>the data size,</li>
+      <li>the source data structure,</li>
+      <li>whether the values are packed,</li>
+      <li>the number of available cores,</li>
       <li>and how much processing time is spent on each element.</li>
     </ul>
   </li>

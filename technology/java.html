@@ -108,27 +108,27 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#fundamentals">Fundamentals</a>    <ul>
-      <li><a href="#data-types">Data Types</a>        <ul>
-          <li><a href="#floating-point-arithmetic">Floating Point Arithmetic</a></li>
+  <li><a href="#fundamentals" id="markdown-toc-fundamentals">Fundamentals</a>    <ul>
+      <li><a href="#data-types" id="markdown-toc-data-types">Data Types</a>        <ul>
+          <li><a href="#floating-point-arithmetic" id="markdown-toc-floating-point-arithmetic">Floating Point Arithmetic</a></li>
         </ul>
       </li>
-      <li><a href="#cloning">Cloning</a></li>
-      <li><a href="#date">Date</a></li>
-      <li><a href="#finalization">Finalization</a></li>
-      <li><a href="#mutability">Mutability</a></li>
-      <li><a href="#uuid">UUID</a></li>
+      <li><a href="#cloning" id="markdown-toc-cloning">Cloning</a></li>
+      <li><a href="#date" id="markdown-toc-date">Date</a></li>
+      <li><a href="#finalization" id="markdown-toc-finalization">Finalization</a></li>
+      <li><a href="#mutability" id="markdown-toc-mutability">Mutability</a></li>
+      <li><a href="#uuid" id="markdown-toc-uuid">UUID</a></li>
     </ul>
   </li>
-  <li><a href="#oops-concepts">OOPS Concepts</a>    <ul>
-      <li><a href="#access-modifiers">Access Modifiers</a></li>
-      <li><a href="#overloading">Overloading</a></li>
-      <li><a href="#overriding">Overriding</a></li>
-      <li><a href="#final-keyword">final keyword</a></li>
-      <li><a href="#static-keyword">static keyword</a></li>
-      <li><a href="#nested-classes">Nested classes</a></li>
-      <li><a href="#enums">Enums</a></li>
-      <li><a href="#interfaces">Interfaces</a></li>
+  <li><a href="#oops-concepts" id="markdown-toc-oops-concepts">OOPS Concepts</a>    <ul>
+      <li><a href="#access-modifiers" id="markdown-toc-access-modifiers">Access Modifiers</a></li>
+      <li><a href="#overloading" id="markdown-toc-overloading">Overloading</a></li>
+      <li><a href="#overriding" id="markdown-toc-overriding">Overriding</a></li>
+      <li><a href="#final-keyword" id="markdown-toc-final-keyword">final keyword</a></li>
+      <li><a href="#static-keyword" id="markdown-toc-static-keyword">static keyword</a></li>
+      <li><a href="#nested-classes" id="markdown-toc-nested-classes">Nested classes</a></li>
+      <li><a href="#enums" id="markdown-toc-enums">Enums</a></li>
+      <li><a href="#interfaces" id="markdown-toc-interfaces">Interfaces</a></li>
     </ul>
   </li>
 </ul>
@@ -173,8 +173,8 @@ messageStyle: "none",
   </li>
   <li>Where primitives are stored?
     <ul>
-      <li>Local variables -&gt; stack. </li>
-      <li>Instance and static variables -&gt; heap. </li>
+      <li>Local variables -&gt; stack.</li>
+      <li>Instance and static variables -&gt; heap.</li>
       <li>Don’t forget that for reference type variables, the value of a variable is a reference, not the object. (Arrays are reference types too - so if you have an int[], the values will be on the heap.)</li>
       <li>Since Java 6, a smart VM may be able to detect if a particular reference type variable refers to an object which can never “escape” the current method. If that’s the case, it could potentially inline the whole object on the stack. (Read more on Escape Analysis)</li>
     </ul>
@@ -190,7 +190,7 @@ messageStyle: "none",
     <ul>
       <li>Implementation can get really complex, but still leading to unsuccessful copying</li>
       <li><strong>Cloning does not call constructor to make a copy</strong>: As a result, it is your responsibility, as a writer of the clone method, to make sure all the members have been properly set. Here is an example of where things could go wrong. Consider a class keeping track of the total number of objects of that type, using a static int member. In the constructors you would increase the count. However, if you clone the object, since no constructor is called, the count will not truly reflect the number of objects!</li>
-      <li><strong>Problem involving <code>final</code> objects</strong>: In the below example, both the copies of ‘Dog’ will have all the 3 names, though it is not intended. The problem here is that, clone() is shallow copy, and the same List<string> is used for both objects</string></li>
+      <li><strong>Problem involving <code>final</code> objects</strong>: In the below example, both the copies of ‘Dog’ will have all the 3 names, though it is not intended. The problem here is that, clone() is shallow copy, and the same List<String> is used for both objects</String></li>
     </ul>
   </li>
 </ul>
@@ -305,7 +305,7 @@ messageStyle: "none",
 <h2 id="overriding">Overriding</h2>
 
 <ul>
-  <li>You can invoke methods from the base class reference; however, the actual method invocation depends on the dynamic type of the object pointed to by the base class reference. The type of the base class reference is known as the <strong>static type</strong> of the object and the actual object pointed by the reference at runtime is known as the <strong>dynamic type</strong> of the object. </li>
+  <li>You can invoke methods from the base class reference; however, the actual method invocation depends on the dynamic type of the object pointed to by the base class reference. The type of the base class reference is known as the <strong>static type</strong> of the object and the actual object pointed by the reference at runtime is known as the <strong>dynamic type</strong> of the object.</li>
   <li>When the compiler sees the invocation of a method from a base class reference and if the method is an overridable method (a non-static and non-final method), the compiler defers determining the exact method to be called to runtime (late binding). At runtime, based on the actual dynamic type of the object, an appropriate method is invoked. This mechanism is known as <strong>dynamic method resolution</strong> or <strong>dynamic method invocation</strong>.</li>
   <li>A static method is resolved statically. Inside the static method, a virtual method is invoked, which is resolved dynamically.</li>
   <li>Things to watch while overriding
@@ -316,7 +316,7 @@ messageStyle: "none",
       <li>Should not throw new or broader checked exceptions. But it may throw fewer or narrower checked exceptions, or any unchecked exception.</li>
     </ul>
   </li>
-  <li><strong>Covariant Return Types</strong> - copy() method is overridden in line 8 returning Shape, due to which explicit downcasting is needed on line 13. Since Java 5, overridden methods can return a sub-class covariant type to avoid this (returning Circle in this case). </li>
+  <li><strong>Covariant Return Types</strong> - copy() method is overridden in line 8 returning Shape, due to which explicit downcasting is needed on line 13. Since Java 5, overridden methods can return a sub-class covariant type to avoid this (returning Circle in this case).</li>
 </ul>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
@@ -362,7 +362,7 @@ messageStyle: "none",
 <h2 id="final-keyword">final keyword</h2>
 
 <ul>
-  <li>Final class - is a non-inheritable class. </li>
+  <li>Final class - is a non-inheritable class.</li>
   <li>In general, OOP suggests that a class should be open for extension but closed for modification (Open/Closed Principle). However, it is useful for important reasons</li>
   <li>To prevent a behavior change by subclassing. e.g. java.lang.System, java.lang.String</li>
   <li>Improved performance (moderate)- All method calls of a final class can be resolved at compile time itself. As there is no possibility of overriding the methods, it is not necessary to resolve the actual call at runtime for final classes, which translates to improved performance. For the same reason, final classes encourage the inlining of methods. If the calls are to be resolved at runtime, they cannot be inlined.</li>
@@ -415,7 +415,7 @@ messageStyle: "none",
           <li>The accessibility (public, protected, etc.) of the inner class is defined by the outer class.</li>
           <li>Outer &amp; inner classes can access members of each other regardless of the access specifiers.</li>
           <li>You can access members of an outer class within an inner class without creating an instance; but this is not the case with an outer class.</li>
-          <li>Limitation: cannot declare static members in an inner class. </li>
+          <li>Limitation: cannot declare static members in an inner class.</li>
         </ul>
       </li>
       <li>Local inner classes
@@ -428,7 +428,7 @@ messageStyle: "none",
       </li>
       <li>Anonymous classes
         <ul>
-          <li>Same as local inner class without a name. </li>
+          <li>Same as local inner class without a name.</li>
           <li>cannot have explicit constructors since there is no name.</li>
           <li>can acces the method arguments and all the variables defined in the body of the code only if they are declared final.</li>
         </ul>

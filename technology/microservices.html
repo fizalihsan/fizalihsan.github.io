@@ -108,25 +108,25 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#event-driven-microservices">Event-Driven Microservices</a>    <ul>
-      <li><a href="#downsides-of-monolith-architecture">Downsides of monolith architecture</a></li>
-      <li><a href="#challenges-of-microservices-architecture">Challenges of microservices architecture</a></li>
+  <li><a href="#event-driven-microservices" id="markdown-toc-event-driven-microservices">Event-Driven Microservices</a>    <ul>
+      <li><a href="#downsides-of-monolith-architecture" id="markdown-toc-downsides-of-monolith-architecture">Downsides of monolith architecture</a></li>
+      <li><a href="#challenges-of-microservices-architecture" id="markdown-toc-challenges-of-microservices-architecture">Challenges of microservices architecture</a></li>
     </ul>
   </li>
-  <li><a href="#microservices-patterns">Microservices Patterns</a>    <ul>
-      <li><a href="#decomposition-patterns">Decomposition Patterns</a></li>
-      <li><a href="#deployment-patterns">Deployment Patterns</a></li>
-      <li><a href="#communication-patterns">Communication Patterns</a></li>
-      <li><a href="#service-discovery">Service Discovery</a></li>
-      <li><a href="#cross-cutting-concerns">Cross-cutting concerns</a></li>
-      <li><a href="#data-management">Data Management</a>        <ul>
-          <li><a href="#event-sourcing">Event Sourcing</a></li>
+  <li><a href="#microservices-patterns" id="markdown-toc-microservices-patterns">Microservices Patterns</a>    <ul>
+      <li><a href="#decomposition-patterns" id="markdown-toc-decomposition-patterns">Decomposition Patterns</a></li>
+      <li><a href="#deployment-patterns" id="markdown-toc-deployment-patterns">Deployment Patterns</a></li>
+      <li><a href="#communication-patterns" id="markdown-toc-communication-patterns">Communication Patterns</a></li>
+      <li><a href="#service-discovery" id="markdown-toc-service-discovery">Service Discovery</a></li>
+      <li><a href="#cross-cutting-concerns" id="markdown-toc-cross-cutting-concerns">Cross-cutting concerns</a></li>
+      <li><a href="#data-management" id="markdown-toc-data-management">Data Management</a>        <ul>
+          <li><a href="#event-sourcing" id="markdown-toc-event-sourcing">Event Sourcing</a></li>
         </ul>
       </li>
     </ul>
   </li>
-  <li><a href="#strategies-to-refactor-monolith-to-microservices">Strategies to refactor Monolith to Microservices</a></li>
-  <li><a href="#references">References</a></li>
+  <li><a href="#strategies-to-refactor-monolith-to-microservices" id="markdown-toc-strategies-to-refactor-monolith-to-microservices">Strategies to refactor Monolith to Microservices</a></li>
+  <li><a href="#references" id="markdown-toc-references">References</a></li>
 </ul>
 
 <h1 id="event-driven-microservices">Event-Driven Microservices</h1>
@@ -170,7 +170,7 @@ messageStyle: "none",
       </li>
       <li>Solution
         <ul>
-          <li>Use a tool like Netflix Hystrix that manages latency and fault tolerance 
+          <li>Use a tool like Netflix Hystrix that manages latency and fault tolerance
             <ul>
               <li>fallback option (e.g., when a service is down, return a static message)</li>
               <li>circuit breaker (e.g., if the service is down, don’t call it repeatedly)</li>
@@ -270,7 +270,7 @@ messageStyle: "none",
       <li>Solution
         <ul>
           <li>Using a global cloud management and delivery platform like Spinnaker</li>
-          <li>Integrating best practices and production ready checklists into the pipeline as and when needed. 
+          <li>Integrating best practices and production ready checklists into the pipeline as and when needed.
             <ul>
               <li>red/black pipelines</li>
               <li>automated canaries</li>
@@ -289,7 +289,7 @@ messageStyle: "none",
 <p><img class="right 100 100" src="/technology/microservices-patterns.png" /></p>
 
 <ul>
-  <li>3 axes of decomposition from “The Art of Scalability” book. </li>
+  <li>3 axes of decomposition from “The Art of Scalability” book.</li>
 </ul>
 
 <h2 id="decomposition-patterns">Decomposition Patterns</h2>
@@ -327,9 +327,9 @@ messageStyle: "none",
   <li>Strategies
     <ul>
       <li>Partition by noun e.g., Catalog service for products</li>
-      <li>Partition by verb e.g., Check out </li>
+      <li>Partition by verb e.g., Check out</li>
       <li>Single Responsibility Principle</li>
-      <li>Subdomain </li>
+      <li>Subdomain</li>
     </ul>
   </li>
   <li>Anti-pattern: Distributed monolith
@@ -348,9 +348,9 @@ messageStyle: "none",
     <ul>
       <li>Cons
         <ul>
-          <li>Less isolation </li>
+          <li>Less isolation</li>
           <li>Difficult to limit resource utilization</li>
-          <li>Risk of dependency version conflict </li>
+          <li>Risk of dependency version conflict</li>
         </ul>
       </li>
     </ul>
@@ -512,7 +512,7 @@ messageStyle: "none",
   </li>
   <li><em>3rd party Registration</em>
     <ul>
-      <li>Registrar detects somehow the service is up, registers to the Service Registry, periodically performs health check on the service and sends heartbeat to service registry, </li>
+      <li>Registrar detects somehow the service is up, registers to the Service Registry, periodically performs health check on the service and sends heartbeat to service registry,</li>
       <li>Examples
         <ul>
           <li>AWS Autoscaling groups - automatically register/unregister EC2 instances with ELB</li>
@@ -530,7 +530,7 @@ messageStyle: "none",
 <p><strong>Microservice Chassis Framework</strong></p>
 
 <ul>
-  <li>Cross-cutting concerns 
+  <li>Cross-cutting concerns
     <ul>
       <li>External configuration
         <ul>
@@ -611,7 +611,7 @@ messageStyle: "none",
   </li>
   <li>Problem of 2-phase commit
     <ul>
-      <li>Guaranteed atomicity but 
+      <li>Guaranteed atomicity but
         <ul>
           <li>Need a distributed transaction manager</li>
           <li>DB and message broker must support 2PC</li>
@@ -665,7 +665,7 @@ messageStyle: "none",
           <li>Subscribe to events</li>
         </ul>
       </li>
-      <li>Implementations: Greg Young’s https://eventstore.org and https://eventuate.io </li>
+      <li>Implementations: Greg Young’s https://eventstore.org and https://eventuate.io</li>
     </ul>
   </li>
   <li>Pros
@@ -731,11 +731,11 @@ messageStyle: "none",
   </li>
   <li>Designing Domain Events
     <ul>
-      <li>Domain events store the information about the following 
+      <li>Domain events store the information about the following
         <ul>
           <li>Event Metadata e.g., time of the event, sender Id, etc.</li>
-          <li>Required by aggregate e.g., productId, </li>
-          <li>Enrichment - useful for consumers e.g., price, product name </li>
+          <li>Required by aggregate e.g., productId,</li>
+          <li>Enrichment - useful for consumers e.g., price, product name</li>
         </ul>
       </li>
     </ul>
@@ -743,7 +743,7 @@ messageStyle: "none",
   <li>Designing Commands
     <ul>
       <li>Created by a service from incoming request</li>
-      <li>Processed by an aggregate </li>
+      <li>Processed by an aggregate</li>
       <li>Immutable</li>
     </ul>
   </li>
@@ -757,8 +757,8 @@ messageStyle: "none",
   <li>
     <p>In relational databases, query a customer and his order details is joining those 2 tables. However, event store only supports primary key look ups.</p>
   </li>
-  <li>Rather a single component performing both command and query operation, handle them separately. </li>
-  <li>Command side would handle HTTP POST, DELETE, PUT methods. </li>
+  <li>Rather a single component performing both command and query operation, handle them separately.</li>
+  <li>Command side would handle HTTP POST, DELETE, PUT methods.</li>
   <li>Query side would handle GET methods. Query side stores only more materialized or denormalized views of the data.</li>
   <li>View Store could be MongoDb, GraphDb, ElasticSearch, AWS DynamoDb etc. depending on the data needs</li>
   <li>Pros
@@ -784,8 +784,8 @@ messageStyle: "none",
   <li>Strangler Application (Martin Fowler)</li>
   <li><strong>#1: Stop digging</strong>
     <ul>
-      <li>If you find yourself in a hole, stop digging. https://en.wikipedia.org/wiki/Law_of_holes </li>
-      <li>Stop adding new features to the monolith, and create a new service. </li>
+      <li>If you find yourself in a hole, stop digging. https://en.wikipedia.org/wiki/Law_of_holes</li>
+      <li>Stop adding new features to the monolith, and create a new service.</li>
       <li>Router routes the traffic to old / new service</li>
       <li>Build an anti-corruption layer to bridge/glue between monolith and new service</li>
     </ul>
@@ -803,7 +803,7 @@ messageStyle: "none",
               <li>Scalability -&gt; Conflicting resource requirements e.g., cryptograph code that requires more CPU</li>
             </ul>
           </li>
-          <li>Look for components that interact with each only via messaging. Since they are loosely coupled they could live in separate services. </li>
+          <li>Look for components that interact with each only via messaging. Since they are loosely coupled they could live in separate services.</li>
         </ul>
       </li>
     </ul>

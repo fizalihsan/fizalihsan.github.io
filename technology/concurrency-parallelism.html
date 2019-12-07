@@ -108,19 +108,19 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#parallelism">Parallelism</a>    <ul>
-      <li><a href="#types-of-parallelism">Types of Parallelism</a></li>
+  <li><a href="#parallelism" id="markdown-toc-parallelism">Parallelism</a>    <ul>
+      <li><a href="#types-of-parallelism" id="markdown-toc-types-of-parallelism">Types of Parallelism</a></li>
     </ul>
   </li>
-  <li><a href="#concurrency">Concurrency</a>    <ul>
-      <li><a href="#factors-affecting-concurrency">Factors affecting concurrency</a></li>
-      <li><a href="#concurrency--state">Concurrency &amp; State</a></li>
-      <li><a href="#concurrency-models">Concurrency Models</a></li>
-      <li><a href="#persistent-data-structures">Persistent Data Structures</a></li>
+  <li><a href="#concurrency" id="markdown-toc-concurrency">Concurrency</a>    <ul>
+      <li><a href="#factors-affecting-concurrency" id="markdown-toc-factors-affecting-concurrency">Factors affecting concurrency</a></li>
+      <li><a href="#concurrency--state" id="markdown-toc-concurrency--state">Concurrency &amp; State</a></li>
+      <li><a href="#concurrency-models" id="markdown-toc-concurrency-models">Concurrency Models</a></li>
+      <li><a href="#persistent-data-structures" id="markdown-toc-persistent-data-structures">Persistent Data Structures</a></li>
     </ul>
   </li>
-  <li><a href="#lambda-architecture">Lambda Architecture</a></li>
-  <li><a href="#references">References</a></li>
+  <li><a href="#lambda-architecture" id="markdown-toc-lambda-architecture">Lambda Architecture</a></li>
+  <li><a href="#references" id="markdown-toc-references">References</a></li>
 </ul>
 
 <h1 id="parallelism">Parallelism</h1>
@@ -135,7 +135,7 @@ messageStyle: "none",
   </li>
   <li><strong>Instruction-level parallelism</strong>
     <ul>
-      <li>(hardware-level) Modern CPUs are highly parallel, using techniques like pipelining, out-of-order </li>
+      <li>(hardware-level) Modern CPUs are highly parallel, using techniques like pipelining, out-of-order</li>
       <li>execution, and speculative execution.</li>
     </ul>
   </li>
@@ -150,18 +150,20 @@ messageStyle: "none",
       <li>This is where multiple processors come into picture. The distinguishing feature of a multiprocessor architecture is the memory model, specifically whether it’s shared or distributed.</li>
       <li><em>Shared-memory multiprocessor</em>
         <ul>
-          <li>Each processor can access any memory location, and interprocessor communication is primarily through memory. </li>
+          <li>Each processor can access any memory location, and interprocessor communication is primarily through memory.</li>
           <li>Communicating via memory is typically faster and simpler, and hence writing code for shared memory-multiprocessors is generally easier.</li>
-          <li>Beyond a certain number of processors, shared memory becomes a bottleneck. To scale beyond that, distributed memory is needed.
-  <add picture="" here=""></add></li>
+          <li>Beyond a certain number of processors, shared memory becomes a bottleneck. To scale beyond that, distributed memory is needed.</li>
         </ul>
+        <add picture="" here="">
+</add>
       </li>
       <li><em>Distributed-memory multiprocessor</em>
         <ul>
           <li>Each processor has its own local memory and where interprocessor communication is primarily via the network.</li>
-          <li>Distributed memory is also unavoidable to write fault-tolerant systems that use multiple machines to cope with hardware failures.
-  <add picture="" here=""></add></li>
+          <li>Distributed memory is also unavoidable to write fault-tolerant systems that use multiple machines to cope with hardware failures.</li>
         </ul>
+        <add picture="" here="">
+</add>
       </li>
     </ul>
   </li>
@@ -181,7 +183,7 @@ messageStyle: "none",
   <li>Concurrency is about a great deal more than just exploiting parallelism—used correctly, it allows your software to be responsive, fault tolerant, efficient, and simple.</li>
   <li>Concurrency is the key to responsive systems. E.g., by handling multiple connections concurrently, a web server ensures that a single slow request doesn’t hold up others.</li>
   <li>Distributed software: Sometimes geographical distribution is a key element of the problem you’re solving. Whenever software is distributed on multiple computers that aren’t running in lockstep, it’s intrinsically concurrent.</li>
-  <li>Concurrency enables resilient, or fault-tolerant, software through independence and fault detection. Independence is important because a failure in one task should not be able to bring down another. </li>
+  <li>Concurrency enables resilient, or fault-tolerant, software through independence and fault detection. Independence is important because a failure in one task should not be able to bring down another.</li>
   <li>Fault detection is critical so that when a task fails (because it crashes or becomes unresponsive, or because the hardware it’s running on dies), a separate task is notified so that it can take remedial action.</li>
 </ul>
 
@@ -207,7 +209,7 @@ messageStyle: "none",
 <ul>
   <li>Number of partitions
     <ul>
-      <li>Although the number of threads affects performance, it is not the only thing. The workload of each part and how much time each part takes to complete relative to others both affect performance. </li>
+      <li>Although the number of threads affects performance, it is not the only thing. The workload of each part and how much time each part takes to complete relative to others both affect performance.</li>
       <li>For computation-intensive tasks, we need to have at least as many partitions as the number of cores.</li>
     </ul>
   </li>
@@ -263,7 +265,7 @@ messageStyle: "none",
 <ul>
   <li>Persistent data structures version their values, so older and newer values stay around or persist over time without degrading performance. Persistent here does not have anything to do with storage; it’s about data being preserved over time.</li>
   <li><strong>Identity or State</strong> - A variable in an imperative language interconnects ‘identity’ and ‘state’. A single identity can only ever have a single value, making it easy to lose sight of the fact that the state is really a sequence of values over time. Persistent data structures separate identity from state. If we retrieve the current state associated with an identity, that state is immutable and unchanging, no matter what happens to the identity from which we retrieved it in the future.</li>
-  <li>Some of the well-known persistent data structures - immutable list, tries, </li>
+  <li>Some of the well-known persistent data structures - immutable list, tries,</li>
 </ul>
 
 <h1 id="lambda-architecture">Lambda Architecture</h1>

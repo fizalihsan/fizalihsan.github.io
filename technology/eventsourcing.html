@@ -108,11 +108,11 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#concepts">Concepts</a></li>
-  <li><a href="#event-first-design">Event-First Design</a></li>
-  <li><a href="#best-practices">Best Practices</a></li>
-  <li><a href="#versionining">Versionining</a></li>
-  <li><a href="#references">References</a></li>
+  <li><a href="#concepts" id="markdown-toc-concepts">Concepts</a></li>
+  <li><a href="#event-first-design" id="markdown-toc-event-first-design">Event-First Design</a></li>
+  <li><a href="#best-practices" id="markdown-toc-best-practices">Best Practices</a></li>
+  <li><a href="#versionining" id="markdown-toc-versionining">Versionining</a></li>
+  <li><a href="#references" id="markdown-toc-references">References</a></li>
 </ul>
 
 <h2 id="concepts">Concepts</h2>
@@ -121,7 +121,7 @@ messageStyle: "none",
   <li>publish events reliably and atomically whenever state changes</li>
   <li>Whenever the state of a business entity changes, a new event is appended to the list of events.</li>
   <li>100% reliable audit log of the changes made to a business entity</li>
-  <li>the application reconstructs an entity’s current state by replaying the events </li>
+  <li>the application reconstructs an entity’s current state by replaying the events</li>
   <li>events are stored in an Event Store.</li>
   <li><strong>Event Store</strong>
     <ul>
@@ -145,7 +145,7 @@ messageStyle: "none",
       </li>
     </ul>
   </li>
-  <li>Periodical snapshotting </li>
+  <li>Periodical snapshotting</li>
   <li><strong>Drawbacks</strong>
     <ul>
       <li>Needs CQRS to implement queries - which means application must handle eventually consistent data. However, one should embrace the fact that information is always from the past.</li>
@@ -162,7 +162,7 @@ messageStyle: "none",
       </li>
       <li>Snapshotting - avoids replaying the entire stream to get the state of the entity
         <ul>
-          <li>Can be taken manually </li>
+          <li>Can be taken manually</li>
           <li>Can be taken automatically. e.g., every 10 events</li>
           <li>Separate table for snapshot records</li>
         </ul>
@@ -186,7 +186,7 @@ messageStyle: "none",
 <ul>
   <li>Immutable append-only event store - means easy to scale</li>
   <li>Events can help manage failure instead of avoiding it</li>
-  <li>Why? 
+  <li>Why?
     <ul>
       <li>Modeling events forces behavioral focus over structural focus of the system</li>
       <li>Modeling events forces temporal focus
@@ -252,7 +252,7 @@ messageStyle: "none",
           <li>Does not hold state of the business objects</li>
         </ul>
       </li>
-      <li>User interface / Test </li>
+      <li>User interface / Test</li>
       <li>Infrastructure
         <ul>
           <li>acts as a supporting layer for other layers</li>

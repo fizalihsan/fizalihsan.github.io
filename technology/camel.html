@@ -108,13 +108,13 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#messaging-model">Messaging Model</a>    <ul>
-      <li><a href="#messages">Messages</a></li>
-      <li><a href="#exchanges">Exchanges</a></li>
+  <li><a href="#messaging-model" id="markdown-toc-messaging-model">Messaging Model</a>    <ul>
+      <li><a href="#messages" id="markdown-toc-messages">Messages</a></li>
+      <li><a href="#exchanges" id="markdown-toc-exchanges">Exchanges</a></li>
     </ul>
   </li>
-  <li><a href="#components">Components</a></li>
-  <li><a href="#bibliography">Bibliography</a></li>
+  <li><a href="#components" id="markdown-toc-components">Components</a></li>
+  <li><a href="#bibliography" id="markdown-toc-bibliography">Bibliography</a></li>
 </ul>
 
 <ul>
@@ -135,7 +135,7 @@ messageStyle: "none",
 <p><img class="right" src="/technology/camel-message-structure.PNG" /></p>
 
 <ul>
-  <li>Messages are the entities used by systems to communicate with each other when using messaging channels. </li>
+  <li>Messages are the entities used by systems to communicate with each other when using messaging channels.</li>
   <li>Messages flow in one direction from a sender to a receiver</li>
   <li>Messages have a body (a payload), headers, and optional attachments</li>
   <li>Messages are uniquely identified with an identifier of type <code>java.lang.String</code>. The identifier’s uniqueness is enforced and guaranteed by the message creator, it’s protocol dependent, and it doesn’t have a guaranteed format. For protocols that don’t define a unique message identification scheme, Camel uses its own UID generator.</li>
@@ -144,20 +144,20 @@ messageStyle: "none",
   </li>
   <li>Headers and Attachments
     <ul>
-      <li>Headers are values associated with the message, such as sender identifiers, hints about content encoding, authentication information, and so on. </li>
-      <li>Headers are name-value pairs; the name is a unique, case-insensitive string, and the value is of type <code>java.lang.Object</code>. Headers are stored as a map within the message. </li>
+      <li>Headers are values associated with the message, such as sender identifiers, hints about content encoding, authentication information, and so on.</li>
+      <li>Headers are name-value pairs; the name is a unique, case-insensitive string, and the value is of type <code>java.lang.Object</code>. Headers are stored as a map within the message.</li>
       <li>A message can also have optional attachments, which are typically used for the web service and email components.</li>
     </ul>
   </li>
   <li>Body
     <ul>
-      <li>The body is of type <code>java.lang.Object</code>, and can store any kind of content. </li>
+      <li>The body is of type <code>java.lang.Object</code>, and can store any kind of content.</li>
       <li>When the sender and receiver use different body formats, Camel provides a number of mechanisms to transform the data into an acceptable format, and in many cases the conversion happens automatically with type converters, behind the scenes.</li>
     </ul>
   </li>
   <li>Fault Flag
     <ul>
-      <li>Messages also have a fault flag. Some protocols and specifications, such as WSDL and JBI, distinguish between output and fault messages. They’re both valid responses to invoking an operation, but the latter indicates an unsuccessful outcome. In general, faults aren’t handled by the integration infrastructure. They’re part of the contract between the client and the server and are handled at the application level. </li>
+      <li>Messages also have a fault flag. Some protocols and specifications, such as WSDL and JBI, distinguish between output and fault messages. They’re both valid responses to invoking an operation, but the latter indicates an unsuccessful outcome. In general, faults aren’t handled by the integration infrastructure. They’re part of the contract between the client and the server and are handled at the application level.</li>
     </ul>
   </li>
 </ul>
@@ -167,26 +167,26 @@ messageStyle: "none",
 <p><img class="right" src="/technology/camel-exchange-structure.PNG" /></p>
 
 <ul>
-  <li>An exchange is the message’s container during routing. </li>
+  <li>An exchange is the message’s container during routing.</li>
   <li>Message Exchange Patterns (MEPs)
     <ul>
-      <li>A pattern that denotes whether you’re using the InOnly or InOut messaging style. </li>
-      <li>MEPs are used to differentiate between <em>one-way</em> and <em>request-response</em> messaging styles. </li>
+      <li>A pattern that denotes whether you’re using the InOnly or InOut messaging style.</li>
+      <li>MEPs are used to differentiate between <em>one-way</em> and <em>request-response</em> messaging styles.</li>
       <li><strong>InOnly</strong> — A one-way message (also known as an <em>Event</em> message). For example,  JMS messaging is often one-way messaging.</li>
       <li><strong>InOut</strong> — A request-response message. For example, HTTP-based transports are often request reply, where a client requests to retrieve a web page, waiting for the reply from the server.</li>
     </ul>
   </li>
   <li>Exchange ID
     <ul>
-      <li>A unique ID that identifies the exchange. </li>
+      <li>A unique ID that identifies the exchange.</li>
       <li>If not provided explicitly it will be auto-generated by default.</li>
     </ul>
   </li>
   <li>Exception</li>
   <li>Properties
     <ul>
-      <li>Similar to message headers, but they last for the duration of the entire exchange. </li>
-      <li>Used to contain global-level information, whereas message headers are specific to a particular message. </li>
+      <li>Similar to message headers, but they last for the duration of the entire exchange.</li>
+      <li>Used to contain global-level information, whereas message headers are specific to a particular message.</li>
       <li>Camel itself adds various properties to the exchange during routing. Developer can store and retrieve properties at any point during the lifetime of an exchange.</li>
     </ul>
   </li>
@@ -223,8 +223,8 @@ messageStyle: "none",
   </li>
   <li>Routes
     <ul>
-      <li>Simplest way to define a route is as a chain of processors. </li>
-      <li>Each route has a unique identifier that’s used for logging, debugging, monitoring, and starting and stopping routes. </li>
+      <li>Simplest way to define a route is as a chain of processors.</li>
+      <li>Each route has a unique identifier that’s used for logging, debugging, monitoring, and starting and stopping routes.</li>
       <li>Routes also have exactly one input source for messages, so they’re effectively tied to an input endpoint.</li>
       <li>To define a route, a DSL is used</li>
     </ul>
@@ -242,10 +242,10 @@ messageStyle: "none",
 <ul>
   <li>Endpoints
     <ul>
-      <li>In Camel, endpoints are configured using URIs. e.g., <code>file:data/inbox?delay=5000</code>. 
+      <li>In Camel, endpoints are configured using URIs. e.g., <code>file:data/inbox?delay=5000</code>.
         <ul>
-          <li><code>file</code> denotes which Camel component handles that type of endpoint. In this case, the scheme of file selects the <code>FileComponent</code>. The FileComponent then works as a factory creating the FileEndpoint based on the remaining parts of the URI. </li>
-          <li>The context path tells the <code>FileComponent</code> that the starting folder is <code>data/inbox</code>. </li>
+          <li><code>file</code> denotes which Camel component handles that type of endpoint. In this case, the scheme of file selects the <code>FileComponent</code>. The FileComponent then works as a factory creating the FileEndpoint based on the remaining parts of the URI.</li>
+          <li>The context path tells the <code>FileComponent</code> that the starting folder is <code>data/inbox</code>.</li>
           <li>The option, <code>delay=5000</code> indicates that files should be polled at a 5 second interval.</li>
         </ul>
       </li>
@@ -266,24 +266,24 @@ messageStyle: "none",
   <li>Processors
     <ul>
       <li>used to transform and manipulate messages during routing and also to implement all the EIP patterns.</li>
-      <li>The processor represents a node capable of using, creating, or modifying an incoming exchange. </li>
-      <li>During routing, exchanges flow from one processor to another; as such, you can think of a route as a graph having specialized processors as the nodes, and lines that connect the output of one processor to the input of another. </li>
+      <li>The processor represents a node capable of using, creating, or modifying an incoming exchange.</li>
+      <li>During routing, exchanges flow from one processor to another; as such, you can think of a route as a graph having specialized processors as the nodes, and lines that connect the output of one processor to the input of another.</li>
     </ul>
   </li>
   <li>Components
     <ul>
       <li>are the extension points in Camel for adding connectivity to other systems. To expose these systems to the rest of Camel, components provide an endpoint interface.</li>
-      <li>There are over 80 components in the Camel ecosystem that range in function from data transports, to DSLs, data formats, etc. </li>
-      <li>Components are associated with a name that’s used in a URI, and they act as a factory of endpoints. E.g., a <code>FileComponent</code> is referred to by file in a URI, and it creates <code>FileEndpoints</code>. </li>
+      <li>There are over 80 components in the Camel ecosystem that range in function from data transports, to DSLs, data formats, etc.</li>
+      <li>Components are associated with a name that’s used in a URI, and they act as a factory of endpoints. E.g., a <code>FileComponent</code> is referred to by file in a URI, and it creates <code>FileEndpoints</code>.</li>
     </ul>
   </li>
   <li>Producers
     <ul>
       <li>an entity capable of creating and sending a message to an endpoint.</li>
-      <li>When a message needs to be sent to an endpoint, the producer will create an exchange and populate it with data compatible with that particular endpoint. For example, 
+      <li>When a message needs to be sent to an endpoint, the producer will create an exchange and populate it with data compatible with that particular endpoint. For example,
         <ul>
-          <li>a <code>FileProducer</code> will write the message body to a file. </li>
-          <li>A <code>JmsProducer</code>, on the other hand, will map the Camel message to a <code>javax.jms.Message</code> before sending it to a JMS destination. </li>
+          <li>a <code>FileProducer</code> will write the message body to a file.</li>
+          <li>A <code>JmsProducer</code>, on the other hand, will map the Camel message to a <code>javax.jms.Message</code> before sending it to a JMS destination.</li>
         </ul>
       </li>
       <li>It hides the complexity of interacting with particular transports. All you need to do is route a message to an endpoint, and the producer does the heavy lifting.</li>
@@ -291,9 +291,9 @@ messageStyle: "none",
   </li>
   <li>Consumers
     <ul>
-      <li>A consumer is the service that receives messages produced by a producer, wraps them in an exchange, and sends them to be processed. </li>
+      <li>A consumer is the service that receives messages produced by a producer, wraps them in an exchange, and sends them to be processed.</li>
       <li>Consumers are the source of the exchanges being routed in Camel.</li>
-      <li>To create a new exchange, a consumer will use the endpoint that wraps the payload being consumed. </li>
+      <li>To create a new exchange, a consumer will use the endpoint that wraps the payload being consumed.</li>
       <li>A processor is then used to initiate the routing of the exchange in Camel using the routing engine.</li>
       <li>Consumer Types
         <ul>

@@ -108,25 +108,25 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#infrastructure-as-code">Infrastructure as Code</a></li>
-  <li><a href="#server-provisioning">Server Provisioning</a>    <ul>
-      <li><a href="#terraform">Terraform</a></li>
+  <li><a href="#infrastructure-as-code" id="markdown-toc-infrastructure-as-code">Infrastructure as Code</a></li>
+  <li><a href="#server-provisioning" id="markdown-toc-server-provisioning">Server Provisioning</a>    <ul>
+      <li><a href="#terraform" id="markdown-toc-terraform">Terraform</a></li>
     </ul>
   </li>
-  <li><a href="#configuration-management">Configuration Management</a>    <ul>
-      <li><a href="#vagrant">Vagrant</a></li>
-      <li><a href="#chef">Chef</a>        <ul>
-          <li><a href="#common-resources">Common Resources</a></li>
-          <li><a href="#chef-client">Chef Client</a></li>
-          <li><a href="#cookbook">​Cookbook​</a></li>
-          <li><a href="#run-list">Run list</a></li>
+  <li><a href="#configuration-management" id="markdown-toc-configuration-management">Configuration Management</a>    <ul>
+      <li><a href="#vagrant" id="markdown-toc-vagrant">Vagrant</a></li>
+      <li><a href="#chef" id="markdown-toc-chef">Chef</a>        <ul>
+          <li><a href="#common-resources" id="markdown-toc-common-resources">Common Resources</a></li>
+          <li><a href="#chef-client" id="markdown-toc-chef-client">Chef Client</a></li>
+          <li><a href="#cookbook" id="markdown-toc-cookbook">​Cookbook​</a></li>
+          <li><a href="#run-list" id="markdown-toc-run-list">Run list</a></li>
         </ul>
       </li>
-      <li><a href="#saltstack">SaltStack</a></li>
-      <li><a href="#open-questions">Open Questions</a></li>
+      <li><a href="#saltstack" id="markdown-toc-saltstack">SaltStack</a></li>
+      <li><a href="#open-questions" id="markdown-toc-open-questions">Open Questions</a></li>
     </ul>
   </li>
-  <li><a href="#references">References</a></li>
+  <li><a href="#references" id="markdown-toc-references">References</a></li>
 </ul>
 
 <h1 id="infrastructure-as-code">Infrastructure as Code</h1>
@@ -189,7 +189,7 @@ messageStyle: "none",
   <li>Provisioners provide the ability to execute commands e.g. copy a file into the VM</li>
   <li>Infrastructure as a Code - Tool Categories
     <ul>
-      <li>Configuration Management Tools 
+      <li>Configuration Management Tools
         <ul>
           <li>Chef, Ansible, Puppet, Salt Stack</li>
           <li>Designed to install and manage software on existing servers</li>
@@ -426,7 +426,7 @@ messageStyle: "none",
 <ul>
   <li>A run list contains a list of recipes to execute on the target node.</li>
   <li>Real-world chef runs typically involve dozens of cookbooks with possibly hundreds of recipes and associated files. There needs to be a succinct way of referring to all the files in a cookbook. That’s the purpose of a run list.</li>
-  <li>A run list is used to specify the cookbook recipes to be evaluated on a node.  </li>
+  <li>A run list is used to specify the cookbook recipes to be evaluated on a node.</li>
   <li>A run list specifies recipes in the form <code>recipe['&lt;cookbook_name&gt;::&lt;recipe_name&gt;'];</code> for example, <code>recipe['motd::default']</code> (or <code>recipe['motd']</code> when the Chef code is contained in the <code>recipes/default.rb</code> file).</li>
   <li>​​Run list is specified in the chef-client command or stored on a Chef server.</li>
   <li>For each node, Chef evaluates only recipe files that are specified on the node’s run list.​</li>

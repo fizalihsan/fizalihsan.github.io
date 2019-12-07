@@ -108,21 +108,21 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#http">HTTP</a>    <ul>
-      <li><a href="#http-basics">HTTP Basics</a></li>
-      <li><a href="#http-methods">HTTP Methods</a></li>
-      <li><a href="#http-content-negotiation-conneg">HTTP Content Negotiation (Conneg)</a></li>
-      <li><a href="#caching">Caching</a></li>
+  <li><a href="#http" id="markdown-toc-http">HTTP</a>    <ul>
+      <li><a href="#http-basics" id="markdown-toc-http-basics">HTTP Basics</a></li>
+      <li><a href="#http-methods" id="markdown-toc-http-methods">HTTP Methods</a></li>
+      <li><a href="#http-content-negotiation-conneg" id="markdown-toc-http-content-negotiation-conneg">HTTP Content Negotiation (Conneg)</a></li>
+      <li><a href="#caching" id="markdown-toc-caching">Caching</a></li>
     </ul>
   </li>
-  <li><a href="#bibliography">Bibliography</a></li>
+  <li><a href="#bibliography" id="markdown-toc-bibliography">Bibliography</a></li>
 </ul>
 
 <h1 id="http">HTTP</h1>
 
 <h2 id="http-basics">HTTP Basics</h2>
 <ul>
-  <li>Browser-based web applications see only a tiny fraction of the features of HTTP. </li>
+  <li>Browser-based web applications see only a tiny fraction of the features of HTTP.</li>
   <li>Non-RESTful technologies like SOAP and WS-* use HTTP strictly as a transport protocol and thus use a very small subset of its capabilities. Many would say that SOAP and WS-* use HTTP solely to tunnel through firewalls</li>
   <li>HTTP Request has 4 parts:  the method, the target URL, the HTTP headers, and the entity-body.
     <ul>
@@ -135,7 +135,7 @@ messageStyle: "none",
 
 <h2 id="http-methods">HTTP Methods</h2>
 
-<p>HTTP has its well-known verbs, officially known as methods or protocol semantics. HTTP verbs 1 to 4 correspond to the CRUD (Create, Read, Update, Delete) operations. 5, 6 are used by clients to explore an API. </p>
+<p>HTTP has its well-known verbs, officially known as methods or protocol semantics. HTTP verbs 1 to 4 correspond to the CRUD (Create, Read, Update, Delete) operations. 5, 6 are used by clients to explore an API.</p>
 
 <table>
   <thead>
@@ -230,7 +230,7 @@ messageStyle: "none",
 <ul>
   <li>Response Data Format
     <ul>
-      <li>clients could specify the response format via “Accept”. If the requested format is not supported, then ‘not accepted’ error is returned. </li>
+      <li>clients could specify the response format via “Accept”. If the requested format is not supported, then ‘not accepted’ error is returned.</li>
     </ul>
   </li>
 </ul>
@@ -242,7 +242,7 @@ messageStyle: "none",
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <ul>
-  <li>specifying preference using wild cards. </li>
+  <li>specifying preference using wild cards.</li>
 </ul>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
@@ -255,7 +255,7 @@ messageStyle: "none",
   <li>Order of preference
     <ul>
       <li>when multiple preference are provided, the most specific types takes priority. In above example, ‘text/html;level=1’ takes precedence.</li>
-      <li>‘q’ MIME type property could be used as well. Higher the q value, more preferred it is. Default q value is 1.0. e.g., <code>text/*;q=0.9, */*;q=0.1, audio/mpeg, application/xml;q=0.5</code>. </li>
+      <li>‘q’ MIME type property could be used as well. Higher the q value, more preferred it is. Default q value is 1.0. e.g., <code>text/*;q=0.9, */*;q=0.1, audio/mpeg, application/xml;q=0.5</code>.</li>
     </ul>
   </li>
   <li>Language Negotiation</li>
@@ -288,7 +288,7 @@ messageStyle: "none",
         <ul>
           <li>private - shared intermediaries like proxy or CDNs cannot cache. Only clients can cache.</li>
           <li>public - anyone can cache</li>
-          <li>no-cache - </li>
+          <li>no-cache -</li>
           <li>no-store - cached data is stored in disks.</li>
           <li>no-transform - intermediary caches typically transforms data like images by compressing.</li>
           <li>max-age - expiration time</li>

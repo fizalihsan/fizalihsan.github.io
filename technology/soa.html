@@ -108,31 +108,31 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#concepts">Concepts</a>    <ul>
-      <li><a href="#what-is-soa">What is SOA?</a></li>
-      <li><a href="#why-soa">Why SOA?</a></li>
-      <li><a href="#soa-operations">SOA Operations</a></li>
-      <li><a href="#characteristics-of-contemporary-soa">Characteristics of contemporary SOA</a></li>
-      <li><a href="#message-exchange-patterns-mep">Message Exchange Patterns (MEP)</a>        <ul>
-          <li><a href="#primitive-meps">Primitive MEPs</a></li>
-          <li><a href="#complex-meps">Complex MEPs</a></li>
-          <li><a href="#meps-and-wsdl">MEPs and WSDL</a>            <ul>
-              <li><a href="#wsdl-11-spec">WSDL 1.1 Spec</a></li>
-              <li><a href="#wsdl-20-spec">WSDL 2.0 Spec</a></li>
+  <li><a href="#concepts" id="markdown-toc-concepts">Concepts</a>    <ul>
+      <li><a href="#what-is-soa" id="markdown-toc-what-is-soa">What is SOA?</a></li>
+      <li><a href="#why-soa" id="markdown-toc-why-soa">Why SOA?</a></li>
+      <li><a href="#soa-operations" id="markdown-toc-soa-operations">SOA Operations</a></li>
+      <li><a href="#characteristics-of-contemporary-soa" id="markdown-toc-characteristics-of-contemporary-soa">Characteristics of contemporary SOA</a></li>
+      <li><a href="#message-exchange-patterns-mep" id="markdown-toc-message-exchange-patterns-mep">Message Exchange Patterns (MEP)</a>        <ul>
+          <li><a href="#primitive-meps" id="markdown-toc-primitive-meps">Primitive MEPs</a></li>
+          <li><a href="#complex-meps" id="markdown-toc-complex-meps">Complex MEPs</a></li>
+          <li><a href="#meps-and-wsdl" id="markdown-toc-meps-and-wsdl">MEPs and WSDL</a>            <ul>
+              <li><a href="#wsdl-11-spec" id="markdown-toc-wsdl-11-spec">WSDL 1.1 Spec</a></li>
+              <li><a href="#wsdl-20-spec" id="markdown-toc-wsdl-20-spec">WSDL 2.0 Spec</a></li>
             </ul>
           </li>
         </ul>
       </li>
-      <li><a href="#primitive-soa--first-generation-web-services-framework">Primitive SOA / First Generation Web-services Framework</a>        <ul>
-          <li><a href="#service-roles">Service Roles</a></li>
-          <li><a href="#service-models">Service Models</a></li>
-          <li><a href="#service-endpoint-or-service-description-wsdl">Service Endpoint or Service Description (WSDL)</a></li>
-          <li><a href="#service-contract-or-service-metadata">Service Contract or Service Metadata</a></li>
+      <li><a href="#primitive-soa--first-generation-web-services-framework" id="markdown-toc-primitive-soa--first-generation-web-services-framework">Primitive SOA / First Generation Web-services Framework</a>        <ul>
+          <li><a href="#service-roles" id="markdown-toc-service-roles">Service Roles</a></li>
+          <li><a href="#service-models" id="markdown-toc-service-models">Service Models</a></li>
+          <li><a href="#service-endpoint-or-service-description-wsdl" id="markdown-toc-service-endpoint-or-service-description-wsdl">Service Endpoint or Service Description (WSDL)</a></li>
+          <li><a href="#service-contract-or-service-metadata" id="markdown-toc-service-contract-or-service-metadata">Service Contract or Service Metadata</a></li>
         </ul>
       </li>
     </ul>
   </li>
-  <li><a href="#bibliography">Bibliography</a></li>
+  <li><a href="#bibliography" id="markdown-toc-bibliography">Bibliography</a></li>
 </ul>
 
 <h1 id="concepts">Concepts</h1>
@@ -141,10 +141,10 @@ messageStyle: "none",
 
 <ul>
   <li>SOA is a software system structuring principle based on the idea of self-describing service providers.</li>
-  <li>a service is a function (usually a business function) that is accomplished by the interchange of messages between two entities: a service provider, and a service consumer. </li>
-  <li>SOA is just a methodology, an architectural design choice. It has nothing to do with a particular technology </li>
-  <li>It is a type of distributed computing </li>
-  <li>Web services is a realization of SOA </li>
+  <li>a service is a function (usually a business function) that is accomplished by the interchange of messages between two entities: a service provider, and a service consumer.</li>
+  <li>SOA is just a methodology, an architectural design choice. It has nothing to do with a particular technology</li>
+  <li>It is a type of distributed computing</li>
+  <li>Web services is a realization of SOA</li>
 </ul>
 
 <h2 id="why-soa">Why SOA?</h2>
@@ -153,19 +153,19 @@ messageStyle: "none",
   <li>Reduces coupling between the consumer and provider. This permits controlled changes to the provider, that will not have unforeseen effects on the consumer. It also allows the consumer to switch providers easily, provided only that a compatible service interface is provided. Decoupling allows changes to occur incrementally.</li>
   <li>Increases inter-operability across different systems, technologies and languages like Java, .Net, etc.</li>
   <li>Since heavy monolithic systems are divided into discrete services, development, upgrade, etc. can happen independently.</li>
-  <li>Reusability of services </li>
-  <li>Predecessors of SOA : CORBA, DCOM, EJB (all 3 are RPC based), SOAP based Web services </li>
-  <li>Downside of the SOA predecessors 
+  <li>Reusability of services</li>
+  <li>Predecessors of SOA : CORBA, DCOM, EJB (all 3 are RPC based), SOAP based Web services</li>
+  <li>Downside of the SOA predecessors
     <ul>
       <li>Interoperability across systems and technologies proved to be nettlesome. EJB &amp; DCOM are tied to specific platforms</li>
       <li>For data exchange, proprietary, binary-based technologies were used unlike XML in SOA</li>
     </ul>
   </li>
-  <li>Downsides of RPC based solutions 
+  <li>Downsides of RPC based solutions
     <ul>
-      <li>tight coupling between server and client </li>
-      <li>repeated RPC calls increases network load </li>
-      <li>data type support between 2 incompatible languages, such as C++ and Java is complicated and challenging. </li>
+      <li>tight coupling between server and client</li>
+      <li>repeated RPC calls increases network load</li>
+      <li>data type support between 2 incompatible languages, such as C++ and Java is complicated and challenging.</li>
       <li>When should SOA be used and should NOT be used?</li>
     </ul>
   </li>
@@ -185,20 +185,17 @@ messageStyle: "none",
 
 <ol>
   <li>QoS (Quality of Service) - security, reliability (in message delivery or notification), transactional capabilities (to protect the integrity of the business tasks)
-    <ul>
-      <li>Autonomous - services should be independent and self-contained</li>
-      <li>Based on Open Standards - Data exchange is governed by open standards like SOAP, WSDL, XML, etc.</li>
-      <li>Promotes Discovery</li>
-      <li>Interoperability - disparate technologies should not prevent service-oriented solutions from interoperating</li>
-      <li>Composability - composing 1 or more fine-grained services to form a coarse-grained service. Different solutions can be composed of different extensions and can continue to interoperate as long as they support the common extensions required</li>
-      <li>Reusability of services</li>
-      <li>Extensibility of services</li>
-      <li>Layers of abstraction - encapsulates application logic and technology resources</li>
-      <li>Promotes loose-coupling - separation of concerns</li>
-      <li>Stateless</li>
-      <li>Location-, Language- &amp; Protocol-independent</li>
-    </ul>
-  </li>
+* Autonomous - services should be independent and self-contained
+* Based on Open Standards - Data exchange is governed by open standards like SOAP, WSDL, XML, etc.
+* Promotes Discovery
+* Interoperability - disparate technologies should not prevent service-oriented solutions from interoperating
+* Composability - composing 1 or more fine-grained services to form a coarse-grained service. Different solutions can be composed of different extensions and can continue to interoperate as long as they support the common extensions required
+* Reusability of services
+* Extensibility of services
+* Layers of abstraction - encapsulates application logic and technology resources
+* Promotes loose-coupling - separation of concerns
+* Stateless
+* Location-, Language- &amp; Protocol-independent</li>
 </ol>
 
 <h2 id="message-exchange-patterns-mep">Message Exchange Patterns (MEP)</h2>
@@ -213,27 +210,18 @@ messageStyle: "none",
   <li>
     <ol>
       <li>Request-response
-        <ul>
-          <li>this could be synchronous or asynchronous</li>
-          <li>typically a “correlation” is used to associate a response with the request </li>
-        </ul>
-      </li>
+* this could be synchronous or asynchronous
+* typically a “correlation” is used to associate a response with the request</li>
     </ol>
   </li>
   <li>
     <ol>
       <li>Fire-and-forget
-        <ul>
-          <li>This simple asynchronous pattern is based on a <em>unidirectional</em> transmission of messages from a source to one or more destinations. </li>
-          <li>There are few variations in this MEP.
-            <ul>
-              <li><em>single-destination</em> pattern - a source sends a message to one destination only</li>
-              <li><em>multi-cast</em> pattern - a source sends messages to a predefined set of destinations</li>
-              <li><em>broadcast</em> pattern - same as multi-cast pattern, except that the message is sent out to a broader range of recipient destinations</li>
-            </ul>
-          </li>
-        </ul>
-      </li>
+* This simple asynchronous pattern is based on a <em>unidirectional</em> transmission of messages from a source to one or more destinations. 
+* There are few variations in this MEP.
+  * <em>single-destination</em> pattern - a source sends a message to one destination only
+  * <em>multi-cast</em> pattern - a source sends messages to a predefined set of destinations
+  * <em>broadcast</em> pattern - same as multi-cast pattern, except that the message is sent out to a broader range of recipient destinations</li>
     </ol>
   </li>
 </ul>
@@ -284,7 +272,7 @@ messageStyle: "none",
   <li><strong>Intermediary service (routing service)</strong>
     <ol>
       <li><strong>Passive Intermediary service</strong> - It is typically responsible for routing messages to a subsequent location. It may use information in the SOAP message header to determine the routing path, or it may employ native routing logic to achieve some level of load balancing. Either way, what makes this type of intermediary passive is that it does not modify the message.</li>
-      <li><strong>Active intermediaries</strong> - also route messages to a forwarding destination. Prior to transmitting a message, however, these services actively process and alter the message contents. Typically, active intermediaries will look for particular SOAP header blocks and perform some action in response to the information they find there. They almost always alter data in header blocks and may insert or even delete header blocks entirely. </li>
+      <li><strong>Active intermediaries</strong> - also route messages to a forwarding destination. Prior to transmitting a message, however, these services actively process and alter the message contents. Typically, active intermediaries will look for particular SOAP header blocks and perform some action in response to the information they find there. They almost always alter data in header blocks and may insert or even delete header blocks entirely.</li>
     </ol>
   </li>
   <li><strong>Initial sender and ultimate receiver</strong> - Initial senders are simply service requestors that initiate the transmission of a message. Therefore, the initial sender is always the first Web service in a message path. The counterpart to this role is the ultimate receiver. This label identifies service providers that exist as the last Web service along a message’s path</li>
@@ -308,11 +296,8 @@ messageStyle: "none",
       <li>
         <ol>
           <li>Abstract description
-            <ul>
-              <li>Describes the interface characteristics of the Web service without any reference to the technology used to host.</li>
-              <li>It contains <code>portType</code> (or <code>interface</code> from WSDL 2.0), <code>operation</code> and <code>message</code></li>
-            </ul>
-          </li>
+* Describes the interface characteristics of the Web service without any reference to the technology used to host.
+* It contains <code>portType</code> (or <code>interface</code> from WSDL 2.0), <code>operation</code> and <code>message</code></li>
         </ol>
       </li>
     </ul>
@@ -335,17 +320,11 @@ messageStyle: "none",
   <li>
     <ol>
       <li>Concrete description - contains
-        <ul>
-          <li>Describes the concrete technology used for physical transport.</li>
-          <li>It contains
-            <ul>
-              <li>binding -  represents the transport technology the service can use to communicate. Typically it is SOAP. A binding can apply to a particular operation or all operations.</li>
-              <li>port (or endpoint from WSDL 2.0) - represents the physical address at which a service can be accessed with a specific protocol.</li>
-              <li>service</li>
-            </ul>
-          </li>
-        </ul>
-      </li>
+* Describes the concrete technology used for physical transport.
+* It contains
+  * binding -  represents the transport technology the service can use to communicate. Typically it is SOAP. A binding can apply to a particular operation or all operations.
+  * port (or endpoint from WSDL 2.0) - represents the physical address at which a service can be accessed with a specific protocol.
+  * service</li>
     </ol>
   </li>
 </ul>

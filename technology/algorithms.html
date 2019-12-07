@@ -108,36 +108,36 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#concepts">Concepts</a>    <ul>
-      <li><a href="#big-o-notation">Big-O Notation</a>        <ul>
-          <li><a href="#how-to-find-big-o-in-interviews">How to find Big-O in interviews?</a></li>
+  <li><a href="#concepts" id="markdown-toc-concepts">Concepts</a>    <ul>
+      <li><a href="#big-o-notation" id="markdown-toc-big-o-notation">Big-O Notation</a>        <ul>
+          <li><a href="#how-to-find-big-o-in-interviews" id="markdown-toc-how-to-find-big-o-in-interviews">How to find Big-O in interviews?</a></li>
         </ul>
       </li>
     </ul>
   </li>
-  <li><a href="#data-structures">Data Structures</a>    <ul>
-      <li><a href="#arrays">Arrays</a></li>
-      <li><a href="#strings">Strings</a></li>
-      <li><a href="#linked-lists">Linked Lists</a></li>
-      <li><a href="#trees">Trees</a></li>
-      <li><a href="#stacks">Stacks</a></li>
-      <li><a href="#queues">Queues</a></li>
+  <li><a href="#data-structures" id="markdown-toc-data-structures">Data Structures</a>    <ul>
+      <li><a href="#arrays" id="markdown-toc-arrays">Arrays</a></li>
+      <li><a href="#strings" id="markdown-toc-strings">Strings</a></li>
+      <li><a href="#linked-lists" id="markdown-toc-linked-lists">Linked Lists</a></li>
+      <li><a href="#trees" id="markdown-toc-trees">Trees</a></li>
+      <li><a href="#stacks" id="markdown-toc-stacks">Stacks</a></li>
+      <li><a href="#queues" id="markdown-toc-queues">Queues</a></li>
     </ul>
   </li>
-  <li><a href="#algorithms">Algorithms</a>    <ul>
-      <li><a href="#searching">Searching</a></li>
-      <li><a href="#sorting">Sorting</a></li>
-      <li><a href="#backtracking">Backtracking</a></li>
+  <li><a href="#algorithms" id="markdown-toc-algorithms">Algorithms</a>    <ul>
+      <li><a href="#searching" id="markdown-toc-searching">Searching</a></li>
+      <li><a href="#sorting" id="markdown-toc-sorting">Sorting</a></li>
+      <li><a href="#backtracking" id="markdown-toc-backtracking">Backtracking</a></li>
     </ul>
   </li>
-  <li><a href="#bitwise-operations">Bitwise Operations</a></li>
-  <li><a href="#searching-1">Searching</a>    <ul>
-      <li><a href="#hashing">Hashing</a></li>
+  <li><a href="#bitwise-operations" id="markdown-toc-bitwise-operations">Bitwise Operations</a></li>
+  <li><a href="#searching-1" id="markdown-toc-searching-1">Searching</a>    <ul>
+      <li><a href="#hashing" id="markdown-toc-hashing">Hashing</a></li>
     </ul>
   </li>
-  <li><a href="#dynamic-programming">Dynamic Programming</a></li>
-  <li><a href="#greedy-algorithms">Greedy Algorithms</a></li>
-  <li><a href="#reference">Reference</a></li>
+  <li><a href="#dynamic-programming" id="markdown-toc-dynamic-programming">Dynamic Programming</a></li>
+  <li><a href="#greedy-algorithms" id="markdown-toc-greedy-algorithms">Greedy Algorithms</a></li>
+  <li><a href="#reference" id="markdown-toc-reference">Reference</a></li>
 </ul>
 
 <p>Grokking Algorithms - <a href="http://adit.io/">http://adit.io/</a></p>
@@ -149,25 +149,25 @@ messageStyle: "none",
 <p><img class="right" src="/technology/big-o-complexity.png" width="600" height="600" /></p>
 
 <ul>
-  <li><strong>O(1)/Constant Complexity</strong>: 
+  <li><strong>O(1)/Constant Complexity</strong>:
     <ul>
-      <li>Constant.  Irrespective of the size of the data set the algorithm will always take a constant time. </li>
+      <li>Constant.  Irrespective of the size of the data set the algorithm will always take a constant time.</li>
       <li>Example: <code>HashMap.get()</code> operation</li>
     </ul>
   </li>
-  <li><strong>O(log n)/Logarithmic Complexity</strong>: 
+  <li><strong>O(log n)/Logarithmic Complexity</strong>:
     <ul>
       <li>Not as good as constant, but still pretty good.  The time taken increases with the size of the data set, but not proportionately so. This means the algorithm takes longer per item on smaller datasets relative to larger ones.   1 item takes 1 second, 10 items takes 2 seconds, 100 items takes 3 seconds. This makes log n algorithms very scalable.</li>
-      <li>Example: Binary search </li>
+      <li>Example: Binary search</li>
     </ul>
   </li>
-  <li><strong>O(n)/Linear Complexity</strong>: 
+  <li><strong>O(n)/Linear Complexity</strong>:
     <ul>
       <li>The larger the data set, the time taken grows proportionately.  1 item takes 1 second, 10 items takes 10 seconds, 100 items takes 100 seconds.</li>
       <li>Example: To find an element T which is the last item in the <code>LinkedList</code></li>
     </ul>
   </li>
-  <li><strong>O(n log n)/Linearithmetic Complexity</strong>: 
+  <li><strong>O(n log n)/Linearithmetic Complexity</strong>:
     <ul>
       <li>A nice combination of the previous two.  Normally there’s 2 parts to the sort, the first loop is O(n), the second is O(log n), combining to form O(n log n) 1 item takes 2 seconds, 10 items takes 12 seconds, 100 items takes 103 seconds.
 <img class="right" src="/technology/merge-sort-example.gif" /></li>
@@ -181,19 +181,19 @@ Now consider if I were to double the number of elements to 16: this would only r
       </li>
     </ul>
   </li>
-  <li><strong>O(n^2)/Polynomial or Quadratic Complexity</strong>: 
+  <li><strong>O(n^2)/Polynomial or Quadratic Complexity</strong>:
     <ul>
       <li>Things are getting extra slow. 1 item takes 1 second, 10 items takes 100, 100 items takes 10000.</li>
-      <li>Example: Bubble Sort. If you need a reminder; we go through the list and compare each element with the one next to it, swapping the elements if they are out of order. At the end of the first iteration, we then start again from the beginning, with the caveat that we now know the last element is correct. </li>
+      <li>Example: Bubble Sort. If you need a reminder; we go through the list and compare each element with the one next to it, swapping the elements if they are out of order. At the end of the first iteration, we then start again from the beginning, with the caveat that we now know the last element is correct.</li>
     </ul>
   </li>
-  <li><strong>O(2^n)/Exponential Growth</strong>: 
+  <li><strong>O(2^n)/Exponential Growth</strong>:
     <ul>
       <li>The algorithm takes twice as long for every new element added.  1 item takes 1 second, 10 items takes 1024 seconds, 100 items takes 1267650600228229401496703205376 seconds.</li>
       <li>Example: Take for example trying to find combinations; imagine a list of 150 people and to find every combination of groupings; everyone by themselves, all of the groups of 2 people, all of the groups of 3 people etc. Using a simple program which takes each person and loops through the combinations,  if I add one extra person then it’s going to increase the processing time exponentially. Every new element will double processing time.</li>
     </ul>
   </li>
-  <li><a href="http://www.perlmonks.org/?node_id=227909">Informal Introduction to BigO notation</a> </li>
+  <li><a href="http://www.perlmonks.org/?node_id=227909">Informal Introduction to BigO notation</a></li>
 </ul>
 
 <h3 id="how-to-find-big-o-in-interviews">How to find Big-O in interviews?</h3>
@@ -302,7 +302,7 @@ Now consider if I were to double the number of elements to 16: this would only r
 <h2 id="searching">Searching</h2>
 
 <ul>
-  <li>Binary Search<br />
+  <li>Binary Search
     <ul>
       <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/array/BinarySearch.java">Binary Search in an array</a></li>
       <li>Binary search matrix - pg 37</li>
@@ -317,13 +317,13 @@ Now consider if I were to double the number of elements to 16: this would only r
 <p><img class="right" src="/technology/sorting-efficiency.png" /></p>
 
 <ul>
-  <li>Array Sorting<br />
+  <li>Array Sorting
     <ul>
       <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/sort/QuickSort.java">Quick sort</a> - <em>from Sedgewick book</em></li>
       <li><a href="https://github.com/fizalihsan/FunPrograms/blob/master/src/main/java/com/algos/sort/SelectionSort.java">Selection sort</a></li>
-      <li>Shell sort </li>
-      <li>Insertion sort </li>
-      <li>Merge sort </li>
+      <li>Shell sort</li>
+      <li>Insertion sort</li>
+      <li>Merge sort</li>
     </ul>
   </li>
   <li>String sorting

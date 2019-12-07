@@ -108,26 +108,26 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#scalability">Scalability</a></li>
-  <li><a href="#fault-tolerance">Fault tolerance</a></li>
-  <li><a href="#design-techniques">Design Techniques</a>    <ul>
-      <li><a href="#partitioning">Partitioning</a></li>
-      <li><a href="#replication">Replication</a></li>
+  <li><a href="#scalability" id="markdown-toc-scalability">Scalability</a></li>
+  <li><a href="#fault-tolerance" id="markdown-toc-fault-tolerance">Fault tolerance</a></li>
+  <li><a href="#design-techniques" id="markdown-toc-design-techniques">Design Techniques</a>    <ul>
+      <li><a href="#partitioning" id="markdown-toc-partitioning">Partitioning</a></li>
+      <li><a href="#replication" id="markdown-toc-replication">Replication</a></li>
     </ul>
   </li>
-  <li><a href="#system-models">System Models</a>    <ul>
-      <li><a href="#nodes">Nodes</a></li>
-      <li><a href="#communication-links">Communication Links</a></li>
-      <li><a href="#timingorder">Timing/Order</a></li>
+  <li><a href="#system-models" id="markdown-toc-system-models">System Models</a>    <ul>
+      <li><a href="#nodes" id="markdown-toc-nodes">Nodes</a></li>
+      <li><a href="#communication-links" id="markdown-toc-communication-links">Communication Links</a></li>
+      <li><a href="#timingorder" id="markdown-toc-timingorder">Timing/Order</a></li>
     </ul>
   </li>
-  <li><a href="#cap-theorem">CAP Theorem</a></li>
-  <li><a href="#consistency-models">Consistency Models</a>    <ul>
-      <li><a href="#strong-consistency-models">Strong consistency models</a></li>
-      <li><a href="#weak-consistency-models">Weak consistency models</a></li>
+  <li><a href="#cap-theorem" id="markdown-toc-cap-theorem">CAP Theorem</a></li>
+  <li><a href="#consistency-models" id="markdown-toc-consistency-models">Consistency Models</a>    <ul>
+      <li><a href="#strong-consistency-models" id="markdown-toc-strong-consistency-models">Strong consistency models</a></li>
+      <li><a href="#weak-consistency-models" id="markdown-toc-weak-consistency-models">Weak consistency models</a></li>
     </ul>
   </li>
-  <li><a href="#references">References</a></li>
+  <li><a href="#references" id="markdown-toc-references">References</a></li>
 </ul>
 
 <h1 id="scalability">Scalability</h1>
@@ -167,7 +167,7 @@ For example,
 <h1 id="fault-tolerance">Fault tolerance</h1>
 
 <ul>
-  <li>ability of a system to behave in a well-defined manner once faults occur. </li>
+  <li>ability of a system to behave in a well-defined manner once faults occur.</li>
   <li>
     <p>define what faults you expect and then design a system or an algorithm that is tolerant of them.</p>
 
@@ -198,7 +198,7 @@ For example,
 
 <h1 id="design-techniques">Design Techniques</h1>
 
-<p>There are two basic techniques in which a data set is distributed between multiple nodes: <strong>partition</strong> and <strong>replication</strong>. </p>
+<p>There are two basic techniques in which a data set is distributed between multiple nodes: <strong>partition</strong> and <strong>replication</strong>.</p>
 
 <p><img src="http://book.mixu.net/distsys/images/part-repl.png" alt="Partition &amp; Replication" /></p>
 
@@ -219,7 +219,7 @@ For example,
   <li>It can also be copied or cached on different nodes to reduce the distance between the client and the server and for greater fault tolerance.</li>
   <li>improves performance by making additional computing power and bandwidth applicable to a new copy of the data</li>
   <li>improves availability by creating additional copies of the data, increasing the number of nodes that need to fail before availability is sacrificed</li>
-  <li>is also the source of many of the problems, since there are now independent copies of the data that has to be kept in sync on multiple machines - this means ensuring that the replication follows a consistency model. </li>
+  <li>is also the source of many of the problems, since there are now independent copies of the data that has to be kept in sync on multiple machines - this means ensuring that the replication follows a consistency model.</li>
   <li><strong><em>Strong consistency</em></strong> allows you to program as-if the underlying data was not replicated. <strong><em>Weaker consistency</em></strong> models can provide lower latency and higher availability.</li>
 </ul>
 
@@ -290,9 +290,9 @@ For example,
 <p><strong>Timing Assumptions / Timing System Models</strong></p>
 
 <ul>
-  <li><strong><em>Synchronous System Model</em></strong> </li>
+  <li><strong><em>Synchronous System Model</em></strong></li>
   <li>Processes execute in lock-step; there is a known upper bound on message transmission delay; each process has an accurate clock</li>
-  <li><strong><em>Asynchronous System Model</em></strong> 
+  <li><strong><em>Asynchronous System Model</em></strong>
     <ul>
       <li>No timing assumptions - e.g. processes execute at independent rates; there is no bound on message transmission delay; useful clocks do not exist</li>
     </ul>
@@ -324,41 +324,32 @@ For example,
 
 <ol>
   <li><strong>CA (Consistency + Availability)</strong>
-    <ul>
-      <li>All relational DBs are CA.</li>
-      <li>When a partition occurs, the system blocks.</li>
-      <li>Examples include <em>full strict quorum protocols</em>, such as <em>two-phase commit</em>.</li>
-      <li>Strong consistency model; <em>CANNOT</em> tolerate any node failures</li>
-      <li>A CA system does not distinguish between node failures and network failures, and so the only safe thing is to stop accepting writes everywhere to avoid introducing <strong><em>divergence</em></strong> (or multiple copies).</li>
-      <li>CA systems are not partition-aware, and often use the two-phase commit algorithm and are common in traditional distributed relational DBs.</li>
-    </ul>
-  </li>
+  * All relational DBs are CA.
+  * When a partition occurs, the system blocks.
+  * Examples include <em>full strict quorum protocols</em>, such as <em>two-phase commit</em>.
+  * Strong consistency model; <em>CANNOT</em> tolerate any node failures
+  * A CA system does not distinguish between node failures and network failures, and so the only safe thing is to stop accepting writes everywhere to avoid introducing <strong><em>divergence</em></strong> (or multiple copies).
+  * CA systems are not partition-aware, and often use the two-phase commit algorithm and are common in traditional distributed relational DBs.</li>
   <li><strong>CP (Consistency + Partition Tolerance)</strong>
-    <ul>
-      <li>Say you have three nodes and one node loses its link with the other two. You can create a rule that a result will be returned only when a majority of nodes agree. So, despite having a partition, the system will return a consistent result. However, since the separated node won’t be able to reach consensus it won’t be available even though it’s up.</li>
-      <li>Examples include majority quorum protocols in which minority partitions are unavailable such as <em>Paxos</em>.</li>
-      <li>Strong consistency model; <em>CAN</em> tolerate node failures</li>
-      <li>CP systems incorporate network partitions into their failure model and distinguish between a majority partition and a minority partition using an algorithm like <a href="http://harry.me/blog/2014/12/27/neat-algorithms-paxos/">Paxos</a>, <a href="https://ramcloud.stanford.edu/raft.pdf">Raft</a> or viewstamped replication. ( <a href="http://harry.me/blog/2013/07/07/id-like-to-have-an-argument-a-primer-on-consensus/">A primer on consensus</a>)</li>
-      <li>in a non-Byzantine failure model, a CP system can tolerate the failure of a minority <code>n</code> nodes as long as majority <code>n+1</code> stays up in a system with<code>2n+1</code> nodes. </li>
-      <li>A CP system prevents divergence (e.g. maintains single-copy consistency) by forcing asymmetric behavior on the two sides of the partition. It only keeps the majority partition around, and requires the minority partition to become unavailable (e.g. stop accepting writes), which retains a degree of availability (the majority partition) and still ensures <em>single-copy consistency</em>.</li>
-    </ul>
-  </li>
+  * Say you have three nodes and one node loses its link with the other two. You can create a rule that a result will be returned only when a majority of nodes agree. So, despite having a partition, the system will return a consistent result. However, since the separated node won’t be able to reach consensus it won’t be available even though it’s up.
+  * Examples include majority quorum protocols in which minority partitions are unavailable such as <em>Paxos</em>.
+  * Strong consistency model; <em>CAN</em> tolerate node failures
+  * CP systems incorporate network partitions into their failure model and distinguish between a majority partition and a minority partition using an algorithm like <a href="http://harry.me/blog/2014/12/27/neat-algorithms-paxos/">Paxos</a>, <a href="https://ramcloud.stanford.edu/raft.pdf">Raft</a> or viewstamped replication. ( <a href="http://harry.me/blog/2013/07/07/id-like-to-have-an-argument-a-primer-on-consensus/">A primer on consensus</a>)
+  * in a non-Byzantine failure model, a CP system can tolerate the failure of a minority <code>n</code> nodes as long as majority <code>n+1</code> stays up in a system with<code>2n+1</code> nodes. 
+  * A CP system prevents divergence (e.g. maintains single-copy consistency) by forcing asymmetric behavior on the two sides of the partition. It only keeps the majority partition around, and requires the minority partition to become unavailable (e.g. stop accepting writes), which retains a degree of availability (the majority partition) and still ensures <em>single-copy consistency</em>.</li>
   <li><strong>AP (Availability + Partition Tolerance)</strong>
-    <ul>
-      <li>Say you have two nodes and the link between the two is severed. Since both nodes are up, you can design the system to accept requests on each of the nodes, which will make the system available despite the network being partitioned. However, each node will issue its own results, so by providing high availability and partition tolerance you’ll compromise consistency.</li>
-      <li>The system is still available under partitioning, but some returned data may be inaccurate, e.g., DNS, caches, Master/Slave replication.</li>
-      <li>Needs a conflict resolution strategy.</li>
-      <li>Examples include protocols using conflict resolution, such as <em>Dynamo</em>.</li>
-    </ul>
-  </li>
+  * Say you have two nodes and the link between the two is severed. Since both nodes are up, you can design the system to accept requests on each of the nodes, which will make the system available despite the network being partitioned. However, each node will issue its own results, so by providing high availability and partition tolerance you’ll compromise consistency.
+  * The system is still available under partitioning, but some returned data may be inaccurate, e.g., DNS, caches, Master/Slave replication.
+  * Needs a conflict resolution strategy.
+  * Examples include protocols using conflict resolution, such as <em>Dynamo</em>.</li>
 </ol>
 
-<p>In a distributed system, managing consistency(C), availability(A) and partition toleration(P) is important. </p>
+<p>In a distributed system, managing consistency(C), availability(A) and partition toleration(P) is important.</p>
 
 <ul>
-  <li>Eric Brewer put forth the CAP theorem which states that in any distributed system we can choose only two of consistency, availability or partition tolerance. </li>
+  <li>Eric Brewer put forth the CAP theorem which states that in any distributed system we can choose only two of consistency, availability or partition tolerance.</li>
   <li>Consistency and availability are not really binary choices, unless you limit yourself to strong consistency. But strong consistency is just one consistency model: the one where you, by necessity, need to give up availability in order to prevent more than a single copy of the data from being active.</li>
-  <li>Many NoSQL DBs try to provide options where the developer has choices where they can tune the DB as per their needs. </li>
+  <li>Many NoSQL DBs try to provide options where the developer has choices where they can tune the DB as per their needs.</li>
 </ul>
 
 <p>For example if you consider a distributed DB, there are essentially three variables r, w, n where</p>
@@ -369,11 +360,11 @@ For example,
   <li><code>n</code> = number of nodes where the data is replicated aka replication factor.</li>
 </ul>
 
-<p>In a cluster with 5 nodes, </p>
+<p>In a cluster with 5 nodes,</p>
 
 <ul>
-  <li>we can tweak the <code>r</code>, <code>w</code>, <code>n</code> values to make the system very consistent by setting <code>r=5</code> and <code>w=5</code> but now we have made the cluster susceptible to network partitions since any write will not be considered successful when any node is not responding. </li>
-  <li>We can make the same cluster highly available for writes or reads by setting <code>r=1</code> and <code>w=1</code>  but now consistency can be compromised since some nodes may not have the latest copy of the data. </li>
+  <li>we can tweak the <code>r</code>, <code>w</code>, <code>n</code> values to make the system very consistent by setting <code>r=5</code> and <code>w=5</code> but now we have made the cluster susceptible to network partitions since any write will not be considered successful when any node is not responding.</li>
+  <li>We can make the same cluster highly available for writes or reads by setting <code>r=1</code> and <code>w=1</code>  but now consistency can be compromised since some nodes may not have the latest copy of the data.</li>
 </ul>
 
 <h1 id="consistency-models">Consistency Models</h1>
@@ -382,10 +373,10 @@ For example,
   <p>Consistency Model is a contract between programmer and system, wherein the system guarantees that if the programmer follows some specific rules, the results of operations on the data store will be predictable</p>
 </blockquote>
 
-<p>There are 2 types of consistency models: </p>
+<p>There are 2 types of consistency models:</p>
 
 <ol>
-  <li><strong>Strong consistency model</strong>: 
+  <li><strong>Strong consistency model</strong>:
     <ul>
       <li>guarantee that the apparent order and visibility of updates is equivalent to a non-replicated system</li>
       <li>Strong consistency models allow a programmer to replace a single server with a cluster of distributed nodes and not run into any problems</li>

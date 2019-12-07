@@ -108,8 +108,8 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#variables">Variables</a></li>
-  <li><a href="#faqs">FAQs</a></li>
+  <li><a href="#variables" id="markdown-toc-variables">Variables</a></li>
+  <li><a href="#faqs" id="markdown-toc-faqs">FAQs</a></li>
 </ul>
 
 <h1 id="variables">Variables</h1>
@@ -117,7 +117,7 @@ messageStyle: "none",
 <ul>
   <li>Sybase
     <ul>
-      <li>Local variables denoted as <code>@varname</code> </li>
+      <li>Local variables denoted as <code>@varname</code></li>
       <li>Global variables
         <ul>
           <li><code>@@rowcount</code> - Holds the number of rows returned by the last Transact-SQL statement. Be careful, almost any statement will set this. Even an “if” statement which checks it’s value. For example:</li>
@@ -141,13 +141,13 @@ messageStyle: "none",
 <h1 id="faqs">FAQs</h1>
 
 <ul>
-  <li>What’s the difference between DELETE TABLE and TRUNCATE TABLE commands? 
+  <li>What’s the difference between DELETE TABLE and TRUNCATE TABLE commands?
     <ul>
-      <li>DELETE TABLE is a logged operation, so the deletion of each row gets logged in the transaction log, which makes it slow. </li>
-      <li>TRUNCATE TABLE also deletes all the rows in a table, but it won’t log the deletion of each row, instead it logs the de-allocation of the data pages of the table, which makes it faster. Of course, TRUNCATE TABLE can be rolled back. </li>
+      <li>DELETE TABLE is a logged operation, so the deletion of each row gets logged in the transaction log, which makes it slow.</li>
+      <li>TRUNCATE TABLE also deletes all the rows in a table, but it won’t log the deletion of each row, instead it logs the de-allocation of the data pages of the table, which makes it faster. Of course, TRUNCATE TABLE can be rolled back.</li>
     </ul>
   </li>
-  <li>Co-related subquery? Co-related query is a query in which subquery depends on execution of main query </li>
+  <li>Co-related subquery? Co-related query is a query in which subquery depends on execution of main query</li>
 </ul>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
@@ -156,7 +156,7 @@ messageStyle: "none",
 
 <ul>
   <li><a href="http://www.xaprb.com/blog/2006/12/07/how-to-select-the-firstleastmax-row-per-group-in-sql">How to select first/last/max per group in SQL?</a></li>
-  <li>SQL query to get 4th or 5th maximum value from a table </li>
+  <li>SQL query to get 4th or 5th maximum value from a table</li>
 </ul>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
@@ -190,7 +190,7 @@ messageStyle: "none",
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <ul>
-  <li>When we need to use USING clause in the sql? For example in this below: </li>
+  <li>When we need to use USING clause in the sql? For example in this below:</li>
 </ul>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
@@ -202,7 +202,7 @@ messageStyle: "none",
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <ul>
-  <li>How to delete duplicate records in a table? </li>
+  <li>How to delete duplicate records in a table?</li>
 </ul>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
@@ -210,14 +210,14 @@ messageStyle: "none",
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <ul>
-  <li>What will be the output of this query? 
+  <li>What will be the output of this query?
     <ul>
       <li><code>SELECT 1 FROM DUAL UNION SELECT 'A' FROM DUAL;</code> The query would throw an error. The two data types in the union set should be same. Out here it is a 1 and ‘A’, datatype mismatch and hence the error.</li>
     </ul>
   </li>
   <li>What does <code>UNION</code> do? What is the difference between <code>UNION</code> and <code>UNION ALL</code>?
     <ul>
-      <li><code>UNION</code> merges the contents of two structurally-compatible tables into a single combined table. </li>
+      <li><code>UNION</code> merges the contents of two structurally-compatible tables into a single combined table.</li>
       <li>The difference between <code>UNION</code> and <code>UNION ALL</code> is that <code>UNION</code> will omit duplicate records whereas <code>UNION ALL</code> will include duplicate records.</li>
       <li>Performance-wise <code>UNION ALL</code> is typically be better than <code>UNION</code>, since <code>UNION</code> requires the server to do the additional work of removing any duplicates.</li>
     </ul>
@@ -317,7 +317,7 @@ Surprisingly, given the sample data provided, the result of this query will be a
   <li>Given a table SALARIES, such as the one below, that has m = male and f = female values. Swap all f and m values (i.e., change all f values to m and vice versa) with a single update query and no intermediate temp table.</li>
 </ul>
 
-<p>Answer: </p>
+<p>Answer:</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class="sql"><span class="line"><span class="k">UPDATE</span> <span class="n">SALARIES</span> <span class="k">SET</span> <span class="n">sex</span> <span class="o">=</span> <span class="k">CASE</span> <span class="n">sex</span> <span class="k">WHEN</span> <span class="s1">&#39;m&#39;</span> <span class="k">THEN</span> <span class="s1">&#39;f&#39;</span> <span class="k">ELSE</span> <span class="s1">&#39;m&#39;</span> <span class="k">END</span>

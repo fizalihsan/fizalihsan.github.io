@@ -108,15 +108,15 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#overview">Overview</a>    <ul>
-      <li><a href="#scope">Scope</a></li>
-      <li><a href="#profiles">Profiles</a></li>
+  <li><a href="#overview" id="markdown-toc-overview">Overview</a>    <ul>
+      <li><a href="#scope" id="markdown-toc-scope">Scope</a></li>
+      <li><a href="#profiles" id="markdown-toc-profiles">Profiles</a></li>
     </ul>
   </li>
-  <li><a href="#jdbc">JDBC</a>    <ul>
-      <li><a href="#why-spring-jdbc-over-plain-java-jdbc">Why Spring JDBC over plain Java JDBC?</a></li>
-      <li><a href="#jdbctemplate">JdbcTemplate</a></li>
-      <li><a href="#querying-results">Querying results</a></li>
+  <li><a href="#jdbc" id="markdown-toc-jdbc">JDBC</a>    <ul>
+      <li><a href="#why-spring-jdbc-over-plain-java-jdbc" id="markdown-toc-why-spring-jdbc-over-plain-java-jdbc">Why Spring JDBC over plain Java JDBC?</a></li>
+      <li><a href="#jdbctemplate" id="markdown-toc-jdbctemplate">JdbcTemplate</a></li>
+      <li><a href="#querying-results" id="markdown-toc-querying-results">Querying results</a></li>
     </ul>
   </li>
 </ul>
@@ -141,7 +141,7 @@ messageStyle: "none",
       <li>Spring automatically discovers beans to be created in the application context.</li>
       <li>
         <ul>
-          <li>Enables Spring to scan classpath for classes that are annotated with <code>@Component</code> (or one of the specialized annotations like <code>@Service</code>, <code>@Repository</code>, <code>@Controller</code>, or <code>@Configuration</code>). </li>
+          <li>Enables Spring to scan classpath for classes that are annotated with <code>@Component</code> (or one of the specialized annotations like <code>@Service</code>, <code>@Repository</code>, <code>@Controller</code>, or <code>@Configuration</code>).</li>
         </ul>
       </li>
       <li>Application Context needs to be enabled for component scanning via <code>@ComponentScan</code> annotation.</li>
@@ -235,16 +235,16 @@ messageStyle: "none",
       <li>If there are no matching beans, Spring will throw an exception as the application context is being created. To avoid that exception, you can set the <code>required</code> attribute on <code>@Autowired</code> to false</li>
     </ul>
   </li>
-  <li>Dependency injection types: Setter-based, Constructor-based and Annotation-based. </li>
+  <li>Dependency injection types: Setter-based, Constructor-based and Annotation-based.</li>
   <li><code>@Inject</code> and <code>@Resource</code>. Last 2 are Java JSR-330 based.</li>
   <li><code>ApplicationContext</code> - different ways to configure. via XML or Java. Multiple application contexts can be defined in a hierarchy.</li>
-  <li><code>@Configuration</code> - marks the class as config class. 
+  <li><code>@Configuration</code> - marks the class as config class.
     <ul>
-      <li>Classes can be abstract but not final. </li>
+      <li>Classes can be abstract but not final.</li>
       <li>Class with no <code>@Bean</code> annotation is now allowed.</li>
     </ul>
   </li>
-  <li><code>@Bean</code> - </li>
+  <li><code>@Bean</code> -</li>
   <li>Resource Loading
     <ul>
       <li>Prefixes are classpath:, file: and http:</li>
@@ -256,7 +256,7 @@ messageStyle: "none",
 <h2 id="scope">Scope</h2>
 <ul>
   <li>By default, all beans in Spring application context is singleton.</li>
-  <li>singleton - </li>
+  <li>singleton -</li>
   <li>prototype - new instance of bean is created every time</li>
   <li>thread - new bean created and bound to current thread. Thread dies - bean destroyed.</li>
   <li>request - new bean created and bound to the current javax.servlet.ServletRequest. Request dies - bean destroyed.</li>
@@ -307,7 +307,7 @@ messageStyle: "none",
 <ul>
   <li><code>JdbcTemplate</code> — The most basic of Spring’s JDBC templates, this class provides simple access to a database through JDBC and indexed-parameter queries.</li>
   <li><code>NamedParameterJdbcTemplate</code> — This JDBC template class enables you to perform queries where values are bound to named parameters in SQL, rather than indexed parameters.</li>
-  <li>Instances of the JdbcTemplate class are <em>thread-safe</em> once configured. This is important because it means that you can configure a single instance of a JdbcTemplate and then safely inject this shared reference into multiple DAOs (or repositories). </li>
+  <li>Instances of the JdbcTemplate class are <em>thread-safe</em> once configured. This is important because it means that you can configure a single instance of a JdbcTemplate and then safely inject this shared reference into multiple DAOs (or repositories).</li>
   <li>The JdbcTemplate is stateful, in that it maintains a reference to a DataSource, but this state is not conversational state.</li>
 </ul>
 

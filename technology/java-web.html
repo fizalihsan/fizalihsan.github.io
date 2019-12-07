@@ -108,43 +108,43 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#servlets">Servlets</a>    <ul>
-      <li><a href="#servlet-life-cycle">Servlet Life Cycle</a></li>
-      <li><a href="#servlet-keyvalue-stores">Servlet Key/Value Stores</a>        <ul>
-          <li><a href="#servletconfig">ServletConfig</a></li>
-          <li><a href="#servletcontext">ServletContext</a></li>
-          <li><a href="#httprequest">HttpRequest</a></li>
-          <li><a href="#httpsession">HttpSession</a></li>
+  <li><a href="#servlets" id="markdown-toc-servlets">Servlets</a>    <ul>
+      <li><a href="#servlet-life-cycle" id="markdown-toc-servlet-life-cycle">Servlet Life Cycle</a></li>
+      <li><a href="#servlet-keyvalue-stores" id="markdown-toc-servlet-keyvalue-stores">Servlet Key/Value Stores</a>        <ul>
+          <li><a href="#servletconfig" id="markdown-toc-servletconfig">ServletConfig</a></li>
+          <li><a href="#servletcontext" id="markdown-toc-servletcontext">ServletContext</a></li>
+          <li><a href="#httprequest" id="markdown-toc-httprequest">HttpRequest</a></li>
+          <li><a href="#httpsession" id="markdown-toc-httpsession">HttpSession</a></li>
         </ul>
       </li>
-      <li><a href="#listeners">Listeners</a></li>
-      <li><a href="#redirect-vs-forwarding--request-dispatch">Redirect Vs Forwarding / Request Dispatch</a>        <ul>
-          <li><a href="#request-redirect">Request Redirect</a></li>
-          <li><a href="#request-forwarding--request-dispatch">Request Forwarding / Request Dispatch</a></li>
+      <li><a href="#listeners" id="markdown-toc-listeners">Listeners</a></li>
+      <li><a href="#redirect-vs-forwarding--request-dispatch" id="markdown-toc-redirect-vs-forwarding--request-dispatch">Redirect Vs Forwarding / Request Dispatch</a>        <ul>
+          <li><a href="#request-redirect" id="markdown-toc-request-redirect">Request Redirect</a></li>
+          <li><a href="#request-forwarding--request-dispatch" id="markdown-toc-request-forwarding--request-dispatch">Request Forwarding / Request Dispatch</a></li>
         </ul>
       </li>
-      <li><a href="#deployment-descriptor-webxml">Deployment Descriptor (web.xml)</a></li>
-      <li><a href="#servlet-chaining--inter-servlet-communication">Servlet chaining / inter-servlet communication</a></li>
+      <li><a href="#deployment-descriptor-webxml" id="markdown-toc-deployment-descriptor-webxml">Deployment Descriptor (web.xml)</a></li>
+      <li><a href="#servlet-chaining--inter-servlet-communication" id="markdown-toc-servlet-chaining--inter-servlet-communication">Servlet chaining / inter-servlet communication</a></li>
     </ul>
   </li>
-  <li><a href="#jsp">JSP</a>    <ul>
-      <li><a href="#el---expression-language">EL - Expression Language</a></li>
-      <li><a href="#lifecycle-methods-of-jsp">Lifecycle methods of JSP</a></li>
-      <li><a href="#custom-tags">Custom Tags</a>        <ul>
-          <li><a href="#include-directive">Include directive</a></li>
-          <li><a href="#include-action">Include Action</a></li>
+  <li><a href="#jsp" id="markdown-toc-jsp">JSP</a>    <ul>
+      <li><a href="#el---expression-language" id="markdown-toc-el---expression-language">EL - Expression Language</a></li>
+      <li><a href="#lifecycle-methods-of-jsp" id="markdown-toc-lifecycle-methods-of-jsp">Lifecycle methods of JSP</a></li>
+      <li><a href="#custom-tags" id="markdown-toc-custom-tags">Custom Tags</a>        <ul>
+          <li><a href="#include-directive" id="markdown-toc-include-directive">Include directive</a></li>
+          <li><a href="#include-action" id="markdown-toc-include-action">Include Action</a></li>
         </ul>
       </li>
-      <li><a href="#custom-tag-libs">Custom tag libs</a></li>
-      <li><a href="#filters">Filters</a></li>
-      <li><a href="#wrappers">Wrappers</a></li>
+      <li><a href="#custom-tag-libs" id="markdown-toc-custom-tag-libs">Custom tag libs</a></li>
+      <li><a href="#filters" id="markdown-toc-filters">Filters</a></li>
+      <li><a href="#wrappers" id="markdown-toc-wrappers">Wrappers</a></li>
     </ul>
   </li>
-  <li><a href="#spring-mvc">Spring MVC</a>    <ul>
-      <li><a href="#mvc-model-1--2">MVC Model 1 &amp; 2</a></li>
+  <li><a href="#spring-mvc" id="markdown-toc-spring-mvc">Spring MVC</a>    <ul>
+      <li><a href="#mvc-model-1--2" id="markdown-toc-mvc-model-1--2">MVC Model 1 &amp; 2</a></li>
     </ul>
   </li>
-  <li><a href="#bibliography">Bibliography</a></li>
+  <li><a href="#bibliography" id="markdown-toc-bibliography">Bibliography</a></li>
 </ul>
 
 <h1 id="servlets">Servlets</h1>
@@ -326,7 +326,7 @@ messageStyle: "none",
 
 <h2 id="servlet-chaining--inter-servlet-communication">Servlet chaining / inter-servlet communication</h2>
 
-<p>Calling another servlet from inside a servlet. Achieved by using RequestDispatcher.forward(req, res) and RequestDispatcher.include(req, res). </p>
+<p>Calling another servlet from inside a servlet. Achieved by using RequestDispatcher.forward(req, res) and RequestDispatcher.include(req, res).</p>
 
 <h1 id="jsp">JSP</h1>
 
@@ -341,7 +341,7 @@ messageStyle: "none",
       <li><code>&lt;!-- HTML comment: visible to client --&gt;</code></li>
     </ul>
   </li>
-  <li>Declarations - <code>&lt;%! %&gt;</code> - to declare methods and instance variables </li>
+  <li>Declarations - <code>&lt;%! %&gt;</code> - to declare methods and instance variables</li>
   <li>Directives
     <ul>
       <li>Directives give special instructions to the container on page translation time.</li>
@@ -390,9 +390,9 @@ messageStyle: "none",
 
 <ul>
   <li>JSP page (extends) <code>javax.servlet.jsp.HttpJspPage</code> extends <code>javax.servlet.jsp.JspPage</code> extends <code>javax.servlet.Servlet</code></li>
-  <li>The generated servlet class thus implements all the methods of these three interfaces. </li>
-  <li>The <code>JspPage</code> interface declares only two methods - <code>jspInit()</code> and <code>jspDestroy()</code> that must be implemented by all JSP pages regardless of the client-server protocol. However the JSP specification has provided the <code>HttpJspPage</code> interface specifically for the JSP pages serving HTTP requests. This interface declares one method <code>_jspService()</code>. </li>
-  <li>The <code>jspInit()</code> - The container calls the jspInit() to initialize the servlet instance.It is called before any other method, and is called only once for a servlet instance. </li>
+  <li>The generated servlet class thus implements all the methods of these three interfaces.</li>
+  <li>The <code>JspPage</code> interface declares only two methods - <code>jspInit()</code> and <code>jspDestroy()</code> that must be implemented by all JSP pages regardless of the client-server protocol. However the JSP specification has provided the <code>HttpJspPage</code> interface specifically for the JSP pages serving HTTP requests. This interface declares one method <code>_jspService()</code>.</li>
+  <li>The <code>jspInit()</code> - The container calls the jspInit() to initialize the servlet instance.It is called before any other method, and is called only once for a servlet instance.</li>
   <li>The <code>_jspservice()</code> - The container calls the _jspservice() for each request, passing it the request and the response objects. Should not be overridden.</li>
   <li>The <code>jspDestroy()</code> - The container calls this when it decides take the instance out of service. It is the last method called n the servlet instance.</li>
 </ul>
@@ -407,9 +407,9 @@ messageStyle: "none",
 
 <ul>
   <li>At JSP page translation time, the content of the file given in the include directive is ‘pasted’ as it is, in the place where the JSP include directive is used. Then the source JSP page is converted into a java servlet class. The included file can be a static resource or a JSP page. Generally JSP include directive is used to include header banners and footers. The JSP compilation procedure is that, the source JSP page gets compiled only if that page has changed. If there is a change in the included JSP file, the source JSP file will not be compiled and therefore the modification will not get reflected in the output.</li>
-  <li>Only one servlet is executed at run time. </li>
-  <li>Scriptlet variables declared in the parent page can be accessed in the included page (remember, they are the same page). </li>
-  <li>The included page does not need to able to be compiled as a standalone JSP. It can be a code fragment or plain text. The included page will never be compiled as a standalone. The included page can also have any extension, though .jspf has become a conventionally used extension. </li>
+  <li>Only one servlet is executed at run time.</li>
+  <li>Scriptlet variables declared in the parent page can be accessed in the included page (remember, they are the same page).</li>
+  <li>The included page does not need to able to be compiled as a standalone JSP. It can be a code fragment or plain text. The included page will never be compiled as a standalone. The included page can also have any extension, though .jspf has become a conventionally used extension.</li>
   <li>One drawback on older containers is that changes to the include pages may not take effect until the parent page is updated. Recent versions of Tomcat will check the include pages for updates and force a recompile of the parent if they’re updated.</li>
 </ul>
 
@@ -417,14 +417,14 @@ messageStyle: "none",
 
 <ul>
   <li>The <code>jsp:include</code> action element is like a function call. At runtime, the included file will be ‘executed’ and the result content will be included with the soure JSP page. When the included JSP page is called, both the request and response objects are passed as parameters. If there is a need to pass additional parameters, then jsp:param element can be used. If the resource is static, its content is inserted into the calling JSP file, since there is no processing needed.</li>
-  <li>Each included page is executed as a separate servlet at run time. </li>
-  <li>Pages can conditionally be included at run time. This is often useful for templating frameworks that build pages out of includes. The parent page can determine which page, if any, to include according to some run-time condition. </li>
+  <li>Each included page is executed as a separate servlet at run time.</li>
+  <li>Pages can conditionally be included at run time. This is often useful for templating frameworks that build pages out of includes. The parent page can determine which page, if any, to include according to some run-time condition.</li>
   <li>The values of scriptlet variables need to be explicitly passed to the include page.</li>
-  <li>The included page must be able to be run on its own. </li>
+  <li>The included page must be able to be run on its own.</li>
   <li><code>Request.getSession()</code>
     <ul>
-      <li><code>request.getSession(true)</code> - only creates a session if one does not exist. </li>
-      <li><code>request.getSession(false)</code> retrieves a session only if it already exists. </li>
+      <li><code>request.getSession(true)</code> - only creates a session if one does not exist.</li>
+      <li><code>request.getSession(false)</code> retrieves a session only if it already exists.</li>
     </ul>
   </li>
 </ul>
@@ -443,7 +443,7 @@ messageStyle: "none",
 
 <ul>
   <li>Filter - can intercept and process requests before and after servlet execution. e.g., of <strong>Intercepting Filter pattern</strong>. Filters can be chained.</li>
-  <li>Request Filters can 
+  <li>Request Filters can
     <ul>
       <li>perform security checks</li>
       <li>reformat request headers or bodies</li>
@@ -525,7 +525,7 @@ messageStyle: "none",
 <ul>
   <li>MVC Model 1 works well for GUI apps, whereas MVC Model 2 works well for web apps.</li>
   <li>
-    <p>Front Controller is the extra thing in Model 2. </p>
+    <p>Front Controller is the extra thing in Model 2.</p>
 
     <p>–(incoming request)–&gt; Front Controller
  Front Controller –(delegates request)–&gt; Controller
@@ -533,7 +533,7 @@ messageStyle: "none",
  Front Controller –(model)–&gt; View Template
  View Template –(renders response, returns control)–&gt; Front Controller –(returns response)–&gt;</p>
   </li>
-  <li>Front Controller is implemented as 
+  <li>Front Controller is implemented as
     <ul>
       <li><code>javax.servlet.Servlet</code></li>
       <li><code>ActionServlet</code> in Struts</li>

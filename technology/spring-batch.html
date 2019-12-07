@@ -108,36 +108,36 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#chunk-processing">Chunk Processing</a></li>
-  <li><a href="#configuration">Configuration</a>    <ul>
-      <li><a href="#job-attributes">Job Attributes</a></li>
+  <li><a href="#chunk-processing" id="markdown-toc-chunk-processing">Chunk Processing</a></li>
+  <li><a href="#configuration" id="markdown-toc-configuration">Configuration</a>    <ul>
+      <li><a href="#job-attributes" id="markdown-toc-job-attributes">Job Attributes</a></li>
     </ul>
   </li>
-  <li><a href="#components--interfaces">Components &amp; Interfaces</a>    <ul>
-      <li><a href="#job">Job</a></li>
-      <li><a href="#tasklet">Tasklet</a></li>
-      <li><a href="#itemreader">ItemReader</a>        <ul>
-          <li><a href="#flatfileitemreader">FlatFileItemReader</a></li>
+  <li><a href="#components--interfaces" id="markdown-toc-components--interfaces">Components &amp; Interfaces</a>    <ul>
+      <li><a href="#job" id="markdown-toc-job">Job</a></li>
+      <li><a href="#tasklet" id="markdown-toc-tasklet">Tasklet</a></li>
+      <li><a href="#itemreader" id="markdown-toc-itemreader">ItemReader</a>        <ul>
+          <li><a href="#flatfileitemreader" id="markdown-toc-flatfileitemreader">FlatFileItemReader</a></li>
         </ul>
       </li>
-      <li><a href="#skipping">Skipping</a></li>
-      <li><a href="#linemapper">LineMapper</a>        <ul>
-          <li><a href="#defaultlinemapper">DefaultLineMapper</a></li>
+      <li><a href="#skipping" id="markdown-toc-skipping">Skipping</a></li>
+      <li><a href="#linemapper" id="markdown-toc-linemapper">LineMapper</a>        <ul>
+          <li><a href="#defaultlinemapper" id="markdown-toc-defaultlinemapper">DefaultLineMapper</a></li>
         </ul>
       </li>
-      <li><a href="#itemprocessor">ItemProcessor</a></li>
-      <li><a href="#itemwriter">ItemWriter</a></li>
-      <li><a href="#filtering">Filtering</a></li>
+      <li><a href="#itemprocessor" id="markdown-toc-itemprocessor">ItemProcessor</a></li>
+      <li><a href="#itemwriter" id="markdown-toc-itemwriter">ItemWriter</a></li>
+      <li><a href="#filtering" id="markdown-toc-filtering">Filtering</a></li>
     </ul>
   </li>
-  <li><a href="#job-flow">Job Flow</a>    <ul>
-      <li><a href="#job-parameters">Job Parameters</a></li>
+  <li><a href="#job-flow" id="markdown-toc-job-flow">Job Flow</a>    <ul>
+      <li><a href="#job-parameters" id="markdown-toc-job-parameters">Job Parameters</a></li>
     </ul>
   </li>
-  <li><a href="#error-handling">Error Handling</a></li>
-  <li><a href="#transaction-management">Transaction Management</a></li>
-  <li><a href="#testing">Testing</a></li>
-  <li><a href="#references">References</a></li>
+  <li><a href="#error-handling" id="markdown-toc-error-handling">Error Handling</a></li>
+  <li><a href="#transaction-management" id="markdown-toc-transaction-management">Transaction Management</a></li>
+  <li><a href="#testing" id="markdown-toc-testing">Testing</a></li>
+  <li><a href="#references" id="markdown-toc-references">References</a></li>
 </ul>
 
 <p><a href="http://www.ontheserverside.com/blog/2014/07/23/horizontal-and-vertical-scaling-strategies-for-batch-applications">Horizontal and Vertical Scaling Strategies for Batch applications</a></p>
@@ -150,7 +150,7 @@ messageStyle: "none",
   <li>Spring Batch includes a batch-oriented algorithm to handle the execution flow called
 <em>chunk processing</em>.</li>
   <li>Spring Batch processes items in chunks. A job reads and writes items in small chunks. Chunk processing allows streaming data instead of loading all the data in memory. By default, chunk processing is single threaded and usually performs well, but has an option to distribute processing on multiple threads or physical nodes as well.</li>
-  <li>Spring Batch collects items one at a time from the <code>ItemReader</code> into a configurable-sized chunk. </li>
+  <li>Spring Batch collects items one at a time from the <code>ItemReader</code> into a configurable-sized chunk.</li>
   <li>Spring Batch then sends the chunk to the <code>ItemWriter</code> and goes back to using the <code>ItemReader</code> to create another chunk, and so on, until the input is exhausted.</li>
   <li>Spring Batch provides an optional processing where a job can process (transform) items before sending them to <code>ItemWriter</code>. It is called <code>ItemProcessor</code>.</li>
   <li>
@@ -266,13 +266,13 @@ messageStyle: "none",
 
 <ul>
   <li><code>id</code> - Identifies the job.</li>
-  <li><code>restartable</code> 
+  <li><code>restartable</code>
     <ul>
-      <li>Specifies whether Spring Batch can restart the job. The default is <code>true</code>. </li>
+      <li>Specifies whether Spring Batch can restart the job. The default is <code>true</code>.</li>
       <li>If <code>false</code>, Spring Batch can’t start the job more than once; if you try, Spring Batch throws the exception <code>JobRestartException</code>.</li>
     </ul>
   </li>
-  <li><code>incrementer</code> 
+  <li><code>incrementer</code>
     <ul>
       <li>Refers to an entity used to set job parameter values. This entity is required when trying to launch a batch job through the startNextInstance method of the <code>JobOperator</code> interface.</li>
       <li>The <code>incrementer</code> attribute provides a convenient way to create new job parameter values. Note that the JobLauncher doesn’t need this feature because you must provide all parameter values explicitly. When the startNextInstance method of the <code>JobOperator</code> class launches a job, though, the method needs to determine new parameter values and use an instance of the JobParametersIncrementer interface:</li>
@@ -381,10 +381,10 @@ messageStyle: "none",
 
 <ul>
   <li>Spring Batch provides a handy <code>LineMapper</code> implementation called <code>DefaultLineMapper</code>, which delegates the mapping to other strategy interfaces.</li>
-  <li>It needs 
+  <li>It needs
     <ul>
       <li>a <code>LineTokenizer</code> to split a line into fields</li>
-      <li>a <code>FieldSetMapper</code> to transform the split line into a domain object. </li>
+      <li>a <code>FieldSetMapper</code> to transform the split line into a domain object.</li>
     </ul>
   </li>
   <li>The <code>FieldSet</code> parameter comes from the <code>LineTokenizer</code>. Think of it as an equivalentto the JDBC ResultSet</li>

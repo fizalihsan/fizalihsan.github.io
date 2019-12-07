@@ -108,42 +108,42 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#overview">Overview</a></li>
-  <li><a href="#fundamentals">Fundamentals</a>    <ul>
-      <li><a href="#control-structure">Control Structure</a>        <ul>
-          <li><a href="#boolean-evaluation">Boolean Evaluation</a></li>
-          <li><a href="#operators">Operators</a></li>
-          <li><a href="#looping-methods">Looping methods</a></li>
-          <li><a href="#static-imports">Static imports</a></li>
+  <li><a href="#overview" id="markdown-toc-overview">Overview</a></li>
+  <li><a href="#fundamentals" id="markdown-toc-fundamentals">Fundamentals</a>    <ul>
+      <li><a href="#control-structure" id="markdown-toc-control-structure">Control Structure</a>        <ul>
+          <li><a href="#boolean-evaluation" id="markdown-toc-boolean-evaluation">Boolean Evaluation</a></li>
+          <li><a href="#operators" id="markdown-toc-operators">Operators</a></li>
+          <li><a href="#looping-methods" id="markdown-toc-looping-methods">Looping methods</a></li>
+          <li><a href="#static-imports" id="markdown-toc-static-imports">Static imports</a></li>
         </ul>
       </li>
-      <li><a href="#exceptions">Exceptions</a></li>
-      <li><a href="#oops">OOPS</a>        <ul>
-          <li><a href="#optional-parameters">Optional Parameters</a></li>
-          <li><a href="#named-arguments-in-method-calls">Named arguments in method calls</a></li>
-          <li><a href="#multiple-assignments">Multiple Assignments</a></li>
-          <li><a href="#implementing-interface">Implementing Interface</a></li>
-          <li><a href="#operator-overloading">Operator Overloading</a></li>
-          <li><a href="#duck-typing">Duck typing</a></li>
-          <li><a href="#coercion">Coercion</a></li>
-          <li><a href="#strings">Strings</a></li>
+      <li><a href="#exceptions" id="markdown-toc-exceptions">Exceptions</a></li>
+      <li><a href="#oops" id="markdown-toc-oops">OOPS</a>        <ul>
+          <li><a href="#optional-parameters" id="markdown-toc-optional-parameters">Optional Parameters</a></li>
+          <li><a href="#named-arguments-in-method-calls" id="markdown-toc-named-arguments-in-method-calls">Named arguments in method calls</a></li>
+          <li><a href="#multiple-assignments" id="markdown-toc-multiple-assignments">Multiple Assignments</a></li>
+          <li><a href="#implementing-interface" id="markdown-toc-implementing-interface">Implementing Interface</a></li>
+          <li><a href="#operator-overloading" id="markdown-toc-operator-overloading">Operator Overloading</a></li>
+          <li><a href="#duck-typing" id="markdown-toc-duck-typing">Duck typing</a></li>
+          <li><a href="#coercion" id="markdown-toc-coercion">Coercion</a></li>
+          <li><a href="#strings" id="markdown-toc-strings">Strings</a></li>
         </ul>
       </li>
-      <li><a href="#pogos">POGOs</a></li>
-      <li><a href="#arrays-and-collection">Arrays and Collection</a>        <ul>
-          <li><a href="#arrays">Arrays</a></li>
-          <li><a href="#ranges">Ranges</a></li>
-          <li><a href="#list">List</a></li>
+      <li><a href="#pogos" id="markdown-toc-pogos">POGOs</a></li>
+      <li><a href="#arrays-and-collection" id="markdown-toc-arrays-and-collection">Arrays and Collection</a>        <ul>
+          <li><a href="#arrays" id="markdown-toc-arrays">Arrays</a></li>
+          <li><a href="#ranges" id="markdown-toc-ranges">Ranges</a></li>
+          <li><a href="#list" id="markdown-toc-list">List</a></li>
         </ul>
       </li>
-      <li><a href="#annotations--ast-abstract-syntax-tree-transformations">Annotations / AST (Abstract Syntax Tree) Transformations</a></li>
-      <li><a href="#closures">Closures</a></li>
+      <li><a href="#annotations--ast-abstract-syntax-tree-transformations" id="markdown-toc-annotations--ast-abstract-syntax-tree-transformations">Annotations / AST (Abstract Syntax Tree) Transformations</a></li>
+      <li><a href="#closures" id="markdown-toc-closures">Closures</a></li>
     </ul>
   </li>
-  <li><a href="#groovy-metaprogramming">Groovy Metaprogramming</a></li>
-  <li><a href="#concurrency">Concurrency</a></li>
-  <li><a href="#dsl">DSL</a>    <ul>
-      <li><a href="#questions">Questions</a></li>
+  <li><a href="#groovy-metaprogramming" id="markdown-toc-groovy-metaprogramming">Groovy Metaprogramming</a></li>
+  <li><a href="#concurrency" id="markdown-toc-concurrency">Concurrency</a></li>
+  <li><a href="#dsl" id="markdown-toc-dsl">DSL</a>    <ul>
+      <li><a href="#questions" id="markdown-toc-questions">Questions</a></li>
     </ul>
   </li>
 </ul>
@@ -173,7 +173,7 @@ messageStyle: "none",
 <h3 id="boolean-evaluation">Boolean Evaluation</h3>
 
 <ul>
-  <li>Groovy’s <code>==</code> Is Equal to Java’s <code>equals()</code> only if the class does not implement the <code>Comparable</code> interface. If it does, then it maps to the class’s <code>compareTo()</code> method. </li>
+  <li>Groovy’s <code>==</code> Is Equal to Java’s <code>equals()</code> only if the class does not implement the <code>Comparable</code> interface. If it does, then it maps to the class’s <code>compareTo()</code> method.</li>
   <li>Reference comparison is done via <code>is()</code> method. Custom truth conventions can be added by implementing <code>asBoolean()</code> method.</li>
   <li><strong>Groovy Truth</strong> - Following evaluate to true : non-null references, non-empty strings or collections, non-zero numbers, and the boolean literal true.</li>
 </ul>
@@ -190,7 +190,7 @@ messageStyle: "none",
 
 <h3 id="operators">Operators</h3>
 
-<p><strong>Elvis operator / Safe-navigation operator (?.)</strong> </p>
+<p><strong>Elvis operator / Safe-navigation operator (?.)</strong></p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Elvis operator</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -238,7 +238,7 @@ messageStyle: "none",
   <li>Groovy is purely object-oriented
     <ul>
       <li>everything is an object. E.g <code>2*3</code>, though they look like primitives, they are actually java.lang.Integer objects</li>
-      <li>every operator is a method call. E.g. <code>a+b</code> //logic for the + operator is implemented in method plus() on the object </li>
+      <li>every operator is a method call. E.g. <code>a+b</code> //logic for the + operator is implemented in method plus() on the object</li>
     </ul>
   </li>
   <li>Scope
@@ -319,7 +319,7 @@ messageStyle: "none",
 <h3 id="multiple-assignments">Multiple Assignments</h3>
 
 <ul>
-  <li>Method returning an array is assigned to multiple variables </li>
+  <li>Method returning an array is assigned to multiple variables</li>
 </ul>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
@@ -464,7 +464,7 @@ messageStyle: "none",
 
 <ul>
   <li>Implementing operators is straightforward when both operands are of the same type. Things get more complex with a mixture of types, say 1 + 1.0. One of the two arguments needs to be promoted to the more general type, and this is called <strong>coercion</strong>.</li>
-  <li>Closure Coersion - e.g. <code>Collections.sort(list, { ... } as Comparator)</code> 
+  <li>Closure Coersion - e.g. <code>Collections.sort(list, { ... } as Comparator)</code>
     <ul>
       <li>closure here is coerced to implement interface Comparator</li>
       <li>if the interface has more than one methods, then pass different closure implementations as map</li>
@@ -538,7 +538,7 @@ messageStyle: "none",
 <h3 id="list">List</h3>
 
 <ul>
-  <li>The sequence can be empty to declare an empty list. </li>
+  <li>The sequence can be empty to declare an empty list.</li>
   <li>Lists are by default of type <code>java.util.ArrayList</code> and can also be declared explicitly by calling the respective constructor. The resulting list can still be used with the subscript operator. In fact, this works with any type of list, as we show here with type <code>java.util.LinkedList</code>.</li>
   <li>Lists can be created and initialized at the same time by calling <code>toList</code> on ranges.</li>
 </ul>

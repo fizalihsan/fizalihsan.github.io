@@ -108,69 +108,69 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#indexes">Indexes</a>    <ul>
-      <li><a href="#how-indexes-work">How Indexes work?</a></li>
-      <li><a href="#limitations-of-indexes">Limitations of Indexes</a></li>
-      <li><a href="#index-usage-criteria">Index usage criteria</a></li>
-      <li><a href="#index-types">Index Types</a>        <ul>
-          <li><a href="#clustered">Clustered</a></li>
-          <li><a href="#non-clustered">Non-clustered</a></li>
-          <li><a href="#b-tree">B+ Tree</a></li>
-          <li><a href="#hashtable-index">Hashtable index</a></li>
-          <li><a href="#bitmapped-index">Bitmapped index</a></li>
-          <li><a href="#covering-index">Covering Index</a></li>
-          <li><a href="#composite-index">Composite Index</a></li>
-          <li><a href="#unique-index">Unique Index</a></li>
-          <li><a href="#others">Others</a></li>
+  <li><a href="#indexes" id="markdown-toc-indexes">Indexes</a>    <ul>
+      <li><a href="#how-indexes-work" id="markdown-toc-how-indexes-work">How Indexes work?</a></li>
+      <li><a href="#limitations-of-indexes" id="markdown-toc-limitations-of-indexes">Limitations of Indexes</a></li>
+      <li><a href="#index-usage-criteria" id="markdown-toc-index-usage-criteria">Index usage criteria</a></li>
+      <li><a href="#index-types" id="markdown-toc-index-types">Index Types</a>        <ul>
+          <li><a href="#clustered" id="markdown-toc-clustered">Clustered</a></li>
+          <li><a href="#non-clustered" id="markdown-toc-non-clustered">Non-clustered</a></li>
+          <li><a href="#b-tree" id="markdown-toc-b-tree">B+ Tree</a></li>
+          <li><a href="#hashtable-index" id="markdown-toc-hashtable-index">Hashtable index</a></li>
+          <li><a href="#bitmapped-index" id="markdown-toc-bitmapped-index">Bitmapped index</a></li>
+          <li><a href="#covering-index" id="markdown-toc-covering-index">Covering Index</a></li>
+          <li><a href="#composite-index" id="markdown-toc-composite-index">Composite Index</a></li>
+          <li><a href="#unique-index" id="markdown-toc-unique-index">Unique Index</a></li>
+          <li><a href="#others" id="markdown-toc-others">Others</a></li>
         </ul>
       </li>
-      <li><a href="#when-to-use-clustered-index">When to use Clustered index?</a></li>
-      <li><a href="#index-covering">Index Covering</a></li>
-      <li><a href="#indexing-rules-of-thumb">Indexing Rules of Thumb</a></li>
-      <li><a href="#index-selection-decisions">Index Selection Decisions</a></li>
+      <li><a href="#when-to-use-clustered-index" id="markdown-toc-when-to-use-clustered-index">When to use Clustered index?</a></li>
+      <li><a href="#index-covering" id="markdown-toc-index-covering">Index Covering</a></li>
+      <li><a href="#indexing-rules-of-thumb" id="markdown-toc-indexing-rules-of-thumb">Indexing Rules of Thumb</a></li>
+      <li><a href="#index-selection-decisions" id="markdown-toc-index-selection-decisions">Index Selection Decisions</a></li>
     </ul>
   </li>
-  <li><a href="#concurrency">Concurrency</a>    <ul>
-      <li><a href="#isolation-levels">Isolation levels</a></li>
-      <li><a href="#locks">Locks</a>        <ul>
-          <li><a href="#types">Types</a></li>
-          <li><a href="#granularity">Granularity</a></li>
+  <li><a href="#concurrency" id="markdown-toc-concurrency">Concurrency</a>    <ul>
+      <li><a href="#isolation-levels" id="markdown-toc-isolation-levels">Isolation levels</a></li>
+      <li><a href="#locks" id="markdown-toc-locks">Locks</a>        <ul>
+          <li><a href="#types" id="markdown-toc-types">Types</a></li>
+          <li><a href="#granularity" id="markdown-toc-granularity">Granularity</a></li>
         </ul>
       </li>
-      <li><a href="#lock-escalation">Lock Escalation</a></li>
-      <li><a href="#concurrency-issues">Concurrency Issues</a></li>
+      <li><a href="#lock-escalation" id="markdown-toc-lock-escalation">Lock Escalation</a></li>
+      <li><a href="#concurrency-issues" id="markdown-toc-concurrency-issues">Concurrency Issues</a></li>
     </ul>
   </li>
-  <li><a href="#performance">Performance</a>    <ul>
-      <li><a href="#buffer-pools">Buffer pools</a></li>
-      <li><a href="#prefetch">Prefetch</a></li>
-      <li><a href="#query-optimization">Query Optimization</a></li>
-      <li><a href="#query-execution-plan">Query Execution Plan</a></li>
-      <li><a href="#data-dictionary">Data Dictionary</a></li>
+  <li><a href="#performance" id="markdown-toc-performance">Performance</a>    <ul>
+      <li><a href="#buffer-pools" id="markdown-toc-buffer-pools">Buffer pools</a></li>
+      <li><a href="#prefetch" id="markdown-toc-prefetch">Prefetch</a></li>
+      <li><a href="#query-optimization" id="markdown-toc-query-optimization">Query Optimization</a></li>
+      <li><a href="#query-execution-plan" id="markdown-toc-query-execution-plan">Query Execution Plan</a></li>
+      <li><a href="#data-dictionary" id="markdown-toc-data-dictionary">Data Dictionary</a></li>
     </ul>
   </li>
-  <li><a href="#db-federation">DB Federation</a></li>
-  <li><a href="#partitioning">Partitioning</a></li>
-  <li><a href="#replication">Replication</a></li>
-  <li><a href="#references">References</a></li>
+  <li><a href="#db-federation" id="markdown-toc-db-federation">DB Federation</a></li>
+  <li><a href="#partitioning" id="markdown-toc-partitioning">Partitioning</a></li>
+  <li><a href="#replication" id="markdown-toc-replication">Replication</a></li>
+  <li><a href="#references" id="markdown-toc-references">References</a></li>
 </ul>
 
 <h1 id="indexes">Indexes</h1>
 
 <ul>
-  <li>http://use-the-index-luke.com/sql/table-of-contents </li>
+  <li>http://use-the-index-luke.com/sql/table-of-contents</li>
   <li>http://www.sqlskills.com/blogs/kimberly/guids-as-primary-keys-andor-the-clustering-key/</li>
   <li>
-    <p>http://www.micmin.com/Session320/Session%20320%20-%20Role%20of%20Indexes.htm </p>
+    <p>http://www.micmin.com/Session320/Session%20320%20-%20Role%20of%20Indexes.htm</p>
   </li>
-  <li>An index is an ordered set of pointers associated with a table, and is used for performance purposes. </li>
+  <li>An index is an ordered set of pointers associated with a table, and is used for performance purposes.</li>
 </ul>
 
 <h2 id="how-indexes-work">How Indexes work?</h2>
 
 <ul>
-  <li>Each index entry contains a search-key value and a pointer to the row containing that value. </li>
-  <li>If you specify the <code>ALLOW REVERSE SCANS</code> parameter while creating the index, the values can be searched in both ascending and descending order. It is therefore possible to bracket the search, given the right predicate. </li>
+  <li>Each index entry contains a search-key value and a pointer to the row containing that value.</li>
+  <li>If you specify the <code>ALLOW REVERSE SCANS</code> parameter while creating the index, the values can be searched in both ascending and descending order. It is therefore possible to bracket the search, given the right predicate.</li>
   <li>An index can also be used to obtain rows in an ordered sequence, eliminating the need for the database manager to sort the rows after they are read from the table.</li>
 </ul>
 
@@ -181,19 +181,19 @@ messageStyle: "none",
 <ul>
   <li><strong>Usability</strong>
     <ul>
-      <li>Indexes are usable (default) or unusable. </li>
-      <li>An unusable index is not maintained by DML operations and is ignored by the optimizer.  </li>
-      <li>An unusable index can improve the performance of bulk loads.  </li>
-      <li>Instead of dropping an index and later re-creating it, you can make the index unusable and then rebuild it.  </li>
-      <li>Unusable indexes and index partitions do not consume space.  </li>
+      <li>Indexes are usable (default) or unusable.</li>
+      <li>An unusable index is not maintained by DML operations and is ignored by the optimizer.</li>
+      <li>An unusable index can improve the performance of bulk loads.</li>
+      <li>Instead of dropping an index and later re-creating it, you can make the index unusable and then rebuild it.</li>
+      <li>Unusable indexes and index partitions do not consume space.</li>
       <li>When you make a usable index unusable, the database drops its index segment.</li>
     </ul>
   </li>
   <li><strong>Visibility</strong>
     <ul>
-      <li>Indexes are visible (default) or invisible.  </li>
-      <li>An invisible index is maintained by DML operations and is not used by default by the optimizer.  </li>
-      <li>Making an index invisible is an alternative to making it unusable or dropping it.  </li>
+      <li>Indexes are visible (default) or invisible.</li>
+      <li>An invisible index is maintained by DML operations and is not used by default by the optimizer.</li>
+      <li>Making an index invisible is an alternative to making it unusable or dropping it.</li>
       <li>Invisible indexes are especially useful for testing the removal of an index before dropping it or using indexes temporarily without affecting the overall application.</li>
     </ul>
   </li>
@@ -204,9 +204,9 @@ messageStyle: "none",
 <p>Although indexes can reduce access time significantly, they can also have adverse effects on performance. Before you create indexes, consider the effects of multiple indexes on disk space and processing time:</p>
 
 <ul>
-  <li>Each index requires storage or disk space. The exact amount depends on the size of the table and the size and number of columns in the index. </li>
-  <li>Each INSERT or DELETE operation performed on a table requires additional updating of each index on that table. This is also true for each UPDATE operation that changes the value of an index key. </li>
-  <li>Each index potentially adds an alternative access path for a query for the optimizer to consider, which increases the compilation time. </li>
+  <li>Each index requires storage or disk space. The exact amount depends on the size of the table and the size and number of columns in the index.</li>
+  <li>Each INSERT or DELETE operation performed on a table requires additional updating of each index on that table. This is also true for each UPDATE operation that changes the value of an index key.</li>
+  <li>Each index potentially adds an alternative access path for a query for the optimizer to consider, which increases the compilation time.</li>
 </ul>
 
 <h2 id="index-usage-criteria">Index usage criteria</h2>
@@ -214,14 +214,14 @@ messageStyle: "none",
 <p>The query contains a column in a join clause that matches at least the first column of the index. eg. <code>create index idx1 on emp (division, dep, emptype) </code></p>
 
 <ul>
-  <li>All the below queries will make use of the above index. 
+  <li>All the below queries will make use of the above index.
     <ul>
       <li><code>select * from emp where division='acct' </code></li>
       <li><code>select * from emp where division='acct' and dept='fin' </code></li>
       <li><code>select * from emp where division='acct' and emptype='exempt' </code></li>
     </ul>
   </li>
-  <li>However, this query would be NOT be able to use the index since it doesn’t specify the first column of the index. 
+  <li>However, this query would be NOT be able to use the index since it doesn’t specify the first column of the index.
     <ul>
       <li><code>select * from emp where emptype='exempt' </code></li>
     </ul>
@@ -233,7 +233,7 @@ messageStyle: "none",
 <h3 id="clustered">Clustered</h3>
 
 <ul>
-  <li>Any index structure having the data accessed in the same way the index is organized so that data with similar or the same key values is stored (or clustered) together. </li>
+  <li>Any index structure having the data accessed in the same way the index is organized so that data with similar or the same key values is stored (or clustered) together.</li>
   <li>Clustering tends to greatly reduce input/output (I/O) time for queries and sorting.</li>
   <li>There can be only one clustered index per table.</li>
 </ul>
@@ -248,18 +248,18 @@ messageStyle: "none",
 
 <ul>
   <li>Basic table index based on one or more attributes, often used to enforce uniqueness of primary keys.</li>
-  <li>These indexes are the standard index type. They are excellent for primary key and highly-selective indexes. Used as concatenated indexes, B-tree indexes can retrieve data sorted by the indexed columns. </li>
+  <li>These indexes are the standard index type. They are excellent for primary key and highly-selective indexes. Used as concatenated indexes, B-tree indexes can retrieve data sorted by the indexed columns.</li>
   <li>B-tree indexes have the following subtypes:
     <ul>
       <li><strong>Index-organized tables</strong>: <a href="/technology/rdbms.html#table-types">For more details</a></li>
       <li><strong>Reverse key indexes</strong>
         <ul>
-          <li>In this type of index, the bytes of the index key are reversed, for example, 103 is stored as 301. The reversal of bytes spreads out inserts into the index over many blocks. Reversing the key value is particularly useful for indexing data such as sequence numbers, where each new key value is greater than the prior value, i.e., values monotonically increase. </li>
+          <li>In this type of index, the bytes of the index key are reversed, for example, 103 is stored as 301. The reversal of bytes spreads out inserts into the index over many blocks. Reversing the key value is particularly useful for indexing data such as sequence numbers, where each new key value is greater than the prior value, i.e., values monotonically increase.</li>
           <li>Reverse key indexes have become particularly important in high volume transaction processing systems because they reduce contention for index blocks.</li>
           <li>Reverse index is used to correct the imbalance caused by continually adding increasing values to a standard B-tree index</li>
         </ul>
       </li>
-      <li><strong>Descending indexes</strong>: This type of index stores data on a particular column or columns in descending order. </li>
+      <li><strong>Descending indexes</strong>: This type of index stores data on a particular column or columns in descending order.</li>
       <li>B-tree cluster indexes</li>
     </ul>
   </li>
@@ -279,7 +279,7 @@ messageStyle: "none",
   <li>Pros
     <ul>
       <li>Bitmap indexes make it feasible to perform queries with complex and unpredictable compound predicates against a large table. This is because ANDing and ORing bitmap indexes is very fast, even when there are hundreds of millions of table rows. The corresponding operation with B-tree indexes requires collecting a large number of pointers and sorting large pointer sets.</li>
-      <li>Bitmap indexes are best used for columns in which the ratio of the number of distinct values to the number of rows in the table is small. (We refer to this ratio as the <em>degree of cardinality</em>). A gender column, which has only two distinct values (male and female), is optimal for a bitmap index. </li>
+      <li>Bitmap indexes are best used for columns in which the ratio of the number of distinct values to the number of rows in the table is small. (We refer to this ratio as the <em>degree of cardinality</em>). A gender column, which has only two distinct values (male and female), is optimal for a bitmap index.</li>
       <li>Reduced response time for large classes of ad hoc queries. ‘AND’ and ‘OR’ conditions in the WHERE clause of a query can be resolved quickly by performing the corresponding Boolean operations directly on the bitmaps before converting the resulting bitmap to rowids.</li>
       <li>Reduce storage requirements compare to other indexing techniques</li>
       <li>Dramatic performance gains even on hardware with a relatively small number of CPUs or a small amount of memory.</li>
@@ -308,7 +308,7 @@ messageStyle: "none",
 <h3 id="composite-index">Composite Index</h3>
 
 <ul>
-  <li>A composite index, also called a <em>concatenated index</em>, is an index on multiple columns in a table. </li>
+  <li>A composite index, also called a <em>concatenated index</em>, is an index on multiple columns in a table.</li>
   <li>Columns in a composite index should appear in the order that makes the most sense for the queries that will retrieve data and need not be adjacent in the table. In the below example, this index will be used
     <ul>
       <li>by queries that access all three columns</li>
@@ -354,22 +354,22 @@ messageStyle: "none",
 <h2 id="when-to-use-clustered-index">When to use Clustered index?</h2>
 
 <ul>
-  <li><strong>Range searches</strong> - Clustered indexes can improve performance for range retrievals because it can be used to set the bounds of a search, even if the query involves the large percentage of the rows in the table. Because the data is in sorted order, the db can use it to find the starting and ending points of the range, and scan only the data pages within the range. </li>
-  <li>Without a clustered index, the rows could be randomly spread throughout the table, and the db would have to perform a table scan to find all rows within the range. </li>
-  <li>Columns containing number of duplicates - Same concept holds true for indexes on columns with a large number of duplicates. With a clustered index, the duplicate values are grouped together. This minimizes the no. of pages that would have to be read to retrieve them. </li>
+  <li><strong>Range searches</strong> - Clustered indexes can improve performance for range retrievals because it can be used to set the bounds of a search, even if the query involves the large percentage of the rows in the table. Because the data is in sorted order, the db can use it to find the starting and ending points of the range, and scan only the data pages within the range.</li>
+  <li>Without a clustered index, the rows could be randomly spread throughout the table, and the db would have to perform a table scan to find all rows within the range.</li>
+  <li>Columns containing number of duplicates - Same concept holds true for indexes on columns with a large number of duplicates. With a clustered index, the duplicate values are grouped together. This minimizes the no. of pages that would have to be read to retrieve them.</li>
   <li><strong>Columns often referenced in an ORDER BY</strong>. Most sorts require that the table be copied into a buffer pool(DB2) or work table in tempdb(Sybase). This incurs additional I/O overhead. However if you’re performing an ORDER BY on clustered index columns on a table, you can avoid creating a work table even if a query contains no search arguments.</li>
-  <li><strong>Columns other than primary key reference in join clauses</strong> - Clustered indexes can also be more efficient for joins that are non-clustered indexes, because clustered indexes usually are much smaller in size; typically they are atleast one level less in the B-tree. </li>
-  <li><strong>Single index table</strong> - If you require only a single index on a table, it typically is advantageous to make it a clustered index, as the resulting overhead of maintaining clustered indexes during updates, inserts and deletes can be considerably less than the other one. </li>
+  <li><strong>Columns other than primary key reference in join clauses</strong> - Clustered indexes can also be more efficient for joins that are non-clustered indexes, because clustered indexes usually are much smaller in size; typically they are atleast one level less in the B-tree.</li>
+  <li><strong>Single index table</strong> - If you require only a single index on a table, it typically is advantageous to make it a clustered index, as the resulting overhead of maintaining clustered indexes during updates, inserts and deletes can be considerably less than the other one.</li>
 </ul>
 
 <h2 id="index-covering">Index Covering</h2>
 
 <ul>
-  <li>Index covering is a mechanism for using the leaf level of a non-clustered index the way the data page of a clustered index would work. This occurs when all columns referenced in a query are contained in the index itself. </li>
-  <li>Because the non-clustered index contains a leaf row corresponding to every data row in the table, db can satisfy the query from the leaf rows of the non-clustered index without having to read the data pages. </li>
-  <li>Because all leaf index pages point to the next page in the leaf-page chain, the leaf level of the index can be scanned just like the data pages in a table. </li>
-  <li>Because the leaf index rows typically are much smaller than the data rows, a non-clustered index that covers a query will be faster than a clustered index on the same columns, due to the fewer number of pages that must be read. </li>
-  <li><strong>Covered Queries</strong> - in a query, if all the columns mentioned in the conditions section are part of an index, then it’s a covered query </li>
+  <li>Index covering is a mechanism for using the leaf level of a non-clustered index the way the data page of a clustered index would work. This occurs when all columns referenced in a query are contained in the index itself.</li>
+  <li>Because the non-clustered index contains a leaf row corresponding to every data row in the table, db can satisfy the query from the leaf rows of the non-clustered index without having to read the data pages.</li>
+  <li>Because all leaf index pages point to the next page in the leaf-page chain, the leaf level of the index can be scanned just like the data pages in a table.</li>
+  <li>Because the leaf index rows typically are much smaller than the data rows, a non-clustered index that covers a query will be faster than a clustered index on the same columns, due to the fewer number of pages that must be read.</li>
+  <li><strong>Covered Queries</strong> - in a query, if all the columns mentioned in the conditions section are part of an index, then it’s a covered query</li>
 </ul>
 
 <h2 id="indexing-rules-of-thumb">Indexing Rules of Thumb</h2>
@@ -403,7 +403,7 @@ messageStyle: "none",
 
 <h1 id="concurrency">Concurrency</h1>
 
-<p>http://msdn2.microsoft.com/en-us/library/ms171845(SQL.90).aspx </p>
+<p>http://msdn2.microsoft.com/en-us/library/ms171845(SQL.90).aspx</p>
 
 <h2 id="isolation-levels">Isolation levels</h2>
 
@@ -416,7 +416,7 @@ messageStyle: "none",
 
 <h2 id="locks">Locks</h2>
 
-<p>http://www.dbazine.com/db2/db2-disarticles/gulutzan6 </p>
+<p>http://www.dbazine.com/db2/db2-disarticles/gulutzan6</p>
 
 <h3 id="types">Types</h3>
 
@@ -449,25 +449,25 @@ called <em>write locks</em>.</p>
 
 <ul>
   <li>A lock escalation occurs when the number of locks held on rows and tables in the db equals the percentage of the locklist specified by the ‘maxlocks’ db config param. To reduce the no. of locks, db manager begins converting many fine-grained locks (row/block level) to table locks for all active tables, starting from any locks on LOBs or VARCHARs. Then the table with the next highest no. of locks and so on, until the no. of locks held is decreased to about half of the value specified by ‘maxlocks’.</li>
-  <li><strong>Exclusive Lock Escalation</strong> - An exclusive lock escalation is a lock escalation in which the table lock acquired is an ‘exclusive lock’. </li>
-  <li>Lock escalations reduce concurrency. Conditions that might cause lock escalations should be avoided. </li>
+  <li><strong>Exclusive Lock Escalation</strong> - An exclusive lock escalation is a lock escalation in which the table lock acquired is an ‘exclusive lock’.</li>
+  <li>Lock escalations reduce concurrency. Conditions that might cause lock escalations should be avoided.</li>
 </ul>
 
 <h2 id="concurrency-issues">Concurrency Issues</h2>
 
 <ul>
-  <li>Deadlock 
+  <li>Deadlock
     <ul>
-      <li>Deadlock is a situation when two processes, each having a lock on one piece of data, attempt to acquire a lock on the other’s piece. Each process would wait indefinitely for the other to release the lock, unless one of the user processes is terminated. SQL Server detects deadlocks and terminates one user’s process. </li>
+      <li>Deadlock is a situation when two processes, each having a lock on one piece of data, attempt to acquire a lock on the other’s piece. Each process would wait indefinitely for the other to release the lock, unless one of the user processes is terminated. SQL Server detects deadlocks and terminates one user’s process.</li>
       <li>How do you avoid deadlocks?</li>
     </ul>
   </li>
-  <li>Livelock 
+  <li>Livelock
     <ul>
-      <li>A livelock is one, where a request for an exclusive lock is repeatedly denied because a series of overlapping shared locks keeps interfering. SQL Server detects the situation after four denials and refuses further shared locks. A livelock also occurs when read transactions monopolize a table or page, forcing a write transaction to wait indefinitely. </li>
+      <li>A livelock is one, where a request for an exclusive lock is repeatedly denied because a series of overlapping shared locks keeps interfering. SQL Server detects the situation after four denials and refuses further shared locks. A livelock also occurs when read transactions monopolize a table or page, forcing a write transaction to wait indefinitely.</li>
     </ul>
   </li>
-  <li>Lock contention </li>
+  <li>Lock contention</li>
   <li>Lock escalation</li>
 </ul>
 
@@ -477,7 +477,7 @@ called <em>write locks</em>.</p>
 
 <ul>
   <li>Each dbms may have several pools according to the type, table or index and the page size.</li>
-  <li>Each pool will be large enough to hold many pages, perhaps hundreds of thousands of them. </li>
+  <li>Each pool will be large enough to hold many pages, perhaps hundreds of thousands of them.</li>
   <li>The buffer pool managers will attempt to ensure that frequently used data remains in the pool to avoid the necessity of additional reads from disk.</li>
   <li>The ideal place for an index or table page to be when it is requested is in the database buffer pool. If it is not there, the next best place is in the disk server read cache. If it is in neither of these, a slow read from disk will be necessary.</li>
 </ul>
@@ -500,7 +500,7 @@ called <em>write locks</em>.</p>
   <li>Data Block Prefetch
     <ul>
       <li>This feature is used by Oracle, again when the table rows being accessed are not in the same sequence as the index rows.</li>
-      <li>The pointers are collected from the index slice and multiple random I/Os are started to read the table rows in parallel. </li>
+      <li>The pointers are collected from the index slice and multiple random I/Os are started to read the table rows in parallel.</li>
     </ul>
   </li>
   <li>Disk Read Ahead
@@ -512,37 +512,37 @@ called <em>write locks</em>.</p>
 
 <h2 id="query-optimization">Query Optimization</h2>
 
-<p>When db processes the query, it performs the following steps: </p>
+<p>When db processes the query, it performs the following steps:</p>
 
 <ul>
-  <li>Parses and normalizes the query, validating syntax and object references </li>
-  <li>Optimizes the query and generates the query plan 
+  <li>Parses and normalizes the query, validating syntax and object references</li>
+  <li>Optimizes the query and generates the query plan
     <ul>
-      <li>Phase 1 - Query Analysis 
+      <li>Phase 1 - Query Analysis
         <ul>
-          <li>Find the search arguments (SARG) </li>
-          <li>Find the ORs c. Find the joins </li>
+          <li>Find the search arguments (SARG)</li>
+          <li>Find the ORs c. Find the joins</li>
         </ul>
       </li>
-      <li>Phase 2 - Index Selection 
+      <li>Phase 2 - Index Selection
         <ul>
-          <li>Choose the best index for each SARG </li>
-          <li>Choose the best method for ORs </li>
-          <li>Choose the best indexes for any join clauses </li>
-          <li>Choose the best index to use for each table </li>
+          <li>Choose the best index for each SARG</li>
+          <li>Choose the best method for ORs</li>
+          <li>Choose the best indexes for any join clauses</li>
+          <li>Choose the best index to use for each table</li>
         </ul>
       </li>
-      <li>Phase 3 - Join Order Selection 
+      <li>Phase 3 - Join Order Selection
         <ul>
-          <li>Evaluate the join orders </li>
-          <li>Compute the costs </li>
-          <li>Evaluate other server options for resolving joins </li>
+          <li>Evaluate the join orders</li>
+          <li>Compute the costs</li>
+          <li>Evaluate other server options for resolving joins</li>
         </ul>
       </li>
-      <li>Phase 4 - Plan Selection </li>
+      <li>Phase 4 - Plan Selection</li>
     </ul>
   </li>
-  <li>Compiles the query plan </li>
+  <li>Compiles the query plan</li>
   <li>Executes the query plan and returns the results to the user.</li>
 </ul>
 
@@ -567,7 +567,7 @@ called <em>write locks</em>.</p>
 <ul>
   <li><strong>Cost-based Optimizers (CBO)</strong> - uses the statistics stored in the Data Dictionary. This approach optimizes for best throughput.</li>
   <li>
-    <p><strong>Rule-based Optimizers (RBO)</strong> - This approach optimizes for best response time. </p>
+    <p><strong>Rule-based Optimizers (RBO)</strong> - This approach optimizes for best response time.</p>
   </li>
   <li>DB2
     <ul>
@@ -620,7 +620,7 @@ called <em>write locks</em>.</p>
   <li>Oracle - <code>EXEC dbms_stats.gather_database_stats;</code></li>
 </ul>
 
-<p>http://download-west.oracle.com/docs/cd/A87860_01/doc/server.817/a76992/toc.htm </p>
+<p>http://download-west.oracle.com/docs/cd/A87860_01/doc/server.817/a76992/toc.htm</p>
 
 <ul>
   <li><a href="https://www.ibm.com/developerworks/data/library/techarticle/dm-0606fechner/">Distribution statistics uses with the DB2 Optimizer</a></li>
@@ -628,9 +628,9 @@ called <em>write locks</em>.</p>
 
 <h1 id="db-federation">DB Federation</h1>
 
-<p>Database federated support in DB2 allows tables from multiple databases to be presented as local tables to a DB2 server. The databases may be local or remote; they can also belong to different. </p>
+<p>Database federated support in DB2 allows tables from multiple databases to be presented as local tables to a DB2 server. The databases may be local or remote; they can also belong to different.</p>
 
-<p>DB2 uses NICKNAME, SERVER, WRAPPER, and USER MAPPING objects to implement federation. </p>
+<p>DB2 uses NICKNAME, SERVER, WRAPPER, and USER MAPPING objects to implement federation.</p>
 
 <h1 id="partitioning">Partitioning</h1>
 
@@ -638,7 +638,7 @@ called <em>write locks</em>.</p>
 
 <ul>
   <li>partition expression must be an integer</li>
-  <li>no foreign key constraints	</li>
+  <li>no foreign key constraints</li>
   <li>partitions can’t be accessed directly</li>
   <li>each partition can have its own index</li>
   <li>each partition can live in a separate disk</li>
@@ -666,7 +666,7 @@ called <em>write locks</em>.</p>
 
 <h1 id="replication">Replication</h1>
 
-<p>HADR - High Availability Database Replication (from version 9.7) </p>
+<p>HADR - High Availability Database Replication (from version 9.7)</p>
 
 <h1 id="references">References</h1>
 
@@ -688,8 +688,8 @@ called <em>write locks</em>.</p>
   </li>
   <li>Sybase
     <ul>
-      <li>http://www.faqs.org/faqs/databases/sybase-faq/part1/ </li>
-      <li>http://www.lcard.ru/~nail/sybase/perf/66.htm </li>
+      <li>http://www.faqs.org/faqs/databases/sybase-faq/part1/</li>
+      <li>http://www.lcard.ru/~nail/sybase/perf/66.htm</li>
       <li>http://www.benslade.com/tech/OldIntroToSybase/</li>
     </ul>
   </li>

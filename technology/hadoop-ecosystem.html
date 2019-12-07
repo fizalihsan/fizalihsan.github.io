@@ -108,23 +108,23 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#basics">Basics</a></li>
-  <li><a href="#hdfs">HDFS</a>    <ul>
-      <li><a href="#concepts">Concepts</a></li>
-      <li><a href="#hdfs-federation">HDFS Federation</a></li>
-      <li><a href="#hdfs-high-availability">HDFS High Availability</a></li>
+  <li><a href="#basics" id="markdown-toc-basics">Basics</a></li>
+  <li><a href="#hdfs" id="markdown-toc-hdfs">HDFS</a>    <ul>
+      <li><a href="#concepts" id="markdown-toc-concepts">Concepts</a></li>
+      <li><a href="#hdfs-federation" id="markdown-toc-hdfs-federation">HDFS Federation</a></li>
+      <li><a href="#hdfs-high-availability" id="markdown-toc-hdfs-high-availability">HDFS High Availability</a></li>
     </ul>
   </li>
-  <li><a href="#mapreduce">MapReduce</a>    <ul>
-      <li><a href="#mapper">Mapper</a></li>
-      <li><a href="#reducer">Reducer</a></li>
-      <li><a href="#combiner">Combiner</a></li>
-      <li><a href="#mapreducer-job">MapReducer Job</a></li>
-      <li><a href="#hadoop-streaming">Hadoop Streaming</a></li>
+  <li><a href="#mapreduce" id="markdown-toc-mapreduce">MapReduce</a>    <ul>
+      <li><a href="#mapper" id="markdown-toc-mapper">Mapper</a></li>
+      <li><a href="#reducer" id="markdown-toc-reducer">Reducer</a></li>
+      <li><a href="#combiner" id="markdown-toc-combiner">Combiner</a></li>
+      <li><a href="#mapreducer-job" id="markdown-toc-mapreducer-job">MapReducer Job</a></li>
+      <li><a href="#hadoop-streaming" id="markdown-toc-hadoop-streaming">Hadoop Streaming</a></li>
     </ul>
   </li>
-  <li><a href="#yarn">YARN</a></li>
-  <li><a href="#references">References</a></li>
+  <li><a href="#yarn" id="markdown-toc-yarn">YARN</a></li>
+  <li><a href="#references" id="markdown-toc-references">References</a></li>
 </ul>
 
 <h1 id="basics">Basics</h1>
@@ -133,18 +133,18 @@ messageStyle: "none",
   <li>Hadoop is an open source platform that provides implementations of both the MapReduce and GFS (Google File System) technologies and allows the processing of very large data sets across clusters of low-cost commodity hardware.</li>
   <li>Host Vs. Node
     <ul>
-      <li>The terms <em>host</em> or <em>server</em> refer to the physical hardware hosting Hadoop’s various components. </li>
+      <li>The terms <em>host</em> or <em>server</em> refer to the physical hardware hosting Hadoop’s various components.</li>
       <li>The term <em>node</em> will refer to the software component comprising a part of the cluster.</li>
     </ul>
   </li>
   <li>Features
     <ul>
-      <li>Hadoop is not a good 
+      <li>Hadoop is not a good
         <ul>
           <li>for low-latency queries like websites, real time systems, etc. (HBase on top of Hadoop serves low-latency queries)</li>
           <li>smaller data sets.</li>
           <li>Hadoop tries to co-locate the data with the compute nodes, so data access is fast because it is local. This feature, known as <strong>data locality</strong>, is at the heart of data processing in Hadoop and is the reason for its good performance.</li>
-          <li>MapReduce is able to do this because it is a <strong>shared-nothing architecture</strong>, meaning that tasks have no dependence on one other </li>
+          <li>MapReduce is able to do this because it is a <strong>shared-nothing architecture</strong>, meaning that tasks have no dependence on one other</li>
         </ul>
       </li>
     </ul>
@@ -161,7 +161,7 @@ messageStyle: "none",
     <ul>
       <li>Hadoop installation consists of four types of nodes
         <ul>
-          <li><strong>NameNode</strong> + <strong>DataNodes</strong> - HDFS nodes provide a distributed filesystem </li>
+          <li><strong>NameNode</strong> + <strong>DataNodes</strong> - HDFS nodes provide a distributed filesystem</li>
           <li><strong>JobTracker</strong> - manages the jobs</li>
           <li><strong>TaskTracker</strong> - run tasks that perform parts of the job</li>
         </ul>
@@ -219,11 +219,11 @@ messageStyle: "none",
 <h1 id="hdfs">HDFS</h1>
 
 <ul>
-  <li>distributed filesystem designed to store very large data sets by scaling out across a cluster of hosts. </li>
+  <li>distributed filesystem designed to store very large data sets by scaling out across a cluster of hosts.</li>
   <li>optimized for high throughput instead of latency. It achieves high availability through replication instead of redundancy.</li>
   <li>similar to any other linux file system like <em>ext3</em> - but cannot be mounted - and requires applications to be specially built for it.</li>
   <li>Block size in old file systems are typically 4KB or 8KB of size. In HDFS, it is 64MB to 1GB.</li>
-  <li>Replicates each block to multiple machines (default 3) in the cluster. Should the number of copies of a block drop below the configured replication factor, the filesystem automatically makes a new copy from one of the remaining replicas. </li>
+  <li>Replicates each block to multiple machines (default 3) in the cluster. Should the number of copies of a block drop below the configured replication factor, the filesystem automatically makes a new copy from one of the remaining replicas.</li>
   <li>Due to replicated data, failures are easily tolerated.</li>
   <li>not a POSIX-compliant filesystem.</li>
   <li>HDFS is optimized for throughput over latency; it is very efficient at streaming read requests for large files but poor at seek requests for many small ones.</li>
@@ -236,7 +236,7 @@ messageStyle: "none",
   <li><strong>Cons</strong>
     <ul>
       <li>Not meant for low-latency applications</li>
-      <li>Files in HDFS may be written to by a single writer. </li>
+      <li>Files in HDFS may be written to by a single writer.</li>
       <li>Writes are always made at the end of the file, in append-only fashion. There is no support for multiple writers or for modifications at arbitrary offsets in the file</li>
     </ul>
   </li>
@@ -265,7 +265,7 @@ messageStyle: "none",
 <p><strong>Namenode</strong></p>
 
 <ul>
-  <li>Namenode 
+  <li>Namenode
     <ul>
       <li>manages the filesystem namespace.</li>
       <li>maintains the filesystem tree and the metadata for all the files and directories in the tree.</li>
@@ -279,9 +279,9 @@ messageStyle: "none",
     <ul>
       <li><strong>Back up</strong>
         <ul>
-          <li>back up the files that make up the persistent state of the filesystem metadata. </li>
-          <li>Hadoop can be configured so that the namenode writes its persistent state to multiple filesystems. </li>
-          <li>These writes are <em>synchronous</em> and <em>atomic</em>. </li>
+          <li>back up the files that make up the persistent state of the filesystem metadata.</li>
+          <li>Hadoop can be configured so that the namenode writes its persistent state to multiple filesystems.</li>
+          <li>These writes are <em>synchronous</em> and <em>atomic</em>.</li>
           <li>The usual configuration choice is to write to local disk as well as a remote NFS mount</li>
         </ul>
       </li>
@@ -321,15 +321,15 @@ messageStyle: "none",
 <h2 id="hdfs-high-availability">HDFS High Availability</h2>
 
 <ul>
-  <li>The combination of replicating namenode metadata on multiple filesystems and using the secondary namenode to create checkpoints protects against data loss, but it does not provide high availability of the filesystem. The namenode is still a <em>single point of failure (SPOF)</em>. </li>
+  <li>The combination of replicating namenode metadata on multiple filesystems and using the secondary namenode to create checkpoints protects against data loss, but it does not provide high availability of the filesystem. The namenode is still a <em>single point of failure (SPOF)</em>.</li>
   <li><em>Failure &amp; Recovery</em>
     <ul>
       <li>If it did fail, all clients—including MapReduce jobs—would be unable to read, write, or list files, because the namenode is the sole repository of the metadata and the file-to-block mapping. In such an event, the whole Hadoop system would  effectively be out of service until a new namenode could be brought online.</li>
-      <li>To recover from a failed namenode in this situation, an administrator starts a new primary namenode with one of the filesystem metadata replicas and configures datanodes and clients to use this new namenode. The new namenode is not able to serve requests until it has 
+      <li>To recover from a failed namenode in this situation, an administrator starts a new primary namenode with one of the filesystem metadata replicas and configures datanodes and clients to use this new namenode. The new namenode is not able to serve requests until it has
         <ul>
-          <li>i) loaded its namespace image into memory, </li>
+          <li>i) loaded its namespace image into memory,</li>
           <li>ii) replayed its edit log, and</li>
-          <li>iii) received enough block reports from the datanodes to leave safe mode. </li>
+          <li>iii) received enough block reports from the datanodes to leave safe mode.</li>
         </ul>
       </li>
       <li>On large clusters with many files and blocks, the time it takes for a namenode to start from cold can be 30 minutes or more.</li>
@@ -339,14 +339,14 @@ messageStyle: "none",
   <li><strong>Quorum Journal Manager</strong>
     <ul>
       <li>The QJM is designed for the sole purpose of providing a highly available edit log, and is the recommended choice for most HDFS installations. (<em>is a dedicated HDFS implementation</em>)</li>
-      <li>The QJM runs as a group of journal nodes, and each edit must be written to a majority of the journal nodes. Typically, there are three journal nodes, so the system can tolerate the loss of one of them. </li>
+      <li>The QJM runs as a group of journal nodes, and each edit must be written to a majority of the journal nodes. Typically, there are three journal nodes, so the system can tolerate the loss of one of them.</li>
       <li>This arrangement is similar to the way ZooKeeper works, although it is important to realize that the QJM implementation does not use ZooKeeper. HDFS HA does use ZooKeeper for electing the active namenode.</li>
       <li>If the active namenode fails, the standby can take over very quickly (in a few tens of seconds) because it has the latest state available in memory: both the latest edit log entries and an up-to-date block mapping.</li>
     </ul>
   </li>
   <li><strong>Failover Controller</strong>
     <ul>
-      <li>The transition from the active namenode to the standby is managed by a new entity in the system called the <em>failover controller</em>. </li>
+      <li>The transition from the active namenode to the standby is managed by a new entity in the system called the <em>failover controller</em>.</li>
       <li>There are various failover controllers, but the default implementation uses ZooKeeper to ensure that only one namenode is active.</li>
       <li>Each namenode runs a lightweight failover controller process whose job it is to monitor its namenode for failures (using a simple heartbeating mechanism) and trigger a failover should a namenode fail.</li>
     </ul>
@@ -355,12 +355,12 @@ messageStyle: "none",
   <li><strong>Fencing</strong>
     <ul>
       <li>In the case of an ungraceful failover, however, it is impossible to be sure that the failed namenode has stopped running. For example, a slow network or a network partition can trigger a failover transition, even though the previously active namenode is still running and thinks it is still the active namenode. The HA implementation goes to great lengths to ensure that the previously active namenode is prevented from doing any damage and causing corruption—a method known as <strong>fencing</strong>.</li>
-      <li>The QJM only allows one namenode to write to the edit log at one time; however, it is still possible for the previously active namenode to serve stale read requests to clients, so setting up an SSH fencing command that will kill the namenode’s process is a good idea. </li>
-      <li>Stronger fencing methods are required when using an NFS filer for the shared edit log, since it is not possible to only allow one namenode to write at a time (this is why QJM is recommended). </li>
+      <li>The QJM only allows one namenode to write to the edit log at one time; however, it is still possible for the previously active namenode to serve stale read requests to clients, so setting up an SSH fencing command that will kill the namenode’s process is a good idea.</li>
+      <li>Stronger fencing methods are required when using an NFS filer for the shared edit log, since it is not possible to only allow one namenode to write at a time (this is why QJM is recommended).</li>
       <li><strong>Fencing Mechanisms</strong>
         <ul>
           <li>includes revoking the namenode’s access to the shared storage directory</li>
-          <li>disabling its network port via a remote management command. </li>
+          <li>disabling its network port via a remote management command.</li>
           <li>As a last resort, the previously active namenode can be fenced with a technique rather graphically known as <strong>STONITH</strong>, or <em>“shoot the other node in the head,”</em> which uses a specialized power distribution unit to forcibly power down the host machine.</li>
         </ul>
       </li>
@@ -373,7 +373,7 @@ messageStyle: "none",
 <ul>
   <li>HDFS shell</li>
   <li>Java API</li>
-  <li>REST API - WebHDFS, HttpFS(standalone RESTful HDFS proxy service) </li>
+  <li>REST API - WebHDFS, HttpFS(standalone RESTful HDFS proxy service)</li>
 </ul>
 
 <h1 id="mapreduce">MapReduce</h1>
@@ -386,7 +386,7 @@ messageStyle: "none",
       <li><em>divide and conquer</em> - a single problem is broken into multiple individual subtasks. This approach becomes even more powerful when the subtasks are executed in parallel;</li>
     </ul>
   </li>
-  <li>Unlike traditional relational databases that require structured data with well-defined schemas, MapReduce and Hadoop work best on semi-structured or unstructured data. </li>
+  <li>Unlike traditional relational databases that require structured data with well-defined schemas, MapReduce and Hadoop work best on semi-structured or unstructured data.</li>
   <li>Hadoop Basic Data Types
     <ul>
       <li>Rather than using built-in Java types, Hadoop provides its own set of basic types that are optimized for network serialization.</li>
@@ -442,9 +442,9 @@ messageStyle: "none",
 <ul>
   <li><strong>Input Splits</strong>
     <ul>
-      <li>Hadoop divides the input to a MapReduce job into fixed-size pieces called <strong>input splits</strong> or just <strong>splits</strong>. </li>
+      <li>Hadoop divides the input to a MapReduce job into fixed-size pieces called <strong>input splits</strong> or just <strong>splits</strong>.</li>
       <li>Hadoop creates <em>one map task</em> for each <em>split</em>, which runs the map function for each record in the split.</li>
-      <li>A good split size tends to be the size of an HDFS block (128MB). 
+      <li>A good split size tends to be the size of an HDFS block (128MB).
         <ul>
           <li>If the spilt size is too small, the overhead of managing the splits and map task creation is high</li>
           <li>If the split size is too large, then the desirable load balancing will be missing.</li>
@@ -455,7 +455,7 @@ messageStyle: "none",
   <li><strong>Data Locality Optimization</strong>
     <ul>
       <li>Hadoop does its best to run the map task on a node where the input data resides in HDFS, because it doesn’t use valuable cluster bandwidth. This is called <em>Data Locality Optimization</em>.</li>
-      <li>Sometimes, however, all the nodes hosting the HDFS block needed for the map task are running other tasks, so the job scheduler will look for a free map slot on a node in the same rack or an off-rack node and copies the data over. </li>
+      <li>Sometimes, however, all the nodes hosting the HDFS block needed for the map task are running other tasks, so the job scheduler will look for a free map slot on a node in the same rack or an off-rack node and copies the data over.</li>
     </ul>
   </li>
   <li>The output of map tasks are written to the local disk, not to HDFS. Because Map output is intermediate output: it’s processed by reduce tasks to produce the final output, and once the job is complete, the map output can be thrown away. So, storing it in HDFS with replication would be overkill. If the node running the map task fails before the map output has been consumed by the reduce task, then Hadoop will automatically rerun the map task on another node to re-create the map output.</li>
@@ -503,7 +503,7 @@ messageStyle: "none",
   <li><strong>Data Locality Optimization</strong>
     <ul>
       <li>Reduce tasks don’t have the advantage of data locality; the input to a single reduce task is normally the output from all mappers.</li>
-      <li>In the present example, we have a single reduce task that is fed by all of the map tasks. Therefore, the sorted map outputs have to be transferred across the network to the node where the reduce task is running, where they are merged and then passed to the user-defined reduce function. </li>
+      <li>In the present example, we have a single reduce task that is fed by all of the map tasks. Therefore, the sorted map outputs have to be transferred across the network to the node where the reduce task is running, where they are merged and then passed to the user-defined reduce function.</li>
     </ul>
   </li>
   <li>The output of the reduce is normally stored in HDFS for reliability.</li>
@@ -575,7 +575,7 @@ messageStyle: "none",
 <ul>
   <li>The above data can be expressed as <em>max(0, 20, 10, 25, 15) = max(max(0, 20, 10), max(25, 15)) = max(20, 25) = 25</em></li>
   <li>Only functions with <em>commutative</em> and <em>associative</em> properties can be represented as combiners.</li>
-  <li>Because the combiner function is an optimization, Hadoop does not provide a guarantee of how many times it will call it for a particular map output record, if at all. </li>
+  <li>Because the combiner function is an optimization, Hadoop does not provide a guarantee of how many times it will call it for a particular map output record, if at all.</li>
   <li>In other words, calling the combiner function zero, one, or many times should produce the same output from the reducer</li>
 </ul>
 

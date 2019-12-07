@@ -108,46 +108,46 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#memory">Memory</a>    <ul>
-      <li><a href="#how-memory-leaks-happen">How Memory Leaks Happen?</a></li>
-      <li><a href="#jvm-architecture">JVM Architecture</a>        <ul>
-          <li><a href="#class-loader-subsystem">Class loader subsystem</a></li>
-          <li><a href="#execution-engine">Execution engine</a></li>
-          <li><a href="#native-interface">Native interface</a></li>
-          <li><a href="#runtime-data-areas">Runtime data areas</a>            <ul>
-              <li><a href="#runtime-data-areas-shared-among-all-threads">Runtime data areas shared among all threads</a></li>
-              <li><a href="#thread-specific-runtime-data-areas">Thread-specific runtime data areas</a></li>
+  <li><a href="#memory" id="markdown-toc-memory">Memory</a>    <ul>
+      <li><a href="#how-memory-leaks-happen" id="markdown-toc-how-memory-leaks-happen">How Memory Leaks Happen?</a></li>
+      <li><a href="#jvm-architecture" id="markdown-toc-jvm-architecture">JVM Architecture</a>        <ul>
+          <li><a href="#class-loader-subsystem" id="markdown-toc-class-loader-subsystem">Class loader subsystem</a></li>
+          <li><a href="#execution-engine" id="markdown-toc-execution-engine">Execution engine</a></li>
+          <li><a href="#native-interface" id="markdown-toc-native-interface">Native interface</a></li>
+          <li><a href="#runtime-data-areas" id="markdown-toc-runtime-data-areas">Runtime data areas</a>            <ul>
+              <li><a href="#runtime-data-areas-shared-among-all-threads" id="markdown-toc-runtime-data-areas-shared-among-all-threads">Runtime data areas shared among all threads</a></li>
+              <li><a href="#thread-specific-runtime-data-areas" id="markdown-toc-thread-specific-runtime-data-areas">Thread-specific runtime data areas</a></li>
             </ul>
           </li>
         </ul>
       </li>
-      <li><a href="#garbage-collection">Garbage Collection</a>        <ul>
-          <li><a href="#phases">Phases</a></li>
-          <li><a href="#jvm-generations">JVM Generations</a></li>
-          <li><a href="#generational-gc-process">Generational GC Process</a></li>
-          <li><a href="#garbage-collection-algorithms">Garbage Collection Algorithms</a></li>
+      <li><a href="#garbage-collection" id="markdown-toc-garbage-collection">Garbage Collection</a>        <ul>
+          <li><a href="#phases" id="markdown-toc-phases">Phases</a></li>
+          <li><a href="#jvm-generations" id="markdown-toc-jvm-generations">JVM Generations</a></li>
+          <li><a href="#generational-gc-process" id="markdown-toc-generational-gc-process">Generational GC Process</a></li>
+          <li><a href="#garbage-collection-algorithms" id="markdown-toc-garbage-collection-algorithms">Garbage Collection Algorithms</a></li>
         </ul>
       </li>
-      <li><a href="#reference-types">Reference Types</a>        <ul>
-          <li><a href="#softreference">SoftReference</a></li>
-          <li><a href="#weakreference">WeakReference</a></li>
-          <li><a href="#phantomreference">PhantomReference</a></li>
+      <li><a href="#reference-types" id="markdown-toc-reference-types">Reference Types</a>        <ul>
+          <li><a href="#softreference" id="markdown-toc-softreference">SoftReference</a></li>
+          <li><a href="#weakreference" id="markdown-toc-weakreference">WeakReference</a></li>
+          <li><a href="#phantomreference" id="markdown-toc-phantomreference">PhantomReference</a></li>
         </ul>
       </li>
     </ul>
   </li>
-  <li><a href="#performance-metrics">Performance Metrics</a></li>
-  <li><a href="#profiling">Profiling</a></li>
-  <li><a href="#benchmarking">Benchmarking</a></li>
-  <li><a href="#jvm-profiling-tools">JVM Profiling Tools</a>    <ul>
-      <li><a href="#hprof">HPROF</a></li>
-      <li><a href="#visualvm">VisualVM</a></li>
-      <li><a href="#mat">MAT</a></li>
-      <li><a href="#btrace">BTrace</a></li>
-      <li><a href="#tools-shipped-with-java">Tools shipped with Java</a></li>
+  <li><a href="#performance-metrics" id="markdown-toc-performance-metrics">Performance Metrics</a></li>
+  <li><a href="#profiling" id="markdown-toc-profiling">Profiling</a></li>
+  <li><a href="#benchmarking" id="markdown-toc-benchmarking">Benchmarking</a></li>
+  <li><a href="#jvm-profiling-tools" id="markdown-toc-jvm-profiling-tools">JVM Profiling Tools</a>    <ul>
+      <li><a href="#hprof" id="markdown-toc-hprof">HPROF</a></li>
+      <li><a href="#visualvm" id="markdown-toc-visualvm">VisualVM</a></li>
+      <li><a href="#mat" id="markdown-toc-mat">MAT</a></li>
+      <li><a href="#btrace" id="markdown-toc-btrace">BTrace</a></li>
+      <li><a href="#tools-shipped-with-java" id="markdown-toc-tools-shipped-with-java">Tools shipped with Java</a></li>
     </ul>
   </li>
-  <li><a href="#bibliography">Bibliography</a></li>
+  <li><a href="#bibliography" id="markdown-toc-bibliography">Bibliography</a></li>
 </ul>
 
 <h1 id="memory">Memory</h1>
@@ -237,7 +237,7 @@ The easiest way to avoid this is to use unit testcases and one of the available 
 
 <p><strong>Classloader Leaks</strong></p>
 
-<p>When thinking about memory leaks we think mostly about normal java objects. Especially in application servers and OSGi containers there is another form of memory leak, the class loader leak. Classes are referenced by their classloader and normally they will not get garbage collected until the classloader itself is collected. That however only happens when the application gets unloaded by the application server or OSGi container. </p>
+<p>When thinking about memory leaks we think mostly about normal java objects. Especially in application servers and OSGi containers there is another form of memory leak, the class loader leak. Classes are referenced by their classloader and normally they will not get garbage collected until the classloader itself is collected. That however only happens when the application gets unloaded by the application server or OSGi container.</p>
 
 <p>There are two forms of Classloader Leaks that I can describe off the top of my head.</p>
 
@@ -271,7 +271,7 @@ The easiest way to avoid this is to use unit testcases and one of the available 
 <h4 id="runtime-data-areas-shared-among-all-threads">Runtime data areas shared among all threads</h4>
 
 <ul>
-  <li><strong>Method area</strong>: holds the details of each class loaded by the class loader subsystem. </li>
+  <li><strong>Method area</strong>: holds the details of each class loaded by the class loader subsystem.</li>
   <li><strong>Heap</strong>: holds every object being created by the threads during execution</li>
 </ul>
 
@@ -318,7 +318,7 @@ The easiest way to avoid this is to use unit testcases and one of the available 
 <ul>
   <li>Young Generation
     <ul>
-      <li>all new objects are allocated and aged. </li>
+      <li>all new objects are allocated and aged.</li>
       <li>causes a minor GC when this fills up.</li>
       <li>relatively quicker to collect than other generations</li>
       <li>All <em>minor GCs</em> are <strong>Stop the World</strong> events which means all the app threads are stopped until the GC completes.</li>
@@ -326,7 +326,7 @@ The easiest way to avoid this is to use unit testcases and one of the available 
   </li>
   <li>Old Generation
     <ul>
-      <li>stores long surviving objects. </li>
+      <li>stores long surviving objects.</li>
       <li>a threshold is set for young generation objects and when the age is met, the objects gets moved to old generation.</li>
       <li>causes a <em>major GC</em> when this fills up. Also, a <strong>Stop the World</strong> event.</li>
     </ul>
@@ -353,7 +353,7 @@ The easiest way to avoid this is to use unit testcases and one of the available 
   <li>2nd minor GC
     <ul>
       <li>When eden space fills up, a minor GC is triggered.</li>
-      <li>referenced objects are moved to 2nd survivor space (S1). </li>
+      <li>referenced objects are moved to 2nd survivor space (S1).</li>
       <li>In addition, objects from 1st survivor space (S0) have their age incremented and get moved to S1.</li>
       <li>Eden &amp; S0 space is cleared.</li>
     </ul>
@@ -361,7 +361,7 @@ The easiest way to avoid this is to use unit testcases and one of the available 
   <li>3rd minor GC
     <ul>
       <li>When eden space fills up, a minor GC is triggered.</li>
-      <li>referenced objects are moved to S0. </li>
+      <li>referenced objects are moved to S0.</li>
       <li>In addition, objects from S1 have their age incremented and get moved to S0.</li>
       <li>Plus, objects that reached the threshold age are moved to old generation.</li>
       <li>Eden &amp; S1 space are cleared.</li>
@@ -383,7 +383,7 @@ The easiest way to avoid this is to use unit testcases and one of the available 
       <li>Both minor &amp; major GCs are done serially using a single virtual CPU.</li>
       <li>Uses a mark-compact collection method.</li>
       <li>Option: <code>-XX:+UserSerialGC</code>.</li>
-      <li><strong>Usages</strong>: 
+      <li><strong>Usages</strong>:
         <ul>
           <li>For longer running apps with no low pause time requirements</li>
           <li>For apps which run on machine that hosts more JVMs than available processors. In such environment, GC of one app shouldn’t affect all other JVMs.</li>
@@ -439,8 +439,8 @@ The easiest way to avoid this is to use unit testcases and one of the available 
 
 <ul>
   <li>if free heap space is available, chances are that a soft reference will not be freed during a garbage collection cycle (so it survives from GC).</li>
-  <li>Before throwing an OutOfMemoryError, JVM will attempt to reclaim memory by releasing instances that are softly reachable.  </li>
-  <li>Soft References ideal for implementing memory sensitive caches </li>
+  <li>Before throwing an OutOfMemoryError, JVM will attempt to reclaim memory by releasing instances that are softly reachable.</li>
+  <li>Soft References ideal for implementing memory sensitive caches</li>
 </ul>
 
 <p>Suppose that the garbage collector determines at a certain point in time that an object is softly reachable. At that time it may choose to clear atomically all soft references to that object and all soft references to any other softly-reachable objects from which that object is reachable through a chain of strong references. At the same time or at some later time it will enqueue those newly-cleared soft references that are registered with reference queues.</p>
@@ -463,7 +463,7 @@ The easiest way to avoid this is to use unit testcases and one of the available 
 <h3 id="phantomreference">PhantomReference</h3>
 
 <ul>
-  <li>Phantom references are the weakest form of referencing. Instances that are referred via a phantom reference cannot be accessed directly using a <code>get()</code> method (it always returns null). Instead, we need to rely on Reference Queues. </li>
+  <li>Phantom references are the weakest form of referencing. Instances that are referred via a phantom reference cannot be accessed directly using a <code>get()</code> method (it always returns null). Instead, we need to rely on Reference Queues.</li>
   <li><code>ReferenceQueue</code> is the mechanism provided by the JVM to be notified when a referenced instance is about to be garbage collected. (<code>enqueue()</code> method in this class is package scoped. )</li>
   <li>One use case of Phantom references is to keep track of active references within an application, and to know when those instances will be garbage collected. If we use strong references, then the instance will not be eligible for GC due to the strong reference we maintain. Instead, we could rely on a phantom reference with the support of a reference queue to handle the situation.</li>
 </ul>
@@ -552,7 +552,7 @@ The easiest way to avoid this is to use unit testcases and one of the available 
   <li>Responsiveness
     <ul>
       <li>Refers to how quickly an app responds with a requested piece of data. e.g., how quickly a website returns a page.</li>
-      <li>The focus is on responding in short period of time and long pause times are not acceptable. </li>
+      <li>The focus is on responding in short period of time and long pause times are not acceptable.</li>
     </ul>
   </li>
   <li>Throughput

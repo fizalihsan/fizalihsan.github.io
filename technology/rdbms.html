@@ -108,40 +108,40 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#keys">Keys</a></li>
-  <li><a href="#integrity">Integrity</a>    <ul>
-      <li><a href="#constraints">Constraints</a></li>
+  <li><a href="#keys" id="markdown-toc-keys">Keys</a></li>
+  <li><a href="#integrity" id="markdown-toc-integrity">Integrity</a>    <ul>
+      <li><a href="#constraints" id="markdown-toc-constraints">Constraints</a></li>
     </ul>
   </li>
-  <li><a href="#table-types">Table Types</a></li>
-  <li><a href="#views">Views</a></li>
-  <li><a href="#cursors">Cursors</a>    <ul>
-      <li><a href="#disadvantages-of-cursors">Disadvantages of cursors</a></li>
+  <li><a href="#table-types" id="markdown-toc-table-types">Table Types</a></li>
+  <li><a href="#views" id="markdown-toc-views">Views</a></li>
+  <li><a href="#cursors" id="markdown-toc-cursors">Cursors</a>    <ul>
+      <li><a href="#disadvantages-of-cursors" id="markdown-toc-disadvantages-of-cursors">Disadvantages of cursors</a></li>
     </ul>
   </li>
-  <li><a href="#triggers">Triggers</a></li>
-  <li><a href="#joins">Joins</a>    <ul>
-      <li><a href="#join-algorithms">Join Algorithms</a>        <ul>
-          <li><a href="#nested-loop-join">Nested Loop Join</a></li>
-          <li><a href="#merge-join--sort-merge-join">Merge Join / Sort-Merge Join</a></li>
-          <li><a href="#hash-join">Hash Join</a></li>
+  <li><a href="#triggers" id="markdown-toc-triggers">Triggers</a></li>
+  <li><a href="#joins" id="markdown-toc-joins">Joins</a>    <ul>
+      <li><a href="#join-algorithms" id="markdown-toc-join-algorithms">Join Algorithms</a>        <ul>
+          <li><a href="#nested-loop-join" id="markdown-toc-nested-loop-join">Nested Loop Join</a></li>
+          <li><a href="#merge-join--sort-merge-join" id="markdown-toc-merge-join--sort-merge-join">Merge Join / Sort-Merge Join</a></li>
+          <li><a href="#hash-join" id="markdown-toc-hash-join">Hash Join</a></li>
         </ul>
       </li>
     </ul>
   </li>
-  <li><a href="#administration-concepts">Administration Concepts</a>    <ul>
-      <li><a href="#tablespaces">Tablespaces</a>        <ul>
-          <li><a href="#default-tablespaces">Default Tablespaces</a></li>
+  <li><a href="#administration-concepts" id="markdown-toc-administration-concepts">Administration Concepts</a>    <ul>
+      <li><a href="#tablespaces" id="markdown-toc-tablespaces">Tablespaces</a>        <ul>
+          <li><a href="#default-tablespaces" id="markdown-toc-default-tablespaces">Default Tablespaces</a></li>
         </ul>
       </li>
-      <li><a href="#buffer-pools">Buffer Pools</a></li>
+      <li><a href="#buffer-pools" id="markdown-toc-buffer-pools">Buffer Pools</a></li>
     </ul>
   </li>
-  <li><a href="#operational-commands">Operational Commands</a>    <ul>
-      <li><a href="#db2">DB2</a></li>
+  <li><a href="#operational-commands" id="markdown-toc-operational-commands">Operational Commands</a>    <ul>
+      <li><a href="#db2" id="markdown-toc-db2">DB2</a></li>
     </ul>
   </li>
-  <li><a href="#bibliography">Bibliography</a></li>
+  <li><a href="#bibliography" id="markdown-toc-bibliography">Bibliography</a></li>
 </ul>
 
 <h1 id="keys">Keys</h1>
@@ -153,17 +153,17 @@ messageStyle: "none",
 <ul>
   <li><strong>Primary Key</strong>
     <ul>
-      <li>PK is an attribute or a set of attributes that uniquely identify a specific instance of an entity. </li>
-      <li>PKs enforce entity integrity by uniquely identifying entity instances. </li>
+      <li>PK is an attribute or a set of attributes that uniquely identify a specific instance of an entity.</li>
+      <li>PKs enforce entity integrity by uniquely identifying entity instances.</li>
     </ul>
   </li>
-  <li><strong>Candidate Key</strong> - an entity can have more than one attribute that can serve as a primary key. Any key or minimum set of keys that could be a primary key is called a candidate key. (Eg. EmpId, SSN, Name of an Employee entity) </li>
-  <li><strong>Alternate Key</strong> - Rest of the non-primary keys are called alternate keys </li>
-  <li><strong>Composite Key</strong> - A primary key made up of more than one attribute is known as a composite key </li>
+  <li><strong>Candidate Key</strong> - an entity can have more than one attribute that can serve as a primary key. Any key or minimum set of keys that could be a primary key is called a candidate key. (Eg. EmpId, SSN, Name of an Employee entity)</li>
+  <li><strong>Alternate Key</strong> - Rest of the non-primary keys are called alternate keys</li>
+  <li><strong>Composite Key</strong> - A primary key made up of more than one attribute is known as a composite key</li>
   <li><strong>Foreign Key</strong>
     <ul>
-      <li>is an attribute that completes a relationship by identifying the parent entity. </li>
-      <li>Foreign keys provide a method for maintaining integrity in the data (called referential integrity) and for navigating between different instances of an entity. </li>
+      <li>is an attribute that completes a relationship by identifying the parent entity.</li>
+      <li>Foreign keys provide a method for maintaining integrity in the data (called referential integrity) and for navigating between different instances of an entity.</li>
     </ul>
   </li>
   <li><strong>Surrogate Key</strong> - system generated unique identifier. Not derived from application data.
@@ -183,9 +183,9 @@ Both primary key and unique enforce uniqueness of the column on which they are d
 <h1 id="integrity">Integrity</h1>
 
 <ul>
-  <li><strong>Data integrity</strong> - means, in part, that you can correctly and consistently navigate and manipulate the tables in the database. There are two basic rules to ensure data integrity; entity integrity and referential integrity. 
+  <li><strong>Data integrity</strong> - means, in part, that you can correctly and consistently navigate and manipulate the tables in the database. There are two basic rules to ensure data integrity; entity integrity and referential integrity.
     <ul>
-      <li><strong>Entity Integrity</strong>- Entity integrity rule states that for every instance of an entity, the value of the primary key must exist, be unique, and cannot be null. </li>
+      <li><strong>Entity Integrity</strong>- Entity integrity rule states that for every instance of an entity, the value of the primary key must exist, be unique, and cannot be null.</li>
       <li><strong>Referential Integrity</strong>- rule states that every foreign key value must match a primary key value in an associated table. Referential integrity ensures that we can correctly navigate between related entities. FKs can have nulls.</li>
     </ul>
   </li>
@@ -195,10 +195,10 @@ Both primary key and unique enforce uniqueness of the column on which they are d
 
 <ul>
   <li>Constraints enable the RDBMS enforce the integrity of the database automatically, without needing you to create triggers, rule or defaults.</li>
-  <li><strong>Types of constraints</strong>: <code>NOT NULL</code>, <code>CHECK</code>, <code>UNIQUE</code>, <code>PRIMARY KEY</code>, <code>FOREIGN KEY</code> </li>
+  <li><strong>Types of constraints</strong>: <code>NOT NULL</code>, <code>CHECK</code>, <code>UNIQUE</code>, <code>PRIMARY KEY</code>, <code>FOREIGN KEY</code></li>
   <li><strong>Check Constraints</strong>
     <ul>
-      <li>A check constraint is a type of integrity constraint in SQL which specifies a requirement that must be met by each row in a database table. The constraint must be a predicate. It can refer to a single or multiple columns of the table. The result of the predicate can be either <code>TRUE</code>, <code>FALSE</code>, or <code>UNKNOWN</code>, depending on the presence of <code>NULLs</code>. </li>
+      <li>A check constraint is a type of integrity constraint in SQL which specifies a requirement that must be met by each row in a database table. The constraint must be a predicate. It can refer to a single or multiple columns of the table. The result of the predicate can be either <code>TRUE</code>, <code>FALSE</code>, or <code>UNKNOWN</code>, depending on the presence of <code>NULLs</code>.</li>
       <li>If the predicate evaluates to <code>UNKNOWN</code>, then the constraint is not violated and the row can be inserted or updated in the table. This is contrary to predicates in <code>WHERE</code> clauses in <code>SELECT</code> or <code>UPDATE</code> statements.</li>
     </ul>
   </li>
@@ -215,7 +215,7 @@ Both primary key and unique enforce uniqueness of the column on which they are d
 <h1 id="table-types">Table Types</h1>
 
 <ul>
-  <li><strong>Heap-organized table</strong> 
+  <li><strong>Heap-organized table</strong>
     <ul>
       <li>A heap-organized table is a table with rows stored in no particular order. This is a standard Oracle table; the term “heap” is used to differentiate it from an <em>index-organized table</em> or <em>external table</em>.</li>
       <li>If a row is moved within a heap-organized table, the row’s ROWID will also change</li>
@@ -230,9 +230,9 @@ Both primary key and unique enforce uniqueness of the column on which they are d
 <ul>
   <li><strong>Index-organized Table (IOT) or Index-Only Table</strong>
     <ul>
-      <li>If the rows in a table are not too long, it may be desirable to copy all the columns into an index to make SELECTs faster. If the index has all the data, then a table is not needed. </li>
+      <li>If the rows in a table are not too long, it may be desirable to copy all the columns into an index to make SELECTs faster. If the index has all the data, then a table is not needed.</li>
       <li>An index-organized table (IOT) is a type of table that stores data in a <em>B-Tree</em> index structure.</li>
-      <li>IOTs store rows in a B-tree index structure that is logically sorted in primary key order. </li>
+      <li>IOTs store rows in a B-tree index structure that is logically sorted in primary key order.</li>
       <li>Unlike normal primary key indexes, which store only the columns included in its definition, IOT indexes store all the columns of the table</li>
       <li>Pros
         <ul>
@@ -259,7 +259,7 @@ Both primary key and unique enforce uniqueness of the column on which they are d
 <ul>
   <li><strong>External Table</strong>
     <ul>
-      <li>An external table is a table that is NOT stored within the Oracle database. Data is loaded from a file via an access driver (normally ORACLE_LOADER) when the table is accessed. </li>
+      <li>An external table is a table that is NOT stored within the Oracle database. Data is loaded from a file via an access driver (normally ORACLE_LOADER) when the table is accessed.</li>
       <li>One can think of an external table as a view that allows running SQL queries against files on a filesystem without the need to first loaded the data into the database.</li>
     </ul>
   </li>
@@ -278,7 +278,7 @@ Both primary key and unique enforce uniqueness of the column on which they are d
     <ul>
       <li>MDC tables can be used to improve performance in many cases.</li>
       <li>With clustered index you can only cluster data in one dimension. With MDC you can cluster data in multiple dimensions.</li>
-      <li>The other difference between MDC and clustered index is that MDC does not require reorgs as the data is automatically clustered. </li>
+      <li>The other difference between MDC and clustered index is that MDC does not require reorgs as the data is automatically clustered.</li>
     </ul>
   </li>
 </ul>
@@ -305,7 +305,7 @@ Both primary key and unique enforce uniqueness of the column on which they are d
   <li><strong>Temporary Tables</strong>
     <ul>
       <li><strong>Global temporary tables (DB2)</strong> - with or without logging - http://www.ibm.com/developerworks/data/library/techarticle/dm-0912globaltemptable/</li>
-      <li><strong>tempdb (Sybase)</strong> - The <code>tempdb</code> database is a special Sybase supplied database that comes in each server. Data in tempdb is not permanent. The tempdb database is cleared each time the server reboots. Any queries which do any sort of sort operation implicitly use tempdb. These queries include select statments with group by’s or order by’s. Be careful, if you select a large set of rows and use an order by or group by clause, you query may fail because tempdb isn’t big enough. The system administrator can extend the size of tempdb </li>
+      <li><strong>tempdb (Sybase)</strong> - The <code>tempdb</code> database is a special Sybase supplied database that comes in each server. Data in tempdb is not permanent. The tempdb database is cleared each time the server reboots. Any queries which do any sort of sort operation implicitly use tempdb. These queries include select statments with group by’s or order by’s. Be careful, if you select a large set of rows and use an order by or group by clause, you query may fail because tempdb isn’t big enough. The system administrator can extend the size of tempdb</li>
     </ul>
   </li>
 </ul>
@@ -313,24 +313,24 @@ Both primary key and unique enforce uniqueness of the column on which they are d
 <h1 id="views">Views</h1>
 
 <ul>
-  <li>A view is an alternate way of representing data that exists in one or more tables. </li>
-  <li>A view can include some or all of the columns from one or more tables. It can also be based on other views. </li>
-  <li>A view is the result of a query on one or more tables. A view looks like a real table, but is actually just a representation of the data from one or more tables. </li>
-  <li>A view is a logical or virtual table that does not exist in physical storage. </li>
-  <li>It is an efficient way of representing data without needing to maintain it. When the data shown in a view changes, those changes were a result of changes made to the data in the tables themselves. </li>
-  <li>Views are used to see different presentations of the same data. Views are a way to control access to sensitive data. Different users can have access to different columns and rows based on their needs. </li>
-  <li>When the column of a view is directly derived from the column of a base table, that view column inherits any constraints that apply to the base table column. For example, if a view includes a foreign key of its base table, insert and update operations using that view are subject to the same referential constraints as is the base table. </li>
-  <li>Also, if the base table of a view is a parent table, delete and update operations using that view are subject to the same rules as are delete and update operations on the base table. </li>
-  <li>A view can derive the data type of each column from the result table, or base the types on the attributes of a user-defined structured type. This is called a <strong>typed view</strong>. Similar to a typed table, a typed view can be part of a view hierarchy. </li>
-  <li>A subview inherits columns from its superview. The term subview applies to a typed view and to all typed views that are below it in the view hierarchy. A proper subview of a view V is a view below V in the typed view hierarchy. </li>
+  <li>A view is an alternate way of representing data that exists in one or more tables.</li>
+  <li>A view can include some or all of the columns from one or more tables. It can also be based on other views.</li>
+  <li>A view is the result of a query on one or more tables. A view looks like a real table, but is actually just a representation of the data from one or more tables.</li>
+  <li>A view is a logical or virtual table that does not exist in physical storage.</li>
+  <li>It is an efficient way of representing data without needing to maintain it. When the data shown in a view changes, those changes were a result of changes made to the data in the tables themselves.</li>
+  <li>Views are used to see different presentations of the same data. Views are a way to control access to sensitive data. Different users can have access to different columns and rows based on their needs.</li>
+  <li>When the column of a view is directly derived from the column of a base table, that view column inherits any constraints that apply to the base table column. For example, if a view includes a foreign key of its base table, insert and update operations using that view are subject to the same referential constraints as is the base table.</li>
+  <li>Also, if the base table of a view is a parent table, delete and update operations using that view are subject to the same rules as are delete and update operations on the base table.</li>
+  <li>A view can derive the data type of each column from the result table, or base the types on the attributes of a user-defined structured type. This is called a <strong>typed view</strong>. Similar to a typed table, a typed view can be part of a view hierarchy.</li>
+  <li>A subview inherits columns from its superview. The term subview applies to a typed view and to all typed views that are below it in the view hierarchy. A proper subview of a view V is a view below V in the typed view hierarchy.</li>
   <li>A view can become inoperative (for example, if the base table is dropped); if this occurs, the view is no longer available for SQL operations.</li>
-  <li>Views CAN contain the following: Aggregate functions and groupings, Joins Other views, distinct clause </li>
+  <li>Views CAN contain the following: Aggregate functions and groupings, Joins Other views, distinct clause</li>
   <li>
     <p>Views CANNOT contain the following: select into, compute clause, union, order by.</p>
   </li>
   <li>View Types
     <ul>
-      <li><strong>Horizontal view</strong> - Slices the source table horizontally to create the view. All of the columns of the source table participate in the view, but only some of its rows are visible through the view. Horizontal views are appropriate when the source table contains data that relates to various organizations or users. They provide a “private table” for each user, composed only of the rows needed by that user. </li>
+      <li><strong>Horizontal view</strong> - Slices the source table horizontally to create the view. All of the columns of the source table participate in the view, but only some of its rows are visible through the view. Horizontal views are appropriate when the source table contains data that relates to various organizations or users. They provide a “private table” for each user, composed only of the rows needed by that user.</li>
       <li><strong>Vertical view</strong>
         <ul>
           <li>A vertical view cuts the source tables vertically so that only selected columns participate in the view. Useful when certain columns like compensation should be hidden.</li>
@@ -366,24 +366,24 @@ Both primary key and unique enforce uniqueness of the column on which they are d
   <li><strong>Static Cursor</strong> - Specifies that cursor will use a temporary copy of the data instead of base tables. This cursor does not allow modifications and modifications made to base tables are not reflected in the data returned by fetches made to this cursor. (Kind of like <a href="technology/java-collections.html#fail-safe-iterators">snapshot iterators</a> in Java)</li>
   <li><strong>Dynamic Cursor</strong>
     <ul>
-      <li>Dynamic cursors are the opposite of static cursors. </li>
+      <li>Dynamic cursors are the opposite of static cursors.</li>
       <li>Dynamic cursors reflect all changes made to the rows in their result set when scrolling through the cursor. The data values, order, and membership of the rows in the result set can change on each fetch. All UPDATE, INSERT, and DELETE statements made by all users are visible through the cursor.  (Kind of like <a href="technology/java-collections.html#fail-safe-iterators">weakly consistent iterators</a> in Java)</li>
-      <li>Updates are visible immediately if they are made through the cursor. </li>
+      <li>Updates are visible immediately if they are made through the cursor.</li>
       <li>Updates made outside the cursor are not visible until they are committed, unless the cursor transaction isolation level is set to read uncommitted.</li>
     </ul>
   </li>
-  <li><strong>Forward-ONLY Cursor</strong> - Specifies that cursor can only fetch data sequentially from the first to the last row. FETCH NEXT is the only fetch option supported. </li>
-  <li><strong>KeySet Cursor</strong> - 
+  <li><strong>Forward-ONLY Cursor</strong> - Specifies that cursor can only fetch data sequentially from the first to the last row. FETCH NEXT is the only fetch option supported.</li>
+  <li><strong>KeySet Cursor</strong> -
     <ul>
-      <li>Specifies that cursor uses the set of keys that uniquely identify the cursor’s rows (keyset), so that the membership and order of rows in the cursor are fixed when the cursor is opened. SQL Server uses a table in tempdb to store keyset. </li>
-      <li>The KEYSET cursor allows updates nonkey values from being made through this cursor, but inserts made by other users are not visible. </li>
+      <li>Specifies that cursor uses the set of keys that uniquely identify the cursor’s rows (keyset), so that the membership and order of rows in the cursor are fixed when the cursor is opened. SQL Server uses a table in tempdb to store keyset.</li>
+      <li>The KEYSET cursor allows updates nonkey values from being made through this cursor, but inserts made by other users are not visible.</li>
       <li>Updates non-key values made by other users are visible as the owner scrolls around the cursor, but updates key values made by other users are not visible. If a row is deleted, an attempt to fetch the row returns an <code>@@FETCH_STATUS</code> of <code>-2</code></li>
     </ul>
   </li>
   <li><strong>Ref Cursors</strong> - Cursor variables are like pointers to result sets. You use them when you want to perform a query in one subprogram, and process the results in a different subprogram (possibly one written in a different language). A cursor variable has datatype REF CURSOR, and you might see them referred to informally as REF CURSORs.</li>
   <li><strong>Implicit &amp; Explicit cursors</strong>
     <ul>
-      <li>An implicit cursor is one created <em>automatically</em> for you by Oracle when you execute a query. </li>
+      <li>An implicit cursor is one created <em>automatically</em> for you by Oracle when you execute a query.</li>
       <li>An explicit cursor is one you create yourself. It takes more code, but gives more control - for example, you can just open-fetch-close if you only want the first record and don’t care if there are others.</li>
     </ul>
   </li>
@@ -424,7 +424,7 @@ Both primary key and unique enforce uniqueness of the column on which they are d
 <ul>
   <li><a href="http://www.codinghorror.com/blog/2007/10/a-visual-explanation-of-sql-joins.html">A Visual Explanation of SQL Joins - Coding Horror</a></li>
   <li>
-    <p>http://publib.boulder.ibm.com/infocenter/iseries/v5r4/index.jsp?topic=%2Fsqlp%2Frbafyjoin.htm </p>
+    <p>http://publib.boulder.ibm.com/infocenter/iseries/v5r4/index.jsp?topic=%2Fsqlp%2Frbafyjoin.htm</p>
   </li>
   <li><strong>Inner Join</strong> (<em>ANSI supported</em>)
     <ul>
@@ -459,9 +459,9 @@ Both primary key and unique enforce uniqueness of the column on which they are d
     </ul>
   </li>
   <li><strong>Exception join</strong> - A left exception join returns only the rows from the first table that do not have a match in the second table.</li>
-  <li><strong>Equijoin</strong> - </li>
-  <li><strong>Natural Join</strong>- is an equijoin with redundant columns removed. </li>
-  <li><strong>Self Join</strong> - </li>
+  <li><strong>Equijoin</strong> -</li>
+  <li><strong>Natural Join</strong>- is an equijoin with redundant columns removed.</li>
+  <li><strong>Self Join</strong> -</li>
   <li><strong>Projection</strong> - The project operator retrieves a subset of columns from a table, removing duplicate rows from the result.</li>
 </ul>
 
@@ -474,8 +474,8 @@ Both primary key and unique enforce uniqueness of the column on which they are d
 <ul>
   <li><em>when one table is small, and other table is large</em></li>
   <li><strong>What is?</strong> The nested loops join, also called nested iteration, uses one join input as the outer input table and one as the inner input table. The outer loop consumes the outer input table row by row. For every outer row, the inner loop searches for matching rows in the inner input table.</li>
-  <li>In the simplest case, the search scans an entire table or index; this is called a <strong>naive nested loops join</strong>. </li>
-  <li>If the search exploits an index, it is called an <strong>index nested loops join</strong>. </li>
+  <li>In the simplest case, the search scans an entire table or index; this is called a <strong>naive nested loops join</strong>.</li>
+  <li>If the search exploits an index, it is called an <strong>index nested loops join</strong>.</li>
   <li>If the index is built as part of the query plan (and destroyed upon completion of the query), it is called a <strong>temporary index nested loops join</strong>. (All these variants are considered by the query optimizer.)</li>
   <li><strong>When is it effective?</strong> A nested loops join is particularly effective if the outer input is small and the inner input is preindexed and large. In many small transactions, such as those affecting only a small set of rows, index nested loops joins are superior to both merge joins and hash joins. In large queries, however, nested loops joins are often not the optimal choice.</li>
   <li>Block nested loop join…</li>
@@ -498,7 +498,7 @@ Both primary key and unique enforce uniqueness of the column on which they are d
 
 <ul>
   <li><em>when the data set is large but the result set expected is small</em></li>
-  <li>This algorithm also has a startup penalty by forcing you to build a hash table of one of the input sets before the actual join can start. </li>
+  <li>This algorithm also has a startup penalty by forcing you to build a hash table of one of the input sets before the actual join can start.</li>
   <li>Performance
     <ul>
       <li>Compared to the sort merge join this is easier as it involves only one sweep through the data and therefore the computational complexity is <code>O(n)</code> while sorting won’t be better than <code>O(n log n)</code>. So in general you can build the hash faster than you would be able to do the sorting.</li>
@@ -510,7 +510,7 @@ Both primary key and unique enforce uniqueness of the column on which they are d
   <li>The hash join can only be used if you use equality as join relation.</li>
   <li>Building the hash needs temporary space and increasing work_mem sometimes helps.</li>
   <li>
-    <p>The hash join is also a good candidate for parallel processing. </p>
+    <p>The hash join is also a good candidate for parallel processing.</p>
   </li>
   <li><a href="http://etutorials.org/Misc/advanced+dba+certification+guide+and+reference/Chapter+6.+The+DB2+Optimizer/Joining+in+DB2+UDB/">Joining in DB2</a></li>
   <li><a href="http://pic.dhe.ibm.com/infocenter/db2luw/v9r7/index.jsp?topic=%2Fcom.ibm.db2.luw.admin.perf.doc%2Fdoc%2Fc0005311.html">Join Methods and Strategies</a></li>
@@ -525,28 +525,25 @@ Both primary key and unique enforce uniqueness of the column on which they are d
 
 <h3 id="default-tablespaces">Default Tablespaces</h3>
 
-<p>There are 3 table spaces created automatically when a database is created: </p>
+<p>There are 3 table spaces created automatically when a database is created:</p>
 
 <ol>
   <li><strong>Catalog (SYSCATSPACE)</strong>: The catalog and the system temporary space can be considered system structures, as they are needed for the normal operation of your database. The catalog contains metadata (data about your database objects) and must exist at all times. 
-    <ul>
-      <li><strong>System temporary space (TEMPSPACE1)</strong>: is the work area for the database manager to perform operations, like joins and overflowed sorts. There must be at least one system temporary table space in each database. </li>
-      <li><strong>Default user table space (USERSPACE1)</strong>: This is created by default, but you can delete it. 
-To create a table in a given table space, use the CREATE TABLE statement with the IN table_space_name clause. If a table space is not specified in this statement, the table will be created in the first user created table space. If you have not yet created a table space, the table will be created in the USERSPACE1 table space. </li>
-    </ul>
-  </li>
+* <strong>System temporary space (TEMPSPACE1)</strong>: is the work area for the database manager to perform operations, like joins and overflowed sorts. There must be at least one system temporary table space in each database. 
+* <strong>Default user table space (USERSPACE1)</strong>: This is created by default, but you can delete it. 
+To create a table in a given table space, use the CREATE TABLE statement with the IN table_space_name clause. If a table space is not specified in this statement, the table will be created in the first user created table space. If you have not yet created a table space, the table will be created in the USERSPACE1 table space.</li>
 </ol>
 
 <p><strong>Types</strong></p>
 
 <ol>
-  <li><strong>System-managed space (SMS)</strong>: This type of table space is managed by the operating system and requires minimal administration. This is the default table space type. </li>
+  <li><strong>System-managed space (SMS)</strong>: This type of table space is managed by the operating system and requires minimal administration. This is the default table space type.</li>
   <li><strong>Database-managed space (DMS)</strong>: This type of table space is managed by the DB2 database manager, and it requires some administration</li>
 </ol>
 
 <h2 id="buffer-pools">Buffer Pools</h2>
 
-<p>A buffer pool is an area in physical memory that caches the database information most recently used. Without buffer pools, every single piece of data has to be retrieved from disk, which is very slow. Buffer pools are associated to tables and indexes through a table space. A buffer pool is an area in memory where all index and data pages other than LOBs are processed.DB2 retrieves LOBs directly from disk. Buffer pools are one of the most important objects to tune for database performance. </p>
+<p>A buffer pool is an area in physical memory that caches the database information most recently used. Without buffer pools, every single piece of data has to be retrieved from disk, which is very slow. Buffer pools are associated to tables and indexes through a table space. A buffer pool is an area in memory where all index and data pages other than LOBs are processed.DB2 retrieves LOBs directly from disk. Buffer pools are one of the most important objects to tune for database performance.</p>
 
 <h1 id="operational-commands">Operational Commands</h1>
 

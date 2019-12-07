@@ -108,38 +108,38 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#overview">Overview</a>    <ul>
-      <li><a href="#advantages-of-messaging">Advantages of Messaging</a></li>
-      <li><a href="#messaging-architecture-styles">Messaging Architecture Styles</a>        <ul>
-          <li><a href="#service-oriented-architecture-soa">Service-Oriented Architecture (SOA)</a></li>
-          <li><a href="#enterprise-service-bus-esb">Enterprise Service Bus (ESB)</a></li>
-          <li><a href="#event-driven-architecture-eda">Event-Driven Architecture (EDA)</a></li>
-          <li><a href="#enterprise-application-integration-eai">Enterprise Application Integration (EAI)</a></li>
+  <li><a href="#overview" id="markdown-toc-overview">Overview</a>    <ul>
+      <li><a href="#advantages-of-messaging" id="markdown-toc-advantages-of-messaging">Advantages of Messaging</a></li>
+      <li><a href="#messaging-architecture-styles" id="markdown-toc-messaging-architecture-styles">Messaging Architecture Styles</a>        <ul>
+          <li><a href="#service-oriented-architecture-soa" id="markdown-toc-service-oriented-architecture-soa">Service-Oriented Architecture (SOA)</a></li>
+          <li><a href="#enterprise-service-bus-esb" id="markdown-toc-enterprise-service-bus-esb">Enterprise Service Bus (ESB)</a></li>
+          <li><a href="#event-driven-architecture-eda" id="markdown-toc-event-driven-architecture-eda">Event-Driven Architecture (EDA)</a></li>
+          <li><a href="#enterprise-application-integration-eai" id="markdown-toc-enterprise-application-integration-eai">Enterprise Application Integration (EAI)</a></li>
         </ul>
       </li>
     </ul>
   </li>
-  <li><a href="#ems-enterprise-messaging-system">EMS (Enterprise Messaging System)</a>    <ul>
-      <li><a href="#architecture-styles">Architecture styles</a></li>
-      <li><a href="#messaging-models-or-domains">Messaging Models or Domains</a></li>
+  <li><a href="#ems-enterprise-messaging-system" id="markdown-toc-ems-enterprise-messaging-system">EMS (Enterprise Messaging System)</a>    <ul>
+      <li><a href="#architecture-styles" id="markdown-toc-architecture-styles">Architecture styles</a></li>
+      <li><a href="#messaging-models-or-domains" id="markdown-toc-messaging-models-or-domains">Messaging Models or Domains</a></li>
     </ul>
   </li>
-  <li><a href="#jms">JMS</a>    <ul>
-      <li><a href="#jms-programming-step-by-step">JMS Programming Step-By-Step</a>        <ul>
-          <li><a href="#step-1-define-jndiproperties">Step 1: Define jndi.properties</a></li>
-          <li><a href="#step-2-obtaining-a-jndi-connection">Step 2: Obtaining a JNDI connection</a></li>
+  <li><a href="#jms" id="markdown-toc-jms">JMS</a>    <ul>
+      <li><a href="#jms-programming-step-by-step" id="markdown-toc-jms-programming-step-by-step">JMS Programming Step-By-Step</a>        <ul>
+          <li><a href="#step-1-define-jndiproperties" id="markdown-toc-step-1-define-jndiproperties">Step 1: Define jndi.properties</a></li>
+          <li><a href="#step-2-obtaining-a-jndi-connection" id="markdown-toc-step-2-obtaining-a-jndi-connection">Step 2: Obtaining a JNDI connection</a></li>
         </ul>
       </li>
     </ul>
   </li>
-  <li><a href="#messaging-technologies">Messaging Technologies</a>    <ul>
-      <li><a href="#rabbitmq">RabbitMQ</a></li>
-      <li><a href="#zeromq">ZeroMQ</a></li>
-      <li><a href="#activemq">ActiveMQ</a></li>
-      <li><a href="#kafka">Kafka</a></li>
+  <li><a href="#messaging-technologies" id="markdown-toc-messaging-technologies">Messaging Technologies</a>    <ul>
+      <li><a href="#rabbitmq" id="markdown-toc-rabbitmq">RabbitMQ</a></li>
+      <li><a href="#zeromq" id="markdown-toc-zeromq">ZeroMQ</a></li>
+      <li><a href="#activemq" id="markdown-toc-activemq">ActiveMQ</a></li>
+      <li><a href="#kafka" id="markdown-toc-kafka">Kafka</a></li>
     </ul>
   </li>
-  <li><a href="#bibliography">Bibliography</a></li>
+  <li><a href="#bibliography" id="markdown-toc-bibliography">Bibliography</a></li>
 </ul>
 
 <h1 id="overview">Overview</h1>
@@ -151,7 +151,7 @@ messageStyle: "none",
   <li>
     <p>provides high degree of decoupling between components, systems, etc.</p>
   </li>
-  <li>Some of the messaging  techniques and technologies developed: 
+  <li>Some of the messaging  techniques and technologies developed:
     <ul>
       <li>MDB(Message Driven Bean from EJB spec)</li>
       <li>Spring Messaging Framework</li>
@@ -221,10 +221,10 @@ messageStyle: "none",
   <li>EMS (Enterprise Message Systems) or MOM (Message Oriented Middleware): Application-to-application messaging systems, when used in business systems, are generally referred to as EMS or MOM.</li>
   <li>Clients send messages to the messaging server, which then distributes them to one or more recipients. Client is the business app or component that uses the JMS API.</li>
   <li>Key feature of messaging is delivering message asynchronously. Client app can send a message and forget about it.</li>
-  <li><strong>Message-Oriented Middleware</strong> architectures<br />
+  <li><strong>Message-Oriented Middleware</strong> architectures
     <ul>
       <li>vary in their implementation from a centralized architecture that depends on a message server to perform routing, to a decentralized architecture that distributes the server processing out to client machines. Some models use a hybrid approach.</li>
-      <li>vary in the protocol used at the network transport layer including TCP/IP, HTTP, SSL, and IP multicast. </li>
+      <li>vary in the protocol used at the network transport layer including TCP/IP, HTTP, SSL, and IP multicast.</li>
     </ul>
   </li>
 </ul>
@@ -298,7 +298,7 @@ messageStyle: "none",
     <ul>
       <li>can be broken down into 3 parts
         <ul>
-          <li>General API - used to send/receive messages from either a queue or a topic </li>
+          <li>General API - used to send/receive messages from either a queue or a topic</li>
           <li><strong>Point-to-point API</strong> - used solely for messaging with queues</li>
           <li><strong>Publish-subscribe API</strong> - used soleley for messaging with topics</li>
         </ul>
@@ -382,7 +382,7 @@ messageStyle: "none",
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>The jndi.properties file also contains the JNDI connection information for the JMS provider. You will need to set the initial context factory class, provider URL, username, and password needed to connect to the JMS server. Each vendor will have a different context factory class and URL name for connecting to the server. You will need to consult the documentation of your specific JMS provider or Java EE container to obtain
-these values. </p>
+these values.</p>
 
 <h3 id="step-2-obtaining-a-jndi-connection">Step 2: Obtaining a JNDI connection</h3>
 
@@ -391,7 +391,7 @@ and configured by a system administrator.</p>
 
 <p>JMS servers will either work with a separate directory service like LDAP or provide their own directory service that supports the JNDI API.</p>
 
-<p>Creating a connection to a JNDI naming service requires that a javax.naming.InitialContext object be created. An InitialContext is the starting point for any JNDI lookup—it’s similar in concept to the root of a filesystem. The InitialContext provides a network connection to the directory service that acts as a root for accessing JMS administered objects. </p>
+<p>Creating a connection to a JNDI naming service requires that a javax.naming.InitialContext object be created. An InitialContext is the starting point for any JNDI lookup—it’s similar in concept to the root of a filesystem. The InitialContext provides a network connection to the directory service that acts as a root for accessing JMS administered objects.</p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>

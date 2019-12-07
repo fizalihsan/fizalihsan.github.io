@@ -108,46 +108,46 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#overview">Overview</a>    <ul>
-      <li><a href="#core-concepts">Core Concepts</a></li>
+  <li><a href="#overview" id="markdown-toc-overview">Overview</a>    <ul>
+      <li><a href="#core-concepts" id="markdown-toc-core-concepts">Core Concepts</a></li>
     </ul>
   </li>
-  <li><a href="#authentication">1. Authentication</a>    <ul>
-      <li><a href="#basic-authentication">Basic Authentication</a>        <ul>
-          <li><a href="#unauthorized-request">Unauthorized request</a></li>
-          <li><a href="#response-with-authorization-details">Response with authorization details</a></li>
+  <li><a href="#authentication" id="markdown-toc-authentication">1. Authentication</a>    <ul>
+      <li><a href="#basic-authentication" id="markdown-toc-basic-authentication">Basic Authentication</a>        <ul>
+          <li><a href="#unauthorized-request" id="markdown-toc-unauthorized-request">Unauthorized request</a></li>
+          <li><a href="#response-with-authorization-details" id="markdown-toc-response-with-authorization-details">Response with authorization details</a></li>
         </ul>
       </li>
-      <li><a href="#digest-authentication">Digest Authentication</a>        <ul>
-          <li><a href="#pros">Pros</a></li>
-          <li><a href="#cons">Cons</a></li>
+      <li><a href="#digest-authentication" id="markdown-toc-digest-authentication">Digest Authentication</a>        <ul>
+          <li><a href="#pros" id="markdown-toc-pros">Pros</a></li>
+          <li><a href="#cons" id="markdown-toc-cons">Cons</a></li>
         </ul>
       </li>
-      <li><a href="#x509-certificates">X.509 certificates</a>        <ul>
-          <li><a href="#pros-1">Pros</a></li>
-          <li><a href="#cons-1">Cons</a></li>
+      <li><a href="#x509-certificates" id="markdown-toc-x509-certificates">X.509 certificates</a>        <ul>
+          <li><a href="#pros-1" id="markdown-toc-pros-1">Pros</a></li>
+          <li><a href="#cons-1" id="markdown-toc-cons-1">Cons</a></li>
         </ul>
       </li>
-      <li><a href="#openauth-openid">OpenAuth (OpenID)</a></li>
+      <li><a href="#openauth-openid" id="markdown-toc-openauth-openid">OpenAuth (OpenID)</a></li>
     </ul>
   </li>
-  <li><a href="#authorization">2. Authorization</a>    <ul>
-      <li><a href="#simple-access-control-list-acl">Simple Access Control List (ACL)</a></li>
-      <li><a href="#json-web-tokens">JSON Web Tokens</a></li>
-      <li><a href="#saml">SAML</a></li>
+  <li><a href="#authorization" id="markdown-toc-authorization">2. Authorization</a>    <ul>
+      <li><a href="#simple-access-control-list-acl" id="markdown-toc-simple-access-control-list-acl">Simple Access Control List (ACL)</a></li>
+      <li><a href="#json-web-tokens" id="markdown-toc-json-web-tokens">JSON Web Tokens</a></li>
+      <li><a href="#saml" id="markdown-toc-saml">SAML</a></li>
     </ul>
   </li>
-  <li><a href="#cryptography">3. Cryptography</a>    <ul>
-      <li><a href="#hashing-aka-message-digest">Hashing (a.k.a Message Digest)</a>        <ul>
-          <li><a href="#salt-hashing">Salt Hashing</a></li>
+  <li><a href="#cryptography" id="markdown-toc-cryptography">3. Cryptography</a>    <ul>
+      <li><a href="#hashing-aka-message-digest" id="markdown-toc-hashing-aka-message-digest">Hashing (a.k.a Message Digest)</a>        <ul>
+          <li><a href="#salt-hashing" id="markdown-toc-salt-hashing">Salt Hashing</a></li>
         </ul>
       </li>
-      <li><a href="#cipher">Cipher</a></li>
-      <li><a href="#miscellaneous">Miscellaneous</a></li>
+      <li><a href="#cipher" id="markdown-toc-cipher">Cipher</a></li>
+      <li><a href="#miscellaneous" id="markdown-toc-miscellaneous">Miscellaneous</a></li>
     </ul>
   </li>
-  <li><a href="#session-management">4. Session Management</a></li>
-  <li><a href="#bibliography">Bibliography</a></li>
+  <li><a href="#session-management" id="markdown-toc-session-management">4. Session Management</a></li>
+  <li><a href="#bibliography" id="markdown-toc-bibliography">Bibliography</a></li>
 </ul>
 
 <h1 id="overview">Overview</h1>
@@ -291,7 +291,7 @@ When the server receives this request, it builds its own version of the response
 
 <h3 id="cons">Cons</h3>
 
-<p>This approach is that unless you use HTTPS, you are still vulnerable to man-in-the-middle attacks, where the middleman can tell a client to use Basic authentication to obtain a password.  </p>
+<p>This approach is that unless you use HTTPS, you are still vulnerable to man-in-the-middle attacks, where the middleman can tell a client to use Basic authentication to obtain a password.</p>
 
 <h2 id="x509-certificates">X.509 certificates</h2>
 
@@ -354,7 +354,7 @@ When the server receives this request, it builds its own version of the response
 
 <ul>
   <li>Hashing/Message digests are secure one-way hash functions that take arbitrary-sized data and output a fixed-length hash value.</li>
-  <li>They turn any amount of data into a fixed-length “fingerprint” that cannot be reversed. If the input changes by even a tiny bit, the resulting hash is completely different (see the example above). </li>
+  <li>They turn any amount of data into a fixed-length “fingerprint” that cannot be reversed. If the input changes by even a tiny bit, the resulting hash is completely different (see the example above).</li>
   <li><strong>Cryptographic hash functions</strong>
     <ul>
       <li>regular hash functions used in hash tables are designed to be fast, not secure</li>
@@ -376,7 +376,7 @@ When the server receives this request, it builds its own version of the response
   <li>There are several ways in which even a cryptographic hashed password can also be hacked.</li>
   <li><strong>Dictionary Attacks</strong>
     <ul>
-      <li>uses a file containing words, phrases, common passwords, and other strings that are likely to be used as a password. Each word in the file is hashed, and its hash is compared to the password hash. If they match, that word is the password. </li>
+      <li>uses a file containing words, phrases, common passwords, and other strings that are likely to be used as a password. Each word in the file is hashed, and its hash is compared to the password hash. If they match, that word is the password.</li>
     </ul>
   </li>
   <li><strong>Brute Force Attacks</strong></li>
@@ -406,11 +406,11 @@ When the server receives this request, it builds its own version of the response
   <li>
     <p>To check if a password is correct, we need the salt, so it is usually stored in the user account database along with the hash, or as part of the hash string itself.</p>
   </li>
-  <li>The salt does not need to be secret, but should be generated using Cryptographically Secure Pseudo-Random Generator (CSPRG) </li>
+  <li>The salt does not need to be secret, but should be generated using Cryptographically Secure Pseudo-Random Generator (CSPRG)</li>
   <li>DO NOT use the username as the salt</li>
   <li>DO NOT reused the salt for all users. Use a separate random salt string for every user and every time the password is changed.</li>
   <li>DO NOT use a short salt. To make it impossible for an attacker to create a lookup table for every possible salt, a good rule of thumb is to use a salt that is the same size as the output of the hash function. For example, the output of SHA256 is 256 bits (32 bytes), so the salt should be at least 32 random bytes.</li>
-  <li>DO NOT use double hashing or wacky combination of hashing functions. 
+  <li>DO NOT use double hashing or wacky combination of hashing functions.
     <ul>
       <li>Cons
         <ul>

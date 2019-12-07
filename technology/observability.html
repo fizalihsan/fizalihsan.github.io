@@ -108,51 +108,51 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#overview">Overview</a></li>
-  <li><a href="#monitoring">Monitoring</a>    <ul>
-      <li><a href="#types">Types</a></li>
-      <li><a href="#why-monitor">Why Monitor?</a></li>
-      <li><a href="#golden-signals">4 Golden Signals</a></li>
-      <li><a href="#anti-patterns">Anti-patterns</a></li>
-      <li><a href="#design-patterns">Design Patterns</a></li>
-      <li><a href="#telemetry-data">Telemetry Data</a></li>
-      <li><a href="#components">Components</a>        <ul>
-          <li><a href="#data-collection">1) Data collection</a></li>
-          <li><a href="#data-storage">2) Data storage</a></li>
-          <li><a href="#visualization">3) Visualization</a></li>
-          <li><a href="#analytics-and-reporting">4) Analytics and reporting</a></li>
-          <li><a href="#alerting">5) Alerting</a></li>
+  <li><a href="#overview" id="markdown-toc-overview">Overview</a></li>
+  <li><a href="#monitoring" id="markdown-toc-monitoring">Monitoring</a>    <ul>
+      <li><a href="#types" id="markdown-toc-types">Types</a></li>
+      <li><a href="#why-monitor" id="markdown-toc-why-monitor">Why Monitor?</a></li>
+      <li><a href="#golden-signals" id="markdown-toc-golden-signals">4 Golden Signals</a></li>
+      <li><a href="#anti-patterns" id="markdown-toc-anti-patterns">Anti-patterns</a></li>
+      <li><a href="#design-patterns" id="markdown-toc-design-patterns">Design Patterns</a></li>
+      <li><a href="#telemetry-data" id="markdown-toc-telemetry-data">Telemetry Data</a></li>
+      <li><a href="#components" id="markdown-toc-components">Components</a>        <ul>
+          <li><a href="#data-collection" id="markdown-toc-data-collection">1) Data collection</a></li>
+          <li><a href="#data-storage" id="markdown-toc-data-storage">2) Data storage</a></li>
+          <li><a href="#visualization" id="markdown-toc-visualization">3) Visualization</a></li>
+          <li><a href="#analytics-and-reporting" id="markdown-toc-analytics-and-reporting">4) Analytics and reporting</a></li>
+          <li><a href="#alerting" id="markdown-toc-alerting">5) Alerting</a></li>
         </ul>
       </li>
-      <li><a href="#monitoring-at-various-tiers">Monitoring at various tiers</a>        <ul>
-          <li><a href="#business-monitoring">Business Monitoring</a></li>
-          <li><a href="#frontend-monitoring">Frontend Monitoring</a></li>
-          <li><a href="#application-monitoring">Application Monitoring</a></li>
-          <li><a href="#server-monitoring">Server Monitoring</a></li>
-          <li><a href="#network-monitoring">Network Monitoring</a></li>
-          <li><a href="#security-monitoring">Security Monitoring</a></li>
-        </ul>
-      </li>
-    </ul>
-  </li>
-  <li><a href="#tools">Tools</a>    <ul>
-      <li><a href="#splunk">Splunk</a>        <ul>
-          <li><a href="#components-1">Components</a></li>
-          <li><a href="#queries">Queries</a></li>
-          <li><a href="#analytics">Analytics</a></li>
+      <li><a href="#monitoring-at-various-tiers" id="markdown-toc-monitoring-at-various-tiers">Monitoring at various tiers</a>        <ul>
+          <li><a href="#business-monitoring" id="markdown-toc-business-monitoring">Business Monitoring</a></li>
+          <li><a href="#frontend-monitoring" id="markdown-toc-frontend-monitoring">Frontend Monitoring</a></li>
+          <li><a href="#application-monitoring" id="markdown-toc-application-monitoring">Application Monitoring</a></li>
+          <li><a href="#server-monitoring" id="markdown-toc-server-monitoring">Server Monitoring</a></li>
+          <li><a href="#network-monitoring" id="markdown-toc-network-monitoring">Network Monitoring</a></li>
+          <li><a href="#security-monitoring" id="markdown-toc-security-monitoring">Security Monitoring</a></li>
         </ul>
       </li>
     </ul>
   </li>
-  <li><a href="#logging">Logging</a>    <ul>
-      <li><a href="#slf4j">slf4j</a></li>
+  <li><a href="#tools" id="markdown-toc-tools">Tools</a>    <ul>
+      <li><a href="#splunk" id="markdown-toc-splunk">Splunk</a>        <ul>
+          <li><a href="#components-1" id="markdown-toc-components-1">Components</a></li>
+          <li><a href="#queries" id="markdown-toc-queries">Queries</a></li>
+          <li><a href="#analytics" id="markdown-toc-analytics">Analytics</a></li>
+        </ul>
+      </li>
     </ul>
   </li>
-  <li><a href="#tracing">Tracing</a>    <ul>
-      <li><a href="#opentracing">OpenTracing</a></li>
+  <li><a href="#logging" id="markdown-toc-logging">Logging</a>    <ul>
+      <li><a href="#slf4j" id="markdown-toc-slf4j">slf4j</a></li>
     </ul>
   </li>
-  <li><a href="#references">References</a></li>
+  <li><a href="#tracing" id="markdown-toc-tracing">Tracing</a>    <ul>
+      <li><a href="#opentracing" id="markdown-toc-opentracing">OpenTracing</a></li>
+    </ul>
+  </li>
+  <li><a href="#references" id="markdown-toc-references">References</a></li>
 </ul>
 
 <blockquote>
@@ -239,7 +239,7 @@ Monitoring doesn’t <em>fix</em> anything. You need to fix things after they br
   <li><strong>White-box monitoring</strong>
     <ul>
       <li>Monitoring based on metrics exposed by the internals of the system, including logs, interfaces like JVM profiling interface, or an HTTP handler that emits internal statistics. e.g. <code>/health</code> endpoint pattern.</li>
-      <li>It depends on the ability to inspect the innards of the system, such as logs or HTTP endpoints, with instrumentation. </li>
+      <li>It depends on the ability to inspect the innards of the system, such as logs or HTTP endpoints, with instrumentation.</li>
       <li>It allows detection of imminent problems, failures masked by retires, and so forth.</li>
       <li>Telemetry from white-box monitoring is essential for debugging. e.g., <em>if web requests are slow, you need to know whether the slowness is caused by a network problem or slowness in database.</em></li>
     </ul>
@@ -275,36 +275,36 @@ Monitoring doesn’t <em>fix</em> anything. You need to fix things after they br
 <ul>
   <li><strong>Latency</strong>
     <ul>
-      <li>The time it takes to service a request. </li>
-      <li>It’s important to distinguish between the latency of successful requests and the latency of failed requests. </li>
-      <li>For example, an HTTP 500 error triggered due to loss of connection to a database or other critical backend might be served very quickly; however, as an HTTP 500 error indicates a failed request, factoring 500s into your overall latency might result in misleading calculations. On the other hand, a slow error is even worse than a fast error! </li>
+      <li>The time it takes to service a request.</li>
+      <li>It’s important to distinguish between the latency of successful requests and the latency of failed requests.</li>
+      <li>For example, an HTTP 500 error triggered due to loss of connection to a database or other critical backend might be served very quickly; however, as an HTTP 500 error indicates a failed request, factoring 500s into your overall latency might result in misleading calculations. On the other hand, a slow error is even worse than a fast error!</li>
     </ul>
   </li>
   <li><strong>Traffic</strong>
     <ul>
-      <li>A measure of how much demand is being placed on your system, measured in a high-level system-specific metric. </li>
-      <li>For a web service, this measurement is usually HTTP requests per second, perhaps broken out by the nature of the requests (e.g., static versus dynamic content). </li>
-      <li>For an audio streaming system, this measurement might focus on network I/O rate or concurrent sessions. </li>
+      <li>A measure of how much demand is being placed on your system, measured in a high-level system-specific metric.</li>
+      <li>For a web service, this measurement is usually HTTP requests per second, perhaps broken out by the nature of the requests (e.g., static versus dynamic content).</li>
+      <li>For an audio streaming system, this measurement might focus on network I/O rate or concurrent sessions.</li>
       <li>For a key-value storage system, this measurement might be transactions and retrievals per second.</li>
     </ul>
   </li>
   <li><strong>Errors</strong>
     <ul>
-      <li>The rate of requests that fail, 
+      <li>The rate of requests that fail,
         <ul>
-          <li>either <strong><em>explicitly</em></strong> (e.g., HTTP 500s), </li>
-          <li><strong><em>implicitly</em></strong> (for example, an HTTP 200 success response, but coupled with the wrong content), </li>
-          <li>or <strong><em>by policy</em></strong> (for example, “If you committed to one-second response times, any request over one second is an error”). </li>
+          <li>either <strong><em>explicitly</em></strong> (e.g., HTTP 500s),</li>
+          <li><strong><em>implicitly</em></strong> (for example, an HTTP 200 success response, but coupled with the wrong content),</li>
+          <li>or <strong><em>by policy</em></strong> (for example, “If you committed to one-second response times, any request over one second is an error”).</li>
         </ul>
       </li>
-      <li>Where protocol response codes are insufficient to express all failure conditions, secondary (internal) protocols may be necessary to track partial failure modes. </li>
+      <li>Where protocol response codes are insufficient to express all failure conditions, secondary (internal) protocols may be necessary to track partial failure modes.</li>
       <li>Monitoring these cases can be drastically different: catching HTTP 500s at your load balancer can do a decent job of catching all completely failed requests, while only end-to-end system tests can detect that you’re serving the wrong content.</li>
     </ul>
   </li>
   <li><strong>Saturation</strong>
     <ul>
-      <li>How “full” your service is. </li>
-      <li>A measure of your system fraction, emphasizing the resources that are most constrained (e.g., in a memory-constrained system, show memory; in an I/O- constrained system, show I/O). </li>
+      <li>How “full” your service is.</li>
+      <li>A measure of your system fraction, emphasizing the resources that are most constrained (e.g., in a memory-constrained system, show memory; in an I/O- constrained system, show I/O).</li>
       <li>Note that many systems degrade in performance before they achieve 100% utilization, so having a utilization target is essential.</li>
       <li>Latency increases are often a leading indicator of saturation.</li>
       <li>Saturation is also concerned with predications of impending saturation, such as <em>“it looks like your DB will fill its hard drive in 4 hours”</em></li>
@@ -321,7 +321,7 @@ Monitoring doesn’t <em>fix</em> anything. You need to fix things after they br
       <li>Monitoring isn’t a single problem, so it stands to reason that it can’t be solved with a single tool either.</li>
       <li>Agentless monitoring is extraordinarily inflexible and will never give you the amount of control and visibility you desire.</li>
       <li><strong><em>How many tools is too many?</em></strong> - If there are 3 tools to monitor your DB and they all provide the same information, you should consider consolidating. On the other hand, if all three provide different information, you’re probably fine.</li>
-      <li><em>Avoid Cargo-culting tools</em> - Adopting tools and procedures of more successful teams and companies in the misguided notion that the tools and procedures are what made those teams successful, so they will also make your own team successful in the same ways. Sadly, the cause and effect are backward: the success that team experienced led them to create the tools and procedures, not the other way around.  </li>
+      <li><em>Avoid Cargo-culting tools</em> - Adopting tools and procedures of more successful teams and companies in the misguided notion that the tools and procedures are what made those teams successful, so they will also make your own team successful in the same ways. Sadly, the cause and effect are backward: the success that team experienced led them to create the tools and procedures, not the other way around.</li>
     </ul>
   </li>
   <li><strong>Monitoring-as-a-Job</strong>
@@ -398,8 +398,8 @@ Monitoring doesn’t <em>fix</em> anything. You need to fix things after they br
   </li>
   <li><strong>Metrics</strong>
     <ul>
-      <li>Metrics are an aggregated set of measurements grouped or collected at regular intervals. </li>
-      <li>Unlike events, metrics are not discrete — they represent aggregates of data over a given time span. </li>
+      <li>Metrics are an aggregated set of measurements grouped or collected at regular intervals.</li>
+      <li>Unlike events, metrics are not discrete — they represent aggregates of data over a given time span.</li>
       <li>Types of metric aggregation are diverse (e.g., average, total, minimum, maximum, sum-of-squares) but all metrics generally share the following traits:
         <ul>
           <li>A timestamp (note that this timestamp represents a timespan, not a specific time)</li>
@@ -444,7 +444,7 @@ Monitoring doesn’t <em>fix</em> anything. You need to fix things after they br
       <li>Logs come in 2 types
         <ul>
           <li><em>Unstructured Logs</em></li>
-          <li><em>Structured Logs</em>: most common example is JSON format. </li>
+          <li><em>Structured Logs</em>: most common example is JSON format.</li>
         </ul>
       </li>
       <li>One can event produce multiple logs. e.g., one customer purchase event in a vending machine could potentially have multiple log messages like coin inserted, buttons pressed, dispensed, etc.</li>
@@ -462,16 +462,16 @@ Monitoring doesn’t <em>fix</em> anything. You need to fix things after they br
 
 <h2 id="components">Components</h2>
 
-<p>https://www.usenix.org/sites/default/files/conference/protected-files/dickson.pdf </p>
+<p>https://www.usenix.org/sites/default/files/conference/protected-files/dickson.pdf</p>
 
 <p>A monitoring service has 5 primary facets</p>
 
 <h3 id="data-collection">1) Data collection</h3>
 
 <ul>
-  <li><em>Pull-based</em> 
+  <li><em>Pull-based</em>
     <ul>
-      <li>SNMP, Nagios. </li>
+      <li>SNMP, Nagios.</li>
       <li>use of <code>/health</code> endpoint pattern in app monitoring which exposes metrics and health information about an app which can be polled by a monitoring service, service discovery tool like Consul and etcd or by a load balancer.</li>
       <li>Pull model can be difficult to scale, as it requires central systems to keep track of all known clients, handle scheduling, and parse returning data.</li>
     </ul>
@@ -533,9 +533,9 @@ Monitoring doesn’t <em>fix</em> anything. You need to fix things after they br
 </blockquote>
 
 <ul>
-  <li>SLA (<em>Service Level Agreement</em>) 
+  <li>SLA (<em>Service Level Agreement</em>)
     <ul>
-      <li>is a contract that the service provider promises customers on service availability, performance, etc. </li>
+      <li>is a contract that the service provider promises customers on service availability, performance, etc.</li>
       <li>SLAs are for external</li>
     </ul>
   </li>
@@ -674,7 +674,7 @@ Monitoring doesn’t <em>fix</em> anything. You need to fix things after they br
     <ul>
       <li><em>Navigation Timing API</em>
         <ul>
-          <li>Browsers expose page performance metrics via <a href="https://www.w3.org/TR/navigation-timing">Navigation Timing API</a>. </li>
+          <li>Browsers expose page performance metrics via <a href="https://www.w3.org/TR/navigation-timing">Navigation Timing API</a>.</li>
           <li>This API exposes 21 metrics. Consistently useful among them are <code>navigationStart</code>, <code>domLoading</code>, <code>domInteractive</code>, <code>domContentLoaded</code>, <code>domComplete</code></li>
         </ul>
       </li>
@@ -764,7 +764,7 @@ Monitoring doesn’t <em>fix</em> anything. You need to fix things after they br
   <li><strong>SSL Certificates</strong>
     <ul>
       <li>For external site monitoring, use tools like Pingdom, StatusCake, etc.</li>
-      <li>For internal site monitoring, create custom shell scripts. </li>
+      <li>For internal site monitoring, create custom shell scripts.</li>
     </ul>
   </li>
   <li><strong>Web Servers</strong>
@@ -772,9 +772,9 @@ Monitoring doesn’t <em>fix</em> anything. You need to fix things after they br
       <li><em>Requests per second (req/sec)</em>:Golden metric for assessing web server performance or throughput.</li>
       <li><em>open connections</em> or <em>keepalives</em>
         <ul>
-          <li>connections are <em>not</em> requests. Prior to the use of keepalives, each request required its own connection. Since a web page may have multiple objects to request for the page to load, this led to a whole lot of connections. </li>
-          <li>Opening a connection requires going through the full TCP handshake, setting up a connection, moving data, and tearing down the connection - dozens of times for a single page. </li>
-          <li>Thus, <em>HTTP keepalives</em> were born: the web server holds open the connection for a client rather than tearing it down, to reuse the connection for the client which allows many requests to be made over a single connection. Of course, the connection can’t be held open forever, so keepalives are governed by a timeout on the webserver side. </li>
+          <li>connections are <em>not</em> requests. Prior to the use of keepalives, each request required its own connection. Since a web page may have multiple objects to request for the page to load, this led to a whole lot of connections.</li>
+          <li>Opening a connection requires going through the full TCP handshake, setting up a connection, moving data, and tearing down the connection - dozens of times for a single page.</li>
+          <li>Thus, <em>HTTP keepalives</em> were born: the web server holds open the connection for a client rather than tearing it down, to reuse the connection for the client which allows many requests to be made over a single connection. Of course, the connection can’t be held open forever, so keepalives are governed by a timeout on the webserver side.</li>
           <li>There is also a keepalive configuration on the browser side called <em>persistent connection</em> with their own timeout values. All modern browsers use persistent connections by default.</li>
         </ul>
       </li>
@@ -835,7 +835,7 @@ Monitoring doesn’t <em>fix</em> anything. You need to fix things after they br
   <li><a href="http://www.elasticsearch.org/">ElasticSearch</a></li>
   <li><a href="https://coreos.com/etcd">etcd</a></li>
   <li><a href="http://www.fluentd.org/">FluentD</a> - an open-source tool to collect events and logs and store as JSON - built on CRuby - plugins enables to store the massive data for Log Search (like ElasticSearch), Analytics and Archiving (MongoDB, S3, Hadoop)</li>
-  <li><a href="http://ganglia.info/">Ganglia</a> - a scalable distributed system monitor tool for high performance computing systems such as clusters and grids. - typically used with Nagios. </li>
+  <li><a href="http://ganglia.info/">Ganglia</a> - a scalable distributed system monitor tool for high performance computing systems such as clusters and grids. - typically used with Nagios.</li>
   <li><a href="https://grafana.com">Grafana</a> - Visualization tool</li>
   <li><a href="http://graphite.wikidot.com/">Graphite</a>
     <ul>
@@ -910,9 +910,9 @@ Monitoring doesn’t <em>fix</em> anything. You need to fix things after they br
   <li>is a time-series indexer - a product that takes care of the three Vs very well.</li>
   <li>3 main functionalities
     <ul>
-      <li><strong>Data collection</strong> 
+      <li><strong>Data collection</strong>
         <ul>
-          <li>from static source </li>
+          <li>from static source</li>
           <li>from real-time source</li>
           <li>from log files, rolling log files</li>
           <li>from databases</li>
@@ -971,7 +971,7 @@ Monitoring doesn’t <em>fix</em> anything. You need to fix things after they br
       <li>Create searches, graphs, and reports using Splunk</li>
     </ul>
   </li>
-  <li>Operational Intelligence refers to the information collected and processed </li>
+  <li>Operational Intelligence refers to the information collected and processed</li>
   <li>Semantic logging as data or events that are written to log files explicitly for the purpose of gathering analytics.</li>
 </ul>
 
@@ -995,11 +995,11 @@ Monitoring doesn’t <em>fix</em> anything. You need to fix things after they br
 <h1 id="tracing">Tracing</h1>
 
 <ul>
-  <li>Distributed Tracing is a methodology and toolchain for monitoring the complex interactions inherent in a microservice architecture. </li>
+  <li>Distributed Tracing is a methodology and toolchain for monitoring the complex interactions inherent in a microservice architecture.</li>
   <li>e.g. Google Dapper, Zipkin</li>
   <li>How it works?
     <ul>
-      <li>for every request that ocmes in, “tag” it with a unique request ID. </li>
+      <li>for every request that ocmes in, “tag” it with a unique request ID.</li>
       <li>this request ID stays with the request and resulting requests throughout its life, allowing to see what services a request touches and how much time is spent in each service.</li>
     </ul>
   </li>
@@ -1010,10 +1010,10 @@ Monitoring doesn’t <em>fix</em> anything. You need to fix things after they br
 
 <ul>
   <li><a href="https://opentracing.io/">OpenTracing</a> is a vendor neutral specification for instrumentation APIs.</li>
-  <li>It offers consistent, expressive, vendor-neutral APIs for popular platforms, making it easy for developers to add (or switch) tracing implementations with an <code>O(1)</code> configuration change. </li>
+  <li>It offers consistent, expressive, vendor-neutral APIs for popular platforms, making it easy for developers to add (or switch) tracing implementations with an <code>O(1)</code> configuration change.</li>
   <li>OpenTracing also offers a lingua franca for OSS instrumentation and platform-specific tracing helper libraries.</li>
   <li><a href="https://github.com/yurishkuro/opentracing-tutorial">Tutorials</a></li>
-  <li>CNCF <a href="https://jaegertracing.io/">Jaeger</a>, a Distributed Tracing UI Platform </li>
+  <li>CNCF <a href="https://jaegertracing.io/">Jaeger</a>, a Distributed Tracing UI Platform</li>
 </ul>
 
 <h1 id="references">References</h1>

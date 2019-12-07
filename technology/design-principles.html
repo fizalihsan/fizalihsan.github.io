@@ -108,24 +108,24 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#design-idioms">Design Idioms</a></li>
-  <li><a href="#api-design---best-practices">API Design - Best Practices</a></li>
-  <li><a href="#interface">Interface</a>    <ul>
-      <li><a href="#interface-types">Interface Types</a></li>
-      <li><a href="#properties-of-an-interface">Properties of an Interface</a></li>
+  <li><a href="#design-idioms" id="markdown-toc-design-idioms">Design Idioms</a></li>
+  <li><a href="#api-design---best-practices" id="markdown-toc-api-design---best-practices">API Design - Best Practices</a></li>
+  <li><a href="#interface" id="markdown-toc-interface">Interface</a>    <ul>
+      <li><a href="#interface-types" id="markdown-toc-interface-types">Interface Types</a></li>
+      <li><a href="#properties-of-an-interface" id="markdown-toc-properties-of-an-interface">Properties of an Interface</a></li>
     </ul>
   </li>
-  <li><a href="#class-design-principles">Class Design Principles</a>    <ul>
-      <li><a href="#solid-principles">SOLID principles</a></li>
-      <li><a href="#law-of-demeter">Law of Demeter</a></li>
+  <li><a href="#class-design-principles" id="markdown-toc-class-design-principles">Class Design Principles</a>    <ul>
+      <li><a href="#solid-principles" id="markdown-toc-solid-principles">SOLID principles</a></li>
+      <li><a href="#law-of-demeter" id="markdown-toc-law-of-demeter">Law of Demeter</a></li>
     </ul>
   </li>
-  <li><a href="#principles-of-package-design">6 principles of package design</a>    <ul>
-      <li><a href="#principles-of-package-cohesion">3 principles of package cohesion</a></li>
-      <li><a href="#principles-of-package-coupling">3 principles of package coupling</a></li>
+  <li><a href="#principles-of-package-design" id="markdown-toc-principles-of-package-design">6 principles of package design</a>    <ul>
+      <li><a href="#principles-of-package-cohesion" id="markdown-toc-principles-of-package-cohesion">3 principles of package cohesion</a></li>
+      <li><a href="#principles-of-package-coupling" id="markdown-toc-principles-of-package-coupling">3 principles of package coupling</a></li>
     </ul>
   </li>
-  <li><a href="#object-calisthenics">Object Calisthenics</a></li>
+  <li><a href="#object-calisthenics" id="markdown-toc-object-calisthenics">Object Calisthenics</a></li>
 </ul>
 
 <h1 id="design-idioms">Design Idioms</h1>
@@ -210,36 +210,21 @@ messageStyle: "none",
 
 <ol>
   <li><strong>SRP</strong> - The Single Responsibility Principle
-    <ul>
-      <li>A class should have one, and only one, reason to change.</li>
-    </ul>
-  </li>
+  * A class should have one, and only one, reason to change.</li>
   <li><strong>OCP</strong> - The Open Closed Principle 
-    <ul>
-      <li>Open for extension, closed for modification. You should be able to extend a classes behavior, without modifying it.</li>
-      <li>It means that you can add new features through inheritance but should not change the existing classes (other than bug fixes). </li>
-      <li>The reason is that if you modify a class, you’ll likely break the API/Contract of the class which means that the classes that depend on it might fail when you do so. If you instead inherit the class to add new features, the base contract is untouched and it’s unlikely that dependent classes will fail.</li>
-    </ul>
-  </li>
+  * Open for extension, closed for modification. You should be able to extend a classes behavior, without modifying it.
+  * It means that you can add new features through inheritance but should not change the existing classes (other than bug fixes). 
+  * The reason is that if you modify a class, you’ll likely break the API/Contract of the class which means that the classes that depend on it might fail when you do so. If you instead inherit the class to add new features, the base contract is untouched and it’s unlikely that dependent classes will fail.</li>
   <li><strong>LSP</strong> - The Liskov Substitution Principle
-    <ul>
-      <li>Derived classes must be substitutable for their base classes.</li>
-      <li>any method that takes class X as a parameter must be able to work with any subclasses of X.</li>
-    </ul>
-  </li>
+  * Derived classes must be substitutable for their base classes.
+  * any method that takes class X as a parameter must be able to work with any subclasses of X.</li>
   <li><strong>ISP</strong> - The Interface Segregation Principle
-    <ul>
-      <li>Make fine grained interfaces that are client specific.</li>
-      <li>ISP states that interfaces that have become “fat” (like <a href="https://en.wikipedia.org/wiki/God_object">God classes</a>) should be split into several interfaces. Large interfaces makes it harder to extend smaller parts of the system.</li>
-    </ul>
-  </li>
+  * Make fine grained interfaces that are client specific.
+  * ISP states that interfaces that have become “fat” (like <a href="https://en.wikipedia.org/wiki/God_object">God classes</a>) should be split into several interfaces. Large interfaces makes it harder to extend smaller parts of the system.</li>
   <li><strong>DIP</strong> - The Dependency Inversion Principle
-    <ul>
-      <li>Depend on abstractions, not on concretions.</li>
-      <li>The principle which is easiest to understand. DIP states that you should let the caller create the dependencies instead of letting the class itself create the dependencies. Hence inverting the dependency control.</li>
-      <li>Also called ‘<em>Hollywood principle - Don’t call us, we’ll call you</em>’</li>
-    </ul>
-  </li>
+  * Depend on abstractions, not on concretions.
+  * The principle which is easiest to understand. DIP states that you should let the caller create the dependencies instead of letting the class itself create the dependencies. Hence inverting the dependency control.
+  * Also called ‘<em>Hollywood principle - Don’t call us, we’ll call you</em>’</li>
 </ol>
 
 <h2 id="law-of-demeter">Law of Demeter</h2>
@@ -260,7 +245,7 @@ messageStyle: "none",
 
 <h1 id="principles-of-package-design">6 principles of package design</h1>
 
-<p>The next six principles are about packages. In this context a package is a binary deliverable like a .jar file, or a dll as opposed to a namespace like a java package or a C++ namespace. </p>
+<p>The next six principles are about packages. In this context a package is a binary deliverable like a .jar file, or a dll as opposed to a namespace like a java package or a C++ namespace.</p>
 
 <h2 id="principles-of-package-cohesion">3 principles of package cohesion</h2>
 
@@ -292,7 +277,7 @@ messageStyle: "none",
   </li>
   <li><strong>Rule 1</strong>: One level of indentation per method
     <ul>
-      <li>Each method should do exactly one thing. </li>
+      <li>Each method should do exactly one thing.</li>
       <li>How to fix it: Use the ‘Extract Method’ to pull out behaviors until your methods only have 1 level of indentation.</li>
     </ul>
   </li>

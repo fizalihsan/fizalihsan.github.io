@@ -108,28 +108,28 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#service-design-patterns">Service Design Patterns</a>    <ul>
-      <li><a href="#api-paradigms">API Paradigms</a></li>
-      <li><a href="#api-styles">API Styles</a>        <ul>
-          <li><a href="#rpc-api">1. RPC API</a></li>
-          <li><a href="#message-api">2. Message API</a></li>
-          <li><a href="#resource-api">3. Resource API</a></li>
+  <li><a href="#service-design-patterns" id="markdown-toc-service-design-patterns">Service Design Patterns</a>    <ul>
+      <li><a href="#api-paradigms" id="markdown-toc-api-paradigms">API Paradigms</a></li>
+      <li><a href="#api-styles" id="markdown-toc-api-styles">API Styles</a>        <ul>
+          <li><a href="#rpc-api" id="markdown-toc-rpc-api">1. RPC API</a></li>
+          <li><a href="#message-api" id="markdown-toc-message-api">2. Message API</a></li>
+          <li><a href="#resource-api" id="markdown-toc-resource-api">3. Resource API</a></li>
         </ul>
       </li>
-      <li><a href="#client-service-interactions">Client-Service Interactions</a></li>
-      <li><a href="#request--response-patterns">Request &amp; Response Patterns</a></li>
-      <li><a href="#qos-quality-of-service">QoS (Quality of Service)</a>        <ul>
-          <li><a href="#how-to-reduce-load-on-the-server">How to reduce load on the server?</a>            <ul>
-              <li><a href="#service-interceptor-pattern">Service Interceptor pattern</a></li>
+      <li><a href="#client-service-interactions" id="markdown-toc-client-service-interactions">Client-Service Interactions</a></li>
+      <li><a href="#request--response-patterns" id="markdown-toc-request--response-patterns">Request &amp; Response Patterns</a></li>
+      <li><a href="#qos-quality-of-service" id="markdown-toc-qos-quality-of-service">QoS (Quality of Service)</a>        <ul>
+          <li><a href="#how-to-reduce-load-on-the-server" id="markdown-toc-how-to-reduce-load-on-the-server">How to reduce load on the server?</a>            <ul>
+              <li><a href="#service-interceptor-pattern" id="markdown-toc-service-interceptor-pattern">Service Interceptor pattern</a></li>
             </ul>
           </li>
         </ul>
       </li>
-      <li><a href="#design-considerations-for-ws-implementation">Design Considerations for WS Implementation</a></li>
+      <li><a href="#design-considerations-for-ws-implementation" id="markdown-toc-design-considerations-for-ws-implementation">Design Considerations for WS Implementation</a></li>
     </ul>
   </li>
-  <li><a href="#tools">Tools</a></li>
-  <li><a href="#references">References</a></li>
+  <li><a href="#tools" id="markdown-toc-tools">Tools</a></li>
+  <li><a href="#references" id="markdown-toc-references">References</a></li>
 </ul>
 
 <h1 id="service-design-patterns">Service Design Patterns</h1>
@@ -161,7 +161,7 @@ messageStyle: "none",
 
 <h3 id="message-api">2. Message API</h3>
 <ul>
-  <li><strong>Command Messages</strong> [EIP] are used to ask the receiving system to carry out a specific task (e.g., process loan). </li>
+  <li><strong>Command Messages</strong> [EIP] are used to ask the receiving system to carry out a specific task (e.g., process loan).</li>
   <li><strong>Event Messages</strong> [EIP] notify the receiver about interesting events (e.g., inventory was depleted)</li>
   <li><strong>Document Messages</strong> [EIP] are like business documents (e.g., purchase orders).</li>
 </ul>
@@ -203,7 +203,7 @@ For example, if a client sends the same order over and over again, the client sh
 </ul>
 
 <p>b. <strong><em>Request/Acknowledge/Callbacks</em></strong>
- Rather than having the client poll a second service for results, a request processor (i.e., background process) pushes information back to the client or forwards it to other parties. For this to happen, the client should have a service running that could be called. </p>
+ Rather than having the client poll a second service for results, a request processor (i.e., background process) pushes information back to the client or forwards it to other parties. For this to happen, the client should have a service running that could be called.</p>
 
 <p>The callback service details could be sent as part of the request or queried from a data store. However, when callback recipients are identified in the request, special precautions must be taken to ensure that they cannot be seen or altered by anyone except the authorized parties. The easiest way to protect the request is through Transport Layer Security (TLS).</p>
 
@@ -212,7 +212,7 @@ For example, if a client sends the same order over and over again, the client sh
 <ul>
   <li>Complex to implement</li>
   <li>This pattern cannot be used if the client is unable to or unwilling to provide a publicly addressable callback service.</li>
-  <li>Callback service could go down in which case the request processor should implement ‘Idempotent Retry’ pattern. </li>
+  <li>Callback service could go down in which case the request processor should implement ‘Idempotent Retry’ pattern.</li>
 </ul>
 
 <p><strong>3. Media Type Negotiation</strong></p>
@@ -222,7 +222,7 @@ For example, if a client sends the same order over and over again, the client sh
 <h2 id="request--response-patterns">Request &amp; Response Patterns</h2>
 
 <ul>
-  <li><strong>Service Controller</strong> 
+  <li><strong>Service Controller</strong>
     <ul>
       <li>Receives requests, evaluate the request’s meaning, and route requests to procedures (i.e., class methods, request handlers), which implement the desired service behaviors.</li>
       <li>When a web server receives a request, the framework (like JAX-RS) selects and invokes handlers by evaluating various aspects of the request against these expressions. The rules that define which handlers should be invoked for different requests are provided through annotations known collectively as <strong><em>Routing Expressions</em></strong>.</li>
@@ -231,12 +231,12 @@ For example, if a client sends the same order over and over again, the client sh
   </li>
   <li><strong>Request Mapper</strong>
     <ul>
-      <li>How can a service process data from requests that are structurally different yet semantically equivalent? </li>
+      <li>How can a service process data from requests that are structurally different yet semantically equivalent?</li>
     </ul>
   </li>
   <li><strong>Response Mapper</strong>
     <ul>
-      <li>How can the logic required to construct a response be reused by multiple services? </li>
+      <li>How can the logic required to construct a response be reused by multiple services?</li>
     </ul>
   </li>
 </ul>

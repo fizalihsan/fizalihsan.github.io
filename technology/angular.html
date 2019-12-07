@@ -123,11 +123,11 @@ messageStyle: "none",
         </ul>
       </li>
       <li><a href="#directives" id="markdown-toc-directives">Directives</a></li>
-      <li><a href="#forms" id="markdown-toc-forms">Forms</a>        <ul>
-          <li><a href="#template-driven-forms" id="markdown-toc-template-driven-forms">Template-driven forms</a></li>
+      <li><a href="#forms---template-driven" id="markdown-toc-forms---template-driven">Forms - Template-driven</a>        <ul>
           <li><a href="#form-validations" id="markdown-toc-form-validations">Form Validations</a></li>
         </ul>
       </li>
+      <li><a href="#forms---reactive" id="markdown-toc-forms---reactive">Forms - Reactive</a></li>
       <li><a href="#tools" id="markdown-toc-tools">Tools</a></li>
       <li><a href="#questions" id="markdown-toc-questions">Questions</a></li>
     </ul>
@@ -293,9 +293,7 @@ messageStyle: "none",
   </li>
 </ul>
 
-<p><em>app.component.ts (Root Component)</em></p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>app.component.ts (Root Component)</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
@@ -306,23 +304,22 @@ messageStyle: "none",
 <span class="line-number">9</span>
 <span class="line-number">10</span>
 <span class="line-number">11</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">import { Component } from '@angular/core';
+</pre></td><td class="code"><pre><code class="ts"><span class="line"><span class="kr">import</span> <span class="p">{</span> <span class="nx">Component</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;@angular/core&#39;</span><span class="p">;</span>
 </span><span class="line">
-</span><span class="line">@Component({
-</span><span class="line">  selector: 'app-root', // DOM selector that gets translated into an instance of this component
-</span><span class="line">  templateUrl: './app.component.html', // The HTML template backing this component - in this case, the URL to it
-</span><span class="line">  styleUrls: ['./app.component.css'] // Any component-specific styling
-</span><span class="line">})
+</span><span class="line"><span class="err">@</span><span class="nx">Component</span><span class="p">({</span>
+</span><span class="line">  <span class="nx">selector</span><span class="o">:</span> <span class="s1">&#39;app-root&#39;</span><span class="p">,</span> <span class="c1">// DOM selector that gets translated into an instance of this component</span>
+</span><span class="line">  <span class="nx">templateUrl</span><span class="o">:</span> <span class="s1">&#39;./app.component.html&#39;</span><span class="p">,</span> <span class="c1">// The HTML template backing this component - in this case, the URL to it</span>
+</span><span class="line">  <span class="nx">styleUrls</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;./app.component.css&#39;</span><span class="p">]</span> <span class="c1">// Any component-specific styling</span>
+</span><span class="line"><span class="p">})</span>
 </span><span class="line">
-</span><span class="line">export class AppComponent { // The component class with its own members and functions
-</span><span class="line">  title = 'stock-market';
-</span><span class="line">}</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span><span class="line"><span class="kr">export</span> <span class="kr">class</span> <span class="nx">AppComponent</span> <span class="p">{</span> <span class="c1">// The component class with its own members and functions</span>
+</span><span class="line">  <span class="nx">title</span> <span class="o">=</span> <span class="s1">&#39;stock-market&#39;</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>In the example below, we have defined that the <code>StockItemComponent</code> is to be rendered whenever Angular encounters the <code>app-stock-item</code> selector, and to render the <code>stock-item.component.html</code> file when it encounters the element.</p>
 
-<p><em>stock-item.component.ts</em></p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>stock-item.component.ts</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
@@ -330,22 +327,21 @@ messageStyle: "none",
 <span class="line-number">6</span>
 <span class="line-number">7</span>
 <span class="line-number">8</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">@Component({
-</span><span class="line">  selector: 'app-stock-item',
-</span><span class="line">  templateUrl: './stock-item.component.html',
-</span><span class="line">  styleUrls: ['./stock-item.component.css']
-</span><span class="line">})
-</span><span class="line">export class StockItemComponent implements OnInit {
-</span><span class="line">   // Code omitted here for clarity
-</span><span class="line">}</span></code></pre></td></tr></table></div></figure></notextile></div>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="err">@</span><span class="nx">Component</span><span class="p">({</span>
+</span><span class="line">  <span class="nx">selector</span><span class="o">:</span> <span class="s1">&#39;app-stock-item&#39;</span><span class="p">,</span>
+</span><span class="line">  <span class="nx">templateUrl</span><span class="o">:</span> <span class="s1">&#39;./stock-item.component.html&#39;</span><span class="p">,</span>
+</span><span class="line">  <span class="nx">styleUrls</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;./stock-item.component.css&#39;</span><span class="p">]</span>
+</span><span class="line"><span class="p">})</span>
+</span><span class="line"><span class="kr">export</span> <span class="kr">class</span> <span class="nx">StockItemComponent</span> <span class="kr">implements</span> <span class="nx">OnInit</span> <span class="p">{</span>
+</span><span class="line">   <span class="c1">// Code omitted here for clarity</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <ul>
   <li>Every component has to be part of a module. If you create a new component, and do not add it to a module, Angular will complain that you have components that are not part of any modules.</li>
 </ul>
 
-<p><em>app.module.ts</em></p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>app.module.ts</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
@@ -360,21 +356,22 @@ messageStyle: "none",
 <span class="line-number">13</span>
 <span class="line-number">14</span>
 <span class="line-number">15</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">import { AppComponent } from './app.component';
-</span><span class="line">import { StockItemComponent } from './component/stock-item/stock-item.component';
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kr">import</span> <span class="p">{</span> <span class="nx">AppComponent</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;./app.component&#39;</span><span class="p">;</span>
+</span><span class="line"><span class="kr">import</span> <span class="p">{</span> <span class="nx">StockItemComponent</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;./component/stock-item/stock-item.component&#39;</span><span class="p">;</span>
 </span><span class="line">
-</span><span class="line">@NgModule({
-</span><span class="line">  declarations: [ // ensures that components and directives are available to use within the scope of the module.
-</span><span class="line">    AppComponent,
-</span><span class="line">    StockItemComponent
-</span><span class="line">  ],
-</span><span class="line">  imports: [ // specify modules that you want imported and accessible within your module. 
-</span><span class="line">    BrowserModule
-</span><span class="line">  ],
-</span><span class="line">  providers: [],
-</span><span class="line">  bootstrap: [AppComponent]
-</span><span class="line">})
-</span><span class="line">export class AppModule { }</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span><span class="line"><span class="err">@</span><span class="nx">NgModule</span><span class="p">({</span>
+</span><span class="line">  <span class="nx">declarations</span><span class="o">:</span> <span class="p">[</span> <span class="c1">// ensures that components and directives are available to use within the scope of the module.</span>
+</span><span class="line">    <span class="nx">AppComponent</span><span class="p">,</span>
+</span><span class="line">    <span class="nx">StockItemComponent</span>
+</span><span class="line">  <span class="p">],</span>
+</span><span class="line">  <span class="nx">imports</span><span class="o">:</span> <span class="p">[</span> <span class="c1">// specify modules that you want imported and accessible within your module. </span>
+</span><span class="line">    <span class="nx">BrowserModule</span>
+</span><span class="line">  <span class="p">],</span>
+</span><span class="line">  <span class="nx">providers</span><span class="o">:</span> <span class="p">[],</span>
+</span><span class="line">  <span class="nx">bootstrap</span><span class="o">:</span> <span class="p">[</span><span class="nx">AppComponent</span><span class="p">]</span>
+</span><span class="line"><span class="p">})</span>
+</span><span class="line"><span class="kr">export</span> <span class="kr">class</span> <span class="nx">AppModule</span> <span class="p">{</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h3 id="component-attributes">Component Attributes</h3>
 
@@ -524,13 +521,16 @@ Falsy: <code>undefined</code>, <code>null</code>, <code>NaN</code>,<code>0</code
 Truthy: Any nonzero number, Any nonempty string, Any nonnull object or array, <code>true</code> (the boolean value)</p>
 </blockquote>
 
-<h2 id="forms">Forms</h2>
+<h2 id="forms---template-driven">Forms - Template-driven</h2>
 
-<p>There are 2 primary mechanisms to create forms 
-* Template-driven forms
-* Reactive forms</p>
+<p>There are 2 primary mechanisms to create forms</p>
 
-<h3 id="template-driven-forms">Template-driven forms</h3>
+<ul>
+  <li>Template-driven forms</li>
+  <li>Reactive forms</li>
+</ul>
+
+<p>Template-driven forms</p>
 
 <ul>
   <li>allows you to drive the logic of your application via your template.</li>
@@ -550,7 +550,7 @@ Truthy: Any nonzero number, Any nonempty string, Any nonnull object or array, <c
   </li>
 </ul>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Form using value and event binding</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
@@ -561,17 +561,18 @@ Truthy: Any nonzero number, Any nonempty string, Any nonnull object or array, <c
 <span class="line-number">9</span>
 <span class="line-number">10</span>
 <span class="line-number">11</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">&lt;div class="form-group"&gt;
-</span><span class="line">  &lt;form&gt;
-</span><span class="line">    &lt;div class="stock-name"&gt;
-</span><span class="line">      &lt;input type="text"
-</span><span class="line">             placeholder="Stock Name"
-</span><span class="line">             [value]="stock.name"
-</span><span class="line">             (input)="stock.name=$event.target.value"&gt;
-</span><span class="line">    &lt;/div&gt;
-</span><span class="line">  &lt;/form&gt;
-</span><span class="line">  &lt;button (click)="stock.name='test'"&gt;Reset stock name&lt;/button&gt;
-</span><span class="line">&lt;/div&gt;</span></code></pre></td></tr></table></div></figure></notextile></div>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">  <span class="nt">&lt;form&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-name&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span>
+</span><span class="line">             <span class="na">placeholder=</span><span class="s">&quot;Stock Name&quot;</span>
+</span><span class="line">             <span class="err">[</span><span class="na">value</span><span class="err">]=&quot;</span><span class="na">stock</span><span class="err">.</span><span class="na">name</span><span class="err">&quot;</span>
+</span><span class="line">             <span class="err">(</span><span class="na">input</span><span class="err">)=&quot;</span><span class="na">stock</span><span class="err">.</span><span class="na">name=</span><span class="s">$event.target.value&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">  <span class="nt">&lt;/form&gt;</span>
+</span><span class="line">  <span class="nt">&lt;button</span> <span class="err">(</span><span class="na">click</span><span class="err">)=&quot;</span><span class="na">stock</span><span class="err">.</span><span class="na">name=</span><span class="s">&#39;test&#39;</span><span class="err">&quot;</span><span class="nt">&gt;</span>Reset stock name<span class="nt">&lt;/button&gt;</span>
+</span><span class="line"><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p><strong>ngModel directive - expanded form</strong></p>
 
@@ -582,7 +583,7 @@ Truthy: Any nonzero number, Any nonempty string, Any nonnull object or array, <c
   <li>The second binding we added is the <code>ngModelChange</code> event binding. In this, we update the underlying component member variable (<code>stock.name</code>) with the value of the <code>$event</code>, which is the changed value of the text field.</li>
 </ul>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Form using ngModel binding</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
@@ -594,18 +595,19 @@ Truthy: Any nonzero number, Any nonempty string, Any nonnull object or array, <c
 <span class="line-number">10</span>
 <span class="line-number">11</span>
 <span class="line-number">12</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">&lt;div class="form-group"&gt;
-</span><span class="line">  &lt;form&gt;
-</span><span class="line">    &lt;div class="stock-name"&gt;
-</span><span class="line">      &lt;input type="text"
-</span><span class="line">             placeholder="Stock Name"
-</span><span class="line">             name="stockName"
-</span><span class="line">             [ngModel]="stock.name"
-</span><span class="line">             (ngModelChange)="stock.name=$event"&gt;
-</span><span class="line">    &lt;/div&gt;
-</span><span class="line">  &lt;/form&gt;
-</span><span class="line">  &lt;button (click)="stock.name='test'"&gt;Reset stock name&lt;/button&gt;
-</span><span class="line">&lt;/div&gt;</span></code></pre></td></tr></table></div></figure></notextile></div>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">  <span class="nt">&lt;form&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-name&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span>
+</span><span class="line">             <span class="na">placeholder=</span><span class="s">&quot;Stock Name&quot;</span>
+</span><span class="line">             <span class="na">name=</span><span class="s">&quot;stockName&quot;</span>
+</span><span class="line">             <span class="err">[</span><span class="na">ngModel</span><span class="err">]=&quot;</span><span class="na">stock</span><span class="err">.</span><span class="na">name</span><span class="err">&quot;</span>
+</span><span class="line">             <span class="err">(</span><span class="na">ngModelChange</span><span class="err">)=&quot;</span><span class="na">stock</span><span class="err">.</span><span class="na">name=</span><span class="s">$event&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">  <span class="nt">&lt;/form&gt;</span>
+</span><span class="line">  <span class="nt">&lt;button</span> <span class="err">(</span><span class="na">click</span><span class="err">)=&quot;</span><span class="na">stock</span><span class="err">.</span><span class="na">name=</span><span class="s">&#39;test&#39;</span><span class="err">&quot;</span><span class="nt">&gt;</span>Reset stock name<span class="nt">&lt;/button&gt;</span>
+</span><span class="line"><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p><strong>ngModel directive - simpler form</strong></p>
 
@@ -618,7 +620,7 @@ Truthy: Any nonzero number, Any nonempty string, Any nonnull object or array, <c
   </li>
 </ul>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Form using ngModel simpler version</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
@@ -629,17 +631,108 @@ Truthy: Any nonzero number, Any nonempty string, Any nonnull object or array, <c
 <span class="line-number">9</span>
 <span class="line-number">10</span>
 <span class="line-number">11</span>
-</pre></td><td class="code"><pre><code class=""><span class="line">&lt;div class="form-group"&gt;
-</span><span class="line">  &lt;form&gt;
-</span><span class="line">    &lt;div class="stock-name"&gt;
-</span><span class="line">      &lt;input type="text"
-</span><span class="line">             placeholder="Stock Name"
-</span><span class="line">             name="stockName"
-</span><span class="line">             [(ngModel)]="stock.name"&gt;
-</span><span class="line">    &lt;/div&gt;
-</span><span class="line">  &lt;/form&gt;
-</span><span class="line">  &lt;button (click)="stock.name='test'"&gt;Reset stock name&lt;/button&gt;
-</span><span class="line">&lt;/div&gt;</span></code></pre></td></tr></table></div></figure></notextile></div>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">  <span class="nt">&lt;form&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-name&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span>
+</span><span class="line">             <span class="na">placeholder=</span><span class="s">&quot;Stock Name&quot;</span>
+</span><span class="line">             <span class="na">name=</span><span class="s">&quot;stockName&quot;</span>
+</span><span class="line">             <span class="err">[(</span><span class="na">ngModel</span><span class="err">)]=&quot;</span><span class="na">stock</span><span class="err">.</span><span class="na">name</span><span class="err">&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">  <span class="nt">&lt;/form&gt;</span>
+</span><span class="line">  <span class="nt">&lt;button</span> <span class="err">(</span><span class="na">click</span><span class="err">)=&quot;</span><span class="na">stock</span><span class="err">.</span><span class="na">name=</span><span class="s">&#39;test&#39;</span><span class="err">&quot;</span><span class="nt">&gt;</span>Reset stock name<span class="nt">&lt;/button&gt;</span>
+</span><span class="line"><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Form group</strong></p>
+
+<ul>
+  <li>We have removed the <em>banana-in-a-box</em> syntax from all the <code>ngModel</code> bindings, and just kept it as an attribute. When we use <code>ngModel</code> like this, Angular uses the name field on the form element as the model name and creates a model object corresponding to it on the form.</li>
+  <li>We have surrounded the form fields with another <code>div</code>, and used an Angular directive called <code>ngModelGroup</code> on it, providing it a name (<code>stock</code> in this case). This groups the form elements, thus creating the <code>name</code>, <code>price</code>, <code>code</code>, and <code>exchange</code> fields as models under the common name <code>stock</code>. This is visible in the component when we access this entire set of values through <code>form.value.stock</code>.</li>
+  <li>We can similarly create multiple form groups and use <code>ngModel</code> directly, and then finally copy over the entire values to a common field (or not copy it over at all) in our component on form submit. This is another way we can use <code>ngModel</code> and template-driven forms in our applications.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Form group example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+<span class="line-number">39</span>
+<span class="line-number">40</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">  <span class="nt">&lt;form</span> <span class="err">(</span><span class="na">ngSubmit</span><span class="err">)=&quot;</span><span class="na">createStock</span><span class="err">(</span><span class="na">stockForm</span><span class="err">)&quot;</span> <span class="err">#</span><span class="na">stockForm=</span><span class="s">&quot;ngForm&quot;</span> <span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">ngModelGroup=</span><span class="s">&quot;stock&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-name&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span>
+</span><span class="line">              <span class="na">placeholder=</span><span class="s">&quot;Stock Name&quot;</span>
+</span><span class="line">              <span class="na">required</span>
+</span><span class="line">              <span class="na">name=</span><span class="s">&quot;name&quot;</span>
+</span><span class="line">              <span class="na">ngModel</span><span class="nt">&gt;</span>
+</span><span class="line">      <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-code&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span>
+</span><span class="line">              <span class="na">placeholder=</span><span class="s">&quot;Stock Code&quot;</span>
+</span><span class="line">              <span class="na">required</span>
+</span><span class="line">              <span class="na">minlength=</span><span class="s">&quot;2&quot;</span>
+</span><span class="line">              <span class="na">name=</span><span class="s">&quot;code&quot;</span>
+</span><span class="line">              <span class="na">ngModel</span><span class="nt">&gt;</span>
+</span><span class="line">      <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-price&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;number&quot;</span>
+</span><span class="line">              <span class="na">placeholder=</span><span class="s">&quot;Stock Price&quot;</span>
+</span><span class="line">              <span class="na">name=</span><span class="s">&quot;price&quot;</span>
+</span><span class="line">              <span class="na">required</span>
+</span><span class="line">              <span class="na">ngModel</span><span class="nt">&gt;</span>
+</span><span class="line">      <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-exchange&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        <span class="nt">&lt;div&gt;</span>
+</span><span class="line">          <span class="nt">&lt;select</span> <span class="na">name=</span><span class="s">&quot;exchange&quot;</span> <span class="na">ngModel</span><span class="nt">&gt;</span>
+</span><span class="line">            <span class="nt">&lt;option</span> <span class="err">*</span><span class="na">ngFor=</span><span class="s">&quot;let exchange of exchanges&quot;</span>
+</span><span class="line">                    <span class="err">[</span><span class="na">ngValue</span><span class="err">]=&quot;</span><span class="na">exchange</span><span class="err">&quot;</span><span class="nt">&gt;</span><span class="nt">&lt;/option&gt;</span>
+</span><span class="line">          <span class="nt">&lt;/select&gt;</span>
+</span><span class="line">        <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">      <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span><span class="nt">&gt;</span>Create<span class="nt">&lt;/button&gt;</span>
+</span><span class="line">  <span class="nt">&lt;/form&gt;</span>
+</span><span class="line"><span class="nt">&lt;/div&gt;</span>
+</span><span class="line">
+</span><span class="line"><span class="nt">&lt;h4&gt;</span>Stock Name is <span class="nt">&lt;/h4&gt;</span>
+</span><span class="line"><span class="nt">&lt;h4&gt;</span>Data has been confirmed: <span class="nt">&lt;/h4&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h3 id="form-validations">Form Validations</h3>
 
@@ -719,7 +812,7 @@ Truthy: Any nonzero number, Any nonempty string, Any nonnull object or array, <c
 </span><span class="line"><span class="p">}</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Complete form example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
@@ -841,7 +934,7 @@ Truthy: Any nonzero number, Any nonempty string, Any nonnull object or array, <c
   </li>
 </ul>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Form validation examle</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
@@ -981,6 +1074,8 @@ Truthy: Any nonzero number, Any nonempty string, Any nonnull object or array, <c
   <li>The <code>#myStockField</code> is a template reference variable that gives us a reference to the input form field</li>
   <li>When we don’t pass it any value, it will always refer to the HTML DOM element</li>
 </ul>
+
+<h2 id="forms---reactive">Forms - Reactive</h2>
 
 <h2 id="tools">Tools</h2>
 

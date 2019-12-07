@@ -68,9 +68,9 @@ footer: true
 ## Binding
     
 * Data binding
-    * `<div class="name">Hello \\{{name}}</div>`. This is called _Interpolation_.
+    * `<div class="name">Hello {% raw %} {{name}} {% endraw %} </div>`. This is called _Interpolation_.
 * Property binding
-    * `<div class="price" [class]="positiveChange ? 'plus' : 'minus'">$ {{price}}</div>`
+    * `<div class="price" [class]="positiveChange ? 'plus' : 'minus'">$ {% raw %}{{price}}{% endraw %}</div>`
     * Tells Angular to bind to the __class__ property of the DOM element to the value of the expression. 
     * Square-bracket notation refers to data flowing from the component to the UI.
     * When you bind to the class property, it overrides the existing value of the property. In the example above, `class="price"` has no effect. 
@@ -164,7 +164,7 @@ export class AppModule { }
 ### Component Attributes
 
 * Selector
-    * Few way you could specify the _selector_ attribute and how you would use it in the HTML:
+    * Few ways you could specify the _selector_ attribute and how you would use it in the HTML:
         * `selector: 'app-stock-item'` would result in the component being used as `<app-stock-item></app-stock-item>` in the HTML.
         * `selector: '.app-stock-item'` would result in the component being used as a CSS class like `<div class="app-stock-item"></div>` in the HTML.
         * `selector: '[app-stock-item]'` would result in the component being used as an attribute on an existing element like `<div app-stock-item></div>` in the HTML.
@@ -196,6 +196,7 @@ TBD
 ### Component Lifecycle
 
 TBD
+
 
 ## Directives
 
@@ -242,15 +243,268 @@ TBD
 > Falsy: `undefined`, `null`, `NaN`,`0`, `""` (any empty string), `false` (the boolean value)
 > Truthy: Any nonzero number, Any nonempty string, Any nonnull object or array, `true` (the boolean value)
 
+## Forms
+
+There are 2 primary mechanisms to create forms 
+* Template-driven forms
+* Reactive forms
+
+### Template-driven forms
+
+* allows you to drive the logic of your application via your template.
+* The `FormsModule` adds the capability of using ngModel, which allows for two-way data binding in Angular.
+
+__Value and Event Binding Example__
+
+* _UI --> Component binding_: The `value` binding is telling Angular to update the value property of the `input` element using the `stock.name` field in the component class. If and when it changes, Angular will be responsible for updating the property as well.
+* _Component --> UI binding_: The `input` event binding is instructing Angular to update the `value` of `stock.name` with the value from the event. The `$event` in this case is the underlying DOM `InputEvent`, through which we access the target and from it, the changed value.
+* Button on click resets the value of `stock.name` to `'test'`.
+* Cons
+    * It is hard to remember exactly which property is used by each form field, and what are the various events and where the values would be available.
+
+```
+<div class="form-group">
+  <form>
+    <div class="stock-name">
+      <input type="text"
+             placeholder="Stock Name"
+             [value]="stock.name"
+             (input)="stock.name=$event.target.value">
+    </div>
+  </form>
+  <button (click)="stock.name='test'">Reset stock name</button>
+</div>
+```
+
+__ngModel directive - expanded form__
+
+* The `ngModel` directive and its special syntax abstracts away the internals of each and every input type from developers, making it easier to quickly develop form-based applications.
+* Added a `name` field to the input form element. This is necessary for the `ngModel` directive to work. If you remove this, you will see errors in the console.
+* We added two bindings. The first one is `ngModel` data binding. This does the work of the value binding we had previously, but abstracting out which property underneath needs to be bound. It points to the component member variable that it takes the value from.
+* The second binding we added is the `ngModelChange` event binding. In this, we update the underlying component member variable (`stock.name`) with the value of the `$event`, which is the changed value of the text field.
+
+```
+<div class="form-group">
+  <form>
+    <div class="stock-name">
+      <input type="text"
+             placeholder="Stock Name"
+             name="stockName"
+             [ngModel]="stock.name"
+             (ngModelChange)="stock.name=$event">
+    </div>
+  </form>
+  <button (click)="stock.name='test'">Reset stock name</button>
+</div>
+```
+
+__ngModel directive - simpler form__
+
+* `[(ngModel)]` banana-in-a-box syntax, as it is called. ( `()` looks like 2 bananas.)
+* Cons
+    * The combined `ngModel` syntax only has the capability to set the data-bound property. If you need to do something more complicated (say convert the text into upper-case before setting the model variable), or set it in a different field itself (a calculated value maybe?), or do multiple things, then you might want to consider the expanded syntax.
+
+```
+<div class="form-group">
+  <form>
+    <div class="stock-name">
+      <input type="text"
+             placeholder="Stock Name"
+             name="stockName"
+             [(ngModel)]="stock.name">
+    </div>
+  </form>
+  <button (click)="stock.name='test'">Reset stock name</button>
+</div>
+```
+
+### Form Validations
+
+* Angular form validation for template-driven forms relies and extends the [native form validation from HTML](https://developer.mozilla.org/en-US/docs/Web/Guide/HTML/HTML5/Constraint_validation)
+* Angular does the work of integrating these **control states** and **validations** with its own internal model (whether it is `ngModel` or `ngForm`), and it is up to us to use this internal model to then show the right kind of message to the user.
+* There are 2 aspects to this:
+    * **The state** allows us to peek into the state of the form control, on 
+        * whether the user has *visited* it, 
+        * whether the user has *changed* it, and finally 
+        * whether it is in a *valid state*.
+    * **The validity**,  tells us whether a form control is valid or not, and if it is not valid, the underlying reason (or reasons) for which the form element is invalid.
+
+__Control State__
+
+*  The `ngModel` directive changes and adds CSS classes to the element it is on, based on the user’s interaction with it. There are 3 primary modes of interaction that it tracks, and 2 CSS classes per mode of interation associated with it.  
+* To use these control state classes, we actually don’t need to make any component class code changes. We only need to tweak the CSS a bit and then leverage that in the HTML template for the component.
+* Angular’s Form Module is responsible for reading it and applying the form control state classes accordingly, without any other work on our side.
+
+| **Control state** | **CSS class if True** | **CSS class if False** |
+| --- | --- | --- | 
+| Visited | `ng-touched` | `ng-untouched` | 
+| Changed | `ng-dirty` | `ng-pristine` | 
+| Valid | `ng-valid` | `ng-invalid` | 
+
+```css
+.stock-name .ng-valid,
+.stock-code .ng-pristine,
+.stock-price .ng-untouched {
+  background-color: green;
+}
+
+.stock-name .ng-invalid,
+.stock-code .ng-dirty,
+.stock-price .ng-touched {
+  background-color: pink;
+}
+```
+
+```html
+<div class="form-group">
+  <form (ngSubmit)="createStock()">
+    <div>
+      The following element changes from green to red when it is invalid
+    </div>
+    <div class="stock-name">
+      <input type="text"
+             placeholder="Stock Name"
+             required
+             name="stockName"
+             [(ngModel)]="stock.name">
+    </div>
+    <div>
+      The following element changes from green to red when it has been modified
+    </div>
+    <div class="stock-code">
+      <input type="text"
+             placeholder="Stock Code"
+             name="stockCode"
+             [(ngModel)]="stock.code">
+    </div>
+    <div>
+        The following element changes from green to red when it is visited by the user, regardless of change
+      </div>
+    <div class="stock-price">
+      <input type="number"
+             placeholder="Stock Price"
+             name="stockPrice"
+             [ngModel]="stock.price"
+             (ngModelChange)="setStockPrice($event)">
+    </div>
+    <div class="stock-exchange">
+      <div>
+        <select name="stockExchange" [(ngModel)]="stock.exchange">
+          <option *ngFor="let exchange of exchanges"
+                  [ngValue]="exchange">{{exchange}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="stock-confirm">
+      <input type="checkbox"
+             name="stockConfirm"
+             [(ngModel)]="confirmed">
+      I confirm that the information provided above is accurate!
+    </div>
+    <button [disabled]="!confirmed"
+            type="submit">Create</button>
+  </form>
+</div>
+
+<h4>Stock Name is {{stock | json}}</h4>
+<h4>Data has been confirmed: {{confirmed}}</h4>
+```
+
+__Control Validity__
+
+* Internally, Angular has its own set of validators. 
+* Once you add any validators to your form elements, Angular will take care of running them every time any of the form control changes. 
+* In the example below
+    * a template reference variable is added at the form level, and at each control level. The form-level template reference variable (`stockForm`) gets the `NgForm` model object bound to it, which allows us to check on things like form and control validity and values through it.
+    * template reference variables (`stockName`, `stockPrice`, `stockCode`) are added on each of the text boxes, and assigned the `NgModel` model object to it. This allows us to check the form field for all the control states that we were previously using through CSS classes (_dirty/pristine_, _valid/invalid_, and _touched/untouched_), in addition to errors.
+    * On form submit the `stockForm` template reference variable is passed, which points to the form model, to the `createStock()` method. This is another capability of template reference variables: _you can pass them in as arguments to your component class_.
+    * Notice that the error message for the stock name is displayed by default, but the error message that the price and code are required is only displayed after we touch the field. This is the advantage of wrapping the error message under the control state (dirty and invalid). Otherwise, the field is invalid by default (because it is empty).
+    * Note that for the stock price, the minlength and required validators are not shown simultaneously. This is handled by the Angular built-in validators,
+
+```html
+<div class="form-group">
+  <form (ngSubmit)="createStock(stockForm)" #stockForm="ngForm">
+    <div class="stock-name">
+      <input type="text"
+             placeholder="Stock Name"
+             required
+             name="stockName"
+             #stockName="ngModel"
+             [(ngModel)]="stock.name">
+    </div>
+    <div *ngIf="stockName.errors && stockName.errors.required">
+        Stock Name is Mandatory
+    </div>
+    <div class="stock-code">
+      <input type="text"
+             placeholder="Stock Code"
+             required
+             minlength="2"
+             name="stockCode"
+             #stockCode="ngModel"
+             [(ngModel)]="stock.code">
+    </div>
+    <div *ngIf="stockCode.dirty && stockCode.invalid">
+      <div *ngIf="stockCode.errors.required">
+        Stock Code is Mandatory
+      </div>
+      <div *ngIf="stockCode.errors.minlength">
+        Stock Code must be atleast of length 2
+      </div>
+    </div>
+    <div class="stock-price">
+      <input type="number"
+             placeholder="Stock Price"
+             name="stockPrice"
+             required
+             #stockPrice="ngModel"
+             [ngModel]="stock.price"
+             (ngModelChange)="setStockPrice($event)">
+    </div>
+    <div *ngIf="stockPrice.dirty && stockPrice.invalid">
+      <div *ngIf="stockPrice.errors.required">
+        Stock Price is Mandatory
+      </div>
+    </div>
+    <div class="stock-exchange">
+      <div>
+        <select name="stockExchange" [(ngModel)]="stock.exchange">
+          <option *ngFor="let exchange of exchanges"
+                  [ngValue]="exchange">{{exchange}}</option>
+        </select>
+      </div>
+    </div>
+    <div class="stock-confirm">
+      <input type="checkbox"
+             name="stockConfirm"
+             required
+             [(ngModel)]="confirmed">
+      I confirm that the information provided above is accurate!
+    </div>
+    <button type="submit">Create</button>
+  </form>
+</div>
+
+<h4>Stock Name is {{stock | json}}</h4>
+<h4>Data has been confirmed: {{confirmed}}</h4>
+```
+
+__Template Reference Variable__
+
+* A template reference variable in Angular allows us to get a temporary handle on a DOM element, component, or directive directly in the template. 
+* It is denoted by a standard syntax in the HTML, which is a prefix of `#`. For example, in the following HTML: `<input type="text" #myStockField name="stockName">`
+* The `#myStockField` is a template reference variable that gives us a reference to the input form field
+* When we don’t pass it any value, it will always refer to the HTML DOM element
 
 
-__Tools__
+## Tools
 
 * build - webpack, npm, ?
 * testing - karma, jasmine, protractor, ??
 * debug - augury
 * stylesheets - css, scss, sass, stylus
 * state management - ???
+
 
 ## Questions
 

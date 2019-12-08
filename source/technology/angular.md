@@ -108,9 +108,7 @@ To some extent, you can consider an Angular application to be nothing but a tree
     * a _selector_ (to tell Angular how to find instances of the component being used) 
     * and a _template_ (that Angular has to render when it finds the element). 
 
-_app.component.ts (Root Component)_
-
-```
+```ts app.component.ts (Root Component)
 import { Component } from '@angular/core';
 
 @Component({
@@ -126,9 +124,7 @@ export class AppComponent { // The component class with its own members and func
 
 In the example below, we have defined that the `StockItemComponent` is to be rendered whenever Angular encounters the `app-stock-item` selector, and to render the `stock-item.component.html` file when it encounters the element.
 
-_stock-item.component.ts_
-
-```
+```js stock-item.component.ts
 @Component({
   selector: 'app-stock-item',
   templateUrl: './stock-item.component.html',
@@ -141,9 +137,7 @@ export class StockItemComponent implements OnInit {
 
 * Every component has to be part of a module. If you create a new component, and do not add it to a module, Angular will complain that you have components that are not part of any modules.
 
-_app.module.ts_
-
-```
+```js app.module.ts
 import { AppComponent } from './app.component';
 import { StockItemComponent } from './component/stock-item/stock-item.component';
 
@@ -243,16 +237,13 @@ TBD
 > Falsy: `undefined`, `null`, `NaN`,`0`, `""` (any empty string), `false` (the boolean value)
 > Truthy: Any nonzero number, Any nonempty string, Any nonnull object or array, `true` (the boolean value)
 
-## Forms
+## Forms - Template-driven
 
-There are 2 primary mechanisms to create forms 
-* Template-driven forms
-* Reactive forms
+There are 2 primary mechanisms to create forms: Template-driven forms and Reactive forms.
 
-### Template-driven forms
+Both are part of the core `@angular/forms` library, but are part of two different modules, `FormsModule` and `ReactiveFormsModule`
 
-* allows you to drive the logic of your application via your template.
-* The `FormsModule` adds the capability of using ngModel, which allows for two-way data binding in Angular.
+Template-driven forms allow you to drive the logic of your application via your template. The `FormsModule` adds the capability of using `ngModel`, which allows for two-way data binding in Angular.
 
 __Value and Event Binding Example__
 
@@ -262,7 +253,7 @@ __Value and Event Binding Example__
 * Cons
     * It is hard to remember exactly which property is used by each form field, and what are the various events and where the values would be available.
 
-```
+```html Form using value and event binding
 <div class="form-group">
   <form>
     <div class="stock-name">
@@ -283,7 +274,7 @@ __ngModel directive - expanded form__
 * We added two bindings. The first one is `ngModel` data binding. This does the work of the value binding we had previously, but abstracting out which property underneath needs to be bound. It points to the component member variable that it takes the value from.
 * The second binding we added is the `ngModelChange` event binding. In this, we update the underlying component member variable (`stock.name`) with the value of the `$event`, which is the changed value of the text field.
 
-```
+```html Form using ngModel binding
 <div class="form-group">
   <form>
     <div class="stock-name">
@@ -304,7 +295,7 @@ __ngModel directive - simpler form__
 * Cons
     * The combined `ngModel` syntax only has the capability to set the data-bound property. If you need to do something more complicated (say convert the text into upper-case before setting the model variable), or set it in a different field itself (a calculated value maybe?), or do multiple things, then you might want to consider the expanded syntax.
 
-```
+```html Form using ngModel simpler version
 <div class="form-group">
   <form>
     <div class="stock-name">
@@ -316,6 +307,55 @@ __ngModel directive - simpler form__
   </form>
   <button (click)="stock.name='test'">Reset stock name</button>
 </div>
+```
+
+__Form group__
+
+* We have removed the *banana-in-a-box* syntax from all the `ngModel` bindings, and just kept it as an attribute. When we use `ngModel` like this, Angular uses the name field on the form element as the model name and creates a model object corresponding to it on the form.
+* We have surrounded the form fields with another `div`, and used an Angular directive called `ngModelGroup` on it, providing it a name (`stock` in this case). This groups the form elements, thus creating the `name`, `price`, `code`, and `exchange` fields as models under the common name `stock`. This is visible in the component when we access this entire set of values through `form.value.stock`.
+* We can similarly create multiple form groups and use `ngModel` directly, and then finally copy over the entire values to a common field (or not copy it over at all) in our component on form submit. This is another way we can use `ngModel` and template-driven forms in our applications.
+
+```html Form group example
+<div class="form-group">
+  <form (ngSubmit)="createStock(stockForm)" #stockForm="ngForm" >
+    <div ngModelGroup="stock">
+      <div class="stock-name">
+        <input type="text"
+              placeholder="Stock Name"
+              required
+              name="name"
+              ngModel>
+      </div>
+      <div class="stock-code">
+        <input type="text"
+              placeholder="Stock Code"
+              required
+              minlength="2"
+              name="code"
+              ngModel>
+      </div>
+      <div class="stock-price">
+        <input type="number"
+              placeholder="Stock Price"
+              name="price"
+              required
+              ngModel>
+      </div>
+      <div class="stock-exchange">
+        <div>
+          <select name="exchange" ngModel>
+            <option *ngFor="let exchange of exchanges"
+                    [ngValue]="exchange">{{exchange}}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <button type="submit">Create</button>
+  </form>
+</div>
+
+<h4>Stock Name is {{stock | json}}</h4>
+<h4>Data has been confirmed: {{confirmed}}</h4>
 ```
 
 ### Form Validations
@@ -355,7 +395,7 @@ __Control State__
 }
 ```
 
-```html
+```html Complete form example
 <div class="form-group">
   <form (ngSubmit)="createStock()">
     <div>
@@ -421,7 +461,7 @@ __Control Validity__
     * Notice that the error message for the stock name is displayed by default, but the error message that the price and code are required is only displayed after we touch the field. This is the advantage of wrapping the error message under the control state (dirty and invalid). Otherwise, the field is invalid by default (because it is empty).
     * Note that for the stock price, the minlength and required validators are not shown simultaneously. This is handled by the Angular built-in validators,
 
-```html
+```html Form validation examle
 <div class="form-group">
   <form (ngSubmit)="createStock(stockForm)" #stockForm="ngForm">
     <div class="stock-name">
@@ -496,6 +536,216 @@ __Template Reference Variable__
 * The `#myStockField` is a template reference variable that gives us a reference to the input form field
 * When we don’t pass it any value, it will always refer to the HTML DOM element
 
+## Forms - Reactive
+
+Unlike *template-driven* forms in Angular, with *reactive* forms, you define the entire tree of Angular form control objects in your component code, and then bind them to native form control elements in your template. Because the component has access to the form controls as well as the backing data model, it can push data model changes into the form control and vice versa, thus reacting to changes either way.
+
+**Template-driven_ vs. _Reactive**
+
+* Both the approaches have their pros and cons.
+* *Template-driven forms* are nice and declarative, and easy to understand. Angular is responsible for the data model sync and pushes data to the model and reads and updates values in the UI via directives like `ngModel`. This also usually means less code in the component class.
+* *Reactive forms* are synchronous, and you as a developer have absolute control over how and when the data is synced from the UI to the model and vice versa. Because you create the entire form control tree in the component, you have access to it immediately and don’t have to deal with Angular’s asynchronous life-cycle.
+* Another slightly subtle advantage of using *reactive forms* over *template-driven forms* is that it forces developers to have a separation between what the user sees and interacts with (what we call the form model), and the persisted data model that drives our application. This is quite common in most applications, where the presented view is different from what the underlying data model is. Reactive forms make that distinction clear, while also keeping you cognizant of the data flow and giving you control over when and what flows from UI to the component and vice versa.
+
+### Form Controls
+
+* The core of any reactive form is the `FormControl`, which directly represents an individual form element in the template. Thus, any reactive form is nothing but a set of grouped FormControls. 
+* It is at the `FormControl` level that we  assign initial values and validators (both sync and async). 
+* Everything that we did in the template with template-driven forms now happens at a `FormControl` level in the TypeScript code.
+
+```html Form Controls
+<div class="form-group">
+
+    <div class="stock-name">
+      <input type="text"
+             placeholder="Stock Name"
+             name="stockName"
+             [formControl]="nameControl">
+    </div>
+    <button (click)="onSubmit()">Submit</button>
+</div>
+
+<p>Form Control value: {{ nameControl.value | json }}</p>
+<p>Form Control status: {{ nameControl.status | json }}</p>
+```
+
+ * On the `onSubmit()` call, we simply print the current value of the nameControl control. 
+ * Note that unlike traditional non-MVC frameworks, at no point is the control reaching out into the view to get the current value of the element. We rely on the Form`Control to provide a representative view of the input element, and keep it up to date.
+ * `FormControl` constructor can also take the initial value along with a list of validators (both sync and async) as arguments.
+ * it is helpful to think of `FormControl` when we need to track the *state* and *value* of any individual form element, like an input box or a checkbox.
+
+```ts Form Controls 
+import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
+
+@Component({
+  selector: 'app-create-stock',
+  templateUrl: './create-stock.component.html',
+  styleUrls: ['./create-stock.component.css']
+})
+export class CreateStockComponent {
+
+  public nameControl = new FormControl();
+  constructor() {}
+
+  onSubmit() {
+    console.log('Name Control Value', this.nameControl.value);
+  }
+}
+```
+
+### Form Groups
+
+* This gives us the convenience of whether we want to track the form controls individually, or as a group.
+* switched over from binding to `formControl` to a `formGroup`
+* for each form element, we mention a `formControlName`. Each of these will bind to an individual element within the `formGroup`.
+
+```html Form groups
+<div class="form-group">
+  <form [formGroup]="stockForm" (ngSubmit)="onSubmit()">
+    <div class="stock-name">
+      <input type="text" placeholder="Stock Name" name="stockName" formControlName="name">
+    </div>
+    <div class="stock-code">
+        <input type="text" placeholder="Stock Code" formControlName="code">
+    </div>
+    <div class="stock-price">
+        <input type="number" placeholder="Stock Price" formControlName="price">
+    </div>
+    <button type="submit">Submit</button>
+  </form>
+</div>
+
+<p>Form Control value: {{ stockForm.value | json }}</p>
+<p>Form Control status: {{ stockForm.status | json }}</p>
+```
+
+```ts
+export class CreateStockComponent {
+
+  public stockForm: FormGroup = new FormGroup({
+    name: new FormControl(null, Validators.required),
+    code: new FormControl(null, [Validators.required, Validators.minLength(2)]),
+    price: new FormControl(0, [Validators.required, Validators.min(0)])
+  });
+  constructor() {}
+
+  onSubmit() {
+    console.log('Stock Form Value', this.stockForm.value);
+  }
+}
+```
+
+### Form Builders
+
+* `FormBuilder` fundamentally is syntactic sugar to allow us to quickly create `FormGroup` and `FormControl` elements without manually calling new for each one
+* For any form with more than a few elements, it almost always makes sense to use the `FormBuilder` rather than the `FormGroup` method, as it reduces both the code and makes it a lot more concise and readable.
+
+```ts Form builders
+export class CreateStockComponent {
+
+  public stockForm: FormGroup;
+  constructor(private fb: FormBuilder) {
+    this.createForm();
+  }
+
+  createForm() {
+    this.stockForm = this.fb.group({
+      name: [null, Validators.required],
+      code: [null, [Validators.required, Validators.minLength(2)]],
+      price: [0, [Validators.required, Validators.min(0)]]
+    });
+  }
+
+  onSubmit() {
+    console.log('Stock Form Value', this.stockForm.value);
+  }
+}
+```
+
+### Form Data
+
+* How to set the value back in the form
+    * `setValue()`
+        * this method takes a JSON model object that matches the form model exactly. That means for the `setValue` to work in this case, it needs an object with a `name`, `code`, and `price` key. It should not have more or fewer keys than this, as it would throw an error in this case. Based on the object, the form’s model object values would get updated and these values would be visible in the form in the UI. This is the reason why we delete all other keys from the model object before calling `setValue`.
+    * `patchValue()`
+        * `patchValue` is a more forgiving method that takes the fields it has available, and updates the form with them. It will ignore extra fields even if it has fewer fields
+* it is good practice to not directly assign the form model to our data model, but rather make a copy of it.
+
+### Form Arrays
+
+* to capture multiple values as well as handle nested form elements cleanly
+
+```ts Form arrays
+export class CreateStockComponent {
+
+  public stockForm: FormGroup;
+  constructor(private fb: FormBuilder) {
+    this.createForm();
+  }
+
+  createForm() {
+    this.stockForm = this.fb.group({
+      name: [null, Validators.required],
+      code: [null, [Validators.required, Validators.minLength(2)]],
+      price: [0, [Validators.required, Validators.min(0)]],
+      notablePeople: this.fb.array([])
+    });
+  }
+
+  get notablePeople(): FormArray {
+    return this.stockForm.get('notablePeople') as FormArray;
+  }
+
+  addNotablePerson() {
+    this.notablePeople.push(this.fb.group({
+      name: ['', Validators.required],
+      title: ['', Validators.required]
+    }))
+  }
+
+  removeNotablePerson(index: number) {
+    this.notablePeople.removeAt(index);
+  }
+
+  resetForm() {
+    this.stockForm.reset();
+  }
+
+  onSubmit() {
+    console.log('Saving stock', this.stock);
+  }
+}
+```
+
+```html
+<div class="form-group">
+  <form [formGroup]="stockForm" (ngSubmit)="onSubmit()">
+    <!-- No change until the end of price form element -->
+    <!-- Omitted for brevity -->
+    <div formArrayName="notablePeople">
+      <div *ngFor="let person of notablePeople.controls; let i = index" [formGroupName]="i" class="notable-people">
+        <div> Person {{i + 1}} </div>
+        <div>
+          <input type="text" placeholder="Person Name" formControlName="name">
+        </div>
+        <div>
+          <input type="text" placeholder="Person Title" formControlName="title">
+        </div>
+        <button type="button" (click)="removeNotablePerson(i)"> Remove Person </button>
+      </div>
+    </div>
+    <button type="button" (click)="addNotablePerson()"> Add Notable Person </button>
+    <button type="submit">Submit</button>
+    <button type="button" (click)="resetForm()">
+      Reset
+    </button>
+  </form>
+</div>
+
+<p>Form Control value: {{ stockForm.value | json }}</p>
+<p>Form Control status: {{ stockForm.status | json }}</p>
+```
 
 ## Tools
 

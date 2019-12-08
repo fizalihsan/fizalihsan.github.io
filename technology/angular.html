@@ -127,7 +127,14 @@ messageStyle: "none",
           <li><a href="#form-validations" id="markdown-toc-form-validations">Form Validations</a></li>
         </ul>
       </li>
-      <li><a href="#forms---reactive" id="markdown-toc-forms---reactive">Forms - Reactive</a></li>
+      <li><a href="#forms---reactive" id="markdown-toc-forms---reactive">Forms - Reactive</a>        <ul>
+          <li><a href="#form-controls" id="markdown-toc-form-controls">Form Controls</a></li>
+          <li><a href="#form-groups" id="markdown-toc-form-groups">Form Groups</a></li>
+          <li><a href="#form-builders" id="markdown-toc-form-builders">Form Builders</a></li>
+          <li><a href="#form-data" id="markdown-toc-form-data">Form Data</a></li>
+          <li><a href="#form-arrays" id="markdown-toc-form-arrays">Form Arrays</a></li>
+        </ul>
+      </li>
       <li><a href="#tools" id="markdown-toc-tools">Tools</a></li>
       <li><a href="#questions" id="markdown-toc-questions">Questions</a></li>
     </ul>
@@ -523,19 +530,11 @@ Truthy: Any nonzero number, Any nonempty string, Any nonnull object or array, <c
 
 <h2 id="forms---template-driven">Forms - Template-driven</h2>
 
-<p>There are 2 primary mechanisms to create forms</p>
+<p>There are 2 primary mechanisms to create forms: Template-driven forms and Reactive forms.</p>
 
-<ul>
-  <li>Template-driven forms</li>
-  <li>Reactive forms</li>
-</ul>
+<p>Both are part of the core <code>@angular/forms</code> library, but are part of two different modules, <code>FormsModule</code> and <code>ReactiveFormsModule</code></p>
 
-<p>Template-driven forms</p>
-
-<ul>
-  <li>allows you to drive the logic of your application via your template.</li>
-  <li>The <code>FormsModule</code> adds the capability of using ngModel, which allows for two-way data binding in Angular.</li>
-</ul>
+<p>Template-driven forms allow you to drive the logic of your application via your template. The <code>FormsModule</code> adds the capability of using <code>ngModel</code>, which allows for two-way data binding in Angular.</p>
 
 <p><strong>Value and Event Binding Example</strong></p>
 
@@ -1076,6 +1075,375 @@ Truthy: Any nonzero number, Any nonempty string, Any nonnull object or array, <c
 </ul>
 
 <h2 id="forms---reactive">Forms - Reactive</h2>
+
+<p>Unlike <em>template-driven</em> forms in Angular, with <em>reactive</em> forms, you define the entire tree of Angular form control objects in your component code, and then bind them to native form control elements in your template. Because the component has access to the form controls as well as the backing data model, it can push data model changes into the form control and vice versa, thus reacting to changes either way.</p>
+
+<p><strong>Template-driven_ vs. _Reactive</strong></p>
+
+<ul>
+  <li>Both the approaches have their pros and cons.</li>
+  <li><em>Template-driven forms</em> are nice and declarative, and easy to understand. Angular is responsible for the data model sync and pushes data to the model and reads and updates values in the UI via directives like <code>ngModel</code>. This also usually means less code in the component class.</li>
+  <li><em>Reactive forms</em> are synchronous, and you as a developer have absolute control over how and when the data is synced from the UI to the model and vice versa. Because you create the entire form control tree in the component, you have access to it immediately and don’t have to deal with Angular’s asynchronous life-cycle.</li>
+  <li>Another slightly subtle advantage of using <em>reactive forms</em> over <em>template-driven forms</em> is that it forces developers to have a separation between what the user sees and interacts with (what we call the form model), and the persisted data model that drives our application. This is quite common in most applications, where the presented view is different from what the underlying data model is. Reactive forms make that distinction clear, while also keeping you cognizant of the data flow and giving you control over when and what flows from UI to the component and vice versa.</li>
+</ul>
+
+<h3 id="form-controls">Form Controls</h3>
+
+<ul>
+  <li>The core of any reactive form is the <code>FormControl</code>, which directly represents an individual form element in the template. Thus, any reactive form is nothing but a set of grouped FormControls.</li>
+  <li>It is at the <code>FormControl</code> level that we  assign initial values and validators (both sync and async).</li>
+  <li>Everything that we did in the template with template-driven forms now happens at a <code>FormControl</code> level in the TypeScript code.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Form Controls</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-name&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span>
+</span><span class="line">             <span class="na">placeholder=</span><span class="s">&quot;Stock Name&quot;</span>
+</span><span class="line">             <span class="na">name=</span><span class="s">&quot;stockName&quot;</span>
+</span><span class="line">             <span class="err">[</span><span class="na">formControl</span><span class="err">]=&quot;</span><span class="na">nameControl</span><span class="err">&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;button</span> <span class="err">(</span><span class="na">click</span><span class="err">)=&quot;</span><span class="na">onSubmit</span><span class="err">()&quot;</span><span class="nt">&gt;</span>Submit<span class="nt">&lt;/button&gt;</span>
+</span><span class="line"><span class="nt">&lt;/div&gt;</span>
+</span><span class="line">
+</span><span class="line"><span class="nt">&lt;p&gt;</span>Form Control value: <span class="nt">&lt;/p&gt;</span>
+</span><span class="line"><span class="nt">&lt;p&gt;</span>Form Control status: <span class="nt">&lt;/p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>On the <code>onSubmit()</code> call, we simply print the current value of the nameControl control.</li>
+  <li>Note that unlike traditional non-MVC frameworks, at no point is the control reaching out into the view to get the current value of the element. We rely on the Form`Control to provide a representative view of the input element, and keep it up to date.</li>
+  <li><code>FormControl</code> constructor can also take the initial value along with a list of validators (both sync and async) as arguments.</li>
+  <li>it is helpful to think of <code>FormControl</code> when we need to track the <em>state</em> and <em>value</em> of any individual form element, like an input box or a checkbox.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Form Controls </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+</pre></td><td class="code"><pre><code class="ts"><span class="line"><span class="kr">import</span> <span class="p">{</span> <span class="nx">Component</span><span class="p">,</span> <span class="nx">OnInit</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;@angular/core&#39;</span><span class="p">;</span>
+</span><span class="line"><span class="kr">import</span> <span class="p">{</span> <span class="nx">FormControl</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;@angular/forms&#39;</span><span class="p">;</span>
+</span><span class="line">
+</span><span class="line"><span class="err">@</span><span class="nx">Component</span><span class="p">({</span>
+</span><span class="line">  <span class="nx">selector</span><span class="o">:</span> <span class="s1">&#39;app-create-stock&#39;</span><span class="p">,</span>
+</span><span class="line">  <span class="nx">templateUrl</span><span class="o">:</span> <span class="s1">&#39;./create-stock.component.html&#39;</span><span class="p">,</span>
+</span><span class="line">  <span class="nx">styleUrls</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;./create-stock.component.css&#39;</span><span class="p">]</span>
+</span><span class="line"><span class="p">})</span>
+</span><span class="line"><span class="kr">export</span> <span class="kr">class</span> <span class="nx">CreateStockComponent</span> <span class="p">{</span>
+</span><span class="line">
+</span><span class="line">  <span class="kr">public</span> <span class="nx">nameControl</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FormControl</span><span class="p">();</span>
+</span><span class="line">  <span class="kr">constructor</span><span class="p">()</span> <span class="p">{}</span>
+</span><span class="line">
+</span><span class="line">  <span class="nx">onSubmit() {</span>
+</span><span class="line">    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Name Control Value&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">nameControl</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="form-groups">Form Groups</h3>
+
+<ul>
+  <li>This gives us the convenience of whether we want to track the form controls individually, or as a group.</li>
+  <li>switched over from binding to <code>formControl</code> to a <code>formGroup</code></li>
+  <li>for each form element, we mention a <code>formControlName</code>. Each of these will bind to an individual element within the <code>formGroup</code>.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Form groups</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">  <span class="nt">&lt;form</span> <span class="err">[</span><span class="na">formGroup</span><span class="err">]=&quot;</span><span class="na">stockForm</span><span class="err">&quot;</span> <span class="err">(</span><span class="na">ngSubmit</span><span class="err">)=&quot;</span><span class="na">onSubmit</span><span class="err">()&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-name&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Stock Name&quot;</span> <span class="na">name=</span><span class="s">&quot;stockName&quot;</span> <span class="na">formControlName=</span><span class="s">&quot;name&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-code&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Stock Code&quot;</span> <span class="na">formControlName=</span><span class="s">&quot;code&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-price&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;number&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Stock Price&quot;</span> <span class="na">formControlName=</span><span class="s">&quot;price&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span><span class="nt">&gt;</span>Submit<span class="nt">&lt;/button&gt;</span>
+</span><span class="line">  <span class="nt">&lt;/form&gt;</span>
+</span><span class="line"><span class="nt">&lt;/div&gt;</span>
+</span><span class="line">
+</span><span class="line"><span class="nt">&lt;p&gt;</span>Form Control value: <span class="nt">&lt;/p&gt;</span>
+</span><span class="line"><span class="nt">&lt;p&gt;</span>Form Control status: <span class="nt">&lt;/p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td><td class="code"><pre><code class="ts"><span class="line"><span class="kr">export</span> <span class="kr">class</span> <span class="nx">CreateStockComponent</span> <span class="p">{</span>
+</span><span class="line">
+</span><span class="line">  <span class="kr">public</span> <span class="nx">stockForm</span>: <span class="kt">FormGroup</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">FormGroup</span><span class="p">({</span>
+</span><span class="line">    <span class="nx">name</span>: <span class="kt">new</span> <span class="nx">FormControl</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">Validators</span><span class="p">.</span><span class="nx">required</span><span class="p">),</span>
+</span><span class="line">    <span class="nx">code</span>: <span class="kt">new</span> <span class="nx">FormControl</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="p">[</span><span class="nx">Validators</span><span class="p">.</span><span class="nx">required</span><span class="p">,</span> <span class="nx">Validators</span><span class="p">.</span><span class="nx">minLength</span><span class="p">(</span><span class="mi">2</span><span class="p">)]),</span>
+</span><span class="line">    <span class="nx">price</span>: <span class="kt">new</span> <span class="nx">FormControl</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="nx">Validators</span><span class="p">.</span><span class="nx">required</span><span class="p">,</span> <span class="nx">Validators</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="mi">0</span><span class="p">)])</span>
+</span><span class="line">  <span class="p">});</span>
+</span><span class="line">  <span class="kr">constructor</span><span class="p">()</span> <span class="p">{}</span>
+</span><span class="line">
+</span><span class="line">  <span class="nx">onSubmit() {</span>
+</span><span class="line">    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Stock Form Value&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">stockForm</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="form-builders">Form Builders</h3>
+
+<ul>
+  <li><code>FormBuilder</code> fundamentally is syntactic sugar to allow us to quickly create <code>FormGroup</code> and <code>FormControl</code> elements without manually calling new for each one</li>
+  <li>For any form with more than a few elements, it almost always makes sense to use the <code>FormBuilder</code> rather than the <code>FormGroup</code> method, as it reduces both the code and makes it a lot more concise and readable.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Form builders</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+</pre></td><td class="code"><pre><code class="ts"><span class="line"><span class="kr">export</span> <span class="kr">class</span> <span class="nx">CreateStockComponent</span> <span class="p">{</span>
+</span><span class="line">
+</span><span class="line">  <span class="kr">public</span> <span class="nx">stockForm</span>: <span class="kt">FormGroup</span><span class="p">;</span>
+</span><span class="line">  <span class="kr">constructor</span><span class="p">(</span><span class="kr">private</span> <span class="nx">fb</span>: <span class="kt">FormBuilder</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">this</span><span class="p">.</span><span class="nx">createForm</span><span class="p">();</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line">
+</span><span class="line">  <span class="nx">createForm() {</span>
+</span><span class="line">    <span class="k">this</span><span class="p">.</span><span class="nx">stockForm</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">fb</span><span class="p">.</span><span class="nx">group</span><span class="p">({</span>
+</span><span class="line">      <span class="nx">name</span><span class="o">:</span> <span class="p">[</span><span class="kc">null</span><span class="p">,</span> <span class="nx">Validators</span><span class="p">.</span><span class="nx">required</span><span class="p">],</span>
+</span><span class="line">      <span class="nx">code</span><span class="o">:</span> <span class="p">[</span><span class="kc">null</span><span class="p">,</span> <span class="p">[</span><span class="nx">Validators</span><span class="p">.</span><span class="nx">required</span><span class="p">,</span> <span class="nx">Validators</span><span class="p">.</span><span class="nx">minLength</span><span class="p">(</span><span class="mi">2</span><span class="p">)]],</span>
+</span><span class="line">      <span class="nx">price</span><span class="o">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="nx">Validators</span><span class="p">.</span><span class="nx">required</span><span class="p">,</span> <span class="nx">Validators</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="mi">0</span><span class="p">)]]</span>
+</span><span class="line">    <span class="p">});</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line">
+</span><span class="line">  <span class="nx">onSubmit() {</span>
+</span><span class="line">    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Stock Form Value&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">stockForm</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="form-data">Form Data</h3>
+
+<ul>
+  <li>How to set the value back in the form
+    <ul>
+      <li><code>setValue()</code>
+        <ul>
+          <li>this method takes a JSON model object that matches the form model exactly. That means for the <code>setValue</code> to work in this case, it needs an object with a <code>name</code>, <code>code</code>, and <code>price</code> key. It should not have more or fewer keys than this, as it would throw an error in this case. Based on the object, the form’s model object values would get updated and these values would be visible in the form in the UI. This is the reason why we delete all other keys from the model object before calling <code>setValue</code>.</li>
+        </ul>
+      </li>
+      <li><code>patchValue()</code>
+        <ul>
+          <li><code>patchValue</code> is a more forgiving method that takes the fields it has available, and updates the form with them. It will ignore extra fields even if it has fewer fields</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>it is good practice to not directly assign the form model to our data model, but rather make a copy of it.</li>
+</ul>
+
+<h3 id="form-arrays">Form Arrays</h3>
+
+<ul>
+  <li>to capture multiple values as well as handle nested form elements cleanly</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Form arrays</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+<span class="line-number">39</span>
+</pre></td><td class="code"><pre><code class="ts"><span class="line"><span class="kr">export</span> <span class="kr">class</span> <span class="nx">CreateStockComponent</span> <span class="p">{</span>
+</span><span class="line">
+</span><span class="line">  <span class="kr">public</span> <span class="nx">stockForm</span>: <span class="kt">FormGroup</span><span class="p">;</span>
+</span><span class="line">  <span class="kr">constructor</span><span class="p">(</span><span class="kr">private</span> <span class="nx">fb</span>: <span class="kt">FormBuilder</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">this</span><span class="p">.</span><span class="nx">createForm</span><span class="p">();</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line">
+</span><span class="line">  <span class="nx">createForm() {</span>
+</span><span class="line">    <span class="k">this</span><span class="p">.</span><span class="nx">stockForm</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">fb</span><span class="p">.</span><span class="nx">group</span><span class="p">({</span>
+</span><span class="line">      <span class="nx">name</span><span class="o">:</span> <span class="p">[</span><span class="kc">null</span><span class="p">,</span> <span class="nx">Validators</span><span class="p">.</span><span class="nx">required</span><span class="p">],</span>
+</span><span class="line">      <span class="nx">code</span><span class="o">:</span> <span class="p">[</span><span class="kc">null</span><span class="p">,</span> <span class="p">[</span><span class="nx">Validators</span><span class="p">.</span><span class="nx">required</span><span class="p">,</span> <span class="nx">Validators</span><span class="p">.</span><span class="nx">minLength</span><span class="p">(</span><span class="mi">2</span><span class="p">)]],</span>
+</span><span class="line">      <span class="nx">price</span><span class="o">:</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">[</span><span class="nx">Validators</span><span class="p">.</span><span class="nx">required</span><span class="p">,</span> <span class="nx">Validators</span><span class="p">.</span><span class="nx">min</span><span class="p">(</span><span class="mi">0</span><span class="p">)]],</span>
+</span><span class="line">      <span class="nx">notablePeople</span>: <span class="kt">this.fb.array</span><span class="p">([])</span>
+</span><span class="line">    <span class="p">});</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line">
+</span><span class="line">  <span class="nx">get</span> <span class="nx">notablePeople</span><span class="p">()</span><span class="o">:</span> <span class="nx">FormArray</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">stockForm</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;notablePeople&#39;</span><span class="p">)</span> <span class="kr">as</span> <span class="nx">FormArray</span><span class="p">;</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line">
+</span><span class="line">  <span class="nx">addNotablePerson() {</span>
+</span><span class="line">    <span class="k">this</span><span class="p">.</span><span class="nx">notablePeople</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">fb</span><span class="p">.</span><span class="nx">group</span><span class="p">({</span>
+</span><span class="line">      <span class="nx">name</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nx">Validators</span><span class="p">.</span><span class="nx">required</span><span class="p">],</span>
+</span><span class="line">      <span class="nx">title</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nx">Validators</span><span class="p">.</span><span class="nx">required</span><span class="p">]</span>
+</span><span class="line">    <span class="p">}))</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line">
+</span><span class="line">  <span class="nx">removeNotablePerson</span><span class="p">(</span><span class="nx">index</span>: <span class="kt">number</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">this</span><span class="p">.</span><span class="nx">notablePeople</span><span class="p">.</span><span class="nx">removeAt</span><span class="p">(</span><span class="nx">index</span><span class="p">);</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line">
+</span><span class="line">  <span class="nx">resetForm() {</span>
+</span><span class="line">    <span class="k">this</span><span class="p">.</span><span class="nx">stockForm</span><span class="p">.</span><span class="nx">reset</span><span class="p">();</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line">
+</span><span class="line">  <span class="nx">onSubmit() {</span>
+</span><span class="line">    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Saving stock&#39;</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">stock</span><span class="p">);</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">  <span class="nt">&lt;form</span> <span class="err">[</span><span class="na">formGroup</span><span class="err">]=&quot;</span><span class="na">stockForm</span><span class="err">&quot;</span> <span class="err">(</span><span class="na">ngSubmit</span><span class="err">)=&quot;</span><span class="na">onSubmit</span><span class="err">()&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="c">&lt;!-- No change until the end of price form element --&gt;</span>
+</span><span class="line">    <span class="c">&lt;!-- Omitted for brevity --&gt;</span>
+</span><span class="line">    <span class="nt">&lt;div</span> <span class="na">formArrayName=</span><span class="s">&quot;notablePeople&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">      <span class="nt">&lt;div</span> <span class="err">*</span><span class="na">ngFor=</span><span class="s">&quot;let person of notablePeople.controls; let i = index&quot;</span> <span class="err">[</span><span class="na">formGroupName</span><span class="err">]=&quot;</span><span class="na">i</span><span class="err">&quot;</span> <span class="na">class=</span><span class="s">&quot;notable-people&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        <span class="nt">&lt;div&gt;</span> Person  <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">        <span class="nt">&lt;div&gt;</span>
+</span><span class="line">          <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Person Name&quot;</span> <span class="na">formControlName=</span><span class="s">&quot;name&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">        <span class="nt">&lt;div&gt;</span>
+</span><span class="line">          <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Person Title&quot;</span> <span class="na">formControlName=</span><span class="s">&quot;title&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">        <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">        <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="err">(</span><span class="na">click</span><span class="err">)=&quot;</span><span class="na">removeNotablePerson</span><span class="err">(</span><span class="na">i</span><span class="err">)&quot;</span><span class="nt">&gt;</span> Remove Person <span class="nt">&lt;/button&gt;</span>
+</span><span class="line">      <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="err">(</span><span class="na">click</span><span class="err">)=&quot;</span><span class="na">addNotablePerson</span><span class="err">()&quot;</span><span class="nt">&gt;</span> Add Notable Person <span class="nt">&lt;/button&gt;</span>
+</span><span class="line">    <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span><span class="nt">&gt;</span>Submit<span class="nt">&lt;/button&gt;</span>
+</span><span class="line">    <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span> <span class="err">(</span><span class="na">click</span><span class="err">)=&quot;</span><span class="na">resetForm</span><span class="err">()&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">      Reset
+</span><span class="line">    <span class="nt">&lt;/button&gt;</span>
+</span><span class="line">  <span class="nt">&lt;/form&gt;</span>
+</span><span class="line"><span class="nt">&lt;/div&gt;</span>
+</span><span class="line">
+</span><span class="line"><span class="nt">&lt;p&gt;</span>Form Control value: <span class="nt">&lt;/p&gt;</span>
+</span><span class="line"><span class="nt">&lt;p&gt;</span>Form Control status: <span class="nt">&lt;/p&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h2 id="tools">Tools</h2>
 

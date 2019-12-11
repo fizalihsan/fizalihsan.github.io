@@ -245,7 +245,7 @@ Both are part of the core `@angular/forms` library, but are part of two differen
 
 Template-driven forms allow you to drive the logic of your application via your template. The `FormsModule` adds the capability of using `ngModel`, which allows for two-way data binding in Angular.
 
-__Value and Event Binding Example__
+### Type 1: Value and Event Binding
 
 * _UI --> Component binding_: The `value` binding is telling Angular to update the value property of the `input` element using the `stock.name` field in the component class. If and when it changes, Angular will be responsible for updating the property as well.
 * _Component --> UI binding_: The `input` event binding is instructing Angular to update the `value` of `stock.name` with the value from the event. The `$event` in this case is the underlying DOM `InputEvent`, through which we access the target and from it, the changed value.
@@ -267,7 +267,7 @@ __Value and Event Binding Example__
 </div>
 ```
 
-__ngModel directive - expanded form__
+### Type 2: ngModel directive (expanded form)
 
 * The `ngModel` directive and its special syntax abstracts away the internals of each and every input type from developers, making it easier to quickly develop form-based applications.
 * Added a `name` field to the input form element. This is necessary for the `ngModel` directive to work. If you remove this, you will see errors in the console.
@@ -289,7 +289,7 @@ __ngModel directive - expanded form__
 </div>
 ```
 
-__ngModel directive - simpler form__
+### Type 3: ngModel directive (simpler form)
 
 * `[(ngModel)]` banana-in-a-box syntax, as it is called. ( `()` looks like 2 bananas.)
 * Cons
@@ -309,7 +309,7 @@ __ngModel directive - simpler form__
 </div>
 ```
 
-__Form group__
+### Form group
 
 * We have removed the *banana-in-a-box* syntax from all the `ngModel` bindings, and just kept it as an attribute. When we use `ngModel` like this, Angular uses the name field on the form element as the model name and creates a model object corresponding to it on the form.
 * We have surrounded the form fields with another `div`, and used an Angular directive called `ngModelGroup` on it, providing it a name (`stock` in this case). This groups the form elements, thus creating the `name`, `price`, `code`, and `exchange` fields as models under the common name `stock`. This is visible in the component when we access this entire set of values through `form.value.stock`.
@@ -320,32 +320,18 @@ __Form group__
   <form (ngSubmit)="createStock(stockForm)" #stockForm="ngForm" >
     <div ngModelGroup="stock">
       <div class="stock-name">
-        <input type="text"
-              placeholder="Stock Name"
-              required
-              name="name"
-              ngModel>
+        <input type="text" placeholder="Stock Name" required name="name" ngModel>
       </div>
       <div class="stock-code">
-        <input type="text"
-              placeholder="Stock Code"
-              required
-              minlength="2"
-              name="code"
-              ngModel>
+        <input type="text" placeholder="Stock Code" required minlength="2" name="code" ngModel>
       </div>
       <div class="stock-price">
-        <input type="number"
-              placeholder="Stock Price"
-              name="price"
-              required
-              ngModel>
+        <input type="number" placeholder="Stock Price" name="price" required ngModel>
       </div>
       <div class="stock-exchange">
         <div>
           <select name="exchange" ngModel>
-            <option *ngFor="let exchange of exchanges"
-                    [ngValue]="exchange">{{exchange}}</option>
+            <option *ngFor="let exchange of exchanges" [ngValue]="exchange">{{exchange}}</option>
           </select>
         </div>
       </div>
@@ -402,47 +388,32 @@ __Control State__
       The following element changes from green to red when it is invalid
     </div>
     <div class="stock-name">
-      <input type="text"
-             placeholder="Stock Name"
-             required
-             name="stockName"
-             [(ngModel)]="stock.name">
+      <input type="text" placeholder="Stock Name" required name="stockName" [(ngModel)]="stock.name">
     </div>
     <div>
       The following element changes from green to red when it has been modified
     </div>
     <div class="stock-code">
-      <input type="text"
-             placeholder="Stock Code"
-             name="stockCode"
-             [(ngModel)]="stock.code">
+      <input type="text" placeholder="Stock Code" name="stockCode" [(ngModel)]="stock.code">
     </div>
     <div>
         The following element changes from green to red when it is visited by the user, regardless of change
       </div>
     <div class="stock-price">
-      <input type="number"
-             placeholder="Stock Price"
-             name="stockPrice"
-             [ngModel]="stock.price"
-             (ngModelChange)="setStockPrice($event)">
+      <input type="number" placeholder="Stock Price" name="stockPrice" [ngModel]="stock.price" (ngModelChange)="setStockPrice($event)">
     </div>
     <div class="stock-exchange">
       <div>
         <select name="stockExchange" [(ngModel)]="stock.exchange">
-          <option *ngFor="let exchange of exchanges"
-                  [ngValue]="exchange">{{exchange}}</option>
+          <option *ngFor="let exchange of exchanges" [ngValue]="exchange">{{exchange}}</option>
         </select>
       </div>
     </div>
     <div class="stock-confirm">
-      <input type="checkbox"
-             name="stockConfirm"
-             [(ngModel)]="confirmed">
+      <input type="checkbox" name="stockConfirm" [(ngModel)]="confirmed">
       I confirm that the information provided above is accurate!
     </div>
-    <button [disabled]="!confirmed"
-            type="submit">Create</button>
+    <button [disabled]="!confirmed" type="submit">Create</button>
   </form>
 </div>
 
@@ -465,60 +436,33 @@ __Control Validity__
 <div class="form-group">
   <form (ngSubmit)="createStock(stockForm)" #stockForm="ngForm">
     <div class="stock-name">
-      <input type="text"
-             placeholder="Stock Name"
-             required
-             name="stockName"
-             #stockName="ngModel"
-             [(ngModel)]="stock.name">
+      <input type="text" placeholder="Stock Name" required name="stockName" #stockName="ngModel" [(ngModel)]="stock.name">
     </div>
     <div *ngIf="stockName.errors && stockName.errors.required">
         Stock Name is Mandatory
     </div>
     <div class="stock-code">
-      <input type="text"
-             placeholder="Stock Code"
-             required
-             minlength="2"
-             name="stockCode"
-             #stockCode="ngModel"
-             [(ngModel)]="stock.code">
+      <input type="text" placeholder="Stock Code" required minlength="2" name="stockCode" #stockCode="ngModel" [(ngModel)]="stock.code">
     </div>
     <div *ngIf="stockCode.dirty && stockCode.invalid">
-      <div *ngIf="stockCode.errors.required">
-        Stock Code is Mandatory
-      </div>
-      <div *ngIf="stockCode.errors.minlength">
-        Stock Code must be atleast of length 2
-      </div>
+      <div *ngIf="stockCode.errors.required"> Stock Code is Mandatory </div>
+      <div *ngIf="stockCode.errors.minlength"> Stock Code must be atleast of length 2 </div>
     </div>
     <div class="stock-price">
-      <input type="number"
-             placeholder="Stock Price"
-             name="stockPrice"
-             required
-             #stockPrice="ngModel"
-             [ngModel]="stock.price"
-             (ngModelChange)="setStockPrice($event)">
+      <input type="number" placeholder="Stock Price" name="stockPrice" required #stockPrice="ngModel" [ngModel]="stock.price" (ngModelChange)="setStockPrice($event)">
     </div>
     <div *ngIf="stockPrice.dirty && stockPrice.invalid">
-      <div *ngIf="stockPrice.errors.required">
-        Stock Price is Mandatory
-      </div>
+      <div *ngIf="stockPrice.errors.required"> Stock Price is Mandatory </div>
     </div>
     <div class="stock-exchange">
       <div>
         <select name="stockExchange" [(ngModel)]="stock.exchange">
-          <option *ngFor="let exchange of exchanges"
-                  [ngValue]="exchange">{{exchange}}</option>
+          <option *ngFor="let exchange of exchanges" [ngValue]="exchange">{{exchange}}</option>
         </select>
       </div>
     </div>
     <div class="stock-confirm">
-      <input type="checkbox"
-             name="stockConfirm"
-             required
-             [(ngModel)]="confirmed">
+      <input type="checkbox" name="stockConfirm" required [(ngModel)]="confirmed">
       I confirm that the information provided above is accurate!
     </div>
     <button type="submit">Create</button>
@@ -540,7 +484,7 @@ __Template Reference Variable__
 
 Unlike *template-driven* forms in Angular, with *reactive* forms, you define the entire tree of Angular form control objects in your component code, and then bind them to native form control elements in your template. Because the component has access to the form controls as well as the backing data model, it can push data model changes into the form control and vice versa, thus reacting to changes either way.
 
-**Template-driven_ vs. _Reactive**
+**Template-driven vs. Reactive**
 
 * Both the approaches have their pros and cons.
 * *Template-driven forms* are nice and declarative, and easy to understand. Angular is responsible for the data model sync and pushes data to the model and reads and updates values in the UI via directives like `ngModel`. This also usually means less code in the component class.

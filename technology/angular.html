@@ -124,6 +124,10 @@ messageStyle: "none",
       </li>
       <li><a href="#directives" id="markdown-toc-directives">Directives</a></li>
       <li><a href="#forms---template-driven" id="markdown-toc-forms---template-driven">Forms - Template-driven</a>        <ul>
+          <li><a href="#type-1-value-and-event-binding" id="markdown-toc-type-1-value-and-event-binding">Type 1: Value and Event Binding</a></li>
+          <li><a href="#type-2-ngmodel-directive-expanded-form" id="markdown-toc-type-2-ngmodel-directive-expanded-form">Type 2: ngModel directive (expanded form)</a></li>
+          <li><a href="#type-3-ngmodel-directive-simpler-form" id="markdown-toc-type-3-ngmodel-directive-simpler-form">Type 3: ngModel directive (simpler form)</a></li>
+          <li><a href="#form-group" id="markdown-toc-form-group">Form group</a></li>
           <li><a href="#form-validations" id="markdown-toc-form-validations">Form Validations</a></li>
         </ul>
       </li>
@@ -536,7 +540,7 @@ Truthy: Any nonzero number, Any nonempty string, Any nonnull object or array, <c
 
 <p>Template-driven forms allow you to drive the logic of your application via your template. The <code>FormsModule</code> adds the capability of using <code>ngModel</code>, which allows for two-way data binding in Angular.</p>
 
-<p><strong>Value and Event Binding Example</strong></p>
+<h3 id="type-1-value-and-event-binding">Type 1: Value and Event Binding</h3>
 
 <ul>
   <li><em>UI –&gt; Component binding</em>: The <code>value</code> binding is telling Angular to update the value property of the <code>input</code> element using the <code>stock.name</code> field in the component class. If and when it changes, Angular will be responsible for updating the property as well.</li>
@@ -573,7 +577,7 @@ Truthy: Any nonzero number, Any nonempty string, Any nonnull object or array, <c
 </span><span class="line"><span class="nt">&lt;/div&gt;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p><strong>ngModel directive - expanded form</strong></p>
+<h3 id="type-2-ngmodel-directive-expanded-form">Type 2: ngModel directive (expanded form)</h3>
 
 <ul>
   <li>The <code>ngModel</code> directive and its special syntax abstracts away the internals of each and every input type from developers, making it easier to quickly develop form-based applications.</li>
@@ -608,7 +612,7 @@ Truthy: Any nonzero number, Any nonempty string, Any nonnull object or array, <c
 </span><span class="line"><span class="nt">&lt;/div&gt;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p><strong>ngModel directive - simpler form</strong></p>
+<h3 id="type-3-ngmodel-directive-simpler-form">Type 3: ngModel directive (simpler form)</h3>
 
 <ul>
   <li><code>[(ngModel)]</code> banana-in-a-box syntax, as it is called. ( <code>()</code> looks like 2 bananas.)</li>
@@ -643,7 +647,7 @@ Truthy: Any nonzero number, Any nonempty string, Any nonnull object or array, <c
 </span><span class="line"><span class="nt">&lt;/div&gt;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p><strong>Form group</strong></p>
+<h3 id="form-group">Form group</h3>
 
 <ul>
   <li>We have removed the <em>banana-in-a-box</em> syntax from all the <code>ngModel</code> bindings, and just kept it as an attribute. When we use <code>ngModel</code> like this, Angular uses the name field on the form element as the model name and creates a model object corresponding to it on the form.</li>
@@ -677,50 +681,22 @@ Truthy: Any nonzero number, Any nonempty string, Any nonnull object or array, <c
 <span class="line-number">24</span>
 <span class="line-number">25</span>
 <span class="line-number">26</span>
-<span class="line-number">27</span>
-<span class="line-number">28</span>
-<span class="line-number">29</span>
-<span class="line-number">30</span>
-<span class="line-number">31</span>
-<span class="line-number">32</span>
-<span class="line-number">33</span>
-<span class="line-number">34</span>
-<span class="line-number">35</span>
-<span class="line-number">36</span>
-<span class="line-number">37</span>
-<span class="line-number">38</span>
-<span class="line-number">39</span>
-<span class="line-number">40</span>
 </pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
 </span><span class="line">  <span class="nt">&lt;form</span> <span class="err">(</span><span class="na">ngSubmit</span><span class="err">)=&quot;</span><span class="na">createStock</span><span class="err">(</span><span class="na">stockForm</span><span class="err">)&quot;</span> <span class="err">#</span><span class="na">stockForm=</span><span class="s">&quot;ngForm&quot;</span> <span class="nt">&gt;</span>
 </span><span class="line">    <span class="nt">&lt;div</span> <span class="na">ngModelGroup=</span><span class="s">&quot;stock&quot;</span><span class="nt">&gt;</span>
 </span><span class="line">      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-name&quot;</span><span class="nt">&gt;</span>
-</span><span class="line">        <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span>
-</span><span class="line">              <span class="na">placeholder=</span><span class="s">&quot;Stock Name&quot;</span>
-</span><span class="line">              <span class="na">required</span>
-</span><span class="line">              <span class="na">name=</span><span class="s">&quot;name&quot;</span>
-</span><span class="line">              <span class="na">ngModel</span><span class="nt">&gt;</span>
+</span><span class="line">        <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Stock Name&quot;</span> <span class="na">required</span> <span class="na">name=</span><span class="s">&quot;name&quot;</span> <span class="na">ngModel</span><span class="nt">&gt;</span>
 </span><span class="line">      <span class="nt">&lt;/div&gt;</span>
 </span><span class="line">      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-code&quot;</span><span class="nt">&gt;</span>
-</span><span class="line">        <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span>
-</span><span class="line">              <span class="na">placeholder=</span><span class="s">&quot;Stock Code&quot;</span>
-</span><span class="line">              <span class="na">required</span>
-</span><span class="line">              <span class="na">minlength=</span><span class="s">&quot;2&quot;</span>
-</span><span class="line">              <span class="na">name=</span><span class="s">&quot;code&quot;</span>
-</span><span class="line">              <span class="na">ngModel</span><span class="nt">&gt;</span>
+</span><span class="line">        <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Stock Code&quot;</span> <span class="na">required</span> <span class="na">minlength=</span><span class="s">&quot;2&quot;</span> <span class="na">name=</span><span class="s">&quot;code&quot;</span> <span class="na">ngModel</span><span class="nt">&gt;</span>
 </span><span class="line">      <span class="nt">&lt;/div&gt;</span>
 </span><span class="line">      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-price&quot;</span><span class="nt">&gt;</span>
-</span><span class="line">        <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;number&quot;</span>
-</span><span class="line">              <span class="na">placeholder=</span><span class="s">&quot;Stock Price&quot;</span>
-</span><span class="line">              <span class="na">name=</span><span class="s">&quot;price&quot;</span>
-</span><span class="line">              <span class="na">required</span>
-</span><span class="line">              <span class="na">ngModel</span><span class="nt">&gt;</span>
+</span><span class="line">        <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;number&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Stock Price&quot;</span> <span class="na">name=</span><span class="s">&quot;price&quot;</span> <span class="na">required</span> <span class="na">ngModel</span><span class="nt">&gt;</span>
 </span><span class="line">      <span class="nt">&lt;/div&gt;</span>
 </span><span class="line">      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-exchange&quot;</span><span class="nt">&gt;</span>
 </span><span class="line">        <span class="nt">&lt;div&gt;</span>
 </span><span class="line">          <span class="nt">&lt;select</span> <span class="na">name=</span><span class="s">&quot;exchange&quot;</span> <span class="na">ngModel</span><span class="nt">&gt;</span>
-</span><span class="line">            <span class="nt">&lt;option</span> <span class="err">*</span><span class="na">ngFor=</span><span class="s">&quot;let exchange of exchanges&quot;</span>
-</span><span class="line">                    <span class="err">[</span><span class="na">ngValue</span><span class="err">]=&quot;</span><span class="na">exchange</span><span class="err">&quot;</span><span class="nt">&gt;</span><span class="nt">&lt;/option&gt;</span>
+</span><span class="line">            <span class="nt">&lt;option</span> <span class="err">*</span><span class="na">ngFor=</span><span class="s">&quot;let exchange of exchanges&quot;</span> <span class="err">[</span><span class="na">ngValue</span><span class="err">]=&quot;</span><span class="na">exchange</span><span class="err">&quot;</span><span class="nt">&gt;</span><span class="nt">&lt;/option&gt;</span>
 </span><span class="line">          <span class="nt">&lt;/select&gt;</span>
 </span><span class="line">        <span class="nt">&lt;/div&gt;</span>
 </span><span class="line">      <span class="nt">&lt;/div&gt;</span>
@@ -848,68 +824,38 @@ Truthy: Any nonzero number, Any nonempty string, Any nonnull object or array, <c
 <span class="line-number">35</span>
 <span class="line-number">36</span>
 <span class="line-number">37</span>
-<span class="line-number">38</span>
-<span class="line-number">39</span>
-<span class="line-number">40</span>
-<span class="line-number">41</span>
-<span class="line-number">42</span>
-<span class="line-number">43</span>
-<span class="line-number">44</span>
-<span class="line-number">45</span>
-<span class="line-number">46</span>
-<span class="line-number">47</span>
-<span class="line-number">48</span>
-<span class="line-number">49</span>
-<span class="line-number">50</span>
-<span class="line-number">51</span>
-<span class="line-number">52</span>
 </pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
 </span><span class="line">  <span class="nt">&lt;form</span> <span class="err">(</span><span class="na">ngSubmit</span><span class="err">)=&quot;</span><span class="na">createStock</span><span class="err">()&quot;</span><span class="nt">&gt;</span>
 </span><span class="line">    <span class="nt">&lt;div&gt;</span>
 </span><span class="line">      The following element changes from green to red when it is invalid
 </span><span class="line">    <span class="nt">&lt;/div&gt;</span>
 </span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-name&quot;</span><span class="nt">&gt;</span>
-</span><span class="line">      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span>
-</span><span class="line">             <span class="na">placeholder=</span><span class="s">&quot;Stock Name&quot;</span>
-</span><span class="line">             <span class="na">required</span>
-</span><span class="line">             <span class="na">name=</span><span class="s">&quot;stockName&quot;</span>
-</span><span class="line">             <span class="err">[(</span><span class="na">ngModel</span><span class="err">)]=&quot;</span><span class="na">stock</span><span class="err">.</span><span class="na">name</span><span class="err">&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Stock Name&quot;</span> <span class="na">required</span> <span class="na">name=</span><span class="s">&quot;stockName&quot;</span> <span class="err">[(</span><span class="na">ngModel</span><span class="err">)]=&quot;</span><span class="na">stock</span><span class="err">.</span><span class="na">name</span><span class="err">&quot;</span><span class="nt">&gt;</span>
 </span><span class="line">    <span class="nt">&lt;/div&gt;</span>
 </span><span class="line">    <span class="nt">&lt;div&gt;</span>
 </span><span class="line">      The following element changes from green to red when it has been modified
 </span><span class="line">    <span class="nt">&lt;/div&gt;</span>
 </span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-code&quot;</span><span class="nt">&gt;</span>
-</span><span class="line">      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span>
-</span><span class="line">             <span class="na">placeholder=</span><span class="s">&quot;Stock Code&quot;</span>
-</span><span class="line">             <span class="na">name=</span><span class="s">&quot;stockCode&quot;</span>
-</span><span class="line">             <span class="err">[(</span><span class="na">ngModel</span><span class="err">)]=&quot;</span><span class="na">stock</span><span class="err">.</span><span class="na">code</span><span class="err">&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Stock Code&quot;</span> <span class="na">name=</span><span class="s">&quot;stockCode&quot;</span> <span class="err">[(</span><span class="na">ngModel</span><span class="err">)]=&quot;</span><span class="na">stock</span><span class="err">.</span><span class="na">code</span><span class="err">&quot;</span><span class="nt">&gt;</span>
 </span><span class="line">    <span class="nt">&lt;/div&gt;</span>
 </span><span class="line">    <span class="nt">&lt;div&gt;</span>
 </span><span class="line">        The following element changes from green to red when it is visited by the user, regardless of change
 </span><span class="line">      <span class="nt">&lt;/div&gt;</span>
 </span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-price&quot;</span><span class="nt">&gt;</span>
-</span><span class="line">      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;number&quot;</span>
-</span><span class="line">             <span class="na">placeholder=</span><span class="s">&quot;Stock Price&quot;</span>
-</span><span class="line">             <span class="na">name=</span><span class="s">&quot;stockPrice&quot;</span>
-</span><span class="line">             <span class="err">[</span><span class="na">ngModel</span><span class="err">]=&quot;</span><span class="na">stock</span><span class="err">.</span><span class="na">price</span><span class="err">&quot;</span>
-</span><span class="line">             <span class="err">(</span><span class="na">ngModelChange</span><span class="err">)=&quot;</span><span class="na">setStockPrice</span><span class="err">($</span><span class="na">event</span><span class="err">)&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;number&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Stock Price&quot;</span> <span class="na">name=</span><span class="s">&quot;stockPrice&quot;</span> <span class="err">[</span><span class="na">ngModel</span><span class="err">]=&quot;</span><span class="na">stock</span><span class="err">.</span><span class="na">price</span><span class="err">&quot;</span> <span class="err">(</span><span class="na">ngModelChange</span><span class="err">)=&quot;</span><span class="na">setStockPrice</span><span class="err">($</span><span class="na">event</span><span class="err">)&quot;</span><span class="nt">&gt;</span>
 </span><span class="line">    <span class="nt">&lt;/div&gt;</span>
 </span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-exchange&quot;</span><span class="nt">&gt;</span>
 </span><span class="line">      <span class="nt">&lt;div&gt;</span>
 </span><span class="line">        <span class="nt">&lt;select</span> <span class="na">name=</span><span class="s">&quot;stockExchange&quot;</span> <span class="err">[(</span><span class="na">ngModel</span><span class="err">)]=&quot;</span><span class="na">stock</span><span class="err">.</span><span class="na">exchange</span><span class="err">&quot;</span><span class="nt">&gt;</span>
-</span><span class="line">          <span class="nt">&lt;option</span> <span class="err">*</span><span class="na">ngFor=</span><span class="s">&quot;let exchange of exchanges&quot;</span>
-</span><span class="line">                  <span class="err">[</span><span class="na">ngValue</span><span class="err">]=&quot;</span><span class="na">exchange</span><span class="err">&quot;</span><span class="nt">&gt;</span><span class="nt">&lt;/option&gt;</span>
+</span><span class="line">          <span class="nt">&lt;option</span> <span class="err">*</span><span class="na">ngFor=</span><span class="s">&quot;let exchange of exchanges&quot;</span> <span class="err">[</span><span class="na">ngValue</span><span class="err">]=&quot;</span><span class="na">exchange</span><span class="err">&quot;</span><span class="nt">&gt;</span><span class="nt">&lt;/option&gt;</span>
 </span><span class="line">        <span class="nt">&lt;/select&gt;</span>
 </span><span class="line">      <span class="nt">&lt;/div&gt;</span>
 </span><span class="line">    <span class="nt">&lt;/div&gt;</span>
 </span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-confirm&quot;</span><span class="nt">&gt;</span>
-</span><span class="line">      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span>
-</span><span class="line">             <span class="na">name=</span><span class="s">&quot;stockConfirm&quot;</span>
-</span><span class="line">             <span class="err">[(</span><span class="na">ngModel</span><span class="err">)]=&quot;</span><span class="na">confirmed</span><span class="err">&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">name=</span><span class="s">&quot;stockConfirm&quot;</span> <span class="err">[(</span><span class="na">ngModel</span><span class="err">)]=&quot;</span><span class="na">confirmed</span><span class="err">&quot;</span><span class="nt">&gt;</span>
 </span><span class="line">      I confirm that the information provided above is accurate!
 </span><span class="line">    <span class="nt">&lt;/div&gt;</span>
-</span><span class="line">    <span class="nt">&lt;button</span> <span class="err">[</span><span class="na">disabled</span><span class="err">]=&quot;!</span><span class="na">confirmed</span><span class="err">&quot;</span>
-</span><span class="line">            <span class="na">type=</span><span class="s">&quot;submit&quot;</span><span class="nt">&gt;</span>Create<span class="nt">&lt;/button&gt;</span>
+</span><span class="line">    <span class="nt">&lt;button</span> <span class="err">[</span><span class="na">disabled</span><span class="err">]=&quot;!</span><span class="na">confirmed</span><span class="err">&quot;</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span><span class="nt">&gt;</span>Create<span class="nt">&lt;/button&gt;</span>
 </span><span class="line">  <span class="nt">&lt;/form&gt;</span>
 </span><span class="line"><span class="nt">&lt;/div&gt;</span>
 </span><span class="line">
@@ -971,90 +917,36 @@ Truthy: Any nonzero number, Any nonempty string, Any nonnull object or array, <c
 <span class="line-number">36</span>
 <span class="line-number">37</span>
 <span class="line-number">38</span>
-<span class="line-number">39</span>
-<span class="line-number">40</span>
-<span class="line-number">41</span>
-<span class="line-number">42</span>
-<span class="line-number">43</span>
-<span class="line-number">44</span>
-<span class="line-number">45</span>
-<span class="line-number">46</span>
-<span class="line-number">47</span>
-<span class="line-number">48</span>
-<span class="line-number">49</span>
-<span class="line-number">50</span>
-<span class="line-number">51</span>
-<span class="line-number">52</span>
-<span class="line-number">53</span>
-<span class="line-number">54</span>
-<span class="line-number">55</span>
-<span class="line-number">56</span>
-<span class="line-number">57</span>
-<span class="line-number">58</span>
-<span class="line-number">59</span>
-<span class="line-number">60</span>
-<span class="line-number">61</span>
-<span class="line-number">62</span>
-<span class="line-number">63</span>
-<span class="line-number">64</span>
-<span class="line-number">65</span>
 </pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;form-group&quot;</span><span class="nt">&gt;</span>
 </span><span class="line">  <span class="nt">&lt;form</span> <span class="err">(</span><span class="na">ngSubmit</span><span class="err">)=&quot;</span><span class="na">createStock</span><span class="err">(</span><span class="na">stockForm</span><span class="err">)&quot;</span> <span class="err">#</span><span class="na">stockForm=</span><span class="s">&quot;ngForm&quot;</span><span class="nt">&gt;</span>
 </span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-name&quot;</span><span class="nt">&gt;</span>
-</span><span class="line">      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span>
-</span><span class="line">             <span class="na">placeholder=</span><span class="s">&quot;Stock Name&quot;</span>
-</span><span class="line">             <span class="na">required</span>
-</span><span class="line">             <span class="na">name=</span><span class="s">&quot;stockName&quot;</span>
-</span><span class="line">             <span class="err">#</span><span class="na">stockName=</span><span class="s">&quot;ngModel&quot;</span>
-</span><span class="line">             <span class="err">[(</span><span class="na">ngModel</span><span class="err">)]=&quot;</span><span class="na">stock</span><span class="err">.</span><span class="na">name</span><span class="err">&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Stock Name&quot;</span> <span class="na">required</span> <span class="na">name=</span><span class="s">&quot;stockName&quot;</span> <span class="err">#</span><span class="na">stockName=</span><span class="s">&quot;ngModel&quot;</span> <span class="err">[(</span><span class="na">ngModel</span><span class="err">)]=&quot;</span><span class="na">stock</span><span class="err">.</span><span class="na">name</span><span class="err">&quot;</span><span class="nt">&gt;</span>
 </span><span class="line">    <span class="nt">&lt;/div&gt;</span>
 </span><span class="line">    <span class="nt">&lt;div</span> <span class="err">*</span><span class="na">ngIf=</span><span class="s">&quot;stockName.errors &amp;&amp; stockName.errors.required&quot;</span><span class="nt">&gt;</span>
 </span><span class="line">        Stock Name is Mandatory
 </span><span class="line">    <span class="nt">&lt;/div&gt;</span>
 </span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-code&quot;</span><span class="nt">&gt;</span>
-</span><span class="line">      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span>
-</span><span class="line">             <span class="na">placeholder=</span><span class="s">&quot;Stock Code&quot;</span>
-</span><span class="line">             <span class="na">required</span>
-</span><span class="line">             <span class="na">minlength=</span><span class="s">&quot;2&quot;</span>
-</span><span class="line">             <span class="na">name=</span><span class="s">&quot;stockCode&quot;</span>
-</span><span class="line">             <span class="err">#</span><span class="na">stockCode=</span><span class="s">&quot;ngModel&quot;</span>
-</span><span class="line">             <span class="err">[(</span><span class="na">ngModel</span><span class="err">)]=&quot;</span><span class="na">stock</span><span class="err">.</span><span class="na">code</span><span class="err">&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Stock Code&quot;</span> <span class="na">required</span> <span class="na">minlength=</span><span class="s">&quot;2&quot;</span> <span class="na">name=</span><span class="s">&quot;stockCode&quot;</span> <span class="err">#</span><span class="na">stockCode=</span><span class="s">&quot;ngModel&quot;</span> <span class="err">[(</span><span class="na">ngModel</span><span class="err">)]=&quot;</span><span class="na">stock</span><span class="err">.</span><span class="na">code</span><span class="err">&quot;</span><span class="nt">&gt;</span>
 </span><span class="line">    <span class="nt">&lt;/div&gt;</span>
 </span><span class="line">    <span class="nt">&lt;div</span> <span class="err">*</span><span class="na">ngIf=</span><span class="s">&quot;stockCode.dirty &amp;&amp; stockCode.invalid&quot;</span><span class="nt">&gt;</span>
-</span><span class="line">      <span class="nt">&lt;div</span> <span class="err">*</span><span class="na">ngIf=</span><span class="s">&quot;stockCode.errors.required&quot;</span><span class="nt">&gt;</span>
-</span><span class="line">        Stock Code is Mandatory
-</span><span class="line">      <span class="nt">&lt;/div&gt;</span>
-</span><span class="line">      <span class="nt">&lt;div</span> <span class="err">*</span><span class="na">ngIf=</span><span class="s">&quot;stockCode.errors.minlength&quot;</span><span class="nt">&gt;</span>
-</span><span class="line">        Stock Code must be atleast of length 2
-</span><span class="line">      <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">      <span class="nt">&lt;div</span> <span class="err">*</span><span class="na">ngIf=</span><span class="s">&quot;stockCode.errors.required&quot;</span><span class="nt">&gt;</span> Stock Code is Mandatory <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">      <span class="nt">&lt;div</span> <span class="err">*</span><span class="na">ngIf=</span><span class="s">&quot;stockCode.errors.minlength&quot;</span><span class="nt">&gt;</span> Stock Code must be atleast of length 2 <span class="nt">&lt;/div&gt;</span>
 </span><span class="line">    <span class="nt">&lt;/div&gt;</span>
 </span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-price&quot;</span><span class="nt">&gt;</span>
-</span><span class="line">      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;number&quot;</span>
-</span><span class="line">             <span class="na">placeholder=</span><span class="s">&quot;Stock Price&quot;</span>
-</span><span class="line">             <span class="na">name=</span><span class="s">&quot;stockPrice&quot;</span>
-</span><span class="line">             <span class="na">required</span>
-</span><span class="line">             <span class="err">#</span><span class="na">stockPrice=</span><span class="s">&quot;ngModel&quot;</span>
-</span><span class="line">             <span class="err">[</span><span class="na">ngModel</span><span class="err">]=&quot;</span><span class="na">stock</span><span class="err">.</span><span class="na">price</span><span class="err">&quot;</span>
-</span><span class="line">             <span class="err">(</span><span class="na">ngModelChange</span><span class="err">)=&quot;</span><span class="na">setStockPrice</span><span class="err">($</span><span class="na">event</span><span class="err">)&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;number&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;Stock Price&quot;</span> <span class="na">name=</span><span class="s">&quot;stockPrice&quot;</span> <span class="na">required</span> <span class="err">#</span><span class="na">stockPrice=</span><span class="s">&quot;ngModel&quot;</span> <span class="err">[</span><span class="na">ngModel</span><span class="err">]=&quot;</span><span class="na">stock</span><span class="err">.</span><span class="na">price</span><span class="err">&quot;</span> <span class="err">(</span><span class="na">ngModelChange</span><span class="err">)=&quot;</span><span class="na">setStockPrice</span><span class="err">($</span><span class="na">event</span><span class="err">)&quot;</span><span class="nt">&gt;</span>
 </span><span class="line">    <span class="nt">&lt;/div&gt;</span>
 </span><span class="line">    <span class="nt">&lt;div</span> <span class="err">*</span><span class="na">ngIf=</span><span class="s">&quot;stockPrice.dirty &amp;&amp; stockPrice.invalid&quot;</span><span class="nt">&gt;</span>
-</span><span class="line">      <span class="nt">&lt;div</span> <span class="err">*</span><span class="na">ngIf=</span><span class="s">&quot;stockPrice.errors.required&quot;</span><span class="nt">&gt;</span>
-</span><span class="line">        Stock Price is Mandatory
-</span><span class="line">      <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">      <span class="nt">&lt;div</span> <span class="err">*</span><span class="na">ngIf=</span><span class="s">&quot;stockPrice.errors.required&quot;</span><span class="nt">&gt;</span> Stock Price is Mandatory <span class="nt">&lt;/div&gt;</span>
 </span><span class="line">    <span class="nt">&lt;/div&gt;</span>
 </span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-exchange&quot;</span><span class="nt">&gt;</span>
 </span><span class="line">      <span class="nt">&lt;div&gt;</span>
 </span><span class="line">        <span class="nt">&lt;select</span> <span class="na">name=</span><span class="s">&quot;stockExchange&quot;</span> <span class="err">[(</span><span class="na">ngModel</span><span class="err">)]=&quot;</span><span class="na">stock</span><span class="err">.</span><span class="na">exchange</span><span class="err">&quot;</span><span class="nt">&gt;</span>
-</span><span class="line">          <span class="nt">&lt;option</span> <span class="err">*</span><span class="na">ngFor=</span><span class="s">&quot;let exchange of exchanges&quot;</span>
-</span><span class="line">                  <span class="err">[</span><span class="na">ngValue</span><span class="err">]=&quot;</span><span class="na">exchange</span><span class="err">&quot;</span><span class="nt">&gt;</span><span class="nt">&lt;/option&gt;</span>
+</span><span class="line">          <span class="nt">&lt;option</span> <span class="err">*</span><span class="na">ngFor=</span><span class="s">&quot;let exchange of exchanges&quot;</span> <span class="err">[</span><span class="na">ngValue</span><span class="err">]=&quot;</span><span class="na">exchange</span><span class="err">&quot;</span><span class="nt">&gt;</span><span class="nt">&lt;/option&gt;</span>
 </span><span class="line">        <span class="nt">&lt;/select&gt;</span>
 </span><span class="line">      <span class="nt">&lt;/div&gt;</span>
 </span><span class="line">    <span class="nt">&lt;/div&gt;</span>
 </span><span class="line">    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">&quot;stock-confirm&quot;</span><span class="nt">&gt;</span>
-</span><span class="line">      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span>
-</span><span class="line">             <span class="na">name=</span><span class="s">&quot;stockConfirm&quot;</span>
-</span><span class="line">             <span class="na">required</span>
-</span><span class="line">             <span class="err">[(</span><span class="na">ngModel</span><span class="err">)]=&quot;</span><span class="na">confirmed</span><span class="err">&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;checkbox&quot;</span> <span class="na">name=</span><span class="s">&quot;stockConfirm&quot;</span> <span class="na">required</span> <span class="err">[(</span><span class="na">ngModel</span><span class="err">)]=&quot;</span><span class="na">confirmed</span><span class="err">&quot;</span><span class="nt">&gt;</span>
 </span><span class="line">      I confirm that the information provided above is accurate!
 </span><span class="line">    <span class="nt">&lt;/div&gt;</span>
 </span><span class="line">    <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span><span class="nt">&gt;</span>Create<span class="nt">&lt;/button&gt;</span>
@@ -1078,7 +970,7 @@ Truthy: Any nonzero number, Any nonempty string, Any nonnull object or array, <c
 
 <p>Unlike <em>template-driven</em> forms in Angular, with <em>reactive</em> forms, you define the entire tree of Angular form control objects in your component code, and then bind them to native form control elements in your template. Because the component has access to the form controls as well as the backing data model, it can push data model changes into the form control and vice versa, thus reacting to changes either way.</p>
 
-<p><strong>Template-driven_ vs. _Reactive</strong></p>
+<p><strong>Template-driven vs. Reactive</strong></p>
 
 <ul>
   <li>Both the approaches have their pros and cons.</li>

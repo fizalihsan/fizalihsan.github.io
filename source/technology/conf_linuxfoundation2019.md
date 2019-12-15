@@ -1,10 +1,9 @@
-
 ---
 layout: page
 title: "Open FinTech Forum - Linux Foundation - NYC 12/09/2019"
-comments: false
-sharing: false
-footer: false
+comments: true
+sharing: true
+footer: true
 ---
 
 * list element with functor item

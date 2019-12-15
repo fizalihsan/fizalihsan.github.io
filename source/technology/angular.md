@@ -93,7 +93,9 @@ _HTML attribute vs. DOM property: What's the difference?_
 
 ## Components
 
-A component in Angular is nothing but a TypeScript class, decorated with some attributes and metadata. The class encapsulates all the data and functionality of the component, while the decorator specifies how it translates into the HTML.
+* A component in Angular is nothing but a TypeScript class, decorated with some attributes and metadata. The class encapsulates all the data and functionality of the component, while the decorator specifies how it translates into the HTML.
+* Components in Angular are our presentation layer, and should be involved in and focus on the presentation aspects of data.
+* Components are responsible for deciding what data to display and how to render and display it in the UI. We bind the data from the components to UI and bind events from the UI to methods in the components to allow and handle user interactions. 
 
 To some extent, you can consider an Angular application to be nothing but a tree of components
 
@@ -691,7 +693,209 @@ export class CreateStockComponent {
 <p>Form Control status: {{ stockForm.status | json }}</p>
 ```
 
-## Tools
+## Services
+
+* Services are primarily meant for
+    * Abstraction of the data-fetching aspects
+    * Encapsulation of shared application logic
+    * Sharing of data across components
+* Services are responsible for the data fetching and common business logic in an Angular application.
+* By default, services  are singletons across the application, which allows to store state and access them across various components.
+* Another simple way to think about Angular services is that it is the layer to abstract the “how” away from the component, so that the component can just focus on the “what”.
+* With the `Injectable` decorator, Angular will take care of injecting them into our service. 
+
+```ts Service Skeleton
+import { Injectable } from '@angular/core';
+
+@Injectable()
+export class StockService {
+
+  constructor() { }
+
+}
+```
+
+* We define how the service will be provided and at what level - it could be at `AppModule` level, `AppComponent` level or your custom component level.
+* Every service that we create needs to be registered as a provider with an injector. Then any other class can ask for the service and the injector will be responsible for providing it. 
+* __Multiple Dependency Injectors__
+    * Angular supports multiple dependency injectors within the same application. 
+    * The ***root injector*** at the root `AppModule` level is where most services will be registered. This makes the instance available across the entire application.
+    * In example 1 below, it is registered in the `providers` section of the `NgModule`, which means the service is in fact registered with the root injector and the service is a singleton for the entire application, and any class or component in the application can ask for the service and would be handed the very same instance of the service.
+    * Then, when we made the change to add the providers at the `CreateStockComponent` level, we brought the injector at the component level into play. Angular will create a chain of injectors all the way down, depending on the need and declarations. And all child components will inherit that injector, which will take precedence over the root injector. When we registered our `MessageService` provider at the `CreateStockComponent` level, it created a child injector at that level, with its own instance of the MessageService. What we injected into the `CreateStockComponent` is in fact this new instance, which has nothing to do with the original root-level `MessageService`. So we, in fact, have two separate instances of `MessageService` with nothing in common.
+    * Just like an Angular application is a tree of components, there is a parallel tree of injectors at play. For most components, these injectors might just be a reference or a proxy to the parent injector. But they may not, as we have just seen.
+    * Whenever a component asks for a dependency, Angular will check the closest injector in the tree to see whether it can satisfy it. If it can (like in `CreateStockComponent`), it will provide it. If not, it will check with the parent injector, all the way to the root injector.
+
+```ts Example 1: Service defined at AppModule
+import { StockService } from 'app/services/stock.service';
+
+@NgModule({
+  declarations: [ AppComponent, StockItemComponent, CreateStockComponent, StockListComponent ],
+  imports: [ BrowserModule, FormsModule, HttpModule ],
+  providers: [
+    StockService // <------------service added here
+  ],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+```
+
+```ts Example 2: Service defined at component level
+@Component({
+  selector: 'app-create-stock',
+  templateUrl: './create-stock.component.html',
+  styleUrls: ['./create-stock.component.css'],
+  providers: [MessageService] // <----------service added as provider
+})
+export class CreateStockComponent {
+
+  public stock: Stock;
+  public confirmed = false;
+  public exchanges = ['NYSE', 'NASDAQ', 'OTHER'];
+  constructor(private stockService: StockService,        //<----------service injected
+              public messageService: MessageService) {   //<----------service injected
+    this.stock =  new Stock('', '', 0, 0, 'NASDAQ');
+    this.messageService.message = 'Component Level: Hello Message Service';
+
+  }
+}
+```
+
+* We can inject any service we want into our component simply by listing it in our constructor. 
+* The variable name itself doesn’t matter; Angular uses the type definition to figure out what service to inject.
+* By adding the `private` or `public` keyword in front of a constructor argument, we can make it a member property of the class with the same name. Which is why we need to access the service through an instance variable and cannot access it directly (i.e., we need to call `this.stockService`, and cannot directly use `stockService`). This is a Typescript feature.
+
+```ts Service injection example
+export class StockListComponent implements OnInit {
+
+  public stocks: Stock[];
+  constructor(private stockService: StockService) { } //<-----------service injection in constructor 
+
+  ngOnInit() {
+    this.stocks = this.stockService.getStocks(); 
+  }
+}
+```
+
+## Observables
+
+* For asynchronous operations, ***callbacks*** were originally used. Later ***Promises*** were introduced in AngularJS which was better than callbacks in many ways. In recent versions, Angular switched to ***Observables***
+* Observables are a [ReactiveX](http://reactivex.io/intro.html) concept that allows us to deal with streams which emit data. Any interested party can then be an observer on this stream, and perform operations and transformations on the events emitted by the stream.
+
+
+| Promises | Observables | 
+| --- | --- | 
+| operate on a single asynchronous event | allow us to deal with a stream of zero or more async events |
+| a promise’s success or error handler will eventually be called, even if you are no longer interested in it | observables allow us to cancel a subscription and not process data if we don’t care about it. |
+| good for single event cases, and are still an option when you work with Angular. | An observable can be converted into a promise and then handled in Angular. But it is recommended to use observables, as Angular provides a lot of out-of-the-box support for RxJS and its extensions within its framework.|
+| not possible to create a chain of transformations | Observables allow us to compose and create a chain of transformations easily. The operators it provides out of the box allow for some strong and powerful compositions, and operations like retry and replay make handling some common use cases trivial. All of this while being able to reuse our subscription code.|
+
+```ts stock.service.ts
+import { Injectable } from '@angular/core';
+
+import { Observable } from 'rxjs/Observable'; //<------- RxJS as a library is large, so import only what is needed
+import { _throw as ObservableThrow } from 'rxjs/observable/throw';
+import { of as ObservableOf } from 'rxjs/observable/of';
+import { Stock } from 'app/model/stock';
+
+@Injectable()
+export class StockService {
+
+  private stocks: Stock[];
+  constructor() {
+    this.stocks = [
+      new Stock('Test Stock Company', 'TSC', 85, 80, 'NASDAQ'),
+      new Stock('Second Stock Company', 'SSC', 10, 20, 'NSE'),
+      new Stock('Last Stock Company', 'LSC', 876, 765, 'NYSE')
+    ];
+   }
+
+  getStocks() : Observable<Stock[]> { //<---------return observable instead of synchronous value
+    return ObservableOf(this.stocks);
+  }
+
+  createStock(stock: Stock): Observable<any> { //<---------return observable instead of synchronous value
+    let foundStock = this.stocks.find(each => each.code === stock.code);
+    if (foundStock) {
+      return ObservableThrow({msg: 'Stock with code ' + stock.code + ' already exists'});
+    }
+    this.stocks.push(stock);
+    return ObservableOf({msg: 'Stock with code ' + stock.code + ' successfully created'});;
+  }
+
+  toggleFavorite(stock: Stock): Observable<Stock> {
+    let foundStock = this.stocks.find(each => each.code === stock.code);
+    foundStock.favorite = !foundStock.favorite;
+    return ObservableOf(foundStock);
+  }
+}
+```
+
+```ts stock-list.component.ts
+export class StockListComponent implements OnInit {
+
+  public stocks: Stock[];
+  constructor(private stockService: StockService) { }
+
+  ngOnInit() {
+    this.stockService.getStocks()
+        .subscribe(stocks => {
+          this.stocks = stocks;
+    });
+  }
+
+  onToggleFavorite(stock: Stock) {
+    this.stockService.toggleFavorite(stock);
+  }
+}
+```
+
+In a lot of cases, we simply want to make a call to our server, and display the return value in our UI. We don’t need to process the data, make any transformations, or anything else. In those cases, Angular gives us a slight shortcut that we can use.
+
+```ts Simplified version of stock-list.component.ts
+export class StockListComponent implements OnInit {
+
+  public stocks$: Observable<Stock[]>; //<--------- storing the observable as a member variable
+  constructor(private stockService: StockService) { }
+
+  ngOnInit() {
+    this.stocks$ = this.stockService.getStocks();  //<--------- directly saving the observable returned by API, instead of its underlying return value
+  }
+
+  onToggleFavorite(stock: Stock) {
+    this.stockService.toggleFavorite(stock);
+  }
+}
+```
+
+We use a `Pipe` in the `ngFor` expression. Angular provides a pipe called `async`, which allows us to bind to `Observable`. Angular would then be responsible for waiting for events to be emitted on the observable and displaying the resultant value directly. It saves us that one step of having to manually subscribe to the observable.
+
+```html stock-list.component.html
+<app-stock-item *ngFor="let stock of stocks$ | async"
+                [stock]="stock"
+                (toggleFavorite)="onToggleFavorite($event)">
+</app-stock-item>
+```
+
+```ts create-stock.component.ts
+export class CreateStockComponent {
+
+  createStock(stockForm) {
+    if (stockForm.valid) {
+      this.stockService.createStock(this.stock)
+          .subscribe((result: any) => { 
+            this.message = result.msg;
+            this.stock =  new Stock('', '', 0, 0, 'NASDAQ');
+          }, (err) => { //<-------exception handling
+            this.message = err.msg;
+          });
+    } else {
+      console.error('Stock form is in an invalid state');
+    }
+  }
+}
+```
+
+# Tools
 
 * build - webpack, npm, ?
 * testing - karma, jasmine, protractor, ??
@@ -700,7 +904,7 @@ export class CreateStockComponent {
 * state management - ???
 
 
-## Questions
+# Questions
 
 * diff b/w unit test and e2e test?
 * Typescript - decorators

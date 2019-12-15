@@ -139,10 +139,12 @@ messageStyle: "none",
           <li><a href="#form-arrays" id="markdown-toc-form-arrays">Form Arrays</a></li>
         </ul>
       </li>
-      <li><a href="#tools" id="markdown-toc-tools">Tools</a></li>
-      <li><a href="#questions" id="markdown-toc-questions">Questions</a></li>
+      <li><a href="#services" id="markdown-toc-services">Services</a></li>
+      <li><a href="#observables" id="markdown-toc-observables">Observables</a></li>
     </ul>
   </li>
+  <li><a href="#tools" id="markdown-toc-tools">Tools</a></li>
+  <li><a href="#questions" id="markdown-toc-questions">Questions</a></li>
   <li><a href="#references" id="markdown-toc-references">References</a></li>
 </ul>
 
@@ -278,7 +280,11 @@ messageStyle: "none",
 
 <h2 id="components">Components</h2>
 
-<p>A component in Angular is nothing but a TypeScript class, decorated with some attributes and metadata. The class encapsulates all the data and functionality of the component, while the decorator specifies how it translates into the HTML.</p>
+<ul>
+  <li>A component in Angular is nothing but a TypeScript class, decorated with some attributes and metadata. The class encapsulates all the data and functionality of the component, while the decorator specifies how it translates into the HTML.</li>
+  <li>Components in Angular are our presentation layer, and should be involved in and focus on the presentation aspects of data.</li>
+  <li>Components are responsible for deciding what data to display and how to render and display it in the UI. We bind the data from the components to UI and bind events from the UI to methods in the components to allow and handle user interactions.</li>
+</ul>
 
 <p>To some extent, you can consider an Angular application to be nothing but a tree of components</p>
 
@@ -1337,7 +1343,366 @@ Truthy: Any nonzero number, Any nonempty string, Any nonnull object or array, <c
 </span><span class="line"><span class="nt">&lt;p&gt;</span>Form Control status: <span class="nt">&lt;/p&gt;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h2 id="tools">Tools</h2>
+<h2 id="services">Services</h2>
+
+<ul>
+  <li>Services are primarily meant for
+    <ul>
+      <li>Abstraction of the data-fetching aspects</li>
+      <li>Encapsulation of shared application logic</li>
+      <li>Sharing of data across components</li>
+    </ul>
+  </li>
+  <li>Services are responsible for the data fetching and common business logic in an Angular application.</li>
+  <li>By default, services  are singletons across the application, which allows to store state and access them across various components.</li>
+  <li>Another simple way to think about Angular services is that it is the layer to abstract the “how” away from the component, so that the component can just focus on the “what”.</li>
+  <li>With the <code>Injectable</code> decorator, Angular will take care of injecting them into our service.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Service Skeleton</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="ts"><span class="line"><span class="kr">import</span> <span class="p">{</span> <span class="nx">Injectable</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;@angular/core&#39;</span><span class="p">;</span>
+</span><span class="line">
+</span><span class="line"><span class="err">@</span><span class="nx">Injectable</span><span class="p">()</span>
+</span><span class="line"><span class="kr">export</span> <span class="kr">class</span> <span class="nx">StockService</span> <span class="p">{</span>
+</span><span class="line">
+</span><span class="line">  <span class="kr">constructor</span><span class="p">()</span> <span class="p">{</span> <span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>We define how the service will be provided and at what level - it could be at <code>AppModule</code> level, <code>AppComponent</code> level or your custom component level.</li>
+  <li>Every service that we create needs to be registered as a provider with an injector. Then any other class can ask for the service and the injector will be responsible for providing it.</li>
+  <li><strong>Multiple Dependency Injectors</strong>
+    <ul>
+      <li>Angular supports multiple dependency injectors within the same application.</li>
+      <li>The <strong><em>root injector</em></strong> at the root <code>AppModule</code> level is where most services will be registered. This makes the instance available across the entire application.</li>
+      <li>In example 1 below, it is registered in the <code>providers</code> section of the <code>NgModule</code>, which means the service is in fact registered with the root injector and the service is a singleton for the entire application, and any class or component in the application can ask for the service and would be handed the very same instance of the service.</li>
+      <li>Then, when we made the change to add the providers at the <code>CreateStockComponent</code> level, we brought the injector at the component level into play. Angular will create a chain of injectors all the way down, depending on the need and declarations. And all child components will inherit that injector, which will take precedence over the root injector. When we registered our <code>MessageService</code> provider at the <code>CreateStockComponent</code> level, it created a child injector at that level, with its own instance of the MessageService. What we injected into the <code>CreateStockComponent</code> is in fact this new instance, which has nothing to do with the original root-level <code>MessageService</code>. So we, in fact, have two separate instances of <code>MessageService</code> with nothing in common.</li>
+      <li>Just like an Angular application is a tree of components, there is a parallel tree of injectors at play. For most components, these injectors might just be a reference or a proxy to the parent injector. But they may not, as we have just seen.</li>
+      <li>Whenever a component asks for a dependency, Angular will check the closest injector in the tree to see whether it can satisfy it. If it can (like in <code>CreateStockComponent</code>), it will provide it. If not, it will check with the parent injector, all the way to the root injector.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Example 1: Service defined at AppModule</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class="ts"><span class="line"><span class="kr">import</span> <span class="p">{</span> <span class="nx">StockService</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;app/services/stock.service&#39;</span><span class="p">;</span>
+</span><span class="line">
+</span><span class="line"><span class="err">@</span><span class="nx">NgModule</span><span class="p">({</span>
+</span><span class="line">  <span class="nx">declarations</span><span class="o">:</span> <span class="p">[</span> <span class="nx">AppComponent</span><span class="p">,</span> <span class="nx">StockItemComponent</span><span class="p">,</span> <span class="nx">CreateStockComponent</span><span class="p">,</span> <span class="nx">StockListComponent</span> <span class="p">],</span>
+</span><span class="line">  <span class="nx">imports</span><span class="o">:</span> <span class="p">[</span> <span class="nx">BrowserModule</span><span class="p">,</span> <span class="nx">FormsModule</span><span class="p">,</span> <span class="nx">HttpModule</span> <span class="p">],</span>
+</span><span class="line">  <span class="nx">providers</span><span class="o">:</span> <span class="p">[</span>
+</span><span class="line">    <span class="nx">StockService</span> <span class="c1">// &lt;------------service added here</span>
+</span><span class="line">  <span class="p">],</span>
+</span><span class="line">  <span class="nx">bootstrap</span><span class="o">:</span> <span class="p">[</span><span class="nx">AppComponent</span><span class="p">]</span>
+</span><span class="line"><span class="p">})</span>
+</span><span class="line"><span class="kr">export</span> <span class="kr">class</span> <span class="nx">AppModule</span> <span class="p">{</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Example 2: Service defined at component level</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+</pre></td><td class="code"><pre><code class="ts"><span class="line"><span class="err">@</span><span class="nx">Component</span><span class="p">({</span>
+</span><span class="line">  <span class="nx">selector</span><span class="o">:</span> <span class="s1">&#39;app-create-stock&#39;</span><span class="p">,</span>
+</span><span class="line">  <span class="nx">templateUrl</span><span class="o">:</span> <span class="s1">&#39;./create-stock.component.html&#39;</span><span class="p">,</span>
+</span><span class="line">  <span class="nx">styleUrls</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;./create-stock.component.css&#39;</span><span class="p">],</span>
+</span><span class="line">  <span class="nx">providers</span><span class="o">:</span> <span class="p">[</span><span class="nx">MessageService</span><span class="p">]</span> <span class="c1">// &lt;----------service added as provider</span>
+</span><span class="line"><span class="p">})</span>
+</span><span class="line"><span class="kr">export</span> <span class="kr">class</span> <span class="nx">CreateStockComponent</span> <span class="p">{</span>
+</span><span class="line">
+</span><span class="line">  <span class="kr">public</span> <span class="nx">stock</span>: <span class="kt">Stock</span><span class="p">;</span>
+</span><span class="line">  <span class="kr">public</span> <span class="nx">confirmed</span> <span class="o">=</span> <span class="kc">false</span><span class="p">;</span>
+</span><span class="line">  <span class="kr">public</span> <span class="nx">exchanges</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;NYSE&#39;</span><span class="p">,</span> <span class="s1">&#39;NASDAQ&#39;</span><span class="p">,</span> <span class="s1">&#39;OTHER&#39;</span><span class="p">];</span>
+</span><span class="line">  <span class="kr">constructor</span><span class="p">(</span><span class="kr">private</span> <span class="nx">stockService</span>: <span class="kt">StockService</span><span class="p">,</span>        <span class="c1">//&lt;----------service injected</span>
+</span><span class="line">              <span class="kr">public</span> <span class="nx">messageService</span>: <span class="kt">MessageService</span><span class="p">)</span> <span class="p">{</span>   <span class="c1">//&lt;----------service injected</span>
+</span><span class="line">    <span class="k">this</span><span class="p">.</span><span class="nx">stock</span> <span class="o">=</span>  <span class="k">new</span> <span class="nx">Stock</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;NASDAQ&#39;</span><span class="p">);</span>
+</span><span class="line">    <span class="k">this</span><span class="p">.</span><span class="nx">messageService</span><span class="p">.</span><span class="nx">message</span> <span class="o">=</span> <span class="s1">&#39;Component Level: Hello Message Service&#39;</span><span class="p">;</span>
+</span><span class="line">
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>We can inject any service we want into our component simply by listing it in our constructor.</li>
+  <li>The variable name itself doesn’t matter; Angular uses the type definition to figure out what service to inject.</li>
+  <li>By adding the <code>private</code> or <code>public</code> keyword in front of a constructor argument, we can make it a member property of the class with the same name. Which is why we need to access the service through an instance variable and cannot access it directly (i.e., we need to call <code>this.stockService</code>, and cannot directly use <code>stockService</code>). This is a Typescript feature.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Service injection example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="ts"><span class="line"><span class="kr">export</span> <span class="kr">class</span> <span class="nx">StockListComponent</span> <span class="kr">implements</span> <span class="nx">OnInit</span> <span class="p">{</span>
+</span><span class="line">
+</span><span class="line">  <span class="kr">public</span> <span class="nx">stocks</span>: <span class="kt">Stock</span><span class="p">[];</span>
+</span><span class="line">  <span class="kr">constructor</span><span class="p">(</span><span class="kr">private</span> <span class="nx">stockService</span>: <span class="kt">StockService</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span> <span class="c1">//&lt;-----------service injection in constructor </span>
+</span><span class="line">
+</span><span class="line">  <span class="nx">ngOnInit() {</span>
+</span><span class="line">    <span class="k">this</span><span class="p">.</span><span class="nx">stocks</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">stockService</span><span class="p">.</span><span class="nx">getStocks</span><span class="p">();</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="observables">Observables</h2>
+
+<ul>
+  <li>For asynchronous operations, <strong><em>callbacks</em></strong> were originally used. Later <strong><em>Promises</em></strong> were introduced in AngularJS which was better than callbacks in many ways. In recent versions, Angular switched to <strong><em>Observables</em></strong></li>
+  <li>Observables are a <a href="http://reactivex.io/intro.html">ReactiveX</a> concept that allows us to deal with streams which emit data. Any interested party can then be an observer on this stream, and perform operations and transformations on the events emitted by the stream.</li>
+</ul>
+
+<table>
+  <thead>
+    <tr>
+      <th>Promises</th>
+      <th>Observables</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>operate on a single asynchronous event</td>
+      <td>allow us to deal with a stream of zero or more async events</td>
+    </tr>
+    <tr>
+      <td>a promise’s success or error handler will eventually be called, even if you are no longer interested in it</td>
+      <td>observables allow us to cancel a subscription and not process data if we don’t care about it.</td>
+    </tr>
+    <tr>
+      <td>good for single event cases, and are still an option when you work with Angular.</td>
+      <td>An observable can be converted into a promise and then handled in Angular. But it is recommended to use observables, as Angular provides a lot of out-of-the-box support for RxJS and its extensions within its framework.</td>
+    </tr>
+    <tr>
+      <td>not possible to create a chain of transformations</td>
+      <td>Observables allow us to compose and create a chain of transformations easily. The operators it provides out of the box allow for some strong and powerful compositions, and operations like retry and replay make handling some common use cases trivial. All of this while being able to reuse our subscription code.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>stock.service.ts</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+<span class="line-number">38</span>
+</pre></td><td class="code"><pre><code class="ts"><span class="line"><span class="kr">import</span> <span class="p">{</span> <span class="nx">Injectable</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;@angular/core&#39;</span><span class="p">;</span>
+</span><span class="line">
+</span><span class="line"><span class="kr">import</span> <span class="p">{</span> <span class="nx">Observable</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;rxjs/Observable&#39;</span><span class="p">;</span> <span class="c1">//&lt;------- RxJS as a library is large, so import only what is needed</span>
+</span><span class="line"><span class="kr">import</span> <span class="p">{</span> <span class="nx">_throw</span> <span class="kr">as</span> <span class="nx">ObservableThrow</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;rxjs/observable/throw&#39;</span><span class="p">;</span>
+</span><span class="line"><span class="kr">import</span> <span class="p">{</span> <span class="nx">of</span> <span class="kr">as</span> <span class="nx">ObservableOf</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;rxjs/observable/of&#39;</span><span class="p">;</span>
+</span><span class="line"><span class="kr">import</span> <span class="p">{</span> <span class="nx">Stock</span> <span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;app/model/stock&#39;</span><span class="p">;</span>
+</span><span class="line">
+</span><span class="line"><span class="err">@</span><span class="nx">Injectable</span><span class="p">()</span>
+</span><span class="line"><span class="kr">export</span> <span class="kr">class</span> <span class="nx">StockService</span> <span class="p">{</span>
+</span><span class="line">
+</span><span class="line">  <span class="kr">private</span> <span class="nx">stocks</span>: <span class="kt">Stock</span><span class="p">[];</span>
+</span><span class="line">  <span class="kr">constructor</span><span class="p">()</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">this</span><span class="p">.</span><span class="nx">stocks</span> <span class="o">=</span> <span class="p">[</span>
+</span><span class="line">      <span class="k">new</span> <span class="nx">Stock</span><span class="p">(</span><span class="s1">&#39;Test Stock Company&#39;</span><span class="p">,</span> <span class="s1">&#39;TSC&#39;</span><span class="p">,</span> <span class="mi">85</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="s1">&#39;NASDAQ&#39;</span><span class="p">),</span>
+</span><span class="line">      <span class="k">new</span> <span class="nx">Stock</span><span class="p">(</span><span class="s1">&#39;Second Stock Company&#39;</span><span class="p">,</span> <span class="s1">&#39;SSC&#39;</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="s1">&#39;NSE&#39;</span><span class="p">),</span>
+</span><span class="line">      <span class="k">new</span> <span class="nx">Stock</span><span class="p">(</span><span class="s1">&#39;Last Stock Company&#39;</span><span class="p">,</span> <span class="s1">&#39;LSC&#39;</span><span class="p">,</span> <span class="mi">876</span><span class="p">,</span> <span class="mi">765</span><span class="p">,</span> <span class="s1">&#39;NYSE&#39;</span><span class="p">)</span>
+</span><span class="line">    <span class="p">];</span>
+</span><span class="line">   <span class="p">}</span>
+</span><span class="line">
+</span><span class="line">  <span class="nx">getStocks</span><span class="p">()</span> <span class="o">:</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="nx">Stock</span><span class="p">[]</span><span class="o">&gt;</span> <span class="p">{</span> <span class="c1">//&lt;---------return observable instead of synchronous value</span>
+</span><span class="line">    <span class="k">return</span> <span class="nx">ObservableOf</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">stocks</span><span class="p">);</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line">
+</span><span class="line">  <span class="nx">createStock</span><span class="p">(</span><span class="nx">stock</span>: <span class="kt">Stock</span><span class="p">)</span><span class="o">:</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="nx">any</span><span class="o">&gt;</span> <span class="p">{</span> <span class="c1">//&lt;---------return observable instead of synchronous value</span>
+</span><span class="line">    <span class="kd">let</span> <span class="nx">foundStock</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">stocks</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">each</span> <span class="o">=&gt;</span> <span class="nx">each</span><span class="p">.</span><span class="nx">code</span> <span class="o">===</span> <span class="nx">stock</span><span class="p">.</span><span class="nx">code</span><span class="p">);</span>
+</span><span class="line">    <span class="k">if</span> <span class="p">(</span><span class="nx">foundStock</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">      <span class="k">return</span> <span class="nx">ObservableThrow</span><span class="p">({</span><span class="nx">msg</span><span class="o">:</span> <span class="s1">&#39;Stock with code &#39;</span> <span class="o">+</span> <span class="nx">stock</span><span class="p">.</span><span class="nx">code</span> <span class="o">+</span> <span class="s1">&#39; already exists&#39;</span><span class="p">});</span>
+</span><span class="line">    <span class="p">}</span>
+</span><span class="line">    <span class="k">this</span><span class="p">.</span><span class="nx">stocks</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">stock</span><span class="p">);</span>
+</span><span class="line">    <span class="k">return</span> <span class="nx">ObservableOf</span><span class="p">({</span><span class="nx">msg</span><span class="o">:</span> <span class="s1">&#39;Stock with code &#39;</span> <span class="o">+</span> <span class="nx">stock</span><span class="p">.</span><span class="nx">code</span> <span class="o">+</span> <span class="s1">&#39; successfully created&#39;</span><span class="p">});;</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line">
+</span><span class="line">  <span class="nx">toggleFavorite</span><span class="p">(</span><span class="nx">stock</span>: <span class="kt">Stock</span><span class="p">)</span><span class="o">:</span> <span class="nx">Observable</span><span class="o">&lt;</span><span class="nx">Stock</span><span class="o">&gt;</span> <span class="p">{</span>
+</span><span class="line">    <span class="kd">let</span> <span class="nx">foundStock</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">stocks</span><span class="p">.</span><span class="nx">find</span><span class="p">(</span><span class="nx">each</span> <span class="o">=&gt;</span> <span class="nx">each</span><span class="p">.</span><span class="nx">code</span> <span class="o">===</span> <span class="nx">stock</span><span class="p">.</span><span class="nx">code</span><span class="p">);</span>
+</span><span class="line">    <span class="nx">foundStock</span><span class="p">.</span><span class="nx">favorite</span> <span class="o">=</span> <span class="o">!</span><span class="nx">foundStock</span><span class="p">.</span><span class="nx">favorite</span><span class="p">;</span>
+</span><span class="line">    <span class="k">return</span> <span class="nx">ObservableOf</span><span class="p">(</span><span class="nx">foundStock</span><span class="p">);</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>stock-list.component.ts</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+</pre></td><td class="code"><pre><code class="ts"><span class="line"><span class="kr">export</span> <span class="kr">class</span> <span class="nx">StockListComponent</span> <span class="kr">implements</span> <span class="nx">OnInit</span> <span class="p">{</span>
+</span><span class="line">
+</span><span class="line">  <span class="kr">public</span> <span class="nx">stocks</span>: <span class="kt">Stock</span><span class="p">[];</span>
+</span><span class="line">  <span class="kr">constructor</span><span class="p">(</span><span class="kr">private</span> <span class="nx">stockService</span>: <span class="kt">StockService</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
+</span><span class="line">
+</span><span class="line">  <span class="nx">ngOnInit() {</span>
+</span><span class="line">    <span class="k">this</span><span class="p">.</span><span class="nx">stockService</span><span class="p">.</span><span class="nx">getStocks</span><span class="p">()</span>
+</span><span class="line">        <span class="p">.</span><span class="nx">subscribe</span><span class="p">(</span><span class="nx">stocks</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class="line">          <span class="k">this</span><span class="p">.</span><span class="nx">stocks</span> <span class="o">=</span> <span class="nx">stocks</span><span class="p">;</span>
+</span><span class="line">    <span class="p">});</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line">
+</span><span class="line">  <span class="nx">onToggleFavorite</span><span class="p">(</span><span class="nx">stock</span>: <span class="kt">Stock</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">this</span><span class="p">.</span><span class="nx">stockService</span><span class="p">.</span><span class="nx">toggleFavorite</span><span class="p">(</span><span class="nx">stock</span><span class="p">);</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>In a lot of cases, we simply want to make a call to our server, and display the return value in our UI. We don’t need to process the data, make any transformations, or anything else. In those cases, Angular gives us a slight shortcut that we can use.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Simplified version of stock-list.component.ts</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td><td class="code"><pre><code class="ts"><span class="line"><span class="kr">export</span> <span class="kr">class</span> <span class="nx">StockListComponent</span> <span class="kr">implements</span> <span class="nx">OnInit</span> <span class="p">{</span>
+</span><span class="line">
+</span><span class="line">  <span class="kr">public</span> <span class="nx">stocks$</span>: <span class="kt">Observable</span><span class="o">&lt;</span><span class="nx">Stock</span><span class="p">[]</span><span class="o">&gt;</span><span class="p">;</span> <span class="c1">//&lt;--------- storing the observable as a member variable</span>
+</span><span class="line">  <span class="kr">constructor</span><span class="p">(</span><span class="kr">private</span> <span class="nx">stockService</span>: <span class="kt">StockService</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
+</span><span class="line">
+</span><span class="line">  <span class="nx">ngOnInit() {</span>
+</span><span class="line">    <span class="k">this</span><span class="p">.</span><span class="nx">stocks$</span> <span class="o">=</span> <span class="k">this</span><span class="p">.</span><span class="nx">stockService</span><span class="p">.</span><span class="nx">getStocks</span><span class="p">();</span>  <span class="c1">//&lt;--------- directly saving the observable returned by API, instead of its underlying return value</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line">
+</span><span class="line">  <span class="nx">onToggleFavorite</span><span class="p">(</span><span class="nx">stock</span>: <span class="kt">Stock</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">this</span><span class="p">.</span><span class="nx">stockService</span><span class="p">.</span><span class="nx">toggleFavorite</span><span class="p">(</span><span class="nx">stock</span><span class="p">);</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>We use a <code>Pipe</code> in the <code>ngFor</code> expression. Angular provides a pipe called <code>async</code>, which allows us to bind to <code>Observable</code>. Angular would then be responsible for waiting for events to be emitted on the observable and displaying the resultant value directly. It saves us that one step of having to manually subscribe to the observable.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>stock-list.component.html</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;app-stock-item</span> <span class="err">*</span><span class="na">ngFor=</span><span class="s">&quot;let stock of stocks$ | async&quot;</span>
+</span><span class="line">                <span class="err">[</span><span class="na">stock</span><span class="err">]=&quot;</span><span class="na">stock</span><span class="err">&quot;</span>
+</span><span class="line">                <span class="err">(</span><span class="na">toggleFavorite</span><span class="err">)=&quot;</span><span class="na">onToggleFavorite</span><span class="err">($</span><span class="na">event</span><span class="err">)&quot;</span><span class="nt">&gt;</span>
+</span><span class="line"><span class="nt">&lt;/app-stock-item&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>create-stock.component.ts</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+</pre></td><td class="code"><pre><code class="ts"><span class="line"><span class="kr">export</span> <span class="kr">class</span> <span class="nx">CreateStockComponent</span> <span class="p">{</span>
+</span><span class="line">
+</span><span class="line">  <span class="nx">createStock</span><span class="p">(</span><span class="nx">stockForm</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">if</span> <span class="p">(</span><span class="nx">stockForm</span><span class="p">.</span><span class="nx">valid</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">      <span class="k">this</span><span class="p">.</span><span class="nx">stockService</span><span class="p">.</span><span class="nx">createStock</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">stock</span><span class="p">)</span>
+</span><span class="line">          <span class="p">.</span><span class="nx">subscribe</span><span class="p">((</span><span class="nx">result</span>: <span class="kt">any</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class="line">            <span class="k">this</span><span class="p">.</span><span class="nx">message</span> <span class="o">=</span> <span class="nx">result</span><span class="p">.</span><span class="nx">msg</span><span class="p">;</span>
+</span><span class="line">            <span class="k">this</span><span class="p">.</span><span class="nx">stock</span> <span class="o">=</span>  <span class="k">new</span> <span class="nx">Stock</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;NASDAQ&#39;</span><span class="p">);</span>
+</span><span class="line">          <span class="p">},</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span> <span class="c1">//&lt;-------exception handling</span>
+</span><span class="line">            <span class="k">this</span><span class="p">.</span><span class="nx">message</span> <span class="o">=</span> <span class="nx">err</span><span class="p">.</span><span class="nx">msg</span><span class="p">;</span>
+</span><span class="line">          <span class="p">});</span>
+</span><span class="line">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class="line">      <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">&#39;Stock form is in an invalid state&#39;</span><span class="p">);</span>
+</span><span class="line">    <span class="p">}</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h1 id="tools">Tools</h1>
 
 <ul>
   <li>build - webpack, npm, ?</li>
@@ -1347,7 +1712,7 @@ Truthy: Any nonzero number, Any nonempty string, Any nonnull object or array, <c
   <li>state management - ???</li>
 </ul>
 
-<h2 id="questions">Questions</h2>
+<h1 id="questions">Questions</h1>
 
 <ul>
   <li>diff b/w unit test and e2e test?</li>

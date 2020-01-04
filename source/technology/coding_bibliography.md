@@ -11,7 +11,7 @@ footer: true
 
 # Craftsmanship
 
-1. 97 Things Every Programmer Should Know
+* 97 Things Every Programmer Should Know
 * Algorithms of the Intelligent Web
 * Beautiful Code
 * Clean Code: A Handbook of Agile Software Craftsmanship
@@ -40,7 +40,7 @@ footer: true
 
 # Agile Development
 
-1. Agile Estimating and Planning
+* Agile Estimating and Planning
 * Agile Java Development with Spring, Hibernate and Eclipse
 * Agile Project Management: Creating Innovative Products, Second Edition
 * Agile Software Engineering with Visual Studio: From Concept to Continuous Feedback, Second Edition
@@ -65,7 +65,7 @@ footer: true
 
 # Testing
 
-1. Advanced Automated Software Testing
+* Advanced Automated Software Testing
 * Advanced Software Testing—Vol. 3
 * Agile Testing: A Practical Guide for Testers and Agile Teams
 * Beautiful Testing
@@ -94,7 +94,7 @@ footer: true
 
 # Architecture
 
-1. Patterns of Enterprise Application Architecture
+* Patterns of Enterprise Application Architecture
 * Enterprise Integration Patterns: Designing, Building, and Deploying Messaging Solutions
 * Software Systems Architecture: Working with Stakeholders Using Viewpoints and Perspectives, Second Edition
 * HTML5 Architecture
@@ -115,7 +115,7 @@ footer: true
 
 # Secure Coding
 
-1. Implementing SSL/TLS Using Cryptography and PKI
+* Implementing SSL/TLS Using Cryptography and PKI
 * Security in Computing, Fourth Edition
 * The Basics of Hacking and Penetration Testing
 * Getting Started with OAuth 2.0

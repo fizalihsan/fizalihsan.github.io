@@ -81,7 +81,6 @@ footer: true
     * [OOPS]({{ root_url }}/technology/oops.html)
     * [Operating Systems]({{ root_url }}/technology/os.html)
     * [VCS]({{ root_url }}/technology/vcs.html)
-    * [Coding Bibliography]({{ root_url }}/technology/coding_bibliography.html)
 
 ## Non-Techninal
   * Data Science

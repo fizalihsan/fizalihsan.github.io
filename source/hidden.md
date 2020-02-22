@@ -15,6 +15,7 @@ footer: false
 * [Physics]({{ root_url }}/misc/physics.html)
 * [Tabligh]({{ root_url }}/islamic/dawah.html)
 * [TODO - Topics to learn in-depth]({{ root_url }}/technology/todo.html)
+* [Book Excerpts]({{ root_url }}/misc/book_excerpts.html)
 * __Conferences__
 	* [2017 Feb - NYC - O'Reilly Software Architecture Conference]({{ root_url }}/technology/conf_sacon2017.html)
 	* [2018 Jul - NYC - QCon Conference]({{ root_url }}/technology/conf_qcon2018.html) - [Videos, Slides](https://qconnewyork.com/video-schedule)
@@ -27,7 +28,7 @@ footer: false
 * [AWS Certification - Trivias]({{ root_url }}/technology/aws_trivia.html)
 * [Kubernetes in AWS]({{ root_url }}/technology/kubernetes-in-aws.html)
 
-* **Data Science**
+* __Data Science__
 	* [Overview]({{ root_url }}/datascience/datascience.html)
 	* [Statistics]({{ root_url }}/datascience/statistics.html)
 	* [R]({{ root_url }}/datascience/r.html)

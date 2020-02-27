@@ -23,6 +23,7 @@ footer: false
 	* [2019 Jun - NYC - DeveloperWeek Conference]({{ root_url }}/technology/conf_devweek2019.html)
 	* [2019 Oct - Baltimore - Monitorama Conference]({{ root_url }}/technology/conf_monitorama2019.html)
 	* [2019 Dec - NYC - Open FinTech Forum - Linux Foundation]({{ root_url }}/technology/conf_linuxfoundation2019.html)
+	* [2020 Feb - NYC - O'Reilly Software Architecture Conference]({{ root_url }}/technology/conf_sacon2020.html)
 
 
 * [AWS Certification - Trivias]({{ root_url }}/technology/aws_trivia.html)

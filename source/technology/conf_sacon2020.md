@@ -125,3 +125,40 @@ kubectl get po -w
     * Contract driven development
     * API Specification first
         * Create client and server code using Swagger codegen (`brew install swagger-codegen`) - https://github.com/swagger-api/swagger-codegen
+
+# Day 2 & 3
+
+- Spring cloud pipeline
+- Blog "[How we build code at Netflix](https://netflixtechblog.com/how-we-build-code-at-netflix-c5d9bd727f15)"
+- Fitness functions - continually evaluating architecture effectiveness
+- user story, Architecture story, technical debt stories
+- value stream mapping
+- SLI, SLO, 
+- Remove GOD objects
+- Reduce cyclomatic complexity
+- AWS API gateway is serverless?
+- AWS dynamo dB is serverless?
+- Exploring DDD conference Denver
+- Data operators in Java?
+- Software - must stay on top of complexity. Reduce cognitive complexity
+- Keep intellectual testing high
+    - Culture of good and simple design
+    - Property based testing
+    - Model based testing
+- Micro service - shared dB- number of connections can exponentially grow and cause latency and connection timeouts
+- Service locator vs. service discovery
+- Why microservices
+    - Agility
+    - Testabilty
+    - Deployability
+    - Scalability
+    - Fault tolerance
+    - Maintainability
+- Kustomize or Openshift template
+- K8s operator 
+- Microservices DDD 
+    - Decomposition strategies
+        - Bounded contexts
+        - Subdomains
+        - Business entities and processes
+

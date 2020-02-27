@@ -9,6 +9,7 @@ footer: false
 {:toc}
 
 # Day 1 - META: Microservices
+
 * META: Microservice-based Enterprise Transformation Approach
 * Barriers to Digital Transformation
     * Highly-integrated apps and data

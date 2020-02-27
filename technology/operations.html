@@ -1,0 +1,473 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Operations - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Operations Book: Beyond Blame by Dave Zwieback Cynefin Framework Learning Review Framework Book: Beyond Blame by Dave Zwieback Prof. Erik Hollnagel &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/operations.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Operations</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#book-beyond-blame-by-dave-zwieback" id="markdown-toc-book-beyond-blame-by-dave-zwieback">Book: Beyond Blame by Dave Zwieback</a>    <ul>
+      <li><a href="#cynefin-framework" id="markdown-toc-cynefin-framework">Cynefin Framework</a></li>
+      <li><a href="#learning-review-framework" id="markdown-toc-learning-review-framework">Learning Review Framework</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="book-beyond-blame-by-dave-zwieback">Book: Beyond Blame by Dave Zwieback</h1>
+
+<ul>
+  <li>Prof. Erik Hollnagel: <em>“E.T.T.O. is efficiency-thoroughness trade-off. You can’t have both efficiency and thoroughness, and that we have to continually balance between the two.”</em></li>
+  <li><strong>Hindsight bias</strong>
+    <ul>
+      <li>We make decisions in real time, but evaluate them with the benefit of hindsight. Whether a decision (like a particular trade-off) was correct can be determined only in retrospect.</li>
+      <li><a href="https://en.wikipedia.org/wiki/Hindsight_bias">Hindsight bias</a> or colloquially “hindsight 20/20”.</li>
+      <li>Daniel Kahneman—one of the people who’s been studying  cognitive biases since the seventies—says that it’s easier to spot biases in others than in ourselves.</li>
+    </ul>
+  </li>
+  <li><strong>Counterfactuals</strong>
+    <ul>
+      <li>“Anytime you hear ‘didn’t,’ ‘could have,’ ‘if only,’ or ‘should have,’ you can be pretty sure that whoever is saying them is under the influence of hindsight bias. These phrases are called ‘counterfactuals’.</li>
+      <li><strong>Wishful thinking</strong>: ‘Mike could have asked for help,’ or ‘Mike should have done more testing in the lab,’ or ‘Mike didn’t do the right thing,’ are all counterfactuals, and are all evidence of hindsight bias.</li>
+    </ul>
+  </li>
+  <li><strong>Outcome bias</strong>
+    <ul>
+      <li>With outcome bias, we judge the quality of decisions made in the past given the outcome, which, of course, is unknown at decision time. Outcome bias is almost always there when we experience hindsight bias.</li>
+      <li>The flip side of outcome bias is that it can lead us to <em>hero worship</em> — celebrating people who made pretty bad or risky decisions that somehow still turned out all right.</li>
+      <li>The ends, after all, justify the means—unless you get caught.</li>
+    </ul>
+  </li>
+  <li><strong>Fundamental attribution error bias</strong>
+    <ul>
+      <li>if I were under the influence of fundamental attribution error, I would think of this grumpiness as part of your personality, instead of attributing it to a lack of caffeine in your system</li>
+    </ul>
+  </li>
+  <li><a href="https://en.wikipedia.org/wiki/Black_swan_theory">Black swan event</a> hiding in the system, waiting for just the right set of conditions to manifest.</li>
+  <li>It stops us from learning about the deeper underlying conditions for outages, or even what’s needed to make things work.</li>
+  <li>Blame is the frigid, arctic air that stunts the development of a deeper understanding of our systems, which is the only way we can really improve them.”</li>
+  <li>Being accountable is being beyond blame. Being accountable is accepting responsibility for our actions, and providing the full account, without accepting the blame. So we can learn. And only through this learning can we make our organization more resilient to failures that will inevitably happen.</li>
+  <li>We talk a lot about making the firm a ‘learning organization’—well, here’s a very concrete step we can take to maximize learning. We want our employees to innovate? Being able to fail in a safe way and learn from it will encourage more innovation. Or we can continue on our current path, and effectively encourage our employees to find innovative ways to limit their personal exposure and liability. Or find employment elsewhere.”</li>
+  <li>Remind everyone that the point is not to judge, reprimand, or punish, but to understand and learn from what happened.</li>
+</ul>
+
+<h2 id="cynefin-framework">Cynefin Framework</h2>
+
+<p><img class="right" src="/technology/cynefin.png" width="350" height="350" /></p>
+
+<ul>
+  <li>Harvard Business Review article from 2007 by David Snowden and Mary Boone introduced a complexity framework called ‘Cynefin.’ It’s a way of thinking about complexity. And this framework is not just philosophy—it’s based on complexity science, and it’s practical, it’s usable.”</li>
+  <li>This is a framework that buckets systems into one of the five domains: obvious, complicated, complex, chaotic, and, finally, unknown.
+    <ul>
+      <li><strong>Obvious</strong>: Imagine a fast-food chain restaurant. No room for creativity here, just follow the process.</li>
+      <li><strong>Complicated</strong>:
+        <ul>
+          <li>In a fancy, five-star restaurant, there’s a lot more creativity and a lot more experience required. You still have a recipe to follow—what you might call a ‘good practice’—but you need a whole lot more experience in order to operate here, especially when things go wrong. That’s why this one is called the <em>‘domain of experts’</em>.</li>
+          <li>Also, complicated systems are far less constrained than obvious ones, but both are still within the realm of ordered domains.”</li>
+        </ul>
+      </li>
+      <li><strong>Complex</strong>:
+        <ul>
+          <li>Imagine a cooking competition show. These experiments are safe-to-fail experiments. They won’t die, even if they get eliminated from the competition. But no one knows in advance who’s going to win, and previous experience is not that valuable here.</li>
+        </ul>
+      </li>
+      <li><strong>Chaotic</strong>:
+        <ul>
+          <li>Imagine unleashing a gang of toddlers into the kitchen. No constraints. They’re running around with knives, throwing things around, locking one another in freezers, and of course, playing with gas stoves.</li>
+          <li>These chaotic systems are, luckily, very short lived. Someone usually steps in and sets some constraints, moving the system into a more ordered domain.</li>
+          <li>In both the complex and the chaotic domains, there’s no best practice—not even good practice. We can’t predict how things will go in advance, and we might not even be able to establish causality in retrospect. The point is, we have to act differently than we do in the more ordered domains, if we find ourselves working within these unordered ones.</li>
+        </ul>
+      </li>
+      <li><strong>Unknown</strong></li>
+    </ul>
+  </li>
+  <li>We’re mostly in the complicated or complex domains. And when we have outages, almost certainly in the complex or chaotic ones.</li>
+  <li>Assuming you’re working within a complex system is probably a safe default. Most of the time we don’t know how our systems are working, and whether the changes we’re making will work or backfire. But we can experiment in safe-to-fail ways, and find out more about the constraints of our systems. We can develop heuristics about how to act within them. And, with some luck, we can move these systems into the more predictable and ordered domains by adjusting the constraints. This is something that humans are quite good at.</li>
+</ul>
+
+<h2 id="learning-review-framework">Learning Review Framework</h2>
+
+<p>Fundamentally, in a learning review,</p>
+
+<ul>
+  <li>we recognize that we’re most likely working with a complex system, which requires a different approach than working with other types of systems.</li>
+  <li>We know that in complex systems, the relationship between causes and effects can be teased out only in retrospect, if ever.</li>
+  <li>We’re also not looking for a single root cause. Instead, we hope to understand the multitude of conditions, some of which might be outside our control.</li>
+  <li>We also accept that some of the conditions will remain unknown and unknowable.</li>
+</ul>
+
+<p>In the learning-review framework, if we ever get to a single root cause—especially if it’s a person—we know we’re not digging deep enough.</p>
+
+<blockquote>
+  <p>Let’s remember that the single root cause of all functioning and malfunctioning systems is impermanence. If you’ve got to blame something, blame impermanence.</p>
+</blockquote>
+
+<p>Anything disclosed during a learning review as protected information—meaning it won’t be used against the people who share it.</p>
+
+<ul>
+  <li>First of all, and perhaps most importantly, starting now we will guarantee that no one providing a full account of their actions during incidents will be penalized in any way.</li>
+  <li>
+    <p>The information that you provide during postmortems cannot and will not be used against you—not as a reason for demotion, or reduced compensation, or any other disciplinary action.</p>
+  </li>
+  <li>1) Set the context.
+    <ul>
+      <li>The purpose of the learning review is to learn so that we can improve our systems and organizations. No one will be blamed, shamed, demoted, fired, or punished in any way for providing a full account of what happened. Going beyond blame and punishment is the only way to gather full accounts of what happened—to fully hold people accountable.</li>
+      <li>We’re likely working within complex, adaptive systems, and thus cannot apply the simplistic, linear, cause-and-effect models to investigating trouble within such systems.</li>
+      <li>Failure is a normal part of the functioning of complex systems. All systems fail — it’s just a matter of time.</li>
+      <li>We seek not only to understand the few things that go wrong, but also the many things that go right, in order to make our systems more resilient.</li>
+      <li>The root cause for both the functioning and malfunctions in all complex systems is impermanence (i.e., the fact that all systems are changeable by nature). Knowing the root cause, we no longer seek it, and instead look for the many conditions that allowed a particular situation to manifest. We accept that not all conditions are knowable or fixable.</li>
+      <li>Human error is a symptom — never the cause — of trouble deeper within the system (e.g., the organization). We accept that no person wants to do a bad job, and we reject the “few bad apples” theory. We seek to understand why it made sense for people to do what they did, given the information they had at the time.</li>
+      <li>While conducting the learning review, we will fall under the influence of cognitive biases. The most common ones are hindsight, outcome, and availability biases; and fundamental attribution error. We may not notice that we’re under the influence, so we request help from participants in becoming aware of biases during the review. (Read <em>Thinking, Fast and Slow by Daniel Kahneman.</em>)</li>
+    </ul>
+  </li>
+  <li>2) Build a timeline.
+    <ul>
+      <li>a) We want to understand what happened from the perspective of the individuals involved: what did they know, when, and how did it make sense?</li>
+      <li>b) Describe what happened; don’t explain.</li>
+      <li>c) The more diverse points of view that you can collect, the fuller the picture of the incident. Encourage and note divergent and dissenting opinions.</li>
+      <li>d) As the facilitator, your job is to listen to discover and verify by synthesizing.</li>
+    </ul>
+  </li>
+  <li>3) Determine and prioritize remediation items, if any. This can be done separately from building a timeline.</li>
+  <li>4) Publish the learning review write-up as widely as possible.
+    <ul>
+      <li>If the incident negatively impacted people, consider using the <strong>Three Rs</strong> (“Regret, Reason, Remedy,” from <em>Drop the Pink Elephant by Bill McFarlan</em>) to structure the write-up.</li>
+    </ul>
+  </li>
+  <li>During the learning review, listen for, and help participants be aware of blaming, cognitive biases, and counterfactuals (“<em>We could have/we should have/if only we/we didn’t</em>”). Use empathy and humor throughout the learning review to defuse tense situations, especially at the beginning. Ask lots of questions, including these:
+    <ul>
+      <li>Did we know this at the time or is it obvious only in hindsight?</li>
+      <li>When did we learn this fact?</li>
+      <li>How does knowing the outcome affect our perception of the situation (or the people involved in the incident)?</li>
+      <li>Is this a likely explanation because we’ve recently had a similar problem? How is this situation different?</li>
+      <li>Can you please describe what happened without explaining (too much)?</li>
+      <li>Any one of us would have done what Bob or Sue did. Let’s focus on how it made sense at the time, and what we can do better in the future.</li>
+      <li>This sounds like a counterfactual. What actually happened, what did we know, and how did it make sense at the time?</li>
+      <li>How do we know this?</li>
+    </ul>
+  </li>
+</ul>
+
+
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  
+			<a href="/technology/coding-principles.html">Coding Principles</a> |	
+			<a href="/technology/ddd.html">DDD</a>  |  
+			<a href="/technology/design-principles.html">Design Principles</a>  |
+			<a href="/technology/eventsourcing.html">Event Sourcing</a> |  
+			<a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  
+			<a href="/technology/observability.html">Observability</a>  |  
+			<a href="/technology/operations.html">Operations</a> |
+			<a href="/technology/patterns.html">Patterns</a>|  
+			<a href="/technology/sdlc.html">SDLC</a> |  
+			<a href="/technology/scalability.html">Scalability</a>  |  
+			<a href="/technology/security.html">Security</a>  |  
+			<a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  
+			<a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  
+			<a href="/technology/elasticsearch.html">ElasticSearch</a>  |  
+			<a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  
+			<a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  
+			<a href="/technology/nosql.html">NoSQL</a>  |  
+			<a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  
+			<a href="/technology/aws.html">AWS</a>  |  
+			<a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>  |  
+			<a href="/technology/virtualization.html">Virtualization</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  
+			<a href="/technology/db-design.html">Design</a>  |  
+			<a href="/technology/db-performance.html">Performance</a>  |  
+			<a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  
+			<a href="/technology/java-collections.html">Collections</a>  |  
+			<a href="/technology/java-concurrency.html">Concurrency</a>  |  
+			<a href="/technology/java-database.html">Database</a>  |  
+			<a href="/technology/java-jmx.html">JMX</a>  |  
+			<a href="/technology/java-jndi.html">JNDI</a>  |  
+			<a href="/technology/java-io.html">I/O</a>  |  
+			<a href="/technology/java-performance.html">Performance</a>  |  
+			<a href="/technology/java-testing.html">Testing</a>  |  
+			<a href="/technology/java-web.html">Web</a>  |  
+			<a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  
+			<a href="/technology/python.html">Python</a>  |  
+			<a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>SOA</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  
+			<a href="/technology/camel.html">Camel</a>  |  
+			<a href="/technology/graphql.html">GraphQL</a>  |  
+			<a href="/technology/messaging.html">Messaging</a> |  
+			<a href="/technology/microservices.html">Microservices</a>   |  
+			<a href="/technology/rest-services.html">REST</a>  | 
+			<a href="/technology/soap-services.html">SOAP</a>  |  
+			<a href="/technology/webservices.html">Web Services</a> |  
+			<a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  
+			<a href="/technology/spring.html">Core</a>  |  
+			<a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> |
+			<a href="/technology/webanalytics.html">Analytics</a> |
+			<a href="/technology/angular.html">Angular</a> | 
+			<a href="/technology/webapp_architecture.html">Architecture</a> | 
+			<a href="/technology/js-ecosystem.html">JS Ecosystem</a> |
+			<a href="/technology/web_security.html">Security</a> |
+			<a href="/technology/ux.html">UX</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  
+			<a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  
+			<a href="/technology/datastructures.html">Data Structures</a>  |  
+			<a href="/technology/design-faqs.html">Design FAQs</a>  |  
+			<a href="/technology/networking.html">Networking</a>  |  
+			<a href="/technology/oops.html">OOPS</a>  |  
+			<a href="/technology/os.html">Operating Systems</a>  |  
+			<a href="/technology/vcs.html">VCS</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  
+			<a href="/softskills/productivity.html">Productivity</a>  |  
+			<a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2020 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

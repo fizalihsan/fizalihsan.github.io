@@ -260,7 +260,7 @@ __Partitioning Strategies__
 
 __API Gateway__
 
-{% img right /technology/microservices-patterns-api-gateway.png %}
+{% img right /technology/microservices-patterns-api-gateway.png 300 300 %}
 
 * Forces
     * Different clients (UI, Mobile) need different data
@@ -286,8 +286,8 @@ __Inter Process Communication__
 
 ## Service Discovery
 
-{% img /technology/microservices-patterns-discovery-problem.png %}
-{% img right /technology/microservices-patterns-clientside-discovery.png %}
+{% img /technology/microservices-patterns-discovery-problem.png 300 300 %}
+{% img right /technology/microservices-patterns-clientside-discovery.png 300 300 %}
 
 * Forces
     * Client or API gateway needs to know where the service is running
@@ -306,7 +306,7 @@ __Client-service discovery__
 
 __Server-side discovery__
 
-{% img right /technology/microservices-patterns-serverside-discovery.png %}
+{% img right /technology/microservices-patterns-serverside-discovery.png 300 300 %}
 
 * Same as client-side, however the client calls a router instead of Service registry. Router talks to Service Registry and then load balances the requests to service instances. e.g., AWS Load Balancer, Nginx, Kubernetes
 * Pros
@@ -401,7 +401,7 @@ __Pattern: Database per service__
 __Pattern: Transaction log tailing__
 
 * After a record is written to db, other services can read/tail off of it
-* LinkedIn Databus https://github.com/linkedin/databus, Mongodb (Oplog), AWS Dynamodb supports streaming of CRUD operations
+* [LinkedIn Databus](https://github.com/linkedin/databus), Mongodb (Oplog), AWS Dynamodb supports streaming of CRUD operations
 * Pros
     * No 2PC
     * No app changes needed
@@ -413,7 +413,7 @@ __Pattern: Transaction log tailing__
 
 ### Event Sourcing
 
-{% img right /technology/microservices-patterns-eventsourcing1.png %}
+{% img right /technology/microservices-patterns-eventsourcing1.png 300 300 %}
 
 * Radically different approach in storing business entities and writing business logic. Most notably, the way in which business entities are stored in a data store is not by storing the current state but by storing the sequence of state-changing events (immutable events). Whenever the current state is needed, you reload past events and compute them.
 * For each business entity (aggregate)
@@ -470,7 +470,7 @@ __Event Sourcing Design__
 
 __CQRS (Command-Query Responsibility Seggregation) pattern__
 
-{% img right /technology/microservices-patterns-cqrs.png %}
+{% img right /technology/microservices-patterns-cqrs.png 300 300 %}
 
 * In relational databases, query a customer and his order details is joining those 2 tables. However, event store only supports primary key look ups.
 
@@ -511,7 +511,7 @@ Following are some of the strategies to refactor monoliths to microservices
     * First appeared in DDD book by Eric Evans
     * Goal is to prevent your legacy system from polluting the pristine new code
 
-{% img right /technology/microservices-patterns-anticorruption-layer.png %}
+{% img right /technology/microservices-patterns-anticorruption-layer.png 300 300 %}
 
 # References
 

@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Microservices Event-Driven Microservices Downsides of monolith architecture Challenges of microservices architecture Microservices Patterns &hellip;">
+<meta name="description" content="Microservices Monolith Architecture Downsides of monolith Advantages of monolith Types of Monolith Coupling and Cohesion Microservices Architecture &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -108,9 +108,21 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#event-driven-microservices" id="markdown-toc-event-driven-microservices">Event-Driven Microservices</a>    <ul>
-      <li><a href="#downsides-of-monolith-architecture" id="markdown-toc-downsides-of-monolith-architecture">Downsides of monolith architecture</a></li>
-      <li><a href="#challenges-of-microservices-architecture" id="markdown-toc-challenges-of-microservices-architecture">Challenges of microservices architecture</a></li>
+  <li><a href="#monolith-architecture" id="markdown-toc-monolith-architecture">Monolith Architecture</a>    <ul>
+      <li><a href="#downsides-of-monolith" id="markdown-toc-downsides-of-monolith">Downsides of monolith</a></li>
+      <li><a href="#advantages-of-monolith" id="markdown-toc-advantages-of-monolith">Advantages of monolith</a></li>
+      <li><a href="#types-of-monolith" id="markdown-toc-types-of-monolith">Types of Monolith</a></li>
+      <li><a href="#coupling-and-cohesion" id="markdown-toc-coupling-and-cohesion">Coupling and Cohesion</a></li>
+    </ul>
+  </li>
+  <li><a href="#microservices-architecture" id="markdown-toc-microservices-architecture">Microservices Architecture</a>    <ul>
+      <li><a href="#advantages-of-microservices" id="markdown-toc-advantages-of-microservices">Advantages of microservices</a></li>
+      <li><a href="#challenges-of-microservices" id="markdown-toc-challenges-of-microservices">Challenges of microservices</a></li>
+    </ul>
+  </li>
+  <li><a href="#domain-modeling" id="markdown-toc-domain-modeling">Domain Modeling</a>    <ul>
+      <li><a href="#aggregates" id="markdown-toc-aggregates">Aggregates</a></li>
+      <li><a href="#bounded-contexts" id="markdown-toc-bounded-contexts">Bounded Contexts</a></li>
     </ul>
   </li>
   <li><a href="#microservices-patterns" id="markdown-toc-microservices-patterns">Microservices Patterns</a>    <ul>
@@ -125,37 +137,165 @@ messageStyle: "none",
       </li>
     </ul>
   </li>
-  <li><a href="#strategies-to-refactor-monolith-to-microservices" id="markdown-toc-strategies-to-refactor-monolith-to-microservices">Strategies to refactor Monolith to Microservices</a></li>
+  <li><a href="#monolith-to-microservices-strategies" id="markdown-toc-monolith-to-microservices-strategies">Monolith to Microservices Strategies</a></li>
   <li><a href="#references" id="markdown-toc-references">References</a></li>
 </ul>
 
-<h1 id="event-driven-microservices">Event-Driven Microservices</h1>
+<h1 id="monolith-architecture">Monolith Architecture</h1>
+
+<h2 id="downsides-of-monolith">Downsides of monolith</h2>
+
+<ul>
+  <li>Vulnerable to the perils of coupling—specifically, implementation and deployment coupling</li>
+  <li><em>Delivery contention</em>: Different developers wanting to change the same piece of code, different teams wanting to push functionality live at different times (or delay deployments)</li>
+  <li>Agile development and deployment becomes impossible</li>
+  <li>Intimidates developers and becomes a monumental effort for new team members to learn the system</li>
+  <li>Some part of the app can be memory-intensive and other parts IO/CPU-intensive. (Cryptography/graphics) Challenging to find optimal hardware to run the system. (EC2 and other cloud providers provide t-shirt sized instances which are either good for memory/IO/CPU intensive cases.) Monoliths running on general-purpose is not optimal.</li>
+  <li>IDE and app start up time is slow</li>
+  <li>Requires front-end and back-end co-ordination before change or deployment</li>
+  <li>Requires lot term commitment to the technology stack - rewriting a part of the system to adapt a newer technology to solve a certain problem in a better way is impossible. If the system is built on a legacy technology that no one wants to work with, it becomes harder to find resources</li>
+</ul>
+
+<h2 id="advantages-of-monolith">Advantages of monolith</h2>
+
+<ul>
+  <li>simpler deployment topology</li>
+  <li>simpler developer workflows; and monitoring, troubleshooting, and activities like end-to-end testing</li>
+  <li>simplify code reuse</li>
+</ul>
+
+<blockquote>
+  <p>A monolithic architecture is a choice, and a valid one at that. It may not be the right choice in all circumstances, any more than microservices are—but it’s a choice nonetheless</p>
+</blockquote>
+
+<h2 id="types-of-monolith">Types of Monolith</h2>
+
+<ul>
+  <li><strong>Single Process Monolith</strong>
+    <ul>
+      <li>all of the code is deployed as a single process.</li>
+      <li>You may have multiple instances of this process for robustness or scaling reasons, but fundamentally all the code is packed into a single process.</li>
+    </ul>
+  </li>
+  <li><strong>Modular Monolith</strong>
+    <ul>
+      <li>As a subset of the single process monolith, the modular monolith is a variation. The single process consists of separate modules, each of which can be worked on independently, but which still need to be combined for deployment.</li>
+      <li>If the module boundaries are well defined, it can allow for a high degree of parallel working, but sidesteps the challenges of the more distributed microservice architecture along with much simpler deployment concerns.</li>
+      <li>One of the challenges of a modular monolith is that the database tends to lack the decomposition.</li>
+    </ul>
+  </li>
+  <li><strong>Distributed Monolith</strong>
+    <ul>
+      <li><em>A distributed system is one in which the failure of a computer you didn’t even know existed can render your own computer unusable. - Leslie Lamport</em></li>
+      <li>A distributed monolith is a system that consists of multiple services, but for whatever reason the entire system has to be deployed together.</li>
+      <li>Distributed monoliths have all the disadvantages of a distributed system, and the disadvantages of a single-process monolith, without having enough upsides of either.</li>
+      <li>Distributed monoliths typically emerge in an environment where not enough focus was placed on concepts like information hiding and cohesion of business functionality, leading instead to highly coupled architectures in which changes ripple across service boundaries, and seemingly innocent changes that appear to be local in scope break other parts of the system.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="coupling-and-cohesion">Coupling and Cohesion</h2>
+
+<blockquote>
+  <p>A structure is stable if cohesion is high, and coupling is low. – Larry Constantine</p>
+</blockquote>
+
+<ul>
+  <li>Coupling speaks to how changing one thing requires a change in another;</li>
+  <li>Cohesion talks to how we group related code. These concepts are directly linked.</li>
+  <li>Cohesion and coupling are concerns regarding modular software, and what is microservice architecture other than modules that communicate via networks and can be independently deployed?</li>
+  <li><strong>Cohesion</strong>: code that changes together, stays together. So the functionality must be grouped in such a way that we can make changes in as few places as possible.</li>
+  <li><strong>Coupling</strong>: The more things are “coupled”, the more they have to change together.
+    <ul>
+      <li><em>Implementation coupling</em>
+        <ul>
+          <li>A is coupled to B in terms of how B is implemented—when the implementation of B changes, A also changes.</li>
+          <li>Another helpful trick to use when it comes to defining a service interface is <em>“outside-in” thinking</em>. Drive the service interface by thinking of things from the point of the service consumers first, and then work out how to implement that service contract. With <em>“outside-in” thinking</em>, you instead first ask, “What do my service consumers need?”</li>
+        </ul>
+      </li>
+      <li><em>Temporal Coupling</em>
+        <ul>
+          <li>is primarily a runtime concern that generally speaks to one of the key challenges of synchronous calls in a distributed environment.</li>
+          <li>This could be avoided by using caches or by using an asynchronous transport to send the requests.</li>
+        </ul>
+      </li>
+      <li><em>Deployment Coupling</em>
+        <ul>
+          <li>When everything is expected to be deployed together, then we have deployment coupling.</li>
+          <li>There are several ways to reduce this risk: Change only what needs to be changed. Smaller releases make for less risk.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="microservices-architecture">Microservices Architecture</h1>
+
+<blockquote>
+  <p>Microservices are independently deployable services modeled around a business domain.</p>
+</blockquote>
+
+<blockquote>
+  <p><em>“Microservices buy you options.”</em> They have a cost, and you have to decide if the cost is worth the options you want to take up</p>
+</blockquote>
+
+<p><strong>What are microservices?</strong></p>
+
+<ul>
+  <li><strong>Independent deployability</strong>
+    <ul>
+      <li>make a change to a microservice and deploy it into a production environment without having to deploy anything else. To guarantee this,
+        <ul>
+          <li>Ensure the services are loosely-coupled.</li>
+          <li>Define well-defined, stable contracts between services.</li>
+          <li>Do not share databases.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Modeled around a business domain</strong>
+    <ul>
+      <li>Make cross-service changes as infrequently as possible.</li>
+      <li>Changes in functionality are primarily about changes in business functionality. But in Figure 1-1 (typical 3-tier architecture) our business functionality is in effect spread across all three tiers, increasing the chance that a change in functionality will cross layers. This is an architecture in which we have high cohesion of related technology, but low cohesion of business functionality. Instead change how we group code - choose cohesion of business functionality, rather than technology.</li>
+      <li>Our business domain becomes the primary force driving our system architecture, hopefully making it easier to make changes, and making it easier for us to organize our teams around our business domain.</li>
+    </ul>
+  </li>
+  <li><strong>Own their own data</strong>
+    <ul>
+      <li>If one service wants to access data held by another service, then it should go and ask that service for the data it needs. This gives the service the ability to decide what is shared and what is hidden. It also allows the service to map from internal implementation details, which can change for various arbitrary reasons, to a more stable public contract, ensuring stable service interfaces.</li>
+      <li>Having stable interfaces between services is essential if we want independent deployability—if the interface a service exposes keeps changing, this will have a ripple effect causing other services to need to change as well.</li>
+      <li>we want to think of our services as end-to-end slices of business functionality, that where appropriate encapsulate the UI, application logic, and data storage. This is because we want to reduce the effort needed to change business-related functionality. The encapsulation of data and behavior in this way gives us high cohesion of business functionality.</li>
+    </ul>
+  </li>
+</ul>
 
 <p><strong>Definition of a Stateless Service</strong></p>
 
 <ul>
   <li>Not a cache or a database</li>
   <li>only stores frequently accessed metadata/configuration</li>
-  <li>no instance affinity (i.e., a client request should be served by an instance)</li>
+  <li>no instance affinity (i.e., a client request should be served by any instance)</li>
   <li>loss of a node is a non-event</li>
 </ul>
 
-<h2 id="downsides-of-monolith-architecture">Downsides of monolith architecture</h2>
+<h2 id="advantages-of-microservices">Advantages of microservices</h2>
 
 <ul>
-  <li>Agile development and deployment becomes impossible</li>
-  <li>Intimidates developers and becomes a monumental effort for new team members to learn the system</li>
-  <li>Some part of the app can be memory-intensive and other parts IO/CPU-intensive. (Cryptography/graphics) Challenging to find optimal hardware to run the system. (EC2 and other cloud providers provide t-shirt sized instances which are either good for memory/IO/CPU intensive cases.) Monoliths running on general-purpose is not optimal</li>
-  <li>IDE and app start up time is slow</li>
-  <li>Requires front-end and back-end co-ordination before change or deployment</li>
-  <li>Requires lot term commitment to the technology stack - rewriting a part of the system to adapt a newer technology to solve a certain problem in a better way is impossible. If the system is built on a legacy technology that no one wants to work with, it becomes harder to find resources</li>
+  <li>independent nature of deployments</li>
+  <li>scale and robustness</li>
+  <li>mix and match technology</li>
+  <li>teams can work in parallel</li>
 </ul>
 
-<h2 id="challenges-of-microservices-architecture">Challenges of microservices architecture</h2>
+<h2 id="challenges-of-microservices">Challenges of microservices</h2>
 
 <p>There are 4 categories of problems: Dependency, Scale, Variance, Change</p>
 
 <ul>
+  <li>Activities that are relatively simple with a single-process monolith, like transactions, are much more difficult. So difficult, you will likely have to ditch transactions, and the safety they bring, in exchange for other sorts of techniques (which unfortunately have very different trade-offs).</li>
+  <li>
+    <p>These problems may not appear initially, but over time, as your system grows, you’ll likely hit most, if not all, of them.</p>
+  </li>
   <li><strong>Dependency</strong>
     <ul>
       <li>Problem
@@ -284,9 +424,43 @@ messageStyle: "none",
   </li>
 </ul>
 
+<h1 id="domain-modeling">Domain Modeling</h1>
+
+<p>Modeling services around a business domain has significant advantages for our microservice architecture. Domain-Driven Design (DDD) is one of the best ways to come up with that model.</p>
+
+<h2 id="aggregates">Aggregates</h2>
+
+<p><img class="right" src="/technology/ddd_aggregate.png" width="300" height="300" />
+<img class="right" src="/technology/ddd_aggregate2.png" width="300" height="300" /></p>
+
+<ul>
+  <li>Consider an aggregate as a representation of a real domain concept—think of something like an Order, Invoice, Stock Item, etc.</li>
+  <li>Aggregates typically have a life cycle around them, which opens them up to being implemented as a state machine.</li>
+  <li>
+    <p>We want to treat aggregates as self-contained units; we want to ensure that the code that handles the state transitions of an aggregate are grouped together, along with the state itself.</p>
+  </li>
+  <li>When thinking about aggregates and microservices, a single microservice will handle the life cycle and data storage of one or more different types of aggregates.</li>
+  <li>If functionality in another service wants to change one of these aggregates, it needs to either directly request a change in that aggregate, or else have the aggregate itself react to other things in the system to initiate its own state transitions.</li>
+  <li>The key thing to understand here is that if an outside party requests a state transition in an aggregate, the aggregate can say no. You ideally want to implement your aggregates in such a way that illegal state transitions are impossible.</li>
+  <li>Aggregates can have relationships with other aggregates.</li>
+</ul>
+
+<h2 id="bounded-contexts">Bounded Contexts</h2>
+
+<ul>
+  <li>From an implementation point of view, bounded contexts contain one or more aggregates. Some aggregates may be exposed outside the bounded context; others may be hidden internally.</li>
+  <li>
+    <p>As with aggregates, bounded contexts may have relationships with other bounded contexts—when mapped to services, these dependencies become inter-service dependencies.</p>
+  </li>
+  <li>
+    <p>The aggregate is a self-contained state machine that focuses on a single domain concept in our system, with the bounded context representing a collection of associated aggregates, again with an explicit interface to the wider world.</p>
+  </li>
+  <li>Both can therefore work well as service boundaries. When starting out, reduce the number of services you work with. As a result, you should probably target services that encompass entire bounded contexts. As you find your feet, and decide to break these services into smaller services, look to split them around aggregate boundaries.</li>
+</ul>
+
 <h1 id="microservices-patterns">Microservices Patterns</h1>
 
-<p><img class="right 100 100" src="/technology/microservices-patterns.png" /></p>
+<p><img class="right" src="/technology/microservices-patterns.png" width="400" height="400" /></p>
 
 <ul>
   <li>3 axes of decomposition from “The Art of Scalability” book.</li>
@@ -778,7 +952,9 @@ messageStyle: "none",
   </li>
 </ul>
 
-<h1 id="strategies-to-refactor-monolith-to-microservices">Strategies to refactor Monolith to Microservices</h1>
+<h1 id="monolith-to-microservices-strategies">Monolith to Microservices Strategies</h1>
+
+<p>Following are some of the strategies to refactor monoliths to microservices</p>
 
 <ul>
   <li>Strangler Application (Martin Fowler)</li>
@@ -822,6 +998,7 @@ messageStyle: "none",
 
 <ul>
   <li>Chris Richardson’s talk on “Event-Driven Microservices” in Safari</li>
+  <li>Book: Monolith to Microservices</li>
 </ul>
 
   
@@ -914,7 +1091,7 @@ messageStyle: "none",
 		</li>
 
 		<li>
-			<h3>SOA</h3>
+			<h3>Integration</h3>
 			<a href="/technology/soa.html">Concepts</a>  |  
 			<a href="/technology/camel.html">Camel</a>  |  
 			<a href="/technology/graphql.html">GraphQL</a>  |  

@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Open FinTech Forum - Linux Foundation - NYC 12/09/2019 - KnowledgeShop</title>
+  <title>Micro Frontend - KnowledgeShop</title>
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Open FinTech Forum - Linux Foundation - NYC 12/09/2019 Linux Foundation Security - Let’s Encrypt Networking - ONAP (open national automation &hellip;">
+<meta name="description" content="Micro Frontend Micro FrontEnds Advantages of Micro Frontends Challenges in Micro Frontends Design Domain Modeling (DDD) Design Considerations 1. &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://fizalihsan.github.io/technology/conf_linuxfoundation2019.html">
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/microfrontend.html">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <!-- Below custom CSS is for table border styling -->
@@ -103,170 +103,204 @@ messageStyle: "none",
 <article role="article">
   
   <header>
-    <h1 class="entry-title">Open FinTech Forum - Linux Foundation - NYC 12/09/2019</h1>
+    <h1 class="entry-title">Micro Frontend</h1>
     
   </header>
   
-  
+  <ul id="markdown-toc">
+  <li><a href="#micro-frontends" id="markdown-toc-micro-frontends">Micro FrontEnds</a>    <ul>
+      <li><a href="#advantages-of-micro-frontends" id="markdown-toc-advantages-of-micro-frontends">Advantages of Micro Frontends</a></li>
+      <li><a href="#challenges-in-micro-frontends" id="markdown-toc-challenges-in-micro-frontends">Challenges in Micro Frontends</a></li>
+      <li><a href="#design" id="markdown-toc-design">Design</a>        <ul>
+          <li><a href="#domain-modeling-ddd" id="markdown-toc-domain-modeling-ddd">Domain Modeling (DDD)</a></li>
+          <li><a href="#design-considerations" id="markdown-toc-design-considerations">Design Considerations</a>            <ul>
+              <li><a href="#definition" id="markdown-toc-definition">1.Definition</a></li>
+              <li><a href="#composition" id="markdown-toc-composition">2.Composition</a></li>
+              <li><a href="#routing" id="markdown-toc-routing">3.Routing</a></li>
+              <li><a href="#communication" id="markdown-toc-communication">4.Communication</a></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><a href="#implementation" id="markdown-toc-implementation">Implementation</a>    <ul>
+      <li><a href="#types-of-implementation" id="markdown-toc-types-of-implementation">Types of Implementation</a></li>
+    </ul>
+  </li>
+</ul>
+
 <ul>
-  <li>Linux Foundation
+  <li>Web architecture types
     <ul>
-      <li>Security - Let’s Encrypt</li>
-      <li>Networking - ONAP (open national automation platform), Open Daylight</li>
-      <li>Cloud - CNCF Cloud Foundry, Cloud information model</li>
-      <li>Automotive - Automotive Rade linux</li>
-      <li>Blockchain - hyperledger</li>
-      <li>Edge/embedded - zephyr, yocto, edge foundry</li>
-      <li>Web - Nodejs, OpenJS foundation</li>
+      <li>Micro frontends</li>
+      <li>Isomorphic apps (SSR)</li>
+      <li>PWA apps</li>
+      <li>Web assembly</li>
     </ul>
   </li>
-  <li>Film making softwares - OpenVDB, OpenColorIO</li>
-  <li>Unlock Open Source Technology’s Full Value - <a href="">Forrester report</a></li>
-  <li>Ant Financial (powers Alibaba pay)</li>
-  <li>Air Force F18s runs K8s</li>
-  <li>Gitlab - The Multicloud Maturity Model - Sid Sijbrandij, Gitlab CEO (@sytses)
+</ul>
+
+<h1 id="micro-frontends">Micro FrontEnds</h1>
+
+<blockquote>
+  <p>Micro Frontends are the technical representation of a business sub-domain, they allow independent implementations with same or different technology choices, finally they avoid sharing logic with other sub-domains and they are owned by a single team.</p>
+</blockquote>
+
+<p><img class="right" src="/technology/microfrontends.png" width="300" height="300" /></p>
+
+<h3 id="advantages-of-micro-frontends">Advantages of Micro Frontends</h3>
+
+<ul>
+  <li>Ease of innovation</li>
+  <li>Easy to manage</li>
+  <li>Easy to upgrade to new component or technology</li>
+  <li>Ease of deployment due to lack of inter-dependency</li>
+  <li>Quick time to market</li>
+  <li>Technology independence across frontends (but don’t do this)</li>
+  <li>Each team has clear ownership</li>
+  <li>Promotes Domain-Driven Design</li>
+</ul>
+
+<h3 id="challenges-in-micro-frontends">Challenges in Micro Frontends</h3>
+
+<ul>
+  <li>first call takes a long time</li>
+  <li>
+    <p>difficult to be indexed by search engines, crawlers, etc.</p>
+  </li>
+  <li>Share nothing across front ends e.g., CSS stylesheets</li>
+  <li>Diamond anti-pattern
     <ul>
-      <li>Why multicloud
-        <ul>
-          <li>functional differences</li>
-          <li>leverage in negotiations</li>
-          <li>acquistions where products are built on cloud</li>
-          <li>customers competing with a specific cloud</li>
-          <li>tough security and compliance regulations</li>
-        </ul>
-      </li>
-      <li>Levels of multicloud adoption
-        <ul>
-          <li>monocloud</li>
-          <li>no portability: cloud dependent devops process</li>
-          <li>workflow porability: cloud independent devops process</li>
-          <li>application portability: apps can run on any cloud</li>
-          <li>DR portability: apps can failover to another cloud - gitlab geo?</li>
-          <li>workload portability: apps shift workload b/w multiple clouds dynamically</li>
-          <li>data portability: data changes can happen in multiple clouds (hardest) - Cockroach db does this</li>
-        </ul>
-      </li>
-      <li>Goldman Sachs - PURE - a logical modeling language and “Alloy”. Will be available in a FINOS Gitlab repo under an Apache 2.0 open source license mid-2020</li>
+      <li>Webcomponents.org</li>
+      <li>Polymer-lit</li>
+      <li>Stencil js</li>
+      <li>Skate js (Netlify)</li>
     </ul>
   </li>
-  <li>Robin.io -
+  <li>Module loader - SystemJS</li>
+  <li><a href="http://opencomponents.github.io">Open Table</a></li>
+</ul>
+
+<h2 id="design">Design</h2>
+
+<h3 id="domain-modeling-ddd">Domain Modeling (DDD)</h3>
+
+<ul>
+  <li>Domains</li>
+  <li>Sub-domains
     <ul>
-      <li>K8s to the edge</li>
+      <li>Core subdomain e.g., core business function like video streaming for Netflix</li>
+      <li>Generic subdomain e.g., payment processing</li>
+      <li>Supportive subdomain e.g., recommendation engine</li>
     </ul>
   </li>
-  <li>Oracle - A new blueprint for a modern app dev and runtime env
+  <li>A team can own more than one subdomain</li>
+</ul>
+
+<h3 id="design-considerations">Design Considerations</h3>
+
+<p>4 things to consider in µFE architecture</p>
+
+<h4 id="definition">1.Definition</h4>
+
+<ul>
+  <li>Use <em>APIs First Design Principle</em>
     <ul>
-      <li>High perf Microservices - Helidon with GraalVM - microprofile solution - better start up time (0.02 secs) than Dropwizard, Quarkus, SpringBoot</li>
-      <li>Quarkus</li>
+      <li>APIs are the first user interface of your app</li>
+      <li>APIs come first, then the implementation</li>
     </ul>
   </li>
-  <li>Hyperledger &amp; CensenSys - Blockchain balance
+</ul>
+
+<h4 id="composition">2.Composition</h4>
+
+<ul>
+  <li>Client-side composition</li>
+  <li>Edge-side composition</li>
+  <li>Server-side composition</li>
+</ul>
+
+<h4 id="routing">3.Routing</h4>
+
+<ul>
+  <li>Router is responsible for intercepting and validate JWTs before redirecting to a µFE page</li>
+</ul>
+
+<h4 id="communication">4.Communication</h4>
+
+<p><img class="right" src="/technology/microfrontend_window_comm.png" width="300" height="300" /></p>
+
+<ul>
+  <li>e.g., window object or redux</li>
+  <li>Window object is the centralized place where all the components in the page can access the data from. Kind of follows the <a href="https://redux.js.org/basics/data-flow/">Redux data flow pattern</a>.</li>
+  <li>Having a global object/variable in window object is against the µFE encapsulation?</li>
+</ul>
+
+<h1 id="implementation">Implementation</h1>
+
+<p>There are 3 things essential for any micro frontend application or framework.</p>
+
+<ul>
+  <li>
+    <ol>
+      <li>Load component scripts onto the page e.g., ScriptJS, <a href="https://github.com/systemjs/systemjs">SystemJS</a> (module/component loader)
+  * Single SPA is layered on SystemJS</li>
+    </ol>
+  </li>
+  <li>
+    <ol>
+      <li>Instantiate the components and place them in the DOM. e.g., <a href="https://single-spa.js.org/">SingleSPA</a></li>
+    </ol>
+  </li>
+  <li>
+    <ol>
+      <li>Communication of data between the components
+  * SingleSPA leaves it up to you</li>
+    </ol>
+  </li>
+</ul>
+
+<h2 id="types-of-implementation">Types of Implementation</h2>
+
+<ul>
+  <li><strong>iFrames</strong> - <em>used by Spotify</em></li>
+  <li><strong>Shell as proxy</strong>
     <ul>
-      <li>Besu - Java based Ethereum client</li>
-      <li>ConsenSys - public blockchain</li>
-      <li>Kmow your supplier - Chainyard and IBM to reimagine supplier procurement</li>
-      <li>libra association - payment permissioned blockchain</li>
-      <li>Santander settles both sides of a $20M bond trade on public Ethereum</li>
-      <li>Lacchain - public permissioned chain</li>
-      <li>Offchain storage - decideing on what really need to be stored on the ledger. Offchain storage allows you to use the benefts of blockchain while protecting PII</li>
-      <li>Trusted Execution Environments - hyperledger avalon, enterprise ethereum alliance, oasis labs
-        <ul>
-          <li>HSM - h/w security module?</li>
-        </ul>
-      </li>
-      <li>Zero knowledge systems: Zcash, Hyperledger Indy, aztec (protocol)</li>
-      <li>super cookie problem?</li>
+      <li>Common logic like auth can be shared in shell</li>
     </ul>
   </li>
-  <li>CI/CD AI/MK
+  <li><strong>Web Components</strong> - Polymer</li>
+  <li>Bootstrap</li>
+  <li><a href="http://opencomponents.github.io">Open Components</a> - <em>used by <a href="https://opentable.com">OpenTable</a></em></li>
+  <li>Interface Framework - <em>Zalando uses mosaic9, tailor.js</em></li>
+  <li>
+    <p>Edge Side Include (ESI) - <em>used by IKEA</em></p>
+  </li>
+  <li>Reverse proxy
     <ul>
-      <li>Dev tools: Kite/Codota</li>
-      <li>Test: predict outcome, trend analysis.</li>
-      <li>Builds: trending B.O.M. testing</li>
-      <li>Statistical analysis of deployment pipelines. Analytics on CM/RM, predictive analytics on defects</li>
-      <li>NLG - Natural language generation tools.</li>
-      <li>https://s-case.github.io</li>
-      <li>pix2code: Teaching machines to use</li>
-      <li>Image to web/mobile gui generation: http://uiwizard.io</li>
+      <li>Auth logic must be duplicated in multiple places since Nginx can’t have business logic</li>
     </ul>
   </li>
-  <li>Blockchain - Is it the right technology for my business? <a href="https://static.sched.com/hosted_files/oftf19/1b/2019%20Events%20-%20Open%20Fintech%20-%20Linux%20Foundation.pdf">Slides</a>
+  <li>Using API gateway
     <ul>
-      <li>Consensys: app layer on Ethereum blockchain</li>
-      <li>Infura, Besu, Kaleido, MythX, Truffle, Metamask</li>
-      <li>Learnings - http://learn.consensys.net</li>
-      <li>Public Ethereum has scalability, privacy and permissioning problems which is solved by private Ethereum</li>
-      <li>NASDAQ uses blockchain in production - settlements</li>
-      <li>Properties to assess before using blockchain for your business use-cases:
-        <ul>
-          <li>secure, peer-to-peer, traceable, immutable, auditable</li>
-        </ul>
-      </li>
-      <li>Properties to assess before using blockchain for your business requirements:
-        <ul>
-          <li>legal, governance, user, trustless</li>
-        </ul>
-      </li>
+      <li>e.g., Ambassador</li>
     </ul>
   </li>
-  <li>Sysdig, Falco
-    <ul>
-      <li>compare with Twistlock</li>
-      <li><a href="https://github.com/falcosecurity/falco">Open source Falco</a></li>
-      <li><a href="https://sysdig.com/blog/oss-container-security-stack/">How to implement an open source container security stack</a></li>
-      <li>image scanning, runtime scanning (wireshark level of system call details)</li>
-      <li>Kube CIS Benchmark across clusters - host level compliance/vulnerability details</li>
-      <li>Crypto jacking detection - CPU spiking above a certain threshold</li>
-      <li><a href="https://kubeless.io">Kubeless</a> is a Function as a Service framework for Kubernetes.</li>
-    </ul>
-  </li>
-  <li>Thread Modelling to secure a cluster - <a href="https://control-plane.io/">Controlplane</a>
-    <ul>
-      <li>@subliminio, @controlplane</li>
-      <li><a href="https://kubesim.io">Kubesim</a></li>
-      <li>Representing a threat model - annotate the architecture diagram</li>
-      <li>Kubernetes is not SOC-friendly</li>
-      <li>https://github.com/cncf/financial-user-group</li>
-      <li>what is a blue or red team? Red team simulates attack and blue team defends. https://securitytrails.com/blog/cybersecurity-red-blue-team</li>
-      <li>https://github.com/kubernetes-simulator/simulator</li>
-    </ul>
-  </li>
-  <li>Become a data-driven organization through Unified Metadata
-    <ul>
-      <li>https://github.com/ODPi/egeria</li>
-      <li>Design thinking</li>
-    </ul>
-  </li>
-  <li>Tetrate - Service Mesh to Production with your cloud native
-    <ul>
-      <li>https://tetrate.io</li>
-      <li>Multicloud, DevSecOps, Microservices</li>
-      <li>Service Meshes: Istio from Google, Linkerd</li>
-      <li>Proxy: Envoy (written in C++, extremely performant)</li>
-      <li>what is mTLS?</li>
-      <li>What is Citadel? Certificate authority/management</li>
-      <li>SPIFFE X.509 SVID</li>
-      <li>Best practices
-        <ul>
-          <li>Assess your existing systems and process</li>
-        </ul>
-      </li>
-    </ul>
-  </li>
+  <li><strong>Micro frontend ownership</strong>: a team must do all the below: develop, test, build, deploy, document, live-support</li>
+</ul>
+
+<p><strong>Open Questions</strong></p>
+
+<ul>
+  <li>how authentication works? how session management is handled?</li>
+  <li>how communication between µFEs work?</li>
+  <li>how multiple µFEs are integrated to form an app? build time or runtime?</li>
 </ul>
 
   
     <footer>
       
-      
-        <div class="sharing">
-  
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/conf_linuxfoundation2019.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/conf_linuxfoundation2019.html" >Tweet</a>
-  
-  
-  
-</div>
-
       
     </footer>
   

@@ -37,3 +37,4 @@ footer: true
     * e.g., user, profiles, documents, data points, ACL
 * Context Map
     * To map between bounded contexts, you need Context map
+

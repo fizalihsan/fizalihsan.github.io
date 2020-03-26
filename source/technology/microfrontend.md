@@ -94,10 +94,10 @@ footer: true
 
 There are 3 things essential for any micro frontend application or framework.
 
-* 1. Load component scripts onto the page e.g., ScriptJS, [SystemJS](https://github.com/systemjs/systemjs) (module/component loader)
+* Load component scripts onto the page e.g., ScriptJS, [SystemJS](https://github.com/systemjs/systemjs) (module/component loader)
     * Single SPA is layered on SystemJS
-* 2. Instantiate the components and place them in the DOM. e.g., [SingleSPA](https://single-spa.js.org/)
-* 3. Communication of data between the components
+* Instantiate the components and place them in the DOM. e.g., [SingleSPA](https://single-spa.js.org/)
+* Communication of data between the components
     * SingleSPA leaves it up to you
 
 ## Types of Implementation

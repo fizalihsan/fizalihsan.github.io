@@ -95,10 +95,10 @@ __Key results__
     * Moonshots are 'Stretch goals'
     * Just beyond the threshold of what seems possible
     * Success means achieving 60-70%
- 	* _Cons_
- 		* Can demotivate people if they can only 60% every time.
- 		* Lack of accountability and commitment (hey, it's just a stretch goal)
-	* _Best practices_
+    * _Cons_
+        * Can demotivate people if they can only 60% every time.
+        * Lack of accountability and commitment (hey, it's just a stretch goal)
+    * _Best practices_
 		* Have one Moonshot KR per objective and others as roofshots
 * __Roofshots__
 	* Goals that are hard but achievable

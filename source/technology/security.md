@@ -13,7 +13,7 @@ footer: true
 
 Application Security has 4 aspects:
 
-* Authentication - proving user identity, often called user ‘login’.
+* Authentication - proving user identity, often called user ‘login'.
 * Authorization - access control
 * Cryptography - protecting or hiding data from prying eyes
 * Session Management - per-user time-sensitive state
@@ -26,11 +26,11 @@ Application Security has 4 aspects:
 
 1. Subject - "the currently executing user". It could be more than a human user. e.g., daemon apps, 3rd party apps, etc.
 2. SecurityManager - manages security operations for all users
-3. Realm - acts the bridge/connector between the security provider and your application's security data like user accounts, access controls, etc.
+3. Realm - acts the bridge/connector between the security provider and your application'' security data like user accounts, access controls, etc.
 
 # 1. Authentication
 
-* Process of verifying a user's identity. Also called 'login' process.
+* Process of verifying a user'' identity. Also called 'login' process.
 * `Authentication Token = Principal(username) + Credential(password)`
 * If the submitted credentials match what the system expects for that user identity (principal), the user is considered authenticated.
 
@@ -128,7 +128,7 @@ This approach is that unless you use HTTPS, you are still vulnerable to man-in-t
 * HTTPS is not only an encryption mechanism - it can also be used for authentication.
 * When you first interact with a secure website, your browser receives a digitally signed certificate from the server that identifies it.
 * Your browser verifies this certificate with a central authority like VeriSign. This is how you guarantee the identity of the server you are interacting with and make
-* sure you’re not dealing with some man-in-the-middle security breach.
+* sure you're not dealing with some man-in-the-middle security breach.
 * HTTPS can also perform two-way authentication. In addition to the client receiving a signed digital certificate representing the server, the server can receive a certificate that represents and identifies the client.
 * When a client initially connects to a server, it exchanges its certificate and the server matches it against its internal store.
 * Once this link is established, there is no further need for user authentication, since the certificate has already positively identified the user.
@@ -145,9 +145,97 @@ Most secure way to perform authentication on web.
 
 Managing of the certificates is painful. The server must create a unique certificate for each client that wants to connect to the service. From the browser/human perspective, this can be a pain, as the user has to do some extra configuration to interact with the server.
 
-## OpenAuth (OpenID)
+## OpenID
 
-...
+- OpenID is the most common open web protocol for handling federated authentication or federated identity.
+- OpenID Connect is the next-generation version of OpenID based on OAuth 2.0.
+
+__What is Federated Authentication?__
+
+- Although many applications have their own system of accounts (including usernames and passwords), some applications rely on other services to verify the identity of users. This is called __federated authentication__.
+- In a corporate IT environment, applications may trust on the following to authenticate users
+  - an Active Directory server
+  - a LDAP server, or 
+  - a SAML provider 
+- On the Web, applications often trust OpenID providers (such as Google or Yahoo!) to handle the authentication of users. 
+
+- eliminates the need for each web application to build its own custom authentication system, and it makes it much easier and faster for users to sign up and sign into sites around the Web.
+- Comparison to OAuth2
+  - Passing permission to access authentication information (the user’s identity) to a site is very similar to passing along delegated access to a user’s data.
+  - OpenID Connect is built on top of OAuth 2.0 and is designed as a modular specification.
+
+__How OpenID Flow works?__
+
+The basic flow for OpenID Connect is:
+
+1. The application requests OAuth 2.0 authorization for one or more of the OpenID Connect scopes (`openid`, `profile`, `email`, `address`) by redirecting the user to an identity provider.
+2. After the user approves the OAuth authorization request, the user’s web browser is redirected back to the application using a traditional OAuth flow. 
+  - The app makes a request to the __Check ID Endpoint__. This endpoint returns the user’s identity (`user_id`) as well as other bits, such as the `aud` and `state`, which must be verified by the client to ensure valid authentication.
+3. If the client requires additional profile information about the user, such as the user’s full name, picture, and email address, the client can make requests to the __UserInfo Endpoint__.
+
+__ID Token__
+
+- With OpenID Connect authentication, there is an additional type of OAuth token: __an ID token__. 
+_ The ID token, or `id_token`, represents the identity of the user being authenticated. This is a separate token from the access token, which is used to retrieve the user’s profile information or other user data requested during the same authorization flow.
+- The ID token is a __JSON Web Token (JWT)__, which is a digitally signed and/or encrypted representation of the user’s identity asserted by the identity provider. Instead of using cryptographic operations to validate the JSON Web Token, it can be treated as an opaque string and passed to the __Check ID Endpoint__ for interpretation. This flexibility keeps with the spirit of OAuth 2.0 and OpenID Connect being significantly easier to use than their predecessors.
+
+Google’s OpenID Connect implementation uses the following Endpoints:
+
+- Check ID Endpoint - https://www.googleapis.com/oauth2/v1/tokeninfo
+- UserInfo Endpoint - https://www.googleapis.com/oauth2/v1/userinfo
+
+__CheckID Endpoint__
+
+```bash Check ID Endpoint Request
+curl https://accounts.example.com/oauth2/tokeninfo?
+  id_token=eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiY...
+```
+
+```json CheckID Endpoint Response
+{
+  "iss" : "https://accounts.example.com",
+  "user_id" : "113487456102835830811",
+  "aud" : "753560681145-2ik2j3snsvbs80ijdi8.apps.googleusercontent.com",
+  "exp" : "1311281970",
+  "nonce" : "53f2495d7b435ac571"
+}
+```
+
+If this verification is completed successfully, the `user_id` is known to represent the unique identifier for the authenticated user, within the scope of the issuer (`iss`). If storing the identifier in a user database table and multiple identity providers are supported by your application, it is recommended that both values be stored upon account creation and queried upon each subsequent authentication request.
+
+__UserInfo Endpoint__
+
+```bash UserInfo Endpoint Request
+GET /v1/userinfo HTTP/1.1
+Host: accounts.example.com
+Authorization: Bearer ya29.AHES6ZSzX
+```
+
+```json UserInfo Endpoint Response
+{
+ "user_id": "3191142839810811",
+ "name": "Example User",
+ "given_name": "Example",
+ "family_name": "User",
+ "email": "user@example.com",
+ "verified": true,
+ "profile": "http://profiles.example.com/user",
+ "picture": "https://photos.profiles.example.com/user/photo.jpg",
+ "gender": "female",
+ "birthday": "1982-02-11",
+ "locale": "en-US"
+}
+```
+
+__Security Properties__
+
+-  Replay attacks occur when legitimate credentials are sent multiple times for malicious purposes.
+- There are 2 main types of replay attacks we wish to prevent:
+  - (1) An attacker capturing a user’s OAuth credentials as they log in to a site and using them later on the same site.
+    - _Solution_: The OAuth 2.0 specification requires the OAuth endpoint and APIs to be accessed over SSL/TLS to prevent man-in-the-middle attacks, such as the first case.
+  - (2) A rogue application developer using the OAuth token a user was issued to log in to their malicious app in order to impersonate the user on a different legitimate app.
+    - _Solution_: To solve this, use the Check ID Endpoint to verify that the credentials issued by the OAuth provider were issued to the correct application.
+    - It is recommended that all developers use the Check ID Endpoint or decode the JSON Web Token to verify the asserted identity, though this is not strictly necessary in some cases when the application uses the server-side Web Application flow and the UserInfo Endpoint provides all required information.
 
 # 2. Authorization
 
@@ -158,13 +246,240 @@ Authorization is essentially access control - controlling what your users can ac
 * Roles/Users assigned with access to certain features. Users are assigned to roles. This model is not flexible since roles cannot be added dynamically
 * Permissions are defined for features. Users are assigned permissions. This model allows dynamic addition of users.
 
+## OAuth
+
+> OAuth 2.0 = Federated Authorization
+
+> OpenID Connect = Federated Authentication
+
+- __What is OAuth?__
+  - OAuth is a _delegated authorization_ protocol
+  - Delegated authorization is granting access to another person or application to perform actions on your behalf.
+  - When you drive your car to a classy hotel, they may offer valet parking. You then authorize the valet attendant to drive your car by handing him the key in order to let him perform actions on your behalf.
+  - OAuth works similarly—a user grants access to an application to perform actions on the user'' behalf and the application can only perform the authorized actions.
+- __Benefits of OAuth?__
+  - OAuth provides the ability to access a user'' data securely, without handing over the account password.
+  - OAuth eliminates data silos
+  - Having a common protocol for handling API authorization greatly improves the developer experience.
+- __Why not basic username and password?__
+  - user may not trust providing their credentials to your app
+  - username-password provides only authn, not authz
+  - only way a user can revoke access to your app is by changing the password
+  - difficult to implement stronger authentication like CAPTCHAs or multi-factor auths
+- __Diff b/w OAuth 1.0 and 2.0?__
+  - OAuth 1.0
+    - required cryptographic signatures be sent with each API request to verify the identity and authorization of the client.
+    - Cons
+      - Cryptography is challenging for the casual developer to grasp and also challenging for even highly skilled engineers to master.
+  - OAuth 2.0
+    - eliminated the complex signature requirements and introduced the use of _bearer tokens_.
+    - Cons
+      - removing signatures makes it easy for developers to make mistakes and accidentally send their credentials to a malicious API endpoint, which can then abuse these credentials to make additional requests because they're not protected by a signature.
+- __Mitigating concerns with OAuth 2.0 Bearer Tokens__
+  - When implementing OAuth 2.0, calling any APIs, or using a library, you should verify that it properly handles SSL/TLS certificate chain validation by doing the following things:
+    - Checking that the hostname on the certificate returned by the server matches the hostname in the URL being accessed
+    - Verifying each certificate in the chain properly chains up to a valid and trusted certificate authority (CA)
+    - Ensuring that the certificate authority bundle on your server is secure and not able to be modified by potential attackers
+- __Tools__
+  - [https://code.google.com/oauthplayground/]()
+
+### Roles
+
+{% img right /technology/oauth-actors.png 500 500 %}
+
+- __Resource server__
+  - The server hosting user-owned resources that are protected by OAuth. This is typically an API provider that holds and protects data such as photos, videos, calendars, or contacts. e.g., Google, Facebook, etc.
+- __Resource owner__
+  - Typically the user of an application, the resource owner has the ability to grant access to their own data hosted on the resource server.
+- __Client__
+  - An application making API requests to perform actions on protected resources on behalf of the resource owner and with its authorization. e.g., Quora
+- __Authorization server__
+  - The authorization server gets consent from the resource owner and issues access tokens to clients for accessing protected resources hosted by a resource server. e.g., Okta, Auth0
+  - Smaller API providers may use the same application and URL space for both the authorization server and resource server.
+
+### Client Registration
+
+- OAuth requires that applications register with the authorization server so that API requests are able to be properly identified. While the protocol allows for registration using automated means, most API providers require manual registration via filling out a form on their developer websites.
+- After registration is complete, the developer is issued client credentials:
+  - _Client ID_ - Specified as `client_id` when interacting with the resource server
+  - _Client Secret_ - Specified as `client_secret` when exchanging an authorization code for an access token and refreshing access tokens using the server-side Web Application Flow.
+- _Why Register?_
+  - Registration enables the application developer to obtain client credentials, which are used to authenticate requests made to the authorization server. These credentials are critical in protecting the authenticity of requests when performing operations such as exchanging authorization codes for access tokens and refreshing access tokens 
+
+- [Google APIs Console](http://code.google.com/apis/console)
+- Microsoft Windows Live [application management site](https://manage.dev.live.com/).
+- [Facebook Developers site](https://developers.facebook.com/apps).
+
+### Access Tokens
+
+ - OAuth 2.0 authorized APIs require only bearer tokens to make authorized requests. 
+ - _Bearer tokens_ are a type of access token whereby simple possession of the token values provides access to protected resources. No additional information, such as a cryptographic key, is needed to make API calls.
+- The preferred method of authorizing requests is by sending the access token in a HTTP Authorization header
+
+```
+GET /tasks/v1/lists/@default/tasks HTTP/1.1 
+Host: www.googleapis.com
+Authorization: Bearer ya29.AHES6ZSzX
+```
+
+
+### Authorization Flows
+
+ OAuth2 protocol defines 4 primary "grant types" used for obtaining authorization and also defines an extension mechanism for enabling additional grant types.
+
+Every OAuth2 grant type flow has the same goal: _To obtain authorization key/access token, which represents a set of permissions, from the user, and perform something on her behalf._
+
+Achieving this goal is a 2-part flow:
+
+1. __Get Access Token__: Acquire the authorization key/access token for the user from the OAuth provider, e.g., Twitter
+2. __Use Access Token__: Use the authorization key/access token to perform something by calling a protected API endpoint on behalf of the user, e.g., post a tweet
+
+In principle, the Get Access Token flow has 5 steps (as shown in the diagram below):
+
+1. Pre-register Client (App) with OAuth Server to get Client ID/Client Secret
+2. OAuth Server authenticates user when she clicks on the App's social login button, which is tagged with Client ID
+3. OAuth Server solicits user permission to allow the App to perform something on her behalf
+4. OAuth Server sends secret code to App
+5. App acquires Key/Access Token from OAuth Server by presenting secret code and client secret
+
+{% img /technology/OAuth-Flow-Comparison.png %}
+
+__1. Authorization code__
+
+{% img right /technology/oauth-serverside-flow.png 500 500 %}
+
+- This grant type is most appropriate for server-side web applications. 
+- After the resource owner has authorized access to their data, they are redirected back to the web application with an authorization code as a query parameter in the URL. 
+- This code must be exchanged for an access token by the client application. 
+- This exchange is done server-to-server and requires both the `client_id` and `client_secret`, preventing even the resource owner from obtaining the access token. 
+- This grant type also allows for long-lived access to an API by using refresh tokens.
+
+__When to use it?__
+
+- Long-lived access is required.
+- The OAuth client is a web application server.
+- Accountability for API calls is very important and the OAuth token shouldn’t be leaked to the browser, where the user may have access to it.
+
+__Security Properties__
+
+- The Authorization Code flow does not expose the access token to the resource owner’s browser. 
+- The exchange process only succeeds if a correct `client_secret` is passed with the request, ensuring confidentiality of the access token as long as client security is maintained.
+- because the access token is never sent through the browser— there is less risk that the access token will be leaked to malicious code through browser history, referer headers, JavaScript, and the like
+- Although there is less chance of the access token leaking because it’s not exposed to the browser, many applications using this flow will store long-lived refresh tokens in the application’s database or key store to enable "offline" access to data. There is additional risk when an application requires long-lived offline access to data, as this creates a single point of compromise for accessing data belonging to many users.
+
+__How access is revoked?__
+
+- Applications are not usually informed when a user revokes access, and the specification does not define any way to implement a notification—the app will simply see an error the next time it attempts to use an access token or refresh the token stored for that user.
+- While users can revoke their access manually, some OAuth 2.0 authorization servers also allow tokens to be revoked programmatically. This enables an application to clean up after itself and remove access it no longer needs if, for instance, the user uninstalls the app. Example:
+
+`curl "https://accounts.google.com/o/oauth2/revoke?token=ya29.AHES6ZSzF"`
+
+---
+
+__2. Implicit grant__
+
+{% img right /technology/oauth-clientside-flow.png 500 500 %}
+
+- This is the most simplistic of all flows, and is optimized for client-side web applications running in a browser. 
+- The resource owner grants access to the application, and a new access token is immediately minted and passed back to the application using a `#hash` fragment in the URL. 
+- The application can immediately extract the access token from the hash fragment (using JavaScript) and make API requests. 
+- This grant type does not require the intermediary "authorization code," but it also doesn't make available refresh tokens for long-lived access.
+
+__When to use it?__
+
+- Only temporary access to data is required.
+- The user is regularly logged into the API provider.
+- The OAuth client is running in the browser (using JavaScript, Flash, etc.).
+- The browser is strongly trusted and there is limited concern that the access token will leak to untrusted users or applications.
+
+__Limitations__
+
+The Implicit Grant flow does not accommodate refresh tokens. If the Authorization server expires access tokens regularly, your application will need to run through the authorization flow whenever it needs access.
+
+__Security Properties__
+
+- In this flow, the application does not store long-lived refresh tokens on a server, limiting the exposure if the server is compromised. 
+- Because the access token is sent to the user’s web browser, this flow offers less accountability than the Authorization Code flow.
+
+---
+
+__3. Resource owner password-based grant__
+
+{% img right /technology/oauth-resource-owner-flow.png 500 500 %}
+
+- This grant type enables a resource owner's username and password to be exchanged for an OAuth access token. 
+- It is used for only highly-trusted clients, such as a mobile application written by the API provider. 
+- While the user'' password is still exposed to the client, it does not need to be stored on the device.
+- After the initial authentication, only the OAuth token needs to be stored. Because the password is not stored, the user can revoke access to the app without changing the password, and the token is scoped to a limited set of data, so this grant type still provides enhanced security over traditional username/password authentication.
+
+__When to use it?__
+
+It is recommended only for first-party "official" applications released by the API provider, and not opened up to wider third-party developer communities.
+
+__Security Properties__
+
+- Although the application has access to the resource owner’s password, there are still some security benefits to using this flow versus authenticating API calls with a username and password (via HTTP Basic access authentication or similar). 
+- Http Basic
+  - With Basic authentication, an application needs to have continuous access to the user’s password in order to make API calls. 
+  - It also requires the user change their password and reenter the new password in all applications which require it, should the user no longer want an application to have access to their data.
+- Resource Owner Password
+  - However, if the OAuth Resource Owner Password flow is used, the application only needs access to the user’s credentials once: on first use when the credentials are exchanged for an access token. 
+  - This means there’s no requirement for the app to store these credentials within the application or on the device, and revoking access is easy as well.
+
+```bash
+curl -d "grant_type=password" \
+-d "client_id=3MVG9QDx8IKCsXTFM0o9aE3KfEwsZLvRt" \
+-d "client_secret=4826278391389087694" \
+-d "username=ryan%40ryguy.com" \
+-d "password=_userspassword__userssecuritytoken_" \
+https://login.salesforce.com/services/oauth2/token
+```
+
+```json
+{
+  "id":"https://login.salesforce.com/id/00DU0000000Io8rMAC/005U0000000hMDCIA2",
+  "issued_at":"1316990706988",
+  "instance_url":"https://na12.salesforce.com",
+  "signature":"Q2KTt8Ez5dwJ4Adu6QttAhCxbEP3HyfaTUXoNI=",
+  "access_token":"00DU0000000Io8r!AQcKbNiJPt0OCSAvxU2SBjVGP6hW0mfmKH07QiPEGIX"
+}
+```
+
+---
+
+__4. Client credentials__
+
+{% img right /technology/oauth-client-credential-flow.png 500 500 %}
+
+- Most of the OAuth flows are for handling delegated authorization, when a resource owner grants access to an application to access her data. However, there are cases when the client itself owns the data and does not need delegated access from a resource owner, or delegated access has already been granted to the application outside of a typical OAuth flow.
+- Imagine a storage API, such as Google Storage or Amazon S3. You want to build a tool using one of these APIs to access the images or documents. The application needs to read and update these resources, but acting on behalf of the app itself rather than on behalf of any individual user. The application can ask the OAuth authorization server for an access token directly, without the involvement of any end user.
+
+Here is an example using Facebook API. If the client credentials are successfully authenticated, an access token is returned to the client
+
+```bash
+curl -d "grant_type=client_credentials\
+&client_id=2016271111111117128396\
+&client_secret=904b98aaaaaaac1c92381d2" \
+https://graph.facebook.com/oauth/access_token
+```
+
+__When the Access Token Expires__
+
+The Client Credentials flow typically provides a long-lived access token. The authorization server may indicate an `expires_in` time; however, the protocol does not support issuing a refresh token in response to the Client Credentials flow. Instead, the application simply asks for a new access token if the current one expires.
+
+---
+
 ## JSON Web Tokens
+
+TBD
 
 ## SAML
 
+TBD
+
 # 3. Cryptography
 
-Cryptography is the process of hiding or obfuscating data so prying eyes can’t understand it.
+Cryptography is the process of hiding or obfuscating data so prying eyes can't understand it.
 
 When a client is interacting with a RESTful web service, it is possible for hostile individuals to intercept network packets and read requests and responses if your HTTP connection is not secure.
 
@@ -176,7 +491,7 @@ Sensitive data should be protected with cryptographic services like SSL. The Web
 * They turn any amount of data into a fixed-length "fingerprint" that cannot be reversed. If the input changes by even a tiny bit, the resulting hash is completely different (see the example above). 
 * __Cryptographic hash functions__
   * regular hash functions used in hash tables are designed to be fast, not secure
-  * used for protecting passwords. Safe even if the password file is compromised, but at the same time, allows to verify that a user's password is correct.
+  * used for protecting passwords. Safe even if the password file is compromised, but at the same time, allows to verify that a user'' password is correct.
   * example: SHA256, SHA512, RipeMD, and WHIRLPOOL
 * `java.security.MessageDigest` class supports MD5 and SHA digests.
 * Shiro supports hex-encode and Base64 encoding.
@@ -212,7 +527,7 @@ hash("hello" + "YYLmfY6IehjZMQ") = a49670c3c18b9e079b9cfaf51634f563dc8ae3070db2c
 * DO NOT use double hashing or wacky combination of hashing functions. 
   * Cons
     * creates interoperability problems
-    * makes the hashes less secure, if the hacker gets hold of the open source code ([Kerckhoffs's principle](https://en.wikipedia.org/wiki/Kerckhoffs%27s_principle) - _A cryptosystem should be secure even if everything about the system, except the key, is public knowledge_)
+    * makes the hashes less secure, if the hacker gets hold of the open source code ([Kerckhoffs'' principle](https://en.wikipedia.org/wiki/Kerckhoffs%27s_principle) - _A cryptosystem should be secure even if everything about the system, except the key, is public knowledge_)
   * If needed, use a 'wacky' function like HMAC (Hash-based Message Authentication Code).
     
 ```bash
@@ -245,15 +560,17 @@ Ciphers are cryptographic algorithms that can reversibly transform data using a 
 
 # 4. Session Management
 
-Apache Shiro enables a Session programming paradigm for any application - from small daemon standalone applications to the largest clustered web applications. This means that application developers who wish to use sessions are no longer forced to use Servlet or EJB containers if they don’t need them otherwise.
+Apache Shiro enables a Session programming paradigm for any application - from small daemon standalone applications to the largest clustered web applications. This means that application developers who wish to use sessions are no longer forced to use Servlet or EJB containers if they don't need them otherwise.
 
 
-# Bibliography
+# References
 
 * Books
   * RESTful Java with JAX-RS - Chapter 12 - Securing JAX-RS
   * REST in practice - Chapter 9 - Web Security
+  * O'Reilly Getting Started with OAuth 2.0 
 * Links
   * [Application Security With Apache Shiro](http://www.infoq.com/articles/apache-shiro)
   * Java EE Security - http://docs.oracle.com/javaee/6/tutorial/doc/gijrp.html
   * Encyclopedia of Security - http://www.microsoft.com/mspress/books/sampchap/6429.aspx
+  * OAuth Roles - http://tutorials.jenkov.com/oauth2/roles.html

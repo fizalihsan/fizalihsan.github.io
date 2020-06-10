@@ -128,11 +128,18 @@ messageStyle: "none",
           <li><a href="#cons-1" id="markdown-toc-cons-1">Cons</a></li>
         </ul>
       </li>
-      <li><a href="#openauth-openid" id="markdown-toc-openauth-openid">OpenAuth (OpenID)</a></li>
+      <li><a href="#openid" id="markdown-toc-openid">OpenID</a></li>
     </ul>
   </li>
   <li><a href="#authorization" id="markdown-toc-authorization">2. Authorization</a>    <ul>
       <li><a href="#simple-access-control-list-acl" id="markdown-toc-simple-access-control-list-acl">Simple Access Control List (ACL)</a></li>
+      <li><a href="#oauth" id="markdown-toc-oauth">OAuth</a>        <ul>
+          <li><a href="#roles" id="markdown-toc-roles">Roles</a></li>
+          <li><a href="#client-registration" id="markdown-toc-client-registration">Client Registration</a></li>
+          <li><a href="#access-tokens" id="markdown-toc-access-tokens">Access Tokens</a></li>
+          <li><a href="#authorization-flows" id="markdown-toc-authorization-flows">Authorization Flows</a></li>
+        </ul>
+      </li>
       <li><a href="#json-web-tokens" id="markdown-toc-json-web-tokens">JSON Web Tokens</a></li>
       <li><a href="#saml" id="markdown-toc-saml">SAML</a></li>
     </ul>
@@ -147,7 +154,7 @@ messageStyle: "none",
     </ul>
   </li>
   <li><a href="#session-management" id="markdown-toc-session-management">4. Session Management</a></li>
-  <li><a href="#bibliography" id="markdown-toc-bibliography">Bibliography</a></li>
+  <li><a href="#references" id="markdown-toc-references">References</a></li>
 </ul>
 
 <h1 id="overview">Overview</h1>
@@ -170,13 +177,13 @@ messageStyle: "none",
 <ol>
   <li>Subject - “the currently executing user”. It could be more than a human user. e.g., daemon apps, 3rd party apps, etc.</li>
   <li>SecurityManager - manages security operations for all users</li>
-  <li>Realm - acts the bridge/connector between the security provider and your application’s security data like user accounts, access controls, etc.</li>
+  <li>Realm - acts the bridge/connector between the security provider and your application’’ security data like user accounts, access controls, etc.</li>
 </ol>
 
 <h1 id="authentication">1. Authentication</h1>
 
 <ul>
-  <li>Process of verifying a user’s identity. Also called ‘login’ process.</li>
+  <li>Process of verifying a user’’ identity. Also called ‘login’ process.</li>
   <li><code>Authentication Token = Principal(username) + Credential(password)</code></li>
   <li>If the submitted credentials match what the system expects for that user identity (principal), the user is considered authenticated.</li>
 </ul>
@@ -323,9 +330,146 @@ When the server receives this request, it builds its own version of the response
 
 <p>Managing of the certificates is painful. The server must create a unique certificate for each client that wants to connect to the service. From the browser/human perspective, this can be a pain, as the user has to do some extra configuration to interact with the server.</p>
 
-<h2 id="openauth-openid">OpenAuth (OpenID)</h2>
+<h2 id="openid">OpenID</h2>
 
-<p>…</p>
+<ul>
+  <li>OpenID is the most common open web protocol for handling federated authentication or federated identity.</li>
+  <li>OpenID Connect is the next-generation version of OpenID based on OAuth 2.0.</li>
+</ul>
+
+<p><strong>What is Federated Authentication?</strong></p>
+
+<ul>
+  <li>Although many applications have their own system of accounts (including usernames and passwords), some applications rely on other services to verify the identity of users. This is called <strong>federated authentication</strong>.</li>
+  <li>In a corporate IT environment, applications may trust on the following to authenticate users
+    <ul>
+      <li>an Active Directory server</li>
+      <li>a LDAP server, or</li>
+      <li>a SAML provider</li>
+    </ul>
+  </li>
+  <li>
+    <p>On the Web, applications often trust OpenID providers (such as Google or Yahoo!) to handle the authentication of users.</p>
+  </li>
+  <li>eliminates the need for each web application to build its own custom authentication system, and it makes it much easier and faster for users to sign up and sign into sites around the Web.</li>
+  <li>Comparison to OAuth2
+    <ul>
+      <li>Passing permission to access authentication information (the user’s identity) to a site is very similar to passing along delegated access to a user’s data.</li>
+      <li>OpenID Connect is built on top of OAuth 2.0 and is designed as a modular specification.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>How OpenID Flow works?</strong></p>
+
+<p>The basic flow for OpenID Connect is:</p>
+
+<ol>
+  <li>The application requests OAuth 2.0 authorization for one or more of the OpenID Connect scopes (<code>openid</code>, <code>profile</code>, <code>email</code>, <code>address</code>) by redirecting the user to an identity provider.</li>
+  <li>After the user approves the OAuth authorization request, the user’s web browser is redirected back to the application using a traditional OAuth flow. 
+  - The app makes a request to the <strong>Check ID Endpoint</strong>. This endpoint returns the user’s identity (<code>user_id</code>) as well as other bits, such as the <code>aud</code> and <code>state</code>, which must be verified by the client to ensure valid authentication.</li>
+  <li>If the client requires additional profile information about the user, such as the user’s full name, picture, and email address, the client can make requests to the <strong>UserInfo Endpoint</strong>.</li>
+</ol>
+
+<p><strong>ID Token</strong></p>
+
+<ul>
+  <li>With OpenID Connect authentication, there is an additional type of OAuth token: <strong>an ID token</strong>. 
+_ The ID token, or <code>id_token</code>, represents the identity of the user being authenticated. This is a separate token from the access token, which is used to retrieve the user’s profile information or other user data requested during the same authorization flow.</li>
+  <li>The ID token is a <strong>JSON Web Token (JWT)</strong>, which is a digitally signed and/or encrypted representation of the user’s identity asserted by the identity provider. Instead of using cryptographic operations to validate the JSON Web Token, it can be treated as an opaque string and passed to the <strong>Check ID Endpoint</strong> for interpretation. This flexibility keeps with the spirit of OAuth 2.0 and OpenID Connect being significantly easier to use than their predecessors.</li>
+</ul>
+
+<p>Google’s OpenID Connect implementation uses the following Endpoints:</p>
+
+<ul>
+  <li>Check ID Endpoint - https://www.googleapis.com/oauth2/v1/tokeninfo</li>
+  <li>UserInfo Endpoint - https://www.googleapis.com/oauth2/v1/userinfo</li>
+</ul>
+
+<p><strong>CheckID Endpoint</strong></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Check ID Endpoint Request</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">curl https://accounts.example.com/oauth2/tokeninfo?
+</span><span class="line">  <span class="nv">id_token</span><span class="o">=</span>eyJhbGciOiJSUzI1NiJ9.eyJpc3MiOiJhY2NvdW50cy5nb29nbGUuY29tIiwiY...
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>CheckID Endpoint Response</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="p">{</span>
+</span><span class="line">  <span class="nt">&quot;iss&quot;</span> <span class="p">:</span> <span class="s2">&quot;https://accounts.example.com&quot;</span><span class="p">,</span>
+</span><span class="line">  <span class="nt">&quot;user_id&quot;</span> <span class="p">:</span> <span class="s2">&quot;113487456102835830811&quot;</span><span class="p">,</span>
+</span><span class="line">  <span class="nt">&quot;aud&quot;</span> <span class="p">:</span> <span class="s2">&quot;753560681145-2ik2j3snsvbs80ijdi8.apps.googleusercontent.com&quot;</span><span class="p">,</span>
+</span><span class="line">  <span class="nt">&quot;exp&quot;</span> <span class="p">:</span> <span class="s2">&quot;1311281970&quot;</span><span class="p">,</span>
+</span><span class="line">  <span class="nt">&quot;nonce&quot;</span> <span class="p">:</span> <span class="s2">&quot;53f2495d7b435ac571&quot;</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>If this verification is completed successfully, the <code>user_id</code> is known to represent the unique identifier for the authenticated user, within the scope of the issuer (<code>iss</code>). If storing the identifier in a user database table and multiple identity providers are supported by your application, it is recommended that both values be stored upon account creation and queried upon each subsequent authentication request.</p>
+
+<p><strong>UserInfo Endpoint</strong></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>UserInfo Endpoint Request</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">GET /v1/userinfo HTTP/1.1
+</span><span class="line">Host: accounts.example.com
+</span><span class="line">Authorization: Bearer ya29.AHES6ZSzX
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>UserInfo Endpoint Response</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="p">{</span>
+</span><span class="line"> <span class="nt">&quot;user_id&quot;</span><span class="p">:</span> <span class="s2">&quot;3191142839810811&quot;</span><span class="p">,</span>
+</span><span class="line"> <span class="nt">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Example User&quot;</span><span class="p">,</span>
+</span><span class="line"> <span class="nt">&quot;given_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Example&quot;</span><span class="p">,</span>
+</span><span class="line"> <span class="nt">&quot;family_name&quot;</span><span class="p">:</span> <span class="s2">&quot;User&quot;</span><span class="p">,</span>
+</span><span class="line"> <span class="nt">&quot;email&quot;</span><span class="p">:</span> <span class="s2">&quot;user@example.com&quot;</span><span class="p">,</span>
+</span><span class="line"> <span class="nt">&quot;verified&quot;</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+</span><span class="line"> <span class="nt">&quot;profile&quot;</span><span class="p">:</span> <span class="s2">&quot;http://profiles.example.com/user&quot;</span><span class="p">,</span>
+</span><span class="line"> <span class="nt">&quot;picture&quot;</span><span class="p">:</span> <span class="s2">&quot;https://photos.profiles.example.com/user/photo.jpg&quot;</span><span class="p">,</span>
+</span><span class="line"> <span class="nt">&quot;gender&quot;</span><span class="p">:</span> <span class="s2">&quot;female&quot;</span><span class="p">,</span>
+</span><span class="line"> <span class="nt">&quot;birthday&quot;</span><span class="p">:</span> <span class="s2">&quot;1982-02-11&quot;</span><span class="p">,</span>
+</span><span class="line"> <span class="nt">&quot;locale&quot;</span><span class="p">:</span> <span class="s2">&quot;en-US&quot;</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Security Properties</strong></p>
+
+<ul>
+  <li>Replay attacks occur when legitimate credentials are sent multiple times for malicious purposes.</li>
+  <li>There are 2 main types of replay attacks we wish to prevent:
+    <ul>
+      <li>(1) An attacker capturing a user’s OAuth credentials as they log in to a site and using them later on the same site.
+        <ul>
+          <li><em>Solution</em>: The OAuth 2.0 specification requires the OAuth endpoint and APIs to be accessed over SSL/TLS to prevent man-in-the-middle attacks, such as the first case.</li>
+        </ul>
+      </li>
+      <li>(2) A rogue application developer using the OAuth token a user was issued to log in to their malicious app in order to impersonate the user on a different legitimate app.
+        <ul>
+          <li><em>Solution</em>: To solve this, use the Check ID Endpoint to verify that the credentials issued by the OAuth provider were issued to the correct application.</li>
+          <li>It is recommended that all developers use the Check ID Endpoint or decode the JSON Web Token to verify the asserted identity, though this is not strictly necessary in some cases when the application uses the server-side Web Application flow and the UserInfo Endpoint provides all required information.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
 
 <h1 id="authorization">2. Authorization</h1>
 
@@ -338,9 +482,343 @@ When the server receives this request, it builds its own version of the response
   <li>Permissions are defined for features. Users are assigned permissions. This model allows dynamic addition of users.</li>
 </ul>
 
+<h2 id="oauth">OAuth</h2>
+
+<blockquote>
+  <p>OAuth 2.0 = Federated Authorization</p>
+</blockquote>
+
+<blockquote>
+  <p>OpenID Connect = Federated Authentication</p>
+</blockquote>
+
+<ul>
+  <li><strong>What is OAuth?</strong>
+    <ul>
+      <li>OAuth is a <em>delegated authorization</em> protocol</li>
+      <li>Delegated authorization is granting access to another person or application to perform actions on your behalf.</li>
+      <li>When you drive your car to a classy hotel, they may offer valet parking. You then authorize the valet attendant to drive your car by handing him the key in order to let him perform actions on your behalf.</li>
+      <li>OAuth works similarly—a user grants access to an application to perform actions on the user’’ behalf and the application can only perform the authorized actions.</li>
+    </ul>
+  </li>
+  <li><strong>Benefits of OAuth?</strong>
+    <ul>
+      <li>OAuth provides the ability to access a user’’ data securely, without handing over the account password.</li>
+      <li>OAuth eliminates data silos</li>
+      <li>Having a common protocol for handling API authorization greatly improves the developer experience.</li>
+    </ul>
+  </li>
+  <li><strong>Why not basic username and password?</strong>
+    <ul>
+      <li>user may not trust providing their credentials to your app</li>
+      <li>username-password provides only authn, not authz</li>
+      <li>only way a user can revoke access to your app is by changing the password</li>
+      <li>difficult to implement stronger authentication like CAPTCHAs or multi-factor auths</li>
+    </ul>
+  </li>
+  <li><strong>Diff b/w OAuth 1.0 and 2.0?</strong>
+    <ul>
+      <li>OAuth 1.0
+        <ul>
+          <li>required cryptographic signatures be sent with each API request to verify the identity and authorization of the client.</li>
+          <li>Cons
+            <ul>
+              <li>Cryptography is challenging for the casual developer to grasp and also challenging for even highly skilled engineers to master.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li>OAuth 2.0
+        <ul>
+          <li>eliminated the complex signature requirements and introduced the use of <em>bearer tokens</em>.</li>
+          <li>Cons
+            <ul>
+              <li>removing signatures makes it easy for developers to make mistakes and accidentally send their credentials to a malicious API endpoint, which can then abuse these credentials to make additional requests because they’re not protected by a signature.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Mitigating concerns with OAuth 2.0 Bearer Tokens</strong>
+    <ul>
+      <li>When implementing OAuth 2.0, calling any APIs, or using a library, you should verify that it properly handles SSL/TLS certificate chain validation by doing the following things:
+        <ul>
+          <li>Checking that the hostname on the certificate returned by the server matches the hostname in the URL being accessed</li>
+          <li>Verifying each certificate in the chain properly chains up to a valid and trusted certificate authority (CA)</li>
+          <li>Ensuring that the certificate authority bundle on your server is secure and not able to be modified by potential attackers</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><strong>Tools</strong>
+    <ul>
+      <li><a href="">https://code.google.com/oauthplayground/</a></li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="roles">Roles</h3>
+
+<p><img class="right" src="/technology/oauth-actors.png" width="500" height="500" /></p>
+
+<ul>
+  <li><strong>Resource server</strong>
+    <ul>
+      <li>The server hosting user-owned resources that are protected by OAuth. This is typically an API provider that holds and protects data such as photos, videos, calendars, or contacts. e.g., Google, Facebook, etc.</li>
+    </ul>
+  </li>
+  <li><strong>Resource owner</strong>
+    <ul>
+      <li>Typically the user of an application, the resource owner has the ability to grant access to their own data hosted on the resource server.</li>
+    </ul>
+  </li>
+  <li><strong>Client</strong>
+    <ul>
+      <li>An application making API requests to perform actions on protected resources on behalf of the resource owner and with its authorization. e.g., Quora</li>
+    </ul>
+  </li>
+  <li><strong>Authorization server</strong>
+    <ul>
+      <li>The authorization server gets consent from the resource owner and issues access tokens to clients for accessing protected resources hosted by a resource server. e.g., Okta, Auth0</li>
+      <li>Smaller API providers may use the same application and URL space for both the authorization server and resource server.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="client-registration">Client Registration</h3>
+
+<ul>
+  <li>OAuth requires that applications register with the authorization server so that API requests are able to be properly identified. While the protocol allows for registration using automated means, most API providers require manual registration via filling out a form on their developer websites.</li>
+  <li>After registration is complete, the developer is issued client credentials:
+    <ul>
+      <li><em>Client ID</em> - Specified as <code>client_id</code> when interacting with the resource server</li>
+      <li><em>Client Secret</em> - Specified as <code>client_secret</code> when exchanging an authorization code for an access token and refreshing access tokens using the server-side Web Application Flow.</li>
+    </ul>
+  </li>
+  <li><em>Why Register?</em>
+    <ul>
+      <li>Registration enables the application developer to obtain client credentials, which are used to authenticate requests made to the authorization server. These credentials are critical in protecting the authenticity of requests when performing operations such as exchanging authorization codes for access tokens and refreshing access tokens</li>
+    </ul>
+  </li>
+  <li><a href="http://code.google.com/apis/console">Google APIs Console</a></li>
+  <li>Microsoft Windows Live <a href="https://manage.dev.live.com/">application management site</a>.</li>
+  <li><a href="https://developers.facebook.com/apps">Facebook Developers site</a>.</li>
+</ul>
+
+<h3 id="access-tokens">Access Tokens</h3>
+
+<ul>
+  <li>OAuth 2.0 authorized APIs require only bearer tokens to make authorized requests.</li>
+  <li><em>Bearer tokens</em> are a type of access token whereby simple possession of the token values provides access to protected resources. No additional information, such as a cryptographic key, is needed to make API calls.</li>
+  <li>The preferred method of authorizing requests is by sending the access token in a HTTP Authorization header</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>UserInfo Endpoint Response</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="err">GET</span> <span class="err">/tasks/v</span><span class="mi">1</span><span class="err">/lists/@default/tasks</span> <span class="err">HTTP/</span><span class="mf">1.1</span>
+</span><span class="line"><span class="err">Host:</span> <span class="err">www.googleapis.com</span>
+</span><span class="line"><span class="err">Authorization:</span> <span class="err">Bearer</span> <span class="err">ya</span><span class="mi">29</span><span class="err">.AHES</span><span class="mi">6</span><span class="err">ZSzX</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h3 id="authorization-flows">Authorization Flows</h3>
+
+<p>OAuth2 protocol defines 4 primary “grant types” used for obtaining authorization and also defines an extension mechanism for enabling additional grant types.</p>
+
+<p>Every OAuth2 grant type flow has the same goal: <em>To obtain authorization key/access token, which represents a set of permissions, from the user, and perform something on her behalf.</em></p>
+
+<p>Achieving this goal is a 2-part flow:</p>
+
+<ol>
+  <li><strong>Get Access Token</strong>: Acquire the authorization key/access token for the user from the OAuth provider, e.g., Twitter</li>
+  <li><strong>Use Access Token</strong>: Use the authorization key/access token to perform something by calling a protected API endpoint on behalf of the user, e.g., post a tweet</li>
+</ol>
+
+<p>In principle, the Get Access Token flow has 5 steps (as shown in the diagram below):</p>
+
+<ol>
+  <li>Pre-register Client (App) with OAuth Server to get Client ID/Client Secret</li>
+  <li>OAuth Server authenticates user when she clicks on the App’s social login button, which is tagged with Client ID</li>
+  <li>OAuth Server solicits user permission to allow the App to perform something on her behalf</li>
+  <li>OAuth Server sends secret code to App</li>
+  <li>App acquires Key/Access Token from OAuth Server by presenting secret code and client secret</li>
+</ol>
+
+<p><img src="/technology/OAuth-Flow-Comparison.png" /></p>
+
+<p><strong>1. Authorization code</strong></p>
+
+<p><img class="right" src="/technology/oauth-serverside-flow.png" width="500" height="500" /></p>
+
+<ul>
+  <li>This grant type is most appropriate for server-side web applications.</li>
+  <li>After the resource owner has authorized access to their data, they are redirected back to the web application with an authorization code as a query parameter in the URL.</li>
+  <li>This code must be exchanged for an access token by the client application.</li>
+  <li>This exchange is done server-to-server and requires both the <code>client_id</code> and <code>client_secret</code>, preventing even the resource owner from obtaining the access token.</li>
+  <li>This grant type also allows for long-lived access to an API by using refresh tokens.</li>
+</ul>
+
+<p><strong>When to use it?</strong></p>
+
+<ul>
+  <li>Long-lived access is required.</li>
+  <li>The OAuth client is a web application server.</li>
+  <li>Accountability for API calls is very important and the OAuth token shouldn’t be leaked to the browser, where the user may have access to it.</li>
+</ul>
+
+<p><strong>Security Properties</strong></p>
+
+<ul>
+  <li>The Authorization Code flow does not expose the access token to the resource owner’s browser.</li>
+  <li>The exchange process only succeeds if a correct <code>client_secret</code> is passed with the request, ensuring confidentiality of the access token as long as client security is maintained.</li>
+  <li>because the access token is never sent through the browser— there is less risk that the access token will be leaked to malicious code through browser history, referer headers, JavaScript, and the like</li>
+  <li>Although there is less chance of the access token leaking because it’s not exposed to the browser, many applications using this flow will store long-lived refresh tokens in the application’s database or key store to enable “offline” access to data. There is additional risk when an application requires long-lived offline access to data, as this creates a single point of compromise for accessing data belonging to many users.</li>
+</ul>
+
+<p><strong>How access is revoked?</strong></p>
+
+<ul>
+  <li>Applications are not usually informed when a user revokes access, and the specification does not define any way to implement a notification—the app will simply see an error the next time it attempts to use an access token or refresh the token stored for that user.</li>
+  <li>While users can revoke their access manually, some OAuth 2.0 authorization servers also allow tokens to be revoked programmatically. This enables an application to clean up after itself and remove access it no longer needs if, for instance, the user uninstalls the app. Example:</li>
+</ul>
+
+<p><code>curl "https://accounts.google.com/o/oauth2/revoke?token=ya29.AHES6ZSzF"</code></p>
+
+<hr />
+
+<p><strong>2. Implicit grant</strong></p>
+
+<p><img class="right" src="/technology/oauth-clientside-flow.png" width="500" height="500" /></p>
+
+<ul>
+  <li>This is the most simplistic of all flows, and is optimized for client-side web applications running in a browser.</li>
+  <li>The resource owner grants access to the application, and a new access token is immediately minted and passed back to the application using a <code>#hash</code> fragment in the URL.</li>
+  <li>The application can immediately extract the access token from the hash fragment (using JavaScript) and make API requests.</li>
+  <li>This grant type does not require the intermediary “authorization code,” but it also doesn’t make available refresh tokens for long-lived access.</li>
+</ul>
+
+<p><strong>When to use it?</strong></p>
+
+<ul>
+  <li>Only temporary access to data is required.</li>
+  <li>The user is regularly logged into the API provider.</li>
+  <li>The OAuth client is running in the browser (using JavaScript, Flash, etc.).</li>
+  <li>The browser is strongly trusted and there is limited concern that the access token will leak to untrusted users or applications.</li>
+</ul>
+
+<p><strong>Limitations</strong></p>
+
+<p>The Implicit Grant flow does not accommodate refresh tokens. If the Authorization server expires access tokens regularly, your application will need to run through the authorization flow whenever it needs access.</p>
+
+<p><strong>Security Properties</strong></p>
+
+<ul>
+  <li>In this flow, the application does not store long-lived refresh tokens on a server, limiting the exposure if the server is compromised.</li>
+  <li>Because the access token is sent to the user’s web browser, this flow offers less accountability than the Authorization Code flow.</li>
+</ul>
+
+<hr />
+
+<p><strong>3. Resource owner password-based grant</strong></p>
+
+<p><img class="right" src="/technology/oauth-resource-owner-flow.png" width="500" height="500" /></p>
+
+<ul>
+  <li>This grant type enables a resource owner’s username and password to be exchanged for an OAuth access token.</li>
+  <li>It is used for only highly-trusted clients, such as a mobile application written by the API provider.</li>
+  <li>While the user’’ password is still exposed to the client, it does not need to be stored on the device.</li>
+  <li>After the initial authentication, only the OAuth token needs to be stored. Because the password is not stored, the user can revoke access to the app without changing the password, and the token is scoped to a limited set of data, so this grant type still provides enhanced security over traditional username/password authentication.</li>
+</ul>
+
+<p><strong>When to use it?</strong></p>
+
+<p>It is recommended only for first-party “official” applications released by the API provider, and not opened up to wider third-party developer communities.</p>
+
+<p><strong>Security Properties</strong></p>
+
+<ul>
+  <li>Although the application has access to the resource owner’s password, there are still some security benefits to using this flow versus authenticating API calls with a username and password (via HTTP Basic access authentication or similar).</li>
+  <li>Http Basic
+    <ul>
+      <li>With Basic authentication, an application needs to have continuous access to the user’s password in order to make API calls.</li>
+      <li>It also requires the user change their password and reenter the new password in all applications which require it, should the user no longer want an application to have access to their data.</li>
+    </ul>
+  </li>
+  <li>Resource Owner Password
+    <ul>
+      <li>However, if the OAuth Resource Owner Password flow is used, the application only needs access to the user’s credentials once: on first use when the credentials are exchanged for an access token.</li>
+      <li>This means there’s no requirement for the app to store these credentials within the application or on the device, and revoking access is easy as well.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">curl -d <span class="s2">&quot;grant_type=password&quot;</span> <span class="se">\</span>
+</span><span class="line">-d <span class="s2">&quot;client_id=3MVG9QDx8IKCsXTFM0o9aE3KfEwsZLvRt&quot;</span> <span class="se">\</span>
+</span><span class="line">-d <span class="s2">&quot;client_secret=4826278391389087694&quot;</span> <span class="se">\</span>
+</span><span class="line">-d <span class="s2">&quot;username=ryan%40ryguy.com&quot;</span> <span class="se">\</span>
+</span><span class="line">-d <span class="s2">&quot;password=_userspassword__userssecuritytoken_&quot;</span> <span class="se">\</span>
+</span><span class="line">https://login.salesforce.com/services/oauth2/token
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="json"><span class="line"><span class="p">{</span>
+</span><span class="line">  <span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="s2">&quot;https://login.salesforce.com/id/00DU0000000Io8rMAC/005U0000000hMDCIA2&quot;</span><span class="p">,</span>
+</span><span class="line">  <span class="nt">&quot;issued_at&quot;</span><span class="p">:</span><span class="s2">&quot;1316990706988&quot;</span><span class="p">,</span>
+</span><span class="line">  <span class="nt">&quot;instance_url&quot;</span><span class="p">:</span><span class="s2">&quot;https://na12.salesforce.com&quot;</span><span class="p">,</span>
+</span><span class="line">  <span class="nt">&quot;signature&quot;</span><span class="p">:</span><span class="s2">&quot;Q2KTt8Ez5dwJ4Adu6QttAhCxbEP3HyfaTUXoNI=&quot;</span><span class="p">,</span>
+</span><span class="line">  <span class="nt">&quot;access_token&quot;</span><span class="p">:</span><span class="s2">&quot;00DU0000000Io8r!AQcKbNiJPt0OCSAvxU2SBjVGP6hW0mfmKH07QiPEGIX&quot;</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<hr />
+
+<p><strong>4. Client credentials</strong></p>
+
+<p><img class="right" src="/technology/oauth-client-credential-flow.png" width="500" height="500" /></p>
+
+<ul>
+  <li>Most of the OAuth flows are for handling delegated authorization, when a resource owner grants access to an application to access her data. However, there are cases when the client itself owns the data and does not need delegated access from a resource owner, or delegated access has already been granted to the application outside of a typical OAuth flow.</li>
+  <li>Imagine a storage API, such as Google Storage or Amazon S3. You want to build a tool using one of these APIs to access the images or documents. The application needs to read and update these resources, but acting on behalf of the app itself rather than on behalf of any individual user. The application can ask the OAuth authorization server for an access token directly, without the involvement of any end user.</li>
+</ul>
+
+<p>Here is an example using Facebook API. If the client credentials are successfully authenticated, an access token is returned to the client</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">curl -d <span class="s2">&quot;grant_type=client_credentials\</span>
+</span><span class="line"><span class="s2">&amp;client_id=2016271111111117128396\</span>
+</span><span class="line"><span class="s2">&amp;client_secret=904b98aaaaaaac1c92381d2&quot;</span> <span class="se">\</span>
+</span><span class="line">https://graph.facebook.com/oauth/access_token
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>When the Access Token Expires</strong></p>
+
+<p>The Client Credentials flow typically provides a long-lived access token. The authorization server may indicate an <code>expires_in</code> time; however, the protocol does not support issuing a refresh token in response to the Client Credentials flow. Instead, the application simply asks for a new access token if the current one expires.</p>
+
+<hr />
+
 <h2 id="json-web-tokens">JSON Web Tokens</h2>
 
+<p>TBD</p>
+
 <h2 id="saml">SAML</h2>
+
+<p>TBD</p>
 
 <h1 id="cryptography">3. Cryptography</h1>
 
@@ -358,7 +836,7 @@ When the server receives this request, it builds its own version of the response
   <li><strong>Cryptographic hash functions</strong>
     <ul>
       <li>regular hash functions used in hash tables are designed to be fast, not secure</li>
-      <li>used for protecting passwords. Safe even if the password file is compromised, but at the same time, allows to verify that a user’s password is correct.</li>
+      <li>used for protecting passwords. Safe even if the password file is compromised, but at the same time, allows to verify that a user’’ password is correct.</li>
       <li>example: SHA256, SHA512, RipeMD, and WHIRLPOOL</li>
     </ul>
   </li>
@@ -415,7 +893,7 @@ When the server receives this request, it builds its own version of the response
       <li>Cons
         <ul>
           <li>creates interoperability problems</li>
-          <li>makes the hashes less secure, if the hacker gets hold of the open source code (<a href="https://en.wikipedia.org/wiki/Kerckhoffs%27s_principle">Kerckhoffs’s principle</a> - <em>A cryptosystem should be secure even if everything about the system, except the key, is public knowledge</em>)</li>
+          <li>makes the hashes less secure, if the hacker gets hold of the open source code (<a href="https://en.wikipedia.org/wiki/Kerckhoffs%27s_principle">Kerckhoffs’’ principle</a> - <em>A cryptosystem should be secure even if everything about the system, except the key, is public knowledge</em>)</li>
         </ul>
       </li>
       <li>If needed, use a ‘wacky’ function like HMAC (Hash-based Message Authentication Code).</li>
@@ -468,13 +946,14 @@ When the server receives this request, it builds its own version of the response
 
 <p>Apache Shiro enables a Session programming paradigm for any application - from small daemon standalone applications to the largest clustered web applications. This means that application developers who wish to use sessions are no longer forced to use Servlet or EJB containers if they don’t need them otherwise.</p>
 
-<h1 id="bibliography">Bibliography</h1>
+<h1 id="references">References</h1>
 
 <ul>
   <li>Books
     <ul>
       <li>RESTful Java with JAX-RS - Chapter 12 - Securing JAX-RS</li>
       <li>REST in practice - Chapter 9 - Web Security</li>
+      <li>O’Reilly Getting Started with OAuth 2.0</li>
     </ul>
   </li>
   <li>Links
@@ -482,6 +961,7 @@ When the server receives this request, it builds its own version of the response
       <li><a href="http://www.infoq.com/articles/apache-shiro">Application Security With Apache Shiro</a></li>
       <li>Java EE Security - http://docs.oracle.com/javaee/6/tutorial/doc/gijrp.html</li>
       <li>Encyclopedia of Security - http://www.microsoft.com/mspress/books/sampchap/6429.aspx</li>
+      <li>OAuth Roles - http://tutorials.jenkov.com/oauth2/roles.html</li>
     </ul>
   </li>
 </ul>

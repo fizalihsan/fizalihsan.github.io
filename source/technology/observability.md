@@ -12,6 +12,8 @@ footer: true
 > Monitoring is the action of observing and checking the behavior and outputs of a system and its components over time.
 > Monitoring doesn't _fix_ anything. You need to fix things after they break.
 
+{% img /technology/Monitoring.png %}
+
 # Overview
 
 Monitoring != Logging != Tracing != Instrumentation

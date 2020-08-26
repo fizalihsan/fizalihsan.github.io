@@ -1,0 +1,440 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Backend for Frontend - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Backend for Frontend Overview Characteristics Why BFF? Downsides of BFF BFF vs. API Gateway BFF vs. GraphQL References Overview Characteristics The &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/bff.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Backend for Frontend</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#overview" id="markdown-toc-overview">Overview</a>    <ul>
+      <li><a href="#characteristics" id="markdown-toc-characteristics">Characteristics</a></li>
+      <li><a href="#why-bff" id="markdown-toc-why-bff">Why BFF?</a></li>
+      <li><a href="#downsides-of-bff" id="markdown-toc-downsides-of-bff">Downsides of BFF</a></li>
+      <li><a href="#bff-vs-api-gateway" id="markdown-toc-bff-vs-api-gateway">BFF vs. API Gateway</a></li>
+      <li><a href="#bff-vs-graphql" id="markdown-toc-bff-vs-graphql">BFF vs. GraphQL</a></li>
+    </ul>
+  </li>
+  <li><a href="#references" id="markdown-toc-references">References</a></li>
+</ul>
+
+<h1 id="overview">Overview</h1>
+
+<h2 id="characteristics">Characteristics</h2>
+
+<ul>
+  <li>The defining characteristics of a BFF are
+    <ul>
+      <li>the API used by a client application is part of said application,</li>
+      <li>owned by the same team that owns it,</li>
+      <li>and it is not meant to be used by any other applications or clients.</li>
+    </ul>
+  </li>
+  <li>The BFF is tightly coupled to a specific user-experience or an application.</li>
+  <li>BFF isn’t an API used by the application, but it is part of the application.</li>
+</ul>
+
+<h2 id="why-bff">Why BFF?</h2>
+
+<ul>
+  <li>easier to define and adapt the API as the UI requires.</li>
+  <li>simplifies the process of lining up release of both the client and server components.</li>
+  <li>backends tend to live longer than the UI. With a general purpose API, you may have to keep older versions of API or endpoints around just to satisfy a small subset of experiences.</li>
+  <li>aggregate data from multiple downstream services - especially when the team building the UI is different than the downstream services.</li>
+  <li>handle failures elegantly and partial failures.</li>
+  <li>allows the app team to optimize the API (BFF) specific to their use cases
+    <ul>
+      <li><em>API payload</em> - e.g., Android team can use Protocol Buffers instead of JSON for their API payload.</li>
+      <li><em>RPC flavor</em> - allows the app team to use any flavor of RPC like REST, gRPC, GraphQL, SOAP or any other combination of wire protocol or architecture style.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="downsides-of-bff">Downsides of BFF</h2>
+
+<ul>
+  <li>multiple API layers can potentially add latency</li>
+  <li>duplication of code between the BFFs which can lead to accidental divergences between experiences. e.g., same type of aggregation of downstream services, same or similar code for interfacing with downstream services.
+    <ul>
+      <li><strong>Counter Arguments</strong>
+        <ul>
+          <li>duplication in such cases are better than creating a general purpose Edge API with highly bloated code with multiple concerns squashed together.</li>
+          <li>duplication in such cases are better than tightly coupling multiple experiences to the services which increases the cost of testing and release.</li>
+        </ul>
+      </li>
+      <li><strong>Alternatives</strong>
+        <ul>
+          <li>cheapest option is to extract shared code and create a shared library. However, shared libraries are a prime source of coupling. <strong><em>AVOID THIS</em></strong></li>
+          <li>extract shared code and create a new service</li>
+          <li>using GraphQL</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="bff-vs-api-gateway">BFF vs. API Gateway</h2>
+
+<ul>
+  <li>A BFF is a single-purpose API for a specific type of client or user-experience</li>
+  <li>API Gateway is general-purpose - it acts as an abstraction/aggregation layer for multiple clients. Implement an API gateway that is the single entry point for all clients.</li>
+</ul>
+
+<h2 id="bff-vs-graphql">BFF vs. GraphQL</h2>
+
+<ul>
+  <li>these 2 are related but not mutually exclusive technologies</li>
+  <li>you can build your GraphQL APIs as many BFFs or as an OSFA (one-size-fits-all) API</li>
+  <li>BFFs are not about the shape of your endpoints - but about giving your client applications autonomy</li>
+  <li>GraphQL literature insists that this new technology gives so much freedom to the client by allowing them to perform ad-hoc queries that you can safely have a single OSFA API without the drawbacks from REST-based approaches. However, it is hard to believe that you can combine the needs of many different applications, owned by different teams, with different users and use cases in a single schema (also called ‘<strong>schema stitching</strong>’).</li>
+  <li>invest in RESTful BFFs, keep their APIs separate, and migrate them to GraphQL - instead of trying to jump to an OSFA GraphQL API.</li>
+</ul>
+
+<h1 id="references">References</h1>
+
+<ul>
+  <li>BFF overview - https://samnewman.io/patterns/architectural/bff/</li>
+  <li>GraphQL vs. BFF - https://philcalcado.com/2019/07/12/some_thoughts_graphql_bff.html</li>
+  <li>Schema stitching 101 - https://artsy.github.io/blog/2018/12/11/GraphQL-Stitching/</li>
+</ul>
+
+  
+    <footer>
+      
+      
+        <div class="sharing">
+  
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/bff.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/bff.html" >Tweet</a>
+  
+  
+  
+</div>
+
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  
+			<a href="/technology/coding-principles.html">Coding Principles</a> |	
+			<a href="/technology/ddd.html">DDD</a>  |  
+			<a href="/technology/design-principles.html">Design Principles</a>  |
+			<a href="/technology/eventsourcing.html">Event Sourcing</a> |  
+			<a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  
+			<a href="/technology/observability.html">Observability</a>  |  
+			<a href="/technology/operations.html">Operations</a> |
+			<a href="/technology/patterns.html">Patterns</a>|  
+			<a href="/technology/sdlc.html">SDLC</a> |  
+			<a href="/technology/scalability.html">Scalability</a>  |  
+			<a href="/technology/security.html">Security</a>  |  
+			<a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  
+			<a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  
+			<a href="/technology/elasticsearch.html">ElasticSearch</a>  |  
+			<a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  
+			<a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  |  
+			<a href="/technology/nosql.html">NoSQL</a>  |  
+			<a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  
+			<a href="/technology/aws.html">AWS</a>  |  
+			<a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>  |  
+			<a href="/technology/virtualization.html">Virtualization</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  
+			<a href="/technology/db-design.html">Design</a>  |  
+			<a href="/technology/db-performance.html">Performance</a>  |  
+			<a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  
+			<a href="/technology/java-collections.html">Collections</a>  |  
+			<a href="/technology/java-concurrency.html">Concurrency</a>  |  
+			<a href="/technology/java-database.html">Database</a>  |  
+			<a href="/technology/java-jmx.html">JMX</a>  |  
+			<a href="/technology/java-jndi.html">JNDI</a>  |  
+			<a href="/technology/java-io.html">I/O</a>  |  
+			<a href="/technology/java-performance.html">Performance</a>  |  
+			<a href="/technology/java-testing.html">Testing</a>  |  
+			<a href="/technology/java-web.html">Web</a>  |  
+			<a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  
+			<a href="/technology/python.html">Python</a>  |  
+			<a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>Integration</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  
+			<a href="/technology/bff.html">BFF</a> |
+			<a href="/technology/camel.html">Camel</a>  |  
+			<a href="/technology/graphql.html">GraphQL</a>  |  
+			<a href="/technology/messaging.html">Messaging</a> |  
+			<a href="/technology/microservices.html">Microservices</a>   |  
+			<a href="/technology/rest-services.html">REST</a>  | 
+			<a href="/technology/soap-services.html">SOAP</a>  |  
+			<a href="/technology/webservices.html">Web Services</a> |  
+			<a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  
+			<a href="/technology/spring.html">Core</a>  |  
+			<a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> |
+			<a href="/technology/webanalytics.html">Analytics</a> |
+			<a href="/technology/angular.html">Angular</a> | 
+			<a href="/technology/webapp_architecture.html">Architecture</a> | 
+			<a href="/technology/js-ecosystem.html">JS Ecosystem</a> |
+			<a href="/technology/microfrontend.html">Micro-Frontend</a> |
+			<a href="/technology/web_security.html">Security</a> |
+			<a href="/technology/ux.html">UX</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  
+			<a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  
+			<a href="/technology/datastructures.html">Data Structures</a>  |  
+			<a href="/technology/design-faqs.html">Design FAQs</a>  |  
+			<a href="/technology/networking.html">Networking</a>  |  
+			<a href="/technology/oops.html">OOPS</a>  |  
+			<a href="/technology/os.html">Operating Systems</a>  |  
+			<a href="/technology/vcs.html">VCS</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+		<li>
+			<a href="/misc/okr.html">OKR</a>
+		</li>
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  
+			<a href="/softskills/productivity.html">Productivity</a>  |  
+			<a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2020 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

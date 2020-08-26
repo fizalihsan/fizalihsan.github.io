@@ -147,8 +147,9 @@ Managing of the certificates is painful. The server must create a unique certifi
 
 ## OpenID
 
-- OpenID is the most common open web protocol for handling federated authentication or federated identity.
-- OpenID Connect is the next-generation version of OpenID based on OAuth 2.0.
+- __OpenID__ is the most common open web protocol for handling federated authentication or federated identity.
+- __OpenID Connect__ is the next-generation version of OpenID based on OAuth 2.0.
+- Few other identity protocols: SAML, WS-Federation, WS-Trust, SCIM, etc.
 
 __What is Federated Authentication?__
 

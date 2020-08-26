@@ -55,6 +55,7 @@ footer: true
 
   * SOA
     * [Concepts]({{ root_url }}/technology/soa.html)
+    * [BFF]({{ root_url }}/technology/bff.html)
     * [Camel]({{ root_url }}/technology/camel.html)
     * [GraphQL]({{ root_url }}/technology/graphql.html)
     * [Messaging]({{ root_url }}/technology/messaging.html)

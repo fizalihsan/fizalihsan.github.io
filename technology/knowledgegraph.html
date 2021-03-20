@@ -5,11 +5,12 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Micro Frontend - KnowledgeShop</title>
+  <title>Knowledge Graph - KnowledgeShop</title>
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Micro Frontend Micro FrontEnds Advantages of Micro Frontends Challenges in Micro Frontends Design Domain Modeling (DDD) Design Considerations 1. &hellip;">
+<meta name="description" content="Knowledge Graph References What is a Knowledge Graph? In Logic Programming, KG is logically consistent collection of facts In 1
+Data Integration + &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +19,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://fizalihsan.github.io/technology/microfrontend.html">
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/knowledgegraph.html">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <!-- Below custom CSS is for table border styling -->
@@ -103,193 +104,124 @@ messageStyle: "none",
 <article role="article">
   
   <header>
-    <h1 class="entry-title">Micro Frontend</h1>
+    <h1 class="entry-title">Knowledge Graph</h1>
     
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#micro-frontends" id="markdown-toc-micro-frontends">Micro FrontEnds</a>    <ul>
-      <li><a href="#advantages-of-micro-frontends" id="markdown-toc-advantages-of-micro-frontends">Advantages of Micro Frontends</a></li>
-      <li><a href="#challenges-in-micro-frontends" id="markdown-toc-challenges-in-micro-frontends">Challenges in Micro Frontends</a></li>
-      <li><a href="#design" id="markdown-toc-design">Design</a>        <ul>
-          <li><a href="#domain-modeling-ddd" id="markdown-toc-domain-modeling-ddd">Domain Modeling (DDD)</a></li>
-          <li><a href="#design-considerations" id="markdown-toc-design-considerations">Design Considerations</a>            <ul>
-              <li><a href="#definition" id="markdown-toc-definition">1.Definition</a></li>
-              <li><a href="#composition" id="markdown-toc-composition">2.Composition</a></li>
-              <li><a href="#routing" id="markdown-toc-routing">3.Routing</a></li>
-              <li><a href="#communication" id="markdown-toc-communication">4.Communication</a></li>
-            </ul>
-          </li>
+  <li><a href="#references" id="markdown-toc-references">References</a></li>
+</ul>
+
+<ul>
+  <li>What is a Knowledge Graph?
+    <ul>
+      <li>In Logic Programming, KG is logically consistent collection of facts</li>
+      <li>In</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">Data Integration + Concepts AND Relationships are first class citizens = Linked Data and Metadata encoded in a Graph</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">Ontology + Instance Data = Knowledge Graph</span></code></pre></td></tr></table></div></figure></notextile></div>
+<ul>
+  <li>Glossary
+    <ul>
+      <li>Taxonomy
+        <ul>
+          <li>Taxonomy is hierarchical</li>
+          <li>Multi-lingual taxonomy is used for searching data in English within documents that are in non-English</li>
+        </ul>
+      </li>
+      <li>Ontology</li>
+    </ul>
+  </li>
+  <li>What is in a Knowledge Graph?
+    <ul>
+      <li>A semantic graph database (scalable, secure, acid)</li>
+      <li>Ontologies and taxonomies</li>
+      <li>Reasoning and rule based processing</li>
+      <li>Smart integration of silos of information</li>
+      <li>Machine Learning and Advanced Analytics</li>
+      <li>Natural Language Processing and Text classification</li>
+    </ul>
+  </li>
+  <li>Types of KG
+    <ul>
+      <li>Document/text based KG</li>
+      <li>Entity/Event bsaed KG</li>
+    </ul>
+  </li>
+  <li>Representations of KG
+    <ul>
+      <li>Symbolic representation - <code>s,p,o</code> (triplet), <code>p (s,o)</code>, <code>(s,p,o)</code>
+        <ul>
+          <li><code>s</code> = subject, <code>p</code> = predicate, <code>o</code> = object</li>
+          <li>used in logical inference systems, DB and DB integration systems</li>
+        </ul>
+      </li>
+      <li>Vector representation - <code>s,p,o ε </code>
+        <ul>
+          <li>used in NLP</li>
         </ul>
       </li>
     </ul>
   </li>
-  <li><a href="#implementation" id="markdown-toc-implementation">Implementation</a>    <ul>
-      <li><a href="#types-of-implementation" id="markdown-toc-types-of-implementation">Types of Implementation</a></li>
-    </ul>
-  </li>
-</ul>
-
-<ul>
-  <li>Web architecture types
+  <li>Methodologies
     <ul>
-      <li>Micro frontends</li>
-      <li>Isomorphic apps (SSR)</li>
-      <li>PWA apps</li>
-      <li>Web assembly</li>
+      <li>Creata Data/Execute Queries
+        <ul>
+          <li>there are 2 approaches: Materialization (ETL) and Virtualization (No ETL)</li>
+          <li><strong>Materialization</strong>: Create an ETL job to extract the source data from RDBMS, apply the mapping defined, then transform and load it to a graph DB.</li>
+          <li><strong>Virtualization</strong>: Take SPARQL queries as input, apply the mapping logic and convert it into a SQL to extract the data. The results are then stored in a graph DB.</li>
+        </ul>
+      </li>
     </ul>
   </li>
-</ul>
-
-<h1 id="micro-frontends">Micro FrontEnds</h1>
-
-<blockquote>
-  <p>Micro Frontends are the technical representation of a business sub-domain, they allow independent implementations with same or different technology choices, finally they avoid sharing logic with other sub-domains and they are owned by a single team.</p>
-</blockquote>
-
-<p><img class="right" src="/technology/microfrontends.png" width="300" height="300" /></p>
-
-<h3 id="advantages-of-micro-frontends">Advantages of Micro Frontends</h3>
-
-<ul>
-  <li>Ease of innovation</li>
-  <li>Easy to manage</li>
-  <li>Easy to upgrade to new component or technology</li>
-  <li>Ease of deployment due to lack of inter-dependency</li>
-  <li>Quick time to market</li>
-  <li>Technology independence across frontends (but don’t do this)</li>
-  <li>Each team has clear ownership</li>
-  <li>Promotes Domain-Driven Design</li>
-</ul>
-
-<h3 id="challenges-in-micro-frontends">Challenges in Micro Frontends</h3>
-
-<ul>
-  <li>first call takes a long time</li>
-  <li>
-    <p>difficult to be indexed by search engines, crawlers, etc.</p>
-  </li>
-  <li>Share nothing across front ends e.g., CSS stylesheets</li>
-  <li>Diamond anti-pattern
+  <li>Tools
     <ul>
-      <li>Webcomponents.org</li>
-      <li>Polymer-lit</li>
-      <li>Stencil js</li>
-      <li>Skate js (Netlify)</li>
+      <li>Data modelling: RDF, RDFS, OWL?</li>
+      <li>Query language: SPARQL</li>
+      <li>Ontologies
+        <ul>
+          <li><a href="https://schema.org">schema.org</a> - universal graph labels, 31% of the internet uses this</li>
+          <li>Good Relations, FIBO, Gist</li>
+          <li><a href="http://vowl.visualdataweb.org">VOWL</a>: Visual Notation for OWL Ontologies</li>
+          <li><a href="http://vowl.visualdataweb.org/webvowl.html">WebVOWL</a> - Web-based visualization of Ontologies</li>
+          <li><a href="https://protege.stanford.edu">Protégé</a> - Free, open-source Ontology editor - has VOWL plugin</li>
+        </ul>
+      </li>
+      <li>Mapping from RDBMS to RDF graphs: R2RML</li>
+      <li>Visualization - <a href="https://gra.fo">Grafo</a></li>
     </ul>
   </li>
-  <li>Module loader - SystemJS</li>
-  <li><a href="http://opencomponents.github.io">Open Table</a></li>
-</ul>
-
-<h2 id="design">Design</h2>
-
-<h3 id="domain-modeling-ddd">Domain Modeling (DDD)</h3>
-
-<ul>
-  <li>Domains</li>
-  <li>Sub-domains
+  <li>Examples of public data sources using KG
     <ul>
-      <li>Core subdomain e.g., core business function like video streaming for Netflix</li>
-      <li>Generic subdomain e.g., payment processing</li>
-      <li>Supportive subdomain e.g., recommendation engine</li>
+      <li>Wikidata</li>
+      <li>Datacommons.org - Knowledge browser,</li>
+      <li>Library of Congress</li>
+      <li>data.gov</li>
+      <li>census.gov</li>
+      <li>NOAA</li>
+      <li><a href="https://lod-cloud.net">The Linked Open Data Cloud</a></li>
+      <li><a href="https://data.world">data.world</a> - is a cloud-native enterprise data catalog, with data virtualization/federation, build on Knowledge Graph</li>
     </ul>
   </li>
-  <li>A team can own more than one subdomain</li>
 </ul>
 
-<h3 id="design-considerations">Design Considerations</h3>
-
-<p>4 things to consider in µFE architecture</p>
-
-<h4 id="definition">1.Definition</h4>
+<h1 id="references">References</h1>
 
 <ul>
-  <li>Use <em>APIs First Design Principle</em>
+  <li>Videos - Knowledge Graph Seminar Session from Stanford 2020
     <ul>
-      <li>APIs are the first user interface of your app</li>
-      <li>APIs come first, then the implementation</li>
+      <li><a href="https://www.youtube.com/watch?v=bvwjG-3qAmY&amp;ab_channel=VinayKChaudhri">Session 1</a>, <a href="https://www.youtube.com/watch?v=ZWM-Dlw3VCM">Session 2</a>, <a href="https://www.youtube.com/watch?v=5RXVorAglVc">Session 3</a></li>
     </ul>
   </li>
-</ul>
-
-<h4 id="composition">2.Composition</h4>
-
-<ul>
-  <li>Client-side composition</li>
-  <li>Edge-side composition</li>
-  <li>Server-side composition</li>
-</ul>
-
-<h4 id="routing">3.Routing</h4>
-
-<ul>
-  <li>Router is responsible for intercepting and validate JWTs before redirecting to a µFE page</li>
-</ul>
-
-<h4 id="communication">4.Communication</h4>
-
-<p><img class="right" src="/technology/microfrontend_window_comm.png" width="300" height="300" /></p>
-
-<ul>
-  <li>e.g., window object or redux</li>
-  <li>Window object is the centralized place where all the components in the page can access the data from. Kind of follows the <a href="https://redux.js.org/basics/data-flow/">Redux data flow pattern</a>.</li>
-  <li>Having a global object/variable in window object is against the µFE encapsulation?</li>
-</ul>
-
-<h1 id="implementation">Implementation</h1>
-
-<p>There are 3 things essential for any micro frontend application or framework.</p>
-
-<ul>
-  <li>Load component scripts onto the page e.g., ScriptJS, <a href="https://github.com/systemjs/systemjs">SystemJS</a> (module/component loader)
-    <ul>
-      <li>Single SPA is layered on SystemJS</li>
-    </ul>
-  </li>
-  <li>Instantiate the components and place them in the DOM. e.g., <a href="https://single-spa.js.org/">SingleSPA</a></li>
-  <li>Communication of data between the components
-    <ul>
-      <li>SingleSPA leaves it up to you</li>
-    </ul>
-  </li>
-</ul>
-
-<h2 id="types-of-implementation">Types of Implementation</h2>
-
-<ul>
-  <li><strong>iFrames</strong> - <em>used by Spotify</em></li>
-  <li><strong>Shell as proxy</strong>
-    <ul>
-      <li>Common logic like auth can be shared in shell</li>
-    </ul>
-  </li>
-  <li><strong>Web Components</strong> - Polymer</li>
-  <li>Bootstrap</li>
-  <li><a href="http://opencomponents.github.io">Open Components</a> - <em>used by <a href="https://opentable.com">OpenTable</a></em></li>
-  <li>Interface Framework - <em>Zalando uses mosaic9, tailor.js</em></li>
-  <li>
-    <p>Edge Side Include (ESI) - <em>used by IKEA</em></p>
-  </li>
-  <li>Reverse proxy
-    <ul>
-      <li>Auth logic must be duplicated in multiple places since Nginx can’t have business logic</li>
-    </ul>
-  </li>
-  <li>Using API gateway
-    <ul>
-      <li>e.g., Ambassador</li>
-    </ul>
-  </li>
-  <li><strong>Micro frontend ownership</strong>: a team must do all the below: develop, test, build, deploy, document, live-support</li>
-</ul>
-
-<p><strong>Open Questions</strong></p>
-
-<ul>
-  <li>how authentication works? how session management is handled?</li>
-  <li>how communication between µFEs work?</li>
-  <li>how multiple µFEs are integrated to form an app? build time or runtime?</li>
+  <li><a href="https://knowledgegraph.today">History of Knowledge Graphs</a></li>
+  <li>https://www.dagstuhl.de/18371</li>
+  <li>https://arxiv.org/abs/2003.02320</li>
 </ul>
 
   

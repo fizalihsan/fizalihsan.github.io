@@ -26,6 +26,7 @@ footer: true
     * [ElasticSearch]({{ root_url }}/technology/elasticsearch.html)
     * [Frameworks]({{ root_url }}/technology/bigdata-frameworks.html)
     * [Hadoop Ecosystem]({{ root_url }}/technology/hadoop-ecosystem.html)
+    * [Knowledge Graph]({{ root_url }}/technology/knowledgegraph.html)
     * [NoSQL]({{ root_url }}/technology/nosql.html)
     * [Parallel Computing]({{ root_url }}/technology/concurrency-parallelism.html)
 

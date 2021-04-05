@@ -1,0 +1,1246 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Service Mesh - KnowledgeShop</title>
+  <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
+
+
+<meta name="description" content="Service Mesh Introduction Traffic Control Service Resiliency Load Balancing Timeout Retry Circuit Breaker Pool Ejection Circuit Breaker + Pool &hellip;">
+<meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/servicemesh.html">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <!-- Below custom CSS is for table border styling -->
+  <link href="/stylesheets/data-table.css" media="screen, projection" rel="stylesheet" type="text/css" />
+
+  <link href="" rel="alternate" title="KnowledgeShop" type="application/atom+xml">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>!window.jQuery && document.write(unescape('%3Cscript src="./javascripts/libs/jquery.min.js"%3E%3C/script%3E'))</script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="//fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="//fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+
+<!-- mathjax config similar to math.stackexchange -->
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+jax: ["input/TeX", "output/HTML-CSS"],
+tex2jax: {
+  inlineMath: [ ['$', '$'], ["\\(","\\)"] ],
+  displayMath: [ ['$$', '$$'], ["\\[","\\]"] ],
+  processEscapes: true,
+  skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+},
+messageStyle: "none",
+"HTML-CSS": { preferredFont: "TeX", availableFonts: ["STIX","TeX"] }
+});
+</script>
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML" type="text/javascript" /></script>
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-58187831-1']);
+    _gaq.push(['_setDomainName','github.io']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">KnowledgeShop</a></h1>
+  
+    <h2>Learn & Share</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="https://www.google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:fizalihsan.github.io" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+
+
+<ul class="main-navigation">
+  <li><a href="/">Home</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article role="article">
+  
+  <header>
+    <h1 class="entry-title">Service Mesh</h1>
+    
+  </header>
+  
+  <ul id="markdown-toc">
+  <li><a href="#introduction" id="markdown-toc-introduction">Introduction</a></li>
+  <li><a href="#traffic-control" id="markdown-toc-traffic-control">Traffic Control</a></li>
+  <li><a href="#service-resiliency" id="markdown-toc-service-resiliency">Service Resiliency</a>    <ul>
+      <li><a href="#load-balancing" id="markdown-toc-load-balancing">Load Balancing</a></li>
+      <li><a href="#timeout" id="markdown-toc-timeout">Timeout</a></li>
+      <li><a href="#retry" id="markdown-toc-retry">Retry</a></li>
+      <li><a href="#circuit-breaker" id="markdown-toc-circuit-breaker">Circuit Breaker</a></li>
+      <li><a href="#pool-ejection" id="markdown-toc-pool-ejection">Pool Ejection</a></li>
+      <li><a href="#circuit-breaker--pool-ejection--retry" id="markdown-toc-circuit-breaker--pool-ejection--retry">Circuit Breaker + Pool Ejection + Retry</a></li>
+    </ul>
+  </li>
+  <li><a href="#chaos-testing" id="markdown-toc-chaos-testing">Chaos Testing</a></li>
+  <li><a href="#observability" id="markdown-toc-observability">Observability</a></li>
+  <li><a href="#security" id="markdown-toc-security">Security</a>    <ul>
+      <li><a href="#mtls" id="markdown-toc-mtls">mTLS</a></li>
+      <li><a href="#mixer-policy" id="markdown-toc-mixer-policy">Mixer Policy</a></li>
+      <li><a href="#rbac" id="markdown-toc-rbac">RBAC</a></li>
+    </ul>
+  </li>
+  <li><a href="#references" id="markdown-toc-references">References</a></li>
+</ul>
+
+<h1 id="introduction">Introduction</h1>
+
+<p>Service Mesh’s mission is to enable cross-cutting concerns across a series of microservices that make up the overall application, ensuring some level of consistency across all these independent services.</p>
+
+<p>A service mesh is the connective tissue between your services that adds additional capabilities like traffic control, service discovery, load balancing, resilience, observability, security, and so on.</p>
+
+<p>Istio provides developers and architects with vastly richer and declarative service discovery and routing capabilities. Where Kubernetes/OpenShift itself gives you default round-robin load balancing behind its service construct, Istio allows you to introduce unique and finely grained routing rules among all services within the mesh.</p>
+
+<p>With the sidecar istio-proxy in place, you are applying these capabilities at the network level between the services that comprise the application.</p>
+
+<p><img src="/technology/servicemesh.png" /></p>
+
+<p><strong>Data Plane</strong></p>
+
+<p>The data plane is implemented in such a way that it intercepts all inbound (ingress) and outbound (egress) network traffic. Your business logic, your app, your microservice is blissfully unaware of this fact.</p>
+
+<p><img src="/technology/envoy.png" /></p>
+
+<p><strong>Service Proxy</strong></p>
+
+<p>A service proxy augments an application service. The application service calls through the service proxy any time it needs to communicate over the network. The service proxy acts as an intermediary or interceptor that can add capabilities like automatic retries, circuit breaker, service discovery, security, and more. The default service proxy for Istio is based on Envoy proxy.</p>
+
+<p>Envoy proxy is a layer 7 (L7) proxy (OSI Network Layer).</p>
+
+<p>It provides features like load balancing for HTTP1.1, HTTP2, and gRPC. It has the ability to collect request-level metrics, trace spans, provide for service discovery, inject faults, and much more. You might notice that some of the capabilities of Istio overlap with Envoy. This fact is simply explained as Istio uses Envoy for its implementation of these capabilities.</p>
+
+<p>Istio brings the service proxy capabilities as close as possible to the application code through a deployment technique known as the sidecar.</p>
+
+<p><strong>Sidecar</strong></p>
+
+<p>With Istio, a second Linux container called “istio-proxy” (aka the Envoy service proxy) is manually or automatically injected into the pod that houses your application or microservice. This sidecar is responsible for intercepting all inbound (ingress) and outbound (egress) network traffic from your business logic container, which means new policies can be applied that reroute the traffic (in or out), perhaps apply policies such as access control lists (ACLs) or rate limits, also snatch monitoring and tracing data (Mixer), and even introduce a little chaos such as network delays or HTTP errors.</p>
+
+<p><strong>Control Plane</strong></p>
+
+<p>The control plane is responsible for being the authoritative source for configuration and policy and making the data plane usable in a cluster potentially consisting of hundreds of pods scattered across a number of nodes. Istio’s control plane comprises three primary Istio services: Pilot, Mixer, and Citadel.</p>
+
+<ul>
+  <li><strong>PILOT</strong>
+    <ul>
+      <li>The Pilot is responsible for managing the overall fleet—all of your microservices’ sidecars running across your Kubernetes/OpenShift cluster.</li>
+      <li>The Istio Pilot ensures that each of the independent microservices, wrapped as individual Linux containers and running inside their pods, has the current view of the overall topology and an up-to-date “routing table.”</li>
+      <li>Pilot provides capabilities like service discovery as well as support for VirtualService. The VirtualService is what gives you fine-grained request distribution, retries, timeouts, etc.</li>
+    </ul>
+  </li>
+  <li><strong>MIXER</strong>:
+    <ul>
+      <li>is the Istio service that brings things together.</li>
+      <li>Each of the distributed istio proxies delivers its telemetry back to Mixer. Mixer maintains the canonical model of the usage and access policies for the overall suite of microservices.</li>
+      <li>With Mixer, you can create policies, apply rate-limiting rules, and even capture custom metrics.</li>
+    </ul>
+  </li>
+  <li><strong>CITADEL</strong>
+    <ul>
+      <li>The Istio Citadel component, formerly known as Istio CA or Auth, is responsible for certificate signing, certificate issuance, and revocation/rotation.</li>
+      <li>Istio issues X.509 certificates to all your microservices, allowing for mutual Transport Layer Security (mTLS) between those services, encrypting all their traffic transparently. It uses identity built into the underlying deployment platform and builds that into the certificates. This identity allows you to enforce policy.</li>
+    </ul>
+  </li>
+</ul>
+
+<h1 id="traffic-control">Traffic Control</h1>
+
+<p>Each application instance has its own dedicated proxy through which all network traffic travels before it gets to the application. These sidecar proxies can be individually configured to route, filter, and augment network traffic as needed.</p>
+
+<p>With Istio, you can specify routing rules that control the traffic to a set of pods. Specifically, Istio uses <code>DestinationRule</code> and <code>VirtualService</code> resources to describe these rules.</p>
+
+<p>The routing behavior just described is not just for ingress traffic; that is, traffic coming into the mesh. This is for all inter-service communication within the mesh. If you have a service deployed to Kubernetes that’s not part of the service mesh, it will not see these rules and will adhere to the default Kubernetes load-balancing rules.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Destination Rule</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+</pre></td><td class="code"><pre><code class="yaml"><span class="line"><span class="l-Scalar-Plain">apiVersion</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">networking.istio.io/v1alpha3</span>
+</span><span class="line"><span class="l-Scalar-Plain">kind</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">DestinationRule</span>
+</span><span class="line"><span class="l-Scalar-Plain">metadata</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">  <span class="l-Scalar-Plain">namespace</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">tutorial</span>
+</span><span class="line"><span class="l-Scalar-Plain">spec</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">  <span class="l-Scalar-Plain">subsets</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">labels</span><span class="p-Indicator">:</span>
+</span><span class="line">      <span class="l-Scalar-Plain">version</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">v1</span>
+</span><span class="line">    <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">version-v1</span>
+</span><span class="line">  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">labels</span><span class="p-Indicator">:</span>
+</span><span class="line">      <span class="l-Scalar-Plain">version</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">v2</span>
+</span><span class="line">    <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">version-v2</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Virtual Service</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+</pre></td><td class="code"><pre><code class="yaml"><span class="line"><span class="l-Scalar-Plain">apiVersion</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">networking.istio.io/v1alpha3</span>
+</span><span class="line"><span class="l-Scalar-Plain">kind</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">VirtualService</span>
+</span><span class="line"><span class="l-Scalar-Plain">metadata</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">  <span class="l-Scalar-Plain">namespace</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">tutorial</span>
+</span><span class="line"><span class="l-Scalar-Plain">spec</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">hosts</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">  <span class="l-Scalar-Plain">http</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">route</span><span class="p-Indicator">:</span>
+</span><span class="line">    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">destination</span><span class="p-Indicator">:</span>
+</span><span class="line">        <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">        <span class="l-Scalar-Plain">subset</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">version-v1</span>
+</span><span class="line">      <span class="l-Scalar-Plain">weight</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">100</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Routing Based on Headers</strong></p>
+
+<p>You also can use Istio to do routing based on request-level metadata. For example, you can use matching predicates to set up specific route rules based on requests that match a specified set of criteria. For example, you might want to split traffic to a particular service based on geography, mobile device, or browser. Let’s see how to do that with Istio.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+</pre></td><td class="code"><pre><code class="yaml"><span class="line"><span class="l-Scalar-Plain">apiVersion</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">networking.istio.io/v1alpha3</span>
+</span><span class="line"><span class="l-Scalar-Plain">kind</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">VirtualService</span>
+</span><span class="line"><span class="l-Scalar-Plain">metadata</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">creationTimestamp</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">null</span>
+</span><span class="line">  <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">  <span class="l-Scalar-Plain">namespace</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">tutorial</span>
+</span><span class="line"><span class="l-Scalar-Plain">spec</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">hosts</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">  <span class="l-Scalar-Plain">http</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">match</span><span class="p-Indicator">:</span>
+</span><span class="line">    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">headers</span><span class="p-Indicator">:</span>
+</span><span class="line">        <span class="l-Scalar-Plain">baggage-user-agent</span><span class="p-Indicator">:</span>
+</span><span class="line">          <span class="l-Scalar-Plain">regex</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">.*Safari.*</span>
+</span><span class="line">    <span class="l-Scalar-Plain">route</span><span class="p-Indicator">:</span>
+</span><span class="line">    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">destination</span><span class="p-Indicator">:</span>
+</span><span class="line">        <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">        <span class="l-Scalar-Plain">subset</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">version-v2</span>
+</span><span class="line">  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">route</span><span class="p-Indicator">:</span>
+</span><span class="line">    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">destination</span><span class="p-Indicator">:</span>
+</span><span class="line">        <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">        <span class="l-Scalar-Plain">subset</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">version-v1</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Canary Releases</strong></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Canary</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+</pre></td><td class="code"><pre><code class="yaml"><span class="line"><span class="l-Scalar-Plain">apiVersion</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">networking.istio.io/v1alpha3</span>
+</span><span class="line"><span class="l-Scalar-Plain">kind</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">VirtualService</span>
+</span><span class="line"><span class="l-Scalar-Plain">metadata</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">  <span class="l-Scalar-Plain">namespace</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">tutorial</span>
+</span><span class="line"><span class="l-Scalar-Plain">spec</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">hosts</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">  <span class="l-Scalar-Plain">http</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">route</span><span class="p-Indicator">:</span>
+</span><span class="line">    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">destination</span><span class="p-Indicator">:</span>
+</span><span class="line">        <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">        <span class="l-Scalar-Plain">subset</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">version-v1</span>
+</span><span class="line">      <span class="l-Scalar-Plain">weight</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">90</span>
+</span><span class="line">    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">destination</span><span class="p-Indicator">:</span>
+</span><span class="line">        <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">        <span class="l-Scalar-Plain">subset</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">version-v2</span>
+</span><span class="line">      <span class="l-Scalar-Plain">weight</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">10</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Dark Launch</strong></p>
+
+<p>You can use Istio to mirror traffic that goes to v1 into the v2 pod. When Istio mirrors traffic, it does so in a fire-and-forget manner. In other words, Istio will do the mirroring asynchronously from the critical path of the live traffic, send the mirrored request to the test pod, and not worry about or care about a response.</p>
+
+<p>Mirrored traffic can be used for powerful pre-release testing, but it does come with challenges. For example, a new version of a service might still need to communicate with a database or other collaborator services.</p>
+
+<p><a href="https://blog.christianposta.com/microservices/advanced-traffic-shadowing-patterns-for-microservices-with-istio-service-mesh/">Advanced Traffic-shadowing Patterns for Microservices With Istio Service Mesh</a></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+</pre></td><td class="code"><pre><code class="yaml"><span class="line"><span class="l-Scalar-Plain">apiVersion</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">networking.istio.io/v1alpha3</span>
+</span><span class="line"><span class="l-Scalar-Plain">kind</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">VirtualService</span>
+</span><span class="line"><span class="l-Scalar-Plain">metadata</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">  <span class="l-Scalar-Plain">namespace</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">tutorial</span>
+</span><span class="line"><span class="l-Scalar-Plain">spec</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">hosts</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">  <span class="l-Scalar-Plain">http</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">route</span><span class="p-Indicator">:</span>
+</span><span class="line">    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">destination</span><span class="p-Indicator">:</span>
+</span><span class="line">        <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">        <span class="l-Scalar-Plain">subset</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">version-v1</span>
+</span><span class="line">    <span class="l-Scalar-Plain">mirror</span><span class="p-Indicator">:</span>
+</span><span class="line">      <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">      <span class="l-Scalar-Plain">subset</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">version-v2</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Egress</strong></p>
+
+<p>By default, Istio directs all traffic originating in a service through the Istio proxy that’s deployed alongside the service. This proxy evaluates its routing rules and decides how best to deliver the request.</p>
+
+<p>One nice thing about the Istio service mesh is that by default it blocks all outbound (outside of the cluster) traffic unless you specifically and explicitly create rules to allow traffic out. From a security standpoint, this is crucial. You can use Istio in both zero-trust networking architectures as well as traditional perimeter-based security.</p>
+
+<p>In both cases, Istio helps protect against a nefarious agent gaining access to a single service and calling back out to a command-and-control system, thus allowing an attacker full access to the network. By blocking any outgoing access by default and allowing routing rules to control not only internal traffic but any and all outgoing traffic, you can make your security posture more resilient to outside attacks irrespective of where they originate.</p>
+
+<p>To address this issue you need to make egress to httpbin.org accessible with a <code>ServiceEntry</code>.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Service Entry</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+</pre></td><td class="code"><pre><code class="yaml"><span class="line"><span class="l-Scalar-Plain">apiVersion</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">networking.istio.io/v1alpha3</span>
+</span><span class="line"><span class="l-Scalar-Plain">kind</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ServiceEntry</span>
+</span><span class="line"><span class="l-Scalar-Plain">metadata</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">httpbin-egress-rule</span>
+</span><span class="line">  <span class="l-Scalar-Plain">namespace</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">tutorial</span>
+</span><span class="line"><span class="l-Scalar-Plain">spec</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">hosts</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">now.httpbin.org</span>
+</span><span class="line">  <span class="l-Scalar-Plain">ports</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">http-80</span>
+</span><span class="line">    <span class="l-Scalar-Plain">number</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">80</span>
+</span><span class="line">    <span class="l-Scalar-Plain">protocol</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">http</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h1 id="service-resiliency">Service Resiliency</h1>
+
+<blockquote>
+  <p>“A common mistake that people make when trying to design something completely foolproof is to underestimate the ingenuity of complete fools” - Douglas Adams, author of The Hitchhiker’s Guide to the Galaxy</p>
+</blockquote>
+
+<blockquote>
+  <p>Netflix Resiliency Libraries: Eureka (service discovery), Ribbon (load balancing), and Hystrix (circuit breaker and bulkhead)</p>
+</blockquote>
+
+<ul>
+  <li><strong>Client-side load balancing</strong> - Istio augments Kubernetes out-of-the-box load balancing.</li>
+  <li><strong>Timeout</strong> - Wait only N seconds for a response and then give up.</li>
+  <li><strong>Retry</strong> - If one pod returns an error (e.g., 503), retry for another pod.</li>
+  <li><strong>Simple circuit breaker</strong> - Instead of overwhelming the degraded service, open the circuit and reject further requests.</li>
+  <li><strong>Pool ejection</strong> - This provides auto removal of error-prone pods from the load-balancing pool.</li>
+</ul>
+
+<h2 id="load-balancing">Load Balancing</h2>
+
+<ul>
+  <li>A core capability for increasing throughput and lowering latency is load balancing.</li>
+  <li><strong>Centralized load balancer</strong>
+    <ul>
+      <li>A straightforward way to implement this is to have a centralized load balancer with which all clients communicate and that knows how to distribute load to any backend systems. This is a great approach, but it can become both a bottleneck as well as a single point of failure.</li>
+    </ul>
+  </li>
+  <li><strong>Client-side load balancer</strong>
+    <ul>
+      <li>Load-balancing capabilities can be distributed to clients with client-side load balancers.</li>
+      <li>These client load balancers can use sophisticated, cluster-specific, load-balancing algorithms to increase availability, lower latency, and increase overall throughput.</li>
+    </ul>
+  </li>
+  <li>The Istio proxy has the capabilities to provide client-side load balancing through the following configurable algorithms:
+    <ul>
+      <li><code>ROUND_ROBIN</code> - This algorithm evenly distributes the load, in order, across the endpoints in the load-balancing pool</li>
+      <li><code>RANDOM</code> - This evenly distributes the load across the endpoints in the load-balancing pool but without any order.</li>
+      <li><code>LEAST_CONN</code> - This algorithm picks two random hosts from the load-balancing pool and determines which host has fewer outstanding requests (of the two) and sends to that endpoint. This is an implementation of weighted least request load balancing.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class="yaml"><span class="line"><span class="l-Scalar-Plain">apiVersion</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">networking.istio.io/v1alpha3</span>
+</span><span class="line"><span class="l-Scalar-Plain">kind</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">DestinationRule</span>
+</span><span class="line"><span class="l-Scalar-Plain">metadata</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">  <span class="l-Scalar-Plain">namespace</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">tutorial</span>
+</span><span class="line"><span class="l-Scalar-Plain">spec</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">  <span class="l-Scalar-Plain">trafficPolicy</span><span class="p-Indicator">:</span>
+</span><span class="line">    <span class="l-Scalar-Plain">loadBalancer</span><span class="p-Indicator">:</span>
+</span><span class="line">      <span class="l-Scalar-Plain">simple</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">RANDOM</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="timeout">Timeout</h2>
+
+<ul>
+  <li>Timeouts are a crucial component for making systems resilient and available.</li>
+  <li>Calls to services over a network can result in lots of unpredictable behavior, but the worst behavior is latency.
+    <ul>
+      <li>Did the service fail?</li>
+      <li>Is it just slow?</li>
+      <li>Is it not even available?</li>
+    </ul>
+  </li>
+  <li>Unbounded latency means any of those things could have happened. But what does your service do? Just sit around and wait?</li>
+  <li>Waiting is not a good solution if there is a customer on the other end of the request.</li>
+  <li>Waiting also uses resources, causes other systems to potentially wait, and is usually a significant contributor to cascading failures.</li>
+  <li>Your network traffic should always have timeouts in place, and you can use Istio service mesh to do this.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Timeout</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+</pre></td><td class="code"><pre><code class="yaml"><span class="line"><span class="l-Scalar-Plain">apiVersion</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">networking.istio.io/v1alpha3</span>
+</span><span class="line"><span class="l-Scalar-Plain">kind</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">VirtualService</span>
+</span><span class="line"><span class="l-Scalar-Plain">metadata</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">creationTimestamp</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">null</span>
+</span><span class="line">  <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">  <span class="l-Scalar-Plain">namespace</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">tutorial</span>
+</span><span class="line"><span class="l-Scalar-Plain">spec</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">hosts</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">  <span class="l-Scalar-Plain">http</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">route</span><span class="p-Indicator">:</span>
+</span><span class="line">    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">destination</span><span class="p-Indicator">:</span>
+</span><span class="line">        <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">    <span class="l-Scalar-Plain">timeout</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">1.000s</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="retry">Retry</h2>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Retry</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+</pre></td><td class="code"><pre><code class="yaml"><span class="line"><span class="l-Scalar-Plain">apiVersion</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">networking.istio.io/v1alpha3</span>
+</span><span class="line"><span class="l-Scalar-Plain">kind</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">VirtualService</span>
+</span><span class="line"><span class="l-Scalar-Plain">metadata</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">  <span class="l-Scalar-Plain">namespace</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">tutorial</span>
+</span><span class="line"><span class="l-Scalar-Plain">spec</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">hosts</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">  <span class="l-Scalar-Plain">http</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">route</span><span class="p-Indicator">:</span>
+</span><span class="line">    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">destination</span><span class="p-Indicator">:</span>
+</span><span class="line">        <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">    <span class="l-Scalar-Plain">retries</span><span class="p-Indicator">:</span>
+</span><span class="line">      <span class="l-Scalar-Plain">attempts</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">3</span>
+</span><span class="line">      <span class="l-Scalar-Plain">perTryTimeout</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">2s</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="circuit-breaker">Circuit Breaker</h2>
+
+<ul>
+  <li>The goal of the circuit breaker is to fail fast.</li>
+  <li>Istio implements circuit breaking
+    <ul>
+      <li>at the connection-pool level</li>
+      <li>and at the load-balancing host level.</li>
+    </ul>
+  </li>
+  <li>Suppose that in a production system a 3-second delay was caused by too many concurrent requests to the same instance or pod. You don’t want multiple requests getting queued or making that instance or pod even slower. So, we’ll add a circuit breaker that will open whenever you have more than one request being handled by any instance or pod.</li>
+</ul>
+
+<p><strong>Connection-pool level circuit breaker</strong></p>
+
+<p>To create circuit breaker functionality for our services, we use an Istio DestinationRule that looks like this:</p>
+
+<p>Here, we’re configuring the circuit breaker for any client calling into v2 of the <em>recommendation</em> service. We are limiting the number of connections and number of pending requests to one.</p>
+
+<p>The circuit breaker will short circuit any pending requests or connections that exceed the specified threshold (in this case, an artificially low number, 1, to demonstrate these capabilities). The goal of the circuit breaker is to fail fast.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Circuit Breaker - Connection-pool level</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+</pre></td><td class="code"><pre><code class="yaml"><span class="line"><span class="l-Scalar-Plain">apiVersion</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">networking.istio.io/v1alpha3</span>
+</span><span class="line"><span class="l-Scalar-Plain">kind</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">DestinationRule</span>
+</span><span class="line"><span class="l-Scalar-Plain">metadata</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">creationTimestamp</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">null</span>
+</span><span class="line">  <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">  <span class="l-Scalar-Plain">namespace</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">tutorial</span>
+</span><span class="line"><span class="l-Scalar-Plain">spec</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">  <span class="l-Scalar-Plain">subsets</span><span class="p-Indicator">:</span>
+</span><span class="line">    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">version-v1</span>
+</span><span class="line">      <span class="l-Scalar-Plain">labels</span><span class="p-Indicator">:</span>
+</span><span class="line">        <span class="l-Scalar-Plain">version</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">v1</span>
+</span><span class="line">    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">version-v2</span>
+</span><span class="line">      <span class="l-Scalar-Plain">labels</span><span class="p-Indicator">:</span>
+</span><span class="line">        <span class="l-Scalar-Plain">version</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">v2</span>
+</span><span class="line">      <span class="l-Scalar-Plain">trafficPolicy</span><span class="p-Indicator">:</span>
+</span><span class="line">        <span class="l-Scalar-Plain">connectionPool</span><span class="p-Indicator">:</span>
+</span><span class="line">          <span class="l-Scalar-Plain">http</span><span class="p-Indicator">:</span>
+</span><span class="line">            <span class="l-Scalar-Plain">http1MaxPendingRequests</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">1</span>
+</span><span class="line">            <span class="l-Scalar-Plain">maxRequestsPerConnection</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">1</span>
+</span><span class="line">          <span class="l-Scalar-Plain">tcp</span><span class="p-Indicator">:</span>
+</span><span class="line">            <span class="l-Scalar-Plain">maxConnections</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">1</span>
+</span><span class="line">        <span class="l-Scalar-Plain">outlierDetection</span><span class="p-Indicator">:</span>
+</span><span class="line">          <span class="l-Scalar-Plain">baseEjectionTime</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">120.000s</span>
+</span><span class="line">          <span class="l-Scalar-Plain">consecutiveErrors</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">1</span>
+</span><span class="line">          <span class="l-Scalar-Plain">interval</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">1.000s</span>
+</span><span class="line">          <span class="l-Scalar-Plain">maxEjectionPercent</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">100</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="pool-ejection">Pool Ejection</h2>
+
+<ul>
+  <li><em>Pool Ejection</em> is identifying badly behaving cluster hosts and not sending any more traffic to them for a cool-off period (essentially kicking the bad-behaving pod out of the load-balancing pool). (Envoy calls this implementation <em>outlier detection</em>).</li>
+  <li>Pool ejection or outlier detection is a resilience strategy that is valuable whenever you have a group of pods (multiple replicas) to serve a client request. If the request is forwarded to a certain instance and it fails (e.g., returns a 50x error code), Istio will eject this instance from the pool for a certain sleep window.</li>
+  <li>This increases the overall availability by making sure that only healthy pods participate in the pool of instances.</li>
+</ul>
+
+<p>In the below example, we’re configuring Istio to check every 5 seconds for misbehaving pods and to remove those pods from the load-balancing pool after one consecutive error (artificially low for this example) and keep it out for 15 seconds.  This pod wouldn’t receive more requests until the sleep window expires, which takes at least 15 seconds.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Pool Ejection</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+<span class="line-number">36</span>
+<span class="line-number">37</span>
+</pre></td><td class="code"><pre><code class="yaml"><span class="line"><span class="l-Scalar-Plain">apiVersion</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">networking.istio.io/v1alpha3</span>
+</span><span class="line"><span class="l-Scalar-Plain">kind</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">DestinationRule</span>
+</span><span class="line"><span class="l-Scalar-Plain">metadata</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">creationTimestamp</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">null</span>
+</span><span class="line">  <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">  <span class="l-Scalar-Plain">namespace</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">tutorial</span>
+</span><span class="line"><span class="l-Scalar-Plain">spec</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">  <span class="l-Scalar-Plain">subsets</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">labels</span><span class="p-Indicator">:</span>
+</span><span class="line">      <span class="l-Scalar-Plain">version</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">v1</span>
+</span><span class="line">    <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">version-v1</span>
+</span><span class="line">    <span class="l-Scalar-Plain">trafficPolicy</span><span class="p-Indicator">:</span>
+</span><span class="line">      <span class="l-Scalar-Plain">connectionPool</span><span class="p-Indicator">:</span>
+</span><span class="line">        <span class="l-Scalar-Plain">http</span><span class="p-Indicator">:</span> <span class="p-Indicator">{}</span>
+</span><span class="line">        <span class="l-Scalar-Plain">tcp</span><span class="p-Indicator">:</span> <span class="p-Indicator">{}</span>
+</span><span class="line">      <span class="l-Scalar-Plain">loadBalancer</span><span class="p-Indicator">:</span>
+</span><span class="line">        <span class="l-Scalar-Plain">simple</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">RANDOM</span>
+</span><span class="line">      <span class="l-Scalar-Plain">outlierDetection</span><span class="p-Indicator">:</span>
+</span><span class="line">        <span class="l-Scalar-Plain">baseEjectionTime</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">15.000s</span>
+</span><span class="line">        <span class="l-Scalar-Plain">consecutiveErrors</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">1</span>
+</span><span class="line">        <span class="l-Scalar-Plain">interval</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">5.000s</span>
+</span><span class="line">        <span class="l-Scalar-Plain">maxEjectionPercent</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">100</span>
+</span><span class="line">  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">labels</span><span class="p-Indicator">:</span>
+</span><span class="line">      <span class="l-Scalar-Plain">version</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">v2</span>
+</span><span class="line">    <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">version-v2</span>
+</span><span class="line">    <span class="l-Scalar-Plain">trafficPolicy</span><span class="p-Indicator">:</span>
+</span><span class="line">      <span class="l-Scalar-Plain">connectionPool</span><span class="p-Indicator">:</span>
+</span><span class="line">        <span class="l-Scalar-Plain">http</span><span class="p-Indicator">:</span> <span class="p-Indicator">{}</span>
+</span><span class="line">        <span class="l-Scalar-Plain">tcp</span><span class="p-Indicator">:</span> <span class="p-Indicator">{}</span>
+</span><span class="line">      <span class="l-Scalar-Plain">loadBalancer</span><span class="p-Indicator">:</span>
+</span><span class="line">        <span class="l-Scalar-Plain">simple</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">RANDOM</span>
+</span><span class="line">      <span class="l-Scalar-Plain">outlierDetection</span><span class="p-Indicator">:</span>
+</span><span class="line">        <span class="l-Scalar-Plain">baseEjectionTime</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">15.000s</span>
+</span><span class="line">        <span class="l-Scalar-Plain">consecutiveErrors</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">1</span>
+</span><span class="line">        <span class="l-Scalar-Plain">interval</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">5.000s</span>
+</span><span class="line">        <span class="l-Scalar-Plain">maxEjectionPercent</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">100</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="circuit-breaker--pool-ejection--retry">Circuit Breaker + Pool Ejection + Retry</h2>
+
+<p>You can combine multiple Istio capabilities to achieve the ultimate backend resilience:</p>
+
+<ul>
+  <li>Circuit breaker, to avoid multiple concurrent requests to an instance</li>
+  <li>Pool ejection, to remove failing instances from the pool of responding instances</li>
+  <li>Retries, to forward the request to another instance just in case you get an open circuit breaker or pool ejection</li>
+</ul>
+
+<p>By simply adding a retry configuration to our current VirtualService, we are able to completely get rid of our 503 responses. This means that whenever you receive a failed request from an ejected instance, Istio will forward the request to another healthy instance:</p>
+
+<h1 id="chaos-testing">Chaos Testing</h1>
+
+<p><a href="http://principlesofchaos.org/">Principles of Chaos Engineering</a></p>
+
+<p>With Istio, this is a relatively simple matter because the istio-proxy is intercepting all network traffic; therefore, it can alter the responses including the time it takes to respond. Two interesting faults that Istio makes easy to inject are HTTP error codes and network delays.</p>
+
+<p><strong>HTTP Errors</strong></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>HTTP Errors</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+</pre></td><td class="code"><pre><code class="yaml"><span class="line"><span class="l-Scalar-Plain">apiVersion</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">networking.istio.io/v1alpha3</span>
+</span><span class="line"><span class="l-Scalar-Plain">kind</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">VirtualService</span>
+</span><span class="line"><span class="l-Scalar-Plain">metadata</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">  <span class="l-Scalar-Plain">namespace</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">tutorial</span>
+</span><span class="line"><span class="l-Scalar-Plain">spec</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">hosts</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">  <span class="l-Scalar-Plain">http</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">fault</span><span class="p-Indicator">:</span>
+</span><span class="line">      <span class="l-Scalar-Plain">abort</span><span class="p-Indicator">:</span>
+</span><span class="line">        <span class="l-Scalar-Plain">httpStatus</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">503</span>
+</span><span class="line">        <span class="l-Scalar-Plain">percent</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">50</span>
+</span><span class="line">    <span class="l-Scalar-Plain">route</span><span class="p-Indicator">:</span>
+</span><span class="line">    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">destination</span><span class="p-Indicator">:</span>
+</span><span class="line">        <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">        <span class="l-Scalar-Plain">subset</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">app-recommendation</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Delays</strong></p>
+
+<p>The most insidious of possible distributed computing faults is not a “dead” service but a service that is responding slowly, potentially causing a cascading failure in your network of services.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Delays</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+</pre></td><td class="code"><pre><code class="yaml"><span class="line"><span class="l-Scalar-Plain">apiVersion</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">networking.istio.io/v1alpha3</span>
+</span><span class="line"><span class="l-Scalar-Plain">kind</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">VirtualService</span>
+</span><span class="line"><span class="l-Scalar-Plain">metadata</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">creationTimestamp</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">null</span>
+</span><span class="line">  <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">  <span class="l-Scalar-Plain">namespace</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">tutorial</span>
+</span><span class="line"><span class="l-Scalar-Plain">spec</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">hosts</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">  <span class="l-Scalar-Plain">http</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">fault</span><span class="p-Indicator">:</span>
+</span><span class="line">      <span class="l-Scalar-Plain">delay</span><span class="p-Indicator">:</span>
+</span><span class="line">        <span class="l-Scalar-Plain">fixedDelay</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">7.000s</span>
+</span><span class="line">        <span class="l-Scalar-Plain">percent</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">50</span>
+</span><span class="line">    <span class="l-Scalar-Plain">route</span><span class="p-Indicator">:</span>
+</span><span class="line">    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">destination</span><span class="p-Indicator">:</span>
+</span><span class="line">        <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">recommendation</span>
+</span><span class="line">        <span class="l-Scalar-Plain">subset</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">app-recommendation</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h1 id="observability">Observability</h1>
+
+<ul>
+  <li>Tools
+    <ul>
+      <li>Tracing via Jaeger,</li>
+      <li>Metrics via Grafana and Prometheus,</li>
+      <li>Service graphing via Kiali.</li>
+    </ul>
+  </li>
+  <li><code>istio-policy</code> and <code>istio-telemetry</code> are the services that make up Istio’s Mixer functionality.</li>
+</ul>
+
+<p><strong>Tracing</strong></p>
+
+<p>Istio’s Mixer comes “out of the box” with the ability to pull tracing spans from your distributed microservices. This means that tracing is programming-language agnostic so that you can use this capability in a polyglot world where different teams, each with its own microservice, can be using different programming languages and frameworks.</p>
+
+<p>Although Istio supports both Zipkin and Jaeger, for our purposes we focus on Jaeger, which implements OpenTracing, a vendor-neutral tracing API. Jaeger was originally open sourced by the Uber Technologies team and is a distributed tracing system specifically focused on microservices architecture.</p>
+
+<p>An important term to understand here is span, which Jaeger defines as “a logical unit of work in the system that has an operation name, the start time of the operation, and the duration. Spans can be nested and ordered to model causal relationships. An RPC call is an example of a span.”</p>
+
+<p>Another important term is trace, which Jaeger defines as “a data/execution path through the system, and can be thought of as a directed acyclic graph of spans.”</p>
+
+<p>It’s important to remember that your programming logic must forward the OpenTracing headers from your inbound call to every outbound call:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Delays</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="yaml"><span class="line"><span class="l-Scalar-Plain">x-request-id</span>
+</span><span class="line"><span class="l-Scalar-Plain">x-b3-traceid</span>
+</span><span class="line"><span class="l-Scalar-Plain">x-b3-spanid</span>
+</span><span class="line"><span class="l-Scalar-Plain">x-b3-parentspanid</span>
+</span><span class="line"><span class="l-Scalar-Plain">x-b3-sampled</span>
+</span><span class="line"><span class="l-Scalar-Plain">x-b3-flags</span>
+</span><span class="line"><span class="l-Scalar-Plain">x-ot-span-context</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h1 id="security">Security</h1>
+
+<h2 id="mtls">mTLS</h2>
+
+<ul>
+  <li>mTLS (Mutual Transport Layer Security) provides encryption between sidecar-injected, istio-enabled services.</li>
+  <li>
+    <p>By default, traffic among our three services of customer, preference, and recommendation is in “clear text” as they just use HTTP. This means that another team, with access to your cluster, could deploy their own service and attempt to sniff the traffic flowing through the system.</p>
+  </li>
+  <li>Enabling mTLS in Istio uses the combination of Policy and DestinationRule objects. The Policy declaration is as follows:</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Policy</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="yaml"><span class="line"><span class="l-Scalar-Plain">apiVersion</span><span class="p-Indicator">:</span> <span class="s">&quot;authentication.istio.io/v1alpha1&quot;</span>
+</span><span class="line"><span class="l-Scalar-Plain">kind</span><span class="p-Indicator">:</span> <span class="s">&quot;Policy&quot;</span>
+</span><span class="line"><span class="l-Scalar-Plain">metadata</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="s">&quot;default&quot;</span>
+</span><span class="line">  <span class="l-Scalar-Plain">namespace</span><span class="p-Indicator">:</span> <span class="s">&quot;tutorial&quot;</span>
+</span><span class="line"><span class="l-Scalar-Plain">spec</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">peers</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">mtls</span><span class="p-Indicator">:</span> <span class="p-Indicator">{}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class="yaml"><span class="line"><span class="l-Scalar-Plain">apiVersion</span><span class="p-Indicator">:</span> <span class="s">&quot;networking.istio.io/v1alpha3&quot;</span>
+</span><span class="line"><span class="l-Scalar-Plain">kind</span><span class="p-Indicator">:</span> <span class="s">&quot;DestinationRule&quot;</span>
+</span><span class="line"><span class="l-Scalar-Plain">metadata</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="s">&quot;default&quot;</span>
+</span><span class="line">  <span class="l-Scalar-Plain">namespace</span><span class="p-Indicator">:</span> <span class="s">&quot;tutorial&quot;</span>
+</span><span class="line"><span class="l-Scalar-Plain">spec</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="s">&quot;*.tutorial.svc.cluster.local&quot;</span>
+</span><span class="line">  <span class="l-Scalar-Plain">trafficPolicy</span><span class="p-Indicator">:</span>
+</span><span class="line">    <span class="l-Scalar-Plain">tls</span><span class="p-Indicator">:</span>
+</span><span class="line">      <span class="l-Scalar-Plain">mode</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ISTIO_MUTUAL</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Once mTLS is enabled, you need to leverage a gateway to achieve end-to-end encryption. Istio has its own ingress gateway, aptly named <strong>Istio Gateway</strong>, a solution that exposes a URL external to the cluster and supports Istio features such as monitoring, traffic management, and policy.</li>
+  <li>On minishift or minikube, the Istio Gateway service exposes a NodePort to make it visible outside the cluster.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+<span class="line-number">25</span>
+<span class="line-number">26</span>
+<span class="line-number">27</span>
+<span class="line-number">28</span>
+<span class="line-number">29</span>
+<span class="line-number">30</span>
+<span class="line-number">31</span>
+<span class="line-number">32</span>
+<span class="line-number">33</span>
+<span class="line-number">34</span>
+<span class="line-number">35</span>
+</pre></td><td class="code"><pre><code class="yaml"><span class="line"><span class="l-Scalar-Plain">apiVersion</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">networking.istio.io/v1alpha3</span>
+</span><span class="line"><span class="l-Scalar-Plain">kind</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">Gateway</span>
+</span><span class="line"><span class="l-Scalar-Plain">metadata</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">customer-gateway</span>
+</span><span class="line">  <span class="l-Scalar-Plain">namespace</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">tutorial</span>
+</span><span class="line"><span class="l-Scalar-Plain">spec</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">selector</span><span class="p-Indicator">:</span>
+</span><span class="line">    <span class="l-Scalar-Plain">istio</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ingressgateway</span> <span class="c1"># use istio default controller</span>
+</span><span class="line">  <span class="l-Scalar-Plain">servers</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span>
+</span><span class="line">      <span class="l-Scalar-Plain">number</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">80</span>
+</span><span class="line">      <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">http</span>
+</span><span class="line">      <span class="l-Scalar-Plain">protocol</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">HTTP</span>
+</span><span class="line">    <span class="l-Scalar-Plain">hosts</span><span class="p-Indicator">:</span>
+</span><span class="line">    <span class="p-Indicator">-</span> <span class="s">&quot;*&quot;</span>
+</span><span class="line"><span class="nn">---</span>
+</span><span class="line"><span class="l-Scalar-Plain">apiVersion</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">networking.istio.io/v1alpha3</span>
+</span><span class="line"><span class="l-Scalar-Plain">kind</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">VirtualService</span>
+</span><span class="line"><span class="l-Scalar-Plain">metadata</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">name</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">customer</span>
+</span><span class="line">  <span class="l-Scalar-Plain">namespace</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">tutorial</span>
+</span><span class="line"><span class="l-Scalar-Plain">spec</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="l-Scalar-Plain">hosts</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="p-Indicator">-</span> <span class="s">&quot;*&quot;</span>
+</span><span class="line">  <span class="l-Scalar-Plain">gateways</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">customer-gateway</span>
+</span><span class="line">  <span class="l-Scalar-Plain">http</span><span class="p-Indicator">:</span>
+</span><span class="line">  <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">match</span><span class="p-Indicator">:</span>
+</span><span class="line">    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">uri</span><span class="p-Indicator">:</span>
+</span><span class="line">        <span class="l-Scalar-Plain">exact</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">/</span>
+</span><span class="line">    <span class="l-Scalar-Plain">route</span><span class="p-Indicator">:</span>
+</span><span class="line">    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">destination</span><span class="p-Indicator">:</span>
+</span><span class="line">        <span class="l-Scalar-Plain">host</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">customer</span>
+</span><span class="line">        <span class="l-Scalar-Plain">port</span><span class="p-Indicator">:</span>
+</span><span class="line">          <span class="l-Scalar-Plain">number</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">8080</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="mixer-policy">Mixer Policy</h2>
+
+<h2 id="rbac">RBAC</h2>
+
+<h1 id="references">References</h1>
+
+<ul>
+  <li>O’Reilly Introducing Istio Service Mesh for Microservices, 2nd Edition</li>
+</ul>
+
+  
+    <footer>
+      
+      
+    </footer>
+  
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+
+	<br/><br/>
+	<ul>
+		<h2>Technical</h2>
+
+		<li>
+			<h3>Architecture</h3>
+			<a href="/technology/architecture.html">Overview</a>  |  
+			<a href="/technology/coding-principles.html">Coding Principles</a> |	
+			<a href="/technology/ddd.html">DDD</a>  |  
+			<a href="/technology/design-principles.html">Design Principles</a>  |
+			<a href="/technology/eventsourcing.html">Event Sourcing</a> |  
+			<a href="/technology/lambda-architecture.html">Lambda Architecture</a>  |  
+			<a href="/technology/observability.html">Observability</a>  |  
+			<a href="/technology/operations.html">Operations</a> |
+			<a href="/technology/patterns.html">Patterns</a>|  
+			<a href="/technology/sdlc.html">SDLC</a> |  
+			<a href="/technology/scalability.html">Scalability</a>  |  
+			<a href="/technology/security.html">Security</a>  |  
+			<a href="/technology/transaction.html">Transactions</a>
+		</li>
+
+		<li>
+			<h3>BigData</h3>
+			<a href="/technology/bigdata.html">Concepts</a>  |  
+			<a href="/technology/distributedcomputing.html">Distributed Computing</a>  |  
+			<a href="/technology/elasticsearch.html">ElasticSearch</a>  |  
+			<a href="/technology/bigdata-frameworks.html">Frameworks</a>  |  
+			<a href="/technology/hadoop-ecosystem.html">Hadoop Ecosystem</a>  | 
+			<a href="/technology/knowledgegraph.html">Knowledge Graph</a> |
+			<a href="/technology/nosql.html">NoSQL</a>  |  
+			<a href="/technology/concurrency-parallelism.html">Parallel Computing</a>
+		</li>
+
+		<li>
+			<h3>Cloud Computing</h3>
+			<a href="/technology/cloud-computing.html">Concepts</a>  |  
+			<a href="/technology/aws.html">AWS</a>  |  
+			<a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>  |  
+			<a href="/technology/virtualization.html">Virtualization</a>
+		</li>
+
+		<li>
+			<h3>Database</h3>
+			<a href="/technology/rdbms.html">Concepts</a>  |  
+			<a href="/technology/db-design.html">Design</a>  |  
+			<a href="/technology/db-performance.html">Performance</a>  |  
+			<a href="/technology/sql.html">SQL</a>
+		</li>
+
+		<li>
+			<h3>Functional Programming</h3>
+			<a href="/technology/functionalprogramming.html">Concepts</a>
+		</li>
+
+		<li>
+			<h3>Java</h3>
+			<a href="/technology/java.html">Core Concepts</a>  |  
+			<a href="/technology/java-collections.html">Collections</a>  |  
+			<a href="/technology/java-concurrency.html">Concurrency</a>  |  
+			<a href="/technology/java-database.html">Database</a>  |  
+			<a href="/technology/java-jmx.html">JMX</a>  |  
+			<a href="/technology/java-jndi.html">JNDI</a>  |  
+			<a href="/technology/java-io.html">I/O</a>  |  
+			<a href="/technology/java-performance.html">Performance</a>  |  
+			<a href="/technology/java-testing.html">Testing</a>  |  
+			<a href="/technology/java-web.html">Web</a>  |  
+			<a href="/technology/java-newsletters.html">Java Specialist Newsletters</a>
+		</li>
+
+		<li>
+			<h3>Languages</h3>
+			<a href="/technology/groovy.html">Groovy</a>  |  
+			<a href="/technology/python.html">Python</a>  |  
+			<a href="/technology/scala.html">Scala</a>
+		</li>
+
+		<li>
+			<h3>Integration</h3>
+			<a href="/technology/soa.html">Concepts</a>  |  
+			<a href="/technology/bff.html">BFF</a> |
+			<a href="/technology/camel.html">Camel</a>  |  
+			<a href="/technology/graphql.html">GraphQL</a>  |  
+			<a href="/technology/messaging.html">Messaging</a> |  
+			<a href="/technology/microservices.html">Microservices</a>   |  
+			<a href="/technology/rest-services.html">REST</a>  | 
+			<a href="/technology/servicemesh.html">Service Mesh</a> |
+			<a href="/technology/soap-services.html">SOAP</a>  |  
+			
+			<a href="/technology/webservices.html">Web Services</a> |  
+			<a href="/technology/xml.html">XML</a>
+		</li>
+
+		<li>
+			<h3>Spring</h3>
+			<a href="/technology/spring-batch.html">Batch</a>  |  
+			<a href="/technology/spring.html">Core</a>  |  
+			<a href="/technology/spring-mvc.html">MVC</a>
+		</li>
+
+		<li>
+			<h3>Web</h3>
+			<a href="/technology/webconcepts.html">Concepts</a> |
+			<a href="/technology/webanalytics.html">Analytics</a> |
+			<a href="/technology/angular.html">Angular</a> | 
+			<a href="/technology/webapp_architecture.html">Architecture</a> | 
+			<a href="/technology/js-ecosystem.html">JS Ecosystem</a> |
+			<a href="/technology/microfrontend.html">Micro-Frontend</a> |
+			<a href="/technology/web_security.html">Security</a> |
+			<a href="/technology/ux.html">UX</a>
+		</li>
+
+		<li>
+			<h3>General Concepts</h3>
+			<a href="/technology/algorithms.html">Algorithms</a>  |  
+			<a href="/softskills/brain-teasers.html">Brain Teasers</a>  |  
+			<a href="/technology/datastructures.html">Data Structures</a>  |  
+			<a href="/technology/design-faqs.html">Design FAQs</a>  |  
+			<a href="/technology/networking.html">Networking</a>  |  
+			<a href="/technology/oops.html">OOPS</a>  |  
+			<a href="/technology/os.html">Operating Systems</a>  |  
+			<a href="/technology/vcs.html">VCS</a>
+		</li>
+
+		<h2>Non-Techninal</h2>
+		<li>
+			<a href="/misc/okr.html">OKR</a>
+		</li>
+		<li>
+			<h3>Domain Knowledge</h3>
+			<a href="/domain/retirement.html">Retirement</a>
+		</li>
+
+		<li>
+			<h3>Soft Skills</h3>
+			<a href="/softskills/presentation.html">Presentation</a>  |  
+			<a href="/softskills/productivity.html">Productivity</a>  |  
+			<a href="/softskills/written.html">Written Communication</a>
+		</li>
+	</ul>
+
+  <!-- <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+  </ul> &#8211;>
+  <!-- <ul>
+    <li><a href="/datascience/statistics.html">Statistics</a></li>
+    <li><a href="/datascience/r.html">R Programming</a></li>
+  </ul> &#8211;>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating&#8230;</li>
+  </ul>
+  
+  <a href="https://github.com/fizalihsan">@fizalihsan</a> on GitHub
+  
+  <script type="text/javascript">
+    $(document).ready(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'fizalihsan',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2021 - Mohamed Fizal Ihsan Mohamed -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = '//platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

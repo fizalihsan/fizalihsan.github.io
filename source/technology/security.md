@@ -563,6 +563,150 @@ Ciphers are cryptographic algorithms that can reversibly transform data using a 
 
 Apache Shiro enables a Session programming paradigm for any application - from small daemon standalone applications to the largest clustered web applications. This means that application developers who wish to use sessions are no longer forced to use Servlet or EJB containers if they don't need them otherwise.
 
+# Books and Trainings
+
+## OReilly Spring Security for REST APIs
+
+[Presentation Slide](/technology/springsecurityforrestapis.pdf)
+
+* [https://www.katacoda.com/jzheaux/scenarios/local-authentication](https://www.katacoda.com/jzheaux/scenarios/local-authentication)
+* [https://github.com/jzheaux/oreilly-spring-security-rest-apis](https://github.com/jzheaux/oreilly-spring-security-rest-apis)
+
+* `@SpringBootApplication(exclude = SecurityAutoConfiguration.class)`
+  * doing this in a Spring Boot app disables Spring Security. DON'T DO THIS.
+  * once the `exclude` is removed, every single url is now protected by Spring Security. Accessing the urls now would throw http 401 unauthorized error.
+  * Accessing invalid/non-existent urls also would throw 401 instead of 404 by design. Spring Security uses this approach to avoid hackers from fingerprinting the valid url patterns by trial and error.
+
+**Username-password**
+
+* Spring Security has a default user (called `user`), but not a default password (by design). However, it generates a new GUID password for every Spring Boot run.
+  * `http -a user:0b44ffc6-db54-4220-8b0d-27f55806c602 :8080/goals`
+* Example of using a custom username-password hardcoded in the code. Spring supports JDBC, LDAP also.
+
+```java
+import org.springframework.context.annotation.Bean;
+
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+
+@Configuration
+public class SecurityConfig{
+  @Bean
+  public UserDetailsService userDetailsService(){
+    return new InMemoryUserDetailsManager(
+      User.withDefaultPasswordEncoder()
+        .username("user")
+        .password("pwd")
+        .authorities("app")
+        .build()
+    );
+  }
+}
+```
+
+__Authentication__
+
+* Spring Security is a set of servlet filters chained together. e.g., Authentication filter, authorization filter, defense filter (`HeaderWriterFilter`)
+
+| {% img /technology/spring-security-filter-chain.png %} | {% img /technology/spring-security-filter-order.png %} |
+| {% img /technology/spring-security-basic-auth-filter.png %} | |
+
+* Once the user is authenticated successfully, from anywhere in the app one can get the authenticated principal details (e.g., username) using the `SecurityContextHolder` as follows. Another way is to ask Spring to inject it for you.
+
+```java Get authenticated user name - Method 1
+Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+String username = auth.getName();
+```
+
+```java Get authenticated user name - Method 2
+@GetMapping("/")
+public String myMethod(Authentication auth){
+  String username = auth.getName();
+}
+```
+
+```java Get authenticated user name - Method 3
+@GetMapping("/")
+public String myMethod(@AuthenticationPrincipal String owner) {
+}
+```
+
+```java Get authenticated user name - Method 4
+@GetMapping("/")
+public String myMethod(@CurrentSecurityContext(expression="authentication.name") String owner) {
+}
+```
+
+__CORS__
+
+* When a web app running on an origin (say, http://localhost:8081) tries to connect to a web service hosted on a different origin (say http://localhost:8080), then the browser blocks the call by default throwing a CORS error.
+* To whitelist certain origins to make the call, do as follows:
+
+```java
+@Configuration
+public class SecurityConfig{
+  @Bean
+  WebMvcConfigurer webMvc(){
+    return new WebMvcConfigurer{
+      @Override
+      public void addCorsMapping(CorsRegistry registry){
+        registry.addMapping("/**/goals")
+                .allowedOrigins("http://localhost:8081")
+                .allowedMethods("GET", "POST")
+                .allowedHeaders("Content-Type")
+                .allowCredentials(true) // to allow browser to pass the credentials entered to be passed to the webservice
+                .maxAge(0); // to disable browser from caching these mappings
+      }
+    };
+  }
+}
+```
+
+* __Pre-flight request__: A browser sends an `OPTION` request to the server before the actual user request asking _what kind of requests are you ok with me sending, e.g., the origins, http methods, etc._ 
+* When authentication is enabled in an app, all requests are expected to be authentication including the pre-flight `OPTION` requests. This means the pre-flight requests will fail with 401 error. To avoid this, customize the SecurityFilterChain as follows:
+
+```java
+@Configuration
+public class SecurityConfig{
+  @Bean
+  SecurityFilterChain web(HttpSecurity http) throws Exception{
+    return http
+          .authorizeRequests((authz) -> authz.anyRequest().authenticated()) // configuring authorization filter
+          .httpBasic(Customizer.withDefaults())
+          .csrf(Customizer.withDefaults)
+          .cors(Customizer.withDefaults()) // here we are suggesting Spring Security to put this CORS filter with our custom settings in the right place, so that the CORS pre-flight calls are not authenticated.
+          .build();
+  }
+}
+```
+
+
+__CSRF tokens__
+
+* Spring security performs CSRF checks before authentication for any non-GET HTTP calls with side-effect (`POST`, `PUT`, `DELETE`). This is to protect the app from cross site forgery even before the app tries to authenticate the request.
+* Since CSRF checks happens earlier than authentication, the app would throw HTTP 403 instead of 401.
+
+```java
+import org.springframework.security.web.csrf.CsrfToken;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ModelAttribute;
+
+@ControllerAdvice
+public class CsrfHeaderAdvice {
+	@ModelAttribute("csrf")
+	public CsrfToken token(HttpServletRequest request, HttpServletResponse response) {
+		CsrfToken token = (CsrfToken) request.getAttribute(CsrfToken.class.getName());
+		if (token != null) {
+			response.setHeader(token.getHeaderName(), token.getToken());
+		}
+		return token;
+	}
+}
+```
+
+https://github.com/spring-projects/spring-security/blob/main/config/src/main/java/org/springframework/security/config/annotation/web/configuration/HttpSecurityConfiguration.java#L87-L98
+
 
 # References
 

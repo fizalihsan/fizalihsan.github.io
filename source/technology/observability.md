@@ -225,6 +225,8 @@ __SLA, SLO, SLI__
 * SLA (_Service Level Agreement_) 
   * is a contract that the service provider promises customers on service availability, performance, etc. 
   * SLAs are for external
+  * SLA is simply an SLO that 2 or more parties have "agreed".
+  * SLAs make sense only when considered in fixed timeframes, which are called "assurance windows".
 * SLO (_Service Level Objective_)
   * is a goal that service provider wants to reach.
   * SLOs are generally used for internal only.
@@ -241,14 +243,20 @@ __SLA, SLO, SLI__
   * define thresholds of metrics based on SLO, and
   * monitor the thresholds of metrics so that it won't break SLA.
 
+
+> You can't meet or exceed expectations if no one agrees what the expectations are.
+
+
 __Availability__
 
 * Availability of an application/service is commonly referred to by the number of _nines_. 99.99% is four nines.
 * `Availability = uptime / (downtime + uptime)`
-* _Why High Availability is difficult?_: According to [_Nyquist-Shannon sampling theorem_](http://bit.ly/2i2kBmv), to measure an outage of 2 minutes, you must be collecting data in minute-long intervals. Thus, to measure availability down to 1 second, you must be collecting data at sub-second intervals. This is just one reason why achieving accurate SLA reporting better than 99% is so difficult.
-* An oft-overlooked point about availability is when your app has dependent components: your service can ony be as available as the underlying components on which it is built. e.g, AWS S3 provides 99.95% SLA. An app depending on S3 can never be >99.95% SLA.
-* Similarly, if the underlying network is unreliable, the servers and application higher in the stack can't possibly be more reliable than the network.
-* Each additional nine of availability has significantly more cost associated with it, and the investment often isn't worth it: many customers can't tell the difference between 99% and 99.9%.
+* Most common ways to measure availability are the marking of __time quanta__ or __counting failures__.
+* _Why High Availability is difficult?_
+  * According to [_Nyquist-Shannon sampling theorem_](http://bit.ly/2i2kBmv), to measure an outage of 2 minutes, you must be collecting data in minute-long intervals. Thus, to measure availability down to 1 second, you must be collecting data at sub-second intervals. This is just one reason why achieving accurate SLA reporting better than 99% is so difficult.
+  * An oft-overlooked point about availability is when your app has dependent components: your service can ony be as available as the underlying components on which it is built. e.g, AWS S3 provides 99.95% SLA. An app depending on S3 can never be >99.95% SLA.
+  * Similarly, if the underlying network is unreliable, the servers and application higher in the stack can't possibly be more reliable than the network.
+  * Each additional nine of availability has significantly more cost associated with it, and the investment often isn't worth it: many customers can't tell the difference between 99% and 99.9%.
 
 ### 5) Alerting
 
@@ -540,3 +548,4 @@ TBD
   * O'Reilly - [Practical Monitoring](https://www.practicalmonitoring.com/) - Mike Julian
   * O'Reilly - Monitoring Distributed Systems - Rob Ewaschuk, Betsy Beyer
   * O'Reilly - [Site Reliability Engineering](https://landing.google.com/sre/sre-book/toc/index.html)
+  * Circonus - The Art and Science of the Service-Level Objective - paper by Theo Schlossnagle

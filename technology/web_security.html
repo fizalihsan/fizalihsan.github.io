@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Web Security Vulnerabilities XSS (Cross Site Scripting) HTTP Security Headers Content-Security-Policy References Vulnerabilities XSS (Cross Site &hellip;">
+<meta name="description" content="Web Security Vulnerabilities SQL Injection XSS (Cross Site Scripting) CSRF (Cross-Site Request Forgery) CORS (Cross Origin) HTTP Security Headers &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -109,7 +109,10 @@ messageStyle: "none",
   
   <ul id="markdown-toc">
   <li><a href="#vulnerabilities" id="markdown-toc-vulnerabilities">Vulnerabilities</a>    <ul>
+      <li><a href="#sql-injection" id="markdown-toc-sql-injection">SQL Injection</a></li>
       <li><a href="#xss-cross-site-scripting" id="markdown-toc-xss-cross-site-scripting">XSS (Cross Site Scripting)</a></li>
+      <li><a href="#csrf-cross-site-request-forgery" id="markdown-toc-csrf-cross-site-request-forgery">CSRF (Cross-Site Request Forgery)</a></li>
+      <li><a href="#cors-cross-origin" id="markdown-toc-cors-cross-origin">CORS (Cross Origin)</a></li>
     </ul>
   </li>
   <li><a href="#http-security-headers" id="markdown-toc-http-security-headers">HTTP Security Headers</a>    <ul>
@@ -121,18 +124,204 @@ messageStyle: "none",
 
 <h1 id="vulnerabilities">Vulnerabilities</h1>
 
+<h2 id="sql-injection">SQL Injection</h2>
+
+<p>…</p>
+
 <h2 id="xss-cross-site-scripting">XSS (Cross Site Scripting)</h2>
 
 <ul>
-  <li></li>
-  <li>e.g., an input field allowing JS code like <code>&lt;script&gt;alert('hello')&lt;/script&gt;</code></li>
+  <li>XSS is a case of a browser trusting JavaScript from the server too much.</li>
+  <li>Dynamic data can be inserted into HTML element attributes like this:
+    <ul>
+      <li><code>&lt;script&gt;alert('hello')&lt;/script&gt;</code></li>
+      <li><code>&lt;img src="picture.jpg" alt="blah" onload="alert('Hello from alt text!');" /&gt;</code></li>
+    </ul>
+  </li>
+  <li>With some imagination, hackers can inject JS code to read the victim’s browser details include cookies, headers, etc.</li>
+  <li>
+    <p>For an interesting case study of what XSS can do, consider the case of the <a href="https://en.wikipedia.org/wiki/Samy_(computer_worm)">Samy worm</a>. Samy Kamkar, the author of the worm, introduced a little bit of JavaScript onto his home page on Myspace. When a logged-in victim visited Samy’s page, Samy’s JavaScript would execute in the victim’s browser. This JavaScript would programmatically click all the buttons that were required to add Samy as a friend and copy itself onto the victim’s home page. Then, when yet another victim visited the first victim’s home page, they too would add Samy as a friend and copy the JavaScript onto their home page. This worm quickly went viral and in less than a day more than one million friends had been added to Samy’s account.</p>
+  </li>
+  <li><strong>How to prevent?</strong>
+    <ul>
+      <li>Use HTML Encoding as defense. Always encode the user input using well-known client libraries.</li>
+      <li><a href="https://www.google.com/about/appsecurity/learning/xss/">https://www.google.com/about/appsecurity/learning/xss/</a></li>
+    </ul>
+  </li>
 </ul>
+
+<table>
+  <tbody>
+    <tr>
+      <td>Rendered Character</td>
+      <td>Named Character</td>
+      <td>Decimal Numeric Character</td>
+      <td>Hex Numeric Character</td>
+    </tr>
+    <tr>
+      <td>&amp;</td>
+      <td><code>&amp;amp;</code></td>
+      <td><code>&amp;#38;</code></td>
+      <td><code>&amp;#x26;</code></td>
+    </tr>
+    <tr>
+      <td>&lt;</td>
+      <td><code>&amp;lt;</code></td>
+      <td><code>&amp;#60;</code></td>
+      <td><code>&amp;#x3C;</code></td>
+    </tr>
+    <tr>
+      <td>&gt;</td>
+      <td><code>&amp;gt;</code></td>
+      <td><code>&amp;#62;</code></td>
+      <td><code>&amp;#x3E;</code></td>
+    </tr>
+    <tr>
+      <td>”</td>
+      <td><code>&amp;quot;</code></td>
+      <td><code>&amp;#34;</code></td>
+      <td><code>&amp;#x22;</code></td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="csrf-cross-site-request-forgery">CSRF (Cross-Site Request Forgery)</h2>
+
+<ul>
+  <li>XSRF is a case of a server trusting a browser too much</li>
+  <li>Normal Scenario
+    <ul>
+      <li>Say www.myblog.com is a site where users can publish articles. A user named ‘John Snow’ logins legitimately creating a sessionid that is stored in a cookie.</li>
+      <li>When an article is published, the POST request would look like the one below.</li>
+      <li>A valid session id is passed, so the server successfully publishes the article on his behalf.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class=""><span class="line">POST /blog/create HTTP/1.1
+</span><span class="line">Host: www.myblog.com
+</span><span class="line">Accept-Encoding: gzip, deflate
+</span><span class="line">Accept: */*
+</span><span class="line">Cookie: sessionid=Re9ljf4uObKk9mSFqBlusxamUKw
+</span><span class="line">Connection: keep-alive
+</span><span class="line">Content-Type: application/x-www-form-urlencoded; charset=utf-8
+</span><span class="line">Content-Length: 57
+</span><span class="line">	
+</span><span class="line">body=It+was+the+best+of+posts.+It+was+the+worst+of+posts.&amp;submit=Publish</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Hack Scenario
+    <ul>
+      <li>A malicious user creates an HTML page or a website to which John Snow happens to visit.</li>
+      <li>The malicious site happens to have an HTML form like the one below which reads John’s browser cookie and submit the form on page load - without his knowledge.</li>
+      <li>The POST request would exactly like the above, and the server wouldn’t be able to tell the difference.</li>
+      <li>The browser’s same-origin policy (SOP) won’t help here either. SOP only says that JavaScript from one site can’t see responses sent back from other sites. But this attack doesn’t require the JavaScript from the malicious site to see a response from the blogging site. This attack only requires that the JavaScript from the malicious site be able to POST a request to the blog site, which it can.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="cp">&lt;!DOCTYPE html&gt;</span>​
+</span><span class="line">​ 	<span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">​&quot;en&quot;​</span><span class="nt">&gt;</span>
+</span><span class="line">​ 	<span class="nt">&lt;body&gt;</span>
+</span><span class="line">​ 	  <span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">​&quot;http://myblog.com/post/create&quot;​</span> <span class="na">method=</span><span class="s">​&quot;POST&quot;​</span><span class="nt">&gt;</span>
+</span><span class="line">​ 	    <span class="nt">&lt;input</span>
+</span><span class="line"><span class="err">​ </span>	      <span class="na">name=</span><span class="s">​body​</span>
+</span><span class="line"><span class="err">​ </span>	      <span class="na">value=</span><span class="s">​&quot;Arbitrary</span> <span class="na">Attacker-Controlled</span> <span class="na">Content</span><span class="err">.</span> <span class="na">I</span> <span class="na">love</span> <span class="na">evilxsrf</span><span class="err">.</span><span class="na">com</span><span class="err">&quot;​</span><span class="nt">/&gt;</span>
+</span><span class="line">​ 	    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">​submit​</span> <span class="na">id=</span><span class="s">​submit​</span> <span class="na">name=</span><span class="s">​submit​</span> <span class="na">value=</span><span class="s">​Publish​</span> <span class="nt">/&gt;</span>&#39;);
+</span><span class="line">​ 	  <span class="nt">&lt;/form&gt;</span>
+</span><span class="line">​ 	
+</span><span class="line">​ 	  <span class="nt">&lt;script&gt;</span>
+</span><span class="line"><span class="err">​ </span>	   <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="err">​</span><span class="s1">&#39;submit&#39;</span><span class="err">​</span><span class="p">).</span><span class="nx">click</span><span class="p">();</span>
+</span><span class="line"><span class="err">​ </span>	  <span class="nt">&lt;/script&gt;</span>
+</span><span class="line">​ 	<span class="nt">&lt;/body&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p><strong>How to prevent?</strong></p>
 
 <ul>
-  <li><a href="https://www.google.com/about/appsecurity/learning/xss/">https://www.google.com/about/appsecurity/learning/xss/</a></li>
+  <li><u>Method 1: Prevention with hidden form input</u>
+    <ul>
+      <li>The server cannot rely on sessionID or cookie alone as we saw above.</li>
+      <li>The browser needs to submit a little bit of secret data with every <em>state-modifying request</em> that only myblog.com knows. This secret can’t be stored in a cookie though, because cookie values will be sent regardless of whether the request was initiated by a logged-in user or a malicious site operator. This leaves the form itself.</li>
+      <li>The defense against this is the <strong>XSRF hidden form input</strong>. When a user logs into the blog site, the server should set a large (say 128 bits, base64-encoded) cookie valid only for the duration of the session. Every page that contains a form that will <code>POST</code> back to the blog server needs to put that same value into a hidden form input. Only the blog site and the browser have this value. So when the user submits a valid <code>POST</code> to the blog site, this request will contain the anti-XSRF value in both the cookie and the body, like this.</li>
+      <li>The malicious website wouldn’t be able to guess the value of the anti-XSRF cookie, and so it would not be able to replicate that value in the body of the request. If the server doesn’t see the value in both places, the server can reject the request as a fake. At a minimum, requests like this should be denied and logged for later review.</li>
+      <li>Cons
+        <ul>
+          <li>If the site is vulnerable to XSS, then this defense won’t work, since the hacker can write a script to read the cookie value.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li><u>Method 2: Prevention with &#8216;SameSite&#8217; cookie setting</u>
+    <ul>
+      <li>Create a cookie from web application with <code>SameSite</code> setting enabled. This tells the browser to send the cookie ONLY for requests originating from the site that created the cookie.
+        <ul>
+          <li><code>Set-Cookie: SessionId=sfVZ1yx68LD51I; SameSite=Strict;</code>
+            <ul>
+              <li>Adding <code>SameSite=Strict</code> to a cookie definition tells a browser to never send that cookie for any request to our site unless the request originated from our site.</li>
+              <li>Downside: With <code>SameSite=Strict</code>, other legitimate sites won’t be able to link successfully to our web application because the initial request to our web application won’t include the SessionId cookie since it originated from another site. If a user clicks on a link from another website to our web application, that first request would not include the SessionId cookie, so the user would probably be prompted to log in, even if they had already logged in. This would be an appropriate choice if you know that you don’t need to support other sites linking to your web application, .</li>
+            </ul>
+          </li>
+          <li><code>Set-Cookie: SessionId=sfVZ1yx68LD51I; SameSite=Lax;</code>
+            <ul>
+              <li>By doing this, all safe requests (<code>GET</code>, <code>HEAD</code>, <code>OPTIONS</code>, <code>TRACE</code>) will send the cookie, even if the request originates from another site. This way, the initial link from an external site to our web application will send the SessionId cookie since clicking on the link will result in a GET request. But a malicious site that wants to exploit XSRF by constructing a form and getting a user to submit a POST request would fail because the <code>SameSite</code> attribute on the SessionId cookie wouldn’t get sent because the request originated on another site.</li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </li>
 </ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line">​POST / HTTP/1.1
+</span><span class="line">​Host: localhost:1234
+</span><span class="line">​Accept-Encoding: gzip, deflate
+</span><span class="line">​Accept: */*
+</span><span class="line">​Connection: keep-alive
+</span><span class="line">​Cookie: antixsrf=XKRYopsd8jXj5DqgfNpHmA
+</span><span class="line">​Content-Type: application/x-www-form-urlencoded; charset=utf-8
+</span><span class="line">​Content-Length: 94
+</span><span class="line">​
+</span><span class="line">​body=It+was+the+best+of+posts.+It+was+the+worst+of+posts.<span class="err">&amp;</span>submit=Publish<span class="err">&amp;</span>antixsrf=XKRYopsd8jXj5DqgfNpHmA
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="cors-cross-origin">CORS (Cross Origin)</h2>
+
+<p>…</p>
 
 <h1 id="http-security-headers">HTTP Security Headers</h1>
 
@@ -147,7 +336,7 @@ messageStyle: "none",
   <li>it is enabled by setting the <code>Content-Security-Policy</code> HTTP response header.</li>
 </ul>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
@@ -156,15 +345,16 @@ messageStyle: "none",
 <span class="line-number">7</span>
 <span class="line-number">8</span>
 <span class="line-number">9</span>
-</pre></td><td class="code"><pre><code class=""><span class="line"># Default to only allow content from the current site
+</pre></td><td class="code"><pre><code class="html"><span class="line"># Default to only allow content from the current site
 </span><span class="line"># Allow images from current site and imgur.com
-</span><span class="line"># Don't allow objects such as Flash and Java
+</span><span class="line"># Don&#39;t allow objects such as Flash and Java
 </span><span class="line"># Only allow scripts from the current site
 </span><span class="line"># Only allow styles from the current site
 </span><span class="line"># Only allow frames from the current site
-</span><span class="line"># Restrict URL's in the &lt;base&gt; tag to current site
+</span><span class="line"># Restrict URL&#39;s in the <span class="nt">&lt;base&gt;</span> tag to current site
 </span><span class="line"># Allow forms to submit only to the current site
-</span><span class="line">Content-Security-Policy: default-src 'self'; img-src 'self' https://i.imgur.com; object-src 'none'; script-src 'self'; style-src 'self'; frame-ancestors 'self'; base-uri 'self'; form-action 'self';</span></code></pre></td></tr></table></div></figure></notextile></div>
+</span><span class="line">Content-Security-Policy: default-src &#39;self&#39;; img-src &#39;self&#39; https://i.imgur.com; object-src &#39;none&#39;; script-src &#39;self&#39;; style-src &#39;self&#39;; frame-ancestors &#39;self&#39;; base-uri &#39;self&#39;; form-action &#39;self&#39;;
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <ul>
   <li><a href="https://content-security-policy.com/">https://content-security-policy.com/</a></li>
@@ -176,7 +366,7 @@ messageStyle: "none",
 <h1 id="references">References</h1>
 
 <ul>
-  <li></li>
+  <li>Book - Practical Security</li>
 </ul>
 
   

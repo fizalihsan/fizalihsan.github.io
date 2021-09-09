@@ -139,6 +139,17 @@ messageStyle: "none",
       </li>
     </ul>
   </li>
+  <li><a href="#configuring-authorization-restricting-access" id="markdown-toc-configuring-authorization-restricting-access">Configuring authorization: Restricting access</a>    <ul>
+      <li><a href="#restricting-access-based-on-authorities-and-roles" id="markdown-toc-restricting-access-based-on-authorities-and-roles">Restricting access based on authorities and roles</a></li>
+      <li><a href="#restricting-access-for-all-endpoints-based-on-user-roles" id="markdown-toc-restricting-access-for-all-endpoints-based-on-user-roles">Restricting access for all endpoints based on user roles</a></li>
+      <li><a href="#restricting-access-to-all-endpoints" id="markdown-toc-restricting-access-to-all-endpoints">Restricting access to all endpoints</a></li>
+    </ul>
+  </li>
+  <li><a href="#configuring-authorization-applying-restrictions" id="markdown-toc-configuring-authorization-applying-restrictions">Configuring authorization: Applying restrictions</a>    <ul>
+      <li><a href="#using-matcher-methods-to-select-endpoints" id="markdown-toc-using-matcher-methods-to-select-endpoints">Using matcher methods to select endpoints</a></li>
+      <li><a href="#selecting-requests-for-authorization-using-mvc-matchers" id="markdown-toc-selecting-requests-for-authorization-using-mvc-matchers">Selecting requests for authorization using MVC matchers</a></li>
+    </ul>
+  </li>
   <li><a href="#references" id="markdown-toc-references">References</a></li>
 </ul>
 
@@ -1081,6 +1092,390 @@ messageStyle: "none",
 </span><span class="line">      <span class="n">httpServletResponse</span><span class="o">.</span><span class="na">sendError</span><span class="o">(</span><span class="n">HttpStatus</span><span class="o">.</span><span class="na">UNAUTHORIZED</span><span class="o">.</span><span class="na">value</span><span class="o">());</span>
 </span><span class="line">    <span class="o">}</span>
 </span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h1 id="configuring-authorization-restricting-access">Configuring authorization: Restricting access</h1>
+
+<ul>
+  <li><em>Authorization</em> is the process during which the system decides if an identified client has permission to access the requested resource</li>
+  <li>In Spring Security, once the application ends the authentication flow, it delegates the request to an authorization filter. The filter allows or rejects the request based on the configured authorization rules.</li>
+  <li>When the client makes the request, the authentication filter authenticates the user. After successful authentication, the authentication filter stores the user details in the security context and forwards the request to the authorization filter. The authorization filter decides whether the call is permitted. To decide whether to authorize the request, the authorization filter uses the details from the security context.</li>
+</ul>
+
+<p><img src="/technology/spring-security-17.png" /></p>
+
+<h2 id="restricting-access-based-on-authorities-and-roles">Restricting access based on authorities and roles</h2>
+
+<ul>
+  <li>A user has one or more authorities (actions that a user can do). During the authentication process, the <code>UserDetailsService</code> obtains all the details about the user, including the authorities. The application uses the authorities as represented by the <code>GrantedAuthority</code> interface for authorization after it successfully authenticates the user</li>
+  <li>An <em>authority</em> is an action that a user can perform with a system resource. An authority has a name that the <code>getAuthority()</code> behavior of the object returns as a <code>String</code>. We use the name of the authority when defining the custom authorization rule. Often an authorization rule can look like this: <em>“Jane is allowed to delete the product records,”</em> or <em>“John is allowed to read the document records.”</em> In these cases, delete and read are the granted authorities. The application allows the users Jane and John to perform these actions, which often have names like read, write, or delete.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>The GrantedAuthority contract</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">GrantedAuthority</span> <span class="kd">extends</span> <span class="n">Serializable</span> <span class="o">{</span>
+</span><span class="line">  <span class="n">String</span> <span class="nf">getAuthority</span><span class="o">();</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>The getAuthorities() method from the UserDetails contract</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UserDetails</span> <span class="kd">extends</span> <span class="n">Serializable</span> <span class="o">{</span>
+</span><span class="line">  <span class="n">Collection</span><span class="o">&lt;?</span> <span class="kd">extends</span> <span class="n">GrantedAuthority</span><span class="o">&gt;</span> <span class="nf">getAuthorities</span><span class="o">();</span>
+</span><span class="line">
+</span><span class="line">  <span class="c1">// Omitted code</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><img src="/technology/spring-security-18.png" /></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Restricting access for all endpoints based on user authorities</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">var</span> <span class="n">user1</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="na">withUsername</span><span class="o">(</span><span class="s">&quot;john&quot;</span><span class="o">)</span>
+</span><span class="line">                <span class="o">.</span><span class="na">password</span><span class="o">(</span><span class="s">&quot;12345&quot;</span><span class="o">)</span>
+</span><span class="line">                <span class="o">.</span><span class="na">authorities</span><span class="o">(</span><span class="s">&quot;READ&quot;</span><span class="o">)</span>
+</span><span class="line">                <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+</span><span class="line">
+</span><span class="line"><span class="n">var</span> <span class="n">user2</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="na">withUsername</span><span class="o">(</span><span class="s">&quot;jane&quot;</span><span class="o">)</span>
+</span><span class="line">                <span class="o">.</span><span class="na">password</span><span class="o">(</span><span class="s">&quot;12345&quot;</span><span class="o">)</span>
+</span><span class="line">                <span class="o">.</span><span class="na">authorities</span><span class="o">(</span><span class="s">&quot;WRITE&quot;</span><span class="o">)</span>
+</span><span class="line">                <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>You provide the name of the authority allowed to the user as a parameter of the <code>hasAuthority()</code> method. The application needs, first, to authenticate the request and then, based on the user’s authorities, the app decides whether to allow the call.</p>
+
+<p>__1. <code>hasAuthority()</code> method</p>
+
+<p><code>hasAuthority('WRITE')</code> – Stipulates that the user needs the WRITE authority to call the endpoint.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Restricting access to only users having WRITE authority</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Override</span>
+</span><span class="line"><span class="kd">protected</span> <span class="kt">void</span> <span class="nf">configure</span><span class="o">(</span><span class="n">HttpSecurity</span> <span class="n">http</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span><span class="line">  <span class="n">http</span><span class="o">.</span><span class="na">httpBasic</span><span class="o">();</span>
+</span><span class="line">
+</span><span class="line">  <span class="n">http</span><span class="o">.</span><span class="na">authorizeRequests</span><span class="o">()</span>
+</span><span class="line">        <span class="o">.</span><span class="na">anyRequest</span><span class="o">()</span>
+</span><span class="line">        <span class="o">.</span><span class="na">hasAuthority</span><span class="o">(</span><span class="s">&quot;WRITE&quot;</span><span class="o">);</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>__2. <code>hasAnyAuthority()</code> method</p>
+
+<p><code>hasAnyAuthority('READ', 'WRITE')</code>–Specifies that the user needs one of either the READ or WRITE authorities. With this expression, you can enumerate all the authorities for which you want to allow access.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Applying the hasAnyAuthority() method</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">http</span><span class="o">.</span><span class="na">authorizeRequests</span><span class="o">()</span>
+</span><span class="line">          <span class="o">.</span><span class="na">anyRequest</span><span class="o">()</span>
+</span><span class="line">            <span class="o">.</span><span class="na">hasAnyAuthority</span><span class="o">(</span><span class="s">&quot;WRITE&quot;</span><span class="o">,</span> <span class="s">&quot;READ&quot;</span><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>__3. <code>access()</code> method</p>
+
+<p>To specify access based on user authorities, the third way you find in practice is the <code>access()</code> method. The <code>access()</code> method is more general, however. It receives as a parameter a <strong>Spring expression (SpEL)</strong> that specifies the authorization condition. This method is powerful, and it doesn’t refer only to authorities. However, this method also makes the code more difficult to read and understand. For this reason, I recommend it as the last option, and only if you can’t apply one of the <code>hasAuthority()</code> or <code>hasAnyAuthority()</code> methods presented earlier.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Using the access() method to configure access to the endpoints</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">http</span><span class="o">.</span><span class="na">authorizeRequests</span><span class="o">()</span>
+</span><span class="line">          <span class="o">.</span><span class="na">anyRequest</span><span class="o">()</span>
+</span><span class="line">            <span class="o">.</span><span class="na">access</span><span class="o">(</span><span class="s">&quot;hasAuthority(&#39;WRITE&#39;)&quot;</span><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Applying the access() method with a more complex expression</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">String</span> <span class="n">expression</span> <span class="o">=</span> <span class="s">&quot;hasAuthority(&#39;read&#39;) and !hasAuthority(&#39;delete&#39;)&quot;</span><span class="o">;</span>
+</span><span class="line">
+</span><span class="line"><span class="n">http</span><span class="o">.</span><span class="na">authorizeRequests</span><span class="o">()</span>
+</span><span class="line">    <span class="o">.</span><span class="na">anyRequest</span><span class="o">()</span>
+</span><span class="line">    <span class="o">.</span><span class="na">access</span><span class="o">(</span><span class="n">expression</span><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="restricting-access-for-all-endpoints-based-on-user-roles">Restricting access for all endpoints based on user roles</h2>
+
+<ul>
+  <li>Roles are coarse grained. Each user with a specific role can only do the actions granted by that role. When applying this philosophy in authorization, a request is allowed based on the purpose of the user in the system. Only users who have a specific role can call a certain endpoint.</li>
+  <li>Imagine, in your application, a user can either only have read authority or have all: read, write, and delete authorities. In this case, it might be more comfortable to think that those users who can only read have a role named READER, while the others have the role ADMIN. Having the ADMIN role means that the application grants you read, write, update, and delete privileges.</li>
+  <li>Roles are represented using the same contract in Spring Security <code>GrantedAuthority</code>. When defining a role, its name should start with the <code>ROLE_</code> prefix. At the implementation level, this prefix specifies the difference between a role and an authority.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Setting roles for users</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">var</span> <span class="n">user1</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="na">withUsername</span><span class="o">(</span><span class="s">&quot;john&quot;</span><span class="o">)</span>
+</span><span class="line">                    <span class="o">.</span><span class="na">password</span><span class="o">(</span><span class="s">&quot;12345&quot;</span><span class="o">)</span>
+</span><span class="line">                    <span class="o">.</span><span class="na">authorities</span><span class="o">(</span><span class="s">&quot;ROLE_ADMIN&quot;</span><span class="o">)</span>
+</span><span class="line">                    <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+</span><span class="line">
+</span><span class="line">    <span class="n">var</span> <span class="n">user2</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="na">withUsername</span><span class="o">(</span><span class="s">&quot;jane&quot;</span><span class="o">)</span>
+</span><span class="line">                    <span class="o">.</span><span class="na">password</span><span class="o">(</span><span class="s">&quot;12345&quot;</span><span class="o">)</span>
+</span><span class="line">                    <span class="o">.</span><span class="na">authorities</span><span class="o">(</span><span class="s">&quot;ROLE_MANAGER&quot;</span><span class="o">)</span>
+</span><span class="line">                    <span class="o">.</span><span class="na">build</span><span class="o">();</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>To set constraints for user roles, you can use one of the following methods:</p>
+
+<ol>
+  <li><code>hasRole()</code>–Receives as a parameter the role name for which the application authorizes the request.</li>
+  <li><code>hasAnyRole()</code>–Receives as parameters the role names for which the application approves the request.</li>
+  <li><code>access()</code>–Uses a Spring expression to specify the role or roles for which the application authorizes requests. In terms of roles, you could use <code>hasRole()</code> or <code>hasAnyRole()</code> as SpEL expressions.</li>
+</ol>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Configuring the app to accept only requests from admins</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">http</span><span class="o">.</span><span class="na">authorizeRequests</span><span class="o">()</span>
+</span><span class="line">         <span class="o">.</span><span class="na">anyRequest</span><span class="o">().</span><span class="na">hasRole</span><span class="o">(</span><span class="s">&quot;ADMIN&quot;</span><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>When building users with the User builder class as we did in the example for this section, you specify the role by using the <code>roles()</code> method. This method creates the <code>GrantedAuthority</code> object and automatically adds the <code>ROLE_</code> prefix to the names you provide.</p>
+
+<blockquote>
+  <p>Make sure the parameter you provide for the <code>roles()</code> method DOES NOT include the <code>ROLE_</code> prefix. If that prefix is inadvertently included in the <code>role()</code> parameter, the method throws an exception. In short, when using the <code>authorities()</code> method, include the <code>ROLE_</code> prefix. When using the <code>roles()</code> method, do not include the <code>ROLE_</code> prefix.</p>
+</blockquote>
+
+<p>Important to remember that the <code>access()</code> method is generic. For example, to configure access to the endpoint to be allowed only after 12:00 pm, you can use the following SpEL expression:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">T</span><span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">time</span><span class="o">.</span><span class="na">LocalTime</span><span class="o">).</span><span class="na">now</span><span class="o">().</span><span class="na">isAfter</span><span class="o">(</span><span class="n">T</span><span class="o">(</span><span class="n">java</span><span class="o">.</span><span class="na">time</span><span class="o">.</span><span class="na">LocalTime</span><span class="o">).</span><span class="na">of</span><span class="o">(</span><span class="mi">12</span><span class="o">,</span> <span class="mi">0</span><span class="o">))</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="restricting-access-to-all-endpoints">Restricting access to all endpoints</h2>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Using the denyAll() method to restrict access to endpoints</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">http</span><span class="o">.</span><span class="na">authorizeRequests</span><span class="o">()</span>
+</span><span class="line">         <span class="o">.</span><span class="na">anyRequest</span><span class="o">().</span><span class="na">denyAll</span><span class="o">();</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h1 id="configuring-authorization-applying-restrictions">Configuring authorization: Applying restrictions</h1>
+
+<h2 id="using-matcher-methods-to-select-endpoints">Using matcher methods to select endpoints</h2>
+
+<ul>
+  <li>We use matcher methods to choose the requests to which we apply authorization configuration.</li>
+  <li>Requests can be selected by path, by HTTP method or both.</li>
+  <li>Spring Security offers you three types of matcher methods:</li>
+</ul>
+
+<ol>
+  <li><strong>MVC matchers</strong>–You use MVC expressions for paths to select endpoints.</li>
+  <li><strong>Ant matchers</strong>–You use Ant expressions for paths to select endpoints.</li>
+  <li><strong>regex matchers</strong>–You use regular expressions (regex) for paths to select endpoints.</li>
+</ol>
+
+<p><strong>MVC matchers</strong></p>
+
+<ul>
+  <li>We create an application that exposes two endpoints: <code>/hello</code> and <code>/ciao</code>. We want to make sure that only users having the ADMIN role can call the <code>/hello</code> endpoint. Similarly, we want to make sure that only users having the MANAGER role can call the <code>/ciao</code> endpoint.</li>
+  <li>To specify that only users having the ADMIN role can call the endpoint <code>/hello</code> when authorizing requests, we use the <code>mvcMatchers()</code> method.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Override</span>
+</span><span class="line">  <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">configure</span><span class="o">(</span><span class="n">HttpSecurity</span> <span class="n">http</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span><span class="line">    <span class="n">http</span><span class="o">.</span><span class="na">httpBasic</span><span class="o">();</span>
+</span><span class="line">
+</span><span class="line">    <span class="n">http</span><span class="o">.</span><span class="na">authorizeRequests</span><span class="o">()</span>
+</span><span class="line">         <span class="o">.</span><span class="na">mvcMatchers</span><span class="o">(</span><span class="s">&quot;/hello&quot;</span><span class="o">).</span><span class="na">hasRole</span><span class="o">(</span><span class="s">&quot;ADMIN&quot;</span><span class="o">)</span>
+</span><span class="line">         <span class="o">.</span><span class="na">mvcMatchers</span><span class="o">(</span><span class="s">&quot;/ciao&quot;</span><span class="o">).</span><span class="na">hasRole</span><span class="o">(</span><span class="s">&quot;MANAGER&quot;</span><span class="o">);</span>
+</span><span class="line">  <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>If you now add any other endpoint to your application, it is accessible by default to anyone, even unauthenticated users.</p>
+
+<p>The <code>permitAll()</code> method states that all other requests are allowed without authentication.</p>
+
+<blockquote>
+  <p>When you use matchers to refer to requests, the order of the rules should be from particular to general. This is why the <code>anyRequest()</code> method cannot be called before a more specific matcher method like <code>mvcMatchers()</code>.</p>
+</blockquote>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Marking additional requests explicitly as accessible without authentication</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Override</span>
+</span><span class="line">  <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">configure</span><span class="o">(</span><span class="n">HttpSecurity</span> <span class="n">http</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span><span class="line">    <span class="n">http</span><span class="o">.</span><span class="na">httpBasic</span><span class="o">();</span>
+</span><span class="line">
+</span><span class="line">    <span class="n">http</span><span class="o">.</span><span class="na">authorizeRequests</span><span class="o">()</span>
+</span><span class="line">           <span class="o">.</span><span class="na">mvcMatchers</span><span class="o">(</span><span class="s">&quot;/hello&quot;</span><span class="o">).</span><span class="na">hasRole</span><span class="o">(</span><span class="s">&quot;ADMIN&quot;</span><span class="o">)</span>
+</span><span class="line">           <span class="o">.</span><span class="na">mvcMatchers</span><span class="o">(</span><span class="s">&quot;/ciao&quot;</span><span class="o">).</span><span class="na">hasRole</span><span class="o">(</span><span class="s">&quot;MANAGER&quot;</span><span class="o">)</span>
+</span><span class="line">           <span class="o">.</span><span class="na">anyRequest</span><span class="o">().</span><span class="na">permitAll</span><span class="o">();</span>
+</span><span class="line">  <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>If you have designed an endpoint to be accessible to anyone, you can call it without providing a username and a password for authentication. In this case, Spring Security won’t do the authentication. If you, however, provide a username and a password, Spring Security evaluates them in the authentication process. If they are wrong (not known by the system), authentication fails, and the response status will be 401 Unauthorized. To be more precise, if you call the /hola endpoint for the configuration presented in listing 8.4, the app returns the body “Hola!” as expected, and the response status is 200 OK.</p>
+
+<p><img src="/technology/spring-security-19.png" /></p>
+
+<p>The authorization filter allows any request to the <code>/hola</code> path. But because the application first executes the authentication logic, the request is never forwarded to the authorization filter. Instead, the authentication filter replies with an HTTP 401 Unauthorized.</p>
+
+<p>The <code>permitAll()</code> method refers to authorization configuration only, and if authentication fails, the call will not be allowed further.</p>
+
+<p>To make all the other endpoints accessible only for authenticated users. To do this, you would change the <code>permitAll()</code> method with <code>authenticated()</code> as presented in the following listing. Similarly, you could even deny all other requests by using the <code>denyAll()</code> method.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Making other requests accessible for all authenticated users</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Override</span>
+</span><span class="line">  <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">configure</span><span class="o">(</span><span class="n">HttpSecurity</span> <span class="n">http</span><span class="o">)</span>
+</span><span class="line">    <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span><span class="line">    <span class="n">http</span><span class="o">.</span><span class="na">httpBasic</span><span class="o">();</span>
+</span><span class="line">
+</span><span class="line">     <span class="n">http</span><span class="o">.</span><span class="na">authorizeRequests</span><span class="o">()</span>
+</span><span class="line">           <span class="o">.</span><span class="na">mvcMatchers</span><span class="o">(</span><span class="s">&quot;/hello&quot;</span><span class="o">).</span><span class="na">hasRole</span><span class="o">(</span><span class="s">&quot;ADMIN&quot;</span><span class="o">)</span>
+</span><span class="line">           <span class="o">.</span><span class="na">mvcMatchers</span><span class="o">(</span><span class="s">&quot;/ciao&quot;</span><span class="o">).</span><span class="na">hasRole</span><span class="o">(</span><span class="s">&quot;MANAGER&quot;</span><span class="o">)</span>
+</span><span class="line">           <span class="o">.</span><span class="na">anyRequest</span><span class="o">().</span><span class="na">authenticated</span><span class="o">();</span>
+</span><span class="line">  <span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Multiple endpoints can have the same authorization rules, so you don’t have to set them up endpoint by endpoint</p>
+
+<h2 id="selecting-requests-for-authorization-using-mvc-matchers">Selecting requests for authorization using MVC matchers</h2>
+
+<p>This matcher uses the standard MVC syntax for referring to paths. This syntax is the same one you use when writing endpoint mappings with annotations like @RequestMapping, <code>@GetMapping</code>, <code>@PostMapping</code>, and so forth. The two methods you can use to declare MVC matchers are as follows:</p>
+
+<ul>
+  <li><code>mvcMatchers(HttpMethod method, String... patterns)</code>–Lets you specify both the HTTP method to which the restrictions apply and the paths. This method is useful if you want to apply different restrictions for different HTTP methods for the same path.</li>
+  <li><code>mvcMatchers(String... patterns)</code>–Simpler and easier to use if you only need to apply authorization restrictions based on paths. The restrictions can automatically apply to any HTTP method used with the path.</li>
+</ul>
+
+<p>Spring Security applies, by default, protection against cross-site request forgery (CSRF).</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Authorization configuration for the first scenario,</span><a href="/a">link</a></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">http</span><span class="o">.</span><span class="na">authorizeRequests</span><span class="o">()</span>
+</span><span class="line">            <span class="o">.</span><span class="na">mvcMatchers</span><span class="o">(</span><span class="n">HttpMethod</span><span class="o">.</span><span class="na">GET</span><span class="o">,</span> <span class="s">&quot;/a&quot;</span><span class="o">)</span>
+</span><span class="line">               <span class="o">.</span><span class="na">authenticated</span><span class="o">()</span>
+</span><span class="line">            <span class="o">.</span><span class="na">mvcMatchers</span><span class="o">(</span><span class="n">HttpMethod</span><span class="o">.</span><span class="na">POST</span><span class="o">,</span> <span class="s">&quot;/a&quot;</span><span class="o">)</span>
+</span><span class="line">               <span class="o">.</span><span class="na">permitAll</span><span class="o">()</span>
+</span><span class="line">            <span class="o">.</span><span class="na">anyRequest</span><span class="o">()</span>
+</span><span class="line">               <span class="o">.</span><span class="na">denyAll</span><span class="o">();</span>
+</span><span class="line">
+</span><span class="line">    <span class="n">http</span><span class="o">.</span><span class="na">csrf</span><span class="o">().</span><span class="na">disable</span><span class="o">();</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>For the current project, we want to ensure that the same rules apply for all requests for paths starting with <code>/a/b</code>. These paths in our case are <code>/a/b</code> and <code>/a/b/c</code>. To achieve this, we use the <code>**</code> operator. (Spring MVC borrows the path-matching syntaxes from Ant.)</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Changes in the configuration class for multiple paths</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"> <span class="n">http</span><span class="o">.</span><span class="na">authorizeRequests</span><span class="o">()</span>
+</span><span class="line">          <span class="o">.</span><span class="na">mvcMatchers</span><span class="o">(</span> <span class="s">&quot;/a/b/**&quot;</span><span class="o">)</span>
+</span><span class="line">             <span class="o">.</span><span class="na">authenticated</span><span class="o">()</span>
+</span><span class="line">          <span class="o">.</span><span class="na">anyRequest</span><span class="o">()</span>
+</span><span class="line">             <span class="o">.</span><span class="na">permitAll</span><span class="o">();</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>The <code>**</code> operator refers to any number of pathnames. You can use it as we have done in the last example so that you can match requests with paths having a known prefix. You can also use it in the middle of a path to refer to any number of pathnames or to refer to paths ending in a specific pattern like <code>/a/**/c</code>. Therefore, <code>/a/**/c</code> would not only match <code>/a/b/c</code> but also <code>/a/b/d/c</code> and <code>a/b/c/d/e/c</code> and so on. If you only want to match one pathname, then you can use a single <code>*</code>. For example, <code>a/*/c</code> would match <code>a/b/c</code> and <code>a/d/c</code> but not <code>a/b/d/c</code>.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Configuring the authorization to permit only specific digits</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">http</span><span class="o">.</span><span class="na">authorizeRequests</span><span class="o">()</span>
+</span><span class="line">         <span class="o">.</span><span class="na">mvcMatchers</span><span class="o">(</span><span class="s">&quot;/product/{code:^[0-9]*$}&quot;</span><span class="o">)</span> <span class="c1">//The regex refers to strings of any length, containing any digit.</span>
+</span><span class="line">              <span class="o">.</span><span class="na">permitAll</span><span class="o">()</span>
+</span><span class="line">         <span class="o">.</span><span class="na">anyRequest</span><span class="o">()</span>
+</span><span class="line">              <span class="o">.</span><span class="na">denyAll</span><span class="o">();</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Common expressions used for path matching with MVC matchers</p>
+
+<table>
+  <tbody>
+    <tr>
+      <td>Expression</td>
+      <td>Description</td>
+    </tr>
+    <tr>
+      <td><code>/a</code></td>
+      <td>Only path /a.</td>
+    </tr>
+    <tr>
+      <td><code>/a/*</code></td>
+      <td>The * operator replaces one pathname. In this case, it matches /a/b or /a/c, but not /a/b/c.</td>
+    </tr>
+    <tr>
+      <td><code>/a/**</code></td>
+      <td>The ** operator replaces multiple pathnames. In this case, /a as well as /a/b and /a/b/c are a match for this expression.</td>
+    </tr>
+    <tr>
+      <td><code>/a/{param}</code></td>
+      <td>This expression applies to the path /a with a given path parameter.</td>
+    </tr>
+    <tr>
+      <td><code>/a/{param:regex}</code></td>
+      <td>This expression applies to the path /a with a given path parameter only when the value of the parameter matches the given regular expression.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>Ant matchers</strong></p>
+
+<p>The Ant matchers apply exactly the given Ant expressions for patterns but know nothing about subtle Spring MVC functionality. In this case, <code>/hello</code> doesn’t apply as an Ant expression to the <code>/hello/</code> path. If you also want to secure the <code>/hello/</code> path, you have to individually add it or write an Ant expression that matches it as well.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">http</span><span class="o">.</span><span class="na">authorizeRequests</span><span class="o">()</span>
+</span><span class="line">          <span class="o">.</span><span class="na">antMatchers</span><span class="o">(</span> <span class="s">&quot;/hello&quot;</span><span class="o">).</span><span class="na">authenticated</span><span class="o">();</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h1 id="references">References</h1>

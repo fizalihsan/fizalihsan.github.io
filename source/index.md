@@ -69,6 +69,7 @@ footer: true
     * [Batch]({{ root_url }}/technology/spring-batch.html)
     * [Core]({{ root_url }}/technology/spring.html)
     * [MVC]({{ root_url }}/technology/spring-mvc.html)
+    * [Security]({{ root_url }}/technology/spring-security.html)
 
   * Web Programming
     * [Concepts]({{ root_url }}/technology/webconcepts.html)

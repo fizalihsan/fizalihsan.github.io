@@ -624,6 +624,275 @@ public class CustomEntryPoint implements AuthenticationEntryPoint {
 }
 ```
 
+# Configuring authorization: Restricting access
+
+* _Authorization_ is the process during which the system decides if an identified client has permission to access the requested resource
+* In Spring Security, once the application ends the authentication flow, it delegates the request to an authorization filter. The filter allows or rejects the request based on the configured authorization rules.
+* When the client makes the request, the authentication filter authenticates the user. After successful authentication, the authentication filter stores the user details in the security context and forwards the request to the authorization filter. The authorization filter decides whether the call is permitted. To decide whether to authorize the request, the authorization filter uses the details from the security context.
+
+{% img /technology/spring-security-17.png %}
+
+## Restricting access based on authorities and roles
+
+* A user has one or more authorities (actions that a user can do). During the authentication process, the `UserDetailsService` obtains all the details about the user, including the authorities. The application uses the authorities as represented by the `GrantedAuthority` interface for authorization after it successfully authenticates the user
+* An _authority_ is an action that a user can perform with a system resource. An authority has a name that the `getAuthority()` behavior of the object returns as a `String`. We use the name of the authority when defining the custom authorization rule. Often an authorization rule can look like this: _“Jane is allowed to delete the product records,”_ or _“John is allowed to read the document records.”_ In these cases, delete and read are the granted authorities. The application allows the users Jane and John to perform these actions, which often have names like read, write, or delete.
+
+```java The GrantedAuthority contract
+public interface GrantedAuthority extends Serializable {
+  String getAuthority();
+}
+```
+
+```java The getAuthorities() method from the UserDetails contract
+
+public interface UserDetails extends Serializable {
+  Collection<? extends GrantedAuthority> getAuthorities();
+
+  // Omitted code
+}
+```
+
+{% img /technology/spring-security-18.png %}
+
+
+```java Restricting access for all endpoints based on user authorities
+    var user1 = User.withUsername("john")
+                    .password("12345")
+                    .authorities("READ")
+                    .build();
+
+    var user2 = User.withUsername("jane")
+                    .password("12345")
+                    .authorities("WRITE")
+                    .build();
+```
+
+You provide the name of the authority allowed to the user as a parameter of the `hasAuthority()` method. The application needs, first, to authenticate the request and then, based on the user’s authorities, the app decides whether to allow the call.
+
+__1. `hasAuthority()` method
+
+`hasAuthority('WRITE')` -- Stipulates that the user needs the WRITE authority to call the endpoint.
+
+
+
+```java Restricting access to only users having WRITE authority
+
+@Override
+protected void configure(HttpSecurity http) throws Exception {
+  http.httpBasic();
+
+  http.authorizeRequests()
+        .anyRequest()
+        .hasAuthority("WRITE");
+}
+```
+
+__2. `hasAnyAuthority()` method
+
+`hasAnyAuthority('READ', 'WRITE')`--Specifies that the user needs one of either the READ or WRITE authorities. With this expression, you can enumerate all the authorities for which you want to allow access.
+
+```java Applying the hasAnyAuthority() method
+http.authorizeRequests()
+          .anyRequest()
+            .hasAnyAuthority("WRITE", "READ");
+```
+
+__3. `access()` method
+
+To specify access based on user authorities, the third way you find in practice is the `access()` method. The `access()` method is more general, however. It receives as a parameter a __Spring expression (SpEL)__ that specifies the authorization condition. This method is powerful, and it doesn’t refer only to authorities. However, this method also makes the code more difficult to read and understand. For this reason, I recommend it as the last option, and only if you can’t apply one of the `hasAuthority()` or `hasAnyAuthority()` methods presented earlier.
+
+```java Using the access() method to configure access to the endpoints
+http.authorizeRequests()
+          .anyRequest()
+            .access("hasAuthority('WRITE')");
+```
+
+```java Applying the access() method with a more complex expression
+String expression = "hasAuthority('read') and !hasAuthority('delete')";
+
+http.authorizeRequests()
+    .anyRequest()
+    .access(expression);
+```
+
+## Restricting access for all endpoints based on user roles
+
+* Roles are coarse grained. Each user with a specific role can only do the actions granted by that role. When applying this philosophy in authorization, a request is allowed based on the purpose of the user in the system. Only users who have a specific role can call a certain endpoint.
+* Imagine, in your application, a user can either only have read authority or have all: read, write, and delete authorities. In this case, it might be more comfortable to think that those users who can only read have a role named READER, while the others have the role ADMIN. Having the ADMIN role means that the application grants you read, write, update, and delete privileges.
+* Roles are represented using the same contract in Spring Security `GrantedAuthority`. When defining a role, its name should start with the `ROLE_` prefix. At the implementation level, this prefix specifies the difference between a role and an authority.
+
+```java Setting roles for users
+var user1 = User.withUsername("john")
+                    .password("12345")
+                    .authorities("ROLE_ADMIN")
+                    .build();
+
+    var user2 = User.withUsername("jane")
+                    .password("12345")
+                    .authorities("ROLE_MANAGER")
+                    .build();
+```
+
+To set constraints for user roles, you can use one of the following methods:
+
+1. `hasRole()`--Receives as a parameter the role name for which the application authorizes the request.
+2. `hasAnyRole()`--Receives as parameters the role names for which the application approves the request.
+3. `access()`--Uses a Spring expression to specify the role or roles for which the application authorizes requests. In terms of roles, you could use `hasRole()` or `hasAnyRole()` as SpEL expressions.
+
+```java Configuring the app to accept only requests from admins
+http.authorizeRequests()
+         .anyRequest().hasRole("ADMIN");
+```
+
+When building users with the User builder class as we did in the example for this section, you specify the role by using the `roles()` method. This method creates the `GrantedAuthority` object and automatically adds the `ROLE_` prefix to the names you provide.
+
+> Make sure the parameter you provide for the `roles()` method DOES NOT include the `ROLE_` prefix. If that prefix is inadvertently included in the `role()` parameter, the method throws an exception. In short, when using the `authorities()` method, include the `ROLE_` prefix. When using the `roles()` method, do not include the `ROLE_` prefix.
+
+Important to remember that the `access()` method is generic. For example, to configure access to the endpoint to be allowed only after 12:00 pm, you can use the following SpEL expression:
+
+```java
+T(java.time.LocalTime).now().isAfter(T(java.time.LocalTime).of(12, 0))
+```
+
+## Restricting access to all endpoints
+
+```java Using the denyAll() method to restrict access to endpoints
+http.authorizeRequests()
+         .anyRequest().denyAll();
+```
+
+# Configuring authorization: Applying restrictions
+
+## Using matcher methods to select endpoints
+
+* We use matcher methods to choose the requests to which we apply authorization configuration. 
+* Requests can be selected by path, by HTTP method or both. 
+* Spring Security offers you three types of matcher methods:
+
+1. __MVC matchers__--You use MVC expressions for paths to select endpoints.
+2. __Ant matchers__--You use Ant expressions for paths to select endpoints.
+3. __regex matchers__--You use regular expressions (regex) for paths to select endpoints.
+
+__MVC matchers__
+
+* We create an application that exposes two endpoints: `/hello` and `/ciao`. We want to make sure that only users having the ADMIN role can call the `/hello` endpoint. Similarly, we want to make sure that only users having the MANAGER role can call the `/ciao` endpoint.
+* To specify that only users having the ADMIN role can call the endpoint `/hello` when authorizing requests, we use the `mvcMatchers()` method.
+
+```java
+@Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http.httpBasic();
+
+    http.authorizeRequests()
+         .mvcMatchers("/hello").hasRole("ADMIN")
+         .mvcMatchers("/ciao").hasRole("MANAGER");
+  }
+
+```
+
+If you now add any other endpoint to your application, it is accessible by default to anyone, even unauthenticated users. 
+
+The `permitAll()` method states that all other requests are allowed without authentication.
+
+> When you use matchers to refer to requests, the order of the rules should be from particular to general. This is why the `anyRequest()` method cannot be called before a more specific matcher method like `mvcMatchers()`.
+
+```java Marking additional requests explicitly as accessible without authentication
+@Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http.httpBasic();
+
+    http.authorizeRequests()
+           .mvcMatchers("/hello").hasRole("ADMIN")
+           .mvcMatchers("/ciao").hasRole("MANAGER")
+           .anyRequest().permitAll();
+  }
+```
+
+
+If you have designed an endpoint to be accessible to anyone, you can call it without providing a username and a password for authentication. In this case, Spring Security won’t do the authentication. If you, however, provide a username and a password, Spring Security evaluates them in the authentication process. If they are wrong (not known by the system), authentication fails, and the response status will be 401 Unauthorized. To be more precise, if you call the /hola endpoint for the configuration presented in listing 8.4, the app returns the body “Hola!” as expected, and the response status is 200 OK.
+
+{% img /technology/spring-security-19.png %}
+
+The authorization filter allows any request to the `/hola` path. But because the application first executes the authentication logic, the request is never forwarded to the authorization filter. Instead, the authentication filter replies with an HTTP 401 Unauthorized.
+
+
+The `permitAll()` method refers to authorization configuration only, and if authentication fails, the call will not be allowed further.
+
+To make all the other endpoints accessible only for authenticated users. To do this, you would change the `permitAll()` method with `authenticated()` as presented in the following listing. Similarly, you could even deny all other requests by using the `denyAll()` method.
+
+```java Making other requests accessible for all authenticated users
+@Override
+  protected void configure(HttpSecurity http) 
+    throws Exception {
+    http.httpBasic();
+
+     http.authorizeRequests()
+           .mvcMatchers("/hello").hasRole("ADMIN")
+           .mvcMatchers("/ciao").hasRole("MANAGER")
+           .anyRequest().authenticated();
+  }
+```
+
+Multiple endpoints can have the same authorization rules, so you don’t have to set them up endpoint by endpoint
+
+## Selecting requests for authorization using MVC matchers
+
+This matcher uses the standard MVC syntax for referring to paths. This syntax is the same one you use when writing endpoint mappings with annotations like @RequestMapping, `@GetMapping`, `@PostMapping`, and so forth. The two methods you can use to declare MVC matchers are as follows:
+
+* `mvcMatchers(HttpMethod method, String... patterns)`--Lets you specify both the HTTP method to which the restrictions apply and the paths. This method is useful if you want to apply different restrictions for different HTTP methods for the same path.
+* `mvcMatchers(String... patterns)`--Simpler and easier to use if you only need to apply authorization restrictions based on paths. The restrictions can automatically apply to any HTTP method used with the path.
+
+Spring Security applies, by default, protection against cross-site request forgery (CSRF).
+
+```java Authorization configuration for the first scenario, /a
+http.authorizeRequests()
+            .mvcMatchers(HttpMethod.GET, "/a")
+               .authenticated()
+            .mvcMatchers(HttpMethod.POST, "/a")
+               .permitAll()
+            .anyRequest()
+               .denyAll();
+
+    http.csrf().disable(); 
+```
+
+For the current project, we want to ensure that the same rules apply for all requests for paths starting with `/a/b`. These paths in our case are `/a/b` and `/a/b/c`. To achieve this, we use the `**` operator. (Spring MVC borrows the path-matching syntaxes from Ant.)
+
+```java Changes in the configuration class for multiple paths
+ http.authorizeRequests()
+          .mvcMatchers( "/a/b/**")
+             .authenticated()    
+          .anyRequest()
+             .permitAll();
+```
+
+The `**` operator refers to any number of pathnames. You can use it as we have done in the last example so that you can match requests with paths having a known prefix. You can also use it in the middle of a path to refer to any number of pathnames or to refer to paths ending in a specific pattern like `/a/**/c`. Therefore, `/a/**/c` would not only match `/a/b/c` but also `/a/b/d/c` and `a/b/c/d/e/c` and so on. If you only want to match one pathname, then you can use a single `*`. For example, `a/*/c` would match `a/b/c` and `a/d/c` but not `a/b/d/c`.
+
+```java Configuring the authorization to permit only specific digits
+http.authorizeRequests()
+         .mvcMatchers("/product/{code:^[0-9]*$}") //The regex refers to strings of any length, containing any digit.
+              .permitAll()
+         .anyRequest()
+              .denyAll();
+```
+
+Common expressions used for path matching with MVC matchers
+
+| Expression | Description |
+| `/a`| Only path /a. | 
+| `/a/*`| The * operator replaces one pathname. In this case, it matches /a/b or /a/c, but not /a/b/c. | 
+| `/a/**`| The ** operator replaces multiple pathnames. In this case, /a as well as /a/b and /a/b/c are a match for this expression. | 
+| `/a/{param}`| This expression applies to the path /a with a given path parameter. | 
+| `/a/{param:regex}`| This expression applies to the path /a with a given path parameter only when the value of the parameter matches the given regular expression. | 
+
+__Ant matchers__
+
+The Ant matchers apply exactly the given Ant expressions for patterns but know nothing about subtle Spring MVC functionality. In this case, `/hello` doesn’t apply as an Ant expression to the `/hello/` path. If you also want to secure the `/hello/` path, you have to individually add it or write an Ant expression that matches it as well. 
+
+```java
+http.authorizeRequests()
+          .antMatchers( "/hello").authenticated();
+```
 
 # References
 

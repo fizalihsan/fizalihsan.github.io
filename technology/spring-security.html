@@ -157,6 +157,16 @@ messageStyle: "none",
       <li><a href="#filter-implementations-from-spring-security" id="markdown-toc-filter-implementations-from-spring-security">Filter implementations from Spring Security</a></li>
     </ul>
   </li>
+  <li><a href="#applying-csrf" id="markdown-toc-applying-csrf">Applying CSRF</a>    <ul>
+      <li><a href="#disabling-csrf-for-endpoints" id="markdown-toc-disabling-csrf-for-endpoints">Disabling CSRF for endpoints</a></li>
+      <li><a href="#customizing-csrf" id="markdown-toc-customizing-csrf">Customizing CSRF</a></li>
+    </ul>
+  </li>
+  <li><a href="#applying-cors" id="markdown-toc-applying-cors">Applying CORS</a>    <ul>
+      <li><a href="#applying-cors-policies-using-crossorigin-annotation" id="markdown-toc-applying-cors-policies-using-crossorigin-annotation">Applying CORS policies using @CrossOrigin annotation</a></li>
+      <li><a href="#applying-cors-using-a-corsconfigurer" id="markdown-toc-applying-cors-using-a-corsconfigurer">Applying CORS using a CorsConfigurer</a></li>
+    </ul>
+  </li>
   <li><a href="#references" id="markdown-toc-references">References</a></li>
 </ul>
 
@@ -1754,6 +1764,314 @@ messageStyle: "none",
   <li>For example, you could extend the <code>GenericFilterBean</code> class, which allows you to use initialization parameters that you would define in a <code>web.xml</code> descriptor file where applicable.</li>
   <li>A more useful class that extends the <code>GenericFilterBean</code> is <code>OncePerRequestFilter</code>. When adding a filter to the chain, the framework doesn’t guarantee it will be called only once per request. <code>OncePerRequestFilter</code>, as the name suggests, implements logic to make sure that the filter’s <code>doFilter()</code> method is executed only one time per request.</li>
 </ul>
+
+<h1 id="applying-csrf">Applying CSRF</h1>
+
+<ul>
+  <li>CSRF (Cross-site request forgery) protection, which is enabled by default in Spring Security</li>
+  <li><strong>How CSRF works?</strong>
+    <ul>
+      <li>CSRF attacks assume that a user is logged into a web application. They’re tricked by the attacker into opening a page that contains scripts that execute actions in the same application the user was working on. Because the user has already logged in (as we’ve assumed from the beginning), the forgery code can now impersonate the user and do actions on their behalf.</li>
+    </ul>
+  </li>
+  <li><strong>How do we protect our users from such scenarios?</strong>
+    <ul>
+      <li>What CSRF protection wants to ensure is that only the frontend of web applications can perform mutating operations (by convention, HTTP methods other than GET, HEAD, TRACE, or OPTIONS). Then, a foreign page, like the one in our example, can’t act on behalf of the user.</li>
+    </ul>
+  </li>
+  <li><strong>How can we achieve this?</strong>
+    <ul>
+      <li>What you know for sure is that before being able to do any action that could change data, a user must send a request using HTTP GET to see the web page at least once. When this happens, the application generates a <em>unique token</em>.</li>
+      <li>The application now accepts only requests for mutating operations (POST, PUT, DELETE, and so forth) that contain this unique value in the header. The application considers that knowing the value of the token is proof that it is the app itself making the mutating request and not another system.</li>
+      <li>Any page containing mutating calls, like POST, PUT, DELETE, and so on, should receive through the response the CSRF token, and the page must use this token when making mutating calls.</li>
+    </ul>
+  </li>
+  <li><strong>Spring Security CsrfFilter</strong>
+    <ul>
+      <li>The starting point of CSRF protection is a filter in the filter chain called <code>CsrfFilter</code>.</li>
+      <li>The <code>CsrfFilter</code> intercepts requests and allows all those that use these HTTP methods: GET, HEAD, TRACE, and OPTIONS.</li>
+      <li>For all other requests, the filter expects to receive a header containing a token. If this header does not exist or contains an incorrect token value, the application rejects the request and sets the status of the response to HTTP 403 Forbidden.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/technology/spring-security-29.png" /></p>
+
+<ul>
+  <li><strong>What is this token, and where does it come from?</strong>
+    <ul>
+      <li>These tokens are nothing more than string values. You have to add the token in the header of the request when you use any method other than GET, HEAD, TRACE, or OPTIONS. If you don’t add the header containing the token, the application doesn’t accept the request.</li>
+      <li>The <code>CsrfFilter</code> uses a component named <code>CsrfTokenRepository</code> to manage the CSRF token values that generate new tokens, store tokens, and eventually invalidate these.</li>
+      <li>By default, the <code>CsrfTokenRepository</code> stores the token on the HTTP session and generates the tokens as random universally unique identifiers (UUIDs).</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/technology/spring-security-30.png" /></p>
+
+<p>Adding the <code>CsrfTokenLogger</code> (shaded) after the <code>CsrfFilter</code>. This way, the <code>CsrfTokenLogger</code> can obtain the value of the token from the <code>_csrf</code> attribute of the request where the <code>CsrfFilter</code> stores it. The <code>CsrfTokenLogger</code> prints the CSRF token in the application console, where we can access it and use it to call an endpoint with the HTTP POST method.</p>
+
+<p><img src="/technology/spring-security-31.png" /></p>
+
+<p>While calling the POST endpoint you also need to specify the session ID (<code>JSESSIONID</code>) because the default implementation of <code>CsrfTokenRepository</code> stores the value of the CSRF token on the session</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="bash"><span class="line">curl -X POST   http://localhost:8080/hello
+</span><span class="line">-H <span class="s1">&#39;Cookie: JSESSIONID=21ADA55E10D70BA81C338FFBB06B0206&#39;</span>
+</span><span class="line">-H <span class="s1">&#39;X-CSRF-TOKEN: 1127bfda-57b1-43f0-bce5-bacd7d94694e&#39;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>You use CSRF protection for web apps running in a browser, where you should expect that mutating operations can be done by the browser that loads the displayed content of the app.</li>
+  <li>Did you notice that the login operation in that application used HTTP POST? Then why didn’t we need to do anything explicitly about CSRF in that case? The reason why we didn’t observe this was because we didn’t develop any mutating operation within it ourselves.</li>
+  <li>For the default login, Spring Security correctly applies CSRF protection for us. The framework takes care of adding the CSRF token to the login request.</li>
+  <li>After running the application, you can access the default login page. If you inspect the form using the inspect element function of your browser, you can observe that the default implementation of the login form sends the CSRF token. This is why your login works with CSRF protection enabled even if it uses an HTTP POST request</li>
+  <li>The default form login uses a hidden input to send the CSRF token in the request. This is why the login request that uses an HTTP POST method works with CSRF protection enabled.</li>
+</ul>
+
+<p><img src="/technology/spring-security-32.png" /></p>
+
+<ul>
+  <li>For any action or asynchronous JavaScript request your page uses to call a mutable action, you need to send a valid CSRF token. This is the most common way used by an application to make sure the request doesn’t come from a third party. A third-party request could try to impersonate the user to execute actions on their behalf.</li>
+</ul>
+
+<p><strong>Downsides of CSRF tokens</strong></p>
+
+<ul>
+  <li>CSRF tokens work well in an architecture where the same server is responsible for both the frontend and the backend, mainly for its simplicity. But CSRF tokens don’t work well when the client is independent of the backend solution it consumes. This scenario happens when you have a mobile application as a client or a web frontend developed independently (Angular, ReactJS, or Vue.js). This is why you need to know how to implement the security approach for these cases as well.</li>
+</ul>
+
+<h2 id="disabling-csrf-for-endpoints">Disabling CSRF for endpoints</h2>
+
+<ul>
+  <li>By default, CSRF protection applies to any path for endpoints called with HTTP methods other than GET, HEAD, TRACE, or OPTIONS</li>
+  <li>CSRF can be disabled for certain endpoints only as follows:
+    <ul>
+      <li><strong>Ant Expressions</strong>
+        <ul>
+          <li>Calling the <code>ignoringAntMatchers(String paths)</code> method, you can specify the Ant expressions representing the paths that you want to exclude from the CSRF protection mechanism.</li>
+        </ul>
+      </li>
+      <li><strong>MVC Expressions</strong>
+        <ul>
+          <li>A more general approach is to use a <code>RequestMatcher</code>. Using this allows you to apply the exclusion rules with regular MVC expressions as well as with regexes (regular expressions).</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Ant expression</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">http</span><span class="o">.</span><span class="na">csrf</span><span class="o">(</span><span class="n">c</span> <span class="o">-&gt;</span> <span class="o">{</span>
+</span><span class="line">        <span class="n">c</span><span class="o">.</span><span class="na">ignoringAntMatchers</span><span class="o">(</span><span class="s">&quot;/ciao&quot;</span><span class="o">);</span>
+</span><span class="line">    <span class="o">});</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>MVC expression</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">HandlerMappingIntrospector</span> <span class="n">i</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">HandlerMappingIntrospector</span><span class="o">();</span>
+</span><span class="line"><span class="n">MvcRequestMatcher</span> <span class="n">r</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">MvcRequestMatcher</span><span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="s">&quot;/ciao&quot;</span><span class="o">);</span>
+</span><span class="line"><span class="n">c</span><span class="o">.</span><span class="na">ignoringRequestMatchers</span><span class="o">(</span><span class="n">r</span><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Regex expression</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="n">String</span> <span class="n">pattern</span> <span class="o">=</span> <span class="s">&quot;.*[0-9].*&quot;</span><span class="o">;</span>
+</span><span class="line"><span class="n">String</span> <span class="n">httpMethod</span> <span class="o">=</span> <span class="n">HttpMethod</span><span class="o">.</span><span class="na">POST</span><span class="o">.</span><span class="na">name</span><span class="o">();</span>
+</span><span class="line"><span class="n">RegexRequestMatcher</span> <span class="n">r</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">RegexRequestMatcher</span><span class="o">(</span><span class="n">pattern</span><span class="o">,</span> <span class="n">httpMethod</span><span class="o">);</span>
+</span><span class="line"><span class="n">c</span><span class="o">.</span><span class="na">ignoringRequestMatchers</span><span class="o">(</span><span class="n">r</span><span class="o">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="customizing-csrf">Customizing CSRF</h2>
+
+<ul>
+  <li>Another need often found in the requirements of the application is customizing the management of CSRF tokens.</li>
+  <li>By default, the application stores CSRF tokens in the HTTP session on the server side. This simple approach is suitable for small applications, but it’s not great for applications that serve a large number of requests and that require horizontal scaling. The HTTP session is stateful and reduces the scalability of the application.</li>
+  <li>Spring Security offers two contracts that you need to implement to do this:
+    <ul>
+      <li><code>CsrfToken</code>–Describes the CSRF token itself</li>
+      <li><code>CsrfTokenRepository</code>–Describes the object that creates, stores, and loads CSRF tokens</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">CsrfToken</span> <span class="kd">extends</span> <span class="n">Serializable</span> <span class="o">{</span>
+</span><span class="line">
+</span><span class="line">  <span class="n">String</span> <span class="nf">getHeaderName</span><span class="o">();</span>
+</span><span class="line">  <span class="n">String</span> <span class="nf">getParameterName</span><span class="o">();</span>
+</span><span class="line">  <span class="n">String</span> <span class="nf">getToken</span><span class="o">();</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><code>DefaultCsrfToken</code> implements the <code>CsrfToken</code> contract and creates immutable instances containing the required values: the name of the request attribute and header, and the token itself.</li>
+  <li>Example
+    <ul>
+      <li>The <code>CsrfToken</code> uses a custom implementation of <code>CsrfTokenRepository</code>. This custom implementation uses a <code>JpaRepository</code> to manage CSRF tokens in a database.</li>
+      <li><strong>Approach 1: Tokens associated to userId</strong>: In our example, we use a table in a database to store CSRF tokens. We assume the client has an ID to identify themselves uniquely. The application needs this identifier to obtain the CSRF token and validate it. Generally, this unique ID would be obtained during login and should be different each time the user logs in. This strategy of managing tokens is similar to storing them in memory. In this case, you use a session ID. So the new identifier for this example merely replaces the session ID.</li>
+      <li><strong>Approach 2: With token expiry</strong>: An alternative to this approach would be to use CSRF tokens with a defined lifetime. With such an approach, tokens expire after a time you define. You can store tokens in the database without linking them to a specific user ID. You only need to check if a token provided via an HTTP request exists and is not expired to decide whether you allow that request.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/technology/spring-security-33.png" /></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>The implementation of the generateToken() method</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Override</span>
+</span><span class="line"><span class="kd">public</span> <span class="n">CsrfToken</span> <span class="nf">generateToken</span><span class="o">(</span><span class="n">HttpServletRequest</span> <span class="n">httpServletRequest</span><span class="o">)</span> <span class="o">{</span>
+</span><span class="line">  <span class="n">String</span> <span class="n">uuid</span> <span class="o">=</span> <span class="n">UUID</span><span class="o">.</span><span class="na">randomUUID</span><span class="o">().</span><span class="na">toString</span><span class="o">();</span>
+</span><span class="line">  <span class="k">return</span> <span class="k">new</span> <span class="nf">DefaultCsrfToken</span><span class="o">(</span><span class="s">&quot;X-CSRF-TOKEN&quot;</span><span class="o">,</span> <span class="s">&quot;_csrf&quot;</span><span class="o">,</span> <span class="n">uuid</span><span class="o">);</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h1 id="applying-cors">Applying CORS</h1>
+
+<ul>
+  <li>Cross-origin resource sharing (CORS)
+    <ul>
+      <li>The necessity for CORS came from web applications. By default, browsers don’t allow requests made for any domain other than the one from which the site is loaded. For example, if you access the site from <code>example.com</code>, the browser won’t let the site make requests to <code>api.example.com</code>.</li>
+    </ul>
+  </li>
+  <li><strong>How CORS works?</strong>
+    <ul>
+      <li>Even if the <code>example.org</code> page is loaded in an <em>iframe</em> from the <code>example.com</code> domain, the calls from the content loaded in <code>example.org</code> won’t load. Even if the application makes a request, the browser won’t accept the response.</li>
+      <li>Any situation in which an application makes calls between two different domains is prohibited. (even if the port numbers are different on the same host)</li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/technology/spring-security-34.png" /></p>
+
+<ul>
+  <li><strong>How to resolve?</strong>
+    <ul>
+      <li>CORS allows you to specify from which domain your application allows requests and what details can be shared. The CORS mechanism works based on HTTP headers . The most important are
+        <ul>
+          <li><code>Access-Control-Allow-Origin</code>–Specifies the foreign domains (origins) that can access resources on your domain.</li>
+          <li><code>Access-Control-Allow-Methods</code>–Lets us refer only to some HTTP methods in situations in which we want to allow access to a different domain, but only to specific HTTP methods. You use this if you’re going to enable <em>example.com</em> to call some endpoint, but only with HTTP GET, for example.</li>
+          <li><code>Access-Control-Allow-Headers</code>–Adds limitations to which headers you can use in a specific request.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<p><img src="/technology/spring-security-35.png" /></p>
+
+<ul>
+  <li>To simulate the cross-origin call, we can access the page in a browser using the domain localhost. From the JavaScript code, we make the call using the IP address <em>127.0.0.1</em>. Even if <em>localhost</em> and <em>127.0.0.1</em> refer to the same host, the browser sees these as different strings and considers these different domains</li>
+  <li><strong>Pre-flight requests</strong>
+    <ul>
+      <li>the browser first makes a call using the HTTP OPTIONS method to test whether the request should be allowed. We call this test request a <em>preflight request</em>. If the preflight request fails, the browser won’t attempt to honor the original request.</li>
+      <li>The preflight request and the decision to make it or not are the responsibility of the browser. You don’t have to implement this logic. But it is important to understand it, so you won’t be surprised to see cross-origin calls to the backend even if you did not specify any CORS policies for specific domains.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="applying-cors-policies-using-crossorigin-annotation">Applying CORS policies using @CrossOrigin annotation</h2>
+
+<ul>
+  <li>You can place the <code>@CrossOrigin</code> annotation directly above the method that defines the endpoint and configure it using the allowed origins and methods.</li>
+  <li>Allow origins: The value parameter of <code>@CrossOrigin</code> receives an array to let you define multiple origins; for example, <code>@CrossOrigin({"example.com", "example.org"})</code>.</li>
+  <li>You can also set the allowed headers and methods using the <code>allowedHeaders</code> attribute and the <code>methods</code> attribute of the annotation.</li>
+  <li>For both <em>origins</em> and <em>headers</em>, you can use the asterisk (<code>*</code>) to represent all headers or all origins. However, it’s always better to filter the origins and headers that you want to allow and never allow any domain to implement code that accesses your applications’ resources. By allowing all origins, you expose the application to cross-site scripting (XSS) requests, which eventually can lead to DDoS attacks</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@PostMapping</span><span class="o">(</span><span class="s">&quot;/test&quot;</span><span class="o">)</span>
+</span><span class="line"><span class="nd">@ResponseBody</span>
+</span><span class="line"><span class="nd">@CrossOrigin</span><span class="o">(</span><span class="s">&quot;http://localhost:8080&quot;</span><span class="o">)</span>
+</span><span class="line"><span class="kd">public</span> <span class="n">String</span> <span class="nf">test</span><span class="o">()</span> <span class="o">{</span>
+</span><span class="line">  <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">&quot;Test method called&quot;</span><span class="o">);</span>
+</span><span class="line">  <span class="k">return</span> <span class="s">&quot;HELLO&quot;</span><span class="o">;</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Pros
+    <ul>
+      <li>The advantage of using <code>@CrossOrigin</code> to specify the rules directly where the endpoints are defined is that it creates good transparency of the rules.</li>
+    </ul>
+  </li>
+  <li>Cons
+    <ul>
+      <li>The disadvantage is that it might become verbose, forcing you to repeat a lot of code. It also imposes the risk that the developer might forget to add the annotation for newly implemented endpoints.</li>
+    </ul>
+  </li>
+</ul>
+
+<h2 id="applying-cors-using-a-corsconfigurer">Applying CORS using a CorsConfigurer</h2>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Defining CORS configurations centralized in the configuration class</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+</pre></td><td class="code"><pre><code class="java"><span class="line"><span class="nd">@Configuration</span>
+</span><span class="line"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">ProjectConfig</span> <span class="kd">extends</span> <span class="n">WebSecurityConfigurerAdapter</span> <span class="o">{</span>
+</span><span class="line">
+</span><span class="line">  <span class="nd">@Override</span>
+</span><span class="line">  <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">configure</span><span class="o">(</span><span class="n">HttpSecurity</span> <span class="n">http</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+</span><span class="line">    <span class="n">http</span><span class="o">.</span><span class="na">cors</span><span class="o">(</span><span class="n">c</span> <span class="o">-&gt;</span> <span class="o">{</span>
+</span><span class="line">      <span class="n">CorsConfigurationSource</span> <span class="n">source</span> <span class="o">=</span> <span class="n">request</span> <span class="o">-&gt;</span> <span class="o">{</span>
+</span><span class="line">        <span class="n">CorsConfiguration</span> <span class="n">config</span> <span class="o">=</span> <span class="k">new</span> <span class="nf">CorsConfiguration</span><span class="o">();</span>
+</span><span class="line">        <span class="n">config</span><span class="o">.</span><span class="na">setAllowedOrigins</span><span class="o">(</span>
+</span><span class="line">            <span class="n">List</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="s">&quot;example.com&quot;</span><span class="o">,</span> <span class="s">&quot;example.org&quot;</span><span class="o">));</span>
+</span><span class="line">        <span class="n">config</span><span class="o">.</span><span class="na">setAllowedMethods</span><span class="o">(</span>
+</span><span class="line">            <span class="n">List</span><span class="o">.</span><span class="na">of</span><span class="o">(</span><span class="s">&quot;GET&quot;</span><span class="o">,</span> <span class="s">&quot;POST&quot;</span><span class="o">,</span> <span class="s">&quot;PUT&quot;</span><span class="o">,</span> <span class="s">&quot;DELETE&quot;</span><span class="o">));</span>
+</span><span class="line">        <span class="k">return</span> <span class="n">config</span><span class="o">;</span>
+</span><span class="line">      <span class="o">};</span>
+</span><span class="line">      <span class="n">c</span><span class="o">.</span><span class="na">configurationSource</span><span class="o">(</span><span class="n">source</span><span class="o">);</span>
+</span><span class="line">    <span class="o">});</span>
+</span><span class="line">
+</span><span class="line">    <span class="n">http</span><span class="o">.</span><span class="na">csrf</span><span class="o">().</span><span class="na">disable</span><span class="o">();</span>
+</span><span class="line">
+</span><span class="line">    <span class="n">http</span><span class="o">.</span><span class="na">authorizeRequests</span><span class="o">()</span>
+</span><span class="line">         <span class="o">.</span><span class="na">anyRequest</span><span class="o">().</span><span class="na">permitAll</span><span class="o">();</span>
+</span><span class="line">  <span class="o">}</span>
+</span><span class="line"><span class="o">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h1 id="references">References</h1>
 

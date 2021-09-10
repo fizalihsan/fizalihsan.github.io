@@ -1068,6 +1068,193 @@ public class ProjectConfig extends WebSecurityConfigurerAdapter {
 * For example, you could extend the `GenericFilterBean` class, which allows you to use initialization parameters that you would define in a `web.xml` descriptor file where applicable. 
 * A more useful class that extends the `GenericFilterBean` is `OncePerRequestFilter`. When adding a filter to the chain, the framework doesn’t guarantee it will be called only once per request. `OncePerRequestFilter`, as the name suggests, implements logic to make sure that the filter’s `doFilter()` method is executed only one time per request.
 
+# Applying CSRF
+
+* CSRF (Cross-site request forgery) protection, which is enabled by default in Spring Security
+* __How CSRF works?__
+    * CSRF attacks assume that a user is logged into a web application. They’re tricked by the attacker into opening a page that contains scripts that execute actions in the same application the user was working on. Because the user has already logged in (as we’ve assumed from the beginning), the forgery code can now impersonate the user and do actions on their behalf.
+* __How do we protect our users from such scenarios?__
+    * What CSRF protection wants to ensure is that only the frontend of web applications can perform mutating operations (by convention, HTTP methods other than GET, HEAD, TRACE, or OPTIONS). Then, a foreign page, like the one in our example, can’t act on behalf of the user.
+* __How can we achieve this?__
+    * What you know for sure is that before being able to do any action that could change data, a user must send a request using HTTP GET to see the web page at least once. When this happens, the application generates a _unique token_. 
+    * The application now accepts only requests for mutating operations (POST, PUT, DELETE, and so forth) that contain this unique value in the header. The application considers that knowing the value of the token is proof that it is the app itself making the mutating request and not another system. 
+    * Any page containing mutating calls, like POST, PUT, DELETE, and so on, should receive through the response the CSRF token, and the page must use this token when making mutating calls.
+
+* __Spring Security CsrfFilter__
+    * The starting point of CSRF protection is a filter in the filter chain called `CsrfFilter`. 
+    * The `CsrfFilter` intercepts requests and allows all those that use these HTTP methods: GET, HEAD, TRACE, and OPTIONS. 
+    * For all other requests, the filter expects to receive a header containing a token. If this header does not exist or contains an incorrect token value, the application rejects the request and sets the status of the response to HTTP 403 Forbidden.
+
+{% img /technology/spring-security-29.png %}
+
+* __What is this token, and where does it come from?__
+    * These tokens are nothing more than string values. You have to add the token in the header of the request when you use any method other than GET, HEAD, TRACE, or OPTIONS. If you don’t add the header containing the token, the application doesn’t accept the request.
+    * The `CsrfFilter` uses a component named `CsrfTokenRepository` to manage the CSRF token values that generate new tokens, store tokens, and eventually invalidate these. 
+    * By default, the `CsrfTokenRepository` stores the token on the HTTP session and generates the tokens as random universally unique identifiers (UUIDs).
+
+{% img /technology/spring-security-30.png %}
+
+Adding the `CsrfTokenLogger` (shaded) after the `CsrfFilter`. This way, the `CsrfTokenLogger` can obtain the value of the token from the `_csrf` attribute of the request where the `CsrfFilter` stores it. The `CsrfTokenLogger` prints the CSRF token in the application console, where we can access it and use it to call an endpoint with the HTTP POST method.
+
+{% img /technology/spring-security-31.png %}
+
+While calling the POST endpoint you also need to specify the session ID (`JSESSIONID`) because the default implementation of `CsrfTokenRepository` stores the value of the CSRF token on the session
+
+```bash
+curl -X POST   http://localhost:8080/hello 
+-H 'Cookie: JSESSIONID=21ADA55E10D70BA81C338FFBB06B0206'   
+-H 'X-CSRF-TOKEN: 1127bfda-57b1-43f0-bce5-bacd7d94694e'
+```
+
+* You use CSRF protection for web apps running in a browser, where you should expect that mutating operations can be done by the browser that loads the displayed content of the app.
+* Did you notice that the login operation in that application used HTTP POST? Then why didn’t we need to do anything explicitly about CSRF in that case? The reason why we didn’t observe this was because we didn’t develop any mutating operation within it ourselves.
+* For the default login, Spring Security correctly applies CSRF protection for us. The framework takes care of adding the CSRF token to the login request.
+* After running the application, you can access the default login page. If you inspect the form using the inspect element function of your browser, you can observe that the default implementation of the login form sends the CSRF token. This is why your login works with CSRF protection enabled even if it uses an HTTP POST request
+* The default form login uses a hidden input to send the CSRF token in the request. This is why the login request that uses an HTTP POST method works with CSRF protection enabled.
+
+{% img /technology/spring-security-32.png %}
+
+* For any action or asynchronous JavaScript request your page uses to call a mutable action, you need to send a valid CSRF token. This is the most common way used by an application to make sure the request doesn’t come from a third party. A third-party request could try to impersonate the user to execute actions on their behalf.
+
+__Downsides of CSRF tokens__
+
+* CSRF tokens work well in an architecture where the same server is responsible for both the frontend and the backend, mainly for its simplicity. But CSRF tokens don’t work well when the client is independent of the backend solution it consumes. This scenario happens when you have a mobile application as a client or a web frontend developed independently (Angular, ReactJS, or Vue.js). This is why you need to know how to implement the security approach for these cases as well.
+
+## Disabling CSRF for endpoints
+
+* By default, CSRF protection applies to any path for endpoints called with HTTP methods other than GET, HEAD, TRACE, or OPTIONS
+* CSRF can be disabled for certain endpoints only as follows:
+    * __Ant Expressions__
+        * Calling the `ignoringAntMatchers(String paths)` method, you can specify the Ant expressions representing the paths that you want to exclude from the CSRF protection mechanism. 
+    * __MVC Expressions__
+        * A more general approach is to use a `RequestMatcher`. Using this allows you to apply the exclusion rules with regular MVC expressions as well as with regexes (regular expressions).
+
+```java Ant expression
+http.csrf(c -> {
+        c.ignoringAntMatchers("/ciao");
+    });
+```
+
+```java MVC expression
+HandlerMappingIntrospector i = new HandlerMappingIntrospector();
+MvcRequestMatcher r = new MvcRequestMatcher(i, "/ciao");
+c.ignoringRequestMatchers(r);
+```
+
+```java Regex expression
+String pattern = ".*[0-9].*";
+String httpMethod = HttpMethod.POST.name();
+RegexRequestMatcher r = new RegexRequestMatcher(pattern, httpMethod);
+c.ignoringRequestMatchers(r);
+```
+
+## Customizing CSRF
+
+* Another need often found in the requirements of the application is customizing the management of CSRF tokens. 
+* By default, the application stores CSRF tokens in the HTTP session on the server side. This simple approach is suitable for small applications, but it’s not great for applications that serve a large number of requests and that require horizontal scaling. The HTTP session is stateful and reduces the scalability of the application.
+* Spring Security offers two contracts that you need to implement to do this:
+    * `CsrfToken`--Describes the CSRF token itself
+    * `CsrfTokenRepository`--Describes the object that creates, stores, and loads CSRF tokens
+
+```java
+public interface CsrfToken extends Serializable {
+
+  String getHeaderName();
+  String getParameterName();
+  String getToken();
+}
+```
+
+* `DefaultCsrfToken` implements the `CsrfToken` contract and creates immutable instances containing the required values: the name of the request attribute and header, and the token itself.
+* Example
+    * The `CsrfToken` uses a custom implementation of `CsrfTokenRepository`. This custom implementation uses a `JpaRepository` to manage CSRF tokens in a database.
+    * __Approach 1: Tokens associated to userId__: In our example, we use a table in a database to store CSRF tokens. We assume the client has an ID to identify themselves uniquely. The application needs this identifier to obtain the CSRF token and validate it. Generally, this unique ID would be obtained during login and should be different each time the user logs in. This strategy of managing tokens is similar to storing them in memory. In this case, you use a session ID. So the new identifier for this example merely replaces the session ID.
+    * __Approach 2: With token expiry__: An alternative to this approach would be to use CSRF tokens with a defined lifetime. With such an approach, tokens expire after a time you define. You can store tokens in the database without linking them to a specific user ID. You only need to check if a token provided via an HTTP request exists and is not expired to decide whether you allow that request.
+
+{% img /technology/spring-security-33.png %}
+
+```java The implementation of the generateToken() method
+@Override
+public CsrfToken generateToken(HttpServletRequest httpServletRequest) {
+  String uuid = UUID.randomUUID().toString();
+  return new DefaultCsrfToken("X-CSRF-TOKEN", "_csrf", uuid);
+}
+```
+
+# Applying CORS
+
+* Cross-origin resource sharing (CORS)
+    * The necessity for CORS came from web applications. By default, browsers don’t allow requests made for any domain other than the one from which the site is loaded. For example, if you access the site from `example.com`, the browser won’t let the site make requests to `api.example.com`.
+* __How CORS works?__
+    * Even if the `example.org` page is loaded in an _iframe_ from the `example.com` domain, the calls from the content loaded in `example.org` won’t load. Even if the application makes a request, the browser won’t accept the response.
+    * Any situation in which an application makes calls between two different domains is prohibited. (even if the port numbers are different on the same host)
+
+{% img /technology/spring-security-34.png %}
+
+
+* __How to resolve?__
+    * CORS allows you to specify from which domain your application allows requests and what details can be shared. The CORS mechanism works based on HTTP headers . The most important are
+        * `Access-Control-Allow-Origin`--Specifies the foreign domains (origins) that can access resources on your domain.
+        * `Access-Control-Allow-Methods`--Lets us refer only to some HTTP methods in situations in which we want to allow access to a different domain, but only to specific HTTP methods. You use this if you’re going to enable _example.com_ to call some endpoint, but only with HTTP GET, for example.
+        * `Access-Control-Allow-Headers`--Adds limitations to which headers you can use in a specific request.
+
+{% img /technology/spring-security-35.png %}
+
+* To simulate the cross-origin call, we can access the page in a browser using the domain localhost. From the JavaScript code, we make the call using the IP address _127.0.0.1_. Even if _localhost_ and _127.0.0.1_ refer to the same host, the browser sees these as different strings and considers these different domains
+* __Pre-flight requests__
+    * the browser first makes a call using the HTTP OPTIONS method to test whether the request should be allowed. We call this test request a _preflight request_. If the preflight request fails, the browser won’t attempt to honor the original request.
+    * The preflight request and the decision to make it or not are the responsibility of the browser. You don’t have to implement this logic. But it is important to understand it, so you won’t be surprised to see cross-origin calls to the backend even if you did not specify any CORS policies for specific domains. 
+
+## Applying CORS policies using @CrossOrigin annotation
+
+* You can place the `@CrossOrigin` annotation directly above the method that defines the endpoint and configure it using the allowed origins and methods.
+* Allow origins: The value parameter of `@CrossOrigin` receives an array to let you define multiple origins; for example, `@CrossOrigin({"example.com", "example.org"})`. 
+* You can also set the allowed headers and methods using the `allowedHeaders` attribute and the `methods` attribute of the annotation. 
+* For both _origins_ and _headers_, you can use the asterisk (`*`) to represent all headers or all origins. However, it’s always better to filter the origins and headers that you want to allow and never allow any domain to implement code that accesses your applications’ resources. By allowing all origins, you expose the application to cross-site scripting (XSS) requests, which eventually can lead to DDoS attacks
+
+```java
+@PostMapping("/test")
+@ResponseBody
+@CrossOrigin("http://localhost:8080")
+public String test() {
+  logger.info("Test method called");
+  return "HELLO";
+}
+```
+
+* Pros
+    * The advantage of using `@CrossOrigin` to specify the rules directly where the endpoints are defined is that it creates good transparency of the rules. 
+* Cons
+    * The disadvantage is that it might become verbose, forcing you to repeat a lot of code. It also imposes the risk that the developer might forget to add the annotation for newly implemented endpoints.
+
+## Applying CORS using a CorsConfigurer
+
+```java Defining CORS configurations centralized in the configuration class
+@Configuration
+public class ProjectConfig extends WebSecurityConfigurerAdapter {
+
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http.cors(c -> {
+      CorsConfigurationSource source = request -> {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOrigins(
+            List.of("example.com", "example.org"));
+        config.setAllowedMethods(
+            List.of("GET", "POST", "PUT", "DELETE"));
+        return config;
+      };
+      c.configurationSource(source);
+    });
+
+    http.csrf().disable();
+
+    http.authorizeRequests()
+         .anyRequest().permitAll();
+  }
+}
+```
+
 # References
 
 * Book - Spring Security in Action (Manning publications)

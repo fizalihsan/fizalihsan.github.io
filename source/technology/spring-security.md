@@ -894,6 +894,180 @@ http.authorizeRequests()
           .antMatchers( "/hello").authenticated();
 ```
 
+# Implementing filters
+
+* In Spring Security, in general, HTTP filters manage each responsibility that must be applied to the request. The filters form a chain of responsibilities. 
+* The filter chain receives the request. Each filter uses a manager to apply specific logic to the request and, eventually, delegates the request further along the chain to the next filter.
+* Spring Security provides filter implementations that you add to the filter chain through customization, but you can also define custom filters.
+
+{% img /technology/spring-security-20.png %}
+
+You can customize the filter chain by adding new filters before, after, or at the position of existing ones. This way, you can customize authentication as well as the entire process applied to request and response.
+
+{% img /technology/spring-security-21.png %}
+
+* Custom filters can created by implementing the `javax.servlet.Filter` package. 
+* Default implementations from Spring Security:
+    * `BasicAuthenticationFilter` takes care of HTTP Basic authentication, if present.
+    * `CsrfFilter` takes care of cross-site request forgery (CSRF) protection.
+    * `CorsFilter` takes care of cross-origin resource sharing (CORS) authorization rules,
+
+* Call to the `httpBasic()` method, an instance of the `BasicAuthenticationFilter` is added to the chain.
+* Each filter has an order number. This determines the order in which filters are applied to a request. You can add custom filters along with the filters provided by Spring Security.
+
+{% img /technology/spring-security-22.png %}
+
+* If multiple filters have the same position, the order in which they are called is not defined.
+
+{% img /technology/spring-security-23.png %}
+
+## Adding a filter before an existing one in chain
+
+* For our example, we add a `RequestValidationFilter`, which acts before the authentication filter. The `RequestValidationFilter` ensures that authentication doesn’t happen if the validation of the request fails. 
+* In our case, the request must have a mandatory header named `RequestId`. If the header doesn’t exist, we set an HTTP status 400 Bad Request on the response without forwarding it to the next filter in the chain.
+
+
+{% img /technology/spring-security-24.png %}
+
+```java Filter implementation
+@Override
+public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) 
+    throws IOException, ServletException {
+
+  var httpRequest = (HttpServletRequest) request;
+  var httpResponse = (HttpServletResponse) response;
+
+  String requestId = httpRequest.getHeader("Request-Id");
+
+  if (requestId == null || requestId.isBlank()) {
+      httpResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+      return;
+  }
+
+  filterChain.doFilter(request, response);
+}
+```
+
+```java Configuring the filter
+@Configuration
+public class ProjectConfig extends WebSecurityConfigurerAdapter {
+
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http.addFilterBefore(
+            new RequestValidationFilter(),
+            BasicAuthenticationFilter.class)
+        .authorizeRequests()
+            .anyRequest().permitAll();
+  }
+}
+```
+
+## Adding a filter after an existing one in chain
+
+{% img /technology/spring-security-25.png %}
+
+```java
+@Configuration
+public class ProjectConfig extends WebSecurityConfigurerAdapter {
+
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http.addFilterBefore(
+            new RequestValidationFilter(),
+            BasicAuthenticationFilter.class)
+        .addFilterAfter(
+            new AuthenticationLoggingFilter(),
+            BasicAuthenticationFilter.class)
+        .authorizeRequests()
+            .anyRequest().permitAll();
+    }
+}
+```
+
+## Adding a filter at the location of another in the chain
+
+* In this section, we discuss adding a filter at the location of another one in the filter chain. You use this approach especially when providing a different implementation for a responsibility that is already assumed by one of the filters known by Spring Security. 
+* A typical scenario is replacing HTTP Basic authentication flow in following scenarios:
+    1. Identification based on a static header value for authentication
+    2. Using a symmetric key to sign the request for authentication
+    3. Using a one-time password (OTP) in the authentication process
+
+
+__1. Identification based on a static header value for authentication__
+
+* This approach  offers weak security related to authentication, but architects and developers often choose it in calls between backend applications for its simplicity.
+* The request contains a header with the value of the static key. If this value matches the one known by the application, it accepts the request.
+
+{% img /technology/spring-security-26.png %}
+
+__2. Using a symmetric key to sign the request for authentication__
+
+* In this scenario, using symmetric keys to sign and validate requests, both client and server know the value of a key (client and server share the key). The client uses this key to sign a part of the request (for example, to sign the value of specific headers), and the server checks if the signature is valid using the same key . The server can store individual keys for each client in a database or a secrets vault. Similarly, you can use a pair of asymmetric keys.
+* The Authorization header contains a value signed with a key known by both client and server (or a private key for which the server has the public pair). The application checks the signature and, if correct, allows the request.
+
+{% img /technology/spring-security-27.png %}
+
+__3. Using a one-time password (OTP) in the authentication process__
+
+* And finally, using an OTP in the authentication process, the user receives the OTP via a message or by using an authentication provider app like Google Authenticator.
+* To access the resource, the client has to use a one-time password (OTP). The client obtains the OTP from a third-party authentication server. Generally, applications use this approach during login when multifactor authentication is required.
+
+{% img /technology/spring-security-28.png %}
+
+```java Custom auth filter
+@Component
+public class StaticKeyAuthenticationFilter implements Filter {
+
+  @Value("${authorization.key}")
+  private String authorizationKey;
+
+  @Override
+  public void doFilter(ServletRequest request, ServletResponse response, FilterChain filterChain) 
+    throws IOException, ServletException {
+
+    var httpRequest = (HttpServletRequest) request;
+    var httpResponse = (HttpServletResponse) response;
+
+    String authentication = httpRequest.getHeader("Authorization");
+
+    if (authorizationKey.equals(authentication)) {
+        filterChain.doFilter(request, response);
+    } else {
+        httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    }
+  }
+}
+```
+
+```java Adding the filter in the configuration
+@Configuration
+public class ProjectConfig extends WebSecurityConfigurerAdapter {
+
+  @Autowired
+  private StaticKeyAuthenticationFilter filter;
+
+  @Override
+  protected void configure(HttpSecurity http) throws Exception {
+    http.addFilterAt(filter, BasicAuthenticationFilter.class)
+        .authorizeRequests()
+           .anyRequest().permitAll();
+  }
+}
+```
+
+* When `UserDetailsService` is not defined, Spring Boot automatically configures one. But in our scenario, we don’t need a `UserDetailsService` at all because the concept of the user doesn’t exist. We only validate that the user requesting to call an endpoint on the server knows a given value. Application scenarios are not usually this simple and often require a `UserDetailsService`. But, if you anticipate or have such a case where this component is not needed, you can disable autoconfiguration. 
+
+```java To disable the default UserDetailsService
+@SpringBootApplication(exclude = {UserDetailsServiceAutoConfiguration.class })
+```
+
+## Filter implementations from Spring Security
+
+* Spring Security offers a few abstract classes that implement the `Filter` interface and for which you can extend your filter definitions. 
+* For example, you could extend the `GenericFilterBean` class, which allows you to use initialization parameters that you would define in a `web.xml` descriptor file where applicable. 
+* A more useful class that extends the `GenericFilterBean` is `OncePerRequestFilter`. When adding a filter to the chain, the framework doesn’t guarantee it will be called only once per request. `OncePerRequestFilter`, as the name suggests, implements logic to make sure that the filter’s `doFilter()` method is executed only one time per request.
+
 # References
 
 * Book - Spring Security in Action (Manning publications)

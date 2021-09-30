@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Web Concepts HTTP HTTP Basics HTTP Methods HTTP Content Negotiation (Conneg) Caching Bibliography HTTP HTTP Basics Browser-based web applications &hellip;">
+<meta name="description" content="Web Concepts DOM DOM Events HTML Attribute Event Handlers DOM DOM is an API. DOM is not the source HTML or the code you write. DOM is not what you &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -108,254 +108,243 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#http" id="markdown-toc-http">HTTP</a>    <ul>
-      <li><a href="#http-basics" id="markdown-toc-http-basics">HTTP Basics</a></li>
-      <li><a href="#http-methods" id="markdown-toc-http-methods">HTTP Methods</a></li>
-      <li><a href="#http-content-negotiation-conneg" id="markdown-toc-http-content-negotiation-conneg">HTTP Content Negotiation (Conneg)</a></li>
-      <li><a href="#caching" id="markdown-toc-caching">Caching</a></li>
+  <li><a href="#dom" id="markdown-toc-dom">DOM</a>    <ul>
+      <li><a href="#dom-events" id="markdown-toc-dom-events">DOM Events</a></li>
+      <li><a href="#html-attribute-event-handlers" id="markdown-toc-html-attribute-event-handlers">HTML Attribute Event Handlers</a></li>
     </ul>
   </li>
-  <li><a href="#bibliography" id="markdown-toc-bibliography">Bibliography</a></li>
 </ul>
 
-<h1 id="http">HTTP</h1>
+<h1 id="dom">DOM</h1>
 
-<h2 id="http-basics">HTTP Basics</h2>
 <ul>
-  <li>Browser-based web applications see only a tiny fraction of the features of HTTP.</li>
-  <li>Non-RESTful technologies like SOAP and WS-* use HTTP strictly as a transport protocol and thus use a very small subset of its capabilities. Many would say that SOAP and WS-* use HTTP solely to tunnel through firewalls</li>
-  <li>HTTP Request has 4 parts:  the method, the target URL, the HTTP headers, and the entity-body.
+  <li>DOM is an API.</li>
+  <li>DOM is not the source HTML or the code you write.</li>
+  <li>DOM is not what you see in the browser’s DevTools</li>
+  <li>DOM tree can have 12 different types of nodes
     <ul>
-      <li>HTML <code>&lt;a&gt;</code> tag: has URL and the HTTP method(implicitly definied by HTML spec)</li>
-      <li>HTML form: has all 4 parts in it.</li>
-      <li>URI Template: only has the URL part. It defines nothing about the HTTP request except for the target URI. It’s not telling you to make a GET request,   a POST request, or any kind of request in particular. That’s why URI Templates   don’t make sense on their own.</li>
+      <li>Element</li>
+      <li>Text</li>
+      <li>Attr</li>
+      <li>CDATASection</li>
+      <li>EntityReference</li>
+      <li>Entity</li>
+      <li>Comment</li>
+      <li>ProcessingInstruction</li>
+      <li>Document</li>
+      <li>Notation</li>
+      <li>DocumentFragment</li>
+      <li>DocumentType</li>
+    </ul>
+  </li>
+  <li>Javascript
+    <ul>
+      <li>can interact with DOM and manipulate the DOM.</li>
+      <li>can change, add, or remove HTML elements and attributes</li>
+      <li>can change CSS styles</li>
+      <li>can create and react to HTML events like clicks or hovers</li>
+      <li>cannot target CSS pseudo-elements
+        <ul>
+          <li>if the code uses CSS pseudo-elements, the DOM does NOT include it in its tree because the DOM builds itself from the HTML document, not the styles applied to the elements (including CSS). Hence JS cannot target pseudo-elements because they are not part of the DOM.</li>
+        </ul>
+      </li>
     </ul>
   </li>
 </ul>
 
-<h2 id="http-methods">HTTP Methods</h2>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Example of DOM manipulation</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kr">const</span> <span class="nx">button</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;button&#39;</span><span class="p">);</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">button</span><span class="p">.</span><span class="nx">removeAttribute</span><span class="p">(</span><span class="s1">&#39;onclick&#39;</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p>HTTP has its well-known verbs, officially known as methods or protocol semantics. HTTP verbs 1 to 4 correspond to the CRUD (Create, Read, Update, Delete) operations. 5, 6 are used by clients to explore an API.</p>
+<h2 id="dom-events">DOM Events</h2>
+
+<p>DOM Events Visualizer - <a href="https://domevents.dev">https://domevents.dev</a></p>
+
+<ul>
+  <li>Event
+    <ul>
+      <li>An event is a signal that something has occurred in the browser.</li>
+      <li>Types of events
+        <ul>
+          <li><em>user events</em>, such as click, and</li>
+          <li><em>system events</em>, such as DOMContentLoaded. Events are dispatched to event targets.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Event Target
+    <ul>
+      <li><code>EventTarget</code> is an interface that is implemented by a number of foundational objects in the browser, such as <code>window</code>, <code>document</code>, <code>element</code> and <code>XMLHttpRequest</code>.</li>
+      <li>When an object implements the <code>EventTarget</code> interface, it allows that object to be the target of events as well as enabling other pieces of code to listen for particular events that hit that object.</li>
+      <li>in the HTML code below, parent div, child and button are few event targets.</li>
+    </ul>
+  </li>
+  <li>Event Listener
+    <ul>
+      <li>Code that is registered to listen for events that hit an event target is known as an <strong>event listener</strong>. The term <strong>event handler</strong> is a name for a particular <em>method</em> of adding an event listener. In practice, it is common to see the term event handler used interchangeably with the term event listener.</li>
+      <li>Event targets can exist as their own objects, and they can also participate in a tree, such as when elements participate in a document.</li>
+    </ul>
+  </li>
+  <li>Event Phases
+    <ul>
+      <li>Generally, events flow through event targets in three separate phases.</li>
+      <li>(1) <em>Capture Phase</em>:  In the first phase, the event travels down through the event targets towards the target of the event. This is known as the <strong>capture phase</strong>.</li>
+      <li>(2) <em>Target Phase</em>: When the event hits the event target, it then travels through the target. This is the second phase known as the <strong>target phase</strong>.</li>
+      <li>(3) <em>Bubble Phase</em>: After that’s completed, then the event goes back up to the root event target in the <strong>bubble phase</strong>.</li>
+    </ul>
+  </li>
+</ul>
 
 <table>
-  <thead>
-    <tr>
-      <th>#</th>
-      <th>HTTP verb</th>
-      <th>CRUD operation</th>
-      <th>Safe</th>
-      <th>Idempotent</th>
-    </tr>
-  </thead>
   <tbody>
     <tr>
-      <td>1</td>
-      <td>POST</td>
-      <td>Create</td>
-      <td>No</td>
-      <td>No</td>
+      <td><img src="/technology/domevents1.png" /></td>
+      <td><img src="/technology/domevents2.png" /></td>
     </tr>
     <tr>
-      <td>2</td>
-      <td>GET</td>
-      <td>Read</td>
-      <td>Yes</td>
-      <td>Yes</td>
-    </tr>
-    <tr>
-      <td>3</td>
-      <td>PUT</td>
-      <td>Update</td>
-      <td>No</td>
-      <td>Yes</td>
-    </tr>
-    <tr>
-      <td>4</td>
-      <td>DELETE</td>
-      <td>Delete</td>
-      <td>No</td>
-      <td>Yes</td>
-    </tr>
-    <tr>
-      <td>5</td>
-      <td>HEAD</td>
-      <td>Read</td>
-      <td>Yes</td>
-      <td>Yes</td>
-    </tr>
-    <tr>
-      <td>6</td>
-      <td>OPTION</td>
+      <td><img src="/technology/domevents3.png" /></td>
       <td> </td>
-      <td> </td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>7</td>
-      <td>CONNECT</td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>8</td>
-      <td>TRACE</td>
-      <td> </td>
-      <td> </td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>9</td>
-      <td>LINK</td>
-      <td> </td>
-      <td>No</td>
-      <td>Yes</td>
-    </tr>
-    <tr>
-      <td>10</td>
-      <td>UNLINK</td>
-      <td> </td>
-      <td>No</td>
-      <td>Yes</td>
     </tr>
   </tbody>
 </table>
 
-<p>Any GET request should be sideeffect free (idempotent) because a GET is a read rather than a create, update, or delete operation. A GET as a read with no side effects is called a ‘safe GET’.</p>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="cp">&lt;!DOCTYPE html&gt;</span>
+</span><span class="line"><span class="nt">&lt;html</span> <span class="na">lang=</span><span class="s">&quot;en&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;head&gt;</span>
+</span><span class="line">        <span class="nt">&lt;title&gt;</span>DOM events<span class="nt">&lt;/title&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/head&gt;</span>
+</span><span class="line">    <span class="nt">&lt;body&gt;</span>
+</span><span class="line">        <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;parent&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">            <span class="nt">&lt;h3&gt;</span>Parent element<span class="nt">&lt;/h3&gt;</span>
+</span><span class="line">            <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;child&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">                <span class="nt">&lt;h3&gt;</span>Child element<span class="nt">&lt;/h3&gt;</span>
+</span><span class="line">                <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">                    Call to action
+</span><span class="line">                <span class="nt">&lt;/button&gt;</span>
+</span><span class="line">            <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">        <span class="nt">&lt;/div&gt;</span>
+</span><span class="line">    <span class="nt">&lt;/body&gt;</span>
+</span><span class="line"><span class="nt">&lt;/html&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h2 id="http-content-negotiation-conneg">HTTP Content Negotiation (Conneg)</h2>
-
-<p>Clients invoking the services could expect the response in various data formats, languages and encodings. HTTP Content Negotiation feature comes handy for such cases.</p>
+<h2 id="html-attribute-event-handlers">HTML Attribute Event Handlers</h2>
 
 <ul>
-  <li>Response Data Format
+  <li>It is possible to write code in HTML attributes that will be executed when a matching event occurs.</li>
+  <li>Different element types allow different event handler attributes to be set. e.g., <code>Window</code>, <code>document</code>, and all HTML elements implement the <code>GlobalEventHandlers</code> mixin which provides a common set of HTML event handler attributes like <code>onClick</code> and <code>onLoad</code>.</li>
+  <li><strong>HTML event handler attributes</strong>
     <ul>
-      <li>clients could specify the response format via “Accept”. If the requested format is not supported, then ‘not accepted’ error is returned.</li>
-    </ul>
-  </li>
-</ul>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="err">GET http://example.com/stuff</span>
-</span><span class="line"><span class="err">Accept: application/xml, application/json</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<ul>
-  <li>specifying preference using wild cards.</li>
-</ul>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="err">GET http://example.com/stuff</span>
-</span><span class="line"><span class="err">Accept: text/*, text/html;level=1, */*, application/xml</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<ul>
-  <li>Order of preference
-    <ul>
-      <li>when multiple preference are provided, the most specific types takes priority. In above example, ‘text/html;level=1’ takes precedence.</li>
-      <li>‘q’ MIME type property could be used as well. Higher the q value, more preferred it is. Default q value is 1.0. e.g., <code>text/*;q=0.9, */*;q=0.1, audio/mpeg, application/xml;q=0.5</code>.</li>
-    </ul>
-  </li>
-  <li>Language Negotiation</li>
-</ul>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="err">GET http://example.com/stuff</span>
-</span><span class="line"><span class="err">Accept-Language: fr;q=1.0, es;q=1.0, en=0.1</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<ul>
-  <li>Encoding Negotiation</li>
-</ul>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="err">GET http://example.com/stuff</span>
-</span><span class="line"><span class="err">Accept-Encoding: gzip;q=1.0, compress;0.5; deflate;q=0.1</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<h2 id="caching">Caching</h2>
-
-<ul>
-  <li>Browser caching</li>
-  <li>Proxy caches (CDNs)</li>
-  <li>HTTP caching
-    <ul>
-      <li>Cache-control
+      <li>are a way to define an <code>EventListener</code> in the <em>bubble phase</em> of an event.</li>
+      <li>You CANNOT use these types of <code>EventListener</code> bindings to listen to events in the capture phase of an event.</li>
+      <li>This style of event binding is also known as a <strong>DOM-zero event handler</strong> and is referred to as <em>event handler content attributes</em> in formal specifications.</li>
+      <li>A HTML event handler attributes string can be any JavaScript function body. That is any code, you would normally be able to put inside of a function. e.g., <code>&lt;button onclick="console.log('clicked');" type="button"/&gt;</code></li>
+      <li>There are some fairly magic values that you can use in your HTML event handler attributes string. For example,
         <ul>
-          <li>private - shared intermediaries like proxy or CDNs cannot cache. Only clients can cache.</li>
-          <li>public - anyone can cache</li>
-          <li>no-cache -</li>
-          <li>no-store - cached data is stored in disks.</li>
-          <li>no-transform - intermediary caches typically transforms data like images by compressing.</li>
-          <li>max-age - expiration time</li>
-          <li>s-maxage - expiration time for intermediary caches</li>
-        </ul>
-      </li>
-      <li>
-        <p>Revalidation: When the cache is stale, the cacher can ask the server if the data it is holding is still valid. This is called revalidation. To be able to perform revalidation, the client needs some extra information from the server about the resource it is caching. The server will send back a Last-Modified and/or an ETag header with its initial response to the client. If the client supports revalidation, it will store this timestamp along with the cached data.</p>
-
-        <ul>
-          <li>Last-Modified<br /></li>
+          <li><code>event</code> - which represents the ActiveEvent.</li>
+          <li><code>this</code> - <code>this</code> runtime context of your function is set to the element that the event handler is bound to, which in our case, is the button element.</li>
         </ul>
       </li>
     </ul>
   </li>
 </ul>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
-</span><span class="line"><span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/xml</span>
-</span><span class="line"><span class="na">Cache-Control</span><span class="o">:</span> <span class="l">max-age=1000</span>
-</span><span class="line"><span class="na">Last-Modified</span><span class="o">:</span> <span class="l">Tue, 15 May 2009 09:56</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<pre><code>* Conditional GET
-   * the client may opt to revalidate its cache of the item. To do this it does a conditional GET request by passing a request header called If-Modified-Since with the value of the cached Last-Modified header. For example: 
-</code></pre>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="nf">GET</span> <span class="nn">/customers/123</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
-</span><span class="line"><span class="na">If-Modified-Since</span><span class="o">:</span> <span class="l">Tue, 15 May 2009 09:56 EST</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Magic values in HTML event handler attributes</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;button</span> <span class="na">onclick=</span><span class="s">&quot;console.log(event, this);&quot;</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span><span class="nt">/&gt;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <ul>
-  <li>ETag or Entity Tag
+  <li>Within HTML event handler attributes, you can execute any function body you like. However, it is common to execute a named function that you have defined somewhere else.</li>
+  <li>In order for this code to work, the function <code>myOnClick()</code> must be accessible on the <strong>global scope</strong>. If not found on the global scope, then a <code>ReferenceError</code> will be thrown when your attribute string is executed.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Calling a named function</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;button</span> <span class="na">onclick=</span><span class="s">&quot;myOnClick();&quot;</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span><span class="nt">/&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>app.js </span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="c1">// a function defined on the global scope</span>
+</span><span class="line"><span class="kd">function</span> <span class="nx">myOnClick</span><span class="p">(){</span>
+</span><span class="line">  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Inside myOnClick&#39;</span><span class="p">);</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><strong>Global functions and minifiers</strong>
     <ul>
-      <li>The ETag header is a pseudounique identifier that represents the version of the data sent back. Its value is any arbitrary quoted string and is usually an MD5 hash. Here’s an example response:</li>
+      <li>However, a bug can occur with this approach of creating global functions when you <em>minify</em> your code. Code minifiers will commonly mangle function names to ensure the smallest amount of code is sent over the wire to your users. Unfortunately, this can break your attempts to use a named function in the global scope.</li>
+      <li>In this case, <code>myOnClick()</code> in the JS file can be mangled to say <code>a()</code>, however, the html still calls <code>myOnClick()</code>, which no longer exists. Because of the minifier, I’ve broken the link between my html and my JavaScript file.</li>
+      <li>Modern minifiers commonly won’t mangle root level function names. Not mangling root level function names is not a guarantee for every minifier that will ever exist. Also, you might change an option for a minifier that can result in top-level function names being mangled without you realizing.</li>
+      <li><strong>Safer option</strong>
+        <ul>
+          <li>A safer option for defining functions in the global scope is to add a named property to the global <code>window</code> object directly.</li>
+          <li>Minifiers should not minify object properties. You can sidestep the function name mangling concern by using this approach.</li>
+          <li>Attaching functions to the window directly also lets you write your global functions inside of nested scopes, which is pretty commonplace in module systems.</li>
+        </ul>
+      </li>
     </ul>
   </li>
 </ul>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>app.js - Safer option</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
-</pre></td><td class="code"><pre><code class="http"><span class="line"><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
-</span><span class="line"><span class="na">Content-Type</span><span class="o">:</span> <span class="l">application/xml</span>
-</span><span class="line"><span class="na">Cache-Control</span><span class="o">:</span> <span class="l">max-age=1000</span>
-</span><span class="line"><span class="na">ETag</span><span class="o">:</span> <span class="l">&quot;3141271342554322343200&quot;</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="c1">// a function defined on the global window object</span>
+</span><span class="line"><span class="nb">window</span><span class="p">.</span><span class="nx">myOnClick</span> <span class="o">=</span> <span class="kd">function</span> <span class="nx">myOnClick</span><span class="p">(){</span>
+</span><span class="line">  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Inside myOnClick&#39;</span><span class="p">);</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">function</span> <span class="nx">foo</span><span class="p">(){</span>
+</span><span class="line">  <span class="nb">window</span><span class="p">.</span><span class="nx">myOnClick2</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(){</span>
+</span><span class="line">    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Inside myOnClick2&#39;</span><span class="p">);</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="c1">//calling this method is important without which our custom function won&#39;t be set on the window object </span>
+</span><span class="line"><span class="nx">foo</span><span class="p">();</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<hr />
-
-<h1 id="bibliography">Bibliography</h1>
+<p><strong>Gotchas of HTML event handler attributes</strong></p>
 
 <ul>
-  <li>Books
-    <ul>
-      <li>RESTful Web APIs - OReilly 2013</li>
-      <li>HTTP - The Definitive Guide</li>
-    </ul>
-  </li>
+  <li><em>Broken links from function name refactoring</em> - it is easy to accidently break the link between the HTML attribute string and any global functions that it is calling. e.g., when you refactor the function name in <code>apps.js</code>, the HTML attribute value is not changed, causing <code>ReferenceError</code> at runtime.</li>
+  <li><em>Forgetting to call the function</em> - Another gotcha is forgetting to actually execute a global function that you’re trying to call. While this code may look right, it’s not actually executing the <code>myOnClick</code> function. e.g., <code>&lt;button onclick="myOnClick" type="button"/&gt;</code></li>
+  <li><em>Only a single event handler allowed</em> - you can only add a single event handler attribute of a particular event type. We can only have one <code>onClick</code> handler to listen for click events, which sucks at scale.</li>
 </ul>
+
 
   
     <footer>
@@ -486,6 +475,7 @@ messageStyle: "none",
 			<a href="/technology/webanalytics.html">Analytics</a> |
 			<a href="/technology/angular.html">Angular</a> | 
 			<a href="/technology/webapp_architecture.html">Architecture</a> | 
+			<a href="/technology/http.html">HTTP</a> |
 			<a href="/technology/js.html">JS</a> |
 			<a href="/technology/microfrontend.html">Micro-Frontend</a> |
 			<a href="/technology/web_security.html">Security</a> |

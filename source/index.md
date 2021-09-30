@@ -73,7 +73,7 @@ footer: true
 
   * Web Programming
     * [Concepts]({{ root_url }}/technology/webconcepts.html)
-    * [JS Ecosystem]({{ root_url }}/technology/js-ecosystem.html)
+    * [JS Ecosystem]({{ root_url }}/technology/js.html)
     * [UX]({{ root_url }}/technology/ux.html)
 
   * General Concepts

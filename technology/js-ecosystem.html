@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="JavaScript Ecosystem JS Ecosystem Overview Node.js References JS Ecosystem Overview “JavaScript” is not really a single language. Each browser &hellip;">
+<meta name="description" content="JavaScript Ecosystem JS Ecosystem Overview Node.js ES6 Basics References JS Ecosystem Overview “JavaScript” is not really a single language. Each &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -110,6 +110,7 @@ messageStyle: "none",
   <ul id="markdown-toc">
   <li><a href="#js-ecosystem-overview" id="markdown-toc-js-ecosystem-overview">JS Ecosystem Overview</a></li>
   <li><a href="#nodejs" id="markdown-toc-nodejs">Node.js</a></li>
+  <li><a href="#es6-basics" id="markdown-toc-es6-basics">ES6 Basics</a></li>
   <li><a href="#references" id="markdown-toc-references">References</a></li>
 </ul>
 
@@ -191,6 +192,603 @@ messageStyle: "none",
     </ul>
   </li>
 </ul>
+
+<h1 id="es6-basics">ES6 Basics</h1>
+
+<ul>
+  <li>
+    <p>Another name for ES6 is ES2015.</p>
+  </li>
+  <li>Good tutorial https://babeljs.io/docs/en/learn</li>
+  <li>MDN documentation https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export</li>
+</ul>
+
+<p><strong>Arrow Functions</strong></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">createGreeting</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">message</span><span class="p">,</span> <span class="nx">name</span><span class="p">){</span>
+</span><span class="line">  <span class="k">return</span> <span class="nx">message</span> <span class="o">+</span> <span class="nx">name</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">let</span> <span class="nx">arrowGreeting</span> <span class="o">=</span> <span class="p">(</span><span class="nx">message</span><span class="p">,</span><span class="nx">name</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">message</span> <span class="o">+</span> <span class="nx">name</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>let keyword</strong></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>using var</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">var</span> <span class="nx">message</span> <span class="o">=</span> <span class="s2">&quot;hi&quot;</span><span class="p">;</span>
+</span><span class="line"><span class="p">{</span>
+</span><span class="line">  <span class="kd">var</span> <span class="nx">message</span> <span class="o">=</span> <span class="s2">&quot;bye&quot;</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span> <span class="c1">// prints bye</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>using let</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">message</span> <span class="o">=</span> <span class="s2">&quot;hi&quot;</span><span class="p">;</span>
+</span><span class="line"><span class="p">{</span>
+</span><span class="line">  <span class="kd">let</span> <span class="nx">message</span> <span class="o">=</span> <span class="s2">&quot;bye&quot;</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span> <span class="c1">// prints hi</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Default values in function parameters</strong></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>example of default value in parameter</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">function</span> <span class="nx">greet</span><span class="p">(</span><span class="nx">greeting</span><span class="p">,</span> <span class="nx">name</span> <span class="o">=</span> <span class="s2">&quot;John&quot;</span><span class="p">){</span>
+</span><span class="line">  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">greeting</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span> <span class="o">+</span> <span class="nx">name</span><span class="p">);</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">greet</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">);</span><span class="c1">// prints Hello John</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>example of a function as a default value</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">function</span> <span class="nx">receive</span><span class="p">(</span><span class="nx">complete</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;complete&quot;</span><span class="p">)){</span>
+</span><span class="line">  <span class="nx">complete</span><span class="p">();</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>or even better</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">receive</span> <span class="o">=</span> <span class="p">(</span><span class="nx">complete</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;complete&quot;</span><span class="p">))</span> <span class="o">=&gt;</span> <span class="nx">complete</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Shorthand properties</strong></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">firstName</span> <span class="o">=</span> <span class="s2">&quot;John&quot;</span><span class="p">;</span>
+</span><span class="line"><span class="kd">let</span> <span class="nx">lastName</span> <span class="o">=</span> <span class="s2">&quot;Lindquist&quot;</span><span class="p">;</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">let</span> <span class="nx">person</span> <span class="o">=</span> <span class="p">{</span><span class="nx">firstName</span><span class="p">,</span> <span class="nx">lastName</span><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">person</span><span class="p">);</span> <span class="c1">//prints { firstName: &#39;John&#39;, lastName: &#39;Lindquist&#39; }</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>nested example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">firstName</span> <span class="o">=</span> <span class="s2">&quot;John&quot;</span><span class="p">;</span>
+</span><span class="line"><span class="kd">let</span> <span class="nx">lastName</span> <span class="o">=</span> <span class="s2">&quot;Lindquist&quot;</span><span class="p">;</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">let</span> <span class="nx">person</span> <span class="o">=</span> <span class="p">{</span><span class="nx">firstName</span><span class="p">,</span> <span class="nx">lastName</span><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">let</span> <span class="nx">mascot</span> <span class="o">=</span> <span class="s2">&quot;Moose&quot;</span><span class="p">;</span>
+</span><span class="line"><span class="kd">let</span> <span class="nx">team</span> <span class="o">=</span> <span class="p">{</span><span class="nx">person</span><span class="p">,</span> <span class="nx">mascot</span><span class="p">};</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">team</span><span class="p">);</span> <span class="c1">//prints {  person: { firstName: &#39;John&#39;, lastName: &#39;Lindquist&#39; },   mascot: &#39;Moose&#39; }</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Object enhancements</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">color</span> <span class="o">=</span> <span class="s2">&quot;red&quot;</span><span class="p">;</span>
+</span><span class="line"><span class="kd">let</span> <span class="nx">speed</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">let</span> <span class="nx">car</span> <span class="o">=</span> <span class="p">{</span><span class="nx">color</span><span class="p">,</span> <span class="nx">speed</span><span class="p">};</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">car</span><span class="p">.</span><span class="nx">color</span><span class="p">);</span> <span class="c1">// &quot;red&quot;</span>
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">car</span><span class="p">.</span><span class="nx">speed</span><span class="p">);</span> <span class="c1">// 10</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">car</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class="line">  <span class="nx">color</span><span class="p">,</span>
+</span><span class="line">  <span class="nx">speed</span><span class="p">,</span>
+</span><span class="line">  <span class="nx">go</span><span class="p">(){</span>
+</span><span class="line">    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;vroom&quot;</span><span class="p">);</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line"><span class="p">};</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">car</span><span class="p">.</span><span class="nx">color</span><span class="p">);</span> <span class="c1">// &quot;red&quot;</span>
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">car</span><span class="p">.</span><span class="nx">speed</span><span class="p">);</span> <span class="c1">// 10</span>
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">car</span><span class="p">.</span><span class="nx">go</span><span class="p">());</span> <span class="c1">// &quot;vroom&quot;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Spread operator</strong></p>
+
+<p>The spread operator allows you to “explode” an array into its individual elements.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">([</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]);</span> <span class="c1">// [1, 2, 3]</span>
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(...[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span> <span class="c1">// 1 2 3</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>add without spread operator</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">first</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">];</span>
+</span><span class="line"><span class="kd">let</span> <span class="nx">second</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">];</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">first</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">second</span><span class="p">);</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">first</span><span class="p">);</span> <span class="c1">// [ 1, 2, 3, [ 4, 5, 6] ]</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>add with spread operator</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="nx">first</span><span class="p">.</span><span class="nx">push</span><span class="p">(...</span><span class="nx">second</span><span class="p">);</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">first</span><span class="p">);</span> <span class="c1">// [1, 2, 3, 4, 5, 6]</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>spread as input parameters</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">function</span> <span class="nx">addThreeThings</span><span class="p">(</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">){</span>
+</span><span class="line">  <span class="kd">let</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span> <span class="o">+</span> <span class="nx">c</span><span class="p">;</span>
+</span><span class="line">  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span> <span class="c1">// 6</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">addThreeThings</span><span class="p">(...</span><span class="nx">first</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Template Literals</strong></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">name</span> <span class="o">=</span> <span class="s2">&quot;Hans&quot;</span>
+</span><span class="line"><span class="kd">let</span> <span class="nx">message</span> <span class="o">=</span> <span class="err">`</span><span class="nx">Hello</span> <span class="nx">$</span><span class="p">{</span><span class="nx">name</span><span class="p">}.</span> <span class="nx">It</span><span class="s1">&#39;s ${new Date().getHours()} I&#39;</span><span class="nx">m</span> <span class="nx">sleepy</span><span class="err">`</span><span class="p">;</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span> <span class="c1">// &quot;Hello Hans. It&#39;s 15 I&#39;m sleepy&quot;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Passing template literal to a function</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">function</span> <span class="nx">foo</span><span class="p">(</span><span class="nx">strings</span><span class="p">,</span> <span class="p">...</span><span class="nx">values</span><span class="p">){</span>
+</span><span class="line">  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">strings</span><span class="p">);</span> <span class="c1">// [ &#39;Hello &#39;, &quot;. It&#39;s &quot;, &quot; I&#39;m sleepy&quot; ]</span>
+</span><span class="line">  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">values</span><span class="p">);</span>  <span class="c1">// [ &#39;Hans&#39;, 20 ]</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">let</span> <span class="nx">name</span> <span class="o">=</span> <span class="s2">&quot;Hans&quot;</span>
+</span><span class="line"><span class="kd">let</span> <span class="nx">message</span> <span class="o">=</span> <span class="nx">foo</span><span class="err">`</span><span class="nx">Hello</span> <span class="nx">$</span><span class="p">{</span><span class="nx">name</span><span class="p">}.</span> <span class="nx">It</span><span class="s1">&#39;s ${new Date().getHours()} I&#39;</span><span class="nx">m</span> <span class="nx">sleepy</span><span class="err">`</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Destructuring Assignments</strong></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>old style</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class="line">  <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;john&quot;</span><span class="p">,</span>
+</span><span class="line">  <span class="nx">color</span><span class="o">:</span> <span class="s2">&quot;blue&quot;</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">obj</span><span class="p">.</span><span class="nx">color</span><span class="p">);</span> <span class="c1">// blue</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class="line">  <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;john&quot;</span><span class="p">,</span>
+</span><span class="line">  <span class="nx">color</span><span class="o">:</span> <span class="s2">&quot;blue&quot;</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line"><span class="kd">let</span> <span class="p">{</span><span class="nx">color</span><span class="p">}</span> <span class="o">=</span> <span class="nx">obj</span>
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">color</span><span class="p">);</span> <span class="c1">// blue</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Multiple properties</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="p">{</span><span class="nx">color</span><span class="p">,</span> <span class="nx">position</span><span class="p">}</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class="line">  <span class="nx">color</span><span class="o">:</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span>
+</span><span class="line">  <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;John&quot;</span><span class="p">,</span>
+</span><span class="line">  <span class="nx">state</span><span class="o">:</span> <span class="s2">&quot;New York&quot;</span><span class="p">,</span>
+</span><span class="line">  <span class="nx">position</span><span class="o">:</span> <span class="s2">&quot;Forward&quot;</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">color</span><span class="p">);</span>
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">position</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Give a new variable name</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">function</span> <span class="nx">generateObj</span><span class="p">()</span> <span class="p">{</span>
+</span><span class="line">  <span class="k">return</span> <span class="p">{</span>
+</span><span class="line">    <span class="nx">color</span><span class="o">:</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="nx">name</span><span class="o">:</span> <span class="s2">&quot;John&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="nx">state</span><span class="o">:</span> <span class="s2">&quot;New York&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="nx">position</span><span class="o">:</span> <span class="s2">&quot;Forward&quot;</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">let</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span><span class="nx">firstname</span><span class="p">,</span> <span class="nx">state</span><span class="o">:</span><span class="nx">location</span><span class="p">}</span> <span class="o">=</span> <span class="nx">generateObj</span><span class="p">();</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">firstname</span><span class="p">);</span> <span class="c1">// John</span>
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">location</span><span class="p">);</span> <span class="c1">// New York</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Destructuring array items</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="p">[</span><span class="nx">first</span><span class="p">,,,,</span><span class="nx">fifth</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;red&quot;</span><span class="p">,</span> <span class="s2">&quot;yellow&quot;</span><span class="p">,</span> <span class="s2">&quot;green&quot;</span><span class="p">,</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="s2">&quot;orange&quot;</span><span class="p">]</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">first</span><span class="p">);</span> <span class="c1">// red</span>
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">fifth</span><span class="p">);</span> <span class="c1">// orange</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Print first names only</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">people</span> <span class="o">=</span> <span class="p">[</span>
+</span><span class="line">  <span class="p">{</span>
+</span><span class="line">    <span class="s2">&quot;firstName&quot;</span><span class="o">:</span> <span class="s2">&quot;Skyler&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s2">&quot;lastName&quot;</span><span class="o">:</span> <span class="s2">&quot;Carroll&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s2">&quot;phone&quot;</span><span class="o">:</span> <span class="s2">&quot;1-429-754-5027&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s2">&quot;email&quot;</span><span class="o">:</span> <span class="s2">&quot;Cras.vehicula.alique@diamProin.ca&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s2">&quot;address&quot;</span><span class="o">:</span> <span class="s2">&quot;P.O. Box 171, 1135 Feugiat St.&quot;</span>
+</span><span class="line">  <span class="p">},</span>
+</span><span class="line">  <span class="p">{</span>
+</span><span class="line">    <span class="s2">&quot;firstName&quot;</span><span class="o">:</span> <span class="s2">&quot;Kylynn&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s2">&quot;lastName&quot;</span><span class="o">:</span> <span class="s2">&quot;Madden&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s2">&quot;phone&quot;</span><span class="o">:</span> <span class="s2">&quot;1-637-627-2810&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s2">&quot;email&quot;</span><span class="o">:</span> <span class="s2">&quot;mollis.Duis@ante.co.uk&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s2">&quot;address&quot;</span><span class="o">:</span> <span class="s2">&quot;993-6353 Aliquet, Street&quot;</span>
+</span><span class="line">  <span class="p">},</span>
+</span><span class="line"><span class="p">]</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">people</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(({</span><span class="nx">firstName</span><span class="p">})</span><span class="o">=</span> <span class="o">&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">firstName</span><span class="p">))</span>
+</span><span class="line"><span class="c1">// Skyler</span>
+</span><span class="line"><span class="c1">// Kylynn</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Destructuring in function parameters</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+<span class="line-number">22</span>
+<span class="line-number">23</span>
+<span class="line-number">24</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">people</span> <span class="o">=</span> <span class="p">[</span>
+</span><span class="line">  <span class="p">{</span>
+</span><span class="line">    <span class="s2">&quot;firstName&quot;</span><span class="o">:</span> <span class="s2">&quot;Skyler&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s2">&quot;lastName&quot;</span><span class="o">:</span> <span class="s2">&quot;Carroll&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s2">&quot;phone&quot;</span><span class="o">:</span> <span class="s2">&quot;1-429-754-5027&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s2">&quot;email&quot;</span><span class="o">:</span> <span class="s2">&quot;Cras.vehicula.alique@diamProin.ca&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s2">&quot;address&quot;</span><span class="o">:</span> <span class="s2">&quot;P.O. Box 171, 1135 Feugiat St.&quot;</span>
+</span><span class="line">  <span class="p">},</span>
+</span><span class="line">  <span class="p">{</span>
+</span><span class="line">    <span class="s2">&quot;firstName&quot;</span><span class="o">:</span> <span class="s2">&quot;Kylynn&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s2">&quot;lastName&quot;</span><span class="o">:</span> <span class="s2">&quot;Madden&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s2">&quot;phone&quot;</span><span class="o">:</span> <span class="s2">&quot;1-637-627-2810&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s2">&quot;email&quot;</span><span class="o">:</span> <span class="s2">&quot;mollis.Duis@ante.co.uk&quot;</span><span class="p">,</span>
+</span><span class="line">    <span class="s2">&quot;address&quot;</span><span class="o">:</span> <span class="s2">&quot;993-6353 Aliquet, Street&quot;</span>
+</span><span class="line">  <span class="p">},</span>
+</span><span class="line"><span class="p">]</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">let</span> <span class="p">[,</span><span class="nx">secondperson</span><span class="p">]</span> <span class="o">=</span> <span class="nx">people</span><span class="p">;</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">function</span> <span class="nx">logEmail</span><span class="p">({</span><span class="nx">email</span><span class="p">}){</span>
+</span><span class="line">  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">email</span><span class="p">);</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">logEmail</span><span class="p">(</span><span class="nx">secondperson</span><span class="p">)</span> <span class="c1">// mollis.Duis@ante.co.uk</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Modules</strong></p>
+
+<p>A function is declared and exported from a file named <code>math/addition.js</code>.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>math/addition.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">function</span> <span class="nx">sumTwo</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">){</span>
+</span><span class="line">  <span class="k">return</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="kr">export</span> <span class="p">{</span> <span class="nx">sumTwo</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>To use the above function in a different file,</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>import the module</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kr">import</span> <span class="p">{</span> <span class="nx">sumTwo</span> <span class="p">}</span> <span class="nx">from</span> <span class="err">`</span><span class="nx">math</span><span class="o">/</span><span class="nx">addition</span><span class="err">`</span><span class="p">;</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span>
+</span><span class="line">  <span class="s2">&quot;2 + 3 + 4 = &quot;</span><span class="p">,</span>
+</span><span class="line">  <span class="nx">sumThree</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+</span><span class="line"><span class="p">);</span> <span class="c1">// 2 + 3 + 4 = 9</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>We can also directly export on the function definition.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>math/addition.js - Using export directly on the function definition</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kr">export</span> <span class="kd">function</span> <span class="nx">sumTwo</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">){</span>
+</span><span class="line">  <span class="k">return</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="kr">export</span> <span class="kd">function</span> <span class="nx">sumTwo</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="nx">b</span><span class="p">,</span><span class="nx">c</span><span class="p">){</span>
+</span><span class="line">  <span class="k">return</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span> <span class="o">+</span> <span class="nx">c</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>import a function using an alias</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kr">import</span> <span class="p">{</span>
+</span><span class="line">  <span class="nx">sumTwo</span> <span class="nx">as</span> <span class="nx">addTwoNumbers</span><span class="p">,</span>
+</span><span class="line">  <span class="nx">sumThree</span>
+</span><span class="line"><span class="p">}</span> <span class="nx">from</span> <span class="s1">&#39;math/addition&#39;</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>We can also import all the functions from the module using <code>*</code>.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Import all</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kr">import</span> <span class="o">*</span> <span class="nx">as</span> <span class="nx">addition</span> <span class="nx">from</span> <span class="s1">&#39;math/addition&#39;</span><span class="p">;</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span>
+</span><span class="line">  <span class="s2">&quot;1 + 3&quot;</span><span class="p">,</span>
+</span><span class="line">  <span class="nx">addition</span><span class="p">.</span><span class="nx">sumTwo</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span> <span class="c1">// 4</span>
+</span><span class="line"><span class="p">);</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span>
+</span><span class="line">  <span class="s2">&quot;1 + 3 + 4&quot;</span><span class="p">,</span>
+</span><span class="line">  <span class="nx">addition</span><span class="p">.</span><span class="nx">sumTwo</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span> <span class="c1">// 8</span>
+</span><span class="line"><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>3rd party modules can be imported in the same fashion. Say, <code>npm install --save lodash</code></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>main.js Import lodash</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kr">import</span> <span class="o">*</span> <span class="nx">as</span> <span class="nx">_</span> <span class="nx">from</span> <span class="s1">&#39;lodash&#39;</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Promises</strong></p>
+
+<ul>
+  <li>Promises in ES6 are very similar to those of Angular’s <strong>$q service</strong>.</li>
+  <li>The callback inside of a promise takes two arguments, <code>resolve</code> and <code>reject</code>.</li>
+  <li>Promises can either be resolved or rejected. When you resolve a promise, the <code>.then()</code> will fire, and when you reject a promise, the <code>.catch()</code> will fire instead. Usually, inside of your promise, you have some sort of logic that decides whether you’re going to reject or resolve the promise.</li>
+  <li>The <code>.then()</code> method callback also takes an argument. This one we’ll call <code>data</code>. The value for <code>data</code> is the argument that is passed into the <code>resolve</code> method.</li>
+  <li>Alternatively, in the <code>.catch()</code> method, we also have a callback function as the argument, but here, what will be passed back is the information that’s supplied into the <code>reject</code> method of our promise.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Promise example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">d</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class="line">  <span class="k">if</span> <span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">    <span class="nx">resolve</span><span class="p">(</span><span class="s1">&#39;hello world&#39;</span><span class="p">);</span>
+</span><span class="line">  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class="line">    <span class="nx">reject</span><span class="p">(</span><span class="s1">&#39;no bueno&#39;</span><span class="p">);</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line"><span class="p">});</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">d</span><span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;success : &#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">));</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">d</span><span class="p">.</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">&#39;error : &#39;</span><span class="p">,</span> <span class="nx">error</span><span class="p">));</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Promises are useful for a lot of things. Most importantly, they allow you to perform <strong>asynchronous operations</strong> in a <strong>synchronous-like manner</strong></li>
+  <li>For example, let’s add a 2 seconds timeout in the above code</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Promise with delay</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">d</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Promise</span><span class="p">((</span><span class="nx">resolve</span><span class="p">,</span> <span class="nx">reject</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class="line">  <span class="nx">setTimeout</span><span class="p">(()</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">if</span> <span class="p">(</span><span class="kc">true</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">      <span class="nx">resolve</span><span class="p">(</span><span class="s1">&#39;hello world&#39;</span><span class="p">);</span>
+</span><span class="line">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span><span class="line">      <span class="nx">reject</span><span class="p">(</span><span class="s1">&#39;no bueno&#39;</span><span class="p">);</span>
+</span><span class="line">    <span class="p">}</span>
+</span><span class="line">  <span class="p">},</span> <span class="mi">2000</span><span class="p">);</span>
+</span><span class="line"><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>There is a variation of <code>.then()</code> method which takes error function as a 2nd parameter. But from readability perspective, it is better to keep them separate.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="nx">d</span><span class="p">.</span><span class="nx">then</span> <span class="p">((</span><span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;success : &#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">),</span> <span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class="line">  <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">&#39;new error msg: &#39;</span><span class="p">,</span> <span class="nx">error</span><span class="p">);</span>
+</span><span class="line"><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Several <code>.then</code> methods can be chained together and have them called in succession. In this case, once the <code>resolve</code> is called, both <em>.thens</em> will fire one after another.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>chained then methods</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="nx">d</span><span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;success : &#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">))</span>
+</span><span class="line">  <span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;success 2 : &#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">))</span> <span class="c1">//prints &quot;success 2 : undefined&quot;</span>
+</span><span class="line">  <span class="p">.</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">&#39;error : &#39;</span><span class="p">,</span> <span class="nx">error</span><span class="p">));</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>As you notice, the 2nd <code>then</code> input parameter <code>data</code> is <code>undefined</code>. This is because the <code>data</code> that’s available in the callback of the second <code>then</code> is not what is originally passed into the <code>resolve</code> but rather what is returned from the 1st <code>.then</code> method.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>chained then version 2</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="nx">d</span><span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">{</span>
+</span><span class="line">    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;success : &#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">);</span>
+</span><span class="line">    <span class="k">return</span> <span class="s1">&#39;foo bar&#39;</span><span class="p">;</span>
+</span><span class="line">  <span class="p">})</span>
+</span><span class="line">  <span class="p">.</span><span class="nx">then</span><span class="p">((</span><span class="nx">data</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;success 2 : &#39;</span><span class="p">,</span> <span class="nx">data</span><span class="p">))</span> <span class="c1">//prints &quot;success 2 : foo bar&quot;</span>
+</span><span class="line">  <span class="p">.</span><span class="k">catch</span><span class="p">((</span><span class="nx">error</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="s1">&#39;error : &#39;</span><span class="p">,</span> <span class="nx">error</span><span class="p">));</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h1 id="references">References</h1>
 

@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Web Concepts DOM DOM Events HTML Attribute Event Handlers DOM DOM is an API. DOM is not the source HTML or the code you write. DOM is not what you &hellip;">
+<meta name="description" content="Web Concepts DOM DOM Events DOM Zero or DOM-0 Event Handlers Object Property Event Handlers DOM2 or DOM2+ Event Listeners Event Object DOM DOM is an &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -110,7 +110,12 @@ messageStyle: "none",
   <ul id="markdown-toc">
   <li><a href="#dom" id="markdown-toc-dom">DOM</a>    <ul>
       <li><a href="#dom-events" id="markdown-toc-dom-events">DOM Events</a></li>
-      <li><a href="#html-attribute-event-handlers" id="markdown-toc-html-attribute-event-handlers">HTML Attribute Event Handlers</a></li>
+      <li><a href="#dom-zero-or-dom-0-event-handlers" id="markdown-toc-dom-zero-or-dom-0-event-handlers">DOM Zero or DOM-0 Event Handlers</a>        <ul>
+          <li><a href="#object-property-event-handlers" id="markdown-toc-object-property-event-handlers">Object Property Event Handlers</a></li>
+        </ul>
+      </li>
+      <li><a href="#dom2-or-dom2-event-listeners" id="markdown-toc-dom2-or-dom2-event-listeners">DOM2 or DOM2+ Event Listeners</a></li>
+      <li><a href="#event-object" id="markdown-toc-event-object">Event Object</a></li>
     </ul>
   </li>
 </ul>
@@ -162,23 +167,32 @@ messageStyle: "none",
 
 <h2 id="dom-events">DOM Events</h2>
 
-<p>DOM Events Visualizer - <a href="https://domevents.dev">https://domevents.dev</a></p>
+<blockquote>
+  <p>DOM Events Visualizer - <a href="https://domevents.dev">https://domevents.dev</a></p>
+</blockquote>
+
+<blockquote>
+  <p>Events Reference: https://developer.mozilla.org/en-US/docs/Web/events</p>
+</blockquote>
 
 <ul>
   <li>Event
     <ul>
       <li>An event is a signal that something has occurred in the browser.</li>
+      <li>An event is a message that is dispatched to event targets.</li>
       <li>Types of events
         <ul>
           <li><em>user events</em>, such as click, and</li>
-          <li><em>system events</em>, such as DOMContentLoaded. Events are dispatched to event targets.</li>
+          <li><em>system events</em>, such as <code>DOMContentLoaded</code>.</li>
         </ul>
       </li>
+      <li>Events are dispatched to event targets.</li>
     </ul>
   </li>
   <li>Event Target
     <ul>
-      <li><code>EventTarget</code> is an interface that is implemented by a number of foundational objects in the browser, such as <code>window</code>, <code>document</code>, <code>element</code> and <code>XMLHttpRequest</code>.</li>
+      <li>An event target is an object that implements the <code>EventTarget</code> interface. e.g., it is implemented by a number of foundational objects in the browser, such as <code>window</code>, <code>document</code>, <code>element</code> and <code>XMLHttpRequest</code>.</li>
+      <li>An event target can be the target of events and can have event listeners added and removed from them</li>
       <li>When an object implements the <code>EventTarget</code> interface, it allows that object to be the target of events as well as enabling other pieces of code to listen for particular events that hit that object.</li>
       <li>in the HTML code below, parent div, child and button are few event targets.</li>
     </ul>
@@ -195,6 +209,16 @@ messageStyle: "none",
       <li>(1) <em>Capture Phase</em>:  In the first phase, the event travels down through the event targets towards the target of the event. This is known as the <strong>capture phase</strong>.</li>
       <li>(2) <em>Target Phase</em>: When the event hits the event target, it then travels through the target. This is the second phase known as the <strong>target phase</strong>.</li>
       <li>(3) <em>Bubble Phase</em>: After that’s completed, then the event goes back up to the root event target in the <strong>bubble phase</strong>.</li>
+    </ul>
+  </li>
+  <li>Event Options
+    <ul>
+      <li>An event’s behaviour can be configured
+        <ul>
+          <li><strong>bubbles</strong>: Conditionally allow the  Bubble phase.</li>
+          <li><strong>cancelable</strong>: Conditionally allow an event to be canceled. Canceling an event prevents the events default behaviour.</li>
+        </ul>
+      </li>
     </ul>
   </li>
 </ul>
@@ -248,7 +272,8 @@ messageStyle: "none",
 </span><span class="line"><span class="nt">&lt;/html&gt;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<h2 id="html-attribute-event-handlers">HTML Attribute Event Handlers</h2>
+<h2 id="dom-zero-or-dom-0-event-handlers">DOM Zero or DOM-0 Event Handlers</h2>
+<p>### HTML Attribute Event Handlers</p>
 
 <ul>
   <li>It is possible to write code in HTML attributes that will be executed when a matching event occurs.</li>
@@ -345,6 +370,302 @@ messageStyle: "none",
   <li><em>Only a single event handler allowed</em> - you can only add a single event handler attribute of a particular event type. We can only have one <code>onClick</code> handler to listen for click events, which sucks at scale.</li>
 </ul>
 
+<h3 id="object-property-event-handlers">Object Property Event Handlers</h3>
+
+<ul>
+  <li>2 representations of HTML attributes:
+    <ul>
+      <li>One representation is the <em>HTML attribute</em> itself and they are named <strong>content attributes</strong>.</li>
+      <li>The other representation of these HTML attributes is <em>properties</em> on corresponding JavaScript DOM objects. These object properties are named <strong>IDL attributes</strong> or <em>Interface Description Language</em> attributes.</li>
+    </ul>
+  </li>
+  <li>Event handler attributes, such as <code>onclick</code>, also have a corresponding <code>onclick</code> object property.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kr">const</span> <span class="nx">button</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;button&#39;</span><span class="p">);</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">button</span><span class="p">.</span><span class="nx">onclick</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">event</span><span class="p">){</span>
+</span><span class="line">    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">.(</span><span class="k">this</span><span class="p">,</span> <span class="nx">event</span><span class="p">);</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Object property event handlers
+    <ul>
+      <li>are a way to define an event listener in the <em>bubble phase</em> of an event.</li>
+      <li>are also classified as <em>DOM zero event handlers</em>.</li>
+      <li>An object property event handler function is provided with the <code>event</code> as the first and only argument to the function.</li>
+      <li>Like HTML attribute event handlers, you cannot use this type of binding to listen to events in the capture phase.</li>
+    </ul>
+  </li>
+  <li>You can only use one binding mechanism - either HTML attribute event handler or the Object property event handler. Setting both will override one another.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;button</span> <span class="na">onclick=</span><span class="s">&quot;console.log(&#39;html attribute&#39;);&quot;</span> <span class="na">type=</span><span class="s">&quot;button&quot;</span><span class="nt">&gt;</span>
+</span><span class="line">  Call to action
+</span><span class="line"><span class="nt">&lt;/button&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kr">const</span> <span class="nx">button</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;button&#39;</span><span class="p">);</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">button</span><span class="p">.</span><span class="nx">onclick</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">event</span><span class="p">){</span>
+</span><span class="line">    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">.(</span><span class="s1">&#39;object property&#39;</span><span class="p">);</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="dom2-or-dom2-event-listeners">DOM2 or DOM2+ Event Listeners</h2>
+
+<ul>
+  <li>Event targets such as <code>elements</code> have an <code>addEventListener</code> API, which allows you to add multiple event listeners to a single event target, as well as giving you a lot of control over the event listener binding.</li>
+  <li>Event listeners created with <code>addEventListener</code> are also known as <strong>DOM2 event listeners</strong> or <strong>DOM2+ event listeners</strong>.</li>
+  <li>Pros
+    <ul>
+      <li>multiple event listeners can be added for a single event like ‘onclick’</li>
+      <li>Gives a lot of control over the event listener binding</li>
+    </ul>
+  </li>
+  <li>The best practice is to always use <code>addEventListener</code> instead of HTML attribute or object property event listeners, since some events don’t support them. e.g., <code>DOMContentLoaded</code></li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>addEventListener example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kr">const</span> <span class="nx">button</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;button&#39;</span><span class="p">);</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">function</span> <span class="nx">myOnClick</span><span class="p">(</span><span class="nx">event</span><span class="p">){</span>
+</span><span class="line">  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;clicked&#39;</span><span class="p">);</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="c1">//event listener added to bubble phase by default</span>
+</span><span class="line"><span class="nx">button</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span>
+</span><span class="line">  <span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="c1">// type of event to bind</span>
+</span><span class="line">  <span class="nx">myOnclick</span> <span class="c1">// event listener function or object</span>
+</span><span class="line"><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Adding multiple listeners to same event type</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="nx">button</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;click1&#39;</span><span class="p">);)</span>
+</span><span class="line"><span class="nx">button</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;click2&#39;</span><span class="p">);)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>There is a 3rd optional argument to <code>addEventListener</code> method which gives more control over binding.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Custom control over binding</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="nx">button</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span>
+</span><span class="line">  <span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="c1">// type of event to bind</span>
+</span><span class="line">  <span class="nx">myOnclick</span><span class="p">,</span> <span class="c1">// event listener function or object</span>
+</span><span class="line">  <span class="p">{</span>
+</span><span class="line">    <span class="nx">capture</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="c1">// makes the listener execute during capture phase</span>
+</span><span class="line">    <span class="nx">once</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="c1">// makes the listener run only once</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line"><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Remove Event Listener</strong></p>
+
+<ul>
+  <li>To remove an event listener from the target, the following 4 values must be correct: target, event type, listener, capture value.</li>
+  <li>The same reference to listener function must be passed to the <code>removeEventListener</code> method. Passing a similar but a different function won’t work. 
+It won’t throw an error, but it won’t remove either.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Remove the event listener</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="nx">button</span> <span class="c1">// 1. target</span>
+</span><span class="line"><span class="p">.</span><span class="nx">removeEventListener</span><span class="p">(</span>
+</span><span class="line">  <span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="c1">// 2. type of event to bind</span>
+</span><span class="line">  <span class="nx">myOnclick</span><span class="p">,</span> <span class="c1">// 3. event listener function or object</span>
+</span><span class="line">  <span class="p">{</span>
+</span><span class="line">    <span class="nx">capture</span><span class="o">:</span> <span class="kc">true</span><span class="p">,</span> <span class="c1">// 4. capture phase</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line"><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="event-object">Event Object</h2>
+
+<ul>
+  <li>Event handlers and event listeners are provided with an event object.</li>
+  <li>The event constructor has four constants representing the different states that an event can be in.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Event states</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">Event</span><span class="p">.</span><span class="nx">NONE</span><span class="p">);</span> <span class="c1">// 0 - when the event has not yet been dispatched or has finished dispatching.</span>
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">Event</span><span class="p">.</span><span class="nx">CAPTURING_PHASE</span><span class="p">);</span> <span class="c1">// 1 - when the event is in the capture phase</span>
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">Event</span><span class="p">.</span><span class="nx">AT_TARGET</span><span class="p">);</span> <span class="c1">// 2 - when we&#39;re in the target phase</span>
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">Event</span><span class="p">.</span><span class="nx">BUBBLING_PHASE</span><span class="p">);</span> <span class="c1">// 3 - when the event is in the bubbling phase </span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>These properties map to integers, which I’ve logged out here in the console, so zero, one, two and three.</li>
+</ul>
+
+<p><strong>Shared Event Object</strong></p>
+
+<blockquote>
+  <p>Every event has a single shared event object.</p>
+</blockquote>
+
+<ul>
+  <li>Every HTML attribute event handler, element property event handler, and event listener on the event path will be provided with an event object that shares the exact same reference.</li>
+  <li>The shared event object will mutate as it flows through event listeners and event targets, as well as in response to side effects such as canceling an event.</li>
+</ul>
+
+<p><strong>Event Object Properties</strong></p>
+
+<ul>
+  <li><code>event.eventPhase</code>  - which matches the phase that the event is currently in. Return an integer which maps to the Event states above.</li>
+  <li><code>event.eventType</code> - which matches the event type that the event listener was added for. e.g., ‘type: click’</li>
+  <li><code>event.target</code> - points at the event target in which the event is occurring and where the event is traveling to.</li>
+  <li><code>event.currentTarget</code> - matches the event target that this event listener was added to. Here, I’m adding an event listener to the parent element.
+    <ul>
+      <li>To understand this better, take a look at the example below. A button inside nested div elements called parent and child. The eventlistener is added to parent.</li>
+      <li>When the button is clicked, <code>event.target</code> returns the button, and the <code>currentTarget</code> return <code>parent</code>, because that’s what this event listener will be bound to.</li>
+      <li>When the parent element is clicked, both the <code>target</code> and <code>currentTarget</code> return parent.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="html"><span class="line"><span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&#39;parent&#39;</span><span class="nt">&gt;</span>
+</span><span class="line">  <span class="nt">&lt;h3&gt;</span>Parent element<span class="nt">&lt;/h3&gt;</span>
+</span><span class="line">  <span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&#39;child&#39;</span><span class="nt">&gt;</span>
+</span><span class="line">    <span class="nt">&lt;h3&gt;</span>Child element<span class="nt">&lt;/h3&gt;</span>
+</span><span class="line">    <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">&#39;button&#39;</span><span class="nt">&gt;</span> Click me <span class="nt">&lt;/button&gt;</span>
+</span><span class="line">  <span class="nt">&lt;/div&gt;</span>
+</span><span class="line"><span class="nt">&lt;/div&gt;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kr">const</span> <span class="nx">button</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;button&#39;</span><span class="p">);</span>
+</span><span class="line"><span class="kr">const</span> <span class="nx">parent</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s1">&#39;.parent&#39;</span><span class="p">);</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">function</span> <span class="nx">onClick</span><span class="p">(</span><span class="nx">event</span><span class="p">){</span>
+</span><span class="line">  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;target: &#39;</span><span class="p">,</span> <span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">);</span>
+</span><span class="line">  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;currentTarget: &#39;</span><span class="p">,</span> <span class="nx">event</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">);</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="c1">// as shown here, the listener is added to parent</span>
+</span><span class="line"><span class="nx">parent</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="nx">onClick</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li><code>event.bubbles</code> - returns true if the event will have a bubble phase</li>
+  <li><code>event.cancelable</code> - true if the event can be cancelled</li>
+  <li><code>event.composed</code> - boolean value that reflects whether an event will travel through the boundaries of a web component shadow DOM. If you’re not working with web components, then this property isn’t all that useful.</li>
+  <li><code>event.isTrusted</code> - boolean value which reveals whether the event was created by the browser itself or whether it was manually created by another piece of code. e.g., <code>button.click()</code> mimicking user click.</li>
+  <li><code>event.timestamp</code>
+    <ul>
+      <li>represents the time in milliseconds that the event was created. This value is relative to the time origin of the page so it will continue to grow bigger and bigger as the page gets older and older.</li>
+      <li>For events that are created by the browser, the creation time and dispatch time of the event are the same.</li>
+      <li>However, for manually created events, the creation of an event and the dispatching of that event might be separated by quite a long period of time.</li>
+      <li>The timestamp property is for when the event is created not when it’s dispatched.</li>
+    </ul>
+  </li>
+  <li><code>event.defaultPrevented</code> - true when an event is cancelled.</li>
+  <li><code>event.returnValue</code> - this is the inverse of <code>defaultPrevented</code>. false, when an event is canceled and true when an event is not cancelled.</li>
+</ul>
+
+<p><strong>Event Object Methods</strong></p>
+
+<ul>
+  <li><code>event.composedPath()</code> -  returns an array of event targets that an event will travel through during an event. The returned array starts with the target of the event and then works up the tree of event targets.
+    <ul>
+      <li>in the above example, when I click on the button to see the composedPath, I will see that the event started with button. This is in the target phase. Then it’s going to go through the bubble phase up to the child, the parent, body, HTML element, document, and finally the window. There doesn’t need to be any event listeners on an <code>eventTarget</code> for to be included in the event path.</li>
+      <li>The <code>composedPath</code> function or return the same event path regardless of which event target the <code>eventListener</code> is added to. In this case, my eventListener is added to the parent element, but the target of the event was the button. The composedPath function will only return the event path when the event is being dispatched. Once the event has finished or if it hasn’t been dispatched yet, then composePath will just return an empty array.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Log Events to console</strong></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Console log</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">function</span> <span class="nx">onClick</span><span class="p">(</span><span class="nx">event</span><span class="p">){</span>
+</span><span class="line">  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">event</span><span class="p">);</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">parent</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="nx">onClick</span><span class="p">,</span> <span class="p">{</span><span class="nx">capture</span><span class="o">:</span> <span class="kc">false</span><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><img src="/technology/domevents4.png" /></p>
+
+<ul>
+  <li>When you log an event to the browser console, you would notice some strange things.</li>
+  <li>As you see in the picture above, <code>eventPhase</code> is set to <code>event.NONE</code>, but we were expecting this event to be in the bubble phase because we’re setting capture to false, and the <code>currentTarget</code> property is set to <code>null</code> even though it should have been the <em>parent</em> element because that’s the event target that this event listener was bound to.</li>
+  <li>The reason we’re seeing these values is that both Chrome and Firefox evaluate the properties on an object that you’ve logged to the console when you first expand it. When I first expand this object, Chrome is looking up the values of this properties. Because the event has finished dispatching, the current target has been cleared and the eventPhase is .</li>
+  <li>In Chrome there is a little “i” icon here, and hover over it prints out, <em>“This value is evaluated upon first expanding, it may have changed since then.”</em> This is calling out that the properties in this object are evaluated by the browser when I expand it for the first time. In our case, that will happen after the event is finished.</li>
+  <li>To avoid this, print the event properties explicitly as follows:</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Console log</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">function</span> <span class="nx">onClick</span><span class="p">(</span><span class="nx">event</span><span class="p">){</span>
+</span><span class="line">  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">event</span><span class="p">);</span>
+</span><span class="line">  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">currentTarget</span><span class="p">);</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">parent</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="nx">onClick</span><span class="p">,</span> <span class="p">{</span><span class="nx">capture</span><span class="o">:</span> <span class="kc">false</span><span class="p">});</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
   
     <footer>

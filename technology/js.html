@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="JavaScript JS Ecosystem Overview Node.js ES6 Basics References JS Ecosystem Overview “JavaScript” is not really a single language. Each browser &hellip;">
+<meta name="description" content="JavaScript Overview Node.js ES6 Basics Types, Values, Variables Expressions and Operators Statements References Overview “JavaScript” is not really &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -108,21 +108,26 @@ messageStyle: "none",
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#js-ecosystem-overview" id="markdown-toc-js-ecosystem-overview">JS Ecosystem Overview</a></li>
+  <li><a href="#overview" id="markdown-toc-overview">Overview</a></li>
   <li><a href="#nodejs" id="markdown-toc-nodejs">Node.js</a></li>
-  <li><a href="#es6-basics" id="markdown-toc-es6-basics">ES6 Basics</a></li>
+  <li><a href="#es6-basics" id="markdown-toc-es6-basics">ES6 Basics</a>    <ul>
+      <li><a href="#types-values-variables" id="markdown-toc-types-values-variables">Types, Values, Variables</a></li>
+      <li><a href="#expressions-and-operators" id="markdown-toc-expressions-and-operators">Expressions and Operators</a></li>
+      <li><a href="#statements" id="markdown-toc-statements">Statements</a></li>
+    </ul>
+  </li>
   <li><a href="#references" id="markdown-toc-references">References</a></li>
 </ul>
 
-<h1 id="js-ecosystem-overview">JS Ecosystem Overview</h1>
+<h1 id="overview">Overview</h1>
 
 <ul>
   <li>“JavaScript” is not really a single language. Each browser vendor implements their own JavaScript engine, and due to variations between browsers and versions, JavaScript suffers from some serious fragmentation. (<a href="http://caniuse.com">CanIUse.com</a> documents some of these inconsistencies).</li>
   <li><strong>ES6</strong>, also known as ES2015 / Harmony / ECMAScript 6 / ECMAScript 2015, is the most-recent version of the JavaScript specification. (<a href="http://blog.teamtreehouse.com/get-started-ecmascript-6">good primer on ES6</a>).</li>
   <li><strong>Transpilers</strong>
     <ul>
-      <li>Tools: <code>Babel</code></li>
-      <li>process of transforming the standardized JavaScript into a version that’s compatible with older platforms is called_ transpiling_. e.g., ES6 to ES5</li>
+      <li>Tools like <code>Babel</code></li>
+      <li>process of transforming the standardized JavaScript into a version that’s compatible with older platforms is called <em>transpiling</em>. e.g., ES6 to ES5</li>
       <li>It’s not much different from compiling. By using a transpiler, you don’t need to worry as much about the headaches of whether or not a given browser will support the JavaScript feature you’re using.</li>
       <li>Transpiler tools don’t just convert ES6 JavaScript to ES5. There are also tools to do the same thing for JavaScript-variants (such as ClojureScript, TypeScript, and CoffeeScript) to regular JavaScript.
         <ul>
@@ -196,28 +201,216 @@ messageStyle: "none",
 <h1 id="es6-basics">ES6 Basics</h1>
 
 <ul>
+  <li>Another name for ES6 is ES2015.</li>
   <li>
-    <p>Another name for ES6 is ES2015.</p>
+    <p>Since ES6, the ECMAScript specification has moved to a yearly release cadence, and versions of the language—ES2016, ES2017, ES2018, ES2019, and ES2020—are now identified by year of release.</p>
+  </li>
+  <li>The core JavaScript language defines a minimal API for working with numbers, text, arrays, sets, maps, and so on, but does not include any input or output functionality. Input and output (as well as more sophisticated features, such as networking, storage, and graphics) are the responsibility of the <em>“host environment”</em> within which JavaScript is embedded.</li>
+  <li>The original host environment for JavaScript was a web browser. The web browser environment allows JavaScript code to obtain input from the user’s mouse and keyboard and by making HTTP requests. And it allows JavaScript code to display output to the user with HTML and CSS.</li>
+  <li>
+    <p>Instead of constraining JavaScript to work with the APIs provided by a web browser, Node gives JavaScript access to the entire operating system, allowing JavaScript programs to read and write files, send and receive data over the network, and make and serve HTTP requests. Node is a popular choice for implementing web servers and also a convenient tool for writing simple utility scripts as an alternative to shell scripts</p>
   </li>
   <li>Good tutorial https://babeljs.io/docs/en/learn</li>
   <li>MDN documentation https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/export</li>
 </ul>
 
-<p><strong>Arrow Functions</strong></p>
+<h2 id="types-values-variables">Types, Values, Variables</h2>
+
+<ul>
+  <li>JavaScript types can be divided into two categories: <em>primitive types</em> and <em>object types</em>.</li>
+  <li>Primitive Types
+    <ul>
+      <li>JavaScript’s primitive types include numbers, strings, and booleans</li>
+      <li>The special JavaScript values <code>null</code> and <code>undefined</code> are primitive values, but they are not numbers, strings, or booleans.</li>
+      <li>Primitives are immutable</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Object Types</strong></p>
+
+<ul>
+  <li><strong>Object</strong>: Any JavaScript value that is not a number, a string, a boolean, a symbol, null, or undefined is an <strong>object</strong>. An object (that is, a member of the type object) is a collection of properties where each property has a name and a value (either a primitive value or another object). One very special object is the <strong>global object</strong>.
+    <ul>
+      <li>Objects are sometimes called <em>reference types</em> to distinguish them from JavaScript’s primitive types</li>
+    </ul>
+  </li>
+  <li><strong>Array</strong>: The language also defines a special kind of object, known as an <strong>array</strong>, that represents an ordered collection of numbered values.
+    <ul>
+      <li>Object types are mutable.</li>
+    </ul>
+  </li>
+  <li><strong>Variables</strong>
+    <ul>
+      <li>Constants are declared with <code>const</code> and variables are declared with <code>let</code> (or with <code>var</code> in older JavaScript code).</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Numbers</strong></p>
+
+<ul>
+  <li>Arithmetic in JavaScript does not raise errors in cases of overflow, underflow, or division by zero. When the result of a numeric operation is larger than the largest representable number (overflow), the result is a special infinity value, <code>Infinity</code>. Similarly, when the absolute value of a negative value becomes larger than the absolute value of the largest representable negative number, the result is negative infinity, <code>-Infinity</code>.</li>
+  <li>Underflow occurs when the result of a numeric operation is closer to zero than the smallest representable number. In this case, JavaScript returns 0. If underflow occurs from a negative number, JavaScript returns a special value known as <em>“negative zero.”</em></li>
+  <li>Division by zero is not an error in JavaScript: it simply returns infinity or negative infinity. There is one exception, however: zero divided by zero does not have a well-defined value, and the result of this operation is the special not-a-number value, NaN. NaN also arises if you attempt to divide infinity by infinity, take the square root of a negative number, or use arithmetic operators with non-numeric operands that cannot be converted to numbers.</li>
+  <li>BigInt literals are written as a string of digits followed by a lowercase letter <code>n</code>. e.g., <code>1234n</code></li>
+</ul>
+
+<p><strong>Text</strong></p>
+
+<ul>
+  <li>JavaScript uses the UTF-16 encoding of the Unicode character set, and JavaScript strings are sequences of unsigned 16-bit values.</li>
+  <li>String literals - enclosed within a matched pair of single or double quotes or backticks (‘ or “ or `</li>
+  <li>As of ES5, however, you can break a string literal across multiple lines by ending each line but the last with a backslash ()</li>
+  <li>standard <code>===</code> equality and <code>!==</code> inequality operators</li>
+  <li>The ES6 backtick syntax allows strings to be broken across multiple lines, and in this case, the line terminators are part of the string literal.</li>
+</ul>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
 <span class="line-number">5</span>
-</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">createGreeting</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">message</span><span class="p">,</span> <span class="nx">name</span><span class="p">){</span>
-</span><span class="line">  <span class="k">return</span> <span class="nx">message</span> <span class="o">+</span> <span class="nx">name</span><span class="p">;</span>
-</span><span class="line"><span class="p">}</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="c1">// A string representing 2 lines written on one line:</span>
+</span><span class="line"><span class="s1">&#39;two\nlines&#39;</span>
 </span><span class="line">
-</span><span class="line"><span class="kd">let</span> <span class="nx">arrowGreeting</span> <span class="o">=</span> <span class="p">(</span><span class="nx">message</span><span class="p">,</span><span class="nx">name</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">message</span> <span class="o">+</span> <span class="nx">name</span><span class="p">;</span>
+</span><span class="line"><span class="c1">// A one-line string written on 3 lines:</span>
+</span><span class="line"><span class="s2">&quot;one\</span>
+</span><span class="line"><span class="s2"> long\</span>
+</span><span class="line"><span class="s2"> line&quot;</span>
+</span><span class="line">
+</span><span class="line"><span class="c1">// A two-line string written on two lines:</span>
+</span><span class="line"><span class="err">`</span><span class="nx">the</span> <span class="nx">newline</span> <span class="nx">character</span> <span class="nx">at</span> <span class="nx">the</span> <span class="nx">end</span> <span class="nx">of</span> <span class="k">this</span> <span class="nx">line</span>
+</span><span class="line"><span class="nx">is</span> <span class="nx">included</span> <span class="nx">literally</span> <span class="k">in</span> <span class="k">this</span> <span class="nx">string</span><span class="err">`</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p><strong>let keyword</strong></p>
+<p><strong>Template Literals</strong></p>
+
+<p>Template literals are string literals with JavaScript expressions in it.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Template literals</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">name</span> <span class="o">=</span> <span class="s2">&quot;Hans&quot;</span>
+</span><span class="line"><span class="kd">let</span> <span class="nx">message</span> <span class="o">=</span> <span class="err">`</span><span class="nx">Hello</span> <span class="nx">$</span><span class="p">{</span><span class="nx">name</span><span class="p">}.</span> <span class="nx">It</span><span class="s1">&#39;s ${new Date().getHours()} I&#39;</span><span class="nx">m</span> <span class="nx">sleepy</span><span class="err">`</span><span class="p">;</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span> <span class="c1">// &quot;Hello Hans. It&#39;s 15 I&#39;m sleepy&quot;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Passing template literal to a function</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">function</span> <span class="nx">foo</span><span class="p">(</span><span class="nx">strings</span><span class="p">,</span> <span class="p">...</span><span class="nx">values</span><span class="p">){</span>
+</span><span class="line">  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">strings</span><span class="p">);</span> <span class="c1">// [ &#39;Hello &#39;, &quot;. It&#39;s &quot;, &quot; I&#39;m sleepy&quot; ]</span>
+</span><span class="line">  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">values</span><span class="p">);</span>  <span class="c1">// [ &#39;Hans&#39;, 20 ]</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">let</span> <span class="nx">name</span> <span class="o">=</span> <span class="s2">&quot;Hans&quot;</span>
+</span><span class="line"><span class="kd">let</span> <span class="nx">message</span> <span class="o">=</span> <span class="nx">foo</span><span class="err">`</span><span class="nx">Hello</span> <span class="nx">$</span><span class="p">{</span><span class="nx">name</span><span class="p">}.</span> <span class="nx">It</span><span class="s1">&#39;s ${new Date().getHours()} I&#39;</span><span class="nx">m</span> <span class="nx">sleepy</span><span class="err">`</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Symbols</strong></p>
+
+<ul>
+  <li>Property names are typically (and until ES6, were exclusively) strings. But in ES6 and later, Symbols can also serve this purpose.</li>
+  <li>To obtain a Symbol value, you call the <code>Symbol()</code> function. This function never returns the same value twice, even when called with the same argument. This means that if you call <code>Symbol()</code> to obtain a Symbol value, you can safely use that value as a property name to add a new property to an object and do not need to worry that you might be overwriting an existing property with the same name. Similarly, if you use symbolic property names and do not share those symbols, you can be confident that other modules of code in your program will not accidentally overwrite your properties.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Symbol</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">strname</span> <span class="o">=</span> <span class="s2">&quot;string name&quot;</span><span class="p">;</span>      <span class="c1">// A string to use as a property name</span>
+</span><span class="line"><span class="kd">let</span> <span class="nx">symname</span> <span class="o">=</span> <span class="nx">Symbol</span><span class="p">(</span><span class="s2">&quot;propname&quot;</span><span class="p">);</span> <span class="c1">// A Symbol to use as a property name</span>
+</span><span class="line"><span class="k">typeof</span> <span class="nx">strname</span>                    <span class="c1">// =&gt; &quot;string&quot;: strname is a string</span>
+</span><span class="line"><span class="k">typeof</span> <span class="nx">symname</span>                    <span class="c1">// =&gt; &quot;symbol&quot;: symname is a symbol</span>
+</span><span class="line"><span class="kd">let</span> <span class="nx">o</span> <span class="o">=</span> <span class="p">{};</span>                       <span class="c1">// Create a new object</span>
+</span><span class="line"><span class="nx">o</span><span class="p">[</span><span class="nx">strname</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>                   <span class="c1">// Define a property with a string name</span>
+</span><span class="line"><span class="nx">o</span><span class="p">[</span><span class="nx">symname</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>                   <span class="c1">// Define a property with a Symbol name</span>
+</span><span class="line"><span class="nx">o</span><span class="p">[</span><span class="nx">strname</span><span class="p">]</span>                        <span class="c1">// =&gt; 1: access the string-named property</span>
+</span><span class="line"><span class="nx">o</span><span class="p">[</span><span class="nx">symname</span><span class="p">]</span>                        <span class="c1">// =&gt; 2: access the symbol-named property</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>The <code>Symbol()</code> function takes an optional string argument and returns a unique Symbol value. If you supply a string argument, that string will be included in the output of the Symbol’s <code>toString()</code> method. Note, however, that calling <code>Symbol()</code> twice with the same string produces two completely different Symbol values.
+    <ul>
+      <li>when using Symbols, you want to keep them private to your own code so you have a guarantee that your properties will never conflict with properties used by other code.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Symbol toString</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">Symbol</span><span class="p">(</span><span class="s2">&quot;sym_x&quot;</span><span class="p">);</span>
+</span><span class="line"><span class="nx">s</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span>             <span class="c1">// =&gt; &quot;Symbol(sym_x)&quot;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>The <code>Symbol.for()</code> function takes a string argument and returns a Symbol value that is associated with the string you pass. If no Symbol is already associated with that string, then a new one is created and returned; otherwise, the already existing Symbol is returned. That is, the <code>Symbol.for()</code> function is completely different than the Symbol() function: <code>Symbol()</code> never returns the same value twice, but <code>Symbol.for()</code> always returns the same value when called with the same string.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Symbol.for()</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">s</span> <span class="o">=</span> <span class="nx">Symbol</span><span class="p">.</span><span class="k">for</span><span class="p">(</span><span class="s2">&quot;shared&quot;</span><span class="p">);</span>
+</span><span class="line"><span class="kd">let</span> <span class="nx">t</span> <span class="o">=</span> <span class="nx">Symbol</span><span class="p">.</span><span class="k">for</span><span class="p">(</span><span class="s2">&quot;shared&quot;</span><span class="p">);</span>
+</span><span class="line"><span class="nx">s</span> <span class="o">===</span> <span class="nx">t</span>          <span class="c1">// =&gt; true</span>
+</span><span class="line"><span class="nx">s</span><span class="p">.</span><span class="nx">toString</span><span class="p">()</span>     <span class="c1">// =&gt; &quot;Symbol(shared)&quot;</span>
+</span><span class="line"><span class="nx">Symbol</span><span class="p">.</span><span class="nx">keyFor</span><span class="p">(</span><span class="nx">t</span><span class="p">)</span> <span class="c1">// =&gt; &quot;shared&quot;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Global Object</strong></p>
+
+<ul>
+  <li>The global object is a regular JavaScript object that serves a very important purpose: the properties of this object are the globally defined identifiers that are available to a JavaScript program.</li>
+  <li>When the JavaScript interpreter starts (or whenever a web browser loads a new page), it creates a new <code>global</code> object and gives it an initial set of properties that define:
+    <ul>
+      <li>Global constants like <code>undefined</code>, <code>Infinity</code>, and <code>NaN</code></li>
+      <li>Global functions like <code>isNaN()</code>, <code>parseInt()</code>, and <code>eval()</code></li>
+      <li>Constructor functions like <code>Date()</code>, <code>RegExp()</code>, <code>String()</code>, <code>Object()</code>, and <code>Array()</code></li>
+      <li>Global objects like <code>Math</code> and <code>JSON</code></li>
+    </ul>
+  </li>
+  <li>In Node, the global object has a property named global whose value is the global object itself, so you can always refer to the global object by the name global in Node programs.</li>
+  <li>In web browsers, the Window object serves as the global object for all JavaScript code contained in the browser window it represents. This global Window object has a self-referential window property that can be used to refer to the global object. The Window object defines the core global properties, but it also defines quite a few other globals that are specific to web browsers and client-side JavaScript. Web worker threads have a different global object than the Window with which they are associated. Code in a worker can refer to its global object as self.</li>
+  <li>ES2020 finally defines globalThis as the standard way to refer to the global object in any context. As of early 2020, this feature has been implemented by all modern browsers and by Node.</li>
+  <li>Global object can be referenced as <code>globalThis</code>.</li>
+</ul>
+
+<p><strong>Scope</strong></p>
+
+<ul>
+  <li>Variables and constants declared with let and const are <em>block scoped</em>.</li>
+  <li>When a declaration appears at the top level, outside of any code blocks, we say it is a <em>global</em> variable.
+    <ul>
+      <li>In Node and in client-side JavaScript modules, the scope of a <em>global</em> variable is the file that it is defined in.</li>
+      <li>In traditional client-side JavaScript, however, the scope of a <em>global</em> variable is the HTML document in which it is defined. That is: if one <code>&lt;script&gt;</code> declares a <em>global</em> variable or constant, that variable or constant is defined in all of the <code>&lt;script&gt;</code> elements in that document (or at least all of the scripts that execute after the <code>let</code> or <code>const</code> statement executes).</li>
+    </ul>
+  </li>
+  <li><strong>Hoisting</strong>
+    <ul>
+      <li>One of the most unusual features of <code>var</code> declarations is known as hoisting. When a variable is declared with <code>var</code>, the declaration is lifted up (or <strong>“hoisted”</strong>) to the top of the enclosing function. The initialization of the variable remains where you wrote it, but the definition of the variable moves to the top of the function. So variables declared with var can be used, without error, anywhere in the enclosing function. If the initialization code has not run yet, then the value of the variable may be undefined, but you won’t get an error if you use the variable before it is initialized. (This can be a source of bugs and is one of the important misfeatures that <code>let</code> corrects: if you declare a variable with <code>let</code> but attempt to use it before the <code>let</code> statement runs, you will get an actual error instead of just seeing an <code>undefined</code> value.)</li>
+    </ul>
+  </li>
+</ul>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>using var</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -247,87 +440,11 @@ messageStyle: "none",
 </span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span> <span class="c1">// prints hi</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p><strong>Default values in function parameters</strong></p>
+<p><strong>Destructuring assignment</strong></p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>example of default value in parameter</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">function</span> <span class="nx">greet</span><span class="p">(</span><span class="nx">greeting</span><span class="p">,</span> <span class="nx">name</span> <span class="o">=</span> <span class="s2">&quot;John&quot;</span><span class="p">){</span>
-</span><span class="line">  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">greeting</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span> <span class="o">+</span> <span class="nx">name</span><span class="p">);</span>
-</span><span class="line"><span class="p">}</span>
-</span><span class="line">
-</span><span class="line"><span class="nx">greet</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">);</span><span class="c1">// prints Hello John</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
+<p>ES6 implements a kind of compound declaration and assignment syntax known as <em>destructuring assignment</em>.</p>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>example of a function as a default value</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">function</span> <span class="nx">receive</span><span class="p">(</span><span class="nx">complete</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;complete&quot;</span><span class="p">)){</span>
-</span><span class="line">  <span class="nx">complete</span><span class="p">();</span>
-</span><span class="line"><span class="p">}</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p>or even better</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">receive</span> <span class="o">=</span> <span class="p">(</span><span class="nx">complete</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;complete&quot;</span><span class="p">))</span> <span class="o">=&gt;</span> <span class="nx">complete</span><span class="p">();</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p><strong>Shorthand properties</strong></p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">firstName</span> <span class="o">=</span> <span class="s2">&quot;John&quot;</span><span class="p">;</span>
-</span><span class="line"><span class="kd">let</span> <span class="nx">lastName</span> <span class="o">=</span> <span class="s2">&quot;Lindquist&quot;</span><span class="p">;</span>
-</span><span class="line">
-</span><span class="line"><span class="kd">let</span> <span class="nx">person</span> <span class="o">=</span> <span class="p">{</span><span class="nx">firstName</span><span class="p">,</span> <span class="nx">lastName</span><span class="p">}</span>
-</span><span class="line">
-</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">person</span><span class="p">);</span> <span class="c1">//prints { firstName: &#39;John&#39;, lastName: &#39;Lindquist&#39; }</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>nested example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-<span class="line-number">8</span>
-<span class="line-number">9</span>
-</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">firstName</span> <span class="o">=</span> <span class="s2">&quot;John&quot;</span><span class="p">;</span>
-</span><span class="line"><span class="kd">let</span> <span class="nx">lastName</span> <span class="o">=</span> <span class="s2">&quot;Lindquist&quot;</span><span class="p">;</span>
-</span><span class="line">
-</span><span class="line"><span class="kd">let</span> <span class="nx">person</span> <span class="o">=</span> <span class="p">{</span><span class="nx">firstName</span><span class="p">,</span> <span class="nx">lastName</span><span class="p">}</span>
-</span><span class="line">
-</span><span class="line"><span class="kd">let</span> <span class="nx">mascot</span> <span class="o">=</span> <span class="s2">&quot;Moose&quot;</span><span class="p">;</span>
-</span><span class="line"><span class="kd">let</span> <span class="nx">team</span> <span class="o">=</span> <span class="p">{</span><span class="nx">person</span><span class="p">,</span> <span class="nx">mascot</span><span class="p">};</span>
-</span><span class="line">
-</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">team</span><span class="p">);</span> <span class="c1">//prints {  person: { firstName: &#39;John&#39;, lastName: &#39;Lindquist&#39; },   mascot: &#39;Moose&#39; }</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Object enhancements</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">color</span> <span class="o">=</span> <span class="s2">&quot;red&quot;</span><span class="p">;</span>
-</span><span class="line"><span class="kd">let</span> <span class="nx">speed</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
-</span><span class="line">
-</span><span class="line"><span class="kd">let</span> <span class="nx">car</span> <span class="o">=</span> <span class="p">{</span><span class="nx">color</span><span class="p">,</span> <span class="nx">speed</span><span class="p">};</span>
-</span><span class="line">
-</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">car</span><span class="p">.</span><span class="nx">color</span><span class="p">);</span> <span class="c1">// &quot;red&quot;</span>
-</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">car</span><span class="p">.</span><span class="nx">speed</span><span class="p">);</span> <span class="c1">// 10</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Destructuring assignment</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
@@ -338,94 +455,38 @@ messageStyle: "none",
 <span class="line-number">9</span>
 <span class="line-number">10</span>
 <span class="line-number">11</span>
-</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">car</span> <span class="o">=</span> <span class="p">{</span>
-</span><span class="line">  <span class="nx">color</span><span class="p">,</span>
-</span><span class="line">  <span class="nx">speed</span><span class="p">,</span>
-</span><span class="line">  <span class="nx">go</span><span class="p">(){</span>
-</span><span class="line">    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;vroom&quot;</span><span class="p">);</span>
-</span><span class="line">  <span class="p">}</span>
-</span><span class="line"><span class="p">};</span>
+<span class="line-number">12</span>
+<span class="line-number">13</span>
+<span class="line-number">14</span>
+<span class="line-number">15</span>
+<span class="line-number">16</span>
+<span class="line-number">17</span>
+<span class="line-number">18</span>
+<span class="line-number">19</span>
+<span class="line-number">20</span>
+<span class="line-number">21</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="p">[</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">];</span>              <span class="c1">// Same as let x=1, y=2</span>
+</span><span class="line"><span class="kd">let</span> <span class="p">[</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">];</span>                <span class="c1">// x == 1; y == undefined</span>
+</span><span class="line"><span class="kd">let</span> <span class="p">[</span><span class="nx">x</span><span class="p">,</span> <span class="p">...</span><span class="nx">y</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">];</span>      <span class="c1">// y == [2,3,4]</span>
+</span><span class="line"><span class="kd">let</span> <span class="p">[</span><span class="nx">first</span><span class="p">,</span> <span class="p">...</span><span class="nx">rest</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Hello&quot;</span><span class="p">;</span> <span class="c1">// first == &quot;H&quot;; rest == [&quot;e&quot;,&quot;l&quot;,&quot;l&quot;,&quot;o&quot;]</span>
 </span><span class="line">
-</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">car</span><span class="p">.</span><span class="nx">color</span><span class="p">);</span> <span class="c1">// &quot;red&quot;</span>
-</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">car</span><span class="p">.</span><span class="nx">speed</span><span class="p">);</span> <span class="c1">// 10</span>
-</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">car</span><span class="p">.</span><span class="nx">go</span><span class="p">());</span> <span class="c1">// &quot;vroom&quot;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p><strong>Spread operator</strong></p>
-
-<p>The spread operator allows you to “explode” an array into its individual elements.</p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">([</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]);</span> <span class="c1">// [1, 2, 3]</span>
-</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(...[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span> <span class="c1">// 1 2 3</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>add without spread operator</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">first</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">];</span>
-</span><span class="line"><span class="kd">let</span> <span class="nx">second</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">];</span>
-</span><span class="line">
-</span><span class="line"><span class="nx">first</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">second</span><span class="p">);</span>
-</span><span class="line">
-</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">first</span><span class="p">);</span> <span class="c1">// [ 1, 2, 3, [ 4, 5, 6] ]</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>add with spread operator</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="nx">first</span><span class="p">.</span><span class="nx">push</span><span class="p">(...</span><span class="nx">second</span><span class="p">);</span>
-</span><span class="line">
-</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">first</span><span class="p">);</span> <span class="c1">// [1, 2, 3, 4, 5, 6]</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>spread as input parameters</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">function</span> <span class="nx">addThreeThings</span><span class="p">(</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">){</span>
-</span><span class="line">  <span class="kd">let</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span> <span class="o">+</span> <span class="nx">c</span><span class="p">;</span>
-</span><span class="line">  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span> <span class="c1">// 6</span>
+</span><span class="line"><span class="c1">// in function return statement</span>
+</span><span class="line"><span class="kd">function</span> <span class="nx">toPolar</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">return</span> <span class="p">[</span><span class="nb">Math</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span><span class="nx">x</span><span class="o">*</span><span class="nx">x</span><span class="o">+</span><span class="nx">y</span><span class="o">*</span><span class="nx">y</span><span class="p">),</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">atan2</span><span class="p">(</span><span class="nx">y</span><span class="p">,</span><span class="nx">x</span><span class="p">)];</span>
 </span><span class="line"><span class="p">}</span>
 </span><span class="line">
-</span><span class="line"><span class="nx">addThreeThings</span><span class="p">(...</span><span class="nx">first</span><span class="p">);</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p><strong>Template Literals</strong></p>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">name</span> <span class="o">=</span> <span class="s2">&quot;Hans&quot;</span>
-</span><span class="line"><span class="kd">let</span> <span class="nx">message</span> <span class="o">=</span> <span class="err">`</span><span class="nx">Hello</span> <span class="nx">$</span><span class="p">{</span><span class="nx">name</span><span class="p">}.</span> <span class="nx">It</span><span class="s1">&#39;s ${new Date().getHours()} I&#39;</span><span class="nx">m</span> <span class="nx">sleepy</span><span class="err">`</span><span class="p">;</span>
-</span><span class="line">
-</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span> <span class="c1">// &quot;Hello Hans. It&#39;s 15 I&#39;m sleepy&quot;</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Passing template literal to a function</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
-<span class="line-number">2</span>
-<span class="line-number">3</span>
-<span class="line-number">4</span>
-<span class="line-number">5</span>
-<span class="line-number">6</span>
-<span class="line-number">7</span>
-</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">function</span> <span class="nx">foo</span><span class="p">(</span><span class="nx">strings</span><span class="p">,</span> <span class="p">...</span><span class="nx">values</span><span class="p">){</span>
-</span><span class="line">  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">strings</span><span class="p">);</span> <span class="c1">// [ &#39;Hello &#39;, &quot;. It&#39;s &quot;, &quot; I&#39;m sleepy&quot; ]</span>
-</span><span class="line">  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">values</span><span class="p">);</span>  <span class="c1">// [ &#39;Hans&#39;, 20 ]</span>
+</span><span class="line"><span class="c1">// In for loop</span>
+</span><span class="line"><span class="kd">let</span> <span class="nx">o</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">x</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">2</span> <span class="p">};</span> <span class="c1">// The object we&#39;ll loop over</span>
+</span><span class="line"><span class="k">for</span><span class="p">(</span><span class="kr">const</span> <span class="p">[</span><span class="nx">name</span><span class="p">,</span> <span class="nx">value</span><span class="p">]</span> <span class="nx">of</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">entries</span><span class="p">(</span><span class="nx">o</span><span class="p">))</span> <span class="p">{</span>
+</span><span class="line">    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">name</span><span class="p">,</span> <span class="nx">value</span><span class="p">);</span> <span class="c1">// Prints &quot;x 1&quot; and &quot;y 2&quot;</span>
 </span><span class="line"><span class="p">}</span>
 </span><span class="line">
-</span><span class="line"><span class="kd">let</span> <span class="nx">name</span> <span class="o">=</span> <span class="s2">&quot;Hans&quot;</span>
-</span><span class="line"><span class="kd">let</span> <span class="nx">message</span> <span class="o">=</span> <span class="nx">foo</span><span class="err">`</span><span class="nx">Hello</span> <span class="nx">$</span><span class="p">{</span><span class="nx">name</span><span class="p">}.</span> <span class="nx">It</span><span class="s1">&#39;s ${new Date().getHours()} I&#39;</span><span class="nx">m</span> <span class="nx">sleepy</span><span class="err">`</span><span class="p">;</span>
+</span><span class="line"><span class="c1">// Same as const sin=Math.sin, cos=Math.cos, tan=Math.tan</span>
+</span><span class="line"><span class="kr">const</span> <span class="p">{</span><span class="nx">sin</span><span class="p">,</span> <span class="nx">cos</span><span class="p">,</span> <span class="nx">tan</span><span class="p">}</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">;</span>
+</span><span class="line">
+</span><span class="line"><span class="c1">// Same as const cosine = Math.cos, tangent = Math.tan;</span>
+</span><span class="line"><span class="kr">const</span> <span class="p">{</span> <span class="nx">cos</span><span class="o">:</span> <span class="nx">cosine</span><span class="p">,</span> <span class="nx">tan</span><span class="o">:</span> <span class="nx">tangent</span> <span class="p">}</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
-
-<p><strong>Destructuring Assignments</strong></p>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>old style</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -439,7 +500,7 @@ messageStyle: "none",
 </span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">obj</span><span class="p">.</span><span class="nx">color</span><span class="p">);</span> <span class="c1">// blue</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>New style</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
 <span class="line-number">3</span>
 <span class="line-number">4</span>
@@ -603,7 +664,163 @@ messageStyle: "none",
 </span><span class="line"><span class="nx">logEmail</span><span class="p">(</span><span class="nx">secondperson</span><span class="p">)</span> <span class="c1">// mollis.Duis@ante.co.uk</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
-<p><strong>Modules</strong></p>
+<h2 id="expressions-and-operators">Expressions and Operators</h2>
+
+<p><strong>Conditional Expressions</strong></p>
+
+<ul>
+  <li><code>expression ?. identifier</code></li>
+  <li><code>expression ?.[ expression ]</code></li>
+  <li>In JavaScript, the values <code>null</code> and <code>undefined</code> are the only two values that do not have properties. In a regular property access expression using <code>.</code> or <code>[],</code> you get a <code>TypeError</code> if the expression on the left evaluates to <code>null</code> or <code>undefined</code>. You can use <code>?.</code> and <code>?.[]</code> syntax to guard against errors of this type.</li>
+  <li>This form of property access expression is sometimes called <strong>“optional chaining”</strong> because it also works for longer “chained” property access expressions like this one:</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Conditional Expressions</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">a</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">b</span><span class="o">:</span> <span class="kc">null</span> <span class="p">};</span>
+</span><span class="line"><span class="nx">a</span><span class="p">.</span><span class="nx">b</span><span class="o">?</span><span class="p">.</span><span class="nx">c</span><span class="p">.</span><span class="nx">d</span>   <span class="c1">// =&gt; undefined</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Conditional Invocation</strong></p>
+
+<ul>
+  <li>In ES2020, you can also invoke a function using <code>?.()</code> instead of <code>()</code>. Normally when you invoke a function, if the expression to the left of the parentheses is <code>null</code> or <code>undefined</code> or any other non-function, a <code>TypeError</code> is thrown. With the new <code>?.()</code> invocation syntax, if the expression to the left of the ?. evaluates to <code>null</code> or <code>undefined</code>, then the entire invocation expression evaluates to <code>undefined</code> and no exception is thrown.</li>
+  <li>Note, however, that <code>?.()</code> only checks whether the lefthand side is <code>null</code> or <code>undefined</code>. It does not verify that the value is actually a function.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Conditional Invocation</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">function</span> <span class="nx">square</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span> <span class="nx">log</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// The second argument is an optional function</span>
+</span><span class="line">    <span class="nx">log</span><span class="o">?</span><span class="p">.(</span><span class="nx">x</span><span class="p">);</span>             <span class="c1">// Call the function if there is one</span>
+</span><span class="line">    <span class="k">return</span> <span class="nx">x</span> <span class="o">*</span> <span class="nx">x</span><span class="p">;</span>         <span class="c1">// Return the square of the argument</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Object Creation Expression</strong></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Object Creation Expression</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="k">new</span> <span class="nb">Object</span><span class="p">()</span>
+</span><span class="line"><span class="k">new</span> <span class="nx">Point</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+</span><span class="line">
+</span><span class="line"><span class="c1">// If no arguments are passed to the constructor function in an object creation expression, the empty pair of parentheses can be omitted:</span>
+</span><span class="line">
+</span><span class="line"><span class="k">new</span> <span class="nb">Object</span>
+</span><span class="line"><span class="k">new</span> <span class="nb">Date</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>eval()</strong></p>
+
+<ul>
+  <li><code>eval()</code> expects one argument. If you pass any value other than a string, it simply returns that value.</li>
+  <li>If you pass a string, it attempts to parse the string as JavaScript code, throwing a <code>SyntaxError</code> if it fails.</li>
+  <li>If it successfully parses the string, then it evaluates the code and returns the value of the last expression or statement in the string or undefined if the last expression or statement had no value. If the evaluated string throws an exception, that exception propogates from the call to <code>eval()</code>.</li>
+  <li>The key thing about <code>eval()</code> (when invoked like this) is that it uses the variable environment of the code that calls it. That is, it looks up the values of variables and defines new variables and functions in the same way that local code does. If a function defines a local variable <code>x</code> and then calls <code>eval("x")</code>, it will obtain the value of the local variable. If it calls <code>eval("x=1")</code>, it changes the value of the local variable.</li>
+</ul>
+
+<p><strong>First-Defined (??) operator</strong></p>
+
+<p>The first-defined operator <code>??</code> evaluates to its first defined operand: if its left operand is not null and not undefined, it returns that value. Otherwise, it returns the value of the right operand.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>First-defined operator</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="nx">a</span><span class="o">??</span><span class="nx">b</span>
+</span><span class="line">
+</span><span class="line"><span class="c1">//is equivalent to</span>
+</span><span class="line"><span class="p">(</span><span class="nx">a</span> <span class="o">!==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="nx">a</span> <span class="o">!==</span> <span class="kc">undefined</span><span class="p">)</span> <span class="o">?</span> <span class="nx">a</span> <span class="o">:</span> <span class="nx">b</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="statements">Statements</h2>
+
+<p><strong>for/of</strong></p>
+
+<p>The for/of loop works with iterable objects</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>for/of</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">data</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">8</span><span class="p">,</span> <span class="mi">9</span><span class="p">],</span> <span class="nx">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span><span class="line"><span class="k">for</span><span class="p">(</span><span class="kd">let</span> <span class="nx">element</span> <span class="nx">of</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">    <span class="nx">sum</span> <span class="o">+=</span> <span class="nx">element</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">sum</span><span class="p">);</span>       <span class="c1">// =&gt; 45</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>for/in</strong></p>
+
+<ul>
+  <li>A for/in loop looks a lot like a for/of loop, with the <code>of</code> keyword changed to <code>in</code>. While a for/of loop requires an <strong>iterable object</strong> after the <code>of</code>, a for/in loop works with <strong>any object</strong> after the in.</li>
+  <li>The for/of loop is new in ES6, but for/in has been part of JavaScript since the very beginning (which is why it has the more natural sounding syntax). Attempting to use for/of on a regular object throws a <code>TypeError</code> at runtime.</li>
+  <li>The for/in loop does not actually enumerate all properties of an object. It does not enumerate properties whose names are symbols. And of the properties whose names are strings, it only loops over the enumerable properties.</li>
+</ul>
+
+<p><strong>try-catch</strong></p>
+
+<p>Occasionally you may find yourself using a catch clause solely to detect and stop the propagation of an exception, even though you do not care about the type or the value of the exception. In ES2019 and later, you can omit the parentheses and the identifier and use the catch keyword bare in this case. Here is an example:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>try-catch</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="c1">// Like JSON.parse(), but return undefined instead of throwing an error</span>
+</span><span class="line"><span class="kd">function</span> <span class="nx">parseJSON</span><span class="p">(</span><span class="nx">s</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">    <span class="k">try</span> <span class="p">{</span>
+</span><span class="line">        <span class="k">return</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">s</span><span class="p">);</span>
+</span><span class="line">    <span class="p">}</span> <span class="k">catch</span> <span class="p">{</span>
+</span><span class="line">        <span class="c1">// Something went wrong but we don&#39;t care what it was</span>
+</span><span class="line">        <span class="k">return</span> <span class="kc">undefined</span><span class="p">;</span>
+</span><span class="line">    <span class="p">}</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>function</strong></p>
+
+<ul>
+  <li>The <code>function</code> declarations in any block of JavaScript code are processed before that code runs, and the function names are bound to the function objects throughout the block. We say that function declarations are <strong>“hoisted”</strong> because it is as if they had all been moved up to the top of whatever scope they are defined within. The upshot is that code that invokes a function can exist in your program before the code that declares the function.</li>
+  <li>Unlike functions, <code>class</code> declarations are not hoisted, and you cannot use a class declared this way in code that appears before the declaration.</li>
+</ul>
+
+<p><strong>import and export</strong></p>
+
+<ul>
+  <li>The <code>import</code> and <code>export</code> declarations are used together to make values defined in one module of JavaScript code available in another module.</li>
+  <li>A module is a file of JavaScript code with its own global namespace, completely independent of all other modules. The only way that a value (such as <code>function</code> or <code>class</code>) defined in one module can be used in another module is if the defining module exports it with export and the using module imports it with import.</li>
+  <li>The export directive has more variants than the import directive does. Here is one of them:</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>geometry/constants.js</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kr">const</span> <span class="nx">PI</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="p">;</span>
+</span><span class="line"><span class="kr">const</span> <span class="nx">TAU</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="nx">PI</span><span class="p">;</span>
+</span><span class="line"><span class="kr">export</span> <span class="p">{</span> <span class="nx">PI</span><span class="p">,</span> <span class="nx">TAU</span> <span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>The <code>export</code> keyword is sometimes used as a modifier on other declarations, resulting in a kind of compound declaration that defines a constant, variable, function, or class and exports it at the same time. And when a module exports only a single value, this is typically done with the special form export default:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>export</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kr">export</span> <span class="kr">const</span> <span class="nx">TAU</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">PI</span><span class="p">;</span>
+</span><span class="line"><span class="kr">export</span> <span class="kd">function</span> <span class="nx">magnitude</span><span class="p">(</span><span class="nx">x</span><span class="p">,</span><span class="nx">y</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">sqrt</span><span class="p">(</span><span class="nx">x</span><span class="o">*</span><span class="nx">x</span> <span class="o">+</span> <span class="nx">y</span><span class="o">*</span><span class="nx">y</span><span class="p">);</span> <span class="p">}</span>
+</span><span class="line"><span class="kr">export</span> <span class="k">default</span> <span class="kr">class</span> <span class="nx">Circle</span> <span class="p">{</span> <span class="cm">/* class definition omitted here */</span> <span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p>A function is declared and exported from a file named <code>math/addition.js</code>.</p>
 
@@ -693,6 +910,172 @@ messageStyle: "none",
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>main.js Import lodash</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kr">import</span> <span class="o">*</span> <span class="nx">as</span> <span class="nx">_</span> <span class="nx">from</span> <span class="s1">&#39;lodash&#39;</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Arrow Functions</strong></p>
+
+<p>Arrow functions are most commonly used when you want to pass an unnamed function as an argument to another function.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">createGreeting</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">message</span><span class="p">,</span> <span class="nx">name</span><span class="p">){</span>
+</span><span class="line">  <span class="k">return</span> <span class="nx">message</span> <span class="o">+</span> <span class="nx">name</span><span class="p">;</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">let</span> <span class="nx">arrowGreeting</span> <span class="o">=</span> <span class="p">(</span><span class="nx">message</span><span class="p">,</span><span class="nx">name</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="nx">message</span> <span class="o">+</span> <span class="nx">name</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Default values in function parameters</strong></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>example of default value in parameter</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">function</span> <span class="nx">greet</span><span class="p">(</span><span class="nx">greeting</span><span class="p">,</span> <span class="nx">name</span> <span class="o">=</span> <span class="s2">&quot;John&quot;</span><span class="p">){</span>
+</span><span class="line">  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">greeting</span> <span class="o">+</span> <span class="s2">&quot;, &quot;</span> <span class="o">+</span> <span class="nx">name</span><span class="p">);</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">greet</span><span class="p">(</span><span class="s2">&quot;Hello&quot;</span><span class="p">);</span><span class="c1">// prints Hello John</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>example of a function as a default value</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">function</span> <span class="nx">receive</span><span class="p">(</span><span class="nx">complete</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;complete&quot;</span><span class="p">)){</span>
+</span><span class="line">  <span class="nx">complete</span><span class="p">();</span>
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>or even better</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">receive</span> <span class="o">=</span> <span class="p">(</span><span class="nx">complete</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;complete&quot;</span><span class="p">))</span> <span class="o">=&gt;</span> <span class="nx">complete</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Shorthand properties</strong></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">firstName</span> <span class="o">=</span> <span class="s2">&quot;John&quot;</span><span class="p">;</span>
+</span><span class="line"><span class="kd">let</span> <span class="nx">lastName</span> <span class="o">=</span> <span class="s2">&quot;Lindquist&quot;</span><span class="p">;</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">let</span> <span class="nx">person</span> <span class="o">=</span> <span class="p">{</span><span class="nx">firstName</span><span class="p">,</span> <span class="nx">lastName</span><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">person</span><span class="p">);</span> <span class="c1">//prints { firstName: &#39;John&#39;, lastName: &#39;Lindquist&#39; }</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>nested example</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">firstName</span> <span class="o">=</span> <span class="s2">&quot;John&quot;</span><span class="p">;</span>
+</span><span class="line"><span class="kd">let</span> <span class="nx">lastName</span> <span class="o">=</span> <span class="s2">&quot;Lindquist&quot;</span><span class="p">;</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">let</span> <span class="nx">person</span> <span class="o">=</span> <span class="p">{</span><span class="nx">firstName</span><span class="p">,</span> <span class="nx">lastName</span><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">let</span> <span class="nx">mascot</span> <span class="o">=</span> <span class="s2">&quot;Moose&quot;</span><span class="p">;</span>
+</span><span class="line"><span class="kd">let</span> <span class="nx">team</span> <span class="o">=</span> <span class="p">{</span><span class="nx">person</span><span class="p">,</span> <span class="nx">mascot</span><span class="p">};</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">team</span><span class="p">);</span> <span class="c1">//prints {  person: { firstName: &#39;John&#39;, lastName: &#39;Lindquist&#39; },   mascot: &#39;Moose&#39; }</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Object enhancements</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">color</span> <span class="o">=</span> <span class="s2">&quot;red&quot;</span><span class="p">;</span>
+</span><span class="line"><span class="kd">let</span> <span class="nx">speed</span> <span class="o">=</span> <span class="mi">10</span><span class="p">;</span>
+</span><span class="line">
+</span><span class="line"><span class="kd">let</span> <span class="nx">car</span> <span class="o">=</span> <span class="p">{</span><span class="nx">color</span><span class="p">,</span> <span class="nx">speed</span><span class="p">};</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">car</span><span class="p">.</span><span class="nx">color</span><span class="p">);</span> <span class="c1">// &quot;red&quot;</span>
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">car</span><span class="p">.</span><span class="nx">speed</span><span class="p">);</span> <span class="c1">// 10</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">car</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class="line">  <span class="nx">color</span><span class="p">,</span>
+</span><span class="line">  <span class="nx">speed</span><span class="p">,</span>
+</span><span class="line">  <span class="nx">go</span><span class="p">(){</span>
+</span><span class="line">    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;vroom&quot;</span><span class="p">);</span>
+</span><span class="line">  <span class="p">}</span>
+</span><span class="line"><span class="p">};</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">car</span><span class="p">.</span><span class="nx">color</span><span class="p">);</span> <span class="c1">// &quot;red&quot;</span>
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">car</span><span class="p">.</span><span class="nx">speed</span><span class="p">);</span> <span class="c1">// 10</span>
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">car</span><span class="p">.</span><span class="nx">go</span><span class="p">());</span> <span class="c1">// &quot;vroom&quot;</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Spread operator</strong></p>
+
+<p>The spread operator allows you to “explode” an array into its individual elements.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">([</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">]);</span> <span class="c1">// [1, 2, 3]</span>
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(...[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">])</span> <span class="c1">// 1 2 3</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>add without spread operator</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">first</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">];</span>
+</span><span class="line"><span class="kd">let</span> <span class="nx">second</span> <span class="o">=</span> <span class="p">[</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">];</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">first</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">second</span><span class="p">);</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">first</span><span class="p">);</span> <span class="c1">// [ 1, 2, 3, [ 4, 5, 6] ]</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>add with spread operator</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="nx">first</span><span class="p">.</span><span class="nx">push</span><span class="p">(...</span><span class="nx">second</span><span class="p">);</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">first</span><span class="p">);</span> <span class="c1">// [1, 2, 3, 4, 5, 6]</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>spread as input parameters</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">function</span> <span class="nx">addThreeThings</span><span class="p">(</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">){</span>
+</span><span class="line">  <span class="kd">let</span> <span class="nx">result</span> <span class="o">=</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span> <span class="o">+</span> <span class="nx">c</span><span class="p">;</span>
+</span><span class="line">  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">result</span><span class="p">);</span> <span class="c1">// 6</span>
+</span><span class="line"><span class="p">}</span>
+</span><span class="line">
+</span><span class="line"><span class="nx">addThreeThings</span><span class="p">(...</span><span class="nx">first</span><span class="p">);</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p><strong>Promises</strong></p>

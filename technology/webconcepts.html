@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="Web Concepts DOM DOM Events DOM Zero or DOM-0 Event Handlers Object Property Event Handlers DOM2 or DOM2+ Event Listeners Event Object DOM DOM is an &hellip;">
+<meta name="description" content="Web Concepts DOM DOM Events DOM Zero or DOM-0 Event Handlers HTML Attribute Event Handlers Object Property Event Handlers DOM2 or DOM2+ Event &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -111,11 +111,13 @@ messageStyle: "none",
   <li><a href="#dom" id="markdown-toc-dom">DOM</a>    <ul>
       <li><a href="#dom-events" id="markdown-toc-dom-events">DOM Events</a></li>
       <li><a href="#dom-zero-or-dom-0-event-handlers" id="markdown-toc-dom-zero-or-dom-0-event-handlers">DOM Zero or DOM-0 Event Handlers</a>        <ul>
+          <li><a href="#html-attribute-event-handlers" id="markdown-toc-html-attribute-event-handlers">HTML Attribute Event Handlers</a></li>
           <li><a href="#object-property-event-handlers" id="markdown-toc-object-property-event-handlers">Object Property Event Handlers</a></li>
         </ul>
       </li>
       <li><a href="#dom2-or-dom2-event-listeners" id="markdown-toc-dom2-or-dom2-event-listeners">DOM2 or DOM2+ Event Listeners</a></li>
       <li><a href="#event-object" id="markdown-toc-event-object">Event Object</a></li>
+      <li><a href="#cancel-events" id="markdown-toc-cancel-events">Cancel Events</a></li>
     </ul>
   </li>
 </ul>
@@ -273,7 +275,8 @@ messageStyle: "none",
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <h2 id="dom-zero-or-dom-0-event-handlers">DOM Zero or DOM-0 Event Handlers</h2>
-<p>### HTML Attribute Event Handlers</p>
+
+<h3 id="html-attribute-event-handlers">HTML Attribute Event Handlers</h3>
 
 <ul>
   <li>It is possible to write code in HTML attributes that will be executed when a matching event occurs.</li>
@@ -666,6 +669,18 @@ It won’t throw an error, but it won’t remove either.</li>
 </span><span class="line">
 </span><span class="line"><span class="nx">parent</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s1">&#39;click&#39;</span><span class="p">,</span> <span class="nx">onClick</span><span class="p">,</span> <span class="p">{</span><span class="nx">capture</span><span class="o">:</span> <span class="kc">false</span><span class="p">});</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<h2 id="cancel-events">Cancel Events</h2>
+
+<ul>
+  <li>If an event is cancellable, then it can be cancelled by event listeners.</li>
+  <li>Cancelling an event is a way to opt out of the default behavior associated with an event.</li>
+  <li>Events have an internal cancelled flag which can be obtained via <code>event.preventDefault</code> property. When an event is created, this is set to <code>false</code>. If an event is cancelled, then the internal cancelled flag is set to <code>true</code>.</li>
+  <li>The clearest way to cancel an event is using the <code>event.preventDefault</code> method.</li>
+  <li>You can’t uncancel an event.</li>
+  <li>Calling <code>event.preventDefault</code> for an event that is not cancelable doesn’t do anything. To check, call <code>event.cancelable</code>.</li>
+  <li>Often the main reason we want to cancel an event is to opt out of the default behavior associated with that event.</li>
+</ul>
 
   
     <footer>

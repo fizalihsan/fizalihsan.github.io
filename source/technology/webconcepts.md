@@ -96,6 +96,7 @@ button.removeAttribute('onclick');
 ```
 
 ## DOM Zero or DOM-0 Event Handlers
+
 ### HTML Attribute Event Handlers
 
 - It is possible to write code in HTML attributes that will be executed when a matching event occurs.
@@ -354,3 +355,13 @@ function onClick(event){
 
 parent.addEventListener('click', onClick, {capture: false});
 ```
+
+## Cancel Events
+
+- If an event is cancellable, then it can be cancelled by event listeners. 
+- Cancelling an event is a way to opt out of the default behavior associated with an event.
+- Events have an internal cancelled flag which can be obtained via `event.preventDefault` property. When an event is created, this is set to `false`. If an event is cancelled, then the internal cancelled flag is set to `true`. 
+- The clearest way to cancel an event is using the `event.preventDefault` method.
+- You can't uncancel an event.
+- Calling `event.preventDefault` for an event that is not cancelable doesn't do anything. To check, call `event.cancelable`.
+- Often the main reason we want to cancel an event is to opt out of the default behavior associated with that event.

@@ -529,6 +529,183 @@ console.log(
 import * as _ from 'lodash';
 ```
 
+
+## Objects
+
+- JavaScript object inherits the properties of another object, known as its **“prototype.”** The methods of an object are typically inherited properties, and this **“prototypal inheritance”** is a key feature of JavaScript.
+- It is sometimes important to be able to distinguish between properties defined directly on an object and those that are inherited from a prototype object. JavaScript uses the term _own property_ to refer to non-inherited properties.
+- Property Attributes
+  - each property has three property attributes:
+    - The _writable_ attribute specifies whether the value of the property can be set.
+    - The _enumerable_ attribute specifies whether the property name is returned by a for/in loop.
+    - The _configurable_ attribute specifies whether the property can be deleted and whether its attributes can be altered.
+- Many of JavaScript’s built-in objects have properties that are read-only, non-enumerable, or non-configurable. By default, however, all properties of the objects you create are writable, enumerable, and configurable.
+
+__Creating Objects__
+  - Objects can be created with object literals, with the `new` keyword, and with the `Object.create()` function.
+  - **Object literal**:  is a comma-separated list of colon-separated *name:value* pairs, enclosed within curly braces. 
+
+```js Object literals
+let empty = {};                          // An object with no properties
+let point = { x: 0, y: 0 };              // Two numeric properties
+let p2 = { x: point.x, y: point.y+1 };   // More complex values
+```
+
+__Prototypes__
+
+- Almost every JavaScript object has a second JavaScript object associated with it. This second object is known as a **prototype**, and the first object inherits properties from the prototype.
+- Object.prototype
+  - All objects created by object literals have the same prototype object, and we can refer to this prototype object in JavaScript code as `Object.prototype`. 
+  - any object created by `{}` inherits from `Object.prototype`
+  - any object created by `new Object()` inherits from `Object.prototype`
+  - any object created by `new Array()` uses `Array.prototype` as its prototype, 
+  - and any object created by `new Date()` uses `Date.prototype` as its prototype.
+- Prototype Property
+  - almost all objects have a prototype, but only a relatively small number of objects have a `prototype` property. It is these objects with `prototype` properties that define the prototypes for all the other objects.
+
+
+- `Object.prototype` is one of the rare objects that has no prototype: it does not inherit any properties. 
+- Other prototype objects are normal objects that do have a prototype. 
+- Most built-in constructors (and most user-defined constructors) have a prototype that inherits from `Object.prototype`. For example, `Date.prototype` inherits properties from `Object.prototype`, so a `Date` object created by `new Date()` inherits properties from both `Date.prototype` and `Object.prototype`. This linked series of prototype objects is known as a **prototype chain**.
+
+__Object.create()__
+
+- `Object.create()` creates a new object, using its first argument as the prototype of that object
+- You can pass `null` to create a new object that does not have a prototype, but if you do this, the newly created object will not inherit anything, not even basic methods like `toString()`
+
+```js Object.create()
+let o1 = Object.create({x: 1, y: 2});     // o1 inherits properties x and y.
+
+//passing null
+let o2 = Object.create(null);             // o2 inherits no props or methods.
+
+//To create an ordinary empty object (like the object returned by {} or new Object()),pass Object.prototype:
+let o3 = Object.create(Object.prototype); // o3 is like {} or new Object().
+```
+
+One common use for `Object.create()` is for defensive copying
+
+```js Defensive copying
+let o = { x: "don't change this value" };
+library.function(Object.create(o));  // Guard against accidental modifications
+```
+
+__Inheritance__
+
+- Suppose you query the property `x` in the object `o`. 
+- If `o` does not have an own property with that name, the prototype object of `o` is queried for the property `x`. 
+- If the prototype object does not have an own property by that name, but has a prototype itself, the query is performed on the prototype of the prototype. 
+- This continues until the property `x` is found or until an object with a `null` prototype is searched. 
+- As you can see, the prototype attribute of an object creates a chain or linked list from which properties are inherited:
+
+```js Inheritance
+let o = {};               // o inherits object methods from Object.prototype
+o.x = 1;                  // and it now has an own property x.
+let p = Object.create(o); // p inherits properties from o and Object.prototype
+p.y = 2;                  // and has an own property y.
+let q = Object.create(p); // q inherits properties from p, o, and...
+q.z = 3;                  // ...Object.prototype and has an own property z.
+let f = q.toString();     // toString is inherited from Object.prototype
+q.x + q.y                 // => 3; x and y are inherited from o and p
+```
+
+The fact that inheritance occurs when querying properties but not when setting them is a key feature of JavaScript because it allows us to selectively override inherited properties.
+
+__Deleting Properties__
+
+- `delete` does not remove properties that have a _configurable_ attribute of `false`. 
+- Certain properties of built-in objects are non-configurable, as are properties of the `global` object created by variable declaration and function declaration. 
+- In _strict_ mode, attempting to delete a non-configurable property causes a `TypeError`. 
+- In _non-strict_ mode, delete simply evaluates to `false` in this case.
+
+When deleting configurable properties of the global object in non-strict mode, you can omit the reference to the global object and simply follow the delete operator with the property name:
+
+```js Deleting properties
+globalThis.x = 1;       // Create a configurable global property (no let or var)
+delete x                // => true: this property can be deleted
+```
+
+__valueOf() method__
+
+
+The `valueOf()` method is much like the `toString()` method, but it is called when JavaScript needs to convert an object to some primitive type other than a string — typically, a number. JavaScript calls this method automatically if an object is used in a context where a primitive value is required. 
+
+```js valueOf()
+let point = {
+    x: 3,
+    y: 4,
+    valueOf: function() { return Math.hypot(this.x, this.y); }
+};
+
+// valueOf() is used for conversions to numbers in these cases
+Number(point)  // => 5
+point > 4      // => true
+point > 5      // => false
+point < 6      // => true
+```
+
+__Spread operator__
+
+In ES2018 and later, you can copy the properties of an existing object into a new object using the “spread operator” `...` inside an object literal:
+
+```js Spread operator
+let position = { x: 0, y: 0 };
+let dimensions = { width: 100, height: 75 };
+let rect = { ...position, ...dimensions };
+```
+
+- Not an operator
+  - Note that this `...` syntax is often called a _spread operator_ but is not a true JavaScript operator in any sense. Instead, it is a special-case syntax available only within object literals. (Three dots are used for other purposes in other JavaScript contexts, but object literals are the only context where the three dots cause this kind of interpolation of one object into another one.)
+- Performance
+  - Finally, it is worth noting that, although the spread operator is just three little dots in your code, it can represent a substantial amount of work to the JavaScript interpreter. If an object has n properties, the process of spreading those properties into another object is likely to be an `O(n)` operation. This means that if you find yourself using `...` within a loop or recursive function as a way to accumulate data into one large object, you may be writing an inefficient `O(n^2)` algorithm that will not scale well as n gets larger.
+
+
+__Shorthand methods__
+
+When a function is defined as a property of an object, we call that function a method.
+
+```js old syntax
+let square = {
+    area: function() { return this.side * this.side; },
+    side: 10
+};
+square.area() // => 100
+```
+
+```js ES6 syntax
+let square = {
+    area() { return this.side * this.side; },
+    side: 10
+};
+square.area() // => 100
+```
+
+Both forms of the code are equivalent: both add a property named _area_ to the object literal, and both set the value of that property to the specified function. The shorthand syntax makes it clearer that `area()` is a method and not a data property like side.
+
+
+__Getters and Setters__
+
+```js Getters/Setters
+let o = {
+    // An ordinary data property
+    dataProp: value,
+
+    // An accessor property defined as a pair of functions.
+    get accessorProp() { return this.dataProp; },
+    set accessorProp(value) { this.dataProp = value; }
+};
+```
+
+Other reasons to use accessor properties include sanity checking of property writes and returning different values on each property read:
+
+
+
+
+
+
+
+
+
 __Arrow Functions__
 
 Arrow functions are most commonly used when you want to pass an unnamed function as an argument to another function.
@@ -716,3 +893,5 @@ d.then((data) => {
 
 * Websites
   * [State of JavaScript 2016](https://www.infoq.com/articles/state-of-javascript-2016?utm_source=twitter&utm_medium=link&utm_campaign=calendar)
+* Book
+  * OReilly JavaScript - The Definitive Guide - David Flanagan

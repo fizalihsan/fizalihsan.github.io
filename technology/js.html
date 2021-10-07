@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="JavaScript Overview Node.js ES6 Basics Types, Values, Variables Expressions and Operators Statements References Overview “JavaScript” is not really &hellip;">
+<meta name="description" content="JavaScript Overview Node.js ES6 Basics Types, Values, Variables Expressions and Operators Statements Objects References Overview “JavaScript” is not &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -114,6 +114,7 @@ messageStyle: "none",
       <li><a href="#types-values-variables" id="markdown-toc-types-values-variables">Types, Values, Variables</a></li>
       <li><a href="#expressions-and-operators" id="markdown-toc-expressions-and-operators">Expressions and Operators</a></li>
       <li><a href="#statements" id="markdown-toc-statements">Statements</a></li>
+      <li><a href="#objects" id="markdown-toc-objects">Objects</a></li>
     </ul>
   </li>
   <li><a href="#references" id="markdown-toc-references">References</a></li>
@@ -912,6 +913,243 @@ messageStyle: "none",
 </pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kr">import</span> <span class="o">*</span> <span class="nx">as</span> <span class="nx">_</span> <span class="nx">from</span> <span class="s1">&#39;lodash&#39;</span><span class="p">;</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
+<h2 id="objects">Objects</h2>
+
+<ul>
+  <li>JavaScript object inherits the properties of another object, known as its <strong>“prototype.”</strong> The methods of an object are typically inherited properties, and this <strong>“prototypal inheritance”</strong> is a key feature of JavaScript.</li>
+  <li>It is sometimes important to be able to distinguish between properties defined directly on an object and those that are inherited from a prototype object. JavaScript uses the term <em>own property</em> to refer to non-inherited properties.</li>
+  <li>Property Attributes
+    <ul>
+      <li>each property has three property attributes:
+        <ul>
+          <li>The <em>writable</em> attribute specifies whether the value of the property can be set.</li>
+          <li>The <em>enumerable</em> attribute specifies whether the property name is returned by a for/in loop.</li>
+          <li>The <em>configurable</em> attribute specifies whether the property can be deleted and whether its attributes can be altered.</li>
+        </ul>
+      </li>
+    </ul>
+  </li>
+  <li>Many of JavaScript’s built-in objects have properties that are read-only, non-enumerable, or non-configurable. By default, however, all properties of the objects you create are writable, enumerable, and configurable.</li>
+</ul>
+
+<p><strong>Creating Objects</strong>
+  - Objects can be created with object literals, with the <code>new</code> keyword, and with the <code>Object.create()</code> function.
+  - <strong>Object literal</strong>:  is a comma-separated list of colon-separated <em>name:value</em> pairs, enclosed within curly braces.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Object literals</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">empty</span> <span class="o">=</span> <span class="p">{};</span>                          <span class="c1">// An object with no properties</span>
+</span><span class="line"><span class="kd">let</span> <span class="nx">point</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">x</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">0</span> <span class="p">};</span>              <span class="c1">// Two numeric properties</span>
+</span><span class="line"><span class="kd">let</span> <span class="nx">p2</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">x</span><span class="o">:</span> <span class="nx">point</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="nx">point</span><span class="p">.</span><span class="nx">y</span><span class="o">+</span><span class="mi">1</span> <span class="p">};</span>   <span class="c1">// More complex values</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Prototypes</strong></p>
+
+<ul>
+  <li>Almost every JavaScript object has a second JavaScript object associated with it. This second object is known as a <strong>prototype</strong>, and the first object inherits properties from the prototype.</li>
+  <li>Object.prototype
+    <ul>
+      <li>All objects created by object literals have the same prototype object, and we can refer to this prototype object in JavaScript code as <code>Object.prototype</code>.</li>
+      <li>any object created by <code>{}</code> inherits from <code>Object.prototype</code></li>
+      <li>any object created by <code>new Object()</code> inherits from <code>Object.prototype</code></li>
+      <li>any object created by <code>new Array()</code> uses <code>Array.prototype</code> as its prototype,</li>
+      <li>and any object created by <code>new Date()</code> uses <code>Date.prototype</code> as its prototype.</li>
+    </ul>
+  </li>
+  <li>Prototype Property
+    <ul>
+      <li>almost all objects have a prototype, but only a relatively small number of objects have a <code>prototype</code> property. It is these objects with <code>prototype</code> properties that define the prototypes for all the other objects.</li>
+    </ul>
+  </li>
+  <li><code>Object.prototype</code> is one of the rare objects that has no prototype: it does not inherit any properties.</li>
+  <li>Other prototype objects are normal objects that do have a prototype.</li>
+  <li>Most built-in constructors (and most user-defined constructors) have a prototype that inherits from <code>Object.prototype</code>. For example, <code>Date.prototype</code> inherits properties from <code>Object.prototype</code>, so a <code>Date</code> object created by <code>new Date()</code> inherits properties from both <code>Date.prototype</code> and <code>Object.prototype</code>. This linked series of prototype objects is known as a <strong>prototype chain</strong>.</li>
+</ul>
+
+<p><strong>Object.create()</strong></p>
+
+<ul>
+  <li><code>Object.create()</code> creates a new object, using its first argument as the prototype of that object</li>
+  <li>You can pass <code>null</code> to create a new object that does not have a prototype, but if you do this, the newly created object will not inherit anything, not even basic methods like <code>toString()</code></li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Object.create()</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">o1</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">({</span><span class="nx">x</span><span class="o">:</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">2</span><span class="p">});</span>     <span class="c1">// o1 inherits properties x and y.</span>
+</span><span class="line">
+</span><span class="line"><span class="c1">//passing null</span>
+</span><span class="line"><span class="kd">let</span> <span class="nx">o2</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="kc">null</span><span class="p">);</span>             <span class="c1">// o2 inherits no props or methods.</span>
+</span><span class="line">
+</span><span class="line"><span class="c1">//To create an ordinary empty object (like the object returned by {} or new Object()),pass Object.prototype:</span>
+</span><span class="line"><span class="kd">let</span> <span class="nx">o3</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nb">Object</span><span class="p">.</span><span class="nx">prototype</span><span class="p">);</span> <span class="c1">// o3 is like {} or new Object().</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>One common use for <code>Object.create()</code> is for defensive copying</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Defensive copying</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">o</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">x</span><span class="o">:</span> <span class="s2">&quot;don&#39;t change this value&quot;</span> <span class="p">};</span>
+</span><span class="line"><span class="nx">library</span><span class="p">.</span><span class="kd">function</span><span class="p">(</span><span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">o</span><span class="p">));</span>  <span class="c1">// Guard against accidental modifications</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Inheritance</strong></p>
+
+<ul>
+  <li>Suppose you query the property <code>x</code> in the object <code>o</code>.</li>
+  <li>If <code>o</code> does not have an own property with that name, the prototype object of <code>o</code> is queried for the property <code>x</code>.</li>
+  <li>If the prototype object does not have an own property by that name, but has a prototype itself, the query is performed on the prototype of the prototype.</li>
+  <li>This continues until the property <code>x</code> is found or until an object with a <code>null</code> prototype is searched.</li>
+  <li>As you can see, the prototype attribute of an object creates a chain or linked list from which properties are inherited:</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Inheritance</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">o</span> <span class="o">=</span> <span class="p">{};</span>               <span class="c1">// o inherits object methods from Object.prototype</span>
+</span><span class="line"><span class="nx">o</span><span class="p">.</span><span class="nx">x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>                  <span class="c1">// and it now has an own property x.</span>
+</span><span class="line"><span class="kd">let</span> <span class="nx">p</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">o</span><span class="p">);</span> <span class="c1">// p inherits properties from o and Object.prototype</span>
+</span><span class="line"><span class="nx">p</span><span class="p">.</span><span class="nx">y</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>                  <span class="c1">// and has an own property y.</span>
+</span><span class="line"><span class="kd">let</span> <span class="nx">q</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">create</span><span class="p">(</span><span class="nx">p</span><span class="p">);</span> <span class="c1">// q inherits properties from p, o, and...</span>
+</span><span class="line"><span class="nx">q</span><span class="p">.</span><span class="nx">z</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>                  <span class="c1">// ...Object.prototype and has an own property z.</span>
+</span><span class="line"><span class="kd">let</span> <span class="nx">f</span> <span class="o">=</span> <span class="nx">q</span><span class="p">.</span><span class="nx">toString</span><span class="p">();</span>     <span class="c1">// toString is inherited from Object.prototype</span>
+</span><span class="line"><span class="nx">q</span><span class="p">.</span><span class="nx">x</span> <span class="o">+</span> <span class="nx">q</span><span class="p">.</span><span class="nx">y</span>                 <span class="c1">// =&gt; 3; x and y are inherited from o and p</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>The fact that inheritance occurs when querying properties but not when setting them is a key feature of JavaScript because it allows us to selectively override inherited properties.</p>
+
+<p><strong>Deleting Properties</strong></p>
+
+<ul>
+  <li><code>delete</code> does not remove properties that have a <em>configurable</em> attribute of <code>false</code>.</li>
+  <li>Certain properties of built-in objects are non-configurable, as are properties of the <code>global</code> object created by variable declaration and function declaration.</li>
+  <li>In <em>strict</em> mode, attempting to delete a non-configurable property causes a <code>TypeError</code>.</li>
+  <li>In <em>non-strict</em> mode, delete simply evaluates to <code>false</code> in this case.</li>
+</ul>
+
+<p>When deleting configurable properties of the global object in non-strict mode, you can omit the reference to the global object and simply follow the delete operator with the property name:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Deleting properties</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="nx">globalThis</span><span class="p">.</span><span class="nx">x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>       <span class="c1">// Create a configurable global property (no let or var)</span>
+</span><span class="line"><span class="k">delete</span> <span class="nx">x</span>                <span class="c1">// =&gt; true: this property can be deleted</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>valueOf() method</strong></p>
+
+<p>The <code>valueOf()</code> method is much like the <code>toString()</code> method, but it is called when JavaScript needs to convert an object to some primitive type other than a string — typically, a number. JavaScript calls this method automatically if an object is used in a context where a primitive value is required.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>valueOf()</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+<span class="line-number">9</span>
+<span class="line-number">10</span>
+<span class="line-number">11</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">point</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class="line">    <span class="nx">x</span><span class="o">:</span> <span class="mi">3</span><span class="p">,</span>
+</span><span class="line">    <span class="nx">y</span><span class="o">:</span> <span class="mi">4</span><span class="p">,</span>
+</span><span class="line">    <span class="nx">valueOf</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">hypot</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">x</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">y</span><span class="p">);</span> <span class="p">}</span>
+</span><span class="line"><span class="p">};</span>
+</span><span class="line">
+</span><span class="line"><span class="c1">// valueOf() is used for conversions to numbers in these cases</span>
+</span><span class="line"><span class="nb">Number</span><span class="p">(</span><span class="nx">point</span><span class="p">)</span>  <span class="c1">// =&gt; 5</span>
+</span><span class="line"><span class="nx">point</span> <span class="o">&gt;</span> <span class="mi">4</span>      <span class="c1">// =&gt; true</span>
+</span><span class="line"><span class="nx">point</span> <span class="o">&gt;</span> <span class="mi">5</span>      <span class="c1">// =&gt; false</span>
+</span><span class="line"><span class="nx">point</span> <span class="o">&lt;</span> <span class="mi">6</span>      <span class="c1">// =&gt; true</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Spread operator</strong></p>
+
+<p>In ES2018 and later, you can copy the properties of an existing object into a new object using the “spread operator” <code>...</code> inside an object literal:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Spread operator</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">position</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">x</span><span class="o">:</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">y</span><span class="o">:</span> <span class="mi">0</span> <span class="p">};</span>
+</span><span class="line"><span class="kd">let</span> <span class="nx">dimensions</span> <span class="o">=</span> <span class="p">{</span> <span class="nx">width</span><span class="o">:</span> <span class="mi">100</span><span class="p">,</span> <span class="nx">height</span><span class="o">:</span> <span class="mi">75</span> <span class="p">};</span>
+</span><span class="line"><span class="kd">let</span> <span class="nx">rect</span> <span class="o">=</span> <span class="p">{</span> <span class="p">...</span><span class="nx">position</span><span class="p">,</span> <span class="p">...</span><span class="nx">dimensions</span> <span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Not an operator
+    <ul>
+      <li>Note that this <code>...</code> syntax is often called a <em>spread operator</em> but is not a true JavaScript operator in any sense. Instead, it is a special-case syntax available only within object literals. (Three dots are used for other purposes in other JavaScript contexts, but object literals are the only context where the three dots cause this kind of interpolation of one object into another one.)</li>
+    </ul>
+  </li>
+  <li>Performance
+    <ul>
+      <li>Finally, it is worth noting that, although the spread operator is just three little dots in your code, it can represent a substantial amount of work to the JavaScript interpreter. If an object has n properties, the process of spreading those properties into another object is likely to be an <code>O(n)</code> operation. This means that if you find yourself using <code>...</code> within a loop or recursive function as a way to accumulate data into one large object, you may be writing an inefficient <code>O(n^2)</code> algorithm that will not scale well as n gets larger.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Shorthand methods</strong></p>
+
+<p>When a function is defined as a property of an object, we call that function a method.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>old syntax</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">square</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class="line">    <span class="nx">area</span><span class="o">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">side</span> <span class="o">*</span> <span class="k">this</span><span class="p">.</span><span class="nx">side</span><span class="p">;</span> <span class="p">},</span>
+</span><span class="line">    <span class="nx">side</span><span class="o">:</span> <span class="mi">10</span>
+</span><span class="line"><span class="p">};</span>
+</span><span class="line"><span class="nx">square</span><span class="p">.</span><span class="nx">area</span><span class="p">()</span> <span class="c1">// =&gt; 100</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>ES6 syntax</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">square</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class="line">    <span class="nx">area</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">side</span> <span class="o">*</span> <span class="k">this</span><span class="p">.</span><span class="nx">side</span><span class="p">;</span> <span class="p">},</span>
+</span><span class="line">    <span class="nx">side</span><span class="o">:</span> <span class="mi">10</span>
+</span><span class="line"><span class="p">};</span>
+</span><span class="line"><span class="nx">square</span><span class="p">.</span><span class="nx">area</span><span class="p">()</span> <span class="c1">// =&gt; 100</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Both forms of the code are equivalent: both add a property named <em>area</em> to the object literal, and both set the value of that property to the specified function. The shorthand syntax makes it clearer that <code>area()</code> is a method and not a data property like side.</p>
+
+<p><strong>Getters and Setters</strong></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Getters/Setters</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+<span class="line-number">6</span>
+<span class="line-number">7</span>
+<span class="line-number">8</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">o</span> <span class="o">=</span> <span class="p">{</span>
+</span><span class="line">    <span class="c1">// An ordinary data property</span>
+</span><span class="line">    <span class="nx">dataProp</span><span class="o">:</span> <span class="nx">value</span><span class="p">,</span>
+</span><span class="line">
+</span><span class="line">    <span class="c1">// An accessor property defined as a pair of functions.</span>
+</span><span class="line">    <span class="nx">get</span> <span class="nx">accessorProp</span><span class="p">()</span> <span class="p">{</span> <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="nx">dataProp</span><span class="p">;</span> <span class="p">},</span>
+</span><span class="line">    <span class="nx">set</span> <span class="nx">accessorProp</span><span class="p">(</span><span class="nx">value</span><span class="p">)</span> <span class="p">{</span> <span class="k">this</span><span class="p">.</span><span class="nx">dataProp</span> <span class="o">=</span> <span class="nx">value</span><span class="p">;</span> <span class="p">}</span>
+</span><span class="line"><span class="p">};</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Other reasons to use accessor properties include sanity checking of property writes and returning different values on each property read:</p>
+
 <p><strong>Arrow Functions</strong></p>
 
 <p>Arrow functions are most commonly used when you want to pass an unnamed function as an argument to another function.</p>
@@ -1179,6 +1417,11 @@ messageStyle: "none",
   <li>Websites
     <ul>
       <li><a href="https://www.infoq.com/articles/state-of-javascript-2016?utm_source=twitter&amp;utm_medium=link&amp;utm_campaign=calendar">State of JavaScript 2016</a></li>
+    </ul>
+  </li>
+  <li>Book
+    <ul>
+      <li>OReilly JavaScript - The Definitive Guide - David Flanagan</li>
     </ul>
   </li>
 </ul>

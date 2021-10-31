@@ -699,16 +699,129 @@ let o = {
 Other reasons to use accessor properties include sanity checking of property writes and returning different values on each property read:
 
 
+## Arrays
+
+- Arrays inherit properties from `Array.prototype`, which defines a rich set of array manipulation methods
+- ES6 introduces a set of new array classes known collectively as *“typed arrays.”* Unlike regular JavaScript arrays, typed arrays have a fixed length and a fixed numeric element type. They offer high performance and byte-level access to binary data.
+
+```js Sparse Array
+let count = [1,,3]; // Elements at indexes 0 and 2. No element at index 1
+```
+
+- Spread operator
+  - In ES6 and later, you can use the “spread operator,” `...`, to include the elements of one array within an array literal:
+
+```js
+let a = [1, 2, 3];
+let b = [0, ...a, 4];  // b == [0, 1, 2, 3, 4]
+```
+
+Strings are iterable, so you can use a spread operator to turn any string into an array of single-character strings:
+
+```js
+let digits = [..."0123456789ABCDEF"];
+digits // => ["0","1","2","3","4","5","6","7","8","9","A","B","C","D","E","F"]
+```
+
+```js Array.of
+Array.of()        // => []; returns empty array with no arguments
+Array.of(10)      // => [10]; can create arrays with a single numeric argument
+Array.of(1,2,3)   // => [1, 2, 3]
+```
+
+- With an iterable argument, `Array.from(iterable)` works like the spread operator `[...iterable]` does. 
+- `Array.from()` is also important because it defines a way to make a true-array copy of an array-like object. 
+
+```js
+let copy = Array.from(original);
+```
+
+**Sparse Arrays**
+
+- A sparse array is one in which the elements do not have contiguous indexes starting at 0. 
+- Normally, the `length` property of an array specifies the number of elements in the array. 
+- If the array is sparse, the value of the `length` property is greater than the number of elements. 
+- Sparse arrays can be created with the `Array()` constructor or simply by assigning to an array index larger than the current array length.
+- Arrays that are sufficiently sparse are typically implemented in a slower, more memory-efficient way than dense arrays are, and looking up elements in such an array will take about as much time as regular object property lookup.
+
+> Note that when you omit a value in an array literal (using repeated commas as in [1,,3]), the resulting array is sparse, and the omitted elements simply do not exist:
+
+```js Sparse Arrays
+let a = new Array(5); // No elements, but a.length is 5.
+a = [];               // Create an array with no elements and length = 0.
+a[1000] = 0;          // Assignment adds one element but sets length to 1001.
+```
+
+__Array length__
+
+if you set the `length` property to a non-negative integer `n` smaller than its current value, any array elements whose index is greater than or equal to `n` are deleted from the array:
+
+```js
+a = [1,2,3,4,5];     // Start with a 5-element array.
+a.length = 3;        // a is now [1,2,3].
+a.length = 0;        // Delete all elements.  a is [].
+a.length = 5;        // Length is 5, but no elements, like new Array(5)
+```
+
+__Adding/Deleting Array Elements__
+
+```js
+let a = [];           // Start with an empty array
+a.push("zero");       // Add a value at the end.  a = ["zero"]
+a.push("one", "two"); // Add two more values.  a = ["zero", "one", "two"]
+```
+
+__slice, splice__
+
+The `slice()` method returns a slice, or subarray, of the specified array.
+
+```js slice
+let a = [1,2,3,4,5];
+a.slice(0,3);    // Returns [1,2,3]
+a.slice(3);      // Returns [4,5]
+a.slice(1,-1);   // Returns [2,3,4]
+a.slice(-3,-2);  // Returns [3]
+```
+
+`splice()` is a general-purpose method for inserting or removing elements from an array. Unlike `slice()` and `concat()`, `splice()` modifies the array on which it is invoked.
+
+```js splice
+let a = [1,2,3,4,5,6,7,8];
+a.splice(4)    // => [5,6,7,8]; a is now [1,2,3,4]
+a.splice(1,2)  // => [2,3]; a is now [1,4]
+a.splice(1,1)  // => [4]; a is now [1]
+```
+
+__Array-like Objects__
+
+JavaScript arrays have some special features that other objects do not have:
+
+- The `length` property is automatically updated as new elements are added to the list.
+- Setting `length` to a smaller value truncates the array.
+- Arrays inherit useful methods from `Array.prototype`.
+- `Array.isArray()` returns `true` for arrays.
 
 
+## Functions
 
+- __Function vs. Method__: If a function is assigned to a property of an object, it is known as a method of that object. When a function is invoked on or through an object, that object is the invocation context or `this` value for the function.
+- __Closures__: JavaScript function definitions can be nested within other functions, and they have access to any variables that are in scope where they are defined. This means that JavaScript functions are _closures_, and it enables important and powerful programming techniques.
+- __Generators__: `function*` defines generator functions 
+- __async function__: defines asynchronous functions
 
+- Declaring a Function
+  
+  - Using `Function()` constructor. 
 
+- __Hoisting__:  Function declaration statements are __“hoisted”__ to the top of the enclosing script, function, or block so that functions defined in this way may be invoked from code that appears before the definition. Another way to say this is that all of the functions declared in a block of JavaScript code will be defined throughout that block, and they will be defined before the JavaScript interpreter begins to execute any of the code in that block.
 
 
 __Arrow Functions__
 
-Arrow functions are most commonly used when you want to pass an unnamed function as an argument to another function.
+- Arrow functions are most commonly used when you want to pass an unnamed function as an argument to another function.
+- _Diff b/w Arrow functions and other functions_
+  - they inherit the value of the `this` keyword from the environment in which they are defined rather than defining their own invocation context as functions defined in other ways do.
+  - they do not have a `prototype` property, which means that they cannot be used as constructor functions for new classes.
 
 ```js
 let createGreeting = function(message, name){
@@ -739,6 +852,78 @@ or even better
 ```js
 let receive = (complete = () => console.log("complete")) => complete();
 ```
+
+
+__Invoking Functions__
+
+- JS functions can be invoked in 5 ways:
+  1. _As functions_ e.g., `factorial(3)`
+  2. _As methods_ e.g., `obj.method()`
+  3. _As constructors_ e.g. ,`new Object()` or `new Object`
+    - If a constructor explicitly uses the `return` statement to return an object, then that object becomes the value of the invocation expression. 
+    - If the constructor uses `return` with no value, or if it returns a primitive value, that return value is ignored and the new object is used as the value of the invocation.
+  4. _Indirectly_ through their `call()` and `apply()` methods
+    - Both methods allow you to explicitly specify the `this` value for the invocation, which means you can invoke any function as a method of any object, even if it is not actually a method of that object.
+  5. _Implicitly_, via JavaScript language features that do not appear like normal function invocations
+    - When an object is used in a string context (such as when it is concatenated with a string), its `toString()` method is called. 
+    - Similarly, when an object is used in a numeric context, its `valueOf()` method is invoked. 
+
+- Invocation Context
+  - in non-strict mode, the invocation context (the `this` value) is the global object. 
+  - in strict mode, however, the invocation context is `undefined`. Note that functions defined using the arrow syntax behave differently: they always inherit the `this` value that is in effect where they are defined.
+
+> Note that `this` is a keyword, not a variable or property name. JavaScript syntax does not allow you to assign a value to `this`.
+
+
+__Function Arguments and Parameters__
+
+__Parameter defaults__ enable us to write functions that can be invoked with fewer arguments than parameters. 
+
+
+```js Parameter defaults
+// This function returns an object representing a rectangle's dimensions.
+// If only width is supplied, make it twice as high as it is wide.
+const rectangle = (width, height=width*2) => ({width, height});
+rectangle(1)  // => { width: 1, height: 2 }
+```
+
+__Rest parameters__ enable the opposite of Parameter defaults: they allow us to write functions that can be invoked with arbitrarily more arguments than parameters.
+
+```js Rest parameters or varargs
+function max(first=-Infinity, ...rest) {
+  xxx
+
+}
+```
+
+Functions like the previous example that can accept any number of arguments are called __variadic functions__, __variable arity functions__, or __vararg functions__. This book uses the most colloquial term, __varargs__, which dates to the early days of the C programming language.
+
+- `...` here is not the spread operator
+  - Don’t confuse the `...` that defines a rest parameter in a function definition with the `...` spread operator
+  - The spread operator `...` is used to unpack, or “spread out,” the elements of an array (or any other iterable object, such as strings) in a context where individual values are expected.
+  - When we use the same `...` syntax in a function definition rather than a function invocation, it has the opposite effect to the spread operator. 
+
+
+
+```js ... in function parameter
+//variable argument
+function print(...names) {
+  xxx
+
+}
+```
+
+```js ... during invocation
+let numbers = [5, 2, 10, -1, 9, 100, 1];
+Math.min(...numbers)  // => -1
+```
+
+
+
+
+
+
+
 
 __Shorthand properties__
 

@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>AWS Trivia - KnowledgeShop</title>
+  <title>Serverless - KnowledgeShop</title>
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="AWS Trivia Follow up reading S3 Max S3 buckets per account: 100 Max objects in S3 bucket: unlimited Max length of S3 bucket name: 63 Max length of &hellip;">
+<meta name="description" content="Serverless Serverless Architecture Usecases Architectures Patterns References Serverless Architecture Microservices and serverless architectures are &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://fizalihsan.github.io/technology/aws_trivia.html">
+  <link rel="canonical" href="http://fizalihsan.github.io/technology/serverless.html">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <!-- Below custom CSS is for table border styling -->
@@ -103,45 +103,174 @@ messageStyle: "none",
 <article role="article">
   
   <header>
-    <h1 class="entry-title">AWS Trivia</h1>
+    <h1 class="entry-title">Serverless</h1>
     
   </header>
   
   <ul id="markdown-toc">
-  <li><a href="#follow-up-reading" id="markdown-toc-follow-up-reading">Follow up reading</a></li>
-</ul>
-
-<ul>
-  <li><strong>S3</strong>
-    <ul>
-      <li>Max S3 buckets per account: 100</li>
-      <li>Max objects in S3 bucket: unlimited</li>
-      <li>Max length of S3 bucket name: 63</li>
-      <li>Max length of S3 object name: 1024 bytes of UTF8</li>
-      <li>Max S3 object size: 5TB</li>
-      <li>Upload object size &gt; 100 MB SHOULD use multi-part upload</li>
-      <li>Upload object size &gt; 5 GB MUST use multi-part upload</li>
-      <li>11 9s durability and 4 9s availability</li>
-      <li>Storage classes: Standard, Standard IA and RRS</li>
+  <li><a href="#serverless-architecture" id="markdown-toc-serverless-architecture">Serverless Architecture</a>    <ul>
+      <li><a href="#usecases" id="markdown-toc-usecases">Usecases</a></li>
+      <li><a href="#architectures" id="markdown-toc-architectures">Architectures</a></li>
+      <li><a href="#patterns" id="markdown-toc-patterns">Patterns</a></li>
     </ul>
   </li>
-  <li><strong>Glaciers</strong>
+  <li><a href="#references" id="markdown-toc-references">References</a></li>
+</ul>
+
+<h1 id="serverless-architecture">Serverless Architecture</h1>
+
+<ul>
+  <li>Microservices and serverless architectures are spiritual descendants of service–oriented architecture. They retain many of the aforementioned principles and ideas while attempting to address the complexity of old-fashioned service-oriented architectures.</li>
+  <li>
+    <p>Serverless architectures give you the freedom to apply as few or as many microservice principles as you would like without forcing you down a single path</p>
+  </li>
+  <li><strong>Principles of Serverless Architecture</strong>
     <ul>
-      <li>Max size per archive: 40TB</li>
-      <li>Max archives: unlimited</li>
-      <li>Max vaults per account: 1000</li>
-      <li>Retrieving up to 5% of stored data is free per month</li>
+      <li>Use a compute service to execute code on demand (no servers).</li>
+      <li>Write single-purpose stateless functions.</li>
+      <li>Design push-based, event-driven pipelines.</li>
+      <li>Create thicker, more powerful front ends.</li>
+      <li>Embrace third-party services.</li>
+    </ul>
+  </li>
+  <li><strong>Pricing</strong>: Lambda pricing is based on the number of requests, the duration of execution, and the amount of allocated memory.</li>
+  <li><strong>Security</strong>: Digitally signed tokens can allow front ends to talk to disparate services, including databases, in a secure manner. This is in contrast to traditional systems where all communication flows through the back-end server.</li>
+  <li>
+    <p><strong>Consistency</strong>: The other important point to consider is consistency. If the front end is responsible for writing to multiple services and fails midway through, it can leave the system in an inconsistent state. In this scenario, a Lambda function should be used because it can be designed to gracefully handle errors and retry failed operations.</p>
+  </li>
+  <li><strong>Cons of serverless</strong>
+    <ul>
+      <li>may not be appropriate for latency-sensitive applications or software with specific service-level agreements (SLA).</li>
+      <li>Vendor lock-in</li>
     </ul>
   </li>
 </ul>
 
-<h2 id="follow-up-reading">Follow up reading</h2>
+<hr />
+
+<h2 id="usecases">Usecases</h2>
 
 <ul>
-  <li>how key-based Cryptography works?</li>
-  <li>CORS</li>
+  <li>Application backend</li>
+  <li>Data processing and manipulation
+    <ul>
+      <li>A common use for serverless technologies is data processing, conversion, manipulation, and transcoding.</li>
+      <li>Lambda and AWS services are well suited for building event-driven pipelines for data-processing tasks.</li>
+      <li>we find data processing to be an excellent use case for serverless technologies, especially when we use a Lambda function in concert with other services.</li>
+    </ul>
+  </li>
+  <li>Realtime analytics
+    <ul>
+      <li>Lambda functions can react to new records in a stream, and can process, save, or discard data quickly. A Lambda function can be configured to run when a specific number (batch size) of records is available for processing, so that it doesn’t have to execute for every individual record added to the stream.</li>
+      <li>When it comes to Kinesis, the number of functions spawned to process messages off a stream is the same as the number of shards (therefore, there’s one Lambda function per shard). Furthermore, if a Lambda function fails to process a batch, it will retry. This can keep going for up to 24 hours (which is how long Kinesis will keep data around before it expires) if processing fails each time</li>
+    </ul>
+  </li>
+  <li>Legacy API Proxy
+    <ul>
+      <li>developers use API Gateway and Lambda to create a new API layer over legacy APIs and services to make them easier to use.</li>
+    </ul>
+  </li>
+  <li>Scheduled Services
+    <ul>
+      <li>We’ve seen developers use Lambda functions on a schedule to periodically ping their websites to see if they’re online and send an email or a text message if they’re not.</li>
+    </ul>
+  </li>
 </ul>
 
+<hr />
+
+<h2 id="architectures">Architectures</h2>
+
+<p>The two overarching architectures are</p>
+
+<ul>
+  <li><em>compute as back end</em> (that is, back ends for web and mobile applications)</li>
+  <li>and <em>compute as glue</em> (pipelines built to carry out workflows).</li>
+</ul>
+
+<p><strong>Compute as backend</strong></p>
+
+<p>Good serverless systems try to minimize the scope and the footprint of Lambda functions so that these functions do only the bare minimum (call them <em>nano functions</em>, if you will) and primarily focus on the tasks that must not be done in the front end because of privacy or security concerns.</p>
+
+<p><img src="/technology/serverless1.jpeg" /></p>
+
+<hr />
+
+<p><strong>Compute as glue</strong></p>
+
+<p>With this style of architecture, the focus of the developer is on the design of their pipeline, coordination, and flow of data. The parallelism of serverless compute services like Lambda helps to make these architectures appealing.</p>
+
+<p>With Kinesis Streams you can accomplish the following:</p>
+
+<ul>
+  <li>Control how much data is passed into a Kinesis stream before a Lambda function is invoked and how data gets to Kinesis in the first place</li>
+  <li>Put a Kinesis stream behind an API Gateway</li>
+  <li>Push data to the stream directly from a client or have a Lambda function add records to it</li>
+</ul>
+
+<p><img src="/technology/serverless2.jpeg" /></p>
+
+<h2 id="patterns">Patterns</h2>
+
+<p><strong>Command pattern</strong></p>
+
+<p><img class="right" src="/technology/serverless3.jpeg" /></p>
+
+<ul>
+  <li>You can design a system in which a specific Lambda function controls and invokes other functions. You can connect it to an API Gateway or invoke it manually and pass messages to it to invoke other Lambda functions.</li>
+  <li>In practice, this pattern can simplify the API Gateway implementation, because you may not want or need to create a RESTful URI for every type of request. It can also make versioning simpler. The command Lambda function could work with different versions of your clients and invoke the right Lambda function that’s needed by the client.</li>
+  <li>When to use
+    <ul>
+      <li>This pattern is useful if you want to decouple the caller and the receiver. Having a way to pass arguments as an object, and allowing clients to be parametrized with different requests, can reduce coupling between components and help make the system more extensible. Be aware of using this approach if you need to return a response to the API Gateway. Adding another function will increase latency.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Messaging pattern</strong></p>
+
+<p><img class="right" src="/technology/serverless4.jpeg" /></p>
+
+<ul>
+  <li>The reliability comes from the fact that if the consuming service goes offline, messages are retained in the queue and can still be processed at a later time.</li>
+  <li>Unfortunately, at the moment Lambda doesn’t integrate directly with SQS, so one approach to addressing this problem is to run a Lambda function on a schedule and let it check the queue every so often.</li>
+  <li>Kinesis Streams is an alternative to SQS, although it doesn’t have some features, such as dead lettering of messages (http://amzn.to/2a3HJzH). Kinesis Streams integrates with Lambda, provides an ordered sequence of records, and supports multiple consumers.</li>
+  <li>When to use
+    <ul>
+      <li>This is a popular pattern used to handle workloads and data processing. The queue serves as a buffer, so if the consuming service crashes, data isn’t lost. It remains in the queue until the service can restart and begin processing it again. A message queue can make future changes easier, too, because there’s less coupling between functions. In an environment that has a lot of data processing, messages, and requests, try to minimize the number of functions that are directly dependent on other functions and use the messaging pattern instead.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Fanout pattern</strong></p>
+
+<p><img class="right" src="/technology/serverless5.jpeg" /></p>
+
+<ul>
+  <li>The fan-out pattern is useful because many AWS services (such as S3) can’t invoke more than one Lambda function when an event takes place.</li>
+  <li>SNS topics are communications/messaging channels that can have multiple publishers and subscribers (including Lambda functions). When a new message is added to a topic, it forces invocation of all subscribers in parallel, thus causing the event to fan out.</li>
+  <li>When to use
+    <ul>
+      <li>This pattern is useful if you need to invoke multiple Lambda functions at the same time. An SNS topic will try and retry to invoke your Lambda functions if it fails to deliver the message or if the function fails to execute.</li>
+    </ul>
+  </li>
+</ul>
+
+<p><strong>Pipes and Filters pattern</strong></p>
+
+<p><img class="right" src="/technology/serverless6.jpeg" /></p>
+
+<p>The purpose of the pipes and filters pattern is to decompose a complex processing task into a series of manageable, discrete services organized in a pipeline. Components designed to transform data are traditionally referred to as filters, whereas connectors that pass data from one component to the next component are referred to as pipes. Serverless architecture lends itself well to this kind of pattern. This is useful for all kinds of tasks where multiple steps are required to achieve a result</p>
+
+<h1 id="references">References</h1>
+
+<ul>
+  <li>Books
+    <ul>
+      <li>Serverless Architecture on AWS - Manning Publications</li>
+      <li>Programming AWS Lambda</li>
+    </ul>
+  </li>
+</ul>
 
   
     <footer>
@@ -149,7 +278,7 @@ messageStyle: "none",
       
         <div class="sharing">
   
-  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/aws_trivia.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/aws_trivia.html" >Tweet</a>
+  <a href="//twitter.com/share" class="twitter-share-button" data-url="http://fizalihsan.github.io/technology/serverless.html" data-via="fizalihsan" data-counturl="http://fizalihsan.github.io/technology/serverless.html" >Tweet</a>
   
   
   

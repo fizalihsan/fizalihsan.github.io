@@ -9,7 +9,7 @@
   <meta name="author" content="Mohamed Fizal Ihsan Mohamed">
 
 
-<meta name="description" content="JavaScript Overview Node.js ES6 Basics Types, Values, Variables Expressions and Operators Statements Objects References Overview “JavaScript” is not &hellip;">
+<meta name="description" content="JavaScript Overview Node.js ES6 Basics Types, Values, Variables Expressions and Operators Statements Objects Arrays Functions References Overview “ &hellip;">
 <meta name="keywords" content="big data, data science, mongodb, nosql, R, statistics">
 
   <!-- http://t.co/dKP3o1e -->
@@ -115,6 +115,8 @@ messageStyle: "none",
       <li><a href="#expressions-and-operators" id="markdown-toc-expressions-and-operators">Expressions and Operators</a></li>
       <li><a href="#statements" id="markdown-toc-statements">Statements</a></li>
       <li><a href="#objects" id="markdown-toc-objects">Objects</a></li>
+      <li><a href="#arrays" id="markdown-toc-arrays">Arrays</a></li>
+      <li><a href="#functions" id="markdown-toc-functions">Functions</a></li>
     </ul>
   </li>
   <li><a href="#references" id="markdown-toc-references">References</a></li>
@@ -1150,9 +1152,171 @@ messageStyle: "none",
 
 <p>Other reasons to use accessor properties include sanity checking of property writes and returning different values on each property read:</p>
 
+<h2 id="arrays">Arrays</h2>
+
+<ul>
+  <li>Arrays inherit properties from <code>Array.prototype</code>, which defines a rich set of array manipulation methods</li>
+  <li>ES6 introduces a set of new array classes known collectively as <em>“typed arrays.”</em> Unlike regular JavaScript arrays, typed arrays have a fixed length and a fixed numeric element type. They offer high performance and byte-level access to binary data.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Sparse Array</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">count</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,,</span><span class="mi">3</span><span class="p">];</span> <span class="c1">// Elements at indexes 0 and 2. No element at index 1</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>Spread operator
+    <ul>
+      <li>In ES6 and later, you can use the “spread operator,” <code>...</code>, to include the elements of one array within an array literal:</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">];</span>
+</span><span class="line"><span class="kd">let</span> <span class="nx">b</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">...</span><span class="nx">a</span><span class="p">,</span> <span class="mi">4</span><span class="p">];</span>  <span class="c1">// b == [0, 1, 2, 3, 4]</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Strings are iterable, so you can use a spread operator to turn any string into an array of single-character strings:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">digits</span> <span class="o">=</span> <span class="p">[...</span><span class="s2">&quot;0123456789ABCDEF&quot;</span><span class="p">];</span>
+</span><span class="line"><span class="nx">digits</span> <span class="c1">// =&gt; [&quot;0&quot;,&quot;1&quot;,&quot;2&quot;,&quot;3&quot;,&quot;4&quot;,&quot;5&quot;,&quot;6&quot;,&quot;7&quot;,&quot;8&quot;,&quot;9&quot;,&quot;A&quot;,&quot;B&quot;,&quot;C&quot;,&quot;D&quot;,&quot;E&quot;,&quot;F&quot;]</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Array.of</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="nb">Array</span><span class="p">.</span><span class="nx">of</span><span class="p">()</span>        <span class="c1">// =&gt; []; returns empty array with no arguments</span>
+</span><span class="line"><span class="nb">Array</span><span class="p">.</span><span class="nx">of</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>      <span class="c1">// =&gt; [10]; can create arrays with a single numeric argument</span>
+</span><span class="line"><span class="nb">Array</span><span class="p">.</span><span class="nx">of</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>   <span class="c1">// =&gt; [1, 2, 3]</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<ul>
+  <li>With an iterable argument, <code>Array.from(iterable)</code> works like the spread operator <code>[...iterable]</code> does.</li>
+  <li><code>Array.from()</code> is also important because it defines a way to make a true-array copy of an array-like object.</li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">copy</span> <span class="o">=</span> <span class="nb">Array</span><span class="p">.</span><span class="nx">from</span><span class="p">(</span><span class="nx">original</span><span class="p">);</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Sparse Arrays</strong></p>
+
+<ul>
+  <li>A sparse array is one in which the elements do not have contiguous indexes starting at 0.</li>
+  <li>Normally, the <code>length</code> property of an array specifies the number of elements in the array.</li>
+  <li>If the array is sparse, the value of the <code>length</code> property is greater than the number of elements.</li>
+  <li>Sparse arrays can be created with the <code>Array()</code> constructor or simply by assigning to an array index larger than the current array length.</li>
+  <li>Arrays that are sufficiently sparse are typically implemented in a slower, more memory-efficient way than dense arrays are, and looking up elements in such an array will take about as much time as regular object property lookup.</li>
+</ul>
+
+<blockquote>
+  <p>Note that when you omit a value in an array literal (using repeated commas as in [1,,3]), the resulting array is sparse, and the omitted elements simply do not exist:</p>
+</blockquote>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Sparse Arrays</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">a</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">Array</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span> <span class="c1">// No elements, but a.length is 5.</span>
+</span><span class="line"><span class="nx">a</span> <span class="o">=</span> <span class="p">[];</span>               <span class="c1">// Create an array with no elements and length = 0.</span>
+</span><span class="line"><span class="nx">a</span><span class="p">[</span><span class="mi">1000</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>          <span class="c1">// Assignment adds one element but sets length to 1001.</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Array length</strong></p>
+
+<p>if you set the <code>length</code> property to a non-negative integer <code>n</code> smaller than its current value, any array elements whose index is greater than or equal to <code>n</code> are deleted from the array:</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="nx">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">];</span>     <span class="c1">// Start with a 5-element array.</span>
+</span><span class="line"><span class="nx">a</span><span class="p">.</span><span class="nx">length</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>        <span class="c1">// a is now [1,2,3].</span>
+</span><span class="line"><span class="nx">a</span><span class="p">.</span><span class="nx">length</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>        <span class="c1">// Delete all elements.  a is [].</span>
+</span><span class="line"><span class="nx">a</span><span class="p">.</span><span class="nx">length</span> <span class="o">=</span> <span class="mi">5</span><span class="p">;</span>        <span class="c1">// Length is 5, but no elements, like new Array(5)</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Adding/Deleting Array Elements</strong></p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">a</span> <span class="o">=</span> <span class="p">[];</span>           <span class="c1">// Start with an empty array</span>
+</span><span class="line"><span class="nx">a</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s2">&quot;zero&quot;</span><span class="p">);</span>       <span class="c1">// Add a value at the end.  a = [&quot;zero&quot;]</span>
+</span><span class="line"><span class="nx">a</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="s2">&quot;one&quot;</span><span class="p">,</span> <span class="s2">&quot;two&quot;</span><span class="p">);</span> <span class="c1">// Add two more values.  a = [&quot;zero&quot;, &quot;one&quot;, &quot;two&quot;]</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>slice, splice</strong></p>
+
+<p>The <code>slice()</code> method returns a slice, or subarray, of the specified array.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>slice</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">];</span>
+</span><span class="line"><span class="nx">a</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">);</span>    <span class="c1">// Returns [1,2,3]</span>
+</span><span class="line"><span class="nx">a</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">3</span><span class="p">);</span>      <span class="c1">// Returns [4,5]</span>
+</span><span class="line"><span class="nx">a</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>   <span class="c1">// Returns [2,3,4]</span>
+</span><span class="line"><span class="nx">a</span><span class="p">.</span><span class="nx">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">);</span>  <span class="c1">// Returns [3]</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><code>splice()</code> is a general-purpose method for inserting or removing elements from an array. Unlike <code>slice()</code> and <code>concat()</code>, <code>splice()</code> modifies the array on which it is invoked.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>splice</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">];</span>
+</span><span class="line"><span class="nx">a</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>    <span class="c1">// =&gt; [5,6,7,8]; a is now [1,2,3,4]</span>
+</span><span class="line"><span class="nx">a</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>  <span class="c1">// =&gt; [2,3]; a is now [1,4]</span>
+</span><span class="line"><span class="nx">a</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>  <span class="c1">// =&gt; [4]; a is now [1]</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Array-like Objects</strong></p>
+
+<p>JavaScript arrays have some special features that other objects do not have:</p>
+
+<ul>
+  <li>The <code>length</code> property is automatically updated as new elements are added to the list.</li>
+  <li>Setting <code>length</code> to a smaller value truncates the array.</li>
+  <li>Arrays inherit useful methods from <code>Array.prototype</code>.</li>
+  <li><code>Array.isArray()</code> returns <code>true</code> for arrays.</li>
+</ul>
+
+<h2 id="functions">Functions</h2>
+
+<ul>
+  <li><strong>Function vs. Method</strong>: If a function is assigned to a property of an object, it is known as a method of that object. When a function is invoked on or through an object, that object is the invocation context or <code>this</code> value for the function.</li>
+  <li><strong>Closures</strong>: JavaScript function definitions can be nested within other functions, and they have access to any variables that are in scope where they are defined. This means that JavaScript functions are <em>closures</em>, and it enables important and powerful programming techniques.</li>
+  <li><strong>Generators</strong>: <code>function*</code> defines generator functions</li>
+  <li>
+    <p><strong>async function</strong>: defines asynchronous functions</p>
+  </li>
+  <li>
+    <p>Declaring a Function</p>
+
+    <ul>
+      <li>Using <code>Function()</code> constructor.</li>
+    </ul>
+  </li>
+  <li><strong>Hoisting</strong>:  Function declaration statements are <strong>“hoisted”</strong> to the top of the enclosing script, function, or block so that functions defined in this way may be invoked from code that appears before the definition. Another way to say this is that all of the functions declared in a block of JavaScript code will be defined throughout that block, and they will be defined before the JavaScript interpreter begins to execute any of the code in that block.</li>
+</ul>
+
 <p><strong>Arrow Functions</strong></p>
 
-<p>Arrow functions are most commonly used when you want to pass an unnamed function as an argument to another function.</p>
+<ul>
+  <li>Arrow functions are most commonly used when you want to pass an unnamed function as an argument to another function.</li>
+  <li><em>Diff b/w Arrow functions and other functions</em>
+    <ul>
+      <li>they inherit the value of the <code>this</code> keyword from the environment in which they are defined rather than defining their own invocation context as functions defined in other ways do.</li>
+      <li>they do not have a <code>prototype</code> property, which means that they cannot be used as constructor functions for new classes.</li>
+    </ul>
+  </li>
+</ul>
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 <span class="line-number">2</span>
@@ -1192,6 +1356,91 @@ messageStyle: "none",
 
 <div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
 </pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">receive</span> <span class="o">=</span> <span class="p">(</span><span class="nx">complete</span> <span class="o">=</span> <span class="p">()</span> <span class="o">=&gt;</span> <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;complete&quot;</span><span class="p">))</span> <span class="o">=&gt;</span> <span class="nx">complete</span><span class="p">();</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Invoking Functions</strong></p>
+
+<ul>
+  <li>JS functions can be invoked in 5 ways:
+    <ol>
+      <li><em>As functions</em> e.g., <code>factorial(3)</code></li>
+      <li><em>As methods</em> e.g., <code>obj.method()</code></li>
+      <li><em>As constructors</em> e.g. ,<code>new Object()</code> or <code>new Object</code>
+  - If a constructor explicitly uses the <code>return</code> statement to return an object, then that object becomes the value of the invocation expression. 
+  - If the constructor uses <code>return</code> with no value, or if it returns a primitive value, that return value is ignored and the new object is used as the value of the invocation.</li>
+      <li><em>Indirectly</em> through their <code>call()</code> and <code>apply()</code> methods
+  - Both methods allow you to explicitly specify the <code>this</code> value for the invocation, which means you can invoke any function as a method of any object, even if it is not actually a method of that object.</li>
+      <li><em>Implicitly</em>, via JavaScript language features that do not appear like normal function invocations
+  - When an object is used in a string context (such as when it is concatenated with a string), its <code>toString()</code> method is called. 
+  - Similarly, when an object is used in a numeric context, its <code>valueOf()</code> method is invoked.</li>
+    </ol>
+  </li>
+  <li>Invocation Context
+    <ul>
+      <li>in non-strict mode, the invocation context (the <code>this</code> value) is the global object.</li>
+      <li>in strict mode, however, the invocation context is <code>undefined</code>. Note that functions defined using the arrow syntax behave differently: they always inherit the <code>this</code> value that is in effect where they are defined.</li>
+    </ul>
+  </li>
+</ul>
+
+<blockquote>
+  <p>Note that <code>this</code> is a keyword, not a variable or property name. JavaScript syntax does not allow you to assign a value to <code>this</code>.</p>
+</blockquote>
+
+<p><strong>Function Arguments and Parameters</strong></p>
+
+<p><strong>Parameter defaults</strong> enable us to write functions that can be invoked with fewer arguments than parameters.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Parameter defaults</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="c1">// This function returns an object representing a rectangle&#39;s dimensions.</span>
+</span><span class="line"><span class="c1">// If only width is supplied, make it twice as high as it is wide.</span>
+</span><span class="line"><span class="kr">const</span> <span class="nx">rectangle</span> <span class="o">=</span> <span class="p">(</span><span class="nx">width</span><span class="p">,</span> <span class="nx">height</span><span class="o">=</span><span class="nx">width</span><span class="o">*</span><span class="mi">2</span><span class="p">)</span> <span class="o">=&gt;</span> <span class="p">({</span><span class="nx">width</span><span class="p">,</span> <span class="nx">height</span><span class="p">});</span>
+</span><span class="line"><span class="nx">rectangle</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>  <span class="c1">// =&gt; { width: 1, height: 2 }</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p><strong>Rest parameters</strong> enable the opposite of Parameter defaults: they allow us to write functions that can be invoked with arbitrarily more arguments than parameters.</p>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>Rest parameters or varargs</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">function</span> <span class="nx">max</span><span class="p">(</span><span class="nx">first</span><span class="o">=-</span><span class="kc">Infinity</span><span class="p">,</span> <span class="p">...</span><span class="nx">rest</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">  <span class="nx">xxx</span>
+</span><span class="line">
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<p>Functions like the previous example that can accept any number of arguments are called <strong>variadic functions</strong>, <strong>variable arity functions</strong>, or <strong>vararg functions</strong>. This book uses the most colloquial term, <strong>varargs</strong>, which dates to the early days of the C programming language.</p>
+
+<ul>
+  <li><code>...</code> here is not the spread operator
+    <ul>
+      <li>Don’t confuse the <code>...</code> that defines a rest parameter in a function definition with the <code>...</code> spread operator</li>
+      <li>The spread operator <code>...</code> is used to unpack, or “spread out,” the elements of an array (or any other iterable object, such as strings) in a context where individual values are expected.</li>
+      <li>When we use the same <code>...</code> syntax in a function definition rather than a function invocation, it has the opposite effect to the spread operator.</li>
+    </ul>
+  </li>
+</ul>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>&#8230; in function parameter</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+<span class="line-number">3</span>
+<span class="line-number">4</span>
+<span class="line-number">5</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="c1">//variable argument</span>
+</span><span class="line"><span class="kd">function</span> <span class="nx">print</span><span class="p">(...</span><span class="nx">names</span><span class="p">)</span> <span class="p">{</span>
+</span><span class="line">  <span class="nx">xxx</span>
+</span><span class="line">
+</span><span class="line"><span class="p">}</span>
+</span></code></pre></td></tr></table></div></figure></notextile></div>
+
+<div class="bogus-wrapper"><notextile><figure class="code"><figcaption><span>&#8230; during invocation</span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class="line-number">1</span>
+<span class="line-number">2</span>
+</pre></td><td class="code"><pre><code class="js"><span class="line"><span class="kd">let</span> <span class="nx">numbers</span> <span class="o">=</span> <span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">100</span><span class="p">,</span> <span class="mi">1</span><span class="p">];</span>
+</span><span class="line"><span class="nb">Math</span><span class="p">.</span><span class="nx">min</span><span class="p">(...</span><span class="nx">numbers</span><span class="p">)</span>  <span class="c1">// =&gt; -1</span>
 </span></code></pre></td></tr></table></div></figure></notextile></div>
 
 <p><strong>Shorthand properties</strong></p>
@@ -1487,6 +1736,7 @@ messageStyle: "none",
 			<a href="/technology/cloud-computing.html">Concepts</a>  |  
 			<a href="/technology/aws.html">AWS</a>  |  
 			<a href="/technology/infrastructure-as-code.html">Infrastructure as Code</a>  |  
+			<a href="/technology/serverless.html">Serverless</a> |
 			<a href="/technology/virtualization.html">Virtualization</a>
 		</li>
 

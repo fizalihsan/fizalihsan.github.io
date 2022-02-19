@@ -11,6 +11,7 @@ footer: false
 
 * [Environmental Setup - Cheat Sheets]({{ root_url }}/cheat-sheets.html)
 * [Blockchain]({{ root_url }}/technology/blockchain.html)
+* [Cryptos]({{ root_url }}/technology/cryptos.html)
 * [Interview]({{ root_url }}/softskills/interview.html)
 * [Physics]({{ root_url }}/misc/physics.html)
 * [Tabligh]({{ root_url }}/islamic/dawah.html)

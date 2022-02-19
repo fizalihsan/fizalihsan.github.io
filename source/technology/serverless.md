@@ -25,6 +25,36 @@ footer: true
 - __Security__: Digitally signed tokens can allow front ends to talk to disparate services, including databases, in a secure manner. This is in contrast to traditional systems where all communication flows through the back-end server.
 - __Consistency__: The other important point to consider is consistency. If the front end is responsible for writing to multiple services and fails midway through, it can leave the system in an inconsistent state. In this scenario, a Lambda function should be used because it can be designed to gracefully handle errors and retry failed operations.
 
+
+__IaaS, PaaS, CaaS, BaaS, FaaS__
+
+- All three of these ideas — IaaS, PaaS, and CaaS — can be grouped as compute as a service; in other words, they are different types of generic environments that we can run our own specialized software in. 
+- PaaS and CasS differ from IaaS by raising the level of abstraction further, allowing us to hand off more of our “heavy lifting” to others.
+- Serverless is the next evolution of cloud computing and can be divided into two ideas: 
+    - Backend as a service, and
+    - Functions as a service.
+- FaaS
+    - The other half of serverless is functions as a service (FaaS). FaaS, like IaaS, PaaS, and CaaS, is another form of _compute as a service_—a generic environment within which we can run our own software. Some people like to use the term _serverless compute_ instead of FaaS.
+    - In FaaS, we have no concern for the runtime management of our code, unlike any other style of compute platform.
+    - we have no concern for hosts or processes, and scaling and resource management are handled on our behalf.
+
+
+| **Traditional Software Deployment** | **Function as a Service** |
+| {% img /technology/serverless7.png %} | {% img /technology/serverless8.png %} |
+
+Both the host instance and the application process are stripped away in the FaaS model. Instead, we focus on just the individual operations or functions that express our application’s logic.
+
+## 5 key criterias of serverless
+
+There are five key criteria that differentiate serverless services—both BaaS and FaaS—that allow us to approach architecting applications in a new way. These criteria are as follows:
+
+- 1. Does not require managing a long-lived host or application instance
+- 2. Self auto-scales and auto-provisions, dependent on load
+- 3. Has costs that are based on precise usage, up from and down to zero usage
+- 4. Has performance capabilities defined in terms other than host size/count
+- 5. Has implicit high availability
+
+
 - __Cons of serverless__
     - may not be appropriate for latency-sensitive applications or software with specific service-level agreements (SLA).
     - Vendor lock-in
@@ -111,8 +141,29 @@ __Pipes and Filters pattern__
 
 The purpose of the pipes and filters pattern is to decompose a complex processing task into a series of manageable, discrete services organized in a pipeline. Components designed to transform data are traditionally referred to as filters, whereas connectors that pass data from one component to the next component are referred to as pipes. Serverless architecture lends itself well to this kind of pattern. This is useful for all kinds of tasks where multiple steps are required to achieve a result
 
+# AWS Lambda
+
+The important thing to know is that you must define a function handler, which will be invoked by the Lambda runtime. The handler takes three `parameters—event`, `context`, and `callback` — and is defined as follows:
+
+```js
+exports.handler = function(event, context, callback){}
+```
+
+- _Lambda local testing_
+    - You can run Lambda functions locally using an npm module called `run-local-lambda`. To install this module, execute the following command from a terminal window (make sure you’re in the function’s directory): `npm install run-local-lambda save-dev`.
+    - This module allows you to invoke your Lambda function but it doesn’t emulate Lambda’s environment. It doesn’t respect memory size or the CPU, ephemeral local disk storage, or the operating system of real Lambda in AWS.
+    - Modify `package.json`, as in the next listing, to change the test script. The test script will invoke the function and pass the contents of event.json, a file you’re about to create, as the event object.
+    - This file must contain the specification of the event object that run-local-lambda will pass in to the Lambda function.
+
+- **Lambda Limitations**
+- __Disk limitation__ : Lambda has a maximum disk capacity of 512 MB, so this function won’t work if your videos are larger.
+- __Time limitation__ : At the time of writing, Lambda also requires that the function completes processing of the event within 15 minutes; otherwise, the execution is aborted.
+
+- Why Lambda?
+    - the key benefit from our perspective is how quickly you can build applications with Lambda when combined with other AWS services
+
 # References
 
 - Books
     - Serverless Architecture on AWS - Manning Publications
-    - Programming AWS Lambda
+    - Programming AWS Lambda - O'Reilly

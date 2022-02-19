@@ -108,3 +108,10 @@ footer: true
 * Talk about your needs
 * Ask about their concerns
 * Speak with enthusiasm and passion
+
+
+# Excerpts from presentation: Mastering Technical Presentations
+
+- O'Reilly talk by Neil Ford
+
+- Never talk about the talk itself. e.g., I was working on this presentation till 2am last night.

@@ -13,6 +13,7 @@ footer: false
 * [Blockchain]({{ root_url }}/technology/blockchain.html)
 * [Cryptos]({{ root_url }}/technology/cryptos.html)
 * [Interview]({{ root_url }}/softskills/interview.html)
+* [Engineering Manager Interview]({{ root_url }}/softskills/engineering_manager_interview.html)
 * [Physics]({{ root_url }}/misc/physics.html)
 * [Tabligh]({{ root_url }}/islamic/dawah.html)
 * [TODO - Topics to learn in-depth]({{ root_url }}/technology/todo.html)

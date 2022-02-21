@@ -10,8 +10,7 @@ footer: false
 {:toc}
 
 * [Environmental Setup - Cheat Sheets]({{ root_url }}/cheat-sheets.html)
-* [Blockchain]({{ root_url }}/technology/blockchain.html)
-* [Cryptos]({{ root_url }}/technology/cryptos.html)
+* [Cryptocurrencies]({{ root_url }}/technology/cryptos.html)
 * [Interview]({{ root_url }}/softskills/interview.html)
 * [Engineering Manager Interview]({{ root_url }}/softskills/engineering_manager_interview.html)
 * [Physics]({{ root_url }}/misc/physics.html)

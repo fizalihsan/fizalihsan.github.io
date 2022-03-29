@@ -25,14 +25,9 @@ footer: true
 
 # Resume Tips
 
-- Work with all the technology leaders across the company to create and drive toward the vision of an InnerSource platform
-- Drive the roadmap and priorities for my team, and work with dependencies across the company
-- Deeply involved in designing the portal, SDLC, ....... and internal product launches
-- Support the engineering team and the Innersource community in achieving the high level of technical excellence and stability
-- Manage processes to help the team do its best work and interface effectively with rest of the org.
+https://blog.tryexponent.com/how-to-write-an-engineering-manager-resume/
 
-- Great engineering manager works himself out of his job by training his team at the same keeping the promises on deliverables.
-- SAFe methodology
+> A great engineering manager works himself out of his job by training his team at the same time keeping the promises on deliverables.
 
 # Sample Questions
 
@@ -62,7 +57,15 @@ footer: true
 
 ### Performance management
 
+There are 2 categories of questions:
+- __Structure and process__
+    - Methods for tracking and improving performance, such as career ladders, annual performance reviews, and performance improvement plans.
+- __Handling difficult situations__
+    - Experience navigating challenging scenarios, such as letting a team member go or explaining why someone didn't receive a promotion.
+
+- __What is your process for monitoring and improving team's performance?__
 - __Tell me about a few people on your team and the career development plans you created with them.__
+- __How do you identify signs of poor performance?__
 - __How do you deal with an underperforming employee?__
 - __Have you ever promoted anyone? Describe the process.__
 - __How would you describe your role in coaching and career development?__
@@ -135,7 +138,7 @@ footer: true
 - Google - Gaurav Pandit, Samip Chakraborty
 - Facebook/Meta - Adriana Altomonte (LinkedIn contact), Aeisha Lima (Gmail)
 - Twitter
-- Coinbase
+- Coinbase - Nirmala Sistala
 - Stripe
 - [Gemini](https://www.builtinnyc.com/company/gemini) - Blockchain, FinTech
 - Amazon - Ramesh, Kiru
@@ -154,6 +157,9 @@ footer: true
 
 - Remote work
 
+## Amazon
+
+- Amazon Writing Assessment https://interviewgenie.com/blog-1/2020/2/5/how-to-answer-the-amazon-written-interview-question
 
 # References
 

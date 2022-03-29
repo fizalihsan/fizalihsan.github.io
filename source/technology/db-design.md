@@ -25,43 +25,44 @@ footer: true
 * [Intro to Normalization](http://dev.mysql.com/tech-resources/articles/intro-to-normalization.html)
 * http://www.bkent.net/Doc/simple5.htm 
 
-* **What is Normalization?**
-	* process to eliminate data redundancy, and to remove potential update inconsistencies which arise from inserting, modifying, and deleting data. 
-	* The goal of normalization is to create a set of relational tables that are free of redundant data and that can be consistently and correctly modified. This means that all tables in a relational database should be in the third normal form (3NF). 
+**What is Normalization?**
 
-* **1st Normal Form** 
+* process to eliminate data redundancy, and to remove potential update inconsistencies which arise from inserting, modifying, and deleting data. 
+* The goal of normalization is to create a set of relational tables that are free of redundant data and that can be consistently and correctly modified. This means that all tables in a relational database should be in the third normal form (3NF). 
+
+**1st Normal Form** 
 
 {% img /technology/1NF.png%}
 
-	* *No multi-value columns*
-	* A relational table, by definition, is in first normal form. 
-	* 1NF requires all values of the columns to be atomic. That is, they contain no repeating values like comma-separated names. 
-	* Table in 1NF contains redundancy of data. Redundancy causes what is called as **Update anomalies**
+* *No multi-value columns*
+* A relational table, by definition, is in first normal form. 
+* 1NF requires all values of the columns to be atomic. That is, they contain no repeating values like comma-separated names. 
+* Table in 1NF contains redundancy of data. Redundancy causes what is called as **Update anomalies**
 
 
-* **2nd Normal Form**
+**2nd Normal Form**
 
 {% img /technology/2NF.png%}
 
-	* *No partial dependencies*
-	* any non-key columns must depend on the entire primary key. In the case of a composite primary key, this means that a non-key column cannot depend on only part of the composite key.
+* *No partial dependencies*
+* any non-key columns must depend on the entire primary key. In the case of a composite primary key, this means that a non-key column cannot depend on only part of the composite key.
 
 
-* **3rd Normal Form**
+**3rd Normal Form**
 
 {% img /technology/3NF.png%}
 
-	* *No transitive dependencies*
-	* 3NF requires that every non-prime attribute must be dependent on primary key. 
-	* Tables violate the 3NF when one column depends on another column, which in turn depends on the primary key (**a transitive dependency**). One way to identify transitive dependencies is to look at your table and see if any columns would require updating if another column in the table was updated. If such a column exists, it probably violates 3NF. 
-	* A relational table is in 3NF if and only if all non-key columns are 
-		* (a) mutually independent (means that no non-key column is dependent upon any combination of the other columns.)
-		* (b) fully dependent upon the primary key.  
-	* The first two normal forms are intermediate steps to achieve the goal of having all tables in 3NF. In order to better understand the 2NF and higher forms, it is necessary to understand the concepts of functional dependencies and lossless decomposition.
+* *No transitive dependencies*
+* 3NF requires that every non-prime attribute must be dependent on primary key. 
+* Tables violate the 3NF when one column depends on another column, which in turn depends on the primary key (**a transitive dependency**). One way to identify transitive dependencies is to look at your table and see if any columns would require updating if another column in the table was updated. If such a column exists, it probably violates 3NF. 
+* A relational table is in 3NF if and only if all non-key columns are 
+	* (a) mutually independent (means that no non-key column is dependent upon any combination of the other columns.)
+	* (b) fully dependent upon the primary key.  
+* The first two normal forms are intermediate steps to achieve the goal of having all tables in 3NF. In order to better understand the 2NF and higher forms, it is necessary to understand the concepts of functional dependencies and lossless decomposition.
 
-* **4th Normal Form**: Every non-trivial multivalued dependency in the table is a dependency on a superkey.
+**4th Normal Form**: Every non-trivial multivalued dependency in the table is a dependency on a superkey.
 
-* **5th Normal Form**: Every non-trivial join dependency in the table is implied by the superkeys of the table.
+**5th Normal Form**: Every non-trivial join dependency in the table is implied by the superkeys of the table.
 
 
 * Denormalization
@@ -131,9 +132,8 @@ which is present in an application is absolutely critical.
 	* captures both validity and transaction time of a record
 	* MarkLogic NoSQL database has a native support for bitemporal collections
 
-> Temporal Tables have also been called *historical tables* but this implies that they record information only about the past. However, 'valid-time' tables often store information about future.
-
-> The presence of a `DATE` column will not render the database as a temporal database; rather, the database must record the time-varying nature of the information managed by the enterprise.
+* Temporal Tables have also been called *historical tables* but this implies that they record information only about the past. However, *valid-time* tables often store information about future.
+* The presence of a `DATE` column will not render the database as a temporal database; rather, the database must record the time-varying nature of the information managed by the enterprise.
 
 ## Time-Series Databases
 

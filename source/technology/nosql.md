@@ -198,7 +198,8 @@ __Partitioning__
 * 2 types of partitioning: horizontal (sharding) and vertical partitioning
 * ___Range partitioning___
   * e.g., user ids 1-1000 in one server, etc. Alphabet range where A-G in one instance, H-O in another, etc.
-  * Con: the distribution of data could be uneven   * Con: does not accommodate the change easily
+  * Con: the distribution of data could be uneven   
+  * Con: does not accommodate the change easily
 * ___Hash partitioning___
   * Pro: data distribution is even
   * Con: when new servers are added, data in other instances become invalidated. 
@@ -212,7 +213,8 @@ __Partitioning__
   * If Redis is used as a cache system with hash partitioning, it becomes very hard to scale up because the size of the list of Redis servers cannot change (otherwise, a lot of cache misses will happen).
   * Consistent hashing is a kind of 
 hashing that remaps only a small portion of the data to different servers when the list of Redis servers is changed (only `K/n` keys are remapped, where `K` is the number of keys and `n` is the number of servers).
-  * For example, in a cluster with 100 keys and four servers, adding a fifth node would remap only 25 keys on an average (100 divided by 4).   * The technique consists of creating multiple points in a circle for each Redis key and server. The appropriate server for a given key is the closest server to that key in the circle (clockwise); this circle is also referred to as "ring." The points are created using a hash function, such as MD5.
+  * For example, in a cluster with 100 keys and four servers, adding a fifth node would remap only 25 keys on an average (100 divided by 4).   
+  * The technique consists of creating multiple points in a circle for each Redis key and server. The appropriate server for a given key is the closest server to that key in the circle (clockwise); this circle is also referred to as "ring." The points are created using a hash function, such as MD5.
   * More on consistent hashing: [link 1](https://akshatm.svbtle.com/consistent-hash-rings-theory-and-implementation)     
 * ___Tagging___ 
   * is a technique of ensuring that keys are stored on the same server. Commands such as `SDIFF`, `SINTER`, and `SUNION` require that all keys are stored in the same Redis instance in order to work. 
@@ -271,7 +273,7 @@ __Network Partition (split-brain)__
 
 | Redis without Sentinel | Redis with Sentinel |
 | -- | -- |
-| {% img /technology/redis_before_split_brain.jpg %} | {% img /technology/redis_afer_split_brain.jpg %} |
+| {% img /technology/redis_before_split_brain.jpg %} | {% img /technology/redis_after_split_brain.jpg %} |
 
 * Redis Sentinel is not strongly consistent in a network partition scenario. Data may be lost when a split-brain occurs. 
 * Kyle Kingsbury (also known as Aphyr on the Internet) wrote some very detailed blog posts on Redis Sentinel and its lack of consistency. The last post can be found at https://aphyr.com/posts/287-asynchronous-replication-with-failover. 
@@ -679,14 +681,14 @@ Graph databases either use a native graph storage or a non-native storage back-e
 * Geospatial queries - e.g.,?
 
 ### Graph Data Models
-1. Property graph model
+* (1) Property graph model
   * A property graph has the following characteristics:
   * It contains nodes and relationships
   * Nodes contain properties (key-value pairs)
   * Relationships are named and directed, and always have a start and end node
   * Relationships can also contain properties
-* 2. RDF Triples - http://en.wikipedia.org/wiki/Resource_Description_Framework
-* 3. Hypergraphs
+* (2) RDF Triples - http://en.wikipedia.org/wiki/Resource_Description_Framework
+* (3) Hypergraphs
   * Graph Query Languages: Cypher (Neo4j), SPARQL (RDF query language), Gremlin (Imperative, path-based language)
 
 * Graph Db Applications

@@ -472,7 +472,8 @@ messageStyle: "none",
   <li><strong><em>Range partitioning</em></strong>
     <ul>
       <li>e.g., user ids 1-1000 in one server, etc. Alphabet range where A-G in one instance, H-O in another, etc.</li>
-      <li>Con: the distribution of data could be uneven   * Con: does not accommodate the change easily</li>
+      <li>Con: the distribution of data could be uneven</li>
+      <li>Con: does not accommodate the change easily</li>
     </ul>
   </li>
   <li><strong><em>Hash partitioning</em></strong>
@@ -495,7 +496,8 @@ messageStyle: "none",
       <li>If Redis is used as a cache system with hash partitioning, it becomes very hard to scale up because the size of the list of Redis servers cannot change (otherwise, a lot of cache misses will happen).</li>
       <li>Consistent hashing is a kind of 
 hashing that remaps only a small portion of the data to different servers when the list of Redis servers is changed (only <code>K/n</code> keys are remapped, where <code>K</code> is the number of keys and <code>n</code> is the number of servers).</li>
-      <li>For example, in a cluster with 100 keys and four servers, adding a fifth node would remap only 25 keys on an average (100 divided by 4).   * The technique consists of creating multiple points in a circle for each Redis key and server. The appropriate server for a given key is the closest server to that key in the circle (clockwise); this circle is also referred to as “ring.” The points are created using a hash function, such as MD5.</li>
+      <li>For example, in a cluster with 100 keys and four servers, adding a fifth node would remap only 25 keys on an average (100 divided by 4).</li>
+      <li>The technique consists of creating multiple points in a circle for each Redis key and server. The appropriate server for a given key is the closest server to that key in the circle (clockwise); this circle is also referred to as “ring.” The points are created using a hash function, such as MD5.</li>
       <li>More on consistent hashing: <a href="https://akshatm.svbtle.com/consistent-hash-rings-theory-and-implementation">link 1</a></li>
     </ul>
   </li>
@@ -597,7 +599,7 @@ hashing that remaps only a small portion of the data to different servers when t
   <tbody>
     <tr>
       <td><img src="/technology/redis_before_split_brain.jpg" /></td>
-      <td><img src="/technology/redis_afer_split_brain.jpg" /></td>
+      <td><img src="/technology/redis_after_split_brain.jpg" /></td>
     </tr>
   </tbody>
 </table>
@@ -1197,19 +1199,22 @@ To acknowledge that the data has replicated to two members of the replica set be
 </ul>
 
 <h3 id="graph-data-models">Graph Data Models</h3>
-<ol>
-  <li>Property graph model
-  * A property graph has the following characteristics:
-  * It contains nodes and relationships
-  * Nodes contain properties (key-value pairs)
-  * Relationships are named and directed, and always have a start and end node
-  * Relationships can also contain properties
-* 2. RDF Triples - http://en.wikipedia.org/wiki/Resource_Description_Framework
-* 3. Hypergraphs
-  * Graph Query Languages: Cypher (Neo4j), SPARQL (RDF query language), Gremlin (Imperative, path-based language)</li>
-</ol>
-
 <ul>
+  <li>(1) Property graph model
+    <ul>
+      <li>A property graph has the following characteristics:</li>
+      <li>It contains nodes and relationships</li>
+      <li>Nodes contain properties (key-value pairs)</li>
+      <li>Relationships are named and directed, and always have a start and end node</li>
+      <li>Relationships can also contain properties</li>
+    </ul>
+  </li>
+  <li>(2) RDF Triples - http://en.wikipedia.org/wiki/Resource_Description_Framework</li>
+  <li>(3) Hypergraphs
+    <ul>
+      <li>Graph Query Languages: Cypher (Neo4j), SPARQL (RDF query language), Gremlin (Imperative, path-based language)</li>
+    </ul>
+  </li>
   <li>Graph Db Applications</li>
   <li>Recommendation Engines - e.g.,?</li>
   <li>Geospatial apps - e.g.,? Datastructure behind geospatial processing is R-tree. http://en.wikipedia.org/wiki/R-tree</li>
